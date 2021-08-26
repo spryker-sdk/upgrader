@@ -49,6 +49,9 @@ class UpgraderUpgradeCommandTest extends Unit
         $this->assertNotEquals(0, $resultCode);
     }
 
+    /**
+     * @return void
+     */
     public function testUpgradeReturnZeroCode(): void
     {
         $input = $this->makeEmpty(InputInterface::class);
