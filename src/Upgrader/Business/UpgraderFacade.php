@@ -33,7 +33,7 @@ class UpgraderFacade implements UpgraderFacadeInterface
 
         $io->writeln('Pre upgrade checking ....');
         $hasUncomitedChanges = $this->getFactory()->createGitClient()->isUncomitedChangesExist();
-        if (!$hasUncomitedChanges) {
+        if ($hasUncomitedChanges) {
             $io->error('Please commit or revert your changes');
 
             return static::ERROR_RESULT_CODE;
