@@ -28,7 +28,7 @@ class UpgraderUpgradeCommandTest extends Unit
     /**
      * @return void
      */
-    public function testUpgradeExistUncomitedChangesReturnNotZeroCode(): void
+    public function testUpgradeExistUncommittedChangesReturnNotZeroCode(): void
     {
         $input = $this->makeEmpty(InputInterface::class);
         $output = $this->makeEmpty(OutputInterface::class);
@@ -75,11 +75,11 @@ class UpgraderUpgradeCommandTest extends Unit
      * @return UpgraderBusinessFactory
      * @throws Exception
      */
-    protected function getMockUpgraderBusinessFactory(bool $hasUncomitedChanges): UpgraderBusinessFactory
+    protected function getMockUpgraderBusinessFactory(bool $hasUncommittedChanges): UpgraderBusinessFactory
     {
         $gitClient = $this->make(GitClient::class, [
-            'isUncomitedChangesExist' => function () use ($hasUncomitedChanges){
-                return $hasUncomitedChanges;
+            'isUncommittedChangesExist' => function () use ($hasUncommittedChanges){
+                return $hasUncommittedChanges;
             },
         ]);
 

@@ -24,7 +24,7 @@ class GitClient
     /**
      * @return bool
      */
-    public function isUncomitedChangesExist(): bool
+    public function isUncommittedChangesExist(): bool
     {
         return $this->statusCommand->isIndexOutdated();
     }

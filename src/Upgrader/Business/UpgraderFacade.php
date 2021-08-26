@@ -32,8 +32,8 @@ class UpgraderFacade implements UpgraderFacadeInterface
         $io = $this->createSymfonyStyle($input, $output);
 
         $io->writeln('Pre upgrade checking ....');
-        $hasUncomitedChanges = $this->getFactory()->createGitClient()->isUncomitedChangesExist();
-        if ($hasUncomitedChanges) {
+        $hasUncommittedChanges = $this->getFactory()->createGitClient()->isUncommittedChangesExist();
+        if ($hasUncommittedChanges) {
             $io->error('Please commit or revert your changes');
 
             return static::ERROR_RESULT_CODE;
