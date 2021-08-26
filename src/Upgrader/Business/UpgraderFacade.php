@@ -29,7 +29,7 @@ class UpgraderFacade implements UpgraderFacadeInterface
      */
     public function upgrade(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $io = $this->createSymfonyStyle($input, $output);
 
         $io->writeln('Pre upgrade checking ....');
         $hasUncomitedChanges = $this->getFactory()->createGitClient()->isUncomitedChangesExist();
@@ -45,6 +45,16 @@ class UpgraderFacade implements UpgraderFacadeInterface
         $io->success('Composer update done');
 
         return static::SUCCESS_RESULT_CODE;
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return SymfonyStyle
+     */
+    protected function createSymfonyStyle(InputInterface $input, OutputInterface $output): SymfonyStyle
+    {
+        return new SymfonyStyle($input, $output);
     }
 
     /**

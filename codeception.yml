@@ -1,4 +1,4 @@
-amespace: BranchoTest
+namespace: UpgraderTest
 paths:
     tests: tests
     output: tests/_output
@@ -12,16 +12,8 @@ coverage:
         - src/*
 suites:
     Command:
-        path: BranchoTest/Command
+        path: UpgraderTest/Command
         class_name: CommandTester
-        modules:
-            enabled:
-                - \BranchoTest\Helper\CommandHelper
-    Brancho:
-        path: BranchoTest/Upgrader
-        class_name: BranchoTester
-        modules:
-            enabled:
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
