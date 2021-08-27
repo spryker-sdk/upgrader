@@ -56,7 +56,7 @@ class JsonFileWriteHelper
         }
 
         $content = file_get_contents($filePath);
-        preg_match('/^(.+)(".*":)/m', $content, $matches);
+        preg_match('/^(.+)(".+":)/m', $content, $matches);
         if (!$matches[1]) {
             return static::INDENTATION_DEFAULT;
         }
