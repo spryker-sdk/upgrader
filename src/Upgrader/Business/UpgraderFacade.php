@@ -31,16 +31,16 @@ class UpgraderFacade implements UpgraderFacadeInterface
     {
         $io = $this->createSymfonyStyle($input, $output);
 
-        $output->writeln('Pre upgrade checking ....', OutputInterface::VERBOSITY_VERY_VERBOSE);
+        $output->writeln('Pre upgrade checking ....', OutputInterface::VERBOSITY_VERBOSE);
         $hasUncommittedChanges = $this->getFactory()->createGitClient()->isUncommittedChangesExist();
         if ($hasUncommittedChanges) {
             $io->error('Please commit or revert your changes');
 
             return static::CODE_ERROR;
         }
-        $io->writeln('Pre upgrade checking done', OutputInterface::VERBOSITY_VERY_VERBOSE);
+        $io->writeln('Pre upgrade checking done', OutputInterface::VERBOSITY_VERBOSE);
 
-        $io->writeln('Composer update progress ....', OutputInterface::VERBOSITY_VERY_VERBOSE);
+        $io->writeln('Composer update progress ....', OutputInterface::VERBOSITY_VERBOSE);
         $this->getFactory()->createComposerClient()->runComposerUpdate();
         $io->success('Composer update done');
 
