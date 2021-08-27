@@ -87,7 +87,7 @@ abstract class AbstractCommandExecutor implements CommandExecutorInterface
     /**
      * @param string|null $command
      *
-     * @return array
+     * @return string[]
      */
     protected function getCommandAsArray(?string $command): array
     {

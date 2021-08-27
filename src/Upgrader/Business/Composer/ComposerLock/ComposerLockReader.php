@@ -11,17 +11,19 @@ use Upgrader\Business\Composer\Helper\JsonFile\JsonFileReadHelper;
 
 class ComposerLockReader implements ComposerLockReaderInterface
 {
-    /**
-     * @var string
-     */
-    private $composerLockFilePath;
+    protected const FILENAME_LOCK = 'composer.lock';
 
     /**
-     * @param string $composerLockFilePath
+     * @var \Upgrader\Business\Composer\Helper\JsonFile\JsonFileReadHelper
      */
-    public function __construct(string $composerLockFilePath)
+    protected $jsonFileReadHelper;
+
+    /**
+     * @param \Upgrader\Business\Composer\Helper\JsonFile\JsonFileReadHelper $jsonFileReadHelper
+     */
+    public function __construct(JsonFileReadHelper $jsonFileReadHelper)
     {
-        $this->composerLockFilePath = $composerLockFilePath;
+        $this->jsonFileReadHelper = $jsonFileReadHelper;
     }
 
     /**
@@ -29,6 +31,6 @@ class ComposerLockReader implements ComposerLockReaderInterface
      */
     public function read(): array
     {
-        return JsonFileReadHelper::readFromPath($this->composerLockFilePath);
+        return $this->jsonFileReadHelper->readFromPath(self::FILENAME_LOCK);
     }
 }

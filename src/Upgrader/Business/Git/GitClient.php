@@ -7,25 +7,30 @@
 
 namespace Upgrader\Business\Git;
 
-use Upgrader\Business\Git\CommandResolver\UpdateIndexCommand;
-
 class GitClient
 {
     /**
-     * @var \Upgrader\Business\Git\CommandResolver\UpdateIndexCommand
+     * @var \Upgrader\Business\Git\GitClientFactory
      */
-    private $statusCommand;
-
-    public function __construct()
-    {
-        $this->statusCommand = new UpdateIndexCommand();
-    }
+    protected $factory;
 
     /**
      * @return bool
      */
     public function isUncommittedChangesExist(): bool
     {
-        return $this->statusCommand->isIndexOutdated();
+        return $this->getFactory()->createUpdateIndexCommand()->isIndexOutdated();
+    }
+
+    /**
+     * @return \Upgrader\Business\Git\GitClientFactory
+     */
+    protected function getFactory(): GitClientFactory
+    {
+        if ($this->factory === null) {
+            $this->factory = new GitClientFactory();
+        }
+
+        return $this->factory;
     }
 }

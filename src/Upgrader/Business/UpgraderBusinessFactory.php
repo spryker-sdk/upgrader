@@ -36,7 +36,7 @@ class UpgraderBusinessFactory
      */
     public function createComposerClient(): ComposerClient
     {
-        return new ComposerClient($this->config);
+        return new ComposerClient();
     }
 
     /**

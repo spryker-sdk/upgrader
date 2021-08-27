@@ -18,7 +18,7 @@ class JsonFileReadHelper
      *
      * @return array
      */
-    public static function readFromPath(string $path): array
+    public function readFromPath(string $path): array
     {
         if (!file_exists($path)) {
             throw new Exception('File is not exist: ' . $path);

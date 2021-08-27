@@ -1,22 +1,29 @@
 <?php
 
+/**
+ * Copyright © 2021-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace Upgrader\Business\Composer\ComposerJson;
 
 use Upgrader\Business\Composer\Helper\JsonFile\JsonFileWriteHelper;
 
 class ComposerJsonWriter implements ComposerJsonWriterInterface
 {
-    /**
-     * @var string
-     */
-    private $composerJsonFilePath;
+    protected const FILENAME_JSON = 'composer.json';
 
     /**
-     * @param string $composerJsonFilePath
+     * @var \Upgrader\Business\Composer\Helper\JsonFile\JsonFileWriteHelper
      */
-    public function __construct(string $composerJsonFilePath)
+    protected $JsonFileWriteHelper;
+
+    /**
+     * @param JsonFileWriteHelper $JsonFileWriteHelper
+     */
+    public function __construct(JsonFileWriteHelper $JsonFileWriteHelper)
     {
-        $this->composerJsonFilePath = $composerJsonFilePath;
+        $this->JsonFileWriteHelper = $JsonFileWriteHelper;
     }
 
     /**
@@ -26,6 +33,6 @@ class ComposerJsonWriter implements ComposerJsonWriterInterface
      */
     public function write(array $composerJsonArray): bool
     {
-        return JsonFileWriteHelper::writeToPath($this->composerJsonFilePath, $composerJsonArray);
+        return $this->JsonFileWriteHelper->writeToPath(self::FILENAME_JSON, $composerJsonArray);
     }
 }

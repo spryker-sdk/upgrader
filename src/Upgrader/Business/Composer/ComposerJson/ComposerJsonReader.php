@@ -7,23 +7,23 @@
 
 namespace Upgrader\Business\Composer\ComposerJson;
 
-use Exception;
 use Upgrader\Business\Composer\Helper\JsonFile\JsonFileReadHelper;
 
 class ComposerJsonReader implements ComposerJsonReaderInterface
 {
+    protected const FILENAME_JSON = 'composer.json';
 
     /**
-     * @var string
+     * @var \Upgrader\Business\Composer\Helper\JsonFile\JsonFileReadHelper
      */
-    private $composerJsonFilePath;
+    protected $jsonFileReadHelper;
 
     /**
-     * @param string $composerJsonFilePath
+     * @param \Upgrader\Business\Composer\Helper\JsonFile\JsonFileReadHelper $jsonFileReadHelper
      */
-    public function __construct(string $composerJsonFilePath)
+    public function __construct(JsonFileReadHelper $jsonFileReadHelper)
     {
-        $this->composerJsonFilePath = $composerJsonFilePath;
+        $this->jsonFileReadHelper = $jsonFileReadHelper;
     }
 
     /**
@@ -31,6 +31,6 @@ class ComposerJsonReader implements ComposerJsonReaderInterface
      */
     public function read(): array
     {
-        return JsonFileReadHelper::readFromPath($this->composerJsonFilePath);
+        return $this->jsonFileReadHelper->readFromPath(self::FILENAME_JSON);
     }
 }

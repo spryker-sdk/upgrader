@@ -16,42 +16,16 @@ use Upgrader\UpgraderConfig;
 class ComposerClient
 {
     /**
-     * @var \Upgrader\UpgraderConfig
+     * @var \Upgrader\Business\Composer\ComposerClientFactory
      */
-    private $config;
-
-    /**
-     * @var \Upgrader\Business\Composer\CommandExecutor\UpdateCommand
-     */
-    private $updateCommand;
-
-    /**
-     * @var \Upgrader\Business\Composer\ComposerJson\ComposerJsonReader
-     */
-    private $composerJsonReader;
-
-    /**
-     * @var \Upgrader\Business\Composer\ComposerLock\ComposerLockReader
-     */
-    private $composerLockReader;
-
-    /**
-     * @param \Upgrader\UpgraderConfig $config
-     */
-    public function __construct(UpgraderConfig $config)
-    {
-        $this->config = $config;
-        $this->updateCommand = new UpdateCommand();
-        $this->composerJsonReader = new ComposerJsonReader($this->config->getComposerJsonPath());
-        $this->composerLockReader = new ComposerLockReader($this->config->getComposerLockPath());
-    }
+    protected $factory;
 
     /**
      * @return array
      */
     public function getComposerJsonBodyAsArray(): array
     {
-        return $this->composerJsonReader->read();
+        return $this->getFactory()->createComposerJsonReader()->read();
     }
 
     /**
@@ -59,7 +33,7 @@ class ComposerClient
      */
     public function getComposerLockBodyAsArray(): array
     {
-        return $this->composerLockReader->read();
+        return $this->getFactory()->createComposerLockReader()->read();
     }
 
     /**
@@ -67,6 +41,18 @@ class ComposerClient
      */
     public function runComposerUpdate(): CommandResultDto
     {
-        return $this->updateCommand->execSuccess();
+        return $this->getFactory()->createUpdateCommand()->execSuccess();
+    }
+
+    /**
+     * @return \Upgrader\Business\Composer\ComposerClientFactory
+     */
+    protected function getFactory(): ComposerClientFactory
+    {
+        if ($this->factory === null) {
+            $this->factory = new ComposerClientFactory();
+        }
+
+        return $this->factory;
     }
 }
