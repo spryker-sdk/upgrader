@@ -46,7 +46,7 @@ class UpgraderUpgradeCommandTest extends Unit
 
         $resultCode = $upgraderFacade->upgrade($input, $output);
 
-        $this->assertNotEquals(0, $resultCode);
+        $this->assertNotSame(0, $resultCode);
     }
 
     /**
@@ -70,7 +70,7 @@ class UpgraderUpgradeCommandTest extends Unit
 
         $resultCode = $upgraderFacade->upgrade($input, $output);
 
-        $this->assertEquals(0, $resultCode);
+        $this->assertSame(0, $resultCode);
     }
 
 

@@ -12,6 +12,9 @@
         "symfony/process": "^5.0"
     },
     "require-dev": {
+        "codeception/codeception": "^4.1",
+        "codeception/module-asserts": "^1.1",
+        "codeception/module-phpbrowser": "^1.0.0",
         "spryker/code-sniffer": "^0.15.6"
     },
     "autoload": {
