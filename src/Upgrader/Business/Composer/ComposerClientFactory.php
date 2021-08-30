@@ -16,7 +16,7 @@ use Upgrader\Business\Composer\Helper\JsonFile\JsonFileHelperFactory;
 class ComposerClientFactory
 {
     /**
-     * @var \Upgrader\Business\Git\CommandResolver\UpdateIndexCommand
+     * @var \Upgrader\Business\Composer\CommandExecutor\UpdateCommand
      */
     private $updateCommand;
 

@@ -15,7 +15,8 @@
         "codeception/codeception": "^4.1",
         "codeception/module-asserts": "^1.1",
         "codeception/module-phpbrowser": "^1.0.0",
-        "spryker/code-sniffer": "^0.15.6"
+        "spryker/code-sniffer": "^0.15.6",
+        "phpstan/phpstan": "^0.12.0"
     },
     "autoload": {
         "psr-4": {
@@ -36,6 +37,7 @@
         "sort-packages": true
     },
     "scripts": {
+        "stan": "phpstan analyze -l 5 src/",
         "test": "codecept build && codecept run"
     }
 }
