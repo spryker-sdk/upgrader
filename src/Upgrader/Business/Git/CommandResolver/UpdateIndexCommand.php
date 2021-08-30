@@ -26,7 +26,7 @@ class UpdateIndexCommand extends AbstractCommandExecutor
      */
     public function isIndexOutdated(): bool
     {
-        $commandResultDto = $this->exec($this->getCommand() . self::REFRESH_FLAG);
+        $commandResultDto = $this->exec($this->getCommand() . ' ' . self::REFRESH_FLAG);
 
         return $commandResultDto->getResultCode();
     }
