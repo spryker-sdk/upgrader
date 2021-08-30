@@ -20,6 +20,6 @@ class CommandResultBuilder
     {
         $resultOutput = $process->getExitCode() ? $process->getErrorOutput() : $process->getExitCodeText();
 
-        return new CommandResultDto($process->getExitCode(), $resultOutput);
+        return new CommandResultDto((int)$process->getExitCode(), (string)$resultOutput);
     }
 }

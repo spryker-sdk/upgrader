@@ -24,6 +24,8 @@ class JsonFileReadHelper
             throw new Exception('File is not exist: ' . $path);
         }
 
-        return json_decode(file_get_contents($path), true);
+        $fileContent = (string)file_get_contents($path);
+
+        return json_decode($fileContent, true);
     }
 }

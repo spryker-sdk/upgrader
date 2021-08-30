@@ -36,7 +36,7 @@ class JsonFileWriteHelper
     public function writeToPath(string $path, array $body): bool
     {
         $indentation = $this->detectIndentation($path);
-        $encodedJson = json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $encodedJson = (string)json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $printed = $this->jsonPrinter->print($encodedJson, str_repeat(' ', $indentation));
 
         return (bool)file_put_contents($path, $printed);
@@ -55,7 +55,7 @@ class JsonFileWriteHelper
             throw new Exception('File is not exist: ' . $filePath);
         }
 
-        $content = file_get_contents($filePath);
+        $content = (string)file_get_contents($filePath);
         preg_match('/^(.+)(".+":)/m', $content, $matches);
         if (!$matches[1]) {
             return static::INDENTATION_DEFAULT;

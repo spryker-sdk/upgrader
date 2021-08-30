@@ -28,6 +28,6 @@ class UpdateIndexCommand extends AbstractCommandExecutor
     {
         $commandResultDto = $this->exec($this->getCommand() . ' ' . self::REFRESH_FLAG);
 
-        return boolval($commandResultDto->getResultCode());
+        return (bool)$commandResultDto->getResultCode();
     }
 }
