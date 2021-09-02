@@ -19,8 +19,12 @@ class ComposerJsonWriterTest extends Unit
     {
         // Arrange
         $path = dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
-        $writeFile = $path . '_generated' . DIRECTORY_SEPARATOR . 'composer4space.json';
+        $generatedPath = $path . '_generated' . DIRECTORY_SEPARATOR;
         $checkFile = $path . 'composer4space.json';
+        $writeFile = $generatedPath . 'composer4space.json';
+        if (!file_exists($generatedPath)) {
+            mkdir($generatedPath, 0777, true);
+        }
         file_put_contents($writeFile, ' ');
 
         $composerJsonWriter = $this->make(ComposerJsonWriter::class, [
@@ -54,8 +58,12 @@ class ComposerJsonWriterTest extends Unit
     {
         // Arrange
         $path = dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
-        $writeFile = $path . '_generated' . DIRECTORY_SEPARATOR . 'composer2space.json';
+        $generatedPath = $path . '_generated' . DIRECTORY_SEPARATOR;
         $checkFile = $path . 'composer2space.json';
+        $writeFile = $generatedPath . 'composer2space.json';
+        if (!file_exists($generatedPath)) {
+            mkdir($generatedPath, 0777, true);
+        }
         copy($checkFile, $writeFile);
 
         $composerJsonWriter = $this->make(ComposerJsonWriter::class, [
