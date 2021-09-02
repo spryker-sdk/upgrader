@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - master
-      - feature/pplus-105/implement-cli-commands
   workflow_dispatch:
 
 jobs:

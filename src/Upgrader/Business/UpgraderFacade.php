@@ -7,66 +7,41 @@
 
 namespace Upgrader\Business;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Upgrader\Business\Upgrader\Upgrader;
+use Upgrader\Business\Upgrader\UpgraderResultInterface;
 
 class UpgraderFacade implements UpgraderFacadeInterface
 {
-    public const CODE_SUCCESS = 0;
-    public const CODE_ERROR = 1;
+    /**
+     * @var \Upgrader\Business\Upgrader\Upgrader
+     */
+    protected $upgrader;
 
     /**
-     * @var \Upgrader\Business\UpgraderBusinessFactory
+     * @return \Upgrader\Business\Upgrader\UpgraderResultInterface
      */
-    protected $factory;
-
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return int
-     */
-    public function upgrade(InputInterface $input, OutputInterface $output): int
+    public function upgrade(): UpgraderResultInterface
     {
-        $io = $this->createSymfonyStyle($input, $output);
-
-        $output->writeln('Pre upgrade checking ....', OutputInterface::VERBOSITY_VERBOSE);
-        $hasUncommittedChanges = $this->getFactory()->createGitClient()->isUncommittedChangesExist();
-        if ($hasUncommittedChanges) {
-            $io->error('Please commit or revert your changes');
-
-            return static::CODE_ERROR;
-        }
-        $io->writeln('Pre upgrade checking done', OutputInterface::VERBOSITY_VERBOSE);
-
-        $io->writeln('Composer update progress ....', OutputInterface::VERBOSITY_VERBOSE);
-        $this->getFactory()->createComposerClient()->runComposerUpdate();
-        $io->success('Composer update done');
-
-        return static::CODE_SUCCESS;
+        return $this->getUpgrader()->upgrade();
     }
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return \Symfony\Component\Console\Style\SymfonyStyle
+     * @return \Upgrader\Business\Upgrader\UpgraderResultInterface
      */
-    protected function createSymfonyStyle(InputInterface $input, OutputInterface $output): SymfonyStyle
+    public function isUpgradeAvailable(): UpgraderResultInterface
     {
-        return new SymfonyStyle($input, $output);
+        return $this->getUpgrader()->isUpgradeAvailable();
     }
 
     /**
-     * @return \Upgrader\Business\UpgraderBusinessFactory
+     * @return \Upgrader\Business\Upgrader\Upgrader
      */
-    protected function getFactory(): UpgraderBusinessFactory
+    protected function getUpgrader(): Upgrader
     {
-        if ($this->factory === null) {
-            $this->factory = new UpgraderBusinessFactory();
+        if ($this->upgrader === null) {
+            $this->upgrader = new Upgrader();
         }
 
-        return $this->factory;
+        return $this->upgrader;
     }
 }

@@ -33,6 +33,23 @@ class UpgradeCommand extends AbstractCommand
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        return $this->getFacade()->upgrade($input, $output);
+        $io = $this->createSymfonyStyle($input, $output);
+
+        $checkResult = $this->getFacade()->isUpgradeAvailable();
+        if (!$checkResult->isSuccess()) {
+            $io->error((string)$checkResult->getMessage());
+
+            return static::CODE_ERROR;
+        }
+
+        $upgradeResult = $this->getFacade()->upgrade();
+        if (!$upgradeResult->isSuccess()) {
+            $io->error((string)$upgradeResult->getMessage());
+
+            return static::CODE_ERROR;
+        }
+        $io->success('Composer update done');
+
+        return static::CODE_SUCCESS;
     }
 }

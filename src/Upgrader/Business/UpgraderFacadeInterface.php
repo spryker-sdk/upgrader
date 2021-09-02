@@ -7,16 +7,17 @@
 
 namespace Upgrader\Business;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Upgrader\Business\Upgrader\UpgraderResultInterface;
 
 interface UpgraderFacadeInterface
 {
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return int
+     * @return \Upgrader\Business\Upgrader\UpgraderResultInterface
      */
-    public function upgrade(InputInterface $input, OutputInterface $output): int;
+    public function upgrade(): UpgraderResultInterface;
+
+    /**
+     * @return \Upgrader\Business\Upgrader\UpgraderResultInterface
+     */
+    public function isUpgradeAvailable(): UpgraderResultInterface;
 }

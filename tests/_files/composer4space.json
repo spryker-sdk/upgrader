@@ -1,0 +1,6 @@
+{
+    "name": "foo/bar",
+    "require": {
+        "php": "^7.4"
+    }
+}

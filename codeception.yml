@@ -1,19 +1,20 @@
 namespace: UpgraderTest
+actor: Tester
+include:
+    - tests/UpgraderTest/Business
 paths:
     tests: tests
-    output: tests/_output
+    log: tests/_output
     data: tests/_data
     support: tests/_support
     envs: tests/_envs
-actor_suffix: Tester
+settings:
+    suite_class: \PHPUnit\Framework\TestSuite
+    colors: true
+    memory_limit: 1024M
+    log: true
 coverage:
     enabled: true
-    include:
-        - src/*
-suites:
-    Command:
-        path: UpgraderTest/Command
-        class_name: CommandTester
-extensions:
-    enabled:
-        - Codeception\Extension\RunFailed
+    whitelist:
+        include:
+            - 'src/*'

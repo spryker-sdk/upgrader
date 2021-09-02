@@ -7,8 +7,8 @@
 
 namespace Upgrader\Business;
 
-use Upgrader\Business\Composer\ComposerClient;
-use Upgrader\Business\Git\GitClient;
+use Upgrader\Business\ComposerClient\ComposerClient;
+use Upgrader\Business\GitClient\GitClient;
 use Upgrader\UpgraderConfig;
 
 class UpgraderBusinessFactory
@@ -16,7 +16,7 @@ class UpgraderBusinessFactory
     /**
      * @var \Upgrader\UpgraderConfig
      */
-    private $config;
+    protected $config;
 
     public function __construct()
     {
@@ -24,19 +24,19 @@ class UpgraderBusinessFactory
     }
 
     /**
-     * @return \Upgrader\Business\Git\GitClient
+     * @return \Upgrader\Business\GitClient\GitClient
      */
     public function createGitClient(): GitClient
     {
-        return new GitClient();
+        return new GitClient($this->config);
     }
 
     /**
-     * @return \Upgrader\Business\Composer\ComposerClient
+     * @return \Upgrader\Business\ComposerClient\ComposerClient
      */
     public function createComposerClient(): ComposerClient
     {
-        return new ComposerClient();
+        return new ComposerClient($this->config);
     }
 
     /**
@@ -44,6 +44,10 @@ class UpgraderBusinessFactory
      */
     public function getConfig(): UpgraderConfig
     {
+        if ($this->config === null) {
+            $this->config = new UpgraderConfig();
+        }
+
         return $this->config;
     }
 }

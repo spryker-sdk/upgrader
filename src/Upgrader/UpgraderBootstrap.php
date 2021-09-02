@@ -40,7 +40,7 @@ class UpgraderBootstrap extends Application
     /**
      * @return \Symfony\Component\Console\Command\Command[]
      */
-    private function getCommands(): array
+    protected function getCommands(): array
     {
         return [
             new UpgradeCommand(),
