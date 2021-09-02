@@ -52,12 +52,7 @@ jobs:
 
       - name: Codeception tests
         run: |
-          if [[ ${{ matrix.php-version }} == '7.4' ]]; then
-            vendor/bin/codecept build
-            XDEBUG_MODE=coverage vendor/bin/codecept run --coverage-xml
-          else
             composer test
-          fi
 
       - name: PHPStan checks
         run: composer stan
