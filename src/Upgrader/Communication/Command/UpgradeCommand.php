@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class UpgradeCommand extends AbstractCommand
 {
     public const COMMAND_NAME = 'upgrade';
-    public const COMMAND_DESCRIPTION = 'Upgrade Spryker packages';
+    public const COMMAND_DESCRIPTION = 'Upgrade Spryker packages.';
 
     /**
      * @return void
@@ -33,22 +33,15 @@ class UpgradeCommand extends AbstractCommand
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = $this->createSymfonyStyle($input, $output);
-
-        $checkResult = $this->getFacade()->isUpgradeAvailable();
-        if (!$checkResult->isSuccess()) {
-            $io->error((string)$checkResult->getMessage());
-
-            return static::CODE_ERROR;
-        }
-
         $upgradeResult = $this->getFacade()->upgrade();
+
         if (!$upgradeResult->isSuccess()) {
-            $io->error((string)$upgradeResult->getMessage());
+            $output->writeln(sprintf("<fg=red;options=bold>%s</>", $upgradeResult->getMessage()));
 
             return static::CODE_ERROR;
         }
-        $io->success('Composer update done');
+
+        $output->writeln("<fg=green;options=bold>Upgrade command has been finished successfully.</>.");
 
         return static::CODE_SUCCESS;
     }

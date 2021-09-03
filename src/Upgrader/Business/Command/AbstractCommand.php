@@ -8,21 +8,22 @@
 namespace Upgrader\Business\Command;
 
 use Symfony\Component\Process\Process;
-use Upgrader\Business\Exception\UpgraderCommandExecException;
+use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
+use Upgrader\UpgraderConfig;
 
 abstract class AbstractCommand implements CommandInterface
 {
     /**
-     * @var int
+     * @var \Upgrader\UpgraderConfig
      */
-    protected $execTimeOut;
+    protected $config;
 
     /**
-     * @param int $execTimeOut
+     * @param \Upgrader\UpgraderConfig $config
      */
-    public function __construct(int $execTimeOut)
+    public function __construct(UpgraderConfig $config)
     {
-        $this->execTimeOut = $execTimeOut;
+        $this->config = $config;
     }
 
     /**
@@ -33,19 +34,13 @@ abstract class AbstractCommand implements CommandInterface
     /**
      * @param string|null $command
      *
-     * @throws \Upgrader\Business\Exception\UpgraderCommandExecException
-     *
-     * @return \Upgrader\Business\Command\CommandResultInterface
+     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
      */
-    public function exec(?string $command = null): CommandResultInterface
+    public function run(?string $command = null): CommandResultOutput
     {
-        $process = $this->run($command);
+        $process = $this->runProcess($command);
 
-        if ($process->getExitCode()) {
-            throw new UpgraderCommandExecException($process->getCommandLine(), $process->getErrorOutput());
-        }
-
-        return $this->createResult($process);
+        return $this->createCommandResultOutput($process);
     }
 
     /**
@@ -53,10 +48,10 @@ abstract class AbstractCommand implements CommandInterface
      *
      * @return \Symfony\Component\Process\Process
      */
-    protected function run(?string $command = null): Process
+    protected function runProcess(?string $command = null): Process
     {
         $process = new Process($this->getCommandAsArray($command), (string)getcwd());
-        $process->setTimeout($this->execTimeOut);
+        $process->setTimeout($this->config->getCommandExecutionTimeout());
         $process->run();
 
         return $process;
@@ -77,12 +72,12 @@ abstract class AbstractCommand implements CommandInterface
     /**
      * @param \Symfony\Component\Process\Process $process
      *
-     * @return \Upgrader\Business\Command\CommandResult
+     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
      */
-    protected function createResult(Process $process): CommandResult
+    protected function createCommandResultOutput(Process $process): CommandResultOutput
     {
         $resultOutput = $process->getExitCode() ? $process->getErrorOutput() : $process->getExitCodeText();
 
-        return new CommandResult((int)$process->getExitCode(), (string)$resultOutput);
+        return new CommandResultOutput((int)$process->getExitCode(), (string)$resultOutput);
     }
 }

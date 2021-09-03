@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Upgrader\Business\UpgraderFacade;
+use Upgrader\Business\UpgraderFacadeInterface;
 
 abstract class AbstractCommand extends Command
 {
@@ -19,30 +20,19 @@ abstract class AbstractCommand extends Command
     public const CODE_ERROR = 1;
 
     /**
-     * @var \Upgrader\Business\UpgraderFacade
+     * @var \Upgrader\Business\UpgraderFacadeInterface
      */
     protected $facade;
 
     /**
-     * @return \Upgrader\Business\UpgraderFacade
+     * @return \Upgrader\Business\UpgraderFacadeInterface
      */
-    protected function getFacade(): UpgraderFacade
+    protected function getFacade(): UpgraderFacadeInterface
     {
         if ($this->facade === null) {
             $this->facade = new UpgraderFacade();
         }
 
         return $this->facade;
-    }
-
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return \Symfony\Component\Console\Style\SymfonyStyle
-     */
-    protected function createSymfonyStyle(InputInterface $input, OutputInterface $output): SymfonyStyle
-    {
-        return new SymfonyStyle($input, $output);
     }
 }

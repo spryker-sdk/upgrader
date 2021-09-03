@@ -7,41 +7,37 @@
 
 namespace Upgrader\Business;
 
-use Upgrader\Business\Upgrader\Upgrader;
-use Upgrader\Business\Upgrader\UpgraderResultInterface;
+use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 
 class UpgraderFacade implements UpgraderFacadeInterface
 {
     /**
-     * @var \Upgrader\Business\Upgrader\Upgrader
+     * @var \Upgrader\Business\UpgraderBusinessFactory
      */
-    protected $upgrader;
+    protected $factory;
 
     /**
-     * @return \Upgrader\Business\Upgrader\UpgraderResultInterface
+     * Specification:
+     * -
+     *
+     * @api
+     *
+     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
      */
-    public function upgrade(): UpgraderResultInterface
+    public function upgrade(): CommandResultOutput
     {
-        return $this->getUpgrader()->upgrade();
+        return $this->getFactory()->createUpgrader()->upgrade();
     }
 
     /**
-     * @return \Upgrader\Business\Upgrader\UpgraderResultInterface
+     * @return \Upgrader\Business\UpgraderBusinessFactory
      */
-    public function isUpgradeAvailable(): UpgraderResultInterface
+    protected function getFactory(): UpgraderBusinessFactory
     {
-        return $this->getUpgrader()->isUpgradeAvailable();
-    }
-
-    /**
-     * @return \Upgrader\Business\Upgrader\Upgrader
-     */
-    protected function getUpgrader(): Upgrader
-    {
-        if ($this->upgrader === null) {
-            $this->upgrader = new Upgrader();
+        if ($this->factory === null) {
+            $this->factory = new UpgraderBusinessFactory();
         }
 
-        return $this->upgrader;
+        return $this->factory;
     }
 }

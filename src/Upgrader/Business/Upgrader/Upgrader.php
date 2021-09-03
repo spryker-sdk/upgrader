@@ -7,56 +7,45 @@
 
 namespace Upgrader\Business\Upgrader;
 
-use Exception;
-use Upgrader\Business\UpgraderBusinessFactory;
+use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
+use Upgrader\Business\PackageManager\PackageManagerInterface;
+use Upgrader\Business\VersionControlSystem\VersionControlSystemInterface;
 
-class Upgrader
+class Upgrader implements UpgraderInterface
 {
     /**
-     * @var \Upgrader\Business\UpgraderBusinessFactory
+     * @var \Upgrader\Business\PackageManager\PackageManagerInterface
      */
-    protected $factory;
+    protected $packageManager;
 
     /**
-     * @return \Upgrader\Business\Upgrader\UpgraderResultInterface
+     * @var \Upgrader\Business\VersionControlSystem\VersionControlSystemInterface
      */
-    public function upgrade(): UpgraderResultInterface
-    {
-        try {
-            $updateResult = $this->getFactory()->createComposerClient()->runComposerUpdate();
-        } catch (Exception $exception) {
-            return new UpgraderResult(false, $exception->getMessage());
-        }
+    protected $versionControlSystem;
 
-        return new UpgraderResult($updateResult->isSuccess(), $updateResult->getResultString());
+    /**
+     * @param \Upgrader\Business\PackageManager\PackageManagerInterface $packageManager
+     * @param \Upgrader\Business\VersionControlSystem\VersionControlSystemInterface $versionControlSystem
+     */
+    public function __construct(
+        PackageManagerInterface $packageManager,
+        VersionControlSystemInterface $versionControlSystem
+    ) {
+        $this->packageManager = $packageManager;
+        $this->versionControlSystem = $versionControlSystem;
     }
 
     /**
-     * @return \Upgrader\Business\Upgrader\UpgraderResultInterface
+     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
      */
-    public function isUpgradeAvailable(): UpgraderResultInterface
+    public function upgrade(): CommandResultOutput
     {
-        try {
-            $hasUncommittedChanges = $this->getFactory()->createGitClient()->isUncommittedChangesExist();
-        } catch (Exception $exception) {
-            return new UpgraderResult(false, $exception->getMessage());
-        }
-        if ($hasUncommittedChanges) {
-            return new UpgraderResult(false, 'Please commit or revert your changes');
-        } else {
-            return new UpgraderResult(true);
-        }
-    }
+        $commandResultOutput = $this->versionControlSystem->checkUncommittedChanges();
 
-    /**
-     * @return \Upgrader\Business\UpgraderBusinessFactory
-     */
-    protected function getFactory(): UpgraderBusinessFactory
-    {
-        if ($this->factory === null) {
-            $this->factory = new UpgraderBusinessFactory();
+        if (!$commandResultOutput->isSuccess()) {
+            return $commandResultOutput;
         }
 
-        return $this->factory;
+        return $this->packageManager->update();
     }
 }

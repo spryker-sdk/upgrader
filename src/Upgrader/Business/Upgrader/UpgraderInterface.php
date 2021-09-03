@@ -5,16 +5,14 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\Command;
+namespace Upgrader\Business\Upgrader;
 
 use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 
-interface CommandInterface
+interface UpgraderInterface
 {
     /**
-     * @param string|null $command
-     *
      * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
      */
-    public function run(?string $command = null): CommandResultOutput;
+    public function upgrade(): CommandResultOutput;
 }

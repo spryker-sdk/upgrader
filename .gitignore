@@ -19,7 +19,6 @@ nbproject/
 
 # tooling
 vendor/
-composer.lock
 .phpunit.result.cache
 
 # built client resources

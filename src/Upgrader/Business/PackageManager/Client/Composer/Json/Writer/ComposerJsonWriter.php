@@ -1,24 +1,33 @@
 <?php
 
 /**
- * Copyright © 2021-present Spryker Systems GmbH. All rights reserved.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\ComposerClient\ComposerFile;
+namespace Upgrader\Business\PackageManager\Client\Composer\Json\Writer;
 
-use Ergebnis\Json\Printer\Printer;
-use RuntimeException;
+use Ergebnis\Json\Printer\PrinterInterface;
 use Upgrader\Business\Exception\UpgraderException;
 
-abstract class AbstractJsonWriter implements JsonWriterInterface
+class ComposerJsonWriter implements ComposerJsonWriterInterface
 {
-    public const INDENTATION_DEFAULT = 4;
+    protected const FILENAME_JSON = 'composer.json';
+    protected const INDENTATION_DEFAULT = 4;
 
     /**
-     * @return string
+     * @var \Ergebnis\Json\Printer\PrinterInterface
      */
-    abstract public function getFileName(): string;
+    protected $printer;
+
+    /**
+     * ToDo Move to Bridge
+     * @param \Ergebnis\Json\Printer\PrinterInterface $printer
+     */
+    public function __construct(PrinterInterface $printer)
+    {
+        $this->printer = $printer;
+    }
 
     /**
      * @param array $composerJsonArray
@@ -27,7 +36,7 @@ abstract class AbstractJsonWriter implements JsonWriterInterface
      */
     public function write(array $composerJsonArray): bool
     {
-        return $this->writeToPath($this->getFileName(), $composerJsonArray);
+        return $this->writeToPath(static::FILENAME_JSON, $composerJsonArray);
     }
 
     /**
@@ -39,6 +48,7 @@ abstract class AbstractJsonWriter implements JsonWriterInterface
     protected function writeToPath(string $path, array $body): bool
     {
         $indentation = $this->detectIndentation($path);
+        // ToDo Move to helper
         $encodedJson = (string)json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $encodedJson = $this->adjustIndentation($encodedJson, $indentation) . PHP_EOL;
 
@@ -59,7 +69,9 @@ abstract class AbstractJsonWriter implements JsonWriterInterface
         }
 
         $content = (string)file_get_contents($filePath);
+
         preg_match('/^(.+)(".+":)/m', $content, $matches);
+
         if (!isset($matches[1])) {
             return static::INDENTATION_DEFAULT;
         }
@@ -71,18 +83,10 @@ abstract class AbstractJsonWriter implements JsonWriterInterface
      * @param string $encodedJson
      * @param int $indentation
      *
-     * @throws \RuntimeException
-     *
      * @return string
      */
     protected function adjustIndentation(string $encodedJson, int $indentation): string
     {
-        if (!class_exists(Printer::class)) {
-            throw new RuntimeException(
-                sprintf('Non default 4 space indentation requires package `%s` installed.', 'ergebnis/json-printer')
-            );
-        }
-
-        return (new Printer())->print($encodedJson, str_repeat(' ', $indentation));
+        return $this->printer->print($encodedJson, str_repeat(' ', $indentation));
     }
 }

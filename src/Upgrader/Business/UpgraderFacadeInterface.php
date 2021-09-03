@@ -7,17 +7,17 @@
 
 namespace Upgrader\Business;
 
-use Upgrader\Business\Upgrader\UpgraderResultInterface;
+use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 
 interface UpgraderFacadeInterface
 {
     /**
-     * @return \Upgrader\Business\Upgrader\UpgraderResultInterface
+     * Specification:
+     * -
+     *
+     * @api
+     *
+     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
      */
-    public function upgrade(): UpgraderResultInterface;
-
-    /**
-     * @return \Upgrader\Business\Upgrader\UpgraderResultInterface
-     */
-    public function isUpgradeAvailable(): UpgraderResultInterface;
+    public function upgrade(): CommandResultOutput;
 }

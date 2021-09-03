@@ -8,7 +8,7 @@
 namespace UpgraderTest\Business\Upgrader;
 
 use Codeception\Test\Unit;
-use Upgrader\Business\Command\CommandResult;
+use Upgrader\Business\Command\CommandResultOutput;
 use Upgrader\Business\ComposerClient\ComposerClient;
 use Upgrader\Business\GitClient\GitClient;
 use Upgrader\Business\Upgrader\Upgrader;
@@ -73,7 +73,7 @@ class UpgraderTest extends Unit
 
         $composerClient = $this->make(ComposerClient::class, [
             'runComposerUpdate' => function () {
-                return new CommandResult(0, 'success');
+                return new CommandResultOutput(0, 'success');
             },
         ]);
 

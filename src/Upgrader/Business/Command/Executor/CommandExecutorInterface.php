@@ -5,12 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\GitClient;
+namespace Upgrader\Business\Command\Executor;
 
-interface GitClientInterface
+interface CommandExecutorInterface
 {
     /**
-     * @return bool
+     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput[]
      */
-    public function isUncommittedChangesExist(): bool;
+    public function execute(): array;
 }

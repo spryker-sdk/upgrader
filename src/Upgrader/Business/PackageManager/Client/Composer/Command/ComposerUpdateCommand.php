@@ -5,17 +5,19 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\ComposerClient\Command;
+namespace Upgrader\Business\PackageManager\Client\Composer\Command;
 
 use Upgrader\Business\Command\AbstractCommand;
 
-class UpdateCommand extends AbstractCommand
+class ComposerUpdateCommand extends AbstractCommand
 {
+    protected const COMMAND_NAME = 'composer update';
+
     /**
      * @return string
      */
     public function getCommand(): string
     {
-        return 'composer update';
+        return static::COMMAND_NAME;
     }
 }

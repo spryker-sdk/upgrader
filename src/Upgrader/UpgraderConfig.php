@@ -9,13 +9,14 @@ namespace Upgrader;
 
 class UpgraderConfig
 {
-    public const COMMAND_EXECUTE_TIMEOUT_KEY = 'UPGRADER_COMMAND_EXECUTE_TIMEOUT';
+    protected const UPGRADER_COMMAND_EXECUTION_TIMEOUT = 'UPGRADER_COMMAND_EXECUTION_TIMEOUT';
+    protected const DEFAULT_COMMAND_EXECUTION_TIMEOUT = 600;
 
     /**
      * @return int
      */
-    public function getCommandExecuteTimeout(): int
+    public function getCommandExecutionTimeout(): int
     {
-        return (int)getenv(self::COMMAND_EXECUTE_TIMEOUT_KEY) ?? 600;
+        return (int)getenv(self::UPGRADER_COMMAND_EXECUTION_TIMEOUT) ?? static::DEFAULT_COMMAND_EXECUTION_TIMEOUT;
     }
 }

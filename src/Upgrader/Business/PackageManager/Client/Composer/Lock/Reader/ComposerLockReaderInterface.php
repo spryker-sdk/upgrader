@@ -5,15 +5,10 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\ComposerClient\ComposerFile;
+namespace Upgrader\Business\PackageManager\Client\Composer\Lock\Reader;
 
-interface JsonReaderInterface
+interface ComposerLockReaderInterface
 {
-    /**
-     * @return string
-     */
-    public function getFileName(): string;
-
     /**
      * @return array
      */

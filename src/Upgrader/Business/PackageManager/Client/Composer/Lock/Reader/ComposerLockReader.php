@@ -5,23 +5,20 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\ComposerClient\ComposerFile;
+namespace Upgrader\Business\PackageManager\Client\Composer\Lock\Reader;
 
 use Upgrader\Business\Exception\UpgraderException;
 
-abstract class AbstractJsonReader implements JsonReaderInterface
+class ComposerLockReader implements ComposerLockReaderInterface
 {
-    /**
-     * @return string
-     */
-    abstract public function getFileName(): string;
+    protected const COMPOSER_LOCK = 'composer.lock';
 
     /**
      * @return array
      */
     public function read(): array
     {
-        return $this->readFromPath($this->getFileName());
+        return $this->readFromPath(static::COMPOSER_LOCK);
     }
 
     /**
@@ -37,8 +34,6 @@ abstract class AbstractJsonReader implements JsonReaderInterface
             throw new UpgraderException('File is not exist: ' . $path);
         }
 
-        $fileContent = (string)file_get_contents($path);
-
-        return json_decode($fileContent, true);
+        return json_decode((string)file_get_contents($path), true);
     }
 }
