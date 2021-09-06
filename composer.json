@@ -37,7 +37,7 @@
         "sort-packages": true
     },
     "scripts": {
-        "stan": "phpstan analyze -l 5 src/",
+        "stan": "phpstan analyze",
         "test": "codecept build && codecept run"
     }
 }
