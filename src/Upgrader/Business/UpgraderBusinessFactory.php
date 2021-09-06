@@ -9,7 +9,6 @@ namespace Upgrader\Business;
 
 use Ergebnis\Json\Printer\Printer;
 use Ergebnis\Json\Printer\PrinterInterface;
-use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerUpdateCommand;
 use Upgrader\Business\PackageManager\Client\Composer\ComposerClient;
@@ -37,15 +36,6 @@ class UpgraderBusinessFactory
      * @var \Upgrader\UpgraderConfig
      */
     protected $config;
-
-//
-//    /**
-//     * @return \Upgrader\Business\GitClient\Command\UpdateIndexCommand
-//     */
-//    public function createUpdateIndexCommand(): UpdateIndexCommand
-//    {
-//        return new UpdateIndexCommand($this->getConfig());
-//    }
 
     /**
      * @return \Upgrader\Business\Upgrader\UpgraderInterface

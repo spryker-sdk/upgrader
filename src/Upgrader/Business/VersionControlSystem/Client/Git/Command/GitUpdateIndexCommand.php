@@ -21,20 +21,4 @@ class GitUpdateIndexCommand extends AbstractCommand
     {
         return sprintf('%s %s', static::COMMAND_NAME, self::COMMAND_REFRESH_FLAG);
     }
-
-//    /**
-//     * @return bool
-//     */
-//    public function isIndexOutdated(): bool
-//    {
-//        $command = sprintf('%s %s', $this->getCommand(), self::COMMAND_REFRESH_FLAG);
-//
-//        try {
-//            $this->exec($command);
-//        } catch (UpgraderCommandExecException $exception) {
-//            return true;
-//        }
-//
-//        return false;
-//    }
 }

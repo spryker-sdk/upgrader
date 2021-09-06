@@ -9,5 +9,10 @@ namespace Upgrader\Business\PackageManager\Client\Composer\Json\Writer;
 
 interface ComposerJsonWriterInterface
 {
-
+    /**
+     * @param array $composerJsonArray
+     *
+     * @return bool
+     */
+    public function write(array $composerJsonArray): bool;
 }
