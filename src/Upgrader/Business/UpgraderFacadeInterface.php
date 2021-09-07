@@ -13,9 +13,9 @@ interface UpgraderFacadeInterface
 {
     /**
      * Specification:
-     * - Updates Spryker packages.
-     * - Checks project files on existing uncommitted changes, return exit code 1 if exists.
-     * - Returns command result object contains exit code and message.
+     * - Checks for uncommented changes.
+     * - Updates packages to the latest available version.
+     * - Returns command result object that contains exit code and message.
      *
      * @api
      *
