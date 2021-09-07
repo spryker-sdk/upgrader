@@ -17,8 +17,7 @@ class UpgraderFacade implements UpgraderFacadeInterface
     protected $factory;
 
     /**
-     * Specification:
-     * -
+     * {@inheritDoc}
      *
      * @api
      *

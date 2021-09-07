@@ -13,7 +13,8 @@ interface UpgraderFacadeInterface
 {
     /**
      * Specification:
-     * -
+     * - Updates Spryker packages.
+     * - Returns command result object contains exit code and message.
      *
      * @api
      *
