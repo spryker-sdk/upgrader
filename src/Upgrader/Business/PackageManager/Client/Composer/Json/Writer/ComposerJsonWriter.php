@@ -21,8 +21,6 @@ class ComposerJsonWriter implements ComposerJsonWriterInterface
     protected $printer;
 
     /**
-     * ToDo Move to Bridge
-     *
      * @param \Ergebnis\Json\Printer\PrinterInterface $printer
      */
     public function __construct(PrinterInterface $printer)
@@ -49,7 +47,6 @@ class ComposerJsonWriter implements ComposerJsonWriterInterface
     protected function writeToPath(string $path, array $body): bool
     {
         $indentation = $this->detectIndentation($path);
-        // ToDo Move to helper
         $encodedJson = (string)json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $encodedJson = $this->adjustIndentation($encodedJson, $indentation) . PHP_EOL;
 
