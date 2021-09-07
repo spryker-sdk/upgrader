@@ -22,6 +22,7 @@ class ComposerJsonWriter implements ComposerJsonWriterInterface
 
     /**
      * ToDo Move to Bridge
+     *
      * @param \Ergebnis\Json\Printer\PrinterInterface $printer
      */
     public function __construct(PrinterInterface $printer)

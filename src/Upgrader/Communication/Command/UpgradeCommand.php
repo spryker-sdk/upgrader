@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2021-present Spryker Systems GmbH. All rights reserved.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
@@ -36,12 +36,12 @@ class UpgradeCommand extends AbstractCommand
         $upgradeResult = $this->getFacade()->upgrade();
 
         if (!$upgradeResult->isSuccess()) {
-            $output->writeln(sprintf("<fg=red;options=bold>%s</>", $upgradeResult->getMessage()));
+            $output->writeln(sprintf('<fg=red;options=bold>%s</>', $upgradeResult->getMessage()));
 
             return static::CODE_ERROR;
         }
 
-        $output->writeln("<fg=green;options=bold>Upgrade command has been finished successfully.</>.");
+        $output->writeln('<fg=green;options=bold>Upgrade command has been finished successfully.</>.');
 
         return static::CODE_SUCCESS;
     }

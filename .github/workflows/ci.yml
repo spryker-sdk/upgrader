@@ -56,3 +56,6 @@ jobs:
 
       - name: PHPStan checks
         run: composer stan
+
+      - name: CodeStyle checks
+        run: composer cs-check

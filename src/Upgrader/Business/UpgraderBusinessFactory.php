@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2021-present Spryker Systems GmbH. All rights reserved.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
@@ -42,10 +42,10 @@ class UpgraderBusinessFactory
      */
     public function createUpgrader(): UpgraderInterface
     {
-       return new Upgrader(
-           $this->createPackageManager(),
-           $this->createVersionControlSystem()
-       );
+        return new Upgrader(
+            $this->createPackageManager(),
+            $this->createVersionControlSystem()
+        );
     }
 
     /**

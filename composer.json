@@ -37,6 +37,8 @@
         "sort-packages": true
     },
     "scripts": {
+        "cs-check": "phpcs --colors -p -s --extensions=php --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml --ignore=/tests/_data/,/_support/,tests/ src/",
+        "cs-fix": "phpcbf --colors -p --extensions=php --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml --ignore=/tests/_data/,/_support/,tests/ src/",
         "stan": "phpstan analyze",
         "test": "codecept build && codecept run"
     }
