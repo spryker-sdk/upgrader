@@ -8,11 +8,13 @@
 namespace UpgraderTest\Business\Upgrader;
 
 use Codeception\Test\Unit;
-use Upgrader\Business\Command\CommandResultOutput;
-use Upgrader\Business\ComposerClient\ComposerClient;
-use Upgrader\Business\GitClient\GitClient;
+use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
+use Upgrader\Business\PackageManager\Client\Composer\ComposerClient;
+use Upgrader\Business\PackageManager\PackageManager;
 use Upgrader\Business\Upgrader\Upgrader;
-use Upgrader\Business\UpgraderBusinessFactory;
+use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitUpdateIndexCommand;
+use Upgrader\Business\VersionControlSystem\Client\Git\GitClient;
+use Upgrader\Business\VersionControlSystem\VersionControlSystem;
 
 /**
  * @group Upgrader
@@ -26,18 +28,17 @@ class UpgraderTest extends Unit
      */
     public function testIsUpgradeAvailableExistUncommittedChanges(): void
     {
-        $factory = $this->getMockUpgraderBusinessFactory(true);
+        // Arrange
+        $packageManager = $this->getMockPackageManager();
+        $versionControlSystem = $this->getMockVersionControlSystem(true);
+        $upgrader = new Upgrader($packageManager, $versionControlSystem);
 
-        $upgrader = $this->make(Upgrader::class, [
-            'getFactory' => function () use ($factory) {
-                return $factory;
-            },
-        ]);
+        // Act
+        $upgradeResult = $upgrader->upgrade();
 
-        $upgraderResult = $upgrader->isUpgradeAvailable();
-
-        $this->assertFalse($upgraderResult->isSuccess());
-        $this->assertStringContainsString('Please commit or revert your changes', $upgraderResult->getMessage());
+        // Assert
+        $this->assertFalse($upgradeResult->isSuccess());
+        $this->assertStringContainsString('Please commit or revert your changes', $upgradeResult->getMessage());
     }
 
     /**
@@ -45,47 +46,48 @@ class UpgraderTest extends Unit
      */
     public function testUpgradeReturnZeroCode(): void
     {
-        $factory = $this->getMockUpgraderBusinessFactory(false);
+        // Arrange
+        $packageManager = $this->getMockPackageManager();
+        $versionControlSystem = $this->getMockVersionControlSystem(false);
+        $upgrader = new Upgrader($packageManager, $versionControlSystem);
 
-        $upgraderFacade = $this->make(Upgrader::class, [
-            'getFactory' => function () use ($factory) {
-                return $factory;
-            },
-        ]);
+        // Act
+        $upgradeResult = $upgrader->upgrade();
 
-        $upgradeResult = $upgraderFacade->upgrade();
-
+        // Assert
         $this->assertTrue($upgradeResult->isSuccess());
     }
 
     /**
      * @param bool $hasUncommittedChanges
      *
-     * @return \Upgrader\Business\UpgraderBusinessFactory
+     * @return \Upgrader\Business\VersionControlSystem\VersionControlSystem
      */
-    protected function getMockUpgraderBusinessFactory(bool $hasUncommittedChanges): UpgraderBusinessFactory
+    protected function getMockVersionControlSystem(bool $hasUncommittedChanges): VersionControlSystem
     {
-        $gitClient = $this->make(GitClient::class, [
-            'isUncommittedChangesExist' => function () use ($hasUncommittedChanges) {
-                return $hasUncommittedChanges;
+        $gitUpdateIndexCommand = $this->make(GitUpdateIndexCommand::class, [
+            'run' => function () use ($hasUncommittedChanges) {
+                $statusCode = $hasUncommittedChanges ? 1 : 0;
+
+                return new CommandResultOutput($statusCode, '');
             },
         ]);
+        $vcsClient = new GitClient($gitUpdateIndexCommand);
 
-        $composerClient = $this->make(ComposerClient::class, [
-            'runComposerUpdate' => function () {
+        return new VersionControlSystem($vcsClient);
+    }
+
+    /**
+     * @return \Upgrader\Business\PackageManager\PackageManager
+     */
+    protected function getMockPackageManager(): PackageManager
+    {
+        $packageManagerClient = $this->make(ComposerClient::class, [
+            'runUpdate' => function () {
                 return new CommandResultOutput(0, 'success');
             },
         ]);
 
-        $businessFactory = $this->make(UpgraderBusinessFactory::class, [
-            'createGitClient' => function () use ($gitClient) {
-                return $gitClient;
-            },
-            'createComposerClient' => function () use ($composerClient) {
-                return $composerClient;
-            },
-        ]);
-
-        return $businessFactory;
+        return new PackageManager($packageManagerClient);
     }
 }

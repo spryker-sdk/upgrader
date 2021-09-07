@@ -8,7 +8,8 @@
 namespace UpgraderTest\Business\ComposerClient\ComposerFile;
 
 use Codeception\Test\Unit;
-use Upgrader\Business\ComposerClient\ComposerFile\ComposerJson\ComposerJsonWriter;
+use Ergebnis\Json\Printer\Printer;
+use Upgrader\Business\PackageManager\Client\Composer\Json\Writer\ComposerJsonWriter;
 
 class ComposerJsonWriterTest extends Unit
 {
@@ -27,11 +28,12 @@ class ComposerJsonWriterTest extends Unit
         }
         file_put_contents($writeFile, ' ');
 
-        $composerJsonWriter = $this->make(ComposerJsonWriter::class, [
-            'getFileName' => function () use ($writeFile) {
-                return $writeFile;
-            },
-        ]);
+        $printer = new Printer();
+        $composerJsonWriter = $this->construct(
+            ComposerJsonWriter::class,
+            ['printer' => $printer],
+            ['getFileName' => $writeFile]
+        );
 
         $array = [
             'name' => 'foo/bar',
@@ -66,11 +68,12 @@ class ComposerJsonWriterTest extends Unit
         }
         copy($checkFile, $writeFile);
 
-        $composerJsonWriter = $this->make(ComposerJsonWriter::class, [
-            'getFileName' => function () use ($writeFile) {
-                return $writeFile;
-            },
-        ]);
+        $printer = new Printer();
+        $composerJsonWriter = $this->construct(
+            ComposerJsonWriter::class,
+            ['printer' => $printer],
+            ['getFileName' => $writeFile]
+        );
 
         $array = [
             'name' => 'foo/bar',

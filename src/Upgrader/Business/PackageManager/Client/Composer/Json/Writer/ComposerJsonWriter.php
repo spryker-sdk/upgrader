@@ -36,7 +36,7 @@ class ComposerJsonWriter implements ComposerJsonWriterInterface
      */
     public function write(array $composerJsonArray): bool
     {
-        return $this->writeToPath(static::FILENAME_JSON, $composerJsonArray);
+        return $this->writeToPath($this->getFileName(), $composerJsonArray);
     }
 
     /**
@@ -88,5 +88,13 @@ class ComposerJsonWriter implements ComposerJsonWriterInterface
     protected function adjustIndentation(string $encodedJson, int $indentation): string
     {
         return $this->printer->print($encodedJson, str_repeat(' ', $indentation));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getFileName(): string
+    {
+        return static::FILENAME_JSON;
     }
 }
