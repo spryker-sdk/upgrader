@@ -26,11 +26,11 @@ class ComposerClient implements PackageManagerClientInterface
         $this->composerUpdateCommand = $composerUpdateCommand;
     }
 
-    /**
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
-     */
-    public function runUpdate(): CommandResultOutput
-    {
-        return $this->composerUpdateCommand->run();
-    }
+//    /**
+//     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+//     */
+//    public function runUpdate(): CommandResultOutput
+//    {
+//        return $this->composerUpdateCommand->run();
+//    }
 }

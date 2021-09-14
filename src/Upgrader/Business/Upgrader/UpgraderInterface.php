@@ -7,12 +7,15 @@
 
 namespace Upgrader\Business\Upgrader;
 
+use Upgrader\Business\Command\CommandRequest;
+use Upgrader\Business\Command\CommandResponseList;
 use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 
 interface UpgraderInterface
 {
     /**
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @param \Upgrader\Business\Command\CommandRequest $commandRequest
+     * @return \Upgrader\Business\Command\CommandResponseList
      */
-    public function upgrade(): CommandResultOutput;
+    public function run(CommandRequest $commandRequest): CommandResponseList;
 }

@@ -11,8 +11,8 @@ use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 
 interface PackageManagerInterface
 {
-    /**
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
-     */
-    public function update(): CommandResultOutput;
+//    /**
+//     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+//     */
+//    public function update(): CommandResultOutput;
 }

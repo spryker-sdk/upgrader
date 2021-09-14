@@ -28,20 +28,20 @@ class GitClient implements VersionControlSystemClientInterface
         $this->gitUpdateIndexCommand = $gitUpdateIndexCommand;
     }
 
-    /**
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
-     */
-    public function isUncommittedChangesExist(): CommandResultOutput
-    {
-        $commandOutputResult = $this->gitUpdateIndexCommand->run();
-
-        if (!$commandOutputResult->isSuccess()) {
-            return new CommandResultOutput(
-                $commandOutputResult->getStatusCode(),
-                static::ERROR_MESSAGE
-            );
-        }
-
-        return $commandOutputResult;
-    }
+//    /**
+//     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+//     */
+//    public function isUncommittedChangesExist(): CommandResultOutput
+//    {
+//        $commandOutputResult = $this->gitUpdateIndexCommand->run();
+//
+//        if (!$commandOutputResult->isSuccess()) {
+//            return new CommandResultOutput(
+//                $commandOutputResult->getStatusCode(),
+//                static::ERROR_MESSAGE
+//            );
+//        }
+//
+//        return $commandOutputResult;
+//    }
 }

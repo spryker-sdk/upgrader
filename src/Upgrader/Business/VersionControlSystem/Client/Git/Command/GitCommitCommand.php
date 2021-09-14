@@ -12,24 +12,24 @@ use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\CommandResponse;
 
-class GitUpdateIndexCommand implements CommandInterface
+class GitCommitCommand implements CommandInterface
 {
     /**
      * @return string
      */
     public function getCommand(): string
     {
-        return 'git update-index --refresh';
+        return 'git commit -m "upgradebot"';
     }
 
     public function getName(): string
     {
-        return 'git:uncommited';
+        return 'git:commit';
     }
 
     public function getDescription(): string
     {
-        return 'The command for checking uncommited changes';
+        return 'The command for commiting changes';
     }
 
     /**

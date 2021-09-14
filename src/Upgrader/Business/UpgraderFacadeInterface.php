@@ -7,6 +7,8 @@
 
 namespace Upgrader\Business;
 
+use Upgrader\Business\Command\CommandResponseList;
+use Upgrader\Business\Command\CommandRequest;
 use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 
 interface UpgraderFacadeInterface
@@ -19,7 +21,19 @@ interface UpgraderFacadeInterface
      *
      * @api
      *
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @param \Upgrader\Business\Command\CommandRequest $commandRequest
+     *
+     * @return \Upgrader\Business\Command\CommandResponseList
      */
-    public function upgrade(): CommandResultOutput;
+    public function upgrade(CommandRequest $commandRequest): CommandResponseList;
+
+    /**
+     * Specification:
+     * - Return list of commands for upgrade.
+     *
+     * @api
+     *
+     * @return \Upgrader\Business\Command\CommandInterface[]
+     */
+    public function getUpgraderCommands(): array;
 }

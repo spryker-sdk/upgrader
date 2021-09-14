@@ -12,24 +12,35 @@ use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\CommandResponse;
 
-class GitUpdateIndexCommand implements CommandInterface
+class GitCheckoutCommand implements CommandInterface
 {
+
+    /**
+     * @var string
+     */
+    protected $checkoutTo;
+
+    public function __construct($checkoutTo)
+    {
+        $this->checkoutTo = $checkoutTo;
+    }
+
     /**
      * @return string
      */
     public function getCommand(): string
     {
-        return 'git update-index --refresh';
+        return sprintf('git checkout %s', $this->checkoutTo);
     }
 
     public function getName(): string
     {
-        return 'git:uncommited';
+        return 'git:checkout';
     }
 
     public function getDescription(): string
     {
-        return 'The command for checking uncommited changes';
+        return 'The command for switching the branch';
     }
 
     /**

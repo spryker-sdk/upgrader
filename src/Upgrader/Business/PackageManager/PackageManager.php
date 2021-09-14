@@ -25,11 +25,11 @@ class PackageManager implements PackageManagerInterface
         $this->packageManagerClient = $packageManagerClient;
     }
 
-    /**
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
-     */
-    public function update(): CommandResultOutput
-    {
-        return $this->packageManagerClient->runUpdate();
-    }
+//    /**
+//     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+//     */
+//    public function update(): CommandResultOutput
+//    {
+//        return $this->packageManagerClient->runUpdate();
+//    }
 }

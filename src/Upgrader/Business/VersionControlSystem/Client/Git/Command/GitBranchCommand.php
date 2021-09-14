@@ -12,24 +12,35 @@ use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\CommandResponse;
 
-class GitUpdateIndexCommand implements CommandInterface
+class GitBranchCommand implements CommandInterface
 {
+
+    /**
+     * @var string
+     */
+    protected $prBranch;
+
+    public function __construct($prBranch)
+    {
+        $this->prBranch = $prBranch;
+    }
+
     /**
      * @return string
      */
     public function getCommand(): string
     {
-        return 'git update-index --refresh';
+        return sprintf('git checkout -b %s', $this->prBranch);
     }
 
     public function getName(): string
     {
-        return 'git:uncommited';
+        return 'git:branch:create';
     }
 
     public function getDescription(): string
     {
-        return 'The command for checking uncommited changes';
+        return 'The command for creating a new branch';
     }
 
     /**

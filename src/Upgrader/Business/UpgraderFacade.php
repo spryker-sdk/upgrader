@@ -7,6 +7,8 @@
 
 namespace Upgrader\Business;
 
+use Upgrader\Business\Command\CommandRequest;
+use Upgrader\Business\Command\CommandResponseList;
 use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 
 class UpgraderFacade implements UpgraderFacadeInterface
@@ -21,11 +23,13 @@ class UpgraderFacade implements UpgraderFacadeInterface
      *
      * @api
      *
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @param \Upgrader\Business\Command\CommandRequest $commandRequest
+     *
+     * @return \Upgrader\Business\Command\CommandResponseList
      */
-    public function upgrade(): CommandResultOutput
+    public function upgrade(CommandRequest $commandRequest): CommandResponseList
     {
-        return $this->getFactory()->createUpgrader()->upgrade();
+        return $this->getFactory()->createUpgrader()->run($commandRequest);
     }
 
     /**
@@ -38,5 +42,17 @@ class UpgraderFacade implements UpgraderFacadeInterface
         }
 
         return $this->factory;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @return \Upgrader\Business\Command\CommandInterface[]
+     */
+    public function getUpgraderCommands(): array
+    {
+        return $this->getFactory()->createUpgrader()->getCommands();
     }
 }

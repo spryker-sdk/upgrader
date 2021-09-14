@@ -12,24 +12,34 @@ use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\CommandResponse;
 
-class GitUpdateIndexCommand implements CommandInterface
+class GitPushCommand implements CommandInterface
 {
+    /**
+     * @var string
+     */
+    protected $branch;
+
+    public function __construct($branch)
+    {
+        $this->branch = $branch;
+    }
+
     /**
      * @return string
      */
     public function getCommand(): string
     {
-        return 'git update-index --refresh';
+        return sprintf('git push --set-upstream origin %s', $this->branch);
     }
 
     public function getName(): string
     {
-        return 'git:uncommited';
+        return 'git:push';
     }
 
     public function getDescription(): string
     {
-        return 'The command for checking uncommited changes';
+        return 'The command for pushing the changes';
     }
 
     /**

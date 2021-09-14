@@ -9,6 +9,7 @@ namespace Upgrader\Business;
 
 use Ergebnis\Json\Printer\Printer;
 use Ergebnis\Json\Printer\PrinterInterface;
+use Symfony\Component\Process\Process;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerUpdateCommand;
 use Upgrader\Business\PackageManager\Client\Composer\ComposerClient;
@@ -23,6 +24,11 @@ use Upgrader\Business\PackageManager\PackageManager;
 use Upgrader\Business\PackageManager\PackageManagerInterface;
 use Upgrader\Business\Upgrader\Upgrader;
 use Upgrader\Business\Upgrader\UpgraderInterface;
+use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitAddCommand;
+use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitBranchCommand;
+use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCheckoutCommand;
+use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCommitCommand;
+use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitPushCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitUpdateIndexCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\GitClient;
 use Upgrader\Business\VersionControlSystem\Client\VersionControlSystemClientInterface;
@@ -42,10 +48,20 @@ class UpgraderBusinessFactory
      */
     public function createUpgrader(): UpgraderInterface
     {
-        return new Upgrader(
+        $upgrader = new Upgrader(
             $this->createPackageManager(),
             $this->createVersionControlSystem()
         );
+
+        $branch = $this->getPrBranch($this->getCurrentBranch(), $this->getPreviousCommitHash());
+        return $upgrader
+            ->addCommand($this->createGitUpdateIndexCommand())
+            ->addCommand($this->createComposerUpdateCommand())
+            ->addCommand(new GitBranchCommand($branch))
+            ->addCommand(new GitAddCommand())
+            ->addCommand(new GitCommitCommand())
+            ->addCommand(new GitPushCommand($branch))
+            ->addCommand(new GitCheckoutCommand($this->getCurrentBranch()));
     }
 
     /**
@@ -136,6 +152,36 @@ class UpgraderBusinessFactory
     public function createPrinter(): PrinterInterface
     {
         return new Printer();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getPreviousCommitHash(): string
+    {
+        $process = new Process(explode(' ', 'git rev-parse HEAD'), (string)getcwd());
+        $process->run();
+        return trim($process->getOutput());
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCurrentBranch(): string
+    {
+        $process = new Process(explode(' ', 'git rev-parse --abbrev-ref HEAD'), (string)getcwd());
+        $process->run();
+        return trim($process->getOutput());
+    }
+
+    /**
+     * @param string $currentBranch
+     * @param string $previousCommitHash
+     * @return string
+     */
+    protected function getPrBranch(string $currentBranch, string $previousCommitHash): string
+    {
+        return sprintf('upgradebot/upgrade-for-%s-%s', $currentBranch, $previousCommitHash);
     }
 
     /**

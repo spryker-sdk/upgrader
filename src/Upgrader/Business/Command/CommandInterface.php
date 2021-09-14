@@ -12,9 +12,22 @@ use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 interface CommandInterface
 {
     /**
-     * @param string|null $command
-     *
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return string
      */
-    public function run(?string $command = null): CommandResultOutput;
+    public function getName(): string;
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string;
+
+    /**
+     * @return string
+     */
+    public function getCommand(): string;
+
+    /**
+     * @return \Upgrader\Business\Command\CommandResponse
+     */
+    public function runCommand(): CommandResponse;
 }

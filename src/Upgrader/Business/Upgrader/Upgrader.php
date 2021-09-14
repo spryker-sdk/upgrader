@@ -7,6 +7,11 @@
 
 namespace Upgrader\Business\Upgrader;
 
+use Symfony\Component\Process\Process;
+use Upgrader\Business\Command\CommandInterface;
+use Upgrader\Business\Command\CommandRequest;
+use Upgrader\Business\Command\CommandResponse;
+use Upgrader\Business\Command\CommandResponseList;
 use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 use Upgrader\Business\PackageManager\PackageManagerInterface;
 use Upgrader\Business\VersionControlSystem\VersionControlSystemInterface;
@@ -14,38 +19,54 @@ use Upgrader\Business\VersionControlSystem\VersionControlSystemInterface;
 class Upgrader implements UpgraderInterface
 {
     /**
-     * @var \Upgrader\Business\PackageManager\PackageManagerInterface
+     * @var \Upgrader\Business\Command\CommandInterface[]
      */
-    protected $packageManager;
+    protected $commands = [];
 
     /**
-     * @var \Upgrader\Business\VersionControlSystem\VersionControlSystemInterface
+     * @param \Upgrader\Business\Command\CommandInterface $command
+     *
+     * @return $this
      */
-    protected $versionControlSystem;
+    public function addCommand(CommandInterface $command)
+    {
+        $this->commands[] = $command;
 
-    /**
-     * @param \Upgrader\Business\PackageManager\PackageManagerInterface $packageManager
-     * @param \Upgrader\Business\VersionControlSystem\VersionControlSystemInterface $versionControlSystem
-     */
-    public function __construct(
-        PackageManagerInterface $packageManager,
-        VersionControlSystemInterface $versionControlSystem
-    ) {
-        $this->packageManager = $packageManager;
-        $this->versionControlSystem = $versionControlSystem;
+        return $this;
     }
 
     /**
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return \Upgrader\Business\Command\CommandInterface[]
      */
-    public function upgrade(): CommandResultOutput
+    public function getCommands(): array
     {
-        $commandResultOutput = $this->versionControlSystem->checkUncommittedChanges();
+        return $this->commands;
+    }
 
-        if (!$commandResultOutput->isSuccess()) {
-            return $commandResultOutput;
+    /**
+     * @param \Upgrader\Business\Command\CommandRequest $commandRequest
+     * @return \Upgrader\Business\Command\CommandResponseList
+     */
+    public function run(CommandRequest $commandRequest): CommandResponseList
+    {
+
+        $commandResponseList = new CommandResponseList();
+        $commandsList = $commandRequest->getCommandFilterListAsArray();
+
+        /** @var \Evaluator\Business\Command\CommandInterface $command */
+        foreach ($this->commands as $command) {
+            if ($commandsList !== [] && !in_array($command->getName(), $commandsList)) {
+                continue;
+            }
+
+            $commandResponse = $command->runCommand();
+            $commandResponseList->add($commandResponse);
+
+            if($commandResponseList->getExitCode() == CommandResponse::CODE_ERROR){
+                break;
+            }
         }
 
-        return $this->packageManager->update();
+        return $commandResponseList;
     }
 }

@@ -14,5 +14,5 @@ interface VersionControlSystemClientInterface
     /**
      * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
      */
-    public function isUncommittedChangesExist(): CommandResultOutput;
+//    public function isUncommittedChangesExist(): CommandResultOutput;
 }
