@@ -12,7 +12,7 @@ use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\CommandResponse;
 
-class ComposerUpdateCommand implements CommandInterface
+class ComposerUpdateCommand extends AbstractCommand implements CommandInterface
 {
     public function getName(): string
     {
@@ -38,10 +38,6 @@ class ComposerUpdateCommand implements CommandInterface
      */
     public function runCommand(): CommandResponse
     {
-        $process = new Process(explode(' ', $this->getCommand()), (string)getcwd());
-        $process->setTimeout(9000);
-        $process->run();
-
-        return new CommandResponse($process, $this->getName());
+        return $this->runProcess($this->getCommand());
     }
 }
