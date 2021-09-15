@@ -8,6 +8,7 @@
 namespace Upgrader\Business\Command;
 
 use Symfony\Component\Process\Process;
+use Upgrader\Business\Command\Response\CommandResponse;
 use Upgrader\UpgraderConfig;
 
 abstract class AbstractCommand implements CommandInterface
@@ -31,15 +32,13 @@ abstract class AbstractCommand implements CommandInterface
     abstract public function getCommand(): string;
 
     /**
-     * @param string|null $command
-     *
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    public function run(?string $command = null): CommandResultOutput
+    public function run(): CommandResponse
     {
-        $process = $this->runProcess($command);
+        $process = $this->runProcess($this->getCommand());
 
-        return $this->createCommandResultOutput($process);
+        return $this->createCommandResponse($process);
     }
 
     /**
@@ -71,38 +70,30 @@ abstract class AbstractCommand implements CommandInterface
     /**
      * @param \Symfony\Component\Process\Process $process
      *
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    protected function createCommandResultOutput(Process $process): CommandResultOutput
+    protected function createCommandResponse(Process $process): CommandResponse
     {
         $resultOutput = $process->getExitCode() ? $process->getErrorOutput() : $process->getExitCodeText();
 
-        return new CommandResultOutput((int)$process->getExitCode(), (string)$resultOutput, $process->getCommandLine());
+        return new CommandResponse($process->isSuccessful(), $this->getName(), $resultOutput);
     }
 
-    /**
-     * @return CommandResponse
-     */
-    public function run(): CommandResponse
-    {
-        return $this->runProcess($this->getCommand());
-    }
-
-    /**
-     *
-     * @return \Upgrader\Business\Command\CommandResponse
-     */
-    public function runProcess(string $cliCommand): CommandResponse
-    {
-        $process = new Process(explode(' ', $cliCommand), (string)getcwd());
-        $process->setTimeout(9000);
-        $process->run();
-        $output = $process->getOutput();
-
-        if(!$process->isSuccessful()){
-            $output .= "\n" . $process->getErrorOutput();
-        }
-
-        return new CommandResponse($process->isSuccessful(), $this->getName(), $output);
-    }
+//    /**
+//     *
+//     * @return \Upgrader\Business\Command\Response\CommandResponse
+//     */
+//    protected function runProcess(string $cliCommand): CommandResponse
+//    {
+//        $process = new Process(explode(' ', $cliCommand), (string)getcwd());
+//        $process->setTimeout(9000);
+//        $process->run();
+//        $output = $process->getOutput();
+//
+//        if(!$process->isSuccessful()){
+//            $output .= "\n" . $process->getErrorOutput();
+//        }
+//
+//        return new CommandResponse($process->isSuccessful(), $this->getName(), $output);
+//    }
 }

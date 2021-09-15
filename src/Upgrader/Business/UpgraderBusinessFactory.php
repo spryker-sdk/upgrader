@@ -9,7 +9,6 @@ namespace Upgrader\Business;
 
 use Ergebnis\Json\Printer\Printer;
 use Ergebnis\Json\Printer\PrinterInterface;
-use Symfony\Component\Process\Process;
 use GuzzleHttp\Client;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpCommunicator;
@@ -27,6 +26,7 @@ use Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockRea
 use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
 use Upgrader\Business\PackageManager\PackageManager;
 use Upgrader\Business\PackageManager\PackageManagerInterface;
+use Upgrader\Business\Upgrader\Command\UpgradeCommand;
 use Upgrader\Business\Upgrader\Upgrader;
 use Upgrader\Business\Upgrader\UpgraderInterface;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitAddCommand;
@@ -35,10 +35,6 @@ use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCheckoutToStart
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCommitCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitPushCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitUpdateIndexCommand;
-use Upgrader\Business\VersionControlSystem\Client\Git\GitClient;
-use Upgrader\Business\VersionControlSystem\Client\VersionControlSystemClientInterface;
-use Upgrader\Business\VersionControlSystem\VersionControlSystem;
-use Upgrader\Business\VersionControlSystem\VersionControlSystemInterface;
 use Upgrader\UpgraderConfig;
 
 class UpgraderBusinessFactory
@@ -55,7 +51,7 @@ class UpgraderBusinessFactory
     {
         return ( new Upgrader())
             ->addCommand($this->createGitUpdateIndexCommand())
-            ->addCommand($this->createComposerUpdateCommand())
+            ->addCommand($this->createUpgradeCommand())
             ->addCommand($this->createGitBranchCommand())
             ->addCommand($this->createGitAddCommand())
             ->addCommand($this->createGitCommitCommand())
@@ -63,18 +59,17 @@ class UpgraderBusinessFactory
             ->addCommand($this->createGitCheckoutToStartCommand());
     }
 
-//    /**
-//     * @return \Upgrader\Business\Upgrader\UpgraderInterface
-//     */
-//    public function createUpgrader(): UpgraderInterface
-//    {
-//        return new Upgrader(
-//            $this->createPackageManager(),
-//            $this->createVersionControlSystem(),
-//            $this->createDataProvider()
-//        );
-//    }
-//
+    /**
+     * @return \Upgrader\Business\Upgrader\Command\UpgradeCommand
+     */
+    public function createUpgradeCommand(): UpgradeCommand
+    {
+        return new UpgradeCommand(
+            $this->createPackageManager(),
+            $this->createDataProvider()
+        );
+    }
+
     /**
      * @return \Upgrader\Business\DataProvider\DataProvider
      */
@@ -109,7 +104,7 @@ class UpgraderBusinessFactory
     /**
      * @return \GuzzleHttp\Client
      */
-    protected function createCommunicationClient(): Client
+    public function createCommunicationClient(): Client
     {
         return new Client();
     }
@@ -125,20 +120,42 @@ class UpgraderBusinessFactory
     }
 
     /**
-     * @return \Upgrader\Business\VersionControlSystem\VersionControlSystemInterface
+     * @return \Upgrader\Business\VersionControlSystem\Client\Git\Command\GitPushCommand
      */
-    public function createVersionControlSystem(): VersionControlSystemInterface
+    public function createGitPushCommand()
     {
-        return new VersionControlSystem(
-            $this->createGitClient()
-        );
-    }
-
-    public function createGitPushCommand(){
         return new GitPushCommand($this->getConfig());
     }
 
-    public function createGitCheckoutToStartCommand(){
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCommitCommand
+     */
+    public function createGitCommitCommand(): GitCommitCommand
+    {
+        return new GitCommitCommand($this->getConfig());
+    }
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Client\Git\Command\GitAddCommand
+     */
+    public function createGitAddCommand(): GitAddCommand
+    {
+        return new GitAddCommand($this->getConfig());
+    }
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Client\Git\Command\GitBranchCommand
+     */
+    public function createGitBranchCommand(): GitBranchCommand
+    {
+        return new GitBranchCommand($this->getConfig());
+    }
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCheckoutToStartCommand
+     */
+    public function createGitCheckoutToStartCommand()
+    {
         return new GitCheckoutToStartCommand($this->getConfig());
     }
 

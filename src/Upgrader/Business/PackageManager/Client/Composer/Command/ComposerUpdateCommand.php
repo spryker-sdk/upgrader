@@ -10,15 +10,21 @@ namespace Upgrader\Business\PackageManager\Client\Composer\Command;
 use Symfony\Component\Process\Process;
 use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
-use Upgrader\Business\Command\CommandResponse;
+use Upgrader\Business\Command\Response\CommandResponse;
 
 class ComposerUpdateCommand extends AbstractCommand implements CommandInterface
 {
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return 'composer:update';
     }
 
+    /**
+     * @return string
+     */
     public function getDescription(): string
     {
         return 'The command for update';

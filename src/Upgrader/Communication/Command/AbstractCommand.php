@@ -8,8 +8,6 @@
 namespace Upgrader\Communication\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Output\OutputInterface;
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 use Upgrader\Business\UpgraderFacade;
 use Upgrader\Business\UpgraderFacadeInterface;
 
@@ -33,20 +31,5 @@ abstract class AbstractCommand extends Command
         }
 
         return $this->facade;
-    }
-
-    /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Upgrader\Business\Command\ResultOutput\CommandResultOutput $resultOutput
-     *
-     * @return void
-     */
-    protected function printResult(OutputInterface $output, CommandResultOutput $resultOutput): void
-    {
-        if ($resultOutput->isSuccess()) {
-            $output->writeln(sprintf('<fg=white>%s</>', $resultOutput->getMessage()));
-        } else {
-            $output->writeln(sprintf('<fg=red>%s</>', $resultOutput->getMessage()));
-        }
     }
 }

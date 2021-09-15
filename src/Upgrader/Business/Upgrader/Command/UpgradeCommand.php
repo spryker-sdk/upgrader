@@ -1,20 +1,54 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace Upgrader\Business\Upgrader\Command;
 
+use Exception;
 use Upgrader\Business\Command\AbstractCommand;
+use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
+use Upgrader\Business\Command\Response\CommandResponse;
+use Upgrader\Business\DataProvider\DataProvider;
+use Upgrader\Business\DataProvider\Entity\ReleaseGroup;
+use Upgrader\Business\DataProvider\Request\DataProviderRequest;
+use Upgrader\Business\DataProvider\Response\DataProviderResponse;
+use Upgrader\Business\PackageManager\Entity\Collection\PackageCollection;
+use Upgrader\Business\PackageManager\Entity\Package;
+use Upgrader\Business\PackageManager\PackageManagerInterface;
 
 class UpgradeCommand extends AbstractCommand
 {
     /**
+     * @return string
+     */
+    public function getCommand(): string
+    {
+        return 'upgrader upgrade';
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'upgrader:upgrade';
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return 'The command for upgrade Spryker packages';
+    }
+
+    /**
      * @var \Upgrader\Business\PackageManager\PackageManagerInterface
      */
     protected $packageManager;
-
-    /**
-     * @var \Upgrader\Business\VersionControlSystem\VersionControlSystemInterface
-     */
-    protected $versionControlSystem;
 
     /**
      * @var \Upgrader\Business\DataProvider\DataProvider
@@ -23,47 +57,40 @@ class UpgradeCommand extends AbstractCommand
 
     /**
      * @param \Upgrader\Business\PackageManager\PackageManagerInterface $packageManager
-     * @param \Upgrader\Business\VersionControlSystem\VersionControlSystemInterface $versionControlSystem
      * @param \Upgrader\Business\DataProvider\DataProvider $dataProvider
      */
     public function __construct(
         PackageManagerInterface $packageManager,
-        VersionControlSystemInterface $versionControlSystem,
         DataProvider $dataProvider
     ) {
         $this->dataProvider = $dataProvider;
         $this->packageManager = $packageManager;
-        $this->versionControlSystem = $versionControlSystem;
     }
 
     /**
-     * @return \Upgrader\Business\Command\ResultOutput\Collection\CommandResultOutputCollection
+     * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    public function upgrade(): CommandResultOutputCollection
+    public function run(): CommandResponse
     {
-        $resultCollection = new CommandResultOutputCollection();
-
-        $checkResult = $this->versionControlSystem->checkUncommittedChanges();
-        $resultCollection->add($checkResult);
-
-        if ($checkResult->isSuccess()) {
+        try {
             $dataProviderRequest = $this->createDataProviderRequest();
             $dataProviderResponse = $this->dataProvider->getNotInstalledReleaseGroupList($dataProviderRequest);
-            $requireResultCollection = $this->requirePackages($dataProviderResponse);
-            $resultCollection->addCollection($requireResultCollection);
+            $requireResponseCollection = $this->requirePackages($dataProviderResponse);
+        } catch (Exception $exception) {
+            return $this->createResponse(false, $exception->getMessage());
         }
 
-        return $resultCollection;
+        return $this->createResponse($requireResponseCollection->isSuccess(), $requireResponseCollection->getOutput());
     }
 
     /**
      * @param \Upgrader\Business\DataProvider\Response\DataProviderResponse $providerResponse
      *
-     * @return \Upgrader\Business\Command\ResultOutput\Collection\CommandResultOutputCollection
+     * @return \Upgrader\Business\Command\Response\Collection\CommandResponseCollection
      */
-    protected function requirePackages(DataProviderResponse $providerResponse): CommandResultOutputCollection
+    protected function requirePackages(DataProviderResponse $providerResponse): CommandResponseCollection
     {
-        $resultCollection = new CommandResultOutputCollection();
+        $resultCollection = new CommandResponseCollection();
 
         /** @var \Upgrader\Business\DataProvider\Entity\ReleaseGroup $releaseGroup */
         foreach ($providerResponse->getReleaseGroupCollection()->toArray() as $releaseGroup) {
@@ -81,9 +108,9 @@ class UpgradeCommand extends AbstractCommand
     /**
      * @param \Upgrader\Business\DataProvider\Entity\ReleaseGroup $releaseGroup
      *
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    protected function requirePackage(ReleaseGroup $releaseGroup): CommandResultOutput
+    protected function requirePackage(ReleaseGroup $releaseGroup): CommandResponse
     {
         if ($releaseGroup->isContainsProjectChanges()) {
             $message = sprintf(
@@ -92,7 +119,7 @@ class UpgradeCommand extends AbstractCommand
                 $releaseGroup->getName()
             );
 
-            return $this->createErrorResult($message);
+            return $this->createResponse(false, $message);
         }
 
         if ($releaseGroup->isContainsMajorUpdates()) {
@@ -102,7 +129,7 @@ class UpgradeCommand extends AbstractCommand
                 $releaseGroup->getName()
             );
 
-            return $this->createErrorResult($message);
+            return $this->createResponse(false, $message);
         }
 
         $packageCollection = $this->createPackageCollection($releaseGroup);
@@ -146,12 +173,13 @@ class UpgradeCommand extends AbstractCommand
     }
 
     /**
+     * @param bool $isSuccess
      * @param string $message
      *
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    protected function createErrorResult(string $message): CommandResultOutput
+    protected function createResponse(bool $isSuccess, string $message): CommandResponse
     {
-        return new CommandResultOutput(CommandResultOutput::ERROR_STATUS_CODE, $message);
+        return new CommandResponse($isSuccess, $this->getName(), $message);
     }
 }

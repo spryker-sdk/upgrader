@@ -8,14 +8,13 @@
 namespace Upgrader\Business\Upgrader;
 
 use Upgrader\Business\Command\CommandRequest;
-use Upgrader\Business\Command\CommandResponseList;
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
+use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
 
 interface UpgraderInterface
 {
     /**
      * @param \Upgrader\Business\Command\CommandRequest $commandRequest
-     * @return \Upgrader\Business\Command\CommandResponseList
+     * @return \Upgrader\Business\Command\Response\Collection\CommandResponseCollection
      */
-    public function run(CommandRequest $commandRequest): CommandResponseList;
+    public function run(CommandRequest $commandRequest): CommandResponseCollection;
 }

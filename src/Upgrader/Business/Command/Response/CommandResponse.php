@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\Command;
+namespace Upgrader\Business\Command\Response;
 
 class CommandResponse
 {
@@ -74,5 +74,13 @@ class CommandResponse
     public function getOutput(): string
     {
         return $this->output;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuccess(): bool
+    {
+        return $this->exitCode === static::CODE_SUCCESS;
     }
 }

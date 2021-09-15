@@ -10,11 +10,8 @@ namespace Upgrader\Business\Upgrader;
 use Symfony\Component\Process\Process;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\CommandRequest;
-use Upgrader\Business\Command\CommandResponse;
-use Upgrader\Business\Command\CommandResponseList;
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
-use Upgrader\Business\PackageManager\PackageManagerInterface;
-use Upgrader\Business\VersionControlSystem\VersionControlSystemInterface;
+use Upgrader\Business\Command\Response\CommandResponse;
+use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
 
 class Upgrader implements UpgraderInterface
 {
@@ -45,11 +42,11 @@ class Upgrader implements UpgraderInterface
 
     /**
      * @param \Upgrader\Business\Command\CommandRequest $commandRequest
-     * @return \Upgrader\Business\Command\CommandResponseList
+     * @return \Upgrader\Business\Command\Response\Collection\CommandResponseCollection
      */
-    public function run(CommandRequest $commandRequest): CommandResponseList
+    public function run(CommandRequest $commandRequest): CommandResponseCollection
     {
-        $commandResponseList = new CommandResponseList();
+        $commandResponseList = new CommandResponseCollection();
         $commandsList = $commandRequest->getCommandFilterListAsArray();
 
         /** @var \Evaluator\Business\Command\CommandInterface $command */

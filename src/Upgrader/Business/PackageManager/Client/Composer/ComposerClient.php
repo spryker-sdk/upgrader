@@ -8,7 +8,7 @@
 namespace Upgrader\Business\PackageManager\Client\Composer;
 
 use Upgrader\Business\Command\CommandInterface;
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
+use Upgrader\Business\Command\Response\CommandResponse;
 use Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface;
 use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
@@ -59,9 +59,9 @@ class ComposerClient implements PackageManagerClientInterface
     }
 
     /**
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    public function runUpdate(): CommandResultOutput
+    public function runUpdate(): CommandResponse
     {
         return $this->composerUpdateCommand->run();
     }
@@ -85,7 +85,7 @@ class ComposerClient implements PackageManagerClientInterface
     }
 
     /**
-     * @return void
+     * @return array
      */
     public function getComposerLockFile(): array
     {
@@ -95,9 +95,9 @@ class ComposerClient implements PackageManagerClientInterface
     /**
      * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    public function require(PackageCollection $packageCollection): CommandResultOutput
+    public function require(PackageCollection $packageCollection): CommandResponse
     {
         $this->composerRequireCommand->setPackageCollection($packageCollection);
 

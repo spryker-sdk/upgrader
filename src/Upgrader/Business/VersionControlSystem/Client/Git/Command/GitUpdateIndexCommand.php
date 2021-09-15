@@ -9,7 +9,6 @@ namespace Upgrader\Business\VersionControlSystem\Client\Git\Command;
 
 use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
-use Upgrader\Business\Command\CommandResponse;
 
 class GitUpdateIndexCommand extends AbstractCommand implements CommandInterface
 {

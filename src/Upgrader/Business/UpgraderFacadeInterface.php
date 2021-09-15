@@ -7,9 +7,8 @@
 
 namespace Upgrader\Business;
 
-use Upgrader\Business\Command\CommandResponseList;
+use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
 use Upgrader\Business\Command\CommandRequest;
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 
 interface UpgraderFacadeInterface
 {
@@ -19,13 +18,13 @@ interface UpgraderFacadeInterface
      * - Updates packages to the latest available version.
      * - Returns command result object that contains exit code and message.
      *
-     * @api
-     *
      * @param \Upgrader\Business\Command\CommandRequest $commandRequest
      *
-     * @return \Upgrader\Business\Command\CommandResponseList
+     * @return \Upgrader\Business\Command\Response\Collection\CommandResponseCollection
+     * @api
+     *
      */
-    public function upgrade(CommandRequest $commandRequest): CommandResponseList;
+    public function upgrade(CommandRequest $commandRequest): CommandResponseCollection;
 
     /**
      * Specification:

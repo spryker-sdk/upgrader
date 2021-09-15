@@ -12,6 +12,7 @@ use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Request\UpgradeAnalysi
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Request\UpgradeInstructionsRequest;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeAnalysis\Collection\UpgradeAnalysisModuleVersionCollection;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\Collection\UpgradeInstructionsReleaseGroupCollection;
+use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionsReleaseGroup;
 use Upgrader\Business\DataProvider\Entity\Collection\ModuleCollection;
 use Upgrader\Business\DataProvider\Entity\Collection\ReleaseGroupCollection;
 use Upgrader\Business\DataProvider\Entity\Module;
@@ -56,26 +57,35 @@ class ReleaseAppClient implements ReleaseAppClientInterface
     protected function buildDataProviderReleaseGroupCollection(
         UpgradeInstructionsReleaseGroupCollection $releaseGroupCollection
     ): ReleaseGroupCollection {
-        $dataProviderRGCollection = new ReleaseGroupCollection();
+        $dataProviderReleaseGroupCollection = new ReleaseGroupCollection();
 
         /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionsReleaseGroup $releaseGroup */
         foreach ($releaseGroupCollection->toArray() as $releaseGroup) {
-            $dataProviderModuleCollection = new ModuleCollection();
-            /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionModule $module */
-            foreach ($releaseGroup->getModuleCollection()->toArray() as $module) {
-                $dataProviderModule = new Module($module->getName(), $module->getVersion(), $module->getType());
-                $dataProviderModuleCollection->add($dataProviderModule);
-            }
-
-            $dataProviderRg = new ReleaseGroup(
+            $dataProviderReleaseGroup = new ReleaseGroup(
                 $releaseGroup->getName(),
-                $dataProviderModuleCollection,
+                $this->buildDtaProviderModuleCollection($releaseGroup),
                 $releaseGroup->isContainsProjectChanges()
             );
-            $dataProviderRGCollection->add($dataProviderRg);
+            $dataProviderReleaseGroupCollection->add($dataProviderReleaseGroup);
         }
 
-        return $dataProviderRGCollection;
+        return $dataProviderReleaseGroupCollection;
+    }
+
+    /**
+     * @param UpgradeInstructionsReleaseGroup $releaseGroup
+     * @return ModuleCollection
+     */
+    protected function buildDtaProviderModuleCollection(UpgradeInstructionsReleaseGroup $releaseGroup): ModuleCollection
+    {
+        $dataProviderModuleCollection = new ModuleCollection();
+        /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionModule $module */
+        foreach ($releaseGroup->getModuleCollection()->toArray() as $module) {
+            $dataProviderModule = new Module($module->getName(), $module->getVersion(), $module->getType());
+            $dataProviderModuleCollection->add($dataProviderModule);
+        }
+
+        return $dataProviderModuleCollection;
     }
 
     /**

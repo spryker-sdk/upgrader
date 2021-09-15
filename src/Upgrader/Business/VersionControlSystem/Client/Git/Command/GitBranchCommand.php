@@ -10,7 +10,7 @@ namespace Upgrader\Business\VersionControlSystem\Client\Git\Command;
 use Symfony\Component\Process\Process;
 use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
-use Upgrader\Business\Command\CommandResponse;
+use Upgrader\Business\Command\Response\CommandResponse;
 
 class GitBranchCommand extends AbstractCommand implements CommandInterface
 {

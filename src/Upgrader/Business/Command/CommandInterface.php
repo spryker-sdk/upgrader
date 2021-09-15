@@ -7,7 +7,7 @@
 
 namespace Upgrader\Business\Command;
 
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
+use Upgrader\Business\Command\Response\CommandResponse;
 
 interface CommandInterface
 {
@@ -27,7 +27,7 @@ interface CommandInterface
     public function getCommand(): string;
 
     /**
-     * @return \Upgrader\Business\Command\CommandResponse
+     * @return \Upgrader\Business\Command\Response\CommandResponse
      */
     public function run(): CommandResponse;
 }
