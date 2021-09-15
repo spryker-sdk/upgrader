@@ -23,6 +23,22 @@ class ComposerRequireCommand extends AbstractCommand
     /**
      * @return string
      */
+    public function getName(): string
+    {
+        return 'Composer require';
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return 'The command add composer packages.';
+    }
+
+    /**
+     * @return string
+     */
     public function getCommand(): string
     {
         return sprintf('%s%s', static::COMMAND_NAME, $this->getPackageString());
