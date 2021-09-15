@@ -11,6 +11,8 @@ use Symfony\Component\Process\Process;
 
 class UpgraderConfig
 {
+    protected const UPGRADER_RELEASE_APP_URL = 'UPGRADER_RELEASE_APP_URL';
+    protected const DEFAULT_RELEASE_APP_URL = 'https://api.release.spryker.com';
     protected const UPGRADER_COMMAND_EXECUTION_TIMEOUT = 'UPGRADER_COMMAND_EXECUTION_TIMEOUT';
     protected const DEFAULT_COMMAND_EXECUTION_TIMEOUT = 600;
     protected $previousCommitHash = null;
@@ -21,7 +23,15 @@ class UpgraderConfig
      */
     public function getCommandExecutionTimeout(): int
     {
-        return (int)getenv(self::UPGRADER_COMMAND_EXECUTION_TIMEOUT) ?? static::DEFAULT_COMMAND_EXECUTION_TIMEOUT;
+        return (int)getenv(self::UPGRADER_COMMAND_EXECUTION_TIMEOUT) ?: static::DEFAULT_COMMAND_EXECUTION_TIMEOUT;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReleaseAppUrl(): string
+    {
+        return (string)getenv(self::UPGRADER_RELEASE_APP_URL) ?: static::DEFAULT_RELEASE_APP_URL;
     }
 
     /**

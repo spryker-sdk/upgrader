@@ -10,7 +10,12 @@ namespace Upgrader\Business;
 use Ergebnis\Json\Printer\Printer;
 use Ergebnis\Json\Printer\PrinterInterface;
 use Symfony\Component\Process\Process;
+use GuzzleHttp\Client;
 use Upgrader\Business\Command\CommandInterface;
+use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpCommunicator;
+use Upgrader\Business\DataProvider\Client\ReleaseApp\ReleaseAppClient;
+use Upgrader\Business\DataProvider\DataProvider;
+use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommand;
 use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerUpdateCommand;
 use Upgrader\Business\PackageManager\Client\Composer\ComposerClient;
 use Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReader;
@@ -58,6 +63,57 @@ class UpgraderBusinessFactory
             ->addCommand($this->createGitCheckoutToStartCommand());
     }
 
+//    /**
+//     * @return \Upgrader\Business\Upgrader\UpgraderInterface
+//     */
+//    public function createUpgrader(): UpgraderInterface
+//    {
+//        return new Upgrader(
+//            $this->createPackageManager(),
+//            $this->createVersionControlSystem(),
+//            $this->createDataProvider()
+//        );
+//    }
+//
+    /**
+     * @return \Upgrader\Business\DataProvider\DataProvider
+     */
+    public function createDataProvider(): DataProvider
+    {
+        return new DataProvider(
+            $this->createReleaseAppClient()
+        );
+    }
+
+    /**
+     * @return \Upgrader\Business\DataProvider\Client\ReleaseApp\ReleaseAppClient
+     */
+    public function createReleaseAppClient(): ReleaseAppClient
+    {
+        return new ReleaseAppClient(
+            $this->createHttpCommunicator()
+        );
+    }
+
+    /**
+     * @return \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpCommunicator
+     */
+    public function createHttpCommunicator(): HttpCommunicator
+    {
+        return new HttpCommunicator(
+            $this->getConfig(),
+            $this->createCommunicationClient()
+        );
+    }
+
+    /**
+     * @return \GuzzleHttp\Client
+     */
+    protected function createCommunicationClient(): Client
+    {
+        return new Client();
+    }
+
     /**
      * @return \Upgrader\Business\PackageManager\PackageManagerInterface
      */
@@ -68,16 +124,14 @@ class UpgraderBusinessFactory
         );
     }
 
-    public function createGitBranchCommand(){
-        return new GitBranchCommand($this->getConfig());
-    }
-
-    public function createGitAddCommand(){
-        return new GitAddCommand($this->getConfig());
-    }
-
-    public function createGitCommitCommand(){
-        return new GitCommitCommand($this->getConfig());
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\VersionControlSystemInterface
+     */
+    public function createVersionControlSystem(): VersionControlSystemInterface
+    {
+        return new VersionControlSystem(
+            $this->createGitClient()
+        );
     }
 
     public function createGitPushCommand(){
@@ -102,7 +156,10 @@ class UpgraderBusinessFactory
     public function createComposerClient(): PackageManagerClientInterface
     {
         return new ComposerClient(
-            $this->createComposerUpdateCommand()
+            $this->createComposerUpdateCommand(),
+            $this->createComposerRequireCommand(),
+            $this->createComposerJsonReader(),
+            $this->createComposerLockReader()
         );
     }
 
@@ -112,6 +169,14 @@ class UpgraderBusinessFactory
     public function createComposerUpdateCommand(): CommandInterface
     {
         return new ComposerUpdateCommand($this->getConfig());
+    }
+
+    /**
+     * @return \Upgrader\Business\Command\CommandInterface
+     */
+    public function createComposerRequireCommand(): ComposerRequireCommand
+    {
+        return new ComposerRequireCommand($this->getConfig());
     }
 
     /**

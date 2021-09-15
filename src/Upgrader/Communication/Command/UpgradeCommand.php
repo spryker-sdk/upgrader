@@ -120,3 +120,29 @@ class UpgradeCommand extends AbstractCommand
         return $help;
     }
 }
+
+///**
+// * @param \Symfony\Component\Console\Input\InputInterface $input
+// * @param \Symfony\Component\Console\Output\OutputInterface $output
+// *
+// * @return int
+// */
+//public function execute(InputInterface $input, OutputInterface $output): int
+//{
+//    $resultCollection = $this->getFacade()->upgrade();
+//
+//    /** @var \Upgrader\Business\Command\ResultOutput\CommandResultOutput $result */
+//    foreach ($resultCollection->toArray() as $result) {
+//        $this->printResult($output, $result);
+//    }
+//
+//    if (!$resultCollection->isSuccess()) {
+//        $output->writeln('<fg=red;options=bold>Upgrade command finished with error.</>.');
+//
+//        return static::CODE_ERROR;
+//    }
+//
+//    $output->writeln('<fg=green;options=bold>Upgrade command has been finished successfully.</>.');
+//
+//    return static::CODE_SUCCESS;
+//}

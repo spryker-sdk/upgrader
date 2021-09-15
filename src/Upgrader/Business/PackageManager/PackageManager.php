@@ -9,6 +9,7 @@ namespace Upgrader\Business\PackageManager;
 
 use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
+use Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface;
 
 class PackageManager implements PackageManagerInterface
 {
@@ -25,11 +26,55 @@ class PackageManager implements PackageManagerInterface
         $this->packageManagerClient = $packageManagerClient;
     }
 
-//    /**
-//     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
-//     */
-//    public function update(): CommandResultOutput
-//    {
-//        return $this->packageManagerClient->runUpdate();
-//    }
+    /**
+     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     */
+    public function update(): CommandResultOutput
+    {
+        return $this->packageManagerClient->runUpdate();
+    }
+
+    /**
+     * @return string
+     */
+    public function getProjectName(): string
+    {
+        return $this->packageManagerClient->getProjectName();
+    }
+
+    /**
+     * @return array
+     */
+    public function getComposerJsonFile(): array
+    {
+        return $this->packageManagerClient->getComposerJsonFile();
+    }
+
+    /**
+     * @return array
+     */
+    public function getComposerLockFile(): array
+    {
+        return $this->packageManagerClient->getComposerLockFile();
+    }
+
+    /**
+     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface $packageCollection
+     *
+     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     */
+    public function require(PackageCollectionInterface $packageCollection): CommandResultOutput
+    {
+        return $this->packageManagerClient->require($packageCollection);
+    }
+
+    /**
+     * @param string $packageName
+     *
+     * @return string|null
+     */
+    public function getPackageVersion(string $packageName): ?string
+    {
+        return $this->packageManagerClient->getPackageVersion($packageName);
+    }
 }

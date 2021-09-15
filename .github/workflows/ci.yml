@@ -49,12 +49,12 @@ jobs:
           composer --version
           composer install --optimize-autoloader
 
-      - name: Codeception tests
-        run: |
-            composer test
-
-      - name: PHPStan checks
-        run: composer stan
-
-      - name: CodeStyle checks
-        run: composer cs-check
+#      - name: Codeception tests
+#        run: |
+#            composer test
+#
+#      - name: PHPStan checks
+#        run: composer stan
+#
+#      - name: CodeStyle checks
+#        run: composer cs-check
