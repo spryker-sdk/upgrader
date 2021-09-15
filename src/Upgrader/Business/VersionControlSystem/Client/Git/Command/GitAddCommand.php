@@ -31,9 +31,4 @@ class GitAddCommand extends AbstractCommand implements CommandInterface
     {
         return 'The command for adding changes';
     }
-
-    public function run(): CommandResponse
-    {
-        return $this->runProcess($this->getCommand());
-    }
 }
