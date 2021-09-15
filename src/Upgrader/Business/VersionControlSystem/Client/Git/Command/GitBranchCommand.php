@@ -12,25 +12,14 @@ use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\CommandResponse;
 
-class GitBranchCommand implements CommandInterface
+class GitBranchCommand extends AbstractCommand implements CommandInterface
 {
-
-    /**
-     * @var string
-     */
-    protected $prBranch;
-
-    public function __construct($prBranch)
-    {
-        $this->prBranch = $prBranch;
-    }
-
     /**
      * @return string
      */
     public function getCommand(): string
     {
-        return sprintf('git checkout -b %s', $this->prBranch);
+        return sprintf('git checkout -b %s', $this->config->getPrBranch());
     }
 
     public function getName(): string
@@ -41,18 +30,5 @@ class GitBranchCommand implements CommandInterface
     public function getDescription(): string
     {
         return 'The command for creating a new branch';
-    }
-
-    /**
-     *
-     * @return \Upgrader\Business\Command\CommandResponse
-     */
-    public function runCommand(): CommandResponse
-    {
-        $process = new Process(explode(' ', $this->getCommand()), (string)getcwd());
-        $process->setTimeout(9000);
-        $process->run();
-
-        return new CommandResponse($process, $this->getName());
     }
 }

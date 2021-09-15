@@ -26,15 +26,16 @@ abstract class AbstractCommand implements CommandInterface
         $this->config = $config;
     }
 
-//    /**
-//     * @return \Upgrader\Business\Command\CommandResponse
-//     */
-//    public function runCommand(): CommandResponse
-//    {
-//        $process = new Process(explode(' ', $this->getCommand()), (string)getcwd());
-//        $process->setTimeout(9000);
-//        $process->run();
-//
-//        return new CommandResponse($process, $this->getName());
-//    }
+    /**
+     *
+     * @return \Upgrader\Business\Command\CommandResponse
+     */
+    public function runCommand(): CommandResponse
+    {
+        $process = new Process(explode(' ', $this->getCommand()), (string)getcwd());
+        $process->setTimeout(9000);
+        $process->run();
+
+        return new CommandResponse($process, $this->getName());
+    }
 }

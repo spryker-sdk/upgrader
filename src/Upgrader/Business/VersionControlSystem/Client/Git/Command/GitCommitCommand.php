@@ -12,7 +12,7 @@ use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\CommandResponse;
 
-class GitCommitCommand implements CommandInterface
+class GitCommitCommand extends AbstractCommand implements CommandInterface
 {
     /**
      * @return string
@@ -30,18 +30,5 @@ class GitCommitCommand implements CommandInterface
     public function getDescription(): string
     {
         return 'The command for commiting changes';
-    }
-
-    /**
-     *
-     * @return \Upgrader\Business\Command\CommandResponse
-     */
-    public function runCommand(): CommandResponse
-    {
-        $process = new Process(explode(' ', $this->getCommand()), (string)getcwd());
-        $process->setTimeout(9000);
-        $process->run();
-
-        return new CommandResponse($process, $this->getName());
     }
 }

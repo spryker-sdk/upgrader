@@ -26,7 +26,7 @@ use Upgrader\Business\Upgrader\Upgrader;
 use Upgrader\Business\Upgrader\UpgraderInterface;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitAddCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitBranchCommand;
-use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCheckoutCommand;
+use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCheckoutToStartCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCommitCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitPushCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitUpdateIndexCommand;
@@ -48,20 +48,14 @@ class UpgraderBusinessFactory
      */
     public function createUpgrader(): UpgraderInterface
     {
-        $upgrader = new Upgrader(
-            $this->createPackageManager(),
-            $this->createVersionControlSystem()
-        );
-
-        $branch = $this->getPrBranch($this->getCurrentBranch(), $this->getPreviousCommitHash());
-        return $upgrader
+        return ( new Upgrader())
             ->addCommand($this->createGitUpdateIndexCommand())
             ->addCommand($this->createComposerUpdateCommand())
-            ->addCommand(new GitBranchCommand($branch))
-            ->addCommand(new GitAddCommand())
-            ->addCommand(new GitCommitCommand())
-            ->addCommand(new GitPushCommand($branch))
-            ->addCommand(new GitCheckoutCommand($this->getCurrentBranch()));
+            ->addCommand($this->createGitBranchCommand())
+            ->addCommand($this->createGitAddCommand())
+            ->addCommand($this->createGitCommitCommand())
+            ->addCommand($this->createGitPushCommand())
+            ->addCommand($this->createGitCheckoutToStartCommand());
     }
 
     /**
@@ -74,24 +68,24 @@ class UpgraderBusinessFactory
         );
     }
 
-    /**
-     * @return \Upgrader\Business\VersionControlSystem\VersionControlSystemInterface
-     */
-    public function createVersionControlSystem(): VersionControlSystemInterface
-    {
-        return new VersionControlSystem(
-            $this->createGitClient()
-        );
+    public function createGitBranchCommand(){
+        return new GitBranchCommand($this->getConfig());
     }
 
-    /**
-     * @return \Upgrader\Business\VersionControlSystem\Client\VersionControlSystemClientInterface
-     */
-    public function createGitClient(): VersionControlSystemClientInterface
-    {
-        return new GitClient(
-            $this->createGitUpdateIndexCommand()
-        );
+    public function createGitAddCommand(){
+        return new GitAddCommand($this->getConfig());
+    }
+
+    public function createGitCommitCommand(){
+        return new GitCommitCommand($this->getConfig());
+    }
+
+    public function createGitPushCommand(){
+        return new GitPushCommand($this->getConfig());
+    }
+
+    public function createGitCheckoutToStartCommand(){
+        return new GitCheckoutToStartCommand($this->getConfig());
     }
 
     /**
@@ -152,36 +146,6 @@ class UpgraderBusinessFactory
     public function createPrinter(): PrinterInterface
     {
         return new Printer();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getPreviousCommitHash(): string
-    {
-        $process = new Process(explode(' ', 'git rev-parse HEAD'), (string)getcwd());
-        $process->run();
-        return trim($process->getOutput());
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCurrentBranch(): string
-    {
-        $process = new Process(explode(' ', 'git rev-parse --abbrev-ref HEAD'), (string)getcwd());
-        $process->run();
-        return trim($process->getOutput());
-    }
-
-    /**
-     * @param string $currentBranch
-     * @param string $previousCommitHash
-     * @return string
-     */
-    protected function getPrBranch(string $currentBranch, string $previousCommitHash): string
-    {
-        return sprintf('upgradebot/upgrade-for-%s-%s', $currentBranch, $previousCommitHash);
     }
 
     /**

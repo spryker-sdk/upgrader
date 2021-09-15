@@ -7,12 +7,10 @@
 
 namespace Upgrader\Business\VersionControlSystem\Client\Git\Command;
 
-use Symfony\Component\Process\Process;
 use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
-use Upgrader\Business\Command\CommandResponse;
 
-class GitUpdateIndexCommand implements CommandInterface
+class GitUpdateIndexCommand extends AbstractCommand implements CommandInterface
 {
     /**
      * @return string
@@ -30,18 +28,5 @@ class GitUpdateIndexCommand implements CommandInterface
     public function getDescription(): string
     {
         return 'The command for checking uncommited changes';
-    }
-
-    /**
-     *
-     * @return \Upgrader\Business\Command\CommandResponse
-     */
-    public function runCommand(): CommandResponse
-    {
-        $process = new Process(explode(' ', $this->getCommand()), (string)getcwd());
-        $process->setTimeout(9000);
-        $process->run();
-
-        return new CommandResponse($process, $this->getName());
     }
 }

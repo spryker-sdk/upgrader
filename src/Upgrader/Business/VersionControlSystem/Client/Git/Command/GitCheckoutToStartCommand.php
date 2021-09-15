@@ -12,25 +12,14 @@ use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\CommandResponse;
 
-class GitCheckoutCommand implements CommandInterface
+class GitCheckoutToStartCommand extends AbstractCommand implements CommandInterface
 {
-
-    /**
-     * @var string
-     */
-    protected $checkoutTo;
-
-    public function __construct($checkoutTo)
-    {
-        $this->checkoutTo = $checkoutTo;
-    }
-
     /**
      * @return string
      */
     public function getCommand(): string
     {
-        return sprintf('git checkout %s', $this->checkoutTo);
+        return sprintf('git checkout %s', $this->config->getStartingBranch());
     }
 
     public function getName(): string
@@ -41,18 +30,5 @@ class GitCheckoutCommand implements CommandInterface
     public function getDescription(): string
     {
         return 'The command for switching the branch';
-    }
-
-    /**
-     *
-     * @return \Upgrader\Business\Command\CommandResponse
-     */
-    public function runCommand(): CommandResponse
-    {
-        $process = new Process(explode(' ', $this->getCommand()), (string)getcwd());
-        $process->setTimeout(9000);
-        $process->run();
-
-        return new CommandResponse($process, $this->getName());
     }
 }
