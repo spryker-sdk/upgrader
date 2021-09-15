@@ -42,21 +42,37 @@ class PackageManager implements PackageManagerInterface
         return $this->packageManagerClient->getProjectName();
     }
 
+    /**
+     * @return array
+     */
     public function getComposerJsonFile(): array
     {
         return $this->packageManagerClient->getComposerJsonFile();
     }
 
+    /**
+     * @return array
+     */
     public function getComposerLockFile(): array
     {
         return $this->packageManagerClient->getComposerLockFile();
     }
 
+    /**
+     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface $packageCollection
+     *
+     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     */
     public function require(PackageCollectionInterface $packageCollection): CommandResultOutput
     {
         return $this->packageManagerClient->require($packageCollection);
     }
 
+    /**
+     * @param string $packageName
+     *
+     * @return string|null
+     */
     public function getPackageVersion(string $packageName): ?string
     {
         return $this->packageManagerClient->getPackageVersion($packageName);

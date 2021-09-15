@@ -39,5 +39,10 @@ interface PackageManagerClientInterface
      */
     public function require(PackageCollection $packageCollection): CommandResultOutput;
 
+    /**
+     * @param string $packageName
+     *
+     * @return string|null
+     */
     public function getPackageVersion(string $packageName): ?string;
 }

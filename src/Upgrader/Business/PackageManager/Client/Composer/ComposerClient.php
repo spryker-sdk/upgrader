@@ -16,6 +16,10 @@ use Upgrader\Business\PackageManager\Entity\Collection\PackageCollection;
 
 class ComposerClient implements PackageManagerClientInterface
 {
+    public const PACKAGES_KEY = 'packages';
+    public const NAME_KEY = 'name';
+    public const VERSION_KEY = 'version';
+
     /**
      * @var \Upgrader\Business\Command\CommandInterface
      */
@@ -38,6 +42,9 @@ class ComposerClient implements PackageManagerClientInterface
 
     /**
      * @param \Upgrader\Business\Command\CommandInterface $composerUpdateCommand
+     * @param \Upgrader\Business\Command\CommandInterface $composerRequireCommand
+     * @param \Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface $composerJsonReader
+     * @param \Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface $composerLockReader
      */
     public function __construct(
         CommandInterface $composerUpdateCommand,
@@ -66,9 +73,12 @@ class ComposerClient implements PackageManagerClientInterface
     {
         $composerJsonContent = $this->composerJsonReader->read();
 
-        return $composerJsonContent['name'];
+        return $composerJsonContent[self::NAME_KEY];
     }
 
+    /**
+     * @return array
+     */
     public function getComposerJsonFile(): array
     {
         return $this->composerJsonReader->read();
@@ -82,6 +92,11 @@ class ComposerClient implements PackageManagerClientInterface
         return $this->composerLockReader->read();
     }
 
+    /**
+     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     */
     public function require(PackageCollection $packageCollection): CommandResultOutput
     {
         $this->composerRequireCommand->setPackageCollection($packageCollection);
@@ -89,13 +104,18 @@ class ComposerClient implements PackageManagerClientInterface
         return $this->composerRequireCommand->run();
     }
 
+    /**
+     * @param string $packageName
+     *
+     * @return string|null
+     */
     public function getPackageVersion(string $packageName): ?string
     {
         $composerLock = $this->composerLockReader->read();
 
-        foreach ($composerLock['packages'] as $package) {
-            if ($package['name'] == $packageName) {
-                return $package['version'];
+        foreach ($composerLock[self::PACKAGES_KEY] as $package) {
+            if ($package[self::NAME_KEY] == $packageName) {
+                return $package[self::VERSION_KEY];
             }
         }
 

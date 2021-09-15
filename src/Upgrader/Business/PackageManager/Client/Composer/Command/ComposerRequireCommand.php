@@ -29,6 +29,8 @@ class ComposerRequireCommand extends AbstractCommand
     }
 
     /**
+     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection $packageCollection
+     *
      * @return void
      */
     public function setPackageCollection(PackageCollection $packageCollection): void
@@ -36,6 +38,11 @@ class ComposerRequireCommand extends AbstractCommand
         $this->packageCollection = $packageCollection;
     }
 
+    /**
+     * @throws \Upgrader\Business\Exception\UpgraderException
+     *
+     * @return string
+     */
     protected function getPackageString(): string
     {
         if (!$this->packageCollection) {

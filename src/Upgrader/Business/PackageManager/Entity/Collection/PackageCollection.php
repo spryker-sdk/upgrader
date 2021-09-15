@@ -12,6 +12,9 @@ use Upgrader\Business\PackageManager\Entity\Package;
 
 class PackageCollection extends UpgraderCollection implements PackageCollectionInterface
 {
+    /**
+     * @return string
+     */
     protected function getClassName(): string
     {
         return Package::class;

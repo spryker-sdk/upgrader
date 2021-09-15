@@ -7,15 +7,21 @@
 
 namespace Upgrader\Business\PackageManager\Entity;
 
-class Package
+class Package implements PackageInterface
 {
+    /**
+     * @var string
+     */
     protected $name;
 
+    /**
+     * @var string
+     */
     protected $version;
 
     /**
-     * @param $name|string
-     * @param $version|string
+     * @param string $name
+     * @param string $version
      */
     public function __construct(string $name, string $version)
     {
