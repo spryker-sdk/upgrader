@@ -33,10 +33,15 @@ class UpgradeCommand extends AbstractCommand
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $upgradeResult = $this->getFacade()->upgrade();
+        $resultCollection = $this->getFacade()->upgrade();
 
-        if (!$upgradeResult->isSuccess()) {
-            $output->writeln(sprintf('<fg=red;options=bold>%s</>', $upgradeResult->getMessage()));
+        /** @var \Upgrader\Business\Command\ResultOutput\CommandResultOutput $result */
+        foreach ($resultCollection->toArray() as $result) {
+            $this->printResult($output, $result);
+        }
+
+        if (!$resultCollection->isSuccess()) {
+            $output->writeln('<fg=red;options=bold>Upgrade command finished with error.</>.');
 
             return static::CODE_ERROR;
         }

@@ -78,6 +78,6 @@ abstract class AbstractCommand implements CommandInterface
     {
         $resultOutput = $process->getExitCode() ? $process->getErrorOutput() : $process->getExitCodeText();
 
-        return new CommandResultOutput((int)$process->getExitCode(), (string)$resultOutput);
+        return new CommandResultOutput((int)$process->getExitCode(), (string)$resultOutput, $process->getCommandLine());
     }
 }

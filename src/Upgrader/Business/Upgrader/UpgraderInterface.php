@@ -7,12 +7,12 @@
 
 namespace Upgrader\Business\Upgrader;
 
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
+use Upgrader\Business\Command\ResultOutput\Collection\CommandResultOutputCollection;
 
 interface UpgraderInterface
 {
     /**
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return \Upgrader\Business\Command\ResultOutput\Collection\CommandResultOutputCollection
      */
-    public function upgrade(): CommandResultOutput;
+    public function upgrade(): CommandResultOutputCollection;
 }

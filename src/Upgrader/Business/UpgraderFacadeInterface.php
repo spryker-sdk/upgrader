@@ -7,7 +7,7 @@
 
 namespace Upgrader\Business;
 
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
+use Upgrader\Business\Command\ResultOutput\Collection\CommandResultOutputCollection;
 
 interface UpgraderFacadeInterface
 {
@@ -19,7 +19,7 @@ interface UpgraderFacadeInterface
      *
      * @api
      *
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return \ Upgrader\Business\Command\ResultOutput\Collection\CommandResultOutputCollection
      */
-    public function upgrade(): CommandResultOutput;
+    public function upgrade(): CommandResultOutputCollection;
 }

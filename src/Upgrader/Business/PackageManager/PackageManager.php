@@ -9,6 +9,7 @@ namespace Upgrader\Business\PackageManager;
 
 use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
+use Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface;
 
 class PackageManager implements PackageManagerInterface
 {
@@ -31,5 +32,33 @@ class PackageManager implements PackageManagerInterface
     public function update(): CommandResultOutput
     {
         return $this->packageManagerClient->runUpdate();
+    }
+
+    /**
+     * @return string
+     */
+    public function getProjectName(): string
+    {
+        return $this->packageManagerClient->getProjectName();
+    }
+
+    public function getComposerJsonFile(): array
+    {
+        return $this->packageManagerClient->getComposerJsonFile();
+    }
+
+    public function getComposerLockFile(): array
+    {
+        return $this->packageManagerClient->getComposerLockFile();
+    }
+
+    public function require(PackageCollectionInterface $packageCollection): CommandResultOutput
+    {
+        return $this->packageManagerClient->require($packageCollection);
+    }
+
+    public function getPackageVersion(string $packageName): ?string
+    {
+        return $this->packageManagerClient->getPackageVersion($packageName);
     }
 }

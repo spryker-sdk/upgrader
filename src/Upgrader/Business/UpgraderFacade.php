@@ -7,7 +7,7 @@
 
 namespace Upgrader\Business;
 
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
+use Upgrader\Business\Command\ResultOutput\Collection\CommandResultOutputCollection;
 
 class UpgraderFacade implements UpgraderFacadeInterface
 {
@@ -23,7 +23,7 @@ class UpgraderFacade implements UpgraderFacadeInterface
      *
      * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
      */
-    public function upgrade(): CommandResultOutput
+    public function upgrade(): CommandResultOutputCollection
     {
         return $this->getFactory()->createUpgrader()->upgrade();
     }
