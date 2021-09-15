@@ -26,6 +26,14 @@ abstract class AbstractCommand implements CommandInterface
     }
 
     /**
+     * @return CommandResponse
+     */
+    public function run(): CommandResponse
+    {
+        return $this->runProcess($this->getCommand());
+    }
+
+    /**
      *
      * @return \Upgrader\Business\Command\CommandResponse
      */
