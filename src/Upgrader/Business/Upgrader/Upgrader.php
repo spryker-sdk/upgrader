@@ -58,7 +58,7 @@ class Upgrader implements UpgraderInterface
                 continue;
             }
 
-            $commandResponse = $command->runCommand();
+            $commandResponse = $command->run();
             $commandResponseList->add($commandResponse);
 
             if($commandResponseList->getExitCode() == CommandResponse::CODE_ERROR){
