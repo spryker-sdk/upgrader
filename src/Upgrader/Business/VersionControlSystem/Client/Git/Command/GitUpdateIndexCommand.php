@@ -31,7 +31,7 @@ class GitUpdateIndexCommand extends AbstractCommand implements CommandInterface
         return 'The command for checking uncommited changes';
     }
 
-    public function runCommand(): CommandResponse
+    public function run(): CommandResponse
     {
         return $this->runProcess($this->getCommand());
     }

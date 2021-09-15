@@ -36,7 +36,7 @@ class ComposerUpdateCommand extends AbstractCommand implements CommandInterface
      *
      * @return \Upgrader\Business\Command\CommandResponse
      */
-    public function runCommand(): CommandResponse
+    public function run(): CommandResponse
     {
         return $this->runProcess($this->getCommand());
     }
