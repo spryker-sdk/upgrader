@@ -29,5 +29,5 @@ interface CommandInterface
     /**
      * @return \Upgrader\Business\Command\CommandResponse
      */
-    public function runCommand(): CommandResponse;
+    public function run(): CommandResponse;
 }
