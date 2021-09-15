@@ -31,9 +31,4 @@ class GitCheckoutToStartCommand extends AbstractCommand implements CommandInterf
     {
         return 'The command for switching the branch';
     }
-
-    public function run(): CommandResponse
-    {
-        return $this->runProcess($this->getCommand());
-    }
 }
