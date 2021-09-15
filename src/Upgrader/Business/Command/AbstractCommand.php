@@ -8,7 +8,6 @@
 namespace Upgrader\Business\Command;
 
 use Symfony\Component\Process\Process;
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 use Upgrader\UpgraderConfig;
 
 abstract class AbstractCommand implements CommandInterface
@@ -30,12 +29,17 @@ abstract class AbstractCommand implements CommandInterface
      *
      * @return \Upgrader\Business\Command\CommandResponse
      */
-    public function runCommand(): CommandResponse
+    public function runProcess(string $cliCommand): CommandResponse
     {
-        $process = new Process(explode(' ', $this->getCommand()), (string)getcwd());
+        $process = new Process(explode(' ', $cliCommand), (string)getcwd());
         $process->setTimeout(9000);
         $process->run();
+        $output = $process->getOutput();
 
-        return new CommandResponse($process, $this->getName());
+        if(!$process->isSuccessful()){
+            $output .= "\n" . $process->getErrorOutput();
+        }
+
+        return new CommandResponse($process->isSuccessful(), $this->getName(), $output);
     }
 }
