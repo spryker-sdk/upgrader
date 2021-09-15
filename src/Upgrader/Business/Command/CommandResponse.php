@@ -7,8 +7,6 @@
 
 namespace Upgrader\Business\Command;
 
-use Symfony\Component\Process\Process;
-
 class CommandResponse
 {
     public const CODE_ERROR = 1;
@@ -20,14 +18,14 @@ class CommandResponse
     protected $exitCode;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $processCommand;
 
     /**
      * @var string
      */
-    protected $upgraderCommand;
+    protected $commandName;
 
     /**
      * @var string
@@ -35,21 +33,15 @@ class CommandResponse
     protected $output;
 
     /**
-     * @var string
-     */
-    protected $errorOutput;
-
-    /**
-     * @param \Symfony\Component\Process\Process $process
+     * @param bool $isSuccessful
      * @param string $upgraderCommand
+     * @param string $output
      */
-    public function __construct(Process $process, string $upgraderCommand)
+    public function __construct(bool $isSuccessful, string $commandName, string $output)
     {
-        $this->exitCode = $process->isSuccessful() ? self::CODE_SUCCESS : self::CODE_ERROR;
-        $this->processCommand = $process->getCommandLine();
-        $this->upgraderCommand = $upgraderCommand;
-        $this->output = $process->getOutput();
-        $this->errorOutput = $process->getErrorOutput();
+        $this->exitCode = $isSuccessful ? self::CODE_SUCCESS : self::CODE_ERROR;
+        $this->output = $output;
+        $this->commandName = $commandName;
     }
 
     /**
@@ -61,9 +53,9 @@ class CommandResponse
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getProcessCommand(): string
+    public function getProcessCommand(): ?string
     {
         return $this->processCommand;
     }
@@ -71,9 +63,9 @@ class CommandResponse
     /**
      * @return string
      */
-    public function getUpgraderCommand(): string
+    public function getCommandName(): string
     {
-        return $this->upgraderCommand;
+        return $this->commandName;
     }
 
     /**
@@ -82,13 +74,5 @@ class CommandResponse
     public function getOutput(): string
     {
         return $this->output;
-    }
-
-    /**
-     * @return string
-     */
-    public function getErrorOutput(): string
-    {
-        return $this->errorOutput;
     }
 }

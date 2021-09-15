@@ -31,4 +31,9 @@ class GitBranchCommand extends AbstractCommand implements CommandInterface
     {
         return 'The command for creating a new branch';
     }
+
+    public function runCommand(): CommandResponse
+    {
+        return $this->runProcess($this->getCommand());
+    }
 }

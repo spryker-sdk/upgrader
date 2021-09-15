@@ -77,22 +77,15 @@ class UpgradeCommand extends AbstractCommand
     protected function processOutput(CommandResponse $response, OutputInterface $output): int
     {
         $output->writeln('<comment>' . str_repeat('=', 100) . '</comment>');
-        $output->writeln('<comment>' . $response->getUpgraderCommand() . '</comment>');
+        $output->writeln('<comment>' . $response->getCommandName() . '</comment>');
         $output->writeln('<comment>' . str_repeat('-', 100) . '</comment>');
-        $output->writeln(
-            '<comment>' . str_replace('\'', '', $response->getProcessCommand()) . ' </comment>',
-            OutputInterface::VERBOSITY_VERBOSE
-        );
-
         if ($response->getExitCode()) {
             $output->writeln('<fg=red>' . $response->getOutput() . '</>');
-            $output->writeln('<fg=red>' . $response->getErrorOutput() . '</>');
             $output->writeln('<error>Finished with errors</error>');
             $output->writeln('<comment>' . str_repeat('=', 100) . '</comment>');
 
             return $response->getExitCode();
         }
-
         $output->writeln('<fg=green>' . $response->getOutput() . '</>', OutputInterface::VERBOSITY_VERBOSE);
         $output->writeln('<info>Finished successfully</info>');
         $output->writeln('<comment>' . str_repeat('=', 100) . '</comment>');

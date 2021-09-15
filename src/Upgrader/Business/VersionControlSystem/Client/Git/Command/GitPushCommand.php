@@ -31,4 +31,9 @@ class GitPushCommand extends AbstractCommand implements CommandInterface
     {
         return 'The command for pushing the changes';
     }
+
+    public function runCommand(): CommandResponse
+    {
+        return $this->runProcess($this->getCommand());
+    }
 }
