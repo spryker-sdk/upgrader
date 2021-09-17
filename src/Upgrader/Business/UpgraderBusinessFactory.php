@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business;
@@ -11,7 +11,7 @@ use Ergebnis\Json\Printer\Printer;
 use Ergebnis\Json\Printer\PrinterInterface;
 use GuzzleHttp\Client;
 use Upgrader\Business\Command\CommandInterface;
-use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpCommunicator;
+use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpClient;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\ReleaseAppClient;
 use Upgrader\Business\DataProvider\DataProvider;
 use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommand;
@@ -91,11 +91,11 @@ class UpgraderBusinessFactory
     }
 
     /**
-     * @return \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpCommunicator
+     * @return \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpClient
      */
-    public function createHttpCommunicator(): HttpCommunicator
+    public function createHttpCommunicator(): HttpClient
     {
-        return new HttpCommunicator(
+        return new HttpClient(
             $this->getConfig(),
             $this->createCommunicationClient()
         );
@@ -189,7 +189,7 @@ class UpgraderBusinessFactory
     }
 
     /**
-     * @return \Upgrader\Business\Command\CommandInterface
+     * @return \Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommand
      */
     public function createComposerRequireCommand(): ComposerRequireCommand
     {

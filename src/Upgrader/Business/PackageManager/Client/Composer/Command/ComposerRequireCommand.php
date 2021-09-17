@@ -1,22 +1,22 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\PackageManager\Client\Composer\Command;
 
 use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Exception\UpgraderException;
-use Upgrader\Business\PackageManager\Entity\Collection\PackageCollection;
+use Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface;
 
-class ComposerRequireCommand extends AbstractCommand
+class ComposerRequireCommand extends AbstractCommand implements ComposerRequireCommandInterface
 {
     protected const COMMAND_NAME = 'composer require';
 
     /**
-     * @var \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection
+     * @var \Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface|null
      */
     protected $packageCollection;
 
@@ -45,13 +45,15 @@ class ComposerRequireCommand extends AbstractCommand
     }
 
     /**
-     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection $packageCollection
+     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface $packageCollection
      *
-     * @return void
+     * @return bool
      */
-    public function setPackageCollection(PackageCollection $packageCollection): void
+    public function setPackageCollection(PackageCollectionInterface $packageCollection): bool
     {
         $this->packageCollection = $packageCollection;
+
+        return true;
     }
 
     /**
@@ -66,7 +68,6 @@ class ComposerRequireCommand extends AbstractCommand
         }
 
         $result = '';
-        /** @var \Upgrader\Business\PackageManager\Entity\Package $package */
         foreach ($this->packageCollection->toArray() as $package) {
             $package = sprintf('%s:%s', $package->getName(), $package->getVersion());
             $result = sprintf('%s %s', $result, $package);

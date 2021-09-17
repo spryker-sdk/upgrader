@@ -1,14 +1,15 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeAnalysis;
 
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\HttpResponse;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeAnalysis\Collection\UpgradeAnalysisModuleCollection;
+use Upgrader\Business\Exception\UpgraderException;
 
 class UpgradeAnalysisResponse extends HttpResponse
 {
@@ -25,10 +26,8 @@ class UpgradeAnalysisResponse extends HttpResponse
     public function getModuleCollection(): UpgradeAnalysisModuleCollection
     {
         if (!$this->moduleCollection instanceof UpgradeAnalysisModuleCollection) {
-            $bodyArray = $this->getBodyArray();
-
             $moduleList = [];
-            foreach ($bodyArray[self::MODULES_KEY] as $moduleData) {
+            foreach ($this->getModulesArray() as $moduleData) {
                 $moduleList[] = new UpgradeAnalysisModule($moduleData);
             }
 
@@ -36,5 +35,27 @@ class UpgradeAnalysisResponse extends HttpResponse
         }
 
         return $this->moduleCollection;
+    }
+
+    /**
+     * @throws \Upgrader\Business\Exception\UpgraderException
+     *
+     * @return array
+     */
+    protected function getModulesArray(): array
+    {
+        $bodyArray = $this->getBodyArray();
+
+        if (!$bodyArray) {
+            throw new UpgraderException('Response body not found');
+        }
+
+        $modulesArray = $bodyArray[self::MODULES_KEY];
+
+        if (!$modulesArray) {
+            throw new UpgraderException('Key module not found');
+        }
+
+        return $modulesArray;
     }
 }

@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business;
 
-use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
 use Upgrader\Business\Command\CommandRequest;
+use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
 
 interface UpgraderFacadeInterface
 {
@@ -18,11 +18,11 @@ interface UpgraderFacadeInterface
      * - Updates packages to the latest available version.
      * - Returns command result object that contains exit code and message.
      *
+     * @api
+     *
      * @param \Upgrader\Business\Command\CommandRequest $commandRequest
      *
      * @return \Upgrader\Business\Command\Response\Collection\CommandResponseCollection
-     * @api
-     *
      */
     public function upgrade(CommandRequest $commandRequest): CommandResponseCollection;
 

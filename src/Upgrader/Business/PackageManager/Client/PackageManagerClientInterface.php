@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\PackageManager\Client;
 
 use Upgrader\Business\Command\Response\CommandResponse;
-use Upgrader\Business\PackageManager\Entity\Collection\PackageCollection;
+use Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface;
 
 interface PackageManagerClientInterface
 {
@@ -33,11 +33,11 @@ interface PackageManagerClientInterface
     public function getComposerLockFile(): array;
 
     /**
-     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection $packageCollection
+     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface $packageCollection
      *
      * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    public function require(PackageCollection $packageCollection): CommandResponse;
+    public function require(PackageCollectionInterface $packageCollection): CommandResponse;
 
     /**
      * @param string $packageName

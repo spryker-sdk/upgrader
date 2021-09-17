@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader;
@@ -15,8 +15,16 @@ class UpgraderConfig
     protected const DEFAULT_RELEASE_APP_URL = 'https://api.release.spryker.com';
     protected const UPGRADER_COMMAND_EXECUTION_TIMEOUT = 'UPGRADER_COMMAND_EXECUTION_TIMEOUT';
     protected const DEFAULT_COMMAND_EXECUTION_TIMEOUT = 600;
-    protected $previousCommitHash = null;
-    protected $startingBranch = null;
+
+    /**
+     * @var string|null
+     */
+    protected $previousCommitHash;
+
+    /**
+     * @var string|null
+     */
+    protected $startingBranch;
 
     /**
      * @return int

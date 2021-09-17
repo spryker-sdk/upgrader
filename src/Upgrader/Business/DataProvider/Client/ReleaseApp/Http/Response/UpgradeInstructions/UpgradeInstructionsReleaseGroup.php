@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions;
@@ -11,6 +11,7 @@ use DateTime;
 use DateTimeInterface;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\Collection\UpgradeInstructionModuleCollection;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\ReleaseAppConst;
+use Upgrader\Business\Exception\UpgraderException;
 
 class UpgradeInstructionsReleaseGroup
 {
@@ -30,7 +31,7 @@ class UpgradeInstructionsReleaseGroup
     protected $moduleCollection;
 
     /**
-     * @param $bodyArray|array
+     * @param array $bodyArray
      */
     public function __construct(array $bodyArray)
     {
@@ -54,14 +55,24 @@ class UpgradeInstructionsReleaseGroup
     }
 
     /**
+     * @throws \Upgrader\Business\Exception\UpgraderException
+     *
      * @return \DateTimeInterface
      */
     public function getReleased(): DateTimeInterface
     {
-        return DateTime::createFromFormat(
+        $dataTime = DateTime::createFromFormat(
             ReleaseAppConst::RESPONSE_DATA_TIME_FORMAT,
             $this->bodyArray[self::RELEASED_KEY]
         );
+
+        if (!$dataTime) {
+            $message = sprintf('%s %s', 'Invalid datatime format:', $this->bodyArray[self::RELEASED_KEY]);
+
+            throw new UpgraderException($message);
+        }
+
+        return $dataTime;
     }
 
     /**

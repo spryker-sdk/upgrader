@@ -1,18 +1,20 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\Collection;
 
+use ArrayAccess;
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
 use Upgrader\Business\Exception\UpgraderException;
 
-abstract class UpgraderCollection implements UpgraderCollectionInterface
+abstract class UpgraderCollection implements Countable, IteratorAggregate, ArrayAccess
 {
-    protected const ELEMENT_TYPE_MISMATCHED_TEMPLATE = 'Elements must be of type %s but %s got (%s)';
-
     /**
      * @var array
      */
@@ -35,7 +37,7 @@ abstract class UpgraderCollection implements UpgraderCollectionInterface
     abstract protected function getClassName(): string;
 
     /**
-     * @param $element
+     * @param mixed $element
      *
      * @return void
      */
@@ -47,7 +49,7 @@ abstract class UpgraderCollection implements UpgraderCollectionInterface
     }
 
     /**
-     * @param $element
+     * @param mixed $element
      *
      * @return bool
      */
@@ -59,7 +61,7 @@ abstract class UpgraderCollection implements UpgraderCollectionInterface
     }
 
     /**
-     * @param $invalidElementData
+     * @param mixed $invalidElementData
      *
      * @throws \Upgrader\Business\Exception\UpgraderException
      *
@@ -68,7 +70,7 @@ abstract class UpgraderCollection implements UpgraderCollectionInterface
     protected function throwInvalidObjectClassException($invalidElementData): void
     {
         $errorMessage = sprintf(
-            self::ELEMENT_TYPE_MISMATCHED_TEMPLATE,
+            'Elements must be of type %s but %s got (%s)',
             $this->getClassName(),
             gettype($invalidElementData),
             var_export($invalidElementData, true)
@@ -78,7 +80,7 @@ abstract class UpgraderCollection implements UpgraderCollectionInterface
     }
 
     /**
-     * @param $element
+     * @param mixed $element
      *
      * @return void
      */
@@ -90,7 +92,7 @@ abstract class UpgraderCollection implements UpgraderCollectionInterface
 
     /**
      * @param string $key
-     * @param $element
+     * @param mixed $element
      *
      * @return void
      */
@@ -101,29 +103,7 @@ abstract class UpgraderCollection implements UpgraderCollectionInterface
     }
 
     /**
-     * @return bool
-     */
-    public function isValid(): bool
-    {
-        foreach ($this as $element) {
-            if (!$this->isValidElement($element)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @return void
-     */
-    public function clear(): void
-    {
-        $this->elements = [];
-    }
-
-    /**
-     * @param $key
+     * @param mixed $key
      *
      * @return mixed|null
      */
@@ -141,41 +121,11 @@ abstract class UpgraderCollection implements UpgraderCollectionInterface
     }
 
     /**
-     * @return mixed|null
-     */
-    public function first()
-    {
-        $first = reset($this->elements);
-
-        return $first !== false ? $first : null;
-    }
-
-    /**
-     * @return mixed|null
-     */
-    public function last()
-    {
-        $end = end($this->elements);
-
-        return $end !== false ? $end : null;
-    }
-
-    /**
      * @return int
      */
     public function count(): int
     {
         return count($this->elements);
-    }
-
-    /**
-     * @param array $elements
-     *
-     * @return $this
-     */
-    protected function createFrom(array $elements)
-    {
-        return new static($elements);
     }
 
     /**
@@ -196,5 +146,89 @@ abstract class UpgraderCollection implements UpgraderCollectionInterface
         foreach ($collectionToMerge->toArray() as $element) {
             $this->add($element);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function valid(): bool
+    {
+        foreach ($this as $element) {
+            if (!$this->isValidElement($element)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return void
+     */
+    public function rewind(): void
+    {
+        reset($this->elements);
+    }
+
+    /**
+     * @param mixed $offset
+     *
+     * @return bool
+     */
+    public function offsetExists($offset): bool
+    {
+        return isset($this->elements[$offset]) || array_key_exists($offset, $this->elements);
+    }
+
+    /**
+     * @param mixed $offset
+     *
+     * @return mixed|null
+     */
+    public function offsetGet($offset)
+    {
+        return $this->get($offset);
+    }
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function offsetSet($offset, $value): void
+    {
+        if (!isset($offset)) {
+            $this->add($value);
+
+            return;
+        }
+
+        $this->set($offset, $value);
+    }
+
+    /**
+     * @param mixed $offset
+     *
+     * @return mixed|null|void
+     */
+    public function offsetUnset($offset)
+    {
+        if (!isset($this->elements[$offset]) && !array_key_exists($offset, $this->elements)) {
+            return null;
+        }
+
+        $removed = $this->elements[$offset];
+        unset($this->elements[$offset]);
+
+        return $removed;
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator(): ArrayIterator
+    {
+        return new ArrayIterator($this->elements);
     }
 }

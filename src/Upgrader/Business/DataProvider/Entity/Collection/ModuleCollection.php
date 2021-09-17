@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\DataProvider\Entity\Collection;
@@ -11,6 +11,9 @@ use Upgrader\Business\Collection\UpgraderCollection;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\ReleaseAppConst;
 use Upgrader\Business\DataProvider\Entity\Module;
 
+/**
+ * @method \Upgrader\Business\DataProvider\Entity\Module[]|\ArrayIterator|\Traversable getIterator()
+ */
 class ModuleCollection extends UpgraderCollection
 {
     /**
@@ -26,8 +29,7 @@ class ModuleCollection extends UpgraderCollection
      */
     public function isContainsMajorUpdates(): bool
     {
-        /** @var \Upgrader\Business\DataProvider\Entity\Module $module */
-        foreach ($this->toArray() as $module) {
+        foreach ($this as $module) {
             if ($module->getVersionType() == ReleaseAppConst::MODULE_TYPE_MAJOR) {
                 return true;
             }

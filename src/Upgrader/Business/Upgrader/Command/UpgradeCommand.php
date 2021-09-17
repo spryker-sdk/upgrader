@@ -11,7 +11,7 @@ use Exception;
 use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
 use Upgrader\Business\Command\Response\CommandResponse;
-use Upgrader\Business\DataProvider\DataProvider;
+use Upgrader\Business\DataProvider\DataProviderInterface;
 use Upgrader\Business\DataProvider\Entity\ReleaseGroup;
 use Upgrader\Business\DataProvider\Request\DataProviderRequest;
 use Upgrader\Business\DataProvider\Response\DataProviderResponse;
@@ -51,17 +51,17 @@ class UpgradeCommand extends AbstractCommand
     protected $packageManager;
 
     /**
-     * @var \Upgrader\Business\DataProvider\DataProvider
+     * @var \Upgrader\Business\DataProvider\DataProviderInterface
      */
     protected $dataProvider;
 
     /**
      * @param \Upgrader\Business\PackageManager\PackageManagerInterface $packageManager
-     * @param \Upgrader\Business\DataProvider\DataProvider $dataProvider
+     * @param \Upgrader\Business\DataProvider\DataProviderInterface $dataProvider
      */
     public function __construct(
         PackageManagerInterface $packageManager,
-        DataProvider $dataProvider
+        DataProviderInterface $dataProvider
     ) {
         $this->dataProvider = $dataProvider;
         $this->packageManager = $packageManager;
@@ -92,8 +92,7 @@ class UpgradeCommand extends AbstractCommand
     {
         $resultCollection = new CommandResponseCollection();
 
-        /** @var \Upgrader\Business\DataProvider\Entity\ReleaseGroup $releaseGroup */
-        foreach ($providerResponse->getReleaseGroupCollection()->toArray() as $releaseGroup) {
+        foreach ($providerResponse->getReleaseGroupCollection() as $releaseGroup) {
             $requireResult = $this->requirePackage($releaseGroup);
             $resultCollection->add($requireResult);
 
@@ -133,8 +132,15 @@ class UpgradeCommand extends AbstractCommand
         }
 
         $packageCollection = $this->createPackageCollection($releaseGroup);
+        $requireResponse = $this->packageManager->require($packageCollection);
 
-        return $this->packageManager->require($packageCollection);
+        if ($requireResponse->isSuccess()) {
+            $message = sprintf('Release group successfully installed. Name: %s', $releaseGroup->getName());
+
+            return $this->createResponse(true, $message);
+        }
+
+        return $requireResponse;
     }
 
     /**
@@ -146,9 +152,8 @@ class UpgradeCommand extends AbstractCommand
     {
         $packageCollection = new PackageCollection();
 
-        /** @var \Upgrader\Business\DataProvider\Entity\Module $module */
-        foreach ($releaseGroup->getModuleCollection()->toArray() as $module) {
-            $installedVersion = $this->packageManager->getPackageVersion($module->getName());
+        foreach ($releaseGroup->getModuleCollection() as $module) {
+            $installedVersion = (string)$this->packageManager->getPackageVersion($module->getName());
             if (version_compare($installedVersion, $module->getVersion(), '>=')) {
                 continue;
             }

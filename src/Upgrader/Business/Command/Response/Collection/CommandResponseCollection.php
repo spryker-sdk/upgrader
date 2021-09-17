@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\Command\Response\Collection;
@@ -39,10 +39,6 @@ class CommandResponseCollection
      */
     public function add(CommandResponse $commandResponse): void
     {
-        if ($commandResponse->getExitCode() == CommandResponse::CODE_ERROR) {
-            $this->exitCode = CommandResponse::CODE_ERROR;
-        }
-
         $this->responseList[] = $commandResponse;
     }
 

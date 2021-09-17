@@ -52,9 +52,9 @@ jobs:
 #      - name: Codeception tests
 #        run: |
 #            composer test
-#
-#      - name: PHPStan checks
-#        run: composer stan
-#
-#      - name: CodeStyle checks
-#        run: composer cs-check
+
+      - name: PHPStan checks
+        run: composer stan
+
+      - name: CodeStyle checks
+        run: composer cs-check

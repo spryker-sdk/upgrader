@@ -1,18 +1,19 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\PackageManager\Client\Composer;
 
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\Response\CommandResponse;
+use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommandInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface;
 use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
-use Upgrader\Business\PackageManager\Entity\Collection\PackageCollection;
+use Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface;
 
 class ComposerClient implements PackageManagerClientInterface
 {
@@ -26,7 +27,7 @@ class ComposerClient implements PackageManagerClientInterface
     protected $composerUpdateCommand;
 
     /**
-     * @var \Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommand
+     * @var \Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommandInterface
      */
     protected $composerRequireCommand;
 
@@ -42,13 +43,13 @@ class ComposerClient implements PackageManagerClientInterface
 
     /**
      * @param \Upgrader\Business\Command\CommandInterface $composerUpdateCommand
-     * @param \Upgrader\Business\Command\CommandInterface $composerRequireCommand
+     * @param \Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommandInterface $composerRequireCommand
      * @param \Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface $composerJsonReader
      * @param \Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface $composerLockReader
      */
     public function __construct(
         CommandInterface $composerUpdateCommand,
-        CommandInterface $composerRequireCommand,
+        ComposerRequireCommandInterface $composerRequireCommand,
         ComposerJsonReaderInterface $composerJsonReader,
         ComposerLockReaderInterface $composerLockReader
     ) {
@@ -93,11 +94,11 @@ class ComposerClient implements PackageManagerClientInterface
     }
 
     /**
-     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection $packageCollection
+     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface $packageCollection
      *
      * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    public function require(PackageCollection $packageCollection): CommandResponse
+    public function require(PackageCollectionInterface $packageCollection): CommandResponse
     {
         $this->composerRequireCommand->setPackageCollection($packageCollection);
 

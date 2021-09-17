@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\Command;
@@ -76,24 +76,6 @@ abstract class AbstractCommand implements CommandInterface
     {
         $resultOutput = $process->getExitCode() ? $process->getErrorOutput() : $process->getExitCodeText();
 
-        return new CommandResponse($process->isSuccessful(), $this->getName(), $resultOutput);
+        return new CommandResponse($process->isSuccessful(), $this->getName(), (string)$resultOutput);
     }
-
-//    /**
-//     *
-//     * @return \Upgrader\Business\Command\Response\CommandResponse
-//     */
-//    protected function runProcess(string $cliCommand): CommandResponse
-//    {
-//        $process = new Process(explode(' ', $cliCommand), (string)getcwd());
-//        $process->setTimeout(9000);
-//        $process->run();
-//        $output = $process->getOutput();
-//
-//        if(!$process->isSuccessful()){
-//            $output .= "\n" . $process->getErrorOutput();
-//        }
-//
-//        return new CommandResponse($process->isSuccessful(), $this->getName(), $output);
-//    }
 }

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\Collection;
@@ -10,6 +10,9 @@ namespace Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\Upgrade
 use Upgrader\Business\Collection\UpgraderCollection;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionModule;
 
+/**
+ * @method \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionModule[]|\ArrayIterator|\Traversable getIterator()
+ */
 class UpgradeInstructionModuleCollection extends UpgraderCollection
 {
     /**

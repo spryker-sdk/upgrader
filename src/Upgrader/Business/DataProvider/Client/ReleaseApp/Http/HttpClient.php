@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\DataProvider\Client\ReleaseApp\Http;
@@ -14,7 +14,7 @@ use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Request\HttpRequestInt
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\HttpResponseInterface;
 use Upgrader\UpgraderConfig;
 
-class HttpCommunicator implements HttpCommunicatorInterface
+class HttpClient implements HttpClientInterface
 {
     public const HTTP_HEADER_LIST = ['Content-Type' => 'application/json'];
 
@@ -65,9 +65,9 @@ class HttpCommunicator implements HttpCommunicatorInterface
         $responseStream = $communicationResponse->getBody();
         $responseStream->seek(0);
         $length = $responseStream->getSize();
-        $body = $responseStream->read($length);
+        $body = $responseStream->read((int)$length);
 
-        /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\HttpResponseInterface $response */
+        /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\HttpResponseInterface $responseClass */
         $responseClass = $request->getResponseClass();
         $response = new $responseClass($communicationResponse->getStatusCode(), $body);
 

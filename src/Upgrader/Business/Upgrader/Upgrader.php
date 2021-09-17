@@ -1,17 +1,16 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\Upgrader;
 
-use Symfony\Component\Process\Process;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\CommandRequest;
-use Upgrader\Business\Command\Response\CommandResponse;
 use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
+use Upgrader\Business\Command\Response\CommandResponse;
 
 class Upgrader implements UpgraderInterface
 {
@@ -42,6 +41,7 @@ class Upgrader implements UpgraderInterface
 
     /**
      * @param \Upgrader\Business\Command\CommandRequest $commandRequest
+     *
      * @return \Upgrader\Business\Command\Response\Collection\CommandResponseCollection
      */
     public function run(CommandRequest $commandRequest): CommandResponseCollection
@@ -49,7 +49,7 @@ class Upgrader implements UpgraderInterface
         $commandResponseList = new CommandResponseCollection();
         $commandsList = $commandRequest->getCommandFilterListAsArray();
 
-        /** @var \Evaluator\Business\Command\CommandInterface $command */
+        /** @var \Upgrader\Business\Command\CommandInterface $command */
         foreach ($this->commands as $command) {
             if ($commandsList !== [] && !in_array($command->getName(), $commandsList)) {
                 continue;
@@ -58,7 +58,7 @@ class Upgrader implements UpgraderInterface
             $commandResponse = $command->run();
             $commandResponseList->add($commandResponse);
 
-            if($commandResponseList->getExitCode() == CommandResponse::CODE_ERROR){
+            if ($commandResponseList->getExitCode() == CommandResponse::CODE_ERROR) {
                 break;
             }
         }

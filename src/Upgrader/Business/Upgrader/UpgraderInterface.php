@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\Upgrader;
@@ -14,7 +14,13 @@ interface UpgraderInterface
 {
     /**
      * @param \Upgrader\Business\Command\CommandRequest $commandRequest
+     *
      * @return \Upgrader\Business\Command\Response\Collection\CommandResponseCollection
      */
     public function run(CommandRequest $commandRequest): CommandResponseCollection;
+
+    /**
+     * @return \Upgrader\Business\Command\CommandInterface[]
+     */
+    public function getCommands(): array;
 }

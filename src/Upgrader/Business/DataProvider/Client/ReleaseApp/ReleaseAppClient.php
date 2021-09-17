@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\DataProvider\Client\ReleaseApp;
 
-use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpCommunicatorInterface;
+use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpClientInterface;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Request\UpgradeAnalysisRequest;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Request\UpgradeInstructionsRequest;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeAnalysis\Collection\UpgradeAnalysisModuleVersionCollection;
@@ -23,14 +23,14 @@ use Upgrader\Business\DataProvider\Response\DataProviderResponse;
 class ReleaseAppClient implements ReleaseAppClientInterface
 {
     /**
-     * @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpCommunicatorInterface
+     * @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpClientInterface
      */
     protected $httpCommunicator;
 
     /**
-     * @param \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpCommunicatorInterface $httpCommunicator
+     * @param \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpClientInterface $httpCommunicator
      */
-    public function __construct(HttpCommunicatorInterface $httpCommunicator)
+    public function __construct(HttpClientInterface $httpCommunicator)
     {
         $this->httpCommunicator = $httpCommunicator;
     }
@@ -59,8 +59,7 @@ class ReleaseAppClient implements ReleaseAppClientInterface
     ): ReleaseGroupCollection {
         $dataProviderReleaseGroupCollection = new ReleaseGroupCollection();
 
-        /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionsReleaseGroup $releaseGroup */
-        foreach ($releaseGroupCollection->toArray() as $releaseGroup) {
+        foreach ($releaseGroupCollection as $releaseGroup) {
             $dataProviderReleaseGroup = new ReleaseGroup(
                 $releaseGroup->getName(),
                 $this->buildDtaProviderModuleCollection($releaseGroup),
@@ -73,14 +72,14 @@ class ReleaseAppClient implements ReleaseAppClientInterface
     }
 
     /**
-     * @param UpgradeInstructionsReleaseGroup $releaseGroup
-     * @return ModuleCollection
+     * @param \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionsReleaseGroup $releaseGroup
+     *
+     * @return \Upgrader\Business\DataProvider\Entity\Collection\ModuleCollection
      */
     protected function buildDtaProviderModuleCollection(UpgradeInstructionsReleaseGroup $releaseGroup): ModuleCollection
     {
         $dataProviderModuleCollection = new ModuleCollection();
-        /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionModule $module */
-        foreach ($releaseGroup->getModuleCollection()->toArray() as $module) {
+        foreach ($releaseGroup->getModuleCollection() as $module) {
             $dataProviderModule = new Module($module->getName(), $module->getVersion(), $module->getType());
             $dataProviderModuleCollection->add($dataProviderModule);
         }
@@ -98,8 +97,7 @@ class ReleaseAppClient implements ReleaseAppClientInterface
     ): UpgradeInstructionsReleaseGroupCollection {
         $releaseGroupCollection = new UpgradeInstructionsReleaseGroupCollection();
 
-        /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeAnalysis\UpgradeAnalysisModuleVersion $moduleVersion */
-        foreach ($moduleVersionCollection->toArray() as $moduleVersion) {
+        foreach ($moduleVersionCollection as $moduleVersion) {
             $request = $this->createUpgradeInstructionsRequest($moduleVersion->getId());
 
             /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionsResponse $response */
@@ -124,7 +122,7 @@ class ReleaseAppClient implements ReleaseAppClientInterface
         /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeAnalysis\UpgradeAnalysisResponse $response */
         $response = $this->httpCommunicator->send($request);
 
-        $moduleCollection = $response->getModuleCollection();
+        $moduleCollection = $response->getModuleCollection()->getModulesThatContainsAtListOneModuleVersion();
         $moduleVersionCollection = $moduleCollection->getModuleVersionCollection();
 
         return $moduleVersionCollection;

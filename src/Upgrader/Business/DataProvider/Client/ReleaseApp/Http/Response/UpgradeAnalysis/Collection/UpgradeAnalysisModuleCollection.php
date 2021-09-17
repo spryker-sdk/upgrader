@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeAnalysis\Collection;
@@ -10,6 +10,9 @@ namespace Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\Upgrade
 use Upgrader\Business\Collection\UpgraderCollection;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeAnalysis\UpgradeAnalysisModule;
 
+/**
+ * @method \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeAnalysis\UpgradeAnalysisModule[]|\ArrayIterator|\Traversable getIterator()
+ */
 class UpgradeAnalysisModuleCollection extends UpgraderCollection
 {
     /**
@@ -21,12 +24,11 @@ class UpgradeAnalysisModuleCollection extends UpgraderCollection
     }
 
     /**
-     * @return $this
+     * @return self
      */
-    public function getModulesThatContainsAtListOneModuleVersion()
+    public function getModulesThatContainsAtListOneModuleVersion(): self
     {
         $collection = new self();
-        /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeAnalysis\UpgradeAnalysisModule $module */
         foreach ($this->elements as $module) {
             if (!$module->getModuleVersionCollection()->isEmpty()) {
                 $collection->add($module);
@@ -43,10 +45,8 @@ class UpgradeAnalysisModuleCollection extends UpgraderCollection
     {
         $collection = new UpgradeAnalysisModuleVersionCollection();
 
-        /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeAnalysis\UpgradeAnalysisModule $module */
         foreach ($this->elements as $module) {
-            /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeAnalysis\UpgradeAnalysisModuleVersion $moduleVersion */
-            foreach ($module->getModuleVersionCollection()->toArray() as $moduleVersion) {
+            foreach ($module->getModuleVersionCollection() as $moduleVersion) {
                 $collection->add($moduleVersion);
             }
         }

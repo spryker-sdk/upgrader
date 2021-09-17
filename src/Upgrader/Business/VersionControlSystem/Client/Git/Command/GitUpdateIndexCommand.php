@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
- * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ * This file is part of the Spryker Suite.
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Upgrader\Business\VersionControlSystem\Client\Git\Command;
@@ -20,11 +20,17 @@ class GitUpdateIndexCommand extends AbstractCommand implements CommandInterface
         return 'git update-index --refresh';
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return 'git:uncommited';
     }
 
+    /**
+     * @return string
+     */
     public function getDescription(): string
     {
         return 'The command for checking uncommited changes';
