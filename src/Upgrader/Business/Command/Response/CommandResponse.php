@@ -37,7 +37,7 @@ class CommandResponse
      * @param string $commandName
      * @param string $output
      */
-    public function __construct(bool $isSuccessful, string $commandName, string $output)
+    public function __construct(bool $isSuccessful, string $commandName, string $output = '')
     {
         $this->exitCode = $isSuccessful ? self::CODE_SUCCESS : self::CODE_ERROR;
         $this->output = $output;

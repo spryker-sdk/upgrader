@@ -75,7 +75,7 @@ class UpgradeCommand extends AbstractCommand
         try {
             $dataProviderRequest = $this->createDataProviderRequest();
             $dataProviderResponse = $this->dataProvider->getNotInstalledReleaseGroupList($dataProviderRequest);
-            $requireResponseCollection = $this->requirePackages($dataProviderResponse);
+            $requireResponseCollection = $this->requirePackageCollection($dataProviderResponse);
         } catch (Exception $exception) {
             return $this->createResponse(false, $exception->getMessage());
         }
@@ -83,99 +83,6 @@ class UpgradeCommand extends AbstractCommand
         return $this->createResponse($requireResponseCollection->isSuccess(), $requireResponseCollection->getOutput());
     }
 
-    /**
-     * @param \Upgrader\Business\DataProvider\Response\DataProviderResponse $providerResponse
-     *
-     * @return \Upgrader\Business\Command\Response\Collection\CommandResponseCollection
-     */
-    protected function requirePackages(DataProviderResponse $providerResponse): CommandResponseCollection
-    {
-        $resultCollection = new CommandResponseCollection();
-
-        foreach ($providerResponse->getReleaseGroupCollection() as $releaseGroup) {
-            $requireResult = $this->requirePackage($releaseGroup);
-            $resultCollection->add($requireResult);
-
-            if (!$requireResult->isSuccess()) {
-                break;
-            }
-        }
-
-        return $resultCollection;
-    }
-
-    /**
-     * @param \Upgrader\Business\DataProvider\Entity\ReleaseGroup $releaseGroup
-     *
-     * @return \Upgrader\Business\Command\Response\CommandResponse
-     */
-    protected function requirePackage(ReleaseGroup $releaseGroup): CommandResponse
-    {
-        if ($releaseGroup->isContainsProjectChanges()) {
-            $message = sprintf(
-                '%s %s',
-                'Release group contains changes on project level. Name:',
-                $releaseGroup->getName()
-            );
-
-            return $this->createResponse(false, $message);
-        }
-
-        if ($releaseGroup->isContainsMajorUpdates()) {
-            $message = sprintf(
-                '%s %s',
-                'Release group contains major changes. Name:',
-                $releaseGroup->getName()
-            );
-
-            return $this->createResponse(false, $message);
-        }
-
-        $packageCollection = $this->createPackageCollection($releaseGroup);
-        $requireResponse = $this->packageManager->require($packageCollection);
-
-        if ($requireResponse->isSuccess()) {
-            $message = sprintf('Release group successfully installed. Name: %s', $releaseGroup->getName());
-
-            return $this->createResponse(true, $message);
-        }
-
-        return $requireResponse;
-    }
-
-    /**
-     * @param \Upgrader\Business\DataProvider\Entity\ReleaseGroup $releaseGroup
-     *
-     * @return \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection
-     */
-    protected function createPackageCollection(ReleaseGroup $releaseGroup): PackageCollection
-    {
-        $packageCollection = new PackageCollection();
-
-        foreach ($releaseGroup->getModuleCollection() as $module) {
-            $installedVersion = (string)$this->packageManager->getPackageVersion($module->getName());
-            if (version_compare($installedVersion, $module->getVersion(), '>=')) {
-                continue;
-            }
-
-            $package = new Package($module->getName(), $module->getVersion());
-            $packageCollection->add($package);
-        }
-
-        return $packageCollection;
-    }
-
-    /**
-     * @return \Upgrader\Business\DataProvider\Request\DataProviderRequest
-     */
-    protected function createDataProviderRequest(): DataProviderRequest
-    {
-        $projectName = $this->packageManager->getProjectName();
-        $composerJson = $this->packageManager->getComposerJsonFile();
-        $composerLock = $this->packageManager->getComposerLockFile();
-
-        return new DataProviderRequest($projectName, $composerJson, $composerLock);
-    }
 
     /**
      * @param bool $isSuccess
