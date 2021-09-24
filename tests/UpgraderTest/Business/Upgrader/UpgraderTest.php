@@ -11,7 +11,7 @@ use Codeception\Test\Unit;
 use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
 use Upgrader\Business\PackageManager\Client\Composer\ComposerClient;
 use Upgrader\Business\PackageManager\PackageManager;
-use Upgrader\Business\Upgrader\Upgrader;
+use Upgrader\Business\Command\Executor\CommandExecutor;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitUpdateIndexCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\GitClient;
 use Upgrader\Business\VersionControlSystem\VersionControlSystem;
@@ -31,7 +31,7 @@ class UpgraderTest extends Unit
         // Arrange
         $packageManager = $this->getMockPackageManager();
         $versionControlSystem = $this->getMockVersionControlSystem(true);
-        $upgrader = new Upgrader($packageManager, $versionControlSystem);
+        $upgrader = new \Upgrader\Business\Command\Executor\CommandExecutor($packageManager, $versionControlSystem);
 
         // Act
         $upgradeResult = $upgrader->upgrade();
@@ -49,7 +49,7 @@ class UpgraderTest extends Unit
         // Arrange
         $packageManager = $this->getMockPackageManager();
         $versionControlSystem = $this->getMockVersionControlSystem(false);
-        $upgrader = new Upgrader($packageManager, $versionControlSystem);
+        $upgrader = new \Upgrader\Business\Command\Executor\CommandExecutor($packageManager, $versionControlSystem);
 
         // Act
         $upgradeResult = $upgrader->upgrade();

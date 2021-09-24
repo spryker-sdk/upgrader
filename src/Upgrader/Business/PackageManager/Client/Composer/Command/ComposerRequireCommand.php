@@ -9,14 +9,14 @@ namespace Upgrader\Business\PackageManager\Client\Composer\Command;
 
 use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Exception\UpgraderException;
-use Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface;
+use Upgrader\Business\PackageManager\Entity\Collection\PackageCollection;
 
 class ComposerRequireCommand extends AbstractCommand implements ComposerRequireCommandInterface
 {
     protected const COMMAND_NAME = 'composer require';
 
     /**
-     * @var \Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface|null
+     * @var \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection|null
      */
     protected $packageCollection;
 
@@ -45,15 +45,13 @@ class ComposerRequireCommand extends AbstractCommand implements ComposerRequireC
     }
 
     /**
-     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface $packageCollection
+     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return bool
+     * @return void
      */
-    public function setPackageCollection(PackageCollectionInterface $packageCollection): bool
+    public function setPackageCollection(PackageCollection $packageCollection): void
     {
         $this->packageCollection = $packageCollection;
-
-        return true;
     }
 
     /**

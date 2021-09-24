@@ -11,6 +11,8 @@ use Ergebnis\Json\Printer\Printer;
 use Ergebnis\Json\Printer\PrinterInterface;
 use GuzzleHttp\Client;
 use Upgrader\Business\Command\CommandInterface;
+use Upgrader\Business\Command\Executor\CommandExecutor;
+use Upgrader\Business\Command\Executor\CommandExecutorInterface;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpClient;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\ReleaseAppClient;
 use Upgrader\Business\DataProvider\DataProvider;
@@ -27,8 +29,15 @@ use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
 use Upgrader\Business\PackageManager\PackageManager;
 use Upgrader\Business\PackageManager\PackageManagerInterface;
 use Upgrader\Business\Upgrader\Command\UpgradeCommand;
+use Upgrader\Business\Upgrader\Manager\DataProviderManager;
+use Upgrader\Business\Upgrader\Manager\PackageCollectionManager;
+use Upgrader\Business\Upgrader\Manager\ReleaseGroupManager;
 use Upgrader\Business\Upgrader\Upgrader;
-use Upgrader\Business\Upgrader\UpgraderInterface;
+use Upgrader\Business\Upgrader\Validator\Package\AlreadyInstalledValidator;
+use Upgrader\Business\Upgrader\Validator\PackageValidateManager;
+use Upgrader\Business\Upgrader\Validator\ReleaseGroup\MajorVersionValidator;
+use Upgrader\Business\Upgrader\Validator\ReleaseGroup\ProjectChangesValidator;
+use Upgrader\Business\Upgrader\Validator\ReleaseGroupValidateManager;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitAddCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitBranchCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCheckoutToStartCommand;
@@ -45,11 +54,11 @@ class UpgraderBusinessFactory
     protected $config;
 
     /**
-     * @return \Upgrader\Business\Upgrader\UpgraderInterface
+     * @return \Upgrader\Business\Command\Executor\CommandExecutorInterface
      */
-    public function createUpgrader(): UpgraderInterface
+    public function createCommandExecutor(): CommandExecutorInterface
     {
-        return ( new Upgrader())
+        return ( new CommandExecutor())
             ->addCommand($this->createGitUpdateIndexCommand())
             ->addCommand($this->createUpgradeCommand())
             ->addCommand($this->createGitBranchCommand())
@@ -65,8 +74,82 @@ class UpgraderBusinessFactory
     public function createUpgradeCommand(): UpgradeCommand
     {
         return new UpgradeCommand(
-            $this->createPackageManager(),
-            $this->createDataProvider()
+            $this->createUpgrader()
+        );
+    }
+
+    /**
+     * @return \Upgrader\Business\Upgrader\Upgrader
+     */
+    public function createUpgrader(): Upgrader
+    {
+        return new Upgrader(
+            $this->createReleaseGroupManager(),
+            $this->createDataProviderManager()
+        );
+    }
+
+    /**
+     * @return \Upgrader\Business\Upgrader\Manager\ReleaseGroupManager
+     */
+    public function createReleaseGroupManager(): ReleaseGroupManager
+    {
+        return new ReleaseGroupManager(
+            $this->createReleaseGroupValidateManager(),
+            $this->createPackageCollectionManager(),
+            $this->createPackageManager()
+        );
+    }
+
+    /**
+     * @return \Upgrader\Business\Upgrader\Validator\ReleaseGroupValidateManager
+     */
+    public function createReleaseGroupValidateManager(): ReleaseGroupValidateManager
+    {
+        return new ReleaseGroupValidateManager([
+            new ProjectChangesValidator(),
+            new MajorVersionValidator(),
+        ]);
+    }
+
+    /**
+     * @return \Upgrader\Business\Upgrader\Manager\PackageCollectionManager
+     */
+    public function createPackageCollectionManager(): PackageCollectionManager
+    {
+        return new PackageCollectionManager(
+            $this->createPackageValidateManager()
+        );
+    }
+
+    /**
+     * @return \Upgrader\Business\Upgrader\Validator\PackageValidateManager
+     */
+    public function createPackageValidateManager(): PackageValidateManager
+    {
+        return new PackageValidateManager([
+            $this->createAlreadyInstalledValidator(),
+        ]);
+    }
+
+    /**
+     * @return \Upgrader\Business\Upgrader\Validator\Package\AlreadyInstalledValidator
+     */
+    public function createAlreadyInstalledValidator(): AlreadyInstalledValidator
+    {
+        return new AlreadyInstalledValidator(
+            $this->createPackageManager()
+        );
+    }
+
+    /**
+     * @return \Upgrader\Business\Upgrader\Manager\DataProviderManager
+     */
+    public function createDataProviderManager(): DataProviderManager
+    {
+        return new DataProviderManager(
+            $this->createDataProvider(),
+            $this->createPackageManager()
         );
     }
 

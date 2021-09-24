@@ -28,7 +28,7 @@ class UpgraderFacade implements UpgraderFacadeInterface
      */
     public function upgrade(CommandRequest $commandRequest): CommandResponseCollection
     {
-        return $this->getFactory()->createUpgrader()->run($commandRequest);
+        return $this->getFactory()->createCommandExecutor()->run($commandRequest);
     }
 
     /**
@@ -52,6 +52,6 @@ class UpgraderFacade implements UpgraderFacadeInterface
      */
     public function getUpgraderCommands(): array
     {
-        return $this->getFactory()->createUpgrader()->getCommands();
+        return $this->getFactory()->createCommandExecutor()->getCommands();
     }
 }

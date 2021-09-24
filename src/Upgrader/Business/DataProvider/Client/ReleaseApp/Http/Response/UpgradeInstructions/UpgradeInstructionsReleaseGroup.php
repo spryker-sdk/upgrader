@@ -67,7 +67,7 @@ class UpgradeInstructionsReleaseGroup
         );
 
         if (!$dataTime) {
-            $message = sprintf('%s %s', 'Invalid datatime format:', $this->bodyArray[self::RELEASED_KEY]);
+            $message = sprintf('%s %s', 'API invalid datatime format:', $this->bodyArray[self::RELEASED_KEY]);
 
             throw new UpgraderException($message);
         }

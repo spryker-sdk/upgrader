@@ -8,18 +8,11 @@
 namespace Upgrader\Business\Upgrader\Command;
 
 use Exception;
-use Upgrader\Business\Command\AbstractCommand;
-use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
+use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\Response\CommandResponse;
-use Upgrader\Business\DataProvider\DataProviderInterface;
-use Upgrader\Business\DataProvider\Entity\ReleaseGroup;
-use Upgrader\Business\DataProvider\Request\DataProviderRequest;
-use Upgrader\Business\DataProvider\Response\DataProviderResponse;
-use Upgrader\Business\PackageManager\Entity\Collection\PackageCollection;
-use Upgrader\Business\PackageManager\Entity\Package;
-use Upgrader\Business\PackageManager\PackageManagerInterface;
+use Upgrader\Business\Upgrader\UpgraderInterface;
 
-class UpgradeCommand extends AbstractCommand
+class UpgradeCommand implements CommandInterface
 {
     /**
      * @return string
@@ -46,25 +39,16 @@ class UpgradeCommand extends AbstractCommand
     }
 
     /**
-     * @var \Upgrader\Business\PackageManager\PackageManagerInterface
+     * @var \Upgrader\Business\Upgrader\UpgraderInterface
      */
-    protected $packageManager;
+    protected $upgrader;
 
     /**
-     * @var \Upgrader\Business\DataProvider\DataProviderInterface
+     * @param \Upgrader\Business\Upgrader\UpgraderInterface $upgrader
      */
-    protected $dataProvider;
-
-    /**
-     * @param \Upgrader\Business\PackageManager\PackageManagerInterface $packageManager
-     * @param \Upgrader\Business\DataProvider\DataProviderInterface $dataProvider
-     */
-    public function __construct(
-        PackageManagerInterface $packageManager,
-        DataProviderInterface $dataProvider
-    ) {
-        $this->dataProvider = $dataProvider;
-        $this->packageManager = $packageManager;
+    public function __construct(UpgraderInterface $upgrader)
+    {
+        $this->upgrader = $upgrader;
     }
 
     /**
@@ -73,16 +57,13 @@ class UpgradeCommand extends AbstractCommand
     public function run(): CommandResponse
     {
         try {
-            $dataProviderRequest = $this->createDataProviderRequest();
-            $dataProviderResponse = $this->dataProvider->getNotInstalledReleaseGroupList($dataProviderRequest);
-            $requireResponseCollection = $this->requirePackageCollection($dataProviderResponse);
+            $requireResponseCollection = $this->upgrader->upgrade();
         } catch (Exception $exception) {
             return $this->createResponse(false, $exception->getMessage());
         }
 
         return $this->createResponse($requireResponseCollection->isSuccess(), $requireResponseCollection->getOutput());
     }
-
 
     /**
      * @param bool $isSuccess

@@ -9,6 +9,7 @@ namespace Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\Upgrade
 
 use Upgrader\Business\Collection\UpgraderCollection;
 use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionsReleaseGroup;
+use Upgrader\Business\Exception\UpgraderException;
 
 /**
  * @method \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionsReleaseGroup[]|\ArrayIterator|\Traversable getIterator()
@@ -30,7 +31,6 @@ class UpgradeInstructionsReleaseGroupCollection extends UpgraderCollection
     {
         $sortData = [];
 
-        /** @var \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\Response\UpgradeInstructions\UpgradeInstructionsReleaseGroup $releaseGroup */
         foreach ($this as $releaseGroup) {
             $timestamp = $releaseGroup->getReleased()->getTimestamp();
             $sortData[$timestamp] = $releaseGroup;
@@ -44,5 +44,27 @@ class UpgradeInstructionsReleaseGroupCollection extends UpgraderCollection
         }
 
         return $collection;
+    }
+
+    /**
+     * @return self
+     */
+    public function filterWithoutReleased(): self
+    {
+        $result = new self();
+
+        foreach ($this as $releaseGroup) {
+            try {
+                $dateTime = $releaseGroup->getReleased();
+            } catch (UpgraderException $exception) {
+                $dateTime = null;
+            }
+
+            if ($dateTime) {
+                $result->add($releaseGroup);
+            }
+        }
+
+        return $result;
     }
 }

@@ -23,21 +23,21 @@ class CommandResponse
     protected $processCommand;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $commandName;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $output;
 
     /**
      * @param bool $isSuccessful
-     * @param string $commandName
-     * @param string $output
+     * @param string|null $output
+     * @param string|null $commandName
      */
-    public function __construct(bool $isSuccessful, string $commandName, string $output = '')
+    public function __construct(bool $isSuccessful, ?string $output = null, ?string $commandName = null)
     {
         $this->exitCode = $isSuccessful ? self::CODE_SUCCESS : self::CODE_ERROR;
         $this->output = $output;
@@ -61,17 +61,17 @@ class CommandResponse
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCommandName(): string
+    public function getCommandName(): ?string
     {
         return $this->commandName;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getOutput(): string
+    public function getOutput(): ?string
     {
         return $this->output;
     }

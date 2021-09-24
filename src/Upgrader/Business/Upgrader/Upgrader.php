@@ -7,62 +7,41 @@
 
 namespace Upgrader\Business\Upgrader;
 
-use Upgrader\Business\Command\CommandInterface;
-use Upgrader\Business\Command\CommandRequest;
 use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
-use Upgrader\Business\Command\Response\CommandResponse;
+use Upgrader\Business\Upgrader\Manager\DataProviderManager;
+use Upgrader\Business\Upgrader\Manager\ReleaseGroupManagerInterface;
 
 class Upgrader implements UpgraderInterface
 {
     /**
-     * @var \Upgrader\Business\Command\CommandInterface[]
+     * @var \Upgrader\Business\Upgrader\Manager\ReleaseGroupManagerInterface
      */
-    protected $commands = [];
+    protected $releaseGroupManager;
 
     /**
-     * @param \Upgrader\Business\Command\CommandInterface $command
-     *
-     * @return $this
+     * @var \Upgrader\Business\Upgrader\Manager\DataProviderManager
      */
-    public function addCommand(CommandInterface $command)
-    {
-        $this->commands[] = $command;
+    protected $dataProviderManager;
 
-        return $this;
+    /**
+     * @param Manager\ReleaseGroupManagerInterface $releaseGroupManager
+     * @param Manager\DataProviderManager $dataProviderManager
+     */
+    public function __construct(
+        ReleaseGroupManagerInterface $releaseGroupManager,
+        DataProviderManager $dataProviderManager
+    ) {
+        $this->releaseGroupManager = $releaseGroupManager;
+        $this->dataProviderManager = $dataProviderManager;
     }
 
     /**
-     * @return \Upgrader\Business\Command\CommandInterface[]
-     */
-    public function getCommands(): array
-    {
-        return $this->commands;
-    }
-
-    /**
-     * @param \Upgrader\Business\Command\CommandRequest $commandRequest
-     *
      * @return \Upgrader\Business\Command\Response\Collection\CommandResponseCollection
      */
-    public function run(CommandRequest $commandRequest): CommandResponseCollection
+    public function upgrade(): CommandResponseCollection
     {
-        $commandResponseList = new CommandResponseCollection();
-        $commandsList = $commandRequest->getCommandFilterListAsArray();
+        $dataProviderResponse = $this->dataProviderManager->getNotInstalledReleaseGroupList();
 
-        /** @var \Upgrader\Business\Command\CommandInterface $command */
-        foreach ($this->commands as $command) {
-            if ($commandsList !== [] && !in_array($command->getName(), $commandsList)) {
-                continue;
-            }
-
-            $commandResponse = $command->run();
-            $commandResponseList->add($commandResponse);
-
-            if ($commandResponseList->getExitCode() == CommandResponse::CODE_ERROR) {
-                break;
-            }
-        }
-
-        return $commandResponseList;
+        return $this->releaseGroupManager->requireCollection($dataProviderResponse->getReleaseGroupCollection());
     }
 }

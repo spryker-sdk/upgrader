@@ -13,7 +13,7 @@ use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireComm
 use Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface;
 use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
-use Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface;
+use Upgrader\Business\PackageManager\Entity\Collection\PackageCollection;
 
 class ComposerClient implements PackageManagerClientInterface
 {
@@ -94,11 +94,11 @@ class ComposerClient implements PackageManagerClientInterface
     }
 
     /**
-     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollectionInterface $packageCollection
+     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection $packageCollection
      *
      * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    public function require(PackageCollectionInterface $packageCollection): CommandResponse
+    public function require(PackageCollection $packageCollection): CommandResponse
     {
         $this->composerRequireCommand->setPackageCollection($packageCollection);
 

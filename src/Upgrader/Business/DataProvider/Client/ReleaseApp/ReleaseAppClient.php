@@ -44,6 +44,7 @@ class ReleaseAppClient implements ReleaseAppClientInterface
     {
         $moduleVersionCollection = $this->getModuleVersionCollection($request);
         $releaseGroupCollection = $this->getReleaseGroupCollection($moduleVersionCollection);
+        $releaseGroupCollection = $releaseGroupCollection->filterWithoutReleased()->getSortedByReleased();
         $dataProviderRGCollection = $this->buildDataProviderReleaseGroupCollection($releaseGroupCollection);
 
         return new DataProviderResponse($dataProviderRGCollection);
@@ -106,7 +107,7 @@ class ReleaseAppClient implements ReleaseAppClientInterface
             $releaseGroupCollection->add($response->getReleaseGroup());
         }
 
-        return $releaseGroupCollection->getSortedByReleased();
+        return $releaseGroupCollection;
     }
 
     /**

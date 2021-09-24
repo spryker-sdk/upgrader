@@ -7,7 +7,7 @@
 
 namespace Upgrader\Business\PackageManager\Entity;
 
-class Package implements PackageInterface
+class Package
 {
     /**
      * @var string
@@ -43,5 +43,13 @@ class Package implements PackageInterface
     public function getVersion(): string
     {
         return $this->version;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return sprintf('%s:%s', $this->getName(), $this->getVersion());
     }
 }

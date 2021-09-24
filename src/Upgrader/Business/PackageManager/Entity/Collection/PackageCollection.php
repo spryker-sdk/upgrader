@@ -13,7 +13,7 @@ use Upgrader\Business\PackageManager\Entity\Package;
 /**
  * @method \Upgrader\Business\PackageManager\Entity\Package[]|\ArrayIterator|\Traversable getIterator()
  */
-class PackageCollection extends UpgraderCollection implements PackageCollectionInterface
+class PackageCollection extends UpgraderCollection
 {
     /**
      * @return string
@@ -21,5 +21,19 @@ class PackageCollection extends UpgraderCollection implements PackageCollectionI
     protected function getClassName(): string
     {
         return Package::class;
+    }
+
+    /**
+     * @return array
+     */
+    public function getNameList(): array
+    {
+        $result = [];
+
+        foreach ($this as $package) {
+            $result[] = (string)$package;
+        }
+
+        return $result;
     }
 }

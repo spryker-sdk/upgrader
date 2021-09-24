@@ -9,7 +9,6 @@ namespace Upgrader\Business\Upgrader\Validator\ReleaseGroup;
 
 use Upgrader\Business\DataProvider\Entity\ReleaseGroup;
 use Upgrader\Business\Exception\UpgraderException;
-use Upgrader\Business\Upgrader\Validator\ReleaseGroup\ReleaseGroupValidatorInterface;
 
 class MajorVersionValidator implements ReleaseGroupValidatorInterface
 {
