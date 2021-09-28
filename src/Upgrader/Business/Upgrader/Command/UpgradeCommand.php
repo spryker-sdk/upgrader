@@ -62,7 +62,7 @@ class UpgradeCommand implements CommandInterface
             return $this->createResponse(false, $exception->getMessage());
         }
 
-        return $this->createResponse($requireResponseCollection->isSuccess(), $requireResponseCollection->getOutput());
+        return $this->createResponse(true, $requireResponseCollection->getOutput());
     }
 
     /**

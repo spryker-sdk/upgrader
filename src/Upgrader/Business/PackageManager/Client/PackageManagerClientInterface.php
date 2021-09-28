@@ -8,7 +8,7 @@
 namespace Upgrader\Business\PackageManager\Client;
 
 use Upgrader\Business\Command\Response\CommandResponse;
-use Upgrader\Business\PackageManager\Entity\Collection\PackageCollection;
+use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
 interface PackageManagerClientInterface
 {
@@ -33,11 +33,11 @@ interface PackageManagerClientInterface
     public function getComposerLockFile(): array;
 
     /**
-     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection $packageCollection
+     * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
      *
      * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    public function require(PackageCollection $packageCollection): CommandResponse;
+    public function require(PackageTransferCollection $packageCollection): CommandResponse;
 
     /**
      * @param string $packageName

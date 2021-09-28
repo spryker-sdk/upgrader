@@ -5,18 +5,17 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\Upgrader\Validator\ReleaseGroup;
+namespace Upgrader\Business\Upgrader\Validator;
 
+use Upgrader\Business\Command\Response\CommandResponse;
 use Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer;
 
-interface ReleaseGroupValidatorInterface
+interface ReleaseGroupSoftValidatorInterface
 {
     /**
      * @param \Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer $releaseGroup
      *
-     * @throws \Upgrader\Business\Exception\UpgraderException
-     *
-     * @return void
+     * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    public function validate(ReleaseGroupTransfer $releaseGroup): void;
+    public function isValidReleaseGroup(ReleaseGroupTransfer $releaseGroup): CommandResponse;
 }

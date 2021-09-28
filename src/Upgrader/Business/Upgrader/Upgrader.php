@@ -8,28 +8,28 @@
 namespace Upgrader\Business\Upgrader;
 
 use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
-use Upgrader\Business\Upgrader\Manager\DataProviderManager;
-use Upgrader\Business\Upgrader\Manager\ReleaseGroupManagerInterface;
+use Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge;
+use Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridgeInterface;
 
 class Upgrader implements UpgraderInterface
 {
     /**
-     * @var \Upgrader\Business\Upgrader\Manager\ReleaseGroupManagerInterface
+     * @var \Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridgeInterface
      */
     protected $releaseGroupManager;
 
     /**
-     * @var \Upgrader\Business\Upgrader\Manager\DataProviderManager
+     * @var \Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge
      */
     protected $dataProviderManager;
 
     /**
-     * @param Manager\ReleaseGroupManagerInterface $releaseGroupManager
-     * @param Manager\DataProviderManager $dataProviderManager
+     * @param Bridge\ReleaseGroupTransferBridgeInterface $releaseGroupManager
+     * @param Bridge\PackageManagementSystemBridge $dataProviderManager
      */
     public function __construct(
-        ReleaseGroupManagerInterface $releaseGroupManager,
-        DataProviderManager $dataProviderManager
+        ReleaseGroupTransferBridgeInterface $releaseGroupManager,
+        PackageManagementSystemBridge $dataProviderManager
     ) {
         $this->releaseGroupManager = $releaseGroupManager;
         $this->dataProviderManager = $dataProviderManager;

@@ -7,19 +7,19 @@
 
 namespace Upgrader\Business\Upgrader\Validator\ReleaseGroup;
 
-use Upgrader\Business\DataProvider\Entity\ReleaseGroup;
 use Upgrader\Business\Exception\UpgraderException;
+use Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer;
 
 class MajorVersionValidator implements ReleaseGroupValidatorInterface
 {
     /**
-     * @param \Upgrader\Business\DataProvider\Entity\ReleaseGroup $releaseGroup
+     * @param \Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer $releaseGroup
      *
      * @throws \Upgrader\Business\Exception\UpgraderException
      *
      * @return void
      */
-    public function validate(ReleaseGroup $releaseGroup): void
+    public function validate(ReleaseGroupTransfer $releaseGroup): void
     {
         if ($releaseGroup->isContainsMajorUpdates()) {
             $message = sprintf(

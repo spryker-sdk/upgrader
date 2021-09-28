@@ -8,14 +8,14 @@
 namespace Upgrader\Business\PackageManager\Client\Composer\Command;
 
 use Upgrader\Business\Command\CommandInterface;
-use Upgrader\Business\PackageManager\Entity\Collection\PackageCollection;
+use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
 interface ComposerRequireCommandInterface extends CommandInterface
 {
     /**
-     * @param \Upgrader\Business\PackageManager\Entity\Collection\PackageCollection $packageCollection
+     * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
      *
      * @return void
      */
-    public function setPackageCollection(PackageCollection $packageCollection): void;
+    public function setPackageCollection(PackageTransferCollection $packageCollection): void;
 }

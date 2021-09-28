@@ -8,8 +8,8 @@
 namespace Upgrader\Business\Upgrader\Validator\Package;
 
 use Upgrader\Business\Exception\UpgraderException;
-use Upgrader\Business\PackageManager\Entity\Package;
 use Upgrader\Business\PackageManager\PackageManagerInterface;
+use Upgrader\Business\PackageManager\Transfer\PackageTransfer;
 
 class AlreadyInstalledValidator implements PackageValidatorInterface
 {
@@ -27,13 +27,13 @@ class AlreadyInstalledValidator implements PackageValidatorInterface
     }
 
     /**
-     * @param \Upgrader\Business\PackageManager\Entity\Package $package
+     * @param \Upgrader\Business\PackageManager\Transfer\PackageTransfer $package
      *
      * @throws \Upgrader\Business\Exception\UpgraderException
      *
      * @return void
      */
-    public function validate(Package $package): void
+    public function validate(PackageTransfer $package): void
     {
         $installedVersion = (string)$this->packageManager->getPackageVersion($package->getName());
         if (version_compare($installedVersion, $package->getVersion(), '>=')) {

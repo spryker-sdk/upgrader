@@ -13,9 +13,11 @@ use GuzzleHttp\Client;
 use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\Command\Executor\CommandExecutor;
 use Upgrader\Business\Command\Executor\CommandExecutorInterface;
-use Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpClient;
-use Upgrader\Business\DataProvider\Client\ReleaseApp\ReleaseAppClient;
-use Upgrader\Business\DataProvider\DataProvider;
+use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpRequestBuilder;
+use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpResponseBuilder;
+use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\HttpClient;
+use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\ReleaseAppClient;
+use Upgrader\Business\PackageManagementSystem\PackageManagementSystem;
 use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommand;
 use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerUpdateCommand;
 use Upgrader\Business\PackageManager\Client\Composer\ComposerClient;
@@ -28,16 +30,16 @@ use Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockRea
 use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
 use Upgrader\Business\PackageManager\PackageManager;
 use Upgrader\Business\PackageManager\PackageManagerInterface;
+use Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge;
+use Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridge;
+use Upgrader\Business\Upgrader\Builder\PackageCollectionBuilder;
 use Upgrader\Business\Upgrader\Command\UpgradeCommand;
-use Upgrader\Business\Upgrader\Manager\DataProviderManager;
-use Upgrader\Business\Upgrader\Manager\PackageCollectionManager;
-use Upgrader\Business\Upgrader\Manager\ReleaseGroupManager;
 use Upgrader\Business\Upgrader\Upgrader;
 use Upgrader\Business\Upgrader\Validator\Package\AlreadyInstalledValidator;
-use Upgrader\Business\Upgrader\Validator\PackageValidateManager;
+use Upgrader\Business\Upgrader\Validator\PackageSoftValidator;
 use Upgrader\Business\Upgrader\Validator\ReleaseGroup\MajorVersionValidator;
 use Upgrader\Business\Upgrader\Validator\ReleaseGroup\ProjectChangesValidator;
-use Upgrader\Business\Upgrader\Validator\ReleaseGroupValidateManager;
+use Upgrader\Business\Upgrader\Validator\ReleaseGroupSoftValidator;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitAddCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitBranchCommand;
 use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCheckoutToStartCommand;
@@ -90,11 +92,11 @@ class UpgraderBusinessFactory
     }
 
     /**
-     * @return \Upgrader\Business\Upgrader\Manager\ReleaseGroupManager
+     * @return \Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridge
      */
-    public function createReleaseGroupManager(): ReleaseGroupManager
+    public function createReleaseGroupManager(): ReleaseGroupTransferBridge
     {
-        return new ReleaseGroupManager(
+        return new ReleaseGroupTransferBridge(
             $this->createReleaseGroupValidateManager(),
             $this->createPackageCollectionManager(),
             $this->createPackageManager()
@@ -102,32 +104,32 @@ class UpgraderBusinessFactory
     }
 
     /**
-     * @return \Upgrader\Business\Upgrader\Validator\ReleaseGroupValidateManager
+     * @return \Upgrader\Business\Upgrader\Validator\ReleaseGroupSoftValidator
      */
-    public function createReleaseGroupValidateManager(): ReleaseGroupValidateManager
+    public function createReleaseGroupValidateManager(): ReleaseGroupSoftValidator
     {
-        return new ReleaseGroupValidateManager([
+        return new ReleaseGroupSoftValidator([
             new ProjectChangesValidator(),
             new MajorVersionValidator(),
         ]);
     }
 
     /**
-     * @return \Upgrader\Business\Upgrader\Manager\PackageCollectionManager
+     * @return \Upgrader\Business\Upgrader\Builder\PackageCollectionBuilder
      */
-    public function createPackageCollectionManager(): PackageCollectionManager
+    public function createPackageCollectionManager(): PackageCollectionBuilder
     {
-        return new PackageCollectionManager(
+        return new PackageCollectionBuilder(
             $this->createPackageValidateManager()
         );
     }
 
     /**
-     * @return \Upgrader\Business\Upgrader\Validator\PackageValidateManager
+     * @return \Upgrader\Business\Upgrader\Validator\PackageSoftValidator
      */
-    public function createPackageValidateManager(): PackageValidateManager
+    public function createPackageValidateManager(): PackageSoftValidator
     {
-        return new PackageValidateManager([
+        return new PackageSoftValidator([
             $this->createAlreadyInstalledValidator(),
         ]);
     }
@@ -143,28 +145,28 @@ class UpgraderBusinessFactory
     }
 
     /**
-     * @return \Upgrader\Business\Upgrader\Manager\DataProviderManager
+     * @return \Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge
      */
-    public function createDataProviderManager(): DataProviderManager
+    public function createDataProviderManager(): PackageManagementSystemBridge
     {
-        return new DataProviderManager(
+        return new PackageManagementSystemBridge(
             $this->createDataProvider(),
             $this->createPackageManager()
         );
     }
 
     /**
-     * @return \Upgrader\Business\DataProvider\DataProvider
+     * @return \Upgrader\Business\PackageManagementSystem\PackageManagementSystem
      */
-    public function createDataProvider(): DataProvider
+    public function createDataProvider(): PackageManagementSystem
     {
-        return new DataProvider(
+        return new PackageManagementSystem(
             $this->createReleaseAppClient()
         );
     }
 
     /**
-     * @return \Upgrader\Business\DataProvider\Client\ReleaseApp\ReleaseAppClient
+     * @return \Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\ReleaseAppClient
      */
     public function createReleaseAppClient(): ReleaseAppClient
     {
@@ -174,20 +176,37 @@ class UpgraderBusinessFactory
     }
 
     /**
-     * @return \Upgrader\Business\DataProvider\Client\ReleaseApp\Http\HttpClient
+     * @return \Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\HttpClient
      */
     public function createHttpCommunicator(): HttpClient
     {
         return new HttpClient(
-            $this->getConfig(),
-            $this->createCommunicationClient()
+            $this->createHttpRequestBuilder(),
+            $this->createHttpResponseBuilder(),
+            $this->createGuzzleClient()
         );
+    }
+
+    /**
+     * @return \Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpRequestBuilder
+     */
+    public function createHttpRequestBuilder(): HttpRequestBuilder
+    {
+        return new HttpRequestBuilder($this->getConfig());
+    }
+
+    /**
+     * @return \Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpResponseBuilder
+     */
+    public function createHttpResponseBuilder(): HttpResponseBuilder
+    {
+        return new HttpResponseBuilder();
     }
 
     /**
      * @return \GuzzleHttp\Client
      */
-    public function createCommunicationClient(): Client
+    public function createGuzzleClient(): Client
     {
         return new Client();
     }

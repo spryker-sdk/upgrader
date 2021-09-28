@@ -5,18 +5,17 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\Upgrader\Validator\Package;
+namespace Upgrader\Business\Upgrader\Validator;
 
+use Upgrader\Business\Command\Response\CommandResponse;
 use Upgrader\Business\PackageManager\Transfer\PackageTransfer;
 
-interface PackageValidatorInterface
+interface PackageSoftValidatorInterface
 {
     /**
      * @param \Upgrader\Business\PackageManager\Transfer\PackageTransfer $package
      *
-     * @throws \Upgrader\Business\Exception\UpgraderException
-     *
-     * @return void
+     * @return \Upgrader\Business\Command\Response\CommandResponse
      */
-    public function validate(PackageTransfer $package): void;
+    public function isValidPackage(PackageTransfer $package): CommandResponse;
 }
