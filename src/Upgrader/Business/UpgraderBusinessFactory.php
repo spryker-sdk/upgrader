@@ -32,7 +32,7 @@ use Upgrader\Business\PackageManager\PackageManager;
 use Upgrader\Business\PackageManager\PackageManagerInterface;
 use Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge;
 use Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridge;
-use Upgrader\Business\Upgrader\Builder\PackageCollectionBuilder;
+use Upgrader\Business\Upgrader\Builder\PackageTransferCollectionBuilder;
 use Upgrader\Business\Upgrader\Command\UpgradeCommand;
 use Upgrader\Business\Upgrader\Upgrader;
 use Upgrader\Business\Upgrader\Validator\Package\AlreadyInstalledValidator;
@@ -115,11 +115,11 @@ class UpgraderBusinessFactory
     }
 
     /**
-     * @return \Upgrader\Business\Upgrader\Builder\PackageCollectionBuilder
+     * @return \Upgrader\Business\Upgrader\Builder\PackageTransferCollectionBuilder
      */
-    public function createPackageCollectionManager(): PackageCollectionBuilder
+    public function createPackageCollectionManager(): PackageTransferCollectionBuilder
     {
-        return new PackageCollectionBuilder(
+        return new PackageTransferCollectionBuilder(
             $this->createPackageValidateManager()
         );
     }

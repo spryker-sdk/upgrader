@@ -17,7 +17,7 @@ interface PackageCollectionBuilderInterface
      *
      * @return \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection
      */
-    public function createCollectionFromModuleCollection(ModuleTransferCollection $moduleCollection): PackageTransferCollection;
+    public function createFromModuleCollection(ModuleTransferCollection $moduleCollection): PackageTransferCollection;
 
     /**
      * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection

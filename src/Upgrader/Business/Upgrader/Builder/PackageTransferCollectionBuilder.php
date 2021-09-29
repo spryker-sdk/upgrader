@@ -13,7 +13,7 @@ use Upgrader\Business\PackageManager\Transfer\PackageTransfer;
 use Upgrader\Business\Upgrader\Bridge\PackageCollectionBuilderInterface;
 use Upgrader\Business\Upgrader\Validator\PackageSoftValidatorInterface;
 
-class PackageCollectionBuilder implements PackageCollectionBuilderInterface
+class PackageTransferCollectionBuilder implements PackageCollectionBuilderInterface
 {
     /**
      * @var \Upgrader\Business\Upgrader\Validator\PackageSoftValidatorInterface
@@ -33,12 +33,13 @@ class PackageCollectionBuilder implements PackageCollectionBuilderInterface
      *
      * @return \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection
      */
-    public function createCollectionFromModuleCollection(ModuleTransferCollection $moduleCollection): PackageTransferCollection
+    public function createFromModuleCollection(ModuleTransferCollection $moduleCollection): PackageTransferCollection
     {
         $packageCollection = new PackageTransferCollection();
 
         foreach ($moduleCollection as $module) {
-            $package = new PackageTransfer($module->getName(), $module->getVersion());
+            $name = $this->removeTypeFromPackageName($module->getName());
+            $package = new PackageTransfer($name, $module->getVersion());
             $packageCollection->add($package);
         }
 
@@ -62,5 +63,17 @@ class PackageCollectionBuilder implements PackageCollectionBuilderInterface
         }
 
         return $resultCollection;
+    }
+
+    /**
+     * @param $moduleName|string
+     *
+     * @return string
+     *
+     * spryker-shop/shop.shop-ui -> spryker-shop/shop-ui
+     */
+    protected function removeTypeFromPackageName(string $moduleName): string
+    {
+        return preg_replace('/\/[a-z]*\./m', '/', $moduleName);
     }
 }

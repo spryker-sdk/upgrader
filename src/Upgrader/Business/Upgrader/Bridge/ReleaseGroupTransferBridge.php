@@ -80,7 +80,7 @@ class ReleaseGroupTransferBridge implements ReleaseGroupTransferBridgeInterface
         }
 
         $moduleCollection = $releaseGroup->getModuleCollection();
-        $packageCollection = $this->packageCollectionBuilder->createCollectionFromModuleCollection($moduleCollection);
+        $packageCollection = $this->packageCollectionBuilder->createFromModuleCollection($moduleCollection);
         $packageCollection = $this->packageCollectionBuilder->filterInvalidPackage($packageCollection);
 
         return $this->requirePackageCollection($packageCollection);

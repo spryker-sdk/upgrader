@@ -61,6 +61,12 @@ class UpgradeInstructionsReleaseGroup
      */
     public function getReleased(): DateTimeInterface
     {
+        if (!isset($this->bodyArray[self::RELEASED_KEY])) {
+            $message = sprintf('%s %s', 'Undefined key:', self::RELEASED_KEY);
+
+            throw new UpgraderException($message);
+        }
+
         $dataTime = DateTime::createFromFormat(
             ReleaseAppConst::RESPONSE_DATA_TIME_FORMAT,
             $this->bodyArray[self::RELEASED_KEY]
