@@ -7,9 +7,6 @@
 
 namespace Upgrader\Business\PackageManager\Client\Composer\Command;
 
-use Upgrader\Business\Command\AbstractCommand;
-use Upgrader\Business\Command\CommandInterface;
-
 class ComposerUpdateCommand extends AbstractCommand implements CommandInterface
 {
     /**

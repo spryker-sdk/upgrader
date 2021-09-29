@@ -7,11 +7,11 @@
 
 namespace Upgrader\Business\Upgrader\Bridge;
 
-use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
-use Upgrader\Business\Command\Response\CommandResponse;
 use Upgrader\Business\PackageManagementSystem\Transfer\Collection\ReleaseGroupTransferCollection;
 use Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer;
 use Upgrader\Business\PackageManager\PackageManagerInterface;
+use Upgrader\Business\PackageManager\Response\Collection\PackageManagerResponseCollection;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 use Upgrader\Business\Upgrader\Validator\ReleaseGroupSoftValidatorInterface;
 
@@ -50,29 +50,28 @@ class ReleaseGroupTransferBridge implements ReleaseGroupTransferBridgeInterface
     /**
      * @param \Upgrader\Business\PackageManagementSystem\Transfer\Collection\ReleaseGroupTransferCollection $releaseGroupCollection
      *
-     * @return \Upgrader\Business\Command\Response\Collection\CommandResponseCollection
+     * @return \Upgrader\Business\PackageManager\Response\Collection\PackageManagerResponseCollection
      */
-    public function requireCollection(ReleaseGroupTransferCollection $releaseGroupCollection): CommandResponseCollection
+    public function requireCollection(ReleaseGroupTransferCollection $releaseGroupCollection): PackageManagerResponseCollection
     {
-        $resultCollection = new CommandResponseCollection();
-
+        $collection = new PackageManagerResponseCollection();
         foreach ($releaseGroupCollection as $releaseGroup) {
             $requireResult = $this->require($releaseGroup);
-            $resultCollection->add($requireResult);
+            $collection->add($requireResult);
             if (!$requireResult->isSuccess()) {
                 break;
             }
         }
 
-        return $resultCollection;
+        return $collection;
     }
 
     /**
      * @param \Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer $releaseGroup
      *
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function require(ReleaseGroupTransfer $releaseGroup): CommandResponse
+    public function require(ReleaseGroupTransfer $releaseGroup): PackageManagerResponse
     {
         $validateResult = $this->releaseGroupValidateManager->isValidReleaseGroup($releaseGroup);
         if (!$validateResult->isSuccess()) {
@@ -89,9 +88,9 @@ class ReleaseGroupTransferBridge implements ReleaseGroupTransferBridgeInterface
     /**
      * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
      *
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    protected function requirePackageCollection(PackageTransferCollection $packageCollection): CommandResponse
+    protected function requirePackageCollection(PackageTransferCollection $packageCollection): PackageManagerResponse
     {
         $requireResponse = $this->packageManager->require($packageCollection);
         if (!$requireResponse->isSuccess()) {
@@ -99,8 +98,7 @@ class ReleaseGroupTransferBridge implements ReleaseGroupTransferBridgeInterface
         }
 
         $packagesNameString = implode(' ', $packageCollection->getNameList());
-        $message = sprintf('Installed %s', $packagesNameString);
 
-        return new CommandResponse(true, $message);
+        return new PackageManagerResponse(true, $packagesNameString);
     }
 }

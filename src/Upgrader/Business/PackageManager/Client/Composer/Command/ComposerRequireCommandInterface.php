@@ -7,7 +7,6 @@
 
 namespace Upgrader\Business\PackageManager\Client\Composer\Command;
 
-use Upgrader\Business\Command\CommandInterface;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
 interface ComposerRequireCommandInterface extends CommandInterface

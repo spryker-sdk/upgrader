@@ -5,10 +5,10 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\Command;
+namespace Upgrader\Business\PackageManager\Client\Composer\Command;
 
 use Symfony\Component\Process\Process;
-use Upgrader\Business\Command\Response\CommandResponse;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\UpgraderConfig;
 
 abstract class AbstractCommand implements CommandInterface
@@ -32,13 +32,13 @@ abstract class AbstractCommand implements CommandInterface
     abstract public function getCommand(): string;
 
     /**
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function run(): CommandResponse
+    public function run(): PackageManagerResponse
     {
         $process = $this->runProcess($this->getCommand());
 
-        return $this->createCommandResponse($process);
+        return $this->createResponse($process);
     }
 
     /**
@@ -58,7 +58,7 @@ abstract class AbstractCommand implements CommandInterface
     /**
      * @param string|null $command
      *
-     * @return string[]
+     * @return array
      */
     protected function getCommandAsArray(?string $command): array
     {
@@ -70,12 +70,12 @@ abstract class AbstractCommand implements CommandInterface
     /**
      * @param \Symfony\Component\Process\Process $process
      *
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    protected function createCommandResponse(Process $process): CommandResponse
+    protected function createResponse(Process $process): PackageManagerResponse
     {
         $resultOutput = $process->getExitCode() ? $process->getErrorOutput() : $process->getExitCodeText();
 
-        return new CommandResponse($process->isSuccessful(), (string)$resultOutput, $this->getName());
+        return new PackageManagerResponse($process->isSuccessful(), (string)$resultOutput);
     }
 }

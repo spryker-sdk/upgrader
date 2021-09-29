@@ -7,7 +7,6 @@
 
 namespace Upgrader\Business\PackageManager\Client\Composer\Command;
 
-use Upgrader\Business\Command\AbstractCommand;
 use Upgrader\Business\Exception\UpgraderException;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 

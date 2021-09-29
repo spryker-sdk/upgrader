@@ -7,15 +7,15 @@
 
 namespace Upgrader\Business\Upgrader\Validator;
 
-use Upgrader\Business\Command\Response\CommandResponse;
 use Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 
 interface ReleaseGroupSoftValidatorInterface
 {
     /**
      * @param \Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer $releaseGroup
      *
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function isValidReleaseGroup(ReleaseGroupTransfer $releaseGroup): CommandResponse;
+    public function isValidReleaseGroup(ReleaseGroupTransfer $releaseGroup): PackageManagerResponse;
 }

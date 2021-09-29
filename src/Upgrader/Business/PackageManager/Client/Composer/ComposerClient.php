@@ -7,12 +7,12 @@
 
 namespace Upgrader\Business\PackageManager\Client\Composer;
 
-use Upgrader\Business\Command\CommandInterface;
-use Upgrader\Business\Command\Response\CommandResponse;
+use Upgrader\Business\PackageManager\Client\Composer\Command\CommandInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommandInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface;
 use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
 class ComposerClient implements PackageManagerClientInterface
@@ -22,7 +22,7 @@ class ComposerClient implements PackageManagerClientInterface
     protected const VERSION_KEY = 'version';
 
     /**
-     * @var \Upgrader\Business\Command\CommandInterface
+     * @var \Upgrader\Business\PackageManager\Client\Composer\Command\CommandInterface
      */
     protected $composerUpdateCommand;
 
@@ -42,7 +42,7 @@ class ComposerClient implements PackageManagerClientInterface
     protected $composerLockReader;
 
     /**
-     * @param \Upgrader\Business\Command\CommandInterface $composerUpdateCommand
+     * @param \Upgrader\Business\PackageManager\Client\Composer\Command\CommandInterface $composerUpdateCommand
      * @param \Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommandInterface $composerRequireCommand
      * @param \Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface $composerJsonReader
      * @param \Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface $composerLockReader
@@ -60,9 +60,9 @@ class ComposerClient implements PackageManagerClientInterface
     }
 
     /**
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function runUpdate(): CommandResponse
+    public function runUpdate(): PackageManagerResponse
     {
         return $this->composerUpdateCommand->run();
     }
@@ -96,9 +96,9 @@ class ComposerClient implements PackageManagerClientInterface
     /**
      * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
      *
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function require(PackageTransferCollection $packageCollection): CommandResponse
+    public function require(PackageTransferCollection $packageCollection): PackageManagerResponse
     {
         $this->composerRequireCommand->setPackageCollection($packageCollection);
 

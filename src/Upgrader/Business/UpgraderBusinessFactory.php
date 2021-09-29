@@ -10,14 +10,12 @@ namespace Upgrader\Business;
 use Ergebnis\Json\Printer\Printer;
 use Ergebnis\Json\Printer\PrinterInterface;
 use GuzzleHttp\Client;
-use Upgrader\Business\Command\CommandInterface;
-use Upgrader\Business\Command\Executor\CommandExecutor;
-use Upgrader\Business\Command\Executor\CommandExecutorInterface;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpRequestBuilder;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpResponseBuilder;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\HttpClient;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\ReleaseAppClient;
 use Upgrader\Business\PackageManagementSystem\PackageManagementSystem;
+use Upgrader\Business\PackageManager\Client\Composer\Command\CommandInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommand;
 use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerUpdateCommand;
 use Upgrader\Business\PackageManager\Client\Composer\ComposerClient;
@@ -33,19 +31,14 @@ use Upgrader\Business\PackageManager\PackageManagerInterface;
 use Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge;
 use Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridge;
 use Upgrader\Business\Upgrader\Builder\PackageTransferCollectionBuilder;
-use Upgrader\Business\Upgrader\Command\UpgradeCommand;
 use Upgrader\Business\Upgrader\Upgrader;
 use Upgrader\Business\Upgrader\Validator\Package\AlreadyInstalledValidator;
 use Upgrader\Business\Upgrader\Validator\PackageSoftValidator;
 use Upgrader\Business\Upgrader\Validator\ReleaseGroup\MajorVersionValidator;
 use Upgrader\Business\Upgrader\Validator\ReleaseGroup\ProjectChangesValidator;
 use Upgrader\Business\Upgrader\Validator\ReleaseGroupSoftValidator;
-use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitAddCommand;
-use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitBranchCommand;
-use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCheckoutToStartCommand;
-use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCommitCommand;
-use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitPushCommand;
-use Upgrader\Business\VersionControlSystem\Client\Git\Command\GitUpdateIndexCommand;
+use Upgrader\Business\VersionControlSystem\GitVcs;
+use Upgrader\Business\VersionControlSystem\VcsInterface;
 use Upgrader\UpgraderConfig;
 
 class UpgraderBusinessFactory
@@ -56,38 +49,14 @@ class UpgraderBusinessFactory
     protected $config;
 
     /**
-     * @return \Upgrader\Business\Command\Executor\CommandExecutorInterface
-     */
-    public function createCommandExecutor(): CommandExecutorInterface
-    {
-        return ( new CommandExecutor())
-            ->addCommand($this->createGitUpdateIndexCommand())
-            ->addCommand($this->createUpgradeCommand())
-            ->addCommand($this->createGitBranchCommand())
-            ->addCommand($this->createGitAddCommand())
-            ->addCommand($this->createGitCommitCommand())
-            ->addCommand($this->createGitPushCommand())
-            ->addCommand($this->createGitCheckoutToStartCommand());
-    }
-
-    /**
-     * @return \Upgrader\Business\Upgrader\Command\UpgradeCommand
-     */
-    public function createUpgradeCommand(): UpgradeCommand
-    {
-        return new UpgradeCommand(
-            $this->createUpgrader()
-        );
-    }
-
-    /**
      * @return \Upgrader\Business\Upgrader\Upgrader
      */
     public function createUpgrader(): Upgrader
     {
         return new Upgrader(
             $this->createReleaseGroupManager(),
-            $this->createDataProviderManager()
+            $this->createDataProviderManager(),
+            $this->createVcs()
         );
     }
 
@@ -222,54 +191,6 @@ class UpgraderBusinessFactory
     }
 
     /**
-     * @return \Upgrader\Business\VersionControlSystem\Client\Git\Command\GitPushCommand
-     */
-    public function createGitPushCommand()
-    {
-        return new GitPushCommand($this->getConfig());
-    }
-
-    /**
-     * @return \Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCommitCommand
-     */
-    public function createGitCommitCommand(): GitCommitCommand
-    {
-        return new GitCommitCommand($this->getConfig());
-    }
-
-    /**
-     * @return \Upgrader\Business\VersionControlSystem\Client\Git\Command\GitAddCommand
-     */
-    public function createGitAddCommand(): GitAddCommand
-    {
-        return new GitAddCommand($this->getConfig());
-    }
-
-    /**
-     * @return \Upgrader\Business\VersionControlSystem\Client\Git\Command\GitBranchCommand
-     */
-    public function createGitBranchCommand(): GitBranchCommand
-    {
-        return new GitBranchCommand($this->getConfig());
-    }
-
-    /**
-     * @return \Upgrader\Business\VersionControlSystem\Client\Git\Command\GitCheckoutToStartCommand
-     */
-    public function createGitCheckoutToStartCommand()
-    {
-        return new GitCheckoutToStartCommand($this->getConfig());
-    }
-
-    /**
-     * @return \Upgrader\Business\Command\CommandInterface
-     */
-    public function createGitUpdateIndexCommand(): CommandInterface
-    {
-        return new GitUpdateIndexCommand($this->getConfig());
-    }
-
-    /**
      * @return \Upgrader\Business\PackageManager\Client\PackageManagerClientInterface
      */
     public function createComposerClient(): PackageManagerClientInterface
@@ -283,7 +204,7 @@ class UpgraderBusinessFactory
     }
 
     /**
-     * @return \Upgrader\Business\Command\CommandInterface
+     * @return \Upgrader\Business\PackageManager\Client\Composer\Command\CommandInterface
      */
     public function createComposerUpdateCommand(): CommandInterface
     {
@@ -330,6 +251,14 @@ class UpgraderBusinessFactory
     public function createPrinter(): PrinterInterface
     {
         return new Printer();
+    }
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\VcsInterface
+     */
+    public function createVcs(): VcsInterface
+    {
+        return new GitVcs($this->getConfig());
     }
 
     /**

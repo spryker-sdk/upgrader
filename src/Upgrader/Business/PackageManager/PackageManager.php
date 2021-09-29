@@ -7,8 +7,8 @@
 
 namespace Upgrader\Business\PackageManager;
 
-use Upgrader\Business\Command\Response\CommandResponse;
 use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
 class PackageManager implements PackageManagerInterface
@@ -27,9 +27,9 @@ class PackageManager implements PackageManagerInterface
     }
 
     /**
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function update(): CommandResponse
+    public function update(): PackageManagerResponse
     {
         return $this->packageManagerClient->runUpdate();
     }
@@ -61,9 +61,9 @@ class PackageManager implements PackageManagerInterface
     /**
      * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
      *
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function require(PackageTransferCollection $packageCollection): CommandResponse
+    public function require(PackageTransferCollection $packageCollection): PackageManagerResponse
     {
         return $this->packageManagerClient->require($packageCollection);
     }

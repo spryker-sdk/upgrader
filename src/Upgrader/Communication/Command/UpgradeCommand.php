@@ -8,18 +8,13 @@
 namespace Upgrader\Communication\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Upgrader\Business\Command\CommandRequest;
-use Upgrader\Business\Command\Response\CommandResponse;
+use Upgrader\Business\Upgrader\Response\UpgraderResponseInterface;
 
 class UpgradeCommand extends AbstractCommand
 {
     protected const NAME = 'upgrade';
     protected const DESCRIPTION = 'Upgrade Spryker packages.';
-    protected const OPTION_FILTER = 'filter';
-    protected const OPTION_FILTER_SHORT = 'f';
-    protected const OPTION_FILTER_DESCRIPTION = 'List commands, that will be filtered (for multiple commands use comma)';
 
     /**
      * @return void
@@ -28,14 +23,7 @@ class UpgradeCommand extends AbstractCommand
     {
         $this
             ->setName(self::NAME)
-            ->setDescription(self::DESCRIPTION)
-            ->setHelp($this->getHelpInfo())
-            ->addOption(
-                static::OPTION_FILTER,
-                static::OPTION_FILTER_SHORT,
-                InputOption::VALUE_OPTIONAL,
-                static::OPTION_FILTER_DESCRIPTION
-            );
+            ->setDescription(self::DESCRIPTION);
     }
 
     /**
@@ -46,70 +34,40 @@ class UpgradeCommand extends AbstractCommand
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $filterList = $input->getOption(static::OPTION_FILTER);
-        $commandRequest = new CommandRequest($filterList);
+        $upgraderResponseCollection = $this->getFacade()->upgrade();
 
-        $commandResponseList = $this->getFacade()->upgrade($commandRequest);
-
-        foreach ($commandResponseList->getResponseList() as $commandResponse) {
-            $this->processOutput($commandResponse, $output);
+        foreach ($upgraderResponseCollection->toArray() as $response) {
+            $this->processOutput($response, $output);
         }
 
-        if ($commandResponseList->getExitCode()) {
+        if ($upgraderResponseCollection->getExitCode()) {
             $output->writeln('<error>Upgrade command has been finished with errors</error>');
 
-            return $commandResponseList->getExitCode();
+            return $upgraderResponseCollection->getExitCode();
         }
 
         $output->writeln('<info>Upgrade command has been finished successfully</info>');
 
-        return $commandResponseList->getExitCode();
+        return $upgraderResponseCollection->getExitCode();
     }
 
     /**
      * @codeCoverageIgnore
      *
-     * @param \Upgrader\Business\Command\Response\CommandResponse $response
+     * @param \Upgrader\Business\Upgrader\Response\UpgraderResponseInterface $response
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return int
      */
-    protected function processOutput(CommandResponse $response, OutputInterface $output): int
+    protected function processOutput(UpgraderResponseInterface $response, OutputInterface $output): int
     {
-        $output->writeln('<comment>' . str_repeat('=', 100) . '</comment>');
-        $output->writeln('<comment>' . $response->getCommandName() . '</comment>');
-        $output->writeln('<comment>' . str_repeat('-', 100) . '</comment>');
         if ($response->getExitCode()) {
             $output->writeln('<fg=red>' . $response->getOutput() . '</>');
-            $output->writeln('<error>Finished with errors</error>');
-            $output->writeln('<comment>' . str_repeat('=', 100) . '</comment>');
 
             return $response->getExitCode();
         }
-        $output->writeln('<fg=green>' . $response->getOutput() . '</>', OutputInterface::VERBOSITY_VERBOSE);
-        $output->writeln('<info>Finished successfully</info>');
-        $output->writeln('<comment>' . str_repeat('=', 100) . '</comment>');
+        $output->writeln('<fg=green>' . $response->getOutput() . '</>');
 
         return $response->getExitCode();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getHelpInfo(): string
-    {
-        $commands = $this->getFacade()->getUpgraderCommands();
-
-        $help = '';
-        foreach ($commands as $command) {
-            $help .= sprintf(
-                "<info>%s</info> %s %s \n",
-                $command->getName(),
-                str_repeat(' ', 21 - strlen($command->getName())),
-                $command->getDescription()
-            );
-        }
-
-        return $help;
     }
 }

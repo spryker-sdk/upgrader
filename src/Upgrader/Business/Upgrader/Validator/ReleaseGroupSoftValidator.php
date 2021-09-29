@@ -7,9 +7,9 @@
 
 namespace Upgrader\Business\Upgrader\Validator;
 
-use Upgrader\Business\Command\Response\CommandResponse;
 use Upgrader\Business\Exception\UpgraderException;
 use Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 
 class ReleaseGroupSoftValidator implements ReleaseGroupSoftValidatorInterface
 {
@@ -29,18 +29,18 @@ class ReleaseGroupSoftValidator implements ReleaseGroupSoftValidatorInterface
     /**
      * @param \Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer $releaseGroup
      *
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function isValidReleaseGroup(ReleaseGroupTransfer $releaseGroup): CommandResponse
+    public function isValidReleaseGroup(ReleaseGroupTransfer $releaseGroup): PackageManagerResponse
     {
         try {
             foreach ($this->validatorList as $validator) {
                 $validator->validate($releaseGroup);
             }
         } catch (UpgraderException $exception) {
-            return new CommandResponse(false, $exception->getMessage());
+            return new PackageManagerResponse(false, $exception->getMessage());
         }
 
-        return new CommandResponse(true);
+        return new PackageManagerResponse(true);
     }
 }

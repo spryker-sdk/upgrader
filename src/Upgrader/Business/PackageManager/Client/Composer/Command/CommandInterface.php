@@ -5,9 +5,9 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\Command;
+namespace Upgrader\Business\PackageManager\Client\Composer\Command;
 
-use Upgrader\Business\Command\Response\CommandResponse;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 
 interface CommandInterface
 {
@@ -27,7 +27,7 @@ interface CommandInterface
     public function getCommand(): string;
 
     /**
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function run(): CommandResponse;
+    public function run(): PackageManagerResponse;
 }

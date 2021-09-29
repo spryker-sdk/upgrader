@@ -7,15 +7,15 @@
 
 namespace Upgrader\Business\PackageManager\Client;
 
-use Upgrader\Business\Command\Response\CommandResponse;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
 interface PackageManagerClientInterface
 {
     /**
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function runUpdate(): CommandResponse;
+    public function runUpdate(): PackageManagerResponse;
 
     /**
      * @return string
@@ -35,9 +35,9 @@ interface PackageManagerClientInterface
     /**
      * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
      *
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function require(PackageTransferCollection $packageCollection): CommandResponse;
+    public function require(PackageTransferCollection $packageCollection): PackageManagerResponse;
 
     /**
      * @param string $packageName

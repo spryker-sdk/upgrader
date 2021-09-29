@@ -7,24 +7,24 @@
 
 namespace Upgrader\Business\Upgrader\Bridge;
 
-use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
-use Upgrader\Business\Command\Response\CommandResponse;
 use Upgrader\Business\PackageManagementSystem\Transfer\Collection\ReleaseGroupTransferCollection;
 use Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer;
+use Upgrader\Business\PackageManager\Response\Collection\PackageManagerResponseCollection;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 
 interface ReleaseGroupTransferBridgeInterface
 {
     /**
      * @param \Upgrader\Business\PackageManagementSystem\Transfer\Collection\ReleaseGroupTransferCollection $releaseGroupCollection
      *
-     * @return \Upgrader\Business\Command\Response\Collection\CommandResponseCollection
+     * @return \Upgrader\Business\PackageManager\Response\Collection\PackageManagerResponseCollection
      */
-    public function requireCollection(ReleaseGroupTransferCollection $releaseGroupCollection): CommandResponseCollection;
+    public function requireCollection(ReleaseGroupTransferCollection $releaseGroupCollection): PackageManagerResponseCollection;
 
     /**
      * @param \Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer $releaseGroup
      *
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function require(ReleaseGroupTransfer $releaseGroup): CommandResponse;
+    public function require(ReleaseGroupTransfer $releaseGroup): PackageManagerResponse;
 }

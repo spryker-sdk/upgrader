@@ -7,8 +7,8 @@
 
 namespace Upgrader\Business\Upgrader\Validator;
 
-use Upgrader\Business\Command\Response\CommandResponse;
 use Upgrader\Business\Exception\UpgraderException;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\PackageTransfer;
 
 class PackageSoftValidator implements PackageSoftValidatorInterface
@@ -29,18 +29,18 @@ class PackageSoftValidator implements PackageSoftValidatorInterface
     /**
      * @param \Upgrader\Business\PackageManager\Transfer\PackageTransfer $package
      *
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function isValidPackage(PackageTransfer $package): CommandResponse
+    public function isValidPackage(PackageTransfer $package): PackageManagerResponse
     {
         try {
             foreach ($this->validatorList as $validator) {
                 $validator->validate($package);
             }
         } catch (UpgraderException $exception) {
-            return new CommandResponse(false, $exception->getMessage());
+            return new PackageManagerResponse(false, $exception->getMessage());
         }
 
-        return new CommandResponse(true);
+        return new PackageManagerResponse(true);
     }
 }

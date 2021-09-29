@@ -7,7 +7,7 @@
 
 namespace Upgrader\Business\Upgrader\Validator;
 
-use Upgrader\Business\Command\Response\CommandResponse;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\PackageTransfer;
 
 interface PackageSoftValidatorInterface
@@ -15,7 +15,7 @@ interface PackageSoftValidatorInterface
     /**
      * @param \Upgrader\Business\PackageManager\Transfer\PackageTransfer $package
      *
-     * @return \Upgrader\Business\Command\Response\CommandResponse
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function isValidPackage(PackageTransfer $package): CommandResponse;
+    public function isValidPackage(PackageTransfer $package): PackageManagerResponse;
 }

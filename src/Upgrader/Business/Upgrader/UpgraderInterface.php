@@ -7,12 +7,12 @@
 
 namespace Upgrader\Business\Upgrader;
 
-use Upgrader\Business\Command\Response\Collection\CommandResponseCollection;
+use Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection;
 
 interface UpgraderInterface
 {
     /**
-     * @return \Upgrader\Business\Command\Response\Collection\CommandResponseCollection
+     * @return \Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection
      */
-    public function upgrade(): CommandResponseCollection;
+    public function upgrade(): UpgraderResponseCollection;
 }
