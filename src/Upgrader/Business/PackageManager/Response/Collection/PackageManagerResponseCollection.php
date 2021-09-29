@@ -9,7 +9,6 @@ namespace Upgrader\Business\PackageManager\Response\Collection;
 
 use Upgrader\Business\Collection\UpgraderCollection;
 use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
-use Upgrader\Business\Upgrader\Response\UpgraderResponseInterface;
 
 class PackageManagerResponseCollection extends UpgraderCollection
 {
