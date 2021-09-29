@@ -45,13 +45,13 @@ class UpgradeAnalysisResponse extends HttpResponse
      */
     protected function getModulesArray(): array
     {
-        $bodyArray = $this->getBodyArray();
+        $bodyArray = $this->getBody();
 
         if (!$bodyArray) {
             throw new UpgraderException('Response body not found');
         }
 
-        $modulesArray = $bodyArray[self::MODULES_KEY];
+        $modulesArray = $bodyArray[static::MODULES_KEY];
 
         if (!$modulesArray) {
             throw new UpgraderException('Key module not found');

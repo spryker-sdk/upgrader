@@ -31,7 +31,7 @@ class UpgraderConfig
      */
     public function getCommandExecutionTimeout(): int
     {
-        return (int)getenv(self::UPGRADER_COMMAND_EXECUTION_TIMEOUT) ?: static::DEFAULT_COMMAND_EXECUTION_TIMEOUT;
+        return (int)getenv(static::UPGRADER_COMMAND_EXECUTION_TIMEOUT) ?: static::DEFAULT_COMMAND_EXECUTION_TIMEOUT;
     }
 
     /**
@@ -39,7 +39,7 @@ class UpgraderConfig
      */
     public function getReleaseAppUrl(): string
     {
-        return (string)getenv(self::UPGRADER_RELEASE_APP_URL) ?: static::DEFAULT_RELEASE_APP_URL;
+        return (string)getenv(static::UPGRADER_RELEASE_APP_URL) ?: static::DEFAULT_RELEASE_APP_URL;
     }
 
     /**

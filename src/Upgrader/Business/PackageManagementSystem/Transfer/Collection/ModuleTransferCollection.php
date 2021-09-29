@@ -9,10 +9,10 @@ namespace Upgrader\Business\PackageManagementSystem\Transfer\Collection;
 
 use Upgrader\Business\Collection\UpgraderCollection;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\ReleaseAppConst;
-use Upgrader\Business\PackageManagementSystem\Transfer\ModuletTransfer;
+use Upgrader\Business\PackageManagementSystem\Transfer\ModuleTransfer;
 
 /**
- * @method \Upgrader\Business\PackageManagementSystem\Transfer\ModuletTransfer[]|\ArrayIterator|\Traversable getIterator()
+ * @method \Upgrader\Business\PackageManagementSystem\Transfer\ModuleTransfer[]|\ArrayIterator|\Traversable getIterator()
  */
 class ModuleTransferCollection extends UpgraderCollection
 {
@@ -21,7 +21,7 @@ class ModuleTransferCollection extends UpgraderCollection
      */
     protected function getClassName(): string
     {
-        return ModuletTransfer::class;
+        return ModuleTransfer::class;
     }
 
     /**
@@ -30,7 +30,7 @@ class ModuleTransferCollection extends UpgraderCollection
     public function isContainsMajorUpdates(): bool
     {
         foreach ($this as $module) {
-            if ($module->getVersionType() == ReleaseAppConst::MODULE_TYPE_MAJOR) {
+            if ($module->getVersionType() === ReleaseAppConst::MODULE_TYPE_MAJOR) {
                 return true;
             }
         }

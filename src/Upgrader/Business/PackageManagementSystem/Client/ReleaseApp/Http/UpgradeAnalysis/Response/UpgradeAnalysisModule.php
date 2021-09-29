@@ -42,7 +42,7 @@ class UpgradeAnalysisModule
         }
 
         $moduleVersionList = [];
-        foreach ($this->bodyArray[self::MODULE_VERSIONS_KEY] as $moduleVersionData) {
+        foreach ($this->bodyArray[static::MODULE_VERSIONS_KEY] as $moduleVersionData) {
             $moduleVersionList[] = new UpgradeAnalysisModuleVersion($moduleVersionData);
         }
         $this->moduleVersionCollection = new UpgradeAnalysisModuleVersionCollection($moduleVersionList);
@@ -55,6 +55,6 @@ class UpgradeAnalysisModule
      */
     public function getPackage(): string
     {
-        return $this->bodyArray[self::PACKAGE_KEY];
+        return $this->bodyArray[static::PACKAGE_KEY];
     }
 }

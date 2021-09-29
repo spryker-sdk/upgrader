@@ -15,7 +15,7 @@ class UpgradeInstructionModule
     /**
      * @var array
      */
-    protected $bodyArray;
+    protected $body;
 
     /**
      * @var string
@@ -23,12 +23,12 @@ class UpgradeInstructionModule
     protected $name;
 
     /**
-     * @param array $bodyArray
+     * @param array $body
      * @param string $name
      */
-    public function __construct(array $bodyArray, string $name)
+    public function __construct(array $body, string $name)
     {
-        $this->bodyArray = $bodyArray;
+        $this->body = $body;
         $this->name = $name;
     }
 
@@ -45,7 +45,7 @@ class UpgradeInstructionModule
      */
     public function getVersion(): string
     {
-        return $this->bodyArray[self::VERSION_KEY];
+        return $this->body[static::VERSION_KEY];
     }
 
     /**
@@ -53,6 +53,6 @@ class UpgradeInstructionModule
      */
     public function getType(): string
     {
-        return $this->bodyArray[self::TYPE_KEY];
+        return $this->body[static::TYPE_KEY];
     }
 }

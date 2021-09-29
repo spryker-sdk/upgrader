@@ -66,7 +66,7 @@ class PackageTransferCollectionBuilder implements PackageCollectionBuilderInterf
     }
 
     /**
-     * @param $moduleName|string
+     * @param string $moduleName
      *
      * @return string
      *
@@ -74,6 +74,6 @@ class PackageTransferCollectionBuilder implements PackageCollectionBuilderInterf
      */
     protected function removeTypeFromPackageName(string $moduleName): string
     {
-        return preg_replace('/\/[a-z]*\./m', '/', $moduleName);
+        return (string)preg_replace('/\/[a-z]*\./m', '/', $moduleName);
     }
 }

@@ -10,12 +10,6 @@ namespace Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http;
 interface HttpResponseInterface
 {
     /**
-     * @param int $code
-     * @param string $body
-     */
-    public function __construct(int $code, string $body);
-
-    /**
      * @return int
      */
     public function getCode(): int;
@@ -23,5 +17,5 @@ interface HttpResponseInterface
     /**
      * @return array|null
      */
-    public function getBodyArray(): ?array;
+    public function getBody(): ?array;
 }

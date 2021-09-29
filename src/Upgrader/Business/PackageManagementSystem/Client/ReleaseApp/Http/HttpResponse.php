@@ -9,7 +9,7 @@ namespace Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http;
 
 class HttpResponse implements HttpResponseInterface
 {
-    public const RESULT_KEY = 'result';
+    protected const RESULT_KEY = 'result';
 
     /**
      * @var int
@@ -42,8 +42,8 @@ class HttpResponse implements HttpResponseInterface
     /**
      * @return array|null
      */
-    public function getBodyArray(): ?array
+    public function getBody(): ?array
     {
-        return $this->bodyArray[self::RESULT_KEY];
+        return $this->bodyArray[static::RESULT_KEY];
     }
 }

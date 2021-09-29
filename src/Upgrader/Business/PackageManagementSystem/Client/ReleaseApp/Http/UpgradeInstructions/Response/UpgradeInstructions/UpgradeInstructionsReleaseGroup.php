@@ -43,7 +43,7 @@ class UpgradeInstructionsReleaseGroup
      */
     public function getName(): string
     {
-        return $this->bodyArray[self::NAME_KEY];
+        return $this->bodyArray[static::NAME_KEY];
     }
 
     /**
@@ -51,7 +51,7 @@ class UpgradeInstructionsReleaseGroup
      */
     public function isContainsProjectChanges(): bool
     {
-        return $this->bodyArray[self::PROJECT_CHANGES_KEY];
+        return $this->bodyArray[static::PROJECT_CHANGES_KEY];
     }
 
     /**
@@ -61,19 +61,19 @@ class UpgradeInstructionsReleaseGroup
      */
     public function getReleased(): DateTimeInterface
     {
-        if (!isset($this->bodyArray[self::RELEASED_KEY])) {
-            $message = sprintf('%s %s', 'Undefined key:', self::RELEASED_KEY);
+        if (!isset($this->bodyArray[static::RELEASED_KEY])) {
+            $message = sprintf('%s %s', 'Undefined key:', static::RELEASED_KEY);
 
             throw new UpgraderException($message);
         }
 
         $dataTime = DateTime::createFromFormat(
             ReleaseAppConst::RESPONSE_DATA_TIME_FORMAT,
-            $this->bodyArray[self::RELEASED_KEY]
+            $this->bodyArray[static::RELEASED_KEY]
         );
 
         if (!$dataTime) {
-            $message = sprintf('%s %s', 'API invalid datatime format:', $this->bodyArray[self::RELEASED_KEY]);
+            $message = sprintf('%s %s', 'API invalid datatime format:', $this->bodyArray[static::RELEASED_KEY]);
 
             throw new UpgraderException($message);
         }
@@ -91,7 +91,7 @@ class UpgradeInstructionsReleaseGroup
         }
 
         $moduleList = [];
-        foreach ($this->bodyArray[self::MODULES_KEY] as $name => $moduleData) {
+        foreach ($this->bodyArray[static::MODULES_KEY] as $name => $moduleData) {
             $moduleList[] = new UpgradeInstructionModule($moduleData, $name);
         }
         $this->moduleCollection = new UpgradeInstructionModuleCollection($moduleList);

@@ -21,12 +21,12 @@ class UpgradeInstructionsResponse extends HttpResponse
      */
     public function getReleaseGroup(): UpgradeInstructionsReleaseGroup
     {
-        $bodyArray = $this->getBodyArray();
+        $bodyArray = $this->getBody();
 
         if (!$bodyArray) {
             throw new UpgraderException('Response body not found');
         }
 
-        return new UpgradeInstructionsReleaseGroup($bodyArray[self::RELEASE_GROUP_KEY]);
+        return new UpgradeInstructionsReleaseGroup($bodyArray[static::RELEASE_GROUP_KEY]);
     }
 }

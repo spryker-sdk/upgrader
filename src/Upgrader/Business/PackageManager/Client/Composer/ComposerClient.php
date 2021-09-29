@@ -17,9 +17,9 @@ use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollecti
 
 class ComposerClient implements PackageManagerClientInterface
 {
-    public const PACKAGES_KEY = 'packages';
-    public const NAME_KEY = 'name';
-    public const VERSION_KEY = 'version';
+    protected const PACKAGES_KEY = 'packages';
+    protected const NAME_KEY = 'name';
+    protected const VERSION_KEY = 'version';
 
     /**
      * @var \Upgrader\Business\Command\CommandInterface

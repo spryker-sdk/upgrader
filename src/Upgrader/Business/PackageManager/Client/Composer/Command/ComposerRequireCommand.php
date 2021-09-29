@@ -14,6 +14,7 @@ use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollecti
 class ComposerRequireCommand extends AbstractCommand implements ComposerRequireCommandInterface
 {
     protected const COMMAND_NAME = 'composer require';
+    protected const NO_SCRIPTS = '--no-scripts';
 
     /**
      * @var \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection|null
@@ -41,7 +42,7 @@ class ComposerRequireCommand extends AbstractCommand implements ComposerRequireC
      */
     public function getCommand(): string
     {
-        return sprintf('%s%s', static::COMMAND_NAME, $this->getPackageString());
+        return sprintf('%s%s %s', static::COMMAND_NAME, $this->getPackageString(), static::NO_SCRIPTS);
     }
 
     /**

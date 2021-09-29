@@ -32,7 +32,7 @@ class UpgradeInstructionsRequest implements HttpRequestInterface
      */
     public function getEndpoint(): string
     {
-        return sprintf('%s?%s', self::ENDPOINT, $this->getParametersAsString());
+        return sprintf('%s?%s', static::ENDPOINT, $this->getParametersAsString());
     }
 
     /**
@@ -48,7 +48,7 @@ class UpgradeInstructionsRequest implements HttpRequestInterface
      */
     public function getMethod(): string
     {
-        return self::REQUEST_TYPE_GET;
+        return static::REQUEST_TYPE_GET;
     }
 
     /**

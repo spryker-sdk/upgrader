@@ -36,7 +36,7 @@ class UpgradeAnalysisModuleVersion
      */
     public function getId(): int
     {
-        return $this->bodyArray[self::ID_KEY];
+        return $this->bodyArray[static::ID_KEY];
     }
 
     /**
@@ -44,7 +44,7 @@ class UpgradeAnalysisModuleVersion
      */
     public function getName(): int
     {
-        return $this->bodyArray[self::NAME_KEY];
+        return $this->bodyArray[static::NAME_KEY];
     }
 
     /**
@@ -56,11 +56,11 @@ class UpgradeAnalysisModuleVersion
     {
         $dataTime = DateTime::createFromFormat(
             ReleaseAppConst::RESPONSE_DATA_TIME_FORMAT,
-            $this->bodyArray[self::CREATED_KEY]
+            $this->bodyArray[static::CREATED_KEY]
         );
 
         if (!$dataTime) {
-            $message = sprintf('%s %s', 'Invalid datatime format:', $this->bodyArray[self::CREATED_KEY]);
+            $message = sprintf('%s %s', 'Invalid datatime format:', $this->bodyArray[static::CREATED_KEY]);
 
             throw new UpgraderException($message);
         }

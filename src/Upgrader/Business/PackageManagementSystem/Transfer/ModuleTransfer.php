@@ -7,7 +7,7 @@
 
 namespace Upgrader\Business\PackageManagementSystem\Transfer;
 
-class ModuletTransfer
+class ModuleTransfer
 {
     /**
      * @var string

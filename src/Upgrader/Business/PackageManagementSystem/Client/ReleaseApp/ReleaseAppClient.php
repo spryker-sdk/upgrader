@@ -17,7 +17,7 @@ use Upgrader\Business\PackageManagementSystem\Request\PackageManagementSystemReq
 use Upgrader\Business\PackageManagementSystem\Response\PackageManagementSystemResponse;
 use Upgrader\Business\PackageManagementSystem\Transfer\Collection\ModuleTransferCollection;
 use Upgrader\Business\PackageManagementSystem\Transfer\Collection\ReleaseGroupTransferCollection;
-use Upgrader\Business\PackageManagementSystem\Transfer\ModuletTransfer;
+use Upgrader\Business\PackageManagementSystem\Transfer\ModuleTransfer;
 use Upgrader\Business\PackageManagementSystem\Transfer\ReleaseGroupTransfer;
 
 class ReleaseAppClient implements ReleaseAppClientInterface
@@ -81,7 +81,7 @@ class ReleaseAppClient implements ReleaseAppClientInterface
     {
         $dataProviderModuleCollection = new ModuleTransferCollection();
         foreach ($releaseGroup->getModuleCollection() as $module) {
-            $dataProviderModule = new ModuletTransfer($module->getName(), $module->getVersion(), $module->getType());
+            $dataProviderModule = new ModuleTransfer($module->getName(), $module->getVersion(), $module->getType());
             $dataProviderModuleCollection->add($dataProviderModule);
         }
 
