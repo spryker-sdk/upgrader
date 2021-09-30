@@ -27,14 +27,6 @@ class PackageManager implements PackageManagerInterface
     }
 
     /**
-     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
-     */
-    public function update(): PackageManagerResponse
-    {
-        return $this->packageManagerClient->runUpdate();
-    }
-
-    /**
      * @return string
      */
     public function getProjectName(): string

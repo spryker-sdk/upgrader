@@ -13,11 +13,6 @@ use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollecti
 interface PackageManagerInterface
 {
     /**
-     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
-     */
-    public function update(): PackageManagerResponse;
-
-    /**
      * @return string
      */
     public function getProjectName(): string;

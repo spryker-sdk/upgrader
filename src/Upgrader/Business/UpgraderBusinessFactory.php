@@ -15,9 +15,7 @@ use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\Htt
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\HttpClient;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\ReleaseAppClient;
 use Upgrader\Business\PackageManagementSystem\PackageManagementSystem;
-use Upgrader\Business\PackageManager\Client\Composer\Command\CommandInterface;
-use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommand;
-use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerUpdateCommand;
+use Upgrader\Business\PackageManager\Client\Composer\ComposerCallExecutor;
 use Upgrader\Business\PackageManager\Client\Composer\ComposerClient;
 use Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReader;
 use Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface;
@@ -196,27 +194,18 @@ class UpgraderBusinessFactory
     public function createComposerClient(): PackageManagerClientInterface
     {
         return new ComposerClient(
-            $this->createComposerUpdateCommand(),
-            $this->createComposerRequireCommand(),
+            $this->createComposerCallExecutor(),
             $this->createComposerJsonReader(),
             $this->createComposerLockReader()
         );
     }
 
     /**
-     * @return \Upgrader\Business\PackageManager\Client\Composer\Command\CommandInterface
+     * @return \Upgrader\Business\PackageManager\Client\Composer\ComposerCallExecutor
      */
-    public function createComposerUpdateCommand(): CommandInterface
+    public function createComposerCallExecutor(): ComposerCallExecutor
     {
-        return new ComposerUpdateCommand($this->getConfig());
-    }
-
-    /**
-     * @return \Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommand
-     */
-    public function createComposerRequireCommand(): ComposerRequireCommand
-    {
-        return new ComposerRequireCommand($this->getConfig());
+        return new ComposerCallExecutor($this->getConfig());
     }
 
     /**

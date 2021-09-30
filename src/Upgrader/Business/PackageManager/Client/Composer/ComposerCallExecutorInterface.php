@@ -5,16 +5,17 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\PackageManager\Client\Composer\Command;
+namespace Upgrader\Business\PackageManager\Client\Composer;
 
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
-interface ComposerRequireCommandInterface extends CommandInterface
+interface ComposerCallExecutorInterface
 {
     /**
      * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
      *
-     * @return void
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
-    public function setPackageCollection(PackageTransferCollection $packageCollection): void;
+    public function require(PackageTransferCollection $packageCollection): PackageManagerResponse;
 }

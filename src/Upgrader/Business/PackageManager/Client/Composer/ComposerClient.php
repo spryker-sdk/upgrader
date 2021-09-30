@@ -7,8 +7,6 @@
 
 namespace Upgrader\Business\PackageManager\Client\Composer;
 
-use Upgrader\Business\PackageManager\Client\Composer\Command\CommandInterface;
-use Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommandInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface;
 use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
@@ -22,14 +20,9 @@ class ComposerClient implements PackageManagerClientInterface
     protected const VERSION_KEY = 'version';
 
     /**
-     * @var \Upgrader\Business\PackageManager\Client\Composer\Command\CommandInterface
+     * @var \Upgrader\Business\PackageManager\Client\Composer\ComposerCallExecutorInterface
      */
-    protected $composerUpdateCommand;
-
-    /**
-     * @var \Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommandInterface
-     */
-    protected $composerRequireCommand;
+    protected $composerCallExecutor;
 
     /**
      * @var \Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface
@@ -42,29 +35,18 @@ class ComposerClient implements PackageManagerClientInterface
     protected $composerLockReader;
 
     /**
-     * @param \Upgrader\Business\PackageManager\Client\Composer\Command\CommandInterface $composerUpdateCommand
-     * @param \Upgrader\Business\PackageManager\Client\Composer\Command\ComposerRequireCommandInterface $composerRequireCommand
+     * @param \Upgrader\Business\PackageManager\Client\Composer\ComposerCallExecutorInterface $composerCallExecutor
      * @param \Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface $composerJsonReader
      * @param \Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface $composerLockReader
      */
     public function __construct(
-        CommandInterface $composerUpdateCommand,
-        ComposerRequireCommandInterface $composerRequireCommand,
+        ComposerCallExecutorInterface $composerCallExecutor,
         ComposerJsonReaderInterface $composerJsonReader,
         ComposerLockReaderInterface $composerLockReader
     ) {
-        $this->composerUpdateCommand = $composerUpdateCommand;
-        $this->composerRequireCommand = $composerRequireCommand;
+        $this->composerCallExecutor = $composerCallExecutor;
         $this->composerJsonReader = $composerJsonReader;
         $this->composerLockReader = $composerLockReader;
-    }
-
-    /**
-     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
-     */
-    public function runUpdate(): PackageManagerResponse
-    {
-        return $this->composerUpdateCommand->run();
     }
 
     /**
@@ -100,9 +82,7 @@ class ComposerClient implements PackageManagerClientInterface
      */
     public function require(PackageTransferCollection $packageCollection): PackageManagerResponse
     {
-        $this->composerRequireCommand->setPackageCollection($packageCollection);
-
-        return $this->composerRequireCommand->run();
+        return $this->composerCallExecutor->require($packageCollection);
     }
 
     /**
