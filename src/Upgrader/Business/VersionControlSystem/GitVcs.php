@@ -42,7 +42,8 @@ class GitVcs implements VcsInterface
      */
     public function add(): VcsResponse
     {
-        $process = $this->runProcess('git add composer.lock composer.json');
+        $command = ['git', 'add', 'composer.lock', 'composer.json'];
+        $process = $this->runProcess($command);
 
         return $this->createResponse($process);
     }
@@ -54,7 +55,8 @@ class GitVcs implements VcsInterface
      */
     public function branch(string $branch): VcsResponse
     {
-        $process = $this->runProcess(sprintf('git checkout -b %s', $branch));
+        $command = ['git', 'checkout', '-b', $branch];
+        $process = $this->runProcess($command);
 
         return $this->createResponse($process);
     }
@@ -66,7 +68,8 @@ class GitVcs implements VcsInterface
      */
     public function checkout(string $branch): VcsResponse
     {
-        $process = $this->runProcess(sprintf('git checkout %s', $branch));
+        $command = ['git', 'checkout', $branch];
+        $process = $this->runProcess($command);
 
         return $this->createResponse($process);
     }
@@ -78,7 +81,8 @@ class GitVcs implements VcsInterface
      */
     public function commit(string $message): VcsResponse
     {
-        $process = $this->runProcess('git commit -m $message');
+        $command = ['git', 'commit', '-m', $message];
+        $process = $this->runProcess($command);
 
         return $this->createResponse($process);
     }
@@ -90,7 +94,8 @@ class GitVcs implements VcsInterface
      */
     public function push(string $branch): VcsResponse
     {
-        $process = $this->runProcess(sprintf('git push --set-upstream origin %s', $branch));
+        $command = ['git', 'push', '--set-upstream', 'origin', $branch];
+        $process = $this->runProcess($command);
 
         return $this->createResponse($process);
     }
@@ -100,21 +105,42 @@ class GitVcs implements VcsInterface
      */
     public function check(): VcsResponse
     {
-        $process = $this->runProcess('git update-index --refresh');
+        $command = ['git', 'update-index', '--refresh'];
+        $process = $this->runProcess($command);
 
         return $this->createResponse($process);
     }
 
     /**
+     * @param array<string> $releaseGroups
+     *
      * @return \Upgrader\Business\VersionControlSystem\Response\Collection\VcsResponseCollection
      */
-    public function save(): VcsResponseCollection
+    public function save(array $releaseGroups): VcsResponseCollection
     {
         $collection = new VcsResponseCollection();
-        $collection->add($this->branch($this->getBranch()));
-        $collection->add($this->add());
-        $collection->add($this->commit('some message'));
-        $collection->add($this->push($this->getBranch()));
+        $response = $this->branch($this->getBranch());
+        $collection->add($response);
+        if (!$response->isSuccess()) {
+            return $collection;
+        }
+        $response = $this->add();
+        $collection->add($response);
+        if (!$response->isSuccess()) {
+            return $collection;
+        }
+        $response = $this->commit(
+            sprintf('Installed: %s %s', PHP_EOL, implode(PHP_EOL, $releaseGroups))
+        );
+        $collection->add($response);
+        if (!$response->isSuccess()) {
+            return $collection;
+        }
+        $response = $this->push($this->getBranch());
+        $collection->add($response);
+        if (!$response->isSuccess()) {
+            return $collection;
+        }
         $collection->add($this->checkout($this->getBasicBranch()));
 
         return $collection;
@@ -126,7 +152,8 @@ class GitVcs implements VcsInterface
     public function getCommitHash(): string
     {
         if (!$this->commitHash) {
-            $process = $this->runProcess('git rev-parse HEAD');
+            $command = ['git', 'rev-parse', 'HEAD'];
+            $process = $this->runProcess($command);
             $this->commitHash = trim($process->getOutput());
         }
 
@@ -139,7 +166,8 @@ class GitVcs implements VcsInterface
     public function getBasicBranch(): string
     {
         if (!$this->basicBranch) {
-            $process = $this->runProcess('git rev-parse --abbrev-ref HEAD');
+            $command = ['git', 'rev-parse', '--abbrev-ref', 'HEAD'];
+            $process = $this->runProcess($command);
             $this->basicBranch = trim($process->getOutput());
         }
 
@@ -155,13 +183,13 @@ class GitVcs implements VcsInterface
     }
 
     /**
-     * @param string $command
+     * @param array $command
      *
      * @return \Symfony\Component\Process\Process
      */
-    protected function runProcess(string $command): Process
+    protected function runProcess(array $command): Process
     {
-        $process = new Process(explode(' ', $command), (string)getcwd());
+        $process = new Process($command, (string)getcwd());
         $process->setTimeout($this->config->getCommandExecutionTimeout());
         $process->run();
 

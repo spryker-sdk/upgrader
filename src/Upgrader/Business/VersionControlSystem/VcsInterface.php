@@ -53,9 +53,11 @@ interface VcsInterface
     public function check(): VcsResponse;
 
     /**
+     * @param array<string> $releaseGroups
+     *
      * @return \Upgrader\Business\VersionControlSystem\Response\Collection\VcsResponseCollection
      */
-    public function save(): VcsResponseCollection;
+    public function save(array $releaseGroups): VcsResponseCollection;
 
     /**
      * @return string

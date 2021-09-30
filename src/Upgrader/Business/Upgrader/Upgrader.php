@@ -59,12 +59,10 @@ class Upgrader implements UpgraderInterface
         $packageManagerResponses = $this->releaseGroupManager->requireCollection(
             $dataProviderResponse->getReleaseGroupCollection()
         );
-        foreach ($packageManagerResponses->toArray() as $item) {
-            $responses->add($item);
-        }
-        $vcsResponses = $this->vcs->save();
-        foreach ($vcsResponses->toArray() as $item) {
-            $responses->add($item);
+        $responses->addCollection($packageManagerResponses);
+        if ($packageManagerResponses->hasSuccessfulResponse()) {
+            $vcsResponses = $this->vcs->save($packageManagerResponses->getSuccessfulOutputs());
+            $responses->addCollection($vcsResponses);
         }
 
         return $responses;
