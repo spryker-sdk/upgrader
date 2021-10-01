@@ -12,10 +12,35 @@ use Upgrader\Business\Upgrader\Response\AbstractUpgraderResponse;
 class PackageManagerResponse extends AbstractUpgraderResponse
 {
     /**
+     * @var array
+     */
+    protected $packageList;
+
+    /**
+     * @param bool $isSuccessful
+     * @param string|null $output
+     * @param array $packageList
+     */
+    public function __construct(bool $isSuccessful, ?string $output = null, array $packageList = [])
+    {
+        parent::__construct($isSuccessful, $output);
+
+        $this->packageList = $packageList;
+    }
+
+    /**
      * @return string|null
      */
     public function getOutput(): ?string
     {
         return 'PackageManager: ' . $this->output;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPackageList(): array
+    {
+        return $this->packageList;
     }
 }

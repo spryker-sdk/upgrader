@@ -7,6 +7,7 @@
 
 namespace Upgrader;
 
+use RuntimeException;
 use Symfony\Component\Process\Process;
 
 class UpgraderConfig
@@ -15,6 +16,9 @@ class UpgraderConfig
     protected const DEFAULT_RELEASE_APP_URL = 'https://api.release.spryker.com';
     protected const UPGRADER_COMMAND_EXECUTION_TIMEOUT = 'UPGRADER_COMMAND_EXECUTION_TIMEOUT';
     protected const DEFAULT_COMMAND_EXECUTION_TIMEOUT = 600;
+    protected const GITHUB_ACCESS_TOKEN = 'GITHUB_ACCESS_TOKEN';
+    protected const GITHUB_ORGANIZATION = 'GITHUB_ORGANIZATION';
+    protected const GITHUB_REPOSITORY = 'GITHUB_REPOSITORY';
 
     /**
      * @var string|null
@@ -25,6 +29,51 @@ class UpgraderConfig
      * @var string|null
      */
     protected $startingBranch;
+
+    /**
+     * @throws \RuntimeException
+     *
+     * @return string
+     */
+    public function getGithubAccessToken(): string
+    {
+        $token = getenv(static::GITHUB_ACCESS_TOKEN);
+        if (!$token) {
+            throw new RuntimeException(sprintf('Please set %s value.', static::GITHUB_ACCESS_TOKEN));
+        }
+
+        return $token;
+    }
+
+    /**
+     * @throws \RuntimeException
+     *
+     * @return string
+     */
+    public function getGithubOrganization(): string
+    {
+        $organization = getenv(static::GITHUB_ORGANIZATION);
+        if (!$organization) {
+            throw new RuntimeException(sprintf('Please set %s value.', static::GITHUB_ORGANIZATION));
+        }
+
+        return $organization;
+    }
+
+    /**
+     * @throws \RuntimeException
+     *
+     * @return string
+     */
+    public function getGithubRepository(): string
+    {
+        $repository = getenv(static::GITHUB_REPOSITORY);
+        if (!$repository) {
+            throw new RuntimeException(sprintf('Please set %s value.', static::GITHUB_REPOSITORY));
+        }
+
+        return $repository;
+    }
 
     /**
      * @return int
