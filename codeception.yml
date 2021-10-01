@@ -1,13 +1,11 @@
 namespace: UpgraderTest
-actor: Tester
-include:
-    - tests/UpgraderTest/Business
 paths:
     tests: tests
-    log: tests/_output
+    output: tests/_output
     data: tests/_data
     support: tests/_support
     envs: tests/_envs
+actor_suffix: Tester
 settings:
     suite_class: \PHPUnit\Framework\TestSuite
     colors: true
@@ -15,6 +13,11 @@ settings:
     log: true
 coverage:
     enabled: true
-    whitelist:
-        include:
-            - 'src/*'
+    include:
+        - src/*
+suites:
+    Business:
+        path: UpgraderTest/Business/*/
+    Communications:
+        path: UpgraderTest/Communication/*/
+        class_name: UpgraderTester

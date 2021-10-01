@@ -9,11 +9,12 @@ namespace Upgrader\Communication\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Upgrader\Business\Upgrader\Response\UpgraderResponseInterface;
 
 class UpgradeCommand extends AbstractCommand
 {
-    public const COMMAND_NAME = 'upgrade';
-    public const COMMAND_DESCRIPTION = 'Upgrade Spryker packages.';
+    protected const NAME = 'upgrade';
+    protected const DESCRIPTION = 'Upgrade Spryker packages.';
 
     /**
      * @return void
@@ -21,8 +22,8 @@ class UpgradeCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName(self::COMMAND_NAME)
-            ->setDescription(self::COMMAND_DESCRIPTION);
+            ->setName(self::NAME)
+            ->setDescription(self::DESCRIPTION);
     }
 
     /**
@@ -33,16 +34,40 @@ class UpgradeCommand extends AbstractCommand
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $upgradeResult = $this->getFacade()->upgrade();
+        $upgraderResponseCollection = $this->getFacade()->upgrade();
 
-        if (!$upgradeResult->isSuccess()) {
-            $output->writeln(sprintf('<fg=red;options=bold>%s</>', $upgradeResult->getMessage()));
-
-            return static::CODE_ERROR;
+        foreach ($upgraderResponseCollection->toArray() as $response) {
+            $this->processOutput($response, $output);
         }
 
-        $output->writeln('<fg=green;options=bold>Upgrade command has been finished successfully.</>.');
+        if ($upgraderResponseCollection->getExitCode()) {
+            $output->writeln('<error>Upgrade command has been finished with errors</error>');
 
-        return static::CODE_SUCCESS;
+            return $upgraderResponseCollection->getExitCode();
+        }
+
+        $output->writeln('<info>Upgrade command has been finished successfully</info>');
+
+        return $upgraderResponseCollection->getExitCode();
+    }
+
+    /**
+     * @codeCoverageIgnore
+     *
+     * @param \Upgrader\Business\Upgrader\Response\UpgraderResponseInterface $response
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return int
+     */
+    protected function processOutput(UpgraderResponseInterface $response, OutputInterface $output): int
+    {
+        if ($response->getExitCode()) {
+            $output->writeln('<fg=red>' . $response->getOutput() . '</>');
+
+            return $response->getExitCode();
+        }
+        $output->writeln('<fg=green>' . $response->getOutput() . '</>');
+
+        return $response->getExitCode();
     }
 }

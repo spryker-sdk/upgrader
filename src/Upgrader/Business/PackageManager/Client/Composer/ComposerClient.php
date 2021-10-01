@@ -7,30 +7,99 @@
 
 namespace Upgrader\Business\PackageManager\Client\Composer;
 
-use Upgrader\Business\Command\CommandInterface;
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
+use Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface;
+use Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface;
 use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
+use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
 class ComposerClient implements PackageManagerClientInterface
 {
-    /**
-     * @var \Upgrader\Business\Command\CommandInterface
-     */
-    protected $composerUpdateCommand;
+    protected const PACKAGES_KEY = 'packages';
+    protected const NAME_KEY = 'name';
+    protected const VERSION_KEY = 'version';
 
     /**
-     * @param \Upgrader\Business\Command\CommandInterface $composerUpdateCommand
+     * @var \Upgrader\Business\PackageManager\Client\Composer\ComposerCallExecutorInterface
      */
-    public function __construct(CommandInterface $composerUpdateCommand)
-    {
-        $this->composerUpdateCommand = $composerUpdateCommand;
+    protected $composerCallExecutor;
+
+    /**
+     * @var \Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface
+     */
+    protected $composerJsonReader;
+
+    /**
+     * @var \Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface
+     */
+    protected $composerLockReader;
+
+    /**
+     * @param \Upgrader\Business\PackageManager\Client\Composer\ComposerCallExecutorInterface $composerCallExecutor
+     * @param \Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface $composerJsonReader
+     * @param \Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface $composerLockReader
+     */
+    public function __construct(
+        ComposerCallExecutorInterface $composerCallExecutor,
+        ComposerJsonReaderInterface $composerJsonReader,
+        ComposerLockReaderInterface $composerLockReader
+    ) {
+        $this->composerCallExecutor = $composerCallExecutor;
+        $this->composerJsonReader = $composerJsonReader;
+        $this->composerLockReader = $composerLockReader;
     }
 
     /**
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return string
      */
-    public function runUpdate(): CommandResultOutput
+    public function getProjectName(): string
     {
-        return $this->composerUpdateCommand->run();
+        $composerJsonContent = $this->composerJsonReader->read();
+
+        return $composerJsonContent[self::NAME_KEY];
+    }
+
+    /**
+     * @return array
+     */
+    public function getComposerJsonFile(): array
+    {
+        return $this->composerJsonReader->read();
+    }
+
+    /**
+     * @return array
+     */
+    public function getComposerLockFile(): array
+    {
+        return $this->composerLockReader->read();
+    }
+
+    /**
+     * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
+     *
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function require(PackageTransferCollection $packageCollection): PackageManagerResponse
+    {
+        return $this->composerCallExecutor->require($packageCollection);
+    }
+
+    /**
+     * @param string $packageName
+     *
+     * @return string|null
+     */
+    public function getPackageVersion(string $packageName): ?string
+    {
+        $composerLock = $this->composerLockReader->read();
+
+        foreach ($composerLock[self::PACKAGES_KEY] as $package) {
+            if ($package[self::NAME_KEY] == $packageName) {
+                return $package[self::VERSION_KEY];
+            }
+        }
+
+        return null;
     }
 }

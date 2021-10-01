@@ -7,45 +7,64 @@
 
 namespace Upgrader\Business\Upgrader;
 
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
-use Upgrader\Business\PackageManager\PackageManagerInterface;
-use Upgrader\Business\VersionControlSystem\VersionControlSystemInterface;
+use Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge;
+use Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridgeInterface;
+use Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection;
+use Upgrader\Business\VersionControlSystem\VcsInterface;
 
 class Upgrader implements UpgraderInterface
 {
     /**
-     * @var \Upgrader\Business\PackageManager\PackageManagerInterface
+     * @var \Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridgeInterface
      */
-    protected $packageManager;
+    protected $releaseGroupManager;
 
     /**
-     * @var \Upgrader\Business\VersionControlSystem\VersionControlSystemInterface
+     * @var \Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge
      */
-    protected $versionControlSystem;
+    protected $dataProviderManager;
 
     /**
-     * @param \Upgrader\Business\PackageManager\PackageManagerInterface $packageManager
-     * @param \Upgrader\Business\VersionControlSystem\VersionControlSystemInterface $versionControlSystem
+     * @var \Upgrader\Business\VersionControlSystem\VcsInterface
+     */
+    protected $vcs;
+
+    /**
+     * @param \Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridgeInterface $releaseGroupManager
+     * @param \Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge $dataProviderManager
+     * @param \Upgrader\Business\VersionControlSystem\VcsInterface $vcs
      */
     public function __construct(
-        PackageManagerInterface $packageManager,
-        VersionControlSystemInterface $versionControlSystem
+        ReleaseGroupTransferBridgeInterface $releaseGroupManager,
+        PackageManagementSystemBridge $dataProviderManager,
+        VcsInterface $vcs
     ) {
-        $this->packageManager = $packageManager;
-        $this->versionControlSystem = $versionControlSystem;
+        $this->releaseGroupManager = $releaseGroupManager;
+        $this->dataProviderManager = $dataProviderManager;
+        $this->vcs = $vcs;
     }
 
     /**
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return \Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection
      */
-    public function upgrade(): CommandResultOutput
+    public function upgrade(): UpgraderResponseCollection
     {
-        $commandResultOutput = $this->versionControlSystem->checkUncommittedChanges();
-
-        if (!$commandResultOutput->isSuccess()) {
-            return $commandResultOutput;
+        $responses = new UpgraderResponseCollection();
+        $checkResponse = $this->vcs->check();
+        $responses->add($checkResponse);
+        if (!$checkResponse->isSuccess()) {
+            return $responses;
+        }
+        $dataProviderResponse = $this->dataProviderManager->getNotInstalledReleaseGroupList();
+        $packageManagerResponses = $this->releaseGroupManager->requireCollection(
+            $dataProviderResponse->getReleaseGroupCollection()
+        );
+        $responses->addCollection($packageManagerResponses);
+        if ($packageManagerResponses->hasSuccessfulResponse()) {
+            $vcsResponses = $this->vcs->save($packageManagerResponses->getSuccessfulOutputs());
+            $responses->addCollection($vcsResponses);
         }
 
-        return $this->packageManager->update();
+        return $responses;
     }
 }

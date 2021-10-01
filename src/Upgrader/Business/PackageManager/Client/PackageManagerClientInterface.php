@@ -7,12 +7,37 @@
 
 namespace Upgrader\Business\PackageManager\Client;
 
-use Upgrader\Business\Command\ResultOutput\CommandResultOutput;
+use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
+use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
 interface PackageManagerClientInterface
 {
     /**
-     * @return \Upgrader\Business\Command\ResultOutput\CommandResultOutput
+     * @return string
      */
-    public function runUpdate(): CommandResultOutput;
+    public function getProjectName(): string;
+
+    /**
+     * @return array
+     */
+    public function getComposerJsonFile(): array;
+
+    /**
+     * @return array
+     */
+    public function getComposerLockFile(): array;
+
+    /**
+     * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
+     *
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function require(PackageTransferCollection $packageCollection): PackageManagerResponse;
+
+    /**
+     * @param string $packageName
+     *
+     * @return string|null
+     */
+    public function getPackageVersion(string $packageName): ?string;
 }
