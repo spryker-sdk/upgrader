@@ -8,7 +8,6 @@
 namespace Upgrader;
 
 use RuntimeException;
-use Symfony\Component\Process\Process;
 
 class UpgraderConfig
 {
@@ -24,11 +23,6 @@ class UpgraderConfig
      * @var string|null
      */
     protected $previousCommitHash;
-
-    /**
-     * @var string|null
-     */
-    protected $startingBranch;
 
     /**
      * @throws \RuntimeException
@@ -89,42 +83,5 @@ class UpgraderConfig
     public function getReleaseAppUrl(): string
     {
         return (string)getenv(static::UPGRADER_RELEASE_APP_URL) ?: static::DEFAULT_RELEASE_APP_URL;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPreviousCommitHash(): string
-    {
-        if (!$this->previousCommitHash) {
-            $process = new Process(explode(' ', 'git rev-parse HEAD'), (string)getcwd());
-            $process->run();
-            $this->previousCommitHash = trim($process->getOutput());
-        }
-
-        return $this->previousCommitHash;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStartingBranch(): string
-    {
-        if (!$this->startingBranch) {
-            $process = new Process(explode(' ', 'git rev-parse --abbrev-ref HEAD'), (string)getcwd());
-            $process->run();
-
-            $this->startingBranch = trim($process->getOutput());
-        }
-
-        return $this->startingBranch;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPrBranch(): string
-    {
-        return sprintf('upgradebot/upgrade-for-%s-%s', $this->getStartingBranch(), $this->getPreviousCommitHash());
     }
 }

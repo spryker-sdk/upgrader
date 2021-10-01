@@ -16,6 +16,7 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
 {
     protected const REQUIRE_COMMAND_NAME = 'composer require';
     protected const NO_SCRIPTS_FLAG = '--no-scripts';
+    protected const WITH_ALL_DEPENDENCIES_FLAG = '--with-all-dependencies';
 
     /**
      * @var \Upgrader\UpgraderConfig
@@ -38,10 +39,11 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
     public function require(PackageTransferCollection $packageCollection): PackageManagerResponse
     {
         $command = sprintf(
-            '%s%s %s',
+            '%s%s %s %s',
             static::REQUIRE_COMMAND_NAME,
             $this->getPackageString($packageCollection),
-            static::NO_SCRIPTS_FLAG
+            static::NO_SCRIPTS_FLAG,
+            static::WITH_ALL_DEPENDENCIES_FLAG
         );
         $process = $this->runProcess($command);
 
