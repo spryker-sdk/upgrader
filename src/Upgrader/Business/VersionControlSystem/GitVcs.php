@@ -102,7 +102,13 @@ class GitVcs implements VcsInterface
      */
     public function push(string $branch): VcsResponse
     {
-        $command = ['git', 'push', '--set-upstream', 'origin', $branch];
+        $remote = sprintf(
+            "https://%s@github.com/%s/%s.git",
+            $this->config->getGithubAccessToken(),
+            $this->config->getGithubOrganization(),
+            $this->config->getGithubRepository()
+        );
+        $command = ['git', 'push', '--set-upstream', $remote, $branch];
         $process = $this->runProcess($command);
 
         return $this->createResponse($process);
