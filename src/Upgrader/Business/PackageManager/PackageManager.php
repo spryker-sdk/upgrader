@@ -61,6 +61,16 @@ class PackageManager implements PackageManagerInterface
     }
 
     /**
+     * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
+     *
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function requireDev(PackageTransferCollection $packageCollection): PackageManagerResponse
+    {
+        return $this->packageManagerClient->requireDev($packageCollection);
+    }
+
+    /**
      * @param string $packageName
      *
      * @return string|null
@@ -68,5 +78,15 @@ class PackageManager implements PackageManagerInterface
     public function getPackageVersion(string $packageName): ?string
     {
         return $this->packageManagerClient->getPackageVersion($packageName);
+    }
+
+    /**
+     * @param string $packageName
+     *
+     * @return bool
+     */
+    public function isDevPackage(string $packageName): bool
+    {
+        return $this->packageManagerClient->isDevPackage($packageName);
     }
 }

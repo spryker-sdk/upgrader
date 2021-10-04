@@ -13,6 +13,9 @@ use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\UpgradeAnal
 
 class UpgradeAnalysisResponse extends HttpResponse
 {
+    /**
+     * @var string
+     */
     protected const MODULES_KEY = 'modules';
 
     /**

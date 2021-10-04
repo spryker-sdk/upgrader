@@ -15,9 +15,24 @@ use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\ReleaseAppConst;
 
 class UpgradeInstructionsReleaseGroup
 {
+    /**
+     * @var string
+     */
     protected const MODULES_KEY = 'modules';
+
+    /**
+     * @var string
+     */
     protected const RELEASED_KEY = 'released';
+
+    /**
+     * @var string
+     */
     protected const PROJECT_CHANGES_KEY = 'project_changes';
+
+    /**
+     * @var string
+     */
     protected const NAME_KEY = 'name';
 
     /**

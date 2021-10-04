@@ -14,9 +14,25 @@ use Upgrader\UpgraderConfig;
 
 class ComposerCallExecutor implements ComposerCallExecutorInterface
 {
+    /**
+     * @var string
+     */
     protected const REQUIRE_COMMAND_NAME = 'composer require';
+
+    /**
+     * @var string
+     */
     protected const NO_SCRIPTS_FLAG = '--no-scripts';
+
+    /**
+     * @var string
+     */
     protected const WITH_ALL_DEPENDENCIES_FLAG = '--with-all-dependencies';
+
+    /**
+     * @var string
+     */
+    protected const DEV_FLAG = '--dev';
 
     /**
      * @var \Upgrader\UpgraderConfig
@@ -44,6 +60,26 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
             $this->getPackageString($packageCollection),
             static::NO_SCRIPTS_FLAG,
             static::WITH_ALL_DEPENDENCIES_FLAG
+        );
+        $process = $this->runProcess($command);
+
+        return $this->createResponse($process);
+    }
+
+    /**
+     * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
+     *
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function requireDev(PackageTransferCollection $packageCollection): PackageManagerResponse
+    {
+        $command = sprintf(
+            '%s%s %s %s %s',
+            static::REQUIRE_COMMAND_NAME,
+            $this->getPackageString($packageCollection),
+            static::NO_SCRIPTS_FLAG,
+            static::WITH_ALL_DEPENDENCIES_FLAG,
+            static::DEV_FLAG
         );
         $process = $this->runProcess($command);
 

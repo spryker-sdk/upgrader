@@ -14,8 +14,19 @@ use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\ReleaseAppConst;
 
 class UpgradeAnalysisModuleVersion
 {
+    /**
+     * @var string
+     */
     protected const ID_KEY = 'id';
+
+    /**
+     * @var string
+     */
     protected const NAME_KEY = 'name';
+
+    /**
+     * @var string
+     */
     protected const CREATED_KEY = 'created';
 
     /**

@@ -9,6 +9,9 @@ namespace Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http;
 
 class HttpResponse implements HttpResponseInterface
 {
+    /**
+     * @var string
+     */
     protected const RESULT_KEY = 'result';
 
     /**

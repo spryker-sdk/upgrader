@@ -13,7 +13,14 @@ use Upgrader\Business\Upgrader\Response\UpgraderResponseInterface;
 
 class UpgradeCommand extends AbstractCommand
 {
+    /**
+     * @var string
+     */
     protected const NAME = 'upgrade';
+
+    /**
+     * @var string
+     */
     protected const DESCRIPTION = 'Upgrade Spryker packages.';
 
     /**

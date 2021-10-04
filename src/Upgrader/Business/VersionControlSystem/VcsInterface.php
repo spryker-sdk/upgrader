@@ -12,6 +12,9 @@ use Upgrader\Business\VersionControlSystem\Response\VcsResponse;
 
 interface VcsInterface
 {
+    /**
+     * @var string
+     */
     public const BRANCH_TEMPLATE = 'upgradebot/upgrade-for-%s-%s';
 
     /**

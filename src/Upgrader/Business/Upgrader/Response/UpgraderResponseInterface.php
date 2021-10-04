@@ -9,7 +9,14 @@ namespace Upgrader\Business\Upgrader\Response;
 
 interface UpgraderResponseInterface
 {
+    /**
+     * @var int
+     */
     public const CODE_ERROR = 1;
+
+    /**
+     * @var int
+     */
     public const CODE_SUCCESS = 0;
 
     /**

@@ -87,7 +87,8 @@ class UpgraderBusinessFactory
     public function createPackageCollectionManager(): PackageTransferCollectionBuilder
     {
         return new PackageTransferCollectionBuilder(
-            $this->createPackageValidateManager()
+            $this->createPackageValidateManager(),
+            $this->createPackageManager()
         );
     }
 

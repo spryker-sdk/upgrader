@@ -9,7 +9,14 @@ namespace Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http;
 
 interface HttpRequestInterface
 {
+    /**
+     * @var string
+     */
     public const REQUEST_TYPE_POST = 'POST';
+
+    /**
+     * @var string
+     */
     public const REQUEST_TYPE_GET = 'GET';
 
     /**

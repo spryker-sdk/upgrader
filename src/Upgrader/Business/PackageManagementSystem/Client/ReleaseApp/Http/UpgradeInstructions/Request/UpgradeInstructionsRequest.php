@@ -12,6 +12,9 @@ use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\UpgradeInst
 
 class UpgradeInstructionsRequest implements HttpRequestInterface
 {
+    /**
+     * @var string
+     */
     protected const ENDPOINT = '/upgrade-instructions.json';
 
     /**

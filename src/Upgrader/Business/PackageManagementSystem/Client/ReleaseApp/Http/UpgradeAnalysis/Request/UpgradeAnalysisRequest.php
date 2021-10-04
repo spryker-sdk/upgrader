@@ -12,6 +12,9 @@ use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\UpgradeAnal
 
 class UpgradeAnalysisRequest implements HttpRequestInterface
 {
+    /**
+     * @var string
+     */
     protected const ENDPOINT = '/upgrade-analysis.json';
 
     /**

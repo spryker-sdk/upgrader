@@ -11,6 +11,9 @@ use Upgrader\Business\Exception\UpgraderException;
 
 class ComposerLockReader implements ComposerLockReaderInterface
 {
+    /**
+     * @var string
+     */
     protected const COMPOSER_LOCK = 'composer.lock';
 
     /**

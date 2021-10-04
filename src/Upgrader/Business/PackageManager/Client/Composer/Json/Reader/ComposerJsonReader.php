@@ -11,6 +11,9 @@ use Upgrader\Business\Exception\UpgraderException;
 
 class ComposerJsonReader implements ComposerJsonReaderInterface
 {
+    /**
+     * @var string
+     */
     protected const COMPOSER_JSON = 'composer.json';
 
     /**

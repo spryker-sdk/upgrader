@@ -13,7 +13,14 @@ use Upgrader\Business\UpgraderFacadeInterface;
 
 abstract class AbstractCommand extends Command
 {
+    /**
+     * @var int
+     */
     public const CODE_SUCCESS = 0;
+
+    /**
+     * @var int
+     */
     public const CODE_ERROR = 1;
 
     /**

@@ -18,4 +18,11 @@ interface ComposerCallExecutorInterface
      * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
     public function require(PackageTransferCollection $packageCollection): PackageManagerResponse;
+
+    /**
+     * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
+     *
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function requireDev(PackageTransferCollection $packageCollection): PackageManagerResponse;
 }
