@@ -14,7 +14,7 @@ use Upgrader\UpgraderConfig;
 class HttpRequestBuilder implements HttpRequestBuilderInterface
 {
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected const HTTP_HEADER_LIST = ['Content-Type' => 'application/json'];
 
