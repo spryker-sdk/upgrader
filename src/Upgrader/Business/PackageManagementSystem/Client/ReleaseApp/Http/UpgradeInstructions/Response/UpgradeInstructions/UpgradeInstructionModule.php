@@ -9,7 +9,14 @@ namespace Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Upgra
 
 class UpgradeInstructionModule
 {
+    /**
+     * @var string
+     */
     protected const TYPE_KEY = 'type';
+
+    /**
+     * @var string
+     */
     protected const VERSION_KEY = 'version';
 
     /**

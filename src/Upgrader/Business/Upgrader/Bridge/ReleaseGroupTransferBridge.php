@@ -98,9 +98,21 @@ class ReleaseGroupTransferBridge implements ReleaseGroupTransferBridgeInterface
      */
     protected function requirePackageCollection(PackageTransferCollection $packageCollection): PackageManagerResponse
     {
-        $requireResponse = $this->packageManager->require($packageCollection);
-        if (!$requireResponse->isSuccess()) {
-            return $requireResponse;
+        $requiredPackages = $this->packageCollectionBuilder->getRequiredPackages($packageCollection);
+        $requiredDevPackages = $this->packageCollectionBuilder->getRequiredDevPackages($packageCollection);
+
+        if (!$requiredPackages->isEmpty()) {
+            $requireResponse = $this->packageManager->require($requiredPackages);
+            if (!$requireResponse->isSuccess()) {
+                return $requireResponse;
+            }
+        }
+
+        if (!$requiredDevPackages->isEmpty()) {
+            $requireResponse = $this->packageManager->requireDev($requiredDevPackages);
+            if (!$requireResponse->isSuccess()) {
+                return $requireResponse;
+            }
         }
 
         $packagesNameString = implode(' ', $packageCollection->getNameList());

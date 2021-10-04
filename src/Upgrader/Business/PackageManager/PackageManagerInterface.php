@@ -35,9 +35,23 @@ interface PackageManagerInterface
     public function require(PackageTransferCollection $packageCollection): PackageManagerResponse;
 
     /**
+     * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
+     *
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function requireDev(PackageTransferCollection $packageCollection): PackageManagerResponse;
+
+    /**
      * @param string $packageName
      *
      * @return string|null
      */
     public function getPackageVersion(string $packageName): ?string;
+
+    /**
+     * @param string $packageName
+     *
+     * @return bool
+     */
+    public function isDevPackage(string $packageName): bool;
 }

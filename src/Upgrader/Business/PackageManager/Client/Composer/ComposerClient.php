@@ -15,8 +15,19 @@ use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollecti
 
 class ComposerClient implements PackageManagerClientInterface
 {
+    /**
+     * @var string
+     */
     protected const PACKAGES_KEY = 'packages';
+
+    /**
+     * @var string
+     */
     protected const NAME_KEY = 'name';
+
+    /**
+     * @var string
+     */
     protected const VERSION_KEY = 'version';
 
     /**
@@ -86,6 +97,16 @@ class ComposerClient implements PackageManagerClientInterface
     }
 
     /**
+     * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
+     *
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function requireDev(PackageTransferCollection $packageCollection): PackageManagerResponse
+    {
+        return $this->composerCallExecutor->requireDev($packageCollection);
+    }
+
+    /**
      * @param string $packageName
      *
      * @return string|null
@@ -101,5 +122,21 @@ class ComposerClient implements PackageManagerClientInterface
         }
 
         return null;
+    }
+
+    /**
+     * @param string $packageName
+     *
+     * @return bool
+     */
+    public function isDevPackage(string $packageName): bool
+    {
+        $composerJson = $this->composerJsonReader->read();
+
+        if (isset($composerJson['require-dev'][$packageName])) {
+            return true;
+        }
+
+        return false;
     }
 }

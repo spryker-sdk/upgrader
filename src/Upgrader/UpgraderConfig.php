@@ -9,9 +9,24 @@ namespace Upgrader;
 
 class UpgraderConfig
 {
+    /**
+     * @var string
+     */
     protected const UPGRADER_RELEASE_APP_URL = 'UPGRADER_RELEASE_APP_URL';
+
+    /**
+     * @var string
+     */
     protected const DEFAULT_RELEASE_APP_URL = 'https://api.release.spryker.com';
+
+    /**
+     * @var string
+     */
     protected const UPGRADER_COMMAND_EXECUTION_TIMEOUT = 'UPGRADER_COMMAND_EXECUTION_TIMEOUT';
+
+    /**
+     * @var int
+     */
     protected const DEFAULT_COMMAND_EXECUTION_TIMEOUT = 600;
 
     /**

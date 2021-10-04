@@ -11,7 +11,14 @@ use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\UpgradeAnal
 
 class UpgradeAnalysisModule
 {
+    /**
+     * @var string
+     */
     protected const PACKAGE_KEY = 'package';
+
+    /**
+     * @var string
+     */
     protected const MODULE_VERSIONS_KEY = 'module_versions';
 
     /**

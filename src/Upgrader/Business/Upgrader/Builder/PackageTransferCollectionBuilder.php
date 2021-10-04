@@ -8,6 +8,7 @@
 namespace Upgrader\Business\Upgrader\Builder;
 
 use Upgrader\Business\PackageManagementSystem\Transfer\Collection\ModuleTransferCollection;
+use Upgrader\Business\PackageManager\PackageManagerInterface;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 use Upgrader\Business\PackageManager\Transfer\PackageTransfer;
 use Upgrader\Business\Upgrader\Bridge\PackageCollectionBuilderInterface;
@@ -18,14 +19,21 @@ class PackageTransferCollectionBuilder implements PackageCollectionBuilderInterf
     /**
      * @var \Upgrader\Business\Upgrader\Validator\PackageSoftValidatorInterface
      */
-    protected $packageValidateManager;
+    protected $packageValidator;
 
     /**
-     * @param \Upgrader\Business\Upgrader\Validator\PackageSoftValidatorInterface $packageValidateManager
+     * @var \Upgrader\Business\PackageManager\PackageManagerInterface
      */
-    public function __construct(PackageSoftValidatorInterface $packageValidateManager)
+    protected $packageManager;
+
+    /**
+     * @param \Upgrader\Business\Upgrader\Validator\PackageSoftValidatorInterface $packageValidator
+     * @param \Upgrader\Business\PackageManager\PackageManagerInterface $packageManager
+     */
+    public function __construct(PackageSoftValidatorInterface $packageValidator, PackageManagerInterface $packageManager)
     {
-        $this->packageValidateManager = $packageValidateManager;
+        $this->packageValidator = $packageValidator;
+        $this->packageManager = $packageManager;
     }
 
     /**
@@ -56,8 +64,44 @@ class PackageTransferCollectionBuilder implements PackageCollectionBuilderInterf
         $resultCollection = new PackageTransferCollection();
 
         foreach ($packageCollection as $package) {
-            $validateResult = $this->packageValidateManager->isValidPackage($package);
+            $validateResult = $this->packageValidator->isValidPackage($package);
             if ($validateResult->isSuccess()) {
+                $resultCollection->add($package);
+            }
+        }
+
+        return $resultCollection;
+    }
+
+    /**
+     * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
+     *
+     * @return \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection
+     */
+    public function getRequiredPackages(PackageTransferCollection $packageCollection): PackageTransferCollection
+    {
+        $resultCollection = new PackageTransferCollection();
+
+        foreach ($packageCollection as $package) {
+            if (!$this->packageManager->isDevPackage($package->getName())) {
+                $resultCollection->add($package);
+            }
+        }
+
+        return $resultCollection;
+    }
+
+    /**
+     * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
+     *
+     * @return \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection
+     */
+    public function getRequiredDevPackages(PackageTransferCollection $packageCollection): PackageTransferCollection
+    {
+        $resultCollection = new PackageTransferCollection();
+
+        foreach ($packageCollection as $package) {
+            if ($this->packageManager->isDevPackage($package->getName())) {
                 $resultCollection->add($package);
             }
         }

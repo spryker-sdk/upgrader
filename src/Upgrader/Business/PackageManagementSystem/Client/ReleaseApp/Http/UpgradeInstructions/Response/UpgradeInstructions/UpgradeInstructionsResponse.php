@@ -12,6 +12,9 @@ use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\HttpRespons
 
 class UpgradeInstructionsResponse extends HttpResponse
 {
+    /**
+     * @var string
+     */
     protected const RELEASE_GROUP_KEY = 'release_group';
 
     /**

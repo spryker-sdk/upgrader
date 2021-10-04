@@ -12,7 +12,14 @@ use Upgrader\Business\Exception\UpgraderException;
 
 class ComposerJsonWriter implements ComposerJsonWriterInterface
 {
+    /**
+     * @var string
+     */
     protected const FILENAME_JSON = 'composer.json';
+
+    /**
+     * @var int
+     */
     protected const INDENTATION_DEFAULT = 4;
 
     /**
