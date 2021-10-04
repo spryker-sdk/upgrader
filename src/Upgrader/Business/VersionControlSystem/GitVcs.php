@@ -103,7 +103,7 @@ class GitVcs implements VcsInterface
     public function push(string $branch): VcsResponse
     {
         $remote = sprintf(
-            "https://%s@github.com/%s/%s.git",
+            'https://%s@github.com/%s/%s.git',
             $this->config->getGithubAccessToken(),
             $this->config->getGithubOrganization(),
             $this->config->getGithubRepository()
