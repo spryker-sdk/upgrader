@@ -78,7 +78,7 @@ class PackageTransferCollectionBuilder implements PackageCollectionBuilderInterf
      *
      * @return \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection
      */
-    public function filterDevPackage(PackageTransferCollection $packageCollection): PackageTransferCollection
+    public function getRequiredPackages(PackageTransferCollection $packageCollection): PackageTransferCollection
     {
         $resultCollection = new PackageTransferCollection();
 
@@ -96,7 +96,7 @@ class PackageTransferCollectionBuilder implements PackageCollectionBuilderInterf
      *
      * @return \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection
      */
-    public function getOnlyDevPackage(PackageTransferCollection $packageCollection): PackageTransferCollection
+    public function getRequiredDevPackages(PackageTransferCollection $packageCollection): PackageTransferCollection
     {
         $resultCollection = new PackageTransferCollection();
 

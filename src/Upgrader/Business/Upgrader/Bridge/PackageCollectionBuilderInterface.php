@@ -31,12 +31,12 @@ interface PackageCollectionBuilderInterface
      *
      * @return \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection
      */
-    public function filterDevPackage(PackageTransferCollection $packageCollection): PackageTransferCollection;
+    public function getRequiredPackages(PackageTransferCollection $packageCollection): PackageTransferCollection;
 
     /**
      * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
      *
      * @return \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection
      */
-    public function getOnlyDevPackage(PackageTransferCollection $packageCollection): PackageTransferCollection;
+    public function getRequiredDevPackages(PackageTransferCollection $packageCollection): PackageTransferCollection;
 }
