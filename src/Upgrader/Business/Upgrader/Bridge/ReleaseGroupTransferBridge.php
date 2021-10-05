@@ -117,6 +117,6 @@ class ReleaseGroupTransferBridge implements ReleaseGroupTransferBridgeInterface
 
         $packagesNameString = implode(' ', $packageCollection->getNameList());
 
-        return new PackageManagerResponse(true, $packagesNameString);
+        return new PackageManagerResponse(true, $packagesNameString, $packageCollection->getNameList());
     }
 }

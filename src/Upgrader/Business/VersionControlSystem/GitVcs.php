@@ -8,6 +8,7 @@
 namespace Upgrader\Business\VersionControlSystem;
 
 use Symfony\Component\Process\Process;
+use Upgrader\Business\VersionControlSystem\Provider\ProviderInterface;
 use Upgrader\Business\VersionControlSystem\Response\Collection\VcsResponseCollection;
 use Upgrader\Business\VersionControlSystem\Response\VcsResponse;
 use Upgrader\UpgraderConfig;
@@ -22,7 +23,7 @@ class GitVcs implements VcsInterface
     /**
      * @var string|null
      */
-    protected $basicBranch;
+    protected $baseBranch;
 
     /**
      * @var \Upgrader\UpgraderConfig
@@ -30,11 +31,18 @@ class GitVcs implements VcsInterface
     protected $config;
 
     /**
-     * @param \Upgrader\UpgraderConfig $config
+     * @var \Upgrader\Business\VersionControlSystem\Provider\ProviderInterface
      */
-    public function __construct(UpgraderConfig $config)
+    protected $provider;
+
+    /**
+     * @param \Upgrader\UpgraderConfig $config
+     * @param \Upgrader\Business\VersionControlSystem\Provider\ProviderInterface $provider
+     */
+    public function __construct(UpgraderConfig $config, ProviderInterface $provider)
     {
         $this->config = $config;
+        $this->provider = $provider;
     }
 
     /**
@@ -94,10 +102,17 @@ class GitVcs implements VcsInterface
      */
     public function push(string $branch): VcsResponse
     {
-        $command = ['git', 'push', '--set-upstream', 'origin', $branch];
+        $remote = sprintf(
+            'https://%s@github.com/%s/%s.git',
+            $this->config->getGithubAccessToken(),
+            $this->config->getGithubOrganization(),
+            $this->config->getGithubRepository()
+        );
+        $command = ['git', 'push', '--set-upstream', $remote, $branch];
         $process = $this->runProcess($command);
+        $command[3] = substr_replace($remote, str_repeat('*', 10), 8, strpos($remote, '@') - 8);
 
-        return $this->createResponse($process);
+        return $this->createResponse($process, implode(' ', $command));
     }
 
     /**
@@ -114,12 +129,29 @@ class GitVcs implements VcsInterface
     /**
      * @param array<string> $releaseGroups
      *
+     * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
+     */
+    public function createPullRequest(array $releaseGroups): VcsResponse
+    {
+        $params = [
+            'base' => $this->getBaseBranch(),
+            'head' => $this->getHeadBranch(),
+            'title' => sprintf('PR from %s to %s', $this->getHeadBranch(), $this->getBaseBranch()),
+            'body' => $this->buildPullRequestBody($releaseGroups),
+        ];
+
+        return $this->provider->createPullRequest($params);
+    }
+
+    /**
+     * @param array<string> $releaseGroups
+     *
      * @return \Upgrader\Business\VersionControlSystem\Response\Collection\VcsResponseCollection
      */
     public function save(array $releaseGroups): VcsResponseCollection
     {
         $collection = new VcsResponseCollection();
-        $response = $this->branch($this->getBranch());
+        $response = $this->branch($this->getHeadBranch());
         $collection->add($response);
         if (!$response->isSuccess()) {
             return $collection;
@@ -136,12 +168,13 @@ class GitVcs implements VcsInterface
         if (!$response->isSuccess()) {
             return $collection;
         }
-        $response = $this->push($this->getBranch());
+        $response = $this->push($this->getHeadBranch());
         $collection->add($response);
         if (!$response->isSuccess()) {
             return $collection;
         }
-        $collection->add($this->checkout($this->getBasicBranch()));
+        $collection->add($this->createPullRequest($releaseGroups));
+        $collection->add($this->checkout($this->getBaseBranch()));
 
         return $collection;
     }
@@ -163,23 +196,48 @@ class GitVcs implements VcsInterface
     /**
      * @return string
      */
-    public function getBasicBranch(): string
+    public function getBaseBranch(): string
     {
-        if (!$this->basicBranch) {
+        if (!$this->baseBranch) {
             $command = ['git', 'rev-parse', '--abbrev-ref', 'HEAD'];
             $process = $this->runProcess($command);
-            $this->basicBranch = trim($process->getOutput());
+            $this->baseBranch = trim($process->getOutput());
         }
 
-        return $this->basicBranch;
+        return $this->baseBranch;
     }
 
     /**
      * @return string
      */
-    public function getBranch(): string
+    public function getHeadBranch(): string
     {
-        return sprintf(static::BRANCH_TEMPLATE, $this->getBasicBranch(), $this->getCommitHash());
+        return sprintf(static::BRANCH_TEMPLATE, $this->getBaseBranch(), $this->getCommitHash());
+    }
+
+    /**
+     * @param array $releaseGroups
+     *
+     * @return string
+     */
+    protected function buildPullRequestBody(array $releaseGroups): string
+    {
+        $releaseGroups = array_map(function ($output) {
+            return '* ' . $output;
+        }, $releaseGroups);
+        $releaseGroupList = implode("\n", $releaseGroups);
+
+        $text = <<<TXT
+Auto created via Upgrader tool.
+
+#### Overview
+
+**Release Groups upgraded:**
+$releaseGroupList
+
+TXT;
+
+        return $text;
     }
 
     /**
@@ -198,12 +256,13 @@ class GitVcs implements VcsInterface
 
     /**
      * @param \Symfony\Component\Process\Process $process
+     * @param string|null $commandOutput
      *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    protected function createResponse(Process $process): VcsResponse
+    protected function createResponse(Process $process, ?string $commandOutput = null): VcsResponse
     {
-        $command = str_replace('\'', '', $process->getCommandLine());
+        $command = $commandOutput ?: str_replace('\'', '', $process->getCommandLine());
         $output = $process->getExitCode() ? $process->getErrorOutput() : '';
         $outputs = array_filter([$command, $output]);
 

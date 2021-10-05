@@ -61,7 +61,7 @@ class Upgrader implements UpgraderInterface
         );
         $responses->addCollection($packageManagerResponses);
         if ($packageManagerResponses->hasSuccessfulResponse()) {
-            $vcsResponses = $this->vcs->save($packageManagerResponses->getSuccessfulOutputs());
+            $vcsResponses = $this->vcs->save($packageManagerResponses->getSuccessfulReleaseGroups());
             $responses->addCollection($vcsResponses);
         }
 

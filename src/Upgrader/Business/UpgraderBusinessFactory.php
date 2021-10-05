@@ -36,6 +36,8 @@ use Upgrader\Business\Upgrader\Validator\ReleaseGroup\MajorVersionValidator;
 use Upgrader\Business\Upgrader\Validator\ReleaseGroup\ProjectChangesValidator;
 use Upgrader\Business\Upgrader\Validator\ReleaseGroupSoftValidator;
 use Upgrader\Business\VersionControlSystem\GitVcs;
+use Upgrader\Business\VersionControlSystem\Provider\GitHub\GitHubProvider;
+use Upgrader\Business\VersionControlSystem\Provider\ProviderInterface;
 use Upgrader\Business\VersionControlSystem\VcsInterface;
 use Upgrader\UpgraderConfig;
 
@@ -54,7 +56,7 @@ class UpgraderBusinessFactory
         return new Upgrader(
             $this->createReleaseGroupManager(),
             $this->createDataProviderManager(),
-            $this->createVcs()
+            $this->createGitVcs()
         );
     }
 
@@ -246,9 +248,17 @@ class UpgraderBusinessFactory
     /**
      * @return \Upgrader\Business\VersionControlSystem\VcsInterface
      */
-    public function createVcs(): VcsInterface
+    public function createGitVcs(): VcsInterface
     {
-        return new GitVcs($this->getConfig());
+        return new GitVcs($this->getConfig(), $this->createGitHubProvider());
+    }
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Provider\ProviderInterface
+     */
+    public function createGitHubProvider(): ProviderInterface
+    {
+        return new GitHubProvider($this->getConfig());
     }
 
     /**

@@ -58,6 +58,13 @@ interface VcsInterface
     /**
      * @param array<string> $releaseGroups
      *
+     * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
+     */
+    public function createPullRequest(array $releaseGroups): VcsResponse;
+
+    /**
+     * @param array<string> $releaseGroups
+     *
      * @return \Upgrader\Business\VersionControlSystem\Response\Collection\VcsResponseCollection
      */
     public function save(array $releaseGroups): VcsResponseCollection;
@@ -70,10 +77,10 @@ interface VcsInterface
     /**
      * @return string
      */
-    public function getBasicBranch(): string;
+    public function getHeadBranch(): string;
 
     /**
      * @return string
      */
-    public function getBranch(): string;
+    public function getBaseBranch(): string;
 }

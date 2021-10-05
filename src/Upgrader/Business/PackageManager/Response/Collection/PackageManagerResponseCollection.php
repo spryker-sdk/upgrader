@@ -37,12 +37,14 @@ class PackageManagerResponseCollection extends UpgraderCollection
     /**
      * @return array
      */
-    public function getSuccessfulOutputs(): array
+    public function getSuccessfulReleaseGroups(): array
     {
-        return array_map(function ($response) {
+        $releaseGroups = array_map(function ($response) {
             if ($response->isSuccess()) {
-                return $response->getOutput();
+                return implode(' ', $response->getPackageList());
             }
         }, $this->toArray());
+
+        return array_filter($releaseGroups);
     }
 }
