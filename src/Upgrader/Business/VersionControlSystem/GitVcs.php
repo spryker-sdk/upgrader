@@ -110,8 +110,9 @@ class GitVcs implements VcsInterface
         );
         $command = ['git', 'push', '--set-upstream', $remote, $branch];
         $process = $this->runProcess($command);
+        $command[3] = substr_replace($remote, str_repeat('*', 10), 8, strpos($remote, '@') - 8);
 
-        return $this->createResponse($process);
+        return $this->createResponse($process, implode(' ', $command));
     }
 
     /**
@@ -255,12 +256,13 @@ TXT;
 
     /**
      * @param \Symfony\Component\Process\Process $process
+     * @param string|null $commandOutput
      *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    protected function createResponse(Process $process): VcsResponse
+    protected function createResponse(Process $process, ?string $commandOutput = null): VcsResponse
     {
-        $command = str_replace('\'', '', $process->getCommandLine());
+        $command = $commandOutput ?: str_replace('\'', '', $process->getCommandLine());
         $output = $process->getExitCode() ? $process->getErrorOutput() : '';
         $outputs = array_filter([$command, $output]);
 
