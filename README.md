@@ -37,7 +37,7 @@ Upgrade command:
 1. Performs check that "there are no uncommitted changes in a project". If they exist, the process will stop.
 2. Upgrades Spryker packages.
 3. Commits changes in composer.json and composer.lock files.
-4. Push changes and creates PR.
+4. Pushes changes and creates PR.
 
 ```
 $HOME/.composer/vendor/bin/upgrader upgrade
