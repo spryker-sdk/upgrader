@@ -94,11 +94,11 @@ class GitVcs implements VcsInterface
      */
     public function deleteRemoteBranch(string $branch): VcsResponse
     {
-        $remote = $this->getRemote();
-        $command = ['git', 'push', '--delete', $remote, $branch];
+        $command = ['git', 'push', '--delete', $this->getRemote(), $branch];
         $process = $this->runProcess($command);
+        $command[3] = $this->getPublicRemote();
 
-        return $this->createResponseForProcess($process);
+        return $this->createResponseForProcess($process, implode(' ', $command));
     }
 
     /**
@@ -151,14 +151,11 @@ class GitVcs implements VcsInterface
     }
 
     /**
-     * @param string|null $branch
-     *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function checkout(?string $branch = null): VcsResponse
+    public function checkout(): VcsResponse
     {
-        $branch = $branch ?: $this->getBaseBranch();
-        $command = ['git', 'checkout', $branch];
+        $command = ['git', 'checkout', $this->getBaseBranch()];
         $process = $this->runProcess($command);
 
         return $this->createResponseForProcess($process);
@@ -184,10 +181,9 @@ class GitVcs implements VcsInterface
      */
     public function pushChanges(string $branch): VcsResponse
     {
-        $remote = $this->getRemote();
-        $command = ['git', 'push', '--set-upstream', $remote, $branch];
+        $command = ['git', 'push', '--set-upstream', $this->getRemote(), $branch];
         $process = $this->runProcess($command);
-        $command[3] = substr_replace($remote, str_repeat('*', 10), 8, strpos($remote, '@') - 8);
+        $command[3] = $this->getPublicRemote();
 
         return $this->createResponseForProcess($process, implode(' ', $command));
     }
@@ -306,7 +302,17 @@ class GitVcs implements VcsInterface
     /**
      * @return string
      */
-    public function getRemote()
+    protected function getPublicRemote(): string
+    {
+        $remote = $this->getRemote();
+
+        return substr_replace($remote, str_repeat('*', 10), 8, strpos($remote, '@') - 8);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getRemote()
     {
         return sprintf(
             'https://%s@github.com/%s/%s.git',

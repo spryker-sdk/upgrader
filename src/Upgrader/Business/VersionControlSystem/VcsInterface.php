@@ -44,11 +44,9 @@ interface VcsInterface
     public function deleteRemoteBranch(string $branch): VcsResponse;
 
     /**
-     * @param string|null $branch
-     *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function checkout(?string $branch): VcsResponse;
+    public function checkout(): VcsResponse;
 
     /**
      * @param string $message
