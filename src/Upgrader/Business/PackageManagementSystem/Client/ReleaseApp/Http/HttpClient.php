@@ -8,6 +8,9 @@
 namespace Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ServerException;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpRequestBuilderInterface;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpResponseBuilderInterface;
 
@@ -51,9 +54,41 @@ class HttpClient implements HttpClientInterface
     public function send(HttpRequestInterface $request): HttpResponseInterface
     {
         $guzzleRequest = $this->guzzleRequestBuilder->createGuzzleRequest($request);
-        $guzzleResponse = $this->guzzleClient->send($guzzleRequest);
+        $guzzleResponse = $this->requestExecute($guzzleRequest);
         $response = $this->httpResponseBuilder->createHttpResponse($request, $guzzleResponse);
 
         return $response;
     }
+
+    protected function requestExecute(RequestInterface $request): ResponseInterface
+    {
+        $iterration = 0;
+        $exception = null;
+        $guzzleResponse = null;
+
+        while ($iterration < 5 && $guzzleResponse == null) {
+            try {
+                $iterration++;
+                $guzzleResponse = $this->guzzleClient->send($request);
+            }catch (ServerException $currentException) {
+                $exception = $currentException;
+                if ($exception->getCode() != 503) {
+                    throw $exception;
+                }
+            }
+            sleep(5);
+        }
+
+        if(!$guzzleResponse) {
+            throw $exception;
+        }
+
+
+        var_dump($guzzleResponse->getStatusCode());
+        exit(15);
+
+        return $guzzleResponse;
+    }
+
+
 }
