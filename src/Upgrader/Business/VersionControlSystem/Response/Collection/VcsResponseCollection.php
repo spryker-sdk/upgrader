@@ -19,4 +19,18 @@ class VcsResponseCollection extends UpgraderCollection
     {
         return VcsResponse::class;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasResponseWithError(): bool
+    {
+        foreach ($this->toArray() as $response) {
+            if (!$response->isSuccess()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
