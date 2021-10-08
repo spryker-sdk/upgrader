@@ -59,9 +59,12 @@ class GitHubProvider implements ProviderInterface
      */
     public function createPullRequest(array $params): VcsResponse
     {
-        $pullRequest = $this->gitClient->pr()->create($this->organization, $this->repository, $params);
-
-        return new VcsResponse(true, sprintf('PR %s has been created', $pullRequest['html_url']));
+        try {
+            $pullRequest = $this->gitClient->pr()->create($this->organization, $this->repository, $params);
+            return new VcsResponse(true, sprintf('PR %s has been created', $pullRequest['html_url']));
+        } catch (\RuntimeException $exception) {
+            return new VcsResponse(false, sprintf('PR can\'t be created. Error: %s', $exception->getMessage()));
+        }
     }
 
     /**
