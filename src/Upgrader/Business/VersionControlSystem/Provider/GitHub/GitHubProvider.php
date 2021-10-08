@@ -9,6 +9,7 @@ namespace Upgrader\Business\VersionControlSystem\Provider\GitHub;
 
 use Github\Client;
 use Github\HttpClient\Builder;
+use RuntimeException;
 use Upgrader\Business\VersionControlSystem\Provider\ProviderInterface;
 use Upgrader\Business\VersionControlSystem\Response\VcsResponse;
 use Upgrader\UpgraderConfig;
@@ -61,8 +62,9 @@ class GitHubProvider implements ProviderInterface
     {
         try {
             $pullRequest = $this->gitClient->pr()->create($this->organization, $this->repository, $params);
+
             return new VcsResponse(true, sprintf('PR %s has been created', $pullRequest['html_url']));
-        } catch (\RuntimeException $exception) {
+        } catch (RuntimeException $exception) {
             return new VcsResponse(false, sprintf('PR can\'t be created. Error: %s', $exception->getMessage()));
         }
     }
