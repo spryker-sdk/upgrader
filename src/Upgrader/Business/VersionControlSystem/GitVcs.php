@@ -36,7 +36,7 @@ class GitVcs implements VcsInterface
     protected $provider;
 
     /**
-     * @var array
+     * @var array<string>
      */
     protected $targetFiles = ['composer.lock', 'composer.json'];
 
@@ -143,7 +143,7 @@ class GitVcs implements VcsInterface
         $collection = new VcsResponseCollection();
         $collection->add($this->deleteLocalBranch($this->getHeadBranch()));
         $collection->add($this->deleteRemoteBranch($this->getHeadBranch()));
-        if ($this->isUncommittedChangesExist()) {
+        if ($this->hasUncommitedChanges()) {
             $collection->addCollection($this->revertUncommittedChanges());
         }
 
@@ -193,7 +193,7 @@ class GitVcs implements VcsInterface
      */
     public function checkUncommittedChanges(): VcsResponse
     {
-        if ($this->isUncommittedChangesExist()) {
+        if ($this->hasUncommitedChanges()) {
             return $this->createResponse(false, 'You have to fix uncommitted changes');
         }
 
@@ -203,7 +203,7 @@ class GitVcs implements VcsInterface
     /**
      * @return bool
      */
-    public function isUncommittedChangesExist(): bool
+    public function hasUncommitedChanges(): bool
     {
         $command = ['git', 'status', '--porcelain'];
         $process = $this->runProcess($command);
@@ -323,7 +323,7 @@ class GitVcs implements VcsInterface
     }
 
     /**
-     * @param array $releaseGroups
+     * @param array<string> $releaseGroups
      *
      * @return string
      */
@@ -348,7 +348,7 @@ TXT;
     }
 
     /**
-     * @param array $command
+     * @param array<string> $command
      *
      * @return \Symfony\Component\Process\Process
      */

@@ -30,8 +30,20 @@ class UpgraderConfig
      * @var int
      */
     protected const DEFAULT_COMMAND_EXECUTION_TIMEOUT = 600;
+
+    /**
+     * @var string
+     */
     protected const GITHUB_ACCESS_TOKEN = 'GITHUB_ACCESS_TOKEN';
+
+    /**
+     * @var string
+     */
     protected const GITHUB_ORGANIZATION = 'GITHUB_ORGANIZATION';
+
+    /**
+     * @var string
+     */
     protected const GITHUB_REPOSITORY = 'GITHUB_REPOSITORY';
 
     /**

@@ -70,7 +70,7 @@ interface VcsInterface
     /**
      * @return bool
      */
-    public function isUncommittedChangesExist(): bool;
+    public function hasUncommitedChanges(): bool;
 
     /**
      * @param array<string> $releaseGroups
