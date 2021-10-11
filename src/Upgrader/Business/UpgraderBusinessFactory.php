@@ -13,6 +13,7 @@ use GuzzleHttp\Client;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpRequestBuilder;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpResponseBuilder;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\HttpClient;
+use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\HttpRequestExecutor;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\ReleaseAppClient;
 use Upgrader\Business\PackageManagementSystem\PackageManagementSystem;
 use Upgrader\Business\PackageManager\Client\Composer\ComposerCallExecutor;
@@ -153,7 +154,18 @@ class UpgraderBusinessFactory
         return new HttpClient(
             $this->createHttpRequestBuilder(),
             $this->createHttpResponseBuilder(),
-            $this->createGuzzleClient()
+            $this->createHttpRequestExecutor()
+        );
+    }
+
+    /**
+     * @return \Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\HttpRequestExecutor
+     */
+    public function createHttpRequestExecutor(): HttpRequestExecutor
+    {
+        return new HttpRequestExecutor(
+            $this->createGuzzleClient(),
+            $this->getConfig()
         );
     }
 

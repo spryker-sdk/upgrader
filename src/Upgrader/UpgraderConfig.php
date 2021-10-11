@@ -30,9 +30,41 @@ class UpgraderConfig
      * @var int
      */
     protected const DEFAULT_COMMAND_EXECUTION_TIMEOUT = 600;
+
+    /**
+     * @var string
+     */
     protected const GITHUB_ACCESS_TOKEN = 'GITHUB_ACCESS_TOKEN';
+
+    /**
+     * @var string
+     */
     protected const GITHUB_ORGANIZATION = 'GITHUB_ORGANIZATION';
+
+    /**
+     * @var string
+     */
     protected const GITHUB_REPOSITORY = 'GITHUB_REPOSITORY';
+
+    /**
+     * @var string
+     */
+    protected const UPGRADER_HTTP_RETRIEVE_ATTEMPTS_COUNT = 'UPGRADER_HTTP_RETRIEVE_ATTEMPTS_COUNT';
+
+    /**
+     * @var int
+     */
+    protected const DEFAULT_HTTP_RETRIEVE_ATTEMPTS_COUNT = 5;
+
+    /**
+     * @var string
+     */
+    protected const UPGRADER_HTTP_RETRIEVE_RETRY_DELAY = 'UPGRADER_HTTP_RETRIEVE_RETRY_DELAY';
+
+    /**
+     * @var int
+     */
+    protected const DEFAULT_HTTP_RETRIEVE_RETRY_DELAY = 10;
 
     /**
      * @var string|null
@@ -98,5 +130,21 @@ class UpgraderConfig
     public function getReleaseAppUrl(): string
     {
         return (string)getenv(static::UPGRADER_RELEASE_APP_URL) ?: static::DEFAULT_RELEASE_APP_URL;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHttpRetrieveAttemptsCount(): int
+    {
+        return (int)getenv(static::UPGRADER_HTTP_RETRIEVE_ATTEMPTS_COUNT) ?: static::DEFAULT_HTTP_RETRIEVE_ATTEMPTS_COUNT;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHttpRetrieveRetryDelay(): int
+    {
+        return (int)getenv(static::UPGRADER_HTTP_RETRIEVE_RETRY_DELAY) ?: static::DEFAULT_HTTP_RETRIEVE_RETRY_DELAY;
     }
 }
