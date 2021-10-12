@@ -63,9 +63,9 @@ class HttpRequestExecutor implements HttpRequestExecutorInterface
         if ($guzzleResponse === null) {
             if ($exception) {
                 throw $exception;
-            } else {
-                throw new UpgraderException('Http request error ' . $request->getUri());
             }
+
+            throw new UpgraderException('Http request error ' . $request->getUri());
         }
 
         return $guzzleResponse;
