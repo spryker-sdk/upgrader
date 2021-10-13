@@ -20,40 +20,57 @@ interface VcsInterface
     /**
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function add(): VcsResponse;
+    public function addChanges(): VcsResponse;
 
     /**
      * @param string $branch
      *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function branch(string $branch): VcsResponse;
+    public function createBranch(string $branch): VcsResponse;
 
     /**
      * @param string $branch
      *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function checkout(string $branch): VcsResponse;
+    public function deleteLocalBranch(string $branch): VcsResponse;
+
+    /**
+     * @param string $branch
+     *
+     * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
+     */
+    public function deleteRemoteBranch(string $branch): VcsResponse;
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
+     */
+    public function checkout(): VcsResponse;
 
     /**
      * @param string $message
      *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function commit(string $message): VcsResponse;
+    public function commitChanges(string $message): VcsResponse;
 
     /**
      * @param string $branch
      *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function push(string $branch): VcsResponse;
+    public function pushChanges(string $branch): VcsResponse;
 
     /**
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function check(): VcsResponse;
+    public function checkUncommittedChanges(): VcsResponse;
+
+    /**
+     * @return bool
+     */
+    public function hasUncommitedChanges(): bool;
 
     /**
      * @param array<string> $releaseGroups
@@ -68,6 +85,16 @@ interface VcsInterface
      * @return \Upgrader\Business\VersionControlSystem\Response\Collection\VcsResponseCollection
      */
     public function save(array $releaseGroups): VcsResponseCollection;
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Response\Collection\VcsResponseCollection
+     */
+    public function rollback(): VcsResponseCollection;
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Response\Collection\VcsResponseCollection
+     */
+    public function revertUncommittedChanges(): VcsResponseCollection;
 
     /**
      * @return string

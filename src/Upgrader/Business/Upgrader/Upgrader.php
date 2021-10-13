@@ -50,7 +50,7 @@ class Upgrader implements UpgraderInterface
     public function upgrade(): UpgraderResponseCollection
     {
         $responses = new UpgraderResponseCollection();
-        $checkResponse = $this->vcs->check();
+        $checkResponse = $this->vcs->checkUncommittedChanges();
         $responses->add($checkResponse);
         if (!$checkResponse->isSuccess()) {
             return $responses;
@@ -60,9 +60,15 @@ class Upgrader implements UpgraderInterface
             $dataProviderResponse->getReleaseGroupCollection()
         );
         $responses->addCollection($packageManagerResponses);
-        if ($packageManagerResponses->hasSuccessfulResponse()) {
-            $vcsResponses = $this->vcs->save($packageManagerResponses->getSuccessfulReleaseGroups());
-            $responses->addCollection($vcsResponses);
+        if (!$packageManagerResponses->hasSuccessfulResponse()) {
+            return $responses;
+        }
+        $vcsResponses = $this->vcs->save($packageManagerResponses->getSuccessfulReleaseGroups());
+        $responses->addCollection($vcsResponses);
+        $responses->add($this->vcs->checkout());
+        if ($vcsResponses->hasResponseWithError()) {
+            $rollbackResponses = $this->vcs->rollback();
+            $responses->addCollection($rollbackResponses);
         }
 
         return $responses;

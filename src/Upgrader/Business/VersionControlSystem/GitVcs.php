@@ -36,6 +36,11 @@ class GitVcs implements VcsInterface
     protected $provider;
 
     /**
+     * @var array<string>
+     */
+    protected $targetFiles = ['composer.lock', 'composer.json'];
+
+    /**
      * @param \Upgrader\UpgraderConfig $config
      * @param \Upgrader\Business\VersionControlSystem\Provider\ProviderInterface $provider
      */
@@ -48,12 +53,12 @@ class GitVcs implements VcsInterface
     /**
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function add(): VcsResponse
+    public function addChanges(): VcsResponse
     {
-        $command = ['git', 'add', 'composer.lock', 'composer.json'];
+        $command = array_merge(['git', 'add'], $this->targetFiles);
         $process = $this->runProcess($command);
 
-        return $this->createResponse($process);
+        return $this->createResponseForProcess($process);
     }
 
     /**
@@ -61,12 +66,12 @@ class GitVcs implements VcsInterface
      *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function branch(string $branch): VcsResponse
+    public function createBranch(string $branch): VcsResponse
     {
         $command = ['git', 'checkout', '-b', $branch];
         $process = $this->runProcess($command);
 
-        return $this->createResponse($process);
+        return $this->createResponseForProcess($process);
     }
 
     /**
@@ -74,12 +79,86 @@ class GitVcs implements VcsInterface
      *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function checkout(string $branch): VcsResponse
+    public function deleteLocalBranch(string $branch): VcsResponse
     {
-        $command = ['git', 'checkout', $branch];
+        $command = ['git', 'branch', '-D', $branch];
         $process = $this->runProcess($command);
 
-        return $this->createResponse($process);
+        return $this->createResponseForProcess($process);
+    }
+
+    /**
+     * @param string $branch
+     *
+     * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
+     */
+    public function deleteRemoteBranch(string $branch): VcsResponse
+    {
+        $command = ['git', 'push', '--delete', $this->getRemote(), $branch];
+        $process = $this->runProcess($command);
+        $command[3] = $this->getPublicRemote();
+
+        return $this->createResponseForProcess($process, implode(' ', $command));
+    }
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Response\Collection\VcsResponseCollection
+     */
+    public function revertUncommittedChanges(): VcsResponseCollection
+    {
+        $collection = new VcsResponseCollection();
+        $collection->add($this->restoreStaged());
+        $collection->add($this->restore());
+
+        return $collection;
+    }
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
+     */
+    protected function restoreStaged(): VcsResponse
+    {
+        $command = array_merge(['git', 'restore', '--staged'], $this->targetFiles);
+        $process = $this->runProcess($command);
+
+        return $this->createResponseForProcess($process);
+    }
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
+     */
+    protected function restore(): VcsResponse
+    {
+        $command = array_merge(['git', 'restore'], $this->targetFiles);
+        $process = $this->runProcess($command);
+
+        return $this->createResponseForProcess($process);
+    }
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Response\Collection\VcsResponseCollection
+     */
+    public function rollback(): VcsResponseCollection
+    {
+        $collection = new VcsResponseCollection();
+        $collection->add($this->deleteLocalBranch($this->getHeadBranch()));
+        $collection->add($this->deleteRemoteBranch($this->getHeadBranch()));
+        if ($this->hasUncommitedChanges()) {
+            $collection->addCollection($this->revertUncommittedChanges());
+        }
+
+        return $collection;
+    }
+
+    /**
+     * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
+     */
+    public function checkout(): VcsResponse
+    {
+        $command = ['git', 'checkout', $this->getBaseBranch()];
+        $process = $this->runProcess($command);
+
+        return $this->createResponseForProcess($process);
     }
 
     /**
@@ -87,12 +166,12 @@ class GitVcs implements VcsInterface
      *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function commit(string $message): VcsResponse
+    public function commitChanges(string $message): VcsResponse
     {
         $command = ['git', 'commit', '-m', $message];
         $process = $this->runProcess($command);
 
-        return $this->createResponse($process);
+        return $this->createResponseForProcess($process);
     }
 
     /**
@@ -100,30 +179,36 @@ class GitVcs implements VcsInterface
      *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function push(string $branch): VcsResponse
+    public function pushChanges(string $branch): VcsResponse
     {
-        $remote = sprintf(
-            'https://%s@github.com/%s/%s.git',
-            $this->config->getGithubAccessToken(),
-            $this->config->getGithubOrganization(),
-            $this->config->getGithubRepository()
-        );
-        $command = ['git', 'push', '--set-upstream', $remote, $branch];
+        $command = ['git', 'push', '--set-upstream', $this->getRemote(), $branch];
         $process = $this->runProcess($command);
-        $command[3] = substr_replace($remote, str_repeat('*', 10), 8, strpos($remote, '@') - 8);
+        $command[3] = $this->getPublicRemote();
 
-        return $this->createResponse($process, implode(' ', $command));
+        return $this->createResponseForProcess($process, implode(' ', $command));
     }
 
     /**
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    public function check(): VcsResponse
+    public function checkUncommittedChanges(): VcsResponse
     {
-        $command = ['git', 'update-index', '--refresh'];
+        if ($this->hasUncommitedChanges()) {
+            return $this->createResponse(false, 'You have to fix uncommitted changes');
+        }
+
+        return $this->createResponse(true, "You don't have uncommitted changes");
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasUncommitedChanges(): bool
+    {
+        $command = ['git', 'status', '--porcelain'];
         $process = $this->runProcess($command);
 
-        return $this->createResponse($process);
+        return strlen($process->getOutput()) > 0;
     }
 
     /**
@@ -151,30 +236,29 @@ class GitVcs implements VcsInterface
     public function save(array $releaseGroups): VcsResponseCollection
     {
         $collection = new VcsResponseCollection();
-        $response = $this->branch($this->getHeadBranch());
+        $response = $this->createBranch($this->getHeadBranch());
         $collection->add($response);
         if (!$response->isSuccess()) {
             return $collection;
         }
-        $response = $this->add();
+        $response = $this->addChanges();
         $collection->add($response);
         if (!$response->isSuccess()) {
             return $collection;
         }
-        $response = $this->commit(
+        $response = $this->commitChanges(
             sprintf('Installed: %s %s', PHP_EOL, implode(PHP_EOL, $releaseGroups))
         );
         $collection->add($response);
         if (!$response->isSuccess()) {
             return $collection;
         }
-        $response = $this->push($this->getHeadBranch());
+        $response = $this->pushChanges($this->getHeadBranch());
         $collection->add($response);
         if (!$response->isSuccess()) {
             return $collection;
         }
         $collection->add($this->createPullRequest($releaseGroups));
-        $collection->add($this->checkout($this->getBaseBranch()));
 
         return $collection;
     }
@@ -216,7 +300,30 @@ class GitVcs implements VcsInterface
     }
 
     /**
-     * @param array $releaseGroups
+     * @return string
+     */
+    protected function getPublicRemote(): string
+    {
+        $remote = $this->getRemote();
+
+        return substr_replace($remote, str_repeat('*', 10), 8, strpos($remote, '@') - 8);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getRemote()
+    {
+        return sprintf(
+            'https://%s@github.com/%s/%s.git',
+            $this->config->getGithubAccessToken(),
+            $this->config->getGithubOrganization(),
+            $this->config->getGithubRepository()
+        );
+    }
+
+    /**
+     * @param array<string> $releaseGroups
      *
      * @return string
      */
@@ -241,7 +348,7 @@ TXT;
     }
 
     /**
-     * @param array $command
+     * @param array<string> $command
      *
      * @return \Symfony\Component\Process\Process
      */
@@ -260,12 +367,23 @@ TXT;
      *
      * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
      */
-    protected function createResponse(Process $process, ?string $commandOutput = null): VcsResponse
+    protected function createResponseForProcess(Process $process, ?string $commandOutput = null): VcsResponse
     {
         $command = $commandOutput ?: str_replace('\'', '', $process->getCommandLine());
         $output = $process->getExitCode() ? $process->getErrorOutput() : '';
         $outputs = array_filter([$command, $output]);
 
-        return new VcsResponse($process->isSuccessful(), implode(PHP_EOL, $outputs));
+        return $this->createResponse($process->isSuccessful(), implode(PHP_EOL, $outputs));
+    }
+
+    /**
+     * @param bool $isSuccess
+     * @param string $output
+     *
+     * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
+     */
+    protected function createResponse($isSuccess, $output): VcsResponse
+    {
+        return new VcsResponse($isSuccess, $output);
     }
 }
