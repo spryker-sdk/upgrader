@@ -7,7 +7,6 @@
 
 namespace Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http;
 
-use GuzzleHttp\Client;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpRequestBuilderInterface;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpResponseBuilderInterface;
 
@@ -21,26 +20,26 @@ class HttpClient implements HttpClientInterface
     /**
      * @var \Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpResponseBuilderInterface
      */
-    protected $httpResponseBuilder;
+    protected $responseBuilder;
 
     /**
-     * @var \GuzzleHttp\Client
+     * @var \Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\HttpRequestExecutorInterface
      */
-    protected $guzzleClient;
+    protected $requestExecutor;
 
     /**
-     * @param Builder\HttpRequestBuilderInterface $guzzleRequestBuilder
-     * @param Builder\HttpResponseBuilderInterface $httpResponseBuilder
-     * @param \GuzzleHttp\Client $guzzleClient
+     * @param \Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpRequestBuilderInterface $guzzleRequestBuilder
+     * @param \Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\Builder\HttpResponseBuilderInterface $responseBuilder
+     * @param \Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\HttpRequestExecutorInterface $requestExecutor
      */
     public function __construct(
         HttpRequestBuilderInterface $guzzleRequestBuilder,
-        HttpResponseBuilderInterface $httpResponseBuilder,
-        Client $guzzleClient
+        HttpResponseBuilderInterface $responseBuilder,
+        HttpRequestExecutorInterface $requestExecutor
     ) {
         $this->guzzleRequestBuilder = $guzzleRequestBuilder;
-        $this->httpResponseBuilder = $httpResponseBuilder;
-        $this->guzzleClient = $guzzleClient;
+        $this->responseBuilder = $responseBuilder;
+        $this->requestExecutor = $requestExecutor;
     }
 
     /**
@@ -51,8 +50,8 @@ class HttpClient implements HttpClientInterface
     public function send(HttpRequestInterface $request): HttpResponseInterface
     {
         $guzzleRequest = $this->guzzleRequestBuilder->createGuzzleRequest($request);
-        $guzzleResponse = $this->guzzleClient->send($guzzleRequest);
-        $response = $this->httpResponseBuilder->createHttpResponse($request, $guzzleResponse);
+        $guzzleResponse = $this->requestExecutor->requestExecute($guzzleRequest);
+        $response = $this->responseBuilder->createHttpResponse($request, $guzzleResponse);
 
         return $response;
     }
