@@ -205,7 +205,7 @@ class GitVcs implements VcsInterface
      */
     public function checkTargetBranchExists(): VcsResponse
     {
-        if ($this->isTargetBranchExists()) {
+        if ($this->targetBranchExists()) {
             return $this->createResponse(false, 'You have an unprocessed PR from a previous update. Upgrader can\'t provide a new update until you process these changes');
         }
 
@@ -226,7 +226,7 @@ class GitVcs implements VcsInterface
     /**
      * @return bool
      */
-    public function isTargetBranchExists(): bool
+    public function targetBranchExists(): bool
     {
         $command = ['git', 'ls-remote', '--heads', $this->getRemote(), $this->getHeadBranch()];
         $process = $this->runProcess($command);
