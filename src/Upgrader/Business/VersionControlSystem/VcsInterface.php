@@ -68,9 +68,14 @@ interface VcsInterface
     public function checkUncommittedChanges(): VcsResponse;
 
     /**
+     * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
+     */
+    public function checkTargetBranchExists(): VcsResponse;
+
+    /**
      * @return bool
      */
-    public function hasUncommitedChanges(): bool;
+    public function hasUncommittedChanges(): bool;
 
     /**
      * @param array<string> $releaseGroups

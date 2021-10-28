@@ -50,6 +50,11 @@ class Upgrader implements UpgraderInterface
     public function upgrade(): UpgraderResponseCollection
     {
         $responses = new UpgraderResponseCollection();
+        $checkResponse = $this->vcs->checkTargetBranchExists();
+        $responses->add($checkResponse);
+        if (!$checkResponse->isSuccess()) {
+            return $responses;
+        }
         $checkResponse = $this->vcs->checkUncommittedChanges();
         $responses->add($checkResponse);
         if (!$checkResponse->isSuccess()) {
