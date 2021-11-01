@@ -25,7 +25,7 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
             $message = sprintf(
                 '%s %s',
                 'Release group contains major changes. Name:',
-                $releaseGroup->getName()
+                $releaseGroup->getName(),
             );
 
             throw new UpgraderException($message);

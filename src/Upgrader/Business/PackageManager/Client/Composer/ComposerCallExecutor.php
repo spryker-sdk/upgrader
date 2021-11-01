@@ -7,10 +7,9 @@
 
 namespace Upgrader\Business\PackageManager\Client\Composer;
 
-use Symfony\Component\Process\Process;
+use Upgrader\Business\PackageManager\CallExecutor\CallExecutor;
 use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
-use Upgrader\UpgraderConfig;
 
 class ComposerCallExecutor implements ComposerCallExecutorInterface
 {
@@ -40,16 +39,16 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
     protected const DEV_FLAG = '--dev';
 
     /**
-     * @var \Upgrader\UpgraderConfig
+     * @var \Upgrader\Business\PackageManager\CallExecutor\CallExecutor
      */
-    protected $config;
+    protected $callExecutor;
 
     /**
-     * @param \Upgrader\UpgraderConfig $config
+     * @param \Upgrader\Business\PackageManager\CallExecutor\CallExecutor $callExecutor
      */
-    public function __construct(UpgraderConfig $config)
+    public function __construct(CallExecutor $callExecutor)
     {
-        $this->config = $config;
+        $this->callExecutor = $callExecutor;
     }
 
     /**
@@ -64,11 +63,11 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
             static::REQUIRE_COMMAND_NAME,
             $this->getPackageString($packageCollection),
             static::NO_SCRIPTS_FLAG,
-            static::WITH_ALL_DEPENDENCIES_FLAG
+            static::WITH_ALL_DEPENDENCIES_FLAG,
         );
-        $process = $this->runProcess($command);
+        $process = $this->callExecutor->runProcess($command);
 
-        return $this->createResponse($process);
+        return $this->callExecutor->createResponse($process);
     }
 
     /**
@@ -84,11 +83,11 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
             $this->getPackageString($packageCollection),
             static::NO_SCRIPTS_FLAG,
             static::WITH_ALL_DEPENDENCIES_FLAG,
-            static::DEV_FLAG
+            static::DEV_FLAG,
         );
-        $process = $this->runProcess($command);
+        $process = $this->callExecutor->runProcess($command);
 
-        return $this->createResponse($process);
+        return $this->callExecutor->createResponse($process);
     }
 
     /**
@@ -100,14 +99,14 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
             '%s %s %s',
             static::UPDATE_COMMAND_NAME,
             static::NO_SCRIPTS_FLAG,
-            static::WITH_ALL_DEPENDENCIES_FLAG
+            static::WITH_ALL_DEPENDENCIES_FLAG,
         );
-        $process = $this->runProcess($command);
+        $process = $this->callExecutor->runProcess($command);
 
-        return $this->createResponse($process);
+        return $this->callExecutor->createResponse($process);
     }
 
-    /***
+    /**
      * @param \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection $packageCollection
      *
      * @return string
@@ -121,33 +120,5 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
         }
 
         return $result;
-    }
-
-    /**
-     * @param string $command
-     *
-     * @return \Symfony\Component\Process\Process
-     */
-    protected function runProcess(string $command): Process
-    {
-        $process = new Process(explode(' ', $command), (string)getcwd());
-        $process->setTimeout($this->config->getCommandExecutionTimeout());
-        $process->run();
-
-        return $process;
-    }
-
-    /**
-     * @param \Symfony\Component\Process\Process $process
-     *
-     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
-     */
-    protected function createResponse(Process $process): PackageManagerResponse
-    {
-        $command = str_replace('\'', '', $process->getCommandLine());
-        $output = $process->getExitCode() ? $process->getErrorOutput() : '';
-        $outputs = array_filter([$command, $output]);
-
-        return new PackageManagerResponse($process->isSuccessful(), implode(PHP_EOL, $outputs));
     }
 }

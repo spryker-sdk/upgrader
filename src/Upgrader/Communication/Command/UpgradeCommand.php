@@ -53,7 +53,7 @@ class UpgradeCommand extends AbstractCommand
                 static::OPTION_STRATEGY,
                 static::OPTION_STRATEGY_SHORT,
                 InputOption::VALUE_OPTIONAL,
-                static::OPTION_STRATEGY_DESCRIPTION
+                static::OPTION_STRATEGY_DESCRIPTION,
             );
     }
 

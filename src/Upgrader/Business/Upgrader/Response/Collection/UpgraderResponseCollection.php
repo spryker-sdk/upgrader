@@ -25,7 +25,7 @@ class UpgraderResponseCollection extends UpgraderCollection
      */
     public function isSuccess(): bool
     {
-        foreach ($this->toArray() as $result) {
+        foreach ($this as $result) {
             if (!$result->isSuccess()) {
                 return false;
             }
@@ -47,7 +47,7 @@ class UpgraderResponseCollection extends UpgraderCollection
      */
     public function hasSuccessfulResponse(): bool
     {
-        foreach ($this->toArray() as $response) {
+        foreach ($this as $response) {
             if ($response->isSuccess()) {
                 return true;
             }

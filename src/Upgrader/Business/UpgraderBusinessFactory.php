@@ -16,6 +16,7 @@ use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\HttpClient;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\Http\HttpRequestExecutor;
 use Upgrader\Business\PackageManagementSystem\Client\ReleaseApp\ReleaseAppClient;
 use Upgrader\Business\PackageManagementSystem\PackageManagementSystem;
+use Upgrader\Business\PackageManager\CallExecutor\CallExecutor;
 use Upgrader\Business\PackageManager\Client\Composer\ComposerCallExecutor;
 use Upgrader\Business\PackageManager\Client\Composer\ComposerClient;
 use Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReader;
@@ -24,7 +25,9 @@ use Upgrader\Business\PackageManager\Client\Composer\Json\Writer\ComposerJsonWri
 use Upgrader\Business\PackageManager\Client\Composer\Json\Writer\ComposerJsonWriterInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReader;
 use Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface;
-use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
+use Upgrader\Business\PackageManager\Client\ComposerClientInterface;
+use Upgrader\Business\PackageManager\Client\ComposerLockDiff\ComposerLockDiffCallExecutor;
+use Upgrader\Business\PackageManager\Client\ComposerLockDiff\ComposerLockDiffClient;
 use Upgrader\Business\PackageManager\PackageManager;
 use Upgrader\Business\PackageManager\PackageManagerInterface;
 use Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge;
@@ -59,7 +62,7 @@ class UpgraderBusinessFactory
         return new Upgrader(
             $this->createComposerUpdateStrategy(),
             $this->createReleaseGroupStrategy(),
-            $this->createGitVcs()
+            $this->createGitVcs(),
         );
     }
 
@@ -69,7 +72,7 @@ class UpgraderBusinessFactory
     public function createComposerUpdateStrategy(): ComposerUpdateStrategy
     {
         return new ComposerUpdateStrategy(
-            $this->createPackageManager()
+            $this->createPackageManager(),
         );
     }
 
@@ -92,7 +95,7 @@ class UpgraderBusinessFactory
         return new ReleaseGroupTransferBridge(
             $this->createReleaseGroupValidateManager(),
             $this->createPackageCollectionManager(),
-            $this->createPackageManager()
+            $this->createPackageManager(),
         );
     }
 
@@ -114,7 +117,7 @@ class UpgraderBusinessFactory
     {
         return new PackageTransferCollectionBuilder(
             $this->createPackageValidateManager(),
-            $this->createPackageManager()
+            $this->createPackageManager(),
         );
     }
 
@@ -134,7 +137,7 @@ class UpgraderBusinessFactory
     public function createAlreadyInstalledValidator(): AlreadyInstalledValidator
     {
         return new AlreadyInstalledValidator(
-            $this->createPackageManager()
+            $this->createPackageManager(),
         );
     }
 
@@ -145,7 +148,7 @@ class UpgraderBusinessFactory
     {
         return new PackageManagementSystemBridge(
             $this->createDataProvider(),
-            $this->createPackageManager()
+            $this->createPackageManager(),
         );
     }
 
@@ -155,7 +158,7 @@ class UpgraderBusinessFactory
     public function createDataProvider(): PackageManagementSystem
     {
         return new PackageManagementSystem(
-            $this->createReleaseAppClient()
+            $this->createReleaseAppClient(),
         );
     }
 
@@ -165,7 +168,7 @@ class UpgraderBusinessFactory
     public function createReleaseAppClient(): ReleaseAppClient
     {
         return new ReleaseAppClient(
-            $this->createHttpCommunicator()
+            $this->createHttpCommunicator(),
         );
     }
 
@@ -177,7 +180,7 @@ class UpgraderBusinessFactory
         return new HttpClient(
             $this->createHttpRequestBuilder(),
             $this->createHttpResponseBuilder(),
-            $this->createHttpRequestExecutor()
+            $this->createHttpRequestExecutor(),
         );
     }
 
@@ -188,7 +191,7 @@ class UpgraderBusinessFactory
     {
         return new HttpRequestExecutor(
             $this->createGuzzleClient(),
-            $this->getConfig()
+            $this->getConfig(),
         );
     }
 
@@ -222,19 +225,36 @@ class UpgraderBusinessFactory
     public function createPackageManager(): PackageManagerInterface
     {
         return new PackageManager(
-            $this->createComposerClient()
+            $this->createComposerClient(),
+            $this->createComposerLockDiffClient(),
         );
     }
 
     /**
-     * @return \Upgrader\Business\PackageManager\Client\PackageManagerClientInterface
+     * @return \Upgrader\Business\PackageManager\Client\ComposerLockDiff\ComposerLockDiffClient
      */
-    public function createComposerClient(): PackageManagerClientInterface
+    public function createComposerLockDiffClient(): ComposerLockDiffClient
+    {
+        return new ComposerLockDiffClient($this->createComposerLockDiffCallExecutor());
+    }
+
+    /**
+     * @return \Upgrader\Business\PackageManager\Client\ComposerLockDiff\ComposerLockDiffCallExecutor
+     */
+    public function createComposerLockDiffCallExecutor(): ComposerLockDiffCallExecutor
+    {
+        return new ComposerLockDiffCallExecutor($this->createCallExecutor());
+    }
+
+    /**
+     * @return \Upgrader\Business\PackageManager\Client\ComposerClientInterface
+     */
+    public function createComposerClient(): ComposerClientInterface
     {
         return new ComposerClient(
             $this->createComposerCallExecutor(),
             $this->createComposerJsonReader(),
-            $this->createComposerLockReader()
+            $this->createComposerLockReader(),
         );
     }
 
@@ -243,7 +263,15 @@ class UpgraderBusinessFactory
      */
     public function createComposerCallExecutor(): ComposerCallExecutor
     {
-        return new ComposerCallExecutor($this->getConfig());
+        return new ComposerCallExecutor($this->createCallExecutor());
+    }
+
+    /**
+     * @return \Upgrader\Business\PackageManager\CallExecutor\CallExecutor
+     */
+    public function createCallExecutor(): CallExecutor
+    {
+        return new CallExecutor($this->getConfig());
     }
 
     /**
@@ -260,7 +288,7 @@ class UpgraderBusinessFactory
     public function createComposerJsonWriter(): ComposerJsonWriterInterface
     {
         return new ComposerJsonWriter(
-            $this->createPrinter()
+            $this->createPrinter(),
         );
     }
 

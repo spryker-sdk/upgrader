@@ -42,7 +42,7 @@ class ReleaseGroupStrategy implements UpgradeStrategyInterface
 
         $dataProviderResponse = $this->dataProviderManager->getNotInstalledReleaseGroupList();
         $requireResponses = $this->releaseGroupManager->requireCollection(
-            $dataProviderResponse->getReleaseGroupCollection()
+            $dataProviderResponse->getReleaseGroupCollection(),
         );
         $responses->addCollection($requireResponses);
 

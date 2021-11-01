@@ -14,17 +14,17 @@ use Upgrader\Business\Exception\UpgraderException;
 class UpgraderEnum
 {
     /**
-     * @var array $cache
+     * @var array
      */
     protected static $cache = [];
 
     /**
-     * @var array $objectCache
+     * @var array
      */
     protected static $objectCache = [];
 
     /**
-     * @var string $value
+     * @var string
      */
     private $value;
 

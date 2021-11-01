@@ -10,7 +10,7 @@ namespace Upgrader\Business\PackageManager\Client;
 use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
-interface PackageManagerClientInterface
+interface ComposerClientInterface
 {
     /**
      * @return string

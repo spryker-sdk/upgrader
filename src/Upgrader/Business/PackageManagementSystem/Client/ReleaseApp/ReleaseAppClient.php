@@ -64,7 +64,7 @@ class ReleaseAppClient implements ReleaseAppClientInterface
             $dataProviderReleaseGroup = new ReleaseGroupTransfer(
                 $releaseGroup->getName(),
                 $this->buildModuleTransferCollection($releaseGroup),
-                $releaseGroup->isContainsProjectChanges()
+                $releaseGroup->isContainsProjectChanges(),
             );
             $dataProviderReleaseGroupCollection->add($dataProviderReleaseGroup);
         }
@@ -139,7 +139,7 @@ class ReleaseAppClient implements ReleaseAppClientInterface
         return new UpgradeAnalysisRequest(
             $request->getProjectName(),
             $request->getComposerJson(),
-            $request->getComposerLock()
+            $request->getComposerLock(),
         );
     }
 

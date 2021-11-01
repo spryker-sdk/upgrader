@@ -15,6 +15,7 @@ class UpgradeStrategyEnum extends UpgraderEnum
      * @var string
      */
     public const COMPOSER_UPDATE = 'composer-update';
+
     /**
      * @var string
      */

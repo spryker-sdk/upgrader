@@ -32,8 +32,8 @@ class ComposerUpdateStrategy implements UpgradeStrategyInterface
     {
         $responses = new UpgraderResponseCollection();
 
-        $result = $this->packageManager->update();
-        $responses->add($result);
+        $resultCollection = $this->packageManager->update();
+        $responses->addCollection($resultCollection);
 
         return $responses;
     }
