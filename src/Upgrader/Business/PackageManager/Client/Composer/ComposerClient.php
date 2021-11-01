@@ -107,6 +107,14 @@ class ComposerClient implements PackageManagerClientInterface
     }
 
     /**
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function update(): PackageManagerResponse
+    {
+        return $this->composerCallExecutor->update();
+    }
+
+    /**
      * @param string $packageName
      *
      * @return string|null

@@ -339,7 +339,7 @@ Auto created via Upgrader tool.
 
 #### Overview
 
-**Release Groups upgraded:**
+**Packages upgraded:**
 $releaseGroupList
 
 TXT;

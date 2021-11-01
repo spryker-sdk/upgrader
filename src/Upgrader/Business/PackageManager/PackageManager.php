@@ -71,6 +71,24 @@ class PackageManager implements PackageManagerInterface
     }
 
     /**
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function update(): PackageManagerResponse
+    {
+        $response = $this->packageManagerClient->update();
+
+        if ($response->isSuccess()) {
+            return new PackageManagerResponse(
+                true,
+                $response->getOutput(),
+                ['Please see the package list in composer.lock diffs']
+            );
+        }
+
+        return $response;
+    }
+
+    /**
      * @param string $packageName
      *
      * @return string|null

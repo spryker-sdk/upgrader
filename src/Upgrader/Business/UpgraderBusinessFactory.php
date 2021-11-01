@@ -30,6 +30,8 @@ use Upgrader\Business\PackageManager\PackageManagerInterface;
 use Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge;
 use Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridge;
 use Upgrader\Business\Upgrader\Builder\PackageTransferCollectionBuilder;
+use Upgrader\Business\Upgrader\Strategy\ComposerUpdateStrategy;
+use Upgrader\Business\Upgrader\Strategy\ReleaseGroupStrategy;
 use Upgrader\Business\Upgrader\Upgrader;
 use Upgrader\Business\Upgrader\Validator\Package\AlreadyInstalledValidator;
 use Upgrader\Business\Upgrader\Validator\PackageSoftValidator;
@@ -55,9 +57,30 @@ class UpgraderBusinessFactory
     public function createUpgrader(): Upgrader
     {
         return new Upgrader(
+            $this->createComposerUpdateStrategy(),
+            $this->createReleaseGroupStrategy(),
+            $this->createGitVcs()
+        );
+    }
+
+    /**
+     * @return \Upgrader\Business\Upgrader\Strategy\ComposerUpdateStrategy
+     */
+    public function createComposerUpdateStrategy(): ComposerUpdateStrategy
+    {
+        return new ComposerUpdateStrategy(
+            $this->createPackageManager()
+        );
+    }
+
+    /**
+     * @return \Upgrader\Business\Upgrader\Strategy\ReleaseGroupStrategy
+     */
+    public function createReleaseGroupStrategy(): ReleaseGroupStrategy
+    {
+        return new ReleaseGroupStrategy(
             $this->createReleaseGroupManager(),
             $this->createDataProviderManager(),
-            $this->createGitVcs()
         );
     }
 

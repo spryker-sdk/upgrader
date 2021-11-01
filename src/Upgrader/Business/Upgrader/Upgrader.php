@@ -7,22 +7,23 @@
 
 namespace Upgrader\Business\Upgrader;
 
-use Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge;
-use Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridgeInterface;
+use Upgrader\Business\Upgrader\Request\UpgraderRequest;
 use Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection;
+use Upgrader\Business\Upgrader\Strategy\ComposerUpdateStrategy;
+use Upgrader\Business\Upgrader\Strategy\ReleaseGroupStrategy;
 use Upgrader\Business\VersionControlSystem\VcsInterface;
 
 class Upgrader implements UpgraderInterface
 {
     /**
-     * @var \Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridgeInterface
+     * @var \Upgrader\Business\Upgrader\Strategy\ComposerUpdateStrategy
      */
-    protected $releaseGroupManager;
+    protected $composerUpdateStrategy;
 
     /**
-     * @var \Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge
+     * @var \Upgrader\Business\Upgrader\Strategy\ReleaseGroupStrategy
      */
-    protected $dataProviderManager;
+    protected $releaseGroupStrategy;
 
     /**
      * @var \Upgrader\Business\VersionControlSystem\VcsInterface
@@ -30,40 +31,46 @@ class Upgrader implements UpgraderInterface
     protected $vcs;
 
     /**
-     * @param \Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridgeInterface $releaseGroupManager
-     * @param \Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge $dataProviderManager
+     * @param \Upgrader\Business\Upgrader\Strategy\ComposerUpdateStrategy $composerUpdateStrategy
+     * @param \Upgrader\Business\Upgrader\Strategy\ReleaseGroupStrategy $releaseGroupStrategy
      * @param \Upgrader\Business\VersionControlSystem\VcsInterface $vcs
      */
     public function __construct(
-        ReleaseGroupTransferBridgeInterface $releaseGroupManager,
-        PackageManagementSystemBridge $dataProviderManager,
+        ComposerUpdateStrategy $composerUpdateStrategy,
+        ReleaseGroupStrategy $releaseGroupStrategy,
         VcsInterface $vcs
     ) {
-        $this->releaseGroupManager = $releaseGroupManager;
-        $this->dataProviderManager = $dataProviderManager;
+        $this->composerUpdateStrategy = $composerUpdateStrategy;
+        $this->releaseGroupStrategy = $releaseGroupStrategy;
         $this->vcs = $vcs;
     }
 
     /**
+     * @param \Upgrader\Business\Upgrader\Request\UpgraderRequest $request
+     *
      * @return \Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection
      */
-    public function upgrade(): UpgraderResponseCollection
+    public function upgrade(UpgraderRequest $request): UpgraderResponseCollection
     {
         $responses = new UpgraderResponseCollection();
+
         $checkResponse = $this->vcs->checkUncommittedChanges();
         $responses->add($checkResponse);
         if (!$checkResponse->isSuccess()) {
             return $responses;
         }
-        $dataProviderResponse = $this->dataProviderManager->getNotInstalledReleaseGroupList();
-        $packageManagerResponses = $this->releaseGroupManager->requireCollection(
-            $dataProviderResponse->getReleaseGroupCollection()
-        );
-        $responses->addCollection($packageManagerResponses);
-        if (!$packageManagerResponses->hasSuccessfulResponse()) {
+
+        if ($request->getStrategyEnum()->isComposerUpdate()) {
+            $upgradeResponses = $this->composerUpdateStrategy->upgrade();
+        } else {
+            $upgradeResponses = $this->releaseGroupStrategy->upgrade();
+        }
+
+        $responses->addCollection($upgradeResponses);
+        if (!$upgradeResponses->hasSuccessfulResponse()) {
             return $responses;
         }
-        $vcsResponses = $this->vcs->save($packageManagerResponses->getSuccessfulReleaseGroups());
+        $vcsResponses = $this->vcs->save($upgradeResponses->getSuccessfulResults());
         $responses->addCollection($vcsResponses);
         $responses->add($this->vcs->checkout());
         if ($vcsResponses->hasResponseWithError()) {

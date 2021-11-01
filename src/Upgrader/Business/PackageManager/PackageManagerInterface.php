@@ -42,6 +42,11 @@ interface PackageManagerInterface
     public function requireDev(PackageTransferCollection $packageCollection): PackageManagerResponse;
 
     /**
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function update(): PackageManagerResponse;
+
+    /**
      * @param string $packageName
      *
      * @return string|null

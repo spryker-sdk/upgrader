@@ -22,6 +22,11 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
     /**
      * @var string
      */
+    protected const UPDATE_COMMAND_NAME = 'composer update';
+
+    /**
+     * @var string
+     */
     protected const NO_SCRIPTS_FLAG = '--no-scripts';
 
     /**
@@ -80,6 +85,22 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
             static::NO_SCRIPTS_FLAG,
             static::WITH_ALL_DEPENDENCIES_FLAG,
             static::DEV_FLAG
+        );
+        $process = $this->runProcess($command);
+
+        return $this->createResponse($process);
+    }
+
+    /**
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function update(): PackageManagerResponse
+    {
+        $command = sprintf(
+            '%s %s %s',
+            static::UPDATE_COMMAND_NAME,
+            static::NO_SCRIPTS_FLAG,
+            static::WITH_ALL_DEPENDENCIES_FLAG
         );
         $process = $this->runProcess($command);
 
