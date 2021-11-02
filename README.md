@@ -34,7 +34,8 @@ export GITHUB_REPOSITORY=<REPOSITORY> # Free string.
 ### Commands
 
 Upgrade command:
-1. Performs check that "there are no uncommitted changes in a project". If they exist, the process will stop.
+1. Performs check that "target branch has been created on the remote repository". If branch exist, the process will stop.
+1. Performs check that "there are no uncommitted changes in a project". If a branch exists, the process will stop.
 2. Upgrades Spryker modules and dependent (3rd party) libraries.
 3. Commits changes in composer.json and composer.lock files.
 4. Pushes changes and creates PR.
@@ -42,6 +43,12 @@ Upgrade command:
 ```
 $HOME/.composer/vendor/bin/upgrader upgrade
 ```
+
+### Upgrade strategy
+
+Upgrader contains two strategies for performs updates:
+1. "Composer update" - default strategy, uses composer update command.
+2. "Release group" - uses Release Group approach for update packages. Add key `--strategy=release-group` for use it.
 
 ### Available exceptions
 
