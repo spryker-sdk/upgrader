@@ -16,7 +16,7 @@ class ComposerLockDiffCallExecutor implements ComposerLockDiffCallExecutorInterf
     /**
      * @var string
      */
-    protected const COMMAND_NAME = 'composer-lock-diff';
+    protected const RUNNER = APPLICATION_VENDOR_DIR . '/bin/composer-lock-diff';
 
     /**
      * @var string
@@ -41,7 +41,7 @@ class ComposerLockDiffCallExecutor implements ComposerLockDiffCallExecutorInterf
      */
     public function getComposerLockDiff(): PackageManagerResponse
     {
-        $command = sprintf('%s %s', static::COMMAND_NAME, static::JSON_OUTPUT_FLAG);
+        $command = sprintf('%s %s', static::RUNNER, static::JSON_OUTPUT_FLAG);
         $process = $this->callExecutor->runProcess($command);
 
         return $this->createResponse($process);

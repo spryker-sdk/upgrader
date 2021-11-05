@@ -32,19 +32,19 @@ class ComposerLockDiffClient implements ComposerLockDiffClientInterface
      */
     public function getComposerLockDiff(): PackageManagerResponseCollection
     {
-        $rawResponse = $this->composerLockDiffCallExecutor->getComposerLockDiff();
+        $response = $this->composerLockDiffCallExecutor->getComposerLockDiff();
 
-        if ($rawResponse->isSuccess()) {
-            $bodyArray = json_decode((string)$rawResponse->getRawOutput(), true);
+        if ($response->isSuccess()) {
+            $bodyArray = json_decode((string)$response->getRawOutput(), true);
             $responseData = new ComposerLockDiffResponse($bodyArray);
 
             return new PackageManagerResponseCollection([
-                $this->createSuccessResponse($rawResponse->getRawOutput(), $responseData->getChanges()->toArray()),
-                $this->createSuccessResponse($rawResponse->getRawOutput(), $responseData->getChangesDev()->toArray()),
+                $this->createSuccessResponse($response->getRawOutput(), $responseData->getChanges()->toArray()),
+                $this->createSuccessResponse($response->getRawOutput(), $responseData->getChangesDev()->toArray()),
             ]);
         }
 
-        return new PackageManagerResponseCollection([$rawResponse]);
+        return new PackageManagerResponseCollection([$response]);
     }
 
     /**

@@ -7,7 +7,7 @@
 
 namespace Upgrader\Business\Upgrader\Strategy;
 
-use Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge;
+use Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridgeInterface;
 use Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridgeInterface;
 use Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection;
 
@@ -19,16 +19,18 @@ class ReleaseGroupStrategy implements UpgradeStrategyInterface
     protected $releaseGroupManager;
 
     /**
-     * @var \Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge
+     * @var \Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridgeInterface
      */
     protected $dataProviderManager;
 
     /**
      * @param \Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridgeInterface $releaseGroupManager
-     * @param \Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridge $dataProviderManager
+     * @param \Upgrader\Business\Upgrader\Bridge\PackageManagementSystemBridgeInterface $dataProviderManager
      */
-    public function __construct(ReleaseGroupTransferBridgeInterface $releaseGroupManager, PackageManagementSystemBridge $dataProviderManager)
-    {
+    public function __construct(
+        ReleaseGroupTransferBridgeInterface $releaseGroupManager,
+        PackageManagementSystemBridgeInterface $dataProviderManager
+    ) {
         $this->releaseGroupManager = $releaseGroupManager;
         $this->dataProviderManager = $dataProviderManager;
     }

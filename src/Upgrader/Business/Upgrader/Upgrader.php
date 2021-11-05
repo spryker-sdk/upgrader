@@ -9,21 +9,15 @@ namespace Upgrader\Business\Upgrader;
 
 use Upgrader\Business\Upgrader\Request\UpgraderRequest;
 use Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection;
-use Upgrader\Business\Upgrader\Strategy\ComposerUpdateStrategy;
-use Upgrader\Business\Upgrader\Strategy\ReleaseGroupStrategy;
+use Upgrader\Business\Upgrader\Strategy\UpdateStrategyGeneratorInterface;
 use Upgrader\Business\VersionControlSystem\VcsInterface;
 
 class Upgrader implements UpgraderInterface
 {
     /**
-     * @var \Upgrader\Business\Upgrader\Strategy\ComposerUpdateStrategy
+     * @var \Upgrader\Business\Upgrader\Strategy\UpdateStrategyGeneratorInterface
      */
-    protected $composerUpdateStrategy;
-
-    /**
-     * @var \Upgrader\Business\Upgrader\Strategy\ReleaseGroupStrategy
-     */
-    protected $releaseGroupStrategy;
+    protected $updateStrategyGenerator;
 
     /**
      * @var \Upgrader\Business\VersionControlSystem\VcsInterface
@@ -31,17 +25,12 @@ class Upgrader implements UpgraderInterface
     protected $vcs;
 
     /**
-     * @param \Upgrader\Business\Upgrader\Strategy\ComposerUpdateStrategy $composerUpdateStrategy
-     * @param \Upgrader\Business\Upgrader\Strategy\ReleaseGroupStrategy $releaseGroupStrategy
+     * @param \Upgrader\Business\Upgrader\Strategy\UpdateStrategyGeneratorInterface $updateStrategyGenerator
      * @param \Upgrader\Business\VersionControlSystem\VcsInterface $vcs
      */
-    public function __construct(
-        ComposerUpdateStrategy $composerUpdateStrategy,
-        ReleaseGroupStrategy $releaseGroupStrategy,
-        VcsInterface $vcs
-    ) {
-        $this->composerUpdateStrategy = $composerUpdateStrategy;
-        $this->releaseGroupStrategy = $releaseGroupStrategy;
+    public function __construct(UpdateStrategyGeneratorInterface $updateStrategyGenerator, VcsInterface $vcs)
+    {
+        $this->updateStrategyGenerator = $updateStrategyGenerator;
         $this->vcs = $vcs;
     }
 
@@ -65,11 +54,7 @@ class Upgrader implements UpgraderInterface
             return $responses;
         }
 
-        if ($request->getStrategyEnum()->isComposerUpdate()) {
-            $upgradeResponses = $this->composerUpdateStrategy->upgrade();
-        } else {
-            $upgradeResponses = $this->releaseGroupStrategy->upgrade();
-        }
+        $upgradeResponses = $this->updateStrategyGenerator->getStrategy($request)->upgrade();
 
         $responses->addCollection($upgradeResponses);
         if (!$upgradeResponses->hasSuccessfulResponse()) {

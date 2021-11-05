@@ -35,6 +35,7 @@ use Upgrader\Business\Upgrader\Bridge\ReleaseGroupTransferBridge;
 use Upgrader\Business\Upgrader\Builder\PackageTransferCollectionBuilder;
 use Upgrader\Business\Upgrader\Strategy\ComposerUpdateStrategy;
 use Upgrader\Business\Upgrader\Strategy\ReleaseGroupStrategy;
+use Upgrader\Business\Upgrader\Strategy\UpdateStrategyGenerator;
 use Upgrader\Business\Upgrader\Upgrader;
 use Upgrader\Business\Upgrader\Validator\Package\AlreadyInstalledValidator;
 use Upgrader\Business\Upgrader\Validator\PackageSoftValidator;
@@ -60,9 +61,19 @@ class UpgraderBusinessFactory
     public function createUpgrader(): Upgrader
     {
         return new Upgrader(
-            $this->createComposerUpdateStrategy(),
-            $this->createReleaseGroupStrategy(),
+            $this->createStrategyGenerator(),
             $this->createGitVcs(),
+        );
+    }
+
+    /**
+     * @return \Upgrader\Business\Upgrader\Strategy\UpdateStrategyGenerator
+     */
+    public function createStrategyGenerator(): UpdateStrategyGenerator
+    {
+        return new UpdateStrategyGenerator(
+            $this->createComposerUpdateStrategy(),
+            $this->createReleaseGroupStrategy()
         );
     }
 

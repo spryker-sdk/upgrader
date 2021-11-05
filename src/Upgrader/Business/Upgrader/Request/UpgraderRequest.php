@@ -7,27 +7,25 @@
 
 namespace Upgrader\Business\Upgrader\Request;
 
-use Upgrader\Business\Upgrader\Enum\UpgradeStrategyEnum;
-
 class UpgraderRequest
 {
     /**
-     * @var \Upgrader\Business\Upgrader\Enum\UpgradeStrategyEnum
+     * @var string|null
      */
     protected $strategy;
 
     /**
-     * @param \Upgrader\Business\Upgrader\Enum\UpgradeStrategyEnum $strategy
+     * @param string|null $strategy
      */
-    public function __construct(UpgradeStrategyEnum $strategy)
+    public function __construct(?string $strategy)
     {
         $this->strategy = $strategy;
     }
 
     /**
-     * @return \Upgrader\Business\Upgrader\Enum\UpgradeStrategyEnum
+     * @return string
      */
-    public function getStrategyEnum(): UpgradeStrategyEnum
+    public function getStrategy(): ?string
     {
         return $this->strategy;
     }

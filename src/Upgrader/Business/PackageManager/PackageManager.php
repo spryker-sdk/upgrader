@@ -86,25 +86,26 @@ class PackageManager implements PackageManagerInterface
      */
     public function update(): PackageManagerResponseCollection
     {
-        $rawResponse = $this->packageManagerClient->update();
+        $responseCollection = new PackageManagerResponseCollection();
+        $response = $this->packageManagerClient->update();
 
-        if ($rawResponse->isSuccess()) {
-            $updateResponseCollection = new PackageManagerResponseCollection();
+        if ($response->isSuccess()) {
             $composerLockDiffResponseCollection = $this->composerLockDiffClient->getComposerLockDiff();
-
             foreach ($composerLockDiffResponseCollection as $diffResponse) {
-                $updateResponse = new PackageManagerResponse(
+                $response = new PackageManagerResponse(
                     true,
-                    $rawResponse->getOutput(),
+                    $response->getOutput(),
                     $diffResponse->getPackageList(),
                 );
-                $updateResponseCollection->add($updateResponse);
+                $responseCollection->add($response);
             }
 
-            return $updateResponseCollection;
+            return $responseCollection;
         }
 
-        return new PackageManagerResponseCollection([$rawResponse]);
+        $responseCollection->add($response);
+
+        return $responseCollection;
     }
 
     /**
