@@ -84,7 +84,7 @@ class UpgradeInstructionsReleaseGroup
 
         $dataTime = DateTime::createFromFormat(
             ReleaseAppConst::RESPONSE_DATA_TIME_FORMAT,
-            $this->bodyArray[static::RELEASED_KEY]
+            $this->bodyArray[static::RELEASED_KEY],
         );
 
         if (!$dataTime) {

@@ -14,12 +14,12 @@ use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 class ReleaseGroupSoftValidator implements ReleaseGroupSoftValidatorInterface
 {
     /**
-     * @var \Upgrader\Business\Upgrader\Validator\ReleaseGroup\ReleaseGroupValidatorInterface[]
+     * @var array<\Upgrader\Business\Upgrader\Validator\ReleaseGroup\ReleaseGroupValidatorInterface>
      */
     protected $validatorList = [];
 
     /**
-     * @param \Upgrader\Business\Upgrader\Validator\ReleaseGroup\ReleaseGroupValidatorInterface[] $validatorList
+     * @param array<\Upgrader\Business\Upgrader\Validator\ReleaseGroup\ReleaseGroupValidatorInterface> $validatorList
      */
     public function __construct(array $validatorList)
     {

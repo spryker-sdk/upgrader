@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e5199dc025895e069e2bdcb1ef7025b7",
+    "content-hash": "d5b91c8ba22919eabc57e3fcec92fcfd",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -71,6 +71,42 @@
                 }
             ],
             "time": "2020-10-02T12:38:20+00:00"
+        },
+        {
+            "name": "davidrjonas/composer-lock-diff",
+            "version": "1.6.1",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:davidrjonas/composer-lock-diff.git",
+                "reference": "350ebcd342a6d91f9ce364d6625ef3eeb58a0ec1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/davidrjonas/composer-lock-diff/zipball/350ebcd342a6d91f9ce364d6625ef3eeb58a0ec1",
+                "reference": "350ebcd342a6d91f9ce364d6625ef3eeb58a0ec1",
+                "shasum": ""
+            },
+            "bin": [
+                "composer-lock-diff"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Jonas",
+                    "homepage": "https://github.com/davidrjonas"
+                }
+            ],
+            "description": "See what has changed after a composer update.",
+            "time": "2021-08-31T01:01:03+00:00"
         },
         {
             "name": "ergebnis/json-printer",

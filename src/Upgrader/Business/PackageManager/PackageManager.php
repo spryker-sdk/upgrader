@@ -7,23 +7,34 @@
 
 namespace Upgrader\Business\PackageManager;
 
-use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
+use Upgrader\Business\PackageManager\Client\ComposerClientInterface;
+use Upgrader\Business\PackageManager\Client\ComposerLockDiffClientInterface;
+use Upgrader\Business\PackageManager\Response\Collection\PackageManagerResponseCollection;
 use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
 class PackageManager implements PackageManagerInterface
 {
     /**
-     * @var \Upgrader\Business\PackageManager\Client\PackageManagerClientInterface
+     * @var \Upgrader\Business\PackageManager\Client\ComposerClientInterface
      */
     protected $packageManagerClient;
 
     /**
-     * @param \Upgrader\Business\PackageManager\Client\PackageManagerClientInterface $packageManagerClient
+     * @var \Upgrader\Business\PackageManager\Client\ComposerLockDiffClientInterface
      */
-    public function __construct(PackageManagerClientInterface $packageManagerClient)
-    {
+    protected $composerLockDiffClient;
+
+    /**
+     * @param \Upgrader\Business\PackageManager\Client\ComposerClientInterface $packageManagerClient
+     * @param \Upgrader\Business\PackageManager\Client\ComposerLockDiffClientInterface $composerLockDiffClient
+     */
+    public function __construct(
+        ComposerClientInterface $packageManagerClient,
+        ComposerLockDiffClientInterface $composerLockDiffClient
+    ) {
         $this->packageManagerClient = $packageManagerClient;
+        $this->composerLockDiffClient = $composerLockDiffClient;
     }
 
     /**
@@ -68,6 +79,33 @@ class PackageManager implements PackageManagerInterface
     public function requireDev(PackageTransferCollection $packageCollection): PackageManagerResponse
     {
         return $this->packageManagerClient->requireDev($packageCollection);
+    }
+
+    /**
+     * @return \Upgrader\Business\PackageManager\Response\Collection\PackageManagerResponseCollection
+     */
+    public function update(): PackageManagerResponseCollection
+    {
+        $responseCollection = new PackageManagerResponseCollection();
+        $response = $this->packageManagerClient->update();
+
+        if ($response->isSuccess()) {
+            $composerLockDiffResponseCollection = $this->composerLockDiffClient->getComposerLockDiff();
+            foreach ($composerLockDiffResponseCollection as $diffResponse) {
+                $response = new PackageManagerResponse(
+                    true,
+                    $response->getOutput(),
+                    $diffResponse->getPackageList(),
+                );
+                $responseCollection->add($response);
+            }
+
+            return $responseCollection;
+        }
+
+        $responseCollection->add($response);
+
+        return $responseCollection;
     }
 
     /**

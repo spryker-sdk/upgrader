@@ -270,7 +270,7 @@ class GitVcs implements VcsInterface
             return $collection;
         }
         $response = $this->commitChanges(
-            sprintf('Installed: %s %s', PHP_EOL, implode(PHP_EOL, $releaseGroups))
+            sprintf('Installed: %s %s', PHP_EOL, implode(PHP_EOL, $releaseGroups)),
         );
         $collection->add($response);
         if (!$response->isSuccess()) {
@@ -341,7 +341,7 @@ class GitVcs implements VcsInterface
             'https://%s@github.com/%s/%s.git',
             $this->config->getGithubAccessToken(),
             $this->config->getGithubOrganization(),
-            $this->config->getGithubRepository()
+            $this->config->getGithubRepository(),
         );
     }
 
@@ -362,7 +362,7 @@ Auto created via Upgrader tool.
 
 #### Overview
 
-**Release Groups upgraded:**
+**Packages upgraded:**
 $releaseGroupList
 
 TXT;

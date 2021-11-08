@@ -7,6 +7,7 @@
 
 namespace Upgrader\Business;
 
+use Upgrader\Business\Upgrader\Request\UpgraderRequest;
 use Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection;
 
 class UpgraderFacade implements UpgraderFacadeInterface
@@ -21,11 +22,13 @@ class UpgraderFacade implements UpgraderFacadeInterface
      *
      * @api
      *
+     * @param \Upgrader\Business\Upgrader\Request\UpgraderRequest $request
+     *
      * @return \Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection
      */
-    public function upgrade(): UpgraderResponseCollection
+    public function upgrade(UpgraderRequest $request): UpgraderResponseCollection
     {
-        return $this->getFactory()->createUpgrader()->upgrade();
+        return $this->getFactory()->createUpgrader()->upgrade($request);
     }
 
     /**

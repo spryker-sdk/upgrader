@@ -43,4 +43,12 @@ class PackageManagerResponse extends AbstractUpgraderResponse
     {
         return $this->packageList;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getRawOutput(): ?string
+    {
+        return $this->output;
+    }
 }

@@ -73,7 +73,7 @@ abstract class UpgraderCollection implements Countable, IteratorAggregate, Array
             'Elements must be of type %s but %s got (%s)',
             $this->getClassName(),
             gettype($invalidElementData),
-            var_export($invalidElementData, true)
+            var_export($invalidElementData, true),
         );
 
         throw new UpgraderException($errorMessage);

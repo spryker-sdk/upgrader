@@ -6,6 +6,7 @@
     "require": {
         "php": ">=7.3",
         "ext-json": "*",
+        "davidrjonas/composer-lock-diff": "^1.0",
         "ergebnis/json-printer": "^3.1",
         "guzzlehttp/guzzle": "^7.0",
         "http-interop/http-factory-guzzle": "^1.0",

@@ -1,0 +1,4 @@
+<?php
+
+define('APPLICATION_ROOT_DIR', __DIR__);
+define('APPLICATION_VENDOR_DIR', APPLICATION_ROOT_DIR . '/vendor');
