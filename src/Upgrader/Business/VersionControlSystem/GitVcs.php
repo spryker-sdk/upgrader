@@ -143,7 +143,7 @@ class GitVcs implements VcsInterface
         $collection = new VcsResponseCollection();
         $collection->add($this->deleteLocalBranch($this->getHeadBranch()));
         $collection->add($this->deleteRemoteBranch($this->getHeadBranch()));
-        if ($this->hasUncommitedChanges()) {
+        if ($this->hasUncommittedChanges()) {
             $collection->addCollection($this->revertUncommittedChanges());
         }
 
@@ -193,7 +193,7 @@ class GitVcs implements VcsInterface
      */
     public function checkUncommittedChanges(): VcsResponse
     {
-        if ($this->hasUncommitedChanges()) {
+        if ($this->hasUncommittedChanges()) {
             return $this->createResponse(false, 'You have to fix uncommitted changes');
         }
 
@@ -201,11 +201,34 @@ class GitVcs implements VcsInterface
     }
 
     /**
+     * @return \Upgrader\Business\VersionControlSystem\Response\VcsResponse
+     */
+    public function checkTargetBranchExists(): VcsResponse
+    {
+        if ($this->targetBranchExists()) {
+            return $this->createResponse(false, 'You have an unprocessed PR from a previous update. Upgrader can\'t provide a new update until you process these changes');
+        }
+
+        return $this->createResponse(true, "You don't have an unprocessed PR from a previous update");
+    }
+
+    /**
      * @return bool
      */
-    public function hasUncommitedChanges(): bool
+    public function hasUncommittedChanges(): bool
     {
         $command = ['git', 'status', '--porcelain'];
+        $process = $this->runProcess($command);
+
+        return strlen($process->getOutput()) > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function targetBranchExists(): bool
+    {
+        $command = ['git', 'ls-remote', '--heads', $this->getRemote(), $this->getHeadBranch()];
         $process = $this->runProcess($command);
 
         return strlen($process->getOutput()) > 0;
