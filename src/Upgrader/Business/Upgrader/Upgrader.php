@@ -9,11 +9,17 @@ namespace Upgrader\Business\Upgrader;
 
 use Upgrader\Business\Upgrader\Request\UpgraderRequest;
 use Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection;
+use Upgrader\Business\Upgrader\Response\UpgraderResponse;
 use Upgrader\Business\Upgrader\Strategy\UpdateStrategyGeneratorInterface;
 use Upgrader\Business\VersionControlSystem\VcsInterface;
 
 class Upgrader implements UpgraderInterface
 {
+    /**
+     * @var string
+     */
+    public const NOTHING_TO_UPDATE_OUTPUT_MESSAGE = 'The branch is up to date. No further action is required.';
+
     /**
      * @var \Upgrader\Business\Upgrader\Strategy\UpdateStrategyGeneratorInterface
      */
@@ -55,11 +61,17 @@ class Upgrader implements UpgraderInterface
         }
 
         $upgradeResponses = $this->updateStrategyGenerator->getStrategy($request)->upgrade();
+        if ($upgradeResponses->isEmpty()) {
+            $response = new UpgraderResponse(true, self::NOTHING_TO_UPDATE_OUTPUT_MESSAGE);
+            $responses->add($response);
 
+            return $responses;
+        }
         $responses->addCollection($upgradeResponses);
         if (!$upgradeResponses->hasSuccessfulResponse()) {
             return $responses;
         }
+
         $vcsResponses = $this->vcs->save($upgradeResponses->getSuccessfulResults());
         $responses->addCollection($vcsResponses);
         $responses->add($this->vcs->checkout());

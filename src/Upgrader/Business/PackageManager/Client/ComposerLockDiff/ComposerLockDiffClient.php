@@ -38,6 +38,10 @@ class ComposerLockDiffClient implements ComposerLockDiffClientInterface
             $bodyArray = json_decode((string)$response->getRawOutput(), true);
             $responseData = new ComposerLockDiffResponse($bodyArray);
 
+            if ($responseData->isEmpty()) {
+                return new PackageManagerResponseCollection();
+            }
+
             return new PackageManagerResponseCollection([
                 $this->createSuccessResponse($response->getRawOutput(), $responseData->getChanges()->toArray()),
                 $this->createSuccessResponse($response->getRawOutput(), $responseData->getChangesDev()->toArray()),
