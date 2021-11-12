@@ -18,7 +18,7 @@ class Upgrader implements UpgraderInterface
     /**
      * @var string
      */
-    public const NOTHING_TO_UPDATE_OUTPUT_MESSAGE = 'The branch is up to date. No further action is required.';
+    protected const NOTHING_TO_UPDATE_OUTPUT_MESSAGE = 'The branch is up to date. No further action is required.';
 
     /**
      * @var \Upgrader\Business\Upgrader\Strategy\UpdateStrategyGeneratorInterface
