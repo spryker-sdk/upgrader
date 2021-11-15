@@ -17,11 +17,6 @@ use Upgrader\Business\VersionControlSystem\VcsInterface;
 class Upgrader implements UpgraderInterface
 {
     /**
-     * @var string
-     */
-    protected const NOTHING_TO_UPDATE_OUTPUT_MESSAGE = 'The branch is up to date. No further action is required.';
-
-    /**
      * @var \Upgrader\Business\Upgrader\Strategy\UpdateStrategyGeneratorInterface
      */
     protected $updateStrategyGenerator;
@@ -98,7 +93,7 @@ class Upgrader implements UpgraderInterface
 
         $upgradeResponses = $this->updateStrategyGenerator->getStrategy($request)->upgrade();
         if ($upgradeResponses->isEmpty()) {
-            $response = new UpgraderResponse(true, self::NOTHING_TO_UPDATE_OUTPUT_MESSAGE);
+            $response = new UpgraderResponse(true, 'The branch is up to date. No further action is required.');
             $responses->add($response);
 
             throw new UpgraderFlowException($responses);
