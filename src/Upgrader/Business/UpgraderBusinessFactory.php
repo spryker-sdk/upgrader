@@ -73,7 +73,7 @@ class UpgraderBusinessFactory
     {
         return new UpdateStrategyGenerator(
             $this->createComposerUpdateStrategy(),
-            $this->createReleaseGroupStrategy()
+            $this->createReleaseGroupStrategy(),
         );
     }
 

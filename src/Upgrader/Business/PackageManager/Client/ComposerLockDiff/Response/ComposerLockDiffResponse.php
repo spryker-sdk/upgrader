@@ -49,6 +49,14 @@ class ComposerLockDiffResponse
     }
 
     /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return !($this->getChanges()->count() + $this->getChangesDev()->count());
+    }
+
+    /**
      * @return \Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection
      */
     public function getChanges(): PackageTransferCollection

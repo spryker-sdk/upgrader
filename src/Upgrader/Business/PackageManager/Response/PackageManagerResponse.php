@@ -7,9 +7,9 @@
 
 namespace Upgrader\Business\PackageManager\Response;
 
-use Upgrader\Business\Upgrader\Response\AbstractUpgraderResponse;
+use Upgrader\Business\Upgrader\Response\UpgraderResponse;
 
-class PackageManagerResponse extends AbstractUpgraderResponse
+class PackageManagerResponse extends UpgraderResponse
 {
     /**
      * @var array

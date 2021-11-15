@@ -7,13 +7,20 @@
 
 namespace Upgrader\Business\Upgrader;
 
+use Upgrader\Business\Exception\UpgraderFlowException;
 use Upgrader\Business\Upgrader\Request\UpgraderRequest;
 use Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection;
+use Upgrader\Business\Upgrader\Response\UpgraderResponse;
 use Upgrader\Business\Upgrader\Strategy\UpdateStrategyGeneratorInterface;
 use Upgrader\Business\VersionControlSystem\VcsInterface;
 
 class Upgrader implements UpgraderInterface
 {
+    /**
+     * @var string
+     */
+    protected const NOTHING_TO_UPDATE_OUTPUT_MESSAGE = 'The branch is up to date. No further action is required.';
+
     /**
      * @var \Upgrader\Business\Upgrader\Strategy\UpdateStrategyGeneratorInterface
      */
@@ -43,23 +50,76 @@ class Upgrader implements UpgraderInterface
     {
         $responses = new UpgraderResponseCollection();
 
+        try {
+            $responses->addCollection($this->check());
+            $upgradeResponses = $this->performUpdate($request);
+            $responses->addCollection($upgradeResponses);
+            $responses->addCollection($this->storeResults($upgradeResponses));
+        } catch (UpgraderFlowException $exception) {
+            $responses->addCollection($exception->getResponses());
+        }
+
+        return $responses;
+    }
+
+    /**
+     * @throws \Upgrader\Business\Exception\UpgraderFlowException
+     *
+     * @return \Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection
+     */
+    protected function check(): UpgraderResponseCollection
+    {
+        $responses = new UpgraderResponseCollection();
+
         $checkResponse = $this->vcs->checkTargetBranchExists();
         $responses->add($checkResponse);
         if (!$checkResponse->isSuccess()) {
-            return $responses;
+            throw new UpgraderFlowException($responses);
         }
         $checkResponse = $this->vcs->checkUncommittedChanges();
         $responses->add($checkResponse);
         if (!$checkResponse->isSuccess()) {
-            return $responses;
+            throw new UpgraderFlowException($responses);
         }
+
+        return $responses;
+    }
+
+    /**
+     * @param \Upgrader\Business\Upgrader\Request\UpgraderRequest $request
+     *
+     * @throws \Upgrader\Business\Exception\UpgraderFlowException
+     *
+     * @return \Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection
+     */
+    protected function performUpdate(UpgraderRequest $request): UpgraderResponseCollection
+    {
+        $responses = new UpgraderResponseCollection();
 
         $upgradeResponses = $this->updateStrategyGenerator->getStrategy($request)->upgrade();
+        if ($upgradeResponses->isEmpty()) {
+            $response = new UpgraderResponse(true, self::NOTHING_TO_UPDATE_OUTPUT_MESSAGE);
+            $responses->add($response);
 
+            throw new UpgraderFlowException($responses);
+        }
         $responses->addCollection($upgradeResponses);
         if (!$upgradeResponses->hasSuccessfulResponse()) {
-            return $responses;
+            throw new UpgraderFlowException($responses);
         }
+
+        return $responses;
+    }
+
+    /**
+     * @param \Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection $upgradeResponses
+     *
+     * @return \Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection
+     */
+    protected function storeResults(UpgraderResponseCollection $upgradeResponses): UpgraderResponseCollection
+    {
+        $responses = new UpgraderResponseCollection();
+
         $vcsResponses = $this->vcs->save($upgradeResponses->getSuccessfulResults());
         $responses->addCollection($vcsResponses);
         $responses->add($this->vcs->checkout());

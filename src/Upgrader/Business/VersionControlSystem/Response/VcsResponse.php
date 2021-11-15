@@ -7,9 +7,9 @@
 
 namespace Upgrader\Business\VersionControlSystem\Response;
 
-use Upgrader\Business\Upgrader\Response\AbstractUpgraderResponse;
+use Upgrader\Business\Upgrader\Response\UpgraderResponse;
 
-class VcsResponse extends AbstractUpgraderResponse
+class VcsResponse extends UpgraderResponse
 {
     /**
      * @return string|null

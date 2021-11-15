@@ -23,7 +23,7 @@ class UpgraderRequest
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getStrategy(): ?string
     {
