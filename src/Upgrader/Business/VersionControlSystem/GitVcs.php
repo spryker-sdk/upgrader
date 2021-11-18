@@ -38,7 +38,7 @@ class GitVcs implements VcsInterface
     /**
      * @var array<string>
      */
-    protected $targetFiles = ['composer.lock', 'composer.json'];
+    protected $targetFiles = ['composer.lock', 'composer.json', 'integrator.lock'];
 
     /**
      * @param \Upgrader\UpgraderConfig $config
