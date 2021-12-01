@@ -25,4 +25,9 @@ interface ComposerCallExecutorInterface
      * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
     public function requireDev(PackageTransferCollection $packageCollection): PackageManagerResponse;
+
+    /**
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function update(): PackageManagerResponse;
 }

@@ -67,7 +67,7 @@ class UpgradeAnalysisModuleVersion
     {
         $dataTime = DateTime::createFromFormat(
             ReleaseAppConst::RESPONSE_DATA_TIME_FORMAT,
-            $this->bodyArray[static::CREATED_KEY]
+            $this->bodyArray[static::CREATED_KEY],
         );
 
         if (!$dataTime) {

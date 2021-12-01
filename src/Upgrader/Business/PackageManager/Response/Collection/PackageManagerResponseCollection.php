@@ -19,32 +19,4 @@ class PackageManagerResponseCollection extends UpgraderCollection
     {
         return PackageManagerResponse::class;
     }
-
-    /**
-     * @return bool
-     */
-    public function hasSuccessfulResponse(): bool
-    {
-        foreach ($this->toArray() as $response) {
-            if ($response->isSuccess()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSuccessfulReleaseGroups(): array
-    {
-        $releaseGroups = array_map(function ($response) {
-            if ($response->isSuccess()) {
-                return implode(' ', $response->getPackageList());
-            }
-        }, $this->toArray());
-
-        return array_filter($releaseGroups);
-    }
 }

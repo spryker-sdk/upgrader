@@ -9,11 +9,11 @@ namespace Upgrader\Business\PackageManager\Client\Composer;
 
 use Upgrader\Business\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface;
 use Upgrader\Business\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface;
-use Upgrader\Business\PackageManager\Client\PackageManagerClientInterface;
+use Upgrader\Business\PackageManager\Client\ComposerClientInterface;
 use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
-class ComposerClient implements PackageManagerClientInterface
+class ComposerClient implements ComposerClientInterface
 {
     /**
      * @var string
@@ -104,6 +104,14 @@ class ComposerClient implements PackageManagerClientInterface
     public function requireDev(PackageTransferCollection $packageCollection): PackageManagerResponse
     {
         return $this->composerCallExecutor->requireDev($packageCollection);
+    }
+
+    /**
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function update(): PackageManagerResponse
+    {
+        return $this->composerCallExecutor->update();
     }
 
     /**

@@ -8,7 +8,9 @@
 namespace Upgrader\Communication\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Upgrader\Business\Upgrader\Request\UpgraderRequest;
 use Upgrader\Business\Upgrader\Response\UpgraderResponseInterface;
 
 class UpgradeCommand extends AbstractCommand
@@ -24,13 +26,34 @@ class UpgradeCommand extends AbstractCommand
     protected const DESCRIPTION = 'Upgrade Spryker packages.';
 
     /**
+     * @var string
+     */
+    protected const OPTION_STRATEGY = 'strategy';
+
+    /**
+     * @var string
+     */
+    protected const OPTION_STRATEGY_SHORT = 's';
+
+    /**
+     * @var string
+     */
+    protected const OPTION_STRATEGY_DESCRIPTION = 'Chose update strategy (composer-update or release-group-approach)';
+
+    /**
      * @return void
      */
     protected function configure(): void
     {
         $this
             ->setName(self::NAME)
-            ->setDescription(self::DESCRIPTION);
+            ->setDescription(self::DESCRIPTION)
+            ->addOption(
+                static::OPTION_STRATEGY,
+                static::OPTION_STRATEGY_SHORT,
+                InputOption::VALUE_OPTIONAL,
+                static::OPTION_STRATEGY_DESCRIPTION,
+            );
     }
 
     /**
@@ -41,7 +64,8 @@ class UpgradeCommand extends AbstractCommand
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $upgraderResponseCollection = $this->getFacade()->upgrade();
+        $request = new UpgraderRequest($input->getOption(static::OPTION_STRATEGY));
+        $upgraderResponseCollection = $this->getFacade()->upgrade($request);
 
         foreach ($upgraderResponseCollection->toArray() as $response) {
             $this->processOutput($response, $output);

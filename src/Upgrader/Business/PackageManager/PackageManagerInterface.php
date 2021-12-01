@@ -7,6 +7,7 @@
 
 namespace Upgrader\Business\PackageManager;
 
+use Upgrader\Business\PackageManager\Response\Collection\PackageManagerResponseCollection;
 use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
@@ -40,6 +41,11 @@ interface PackageManagerInterface
      * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
     public function requireDev(PackageTransferCollection $packageCollection): PackageManagerResponse;
+
+    /**
+     * @return \Upgrader\Business\PackageManager\Response\Collection\PackageManagerResponseCollection
+     */
+    public function update(): PackageManagerResponseCollection;
 
     /**
      * @param string $packageName

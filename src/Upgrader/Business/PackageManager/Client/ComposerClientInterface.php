@@ -10,7 +10,7 @@ namespace Upgrader\Business\PackageManager\Client;
 use Upgrader\Business\PackageManager\Response\PackageManagerResponse;
 use Upgrader\Business\PackageManager\Transfer\Collection\PackageTransferCollection;
 
-interface PackageManagerClientInterface
+interface ComposerClientInterface
 {
     /**
      * @return string
@@ -40,6 +40,11 @@ interface PackageManagerClientInterface
      * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
      */
     public function requireDev(PackageTransferCollection $packageCollection): PackageManagerResponse;
+
+    /**
+     * @return \Upgrader\Business\PackageManager\Response\PackageManagerResponse
+     */
+    public function update(): PackageManagerResponse;
 
     /**
      * @param string $packageName

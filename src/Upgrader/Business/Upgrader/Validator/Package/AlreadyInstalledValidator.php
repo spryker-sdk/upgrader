@@ -40,7 +40,7 @@ class AlreadyInstalledValidator implements PackageValidatorInterface
             $message = sprintf(
                 'Package %s:%s already installed.',
                 $package->getName(),
-                $package->getVersion()
+                $package->getVersion(),
             );
 
             throw new UpgraderException($message);

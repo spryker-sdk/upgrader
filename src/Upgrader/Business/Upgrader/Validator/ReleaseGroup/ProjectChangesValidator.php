@@ -25,7 +25,7 @@ class ProjectChangesValidator implements ReleaseGroupValidatorInterface
             $message = sprintf(
                 '%s %s',
                 'Release group contains changes on project level. Name:',
-                $releaseGroup->getName()
+                $releaseGroup->getName(),
             );
 
             throw new UpgraderException($message);

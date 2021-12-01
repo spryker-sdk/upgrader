@@ -24,7 +24,7 @@ class UpgraderBootstrap extends Application
     }
 
     /**
-     * @return \Symfony\Component\Console\Command\Command[]
+     * @return array<\Symfony\Component\Console\Command\Command>
      */
     protected function getDefaultCommands(): array
     {
@@ -38,7 +38,7 @@ class UpgraderBootstrap extends Application
     }
 
     /**
-     * @return \Symfony\Component\Console\Command\Command[]
+     * @return array<\Symfony\Component\Console\Command\Command>
      */
     protected function getCommands(): array
     {

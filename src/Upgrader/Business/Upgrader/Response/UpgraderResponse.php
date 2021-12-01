@@ -7,7 +7,7 @@
 
 namespace Upgrader\Business\Upgrader\Response;
 
-abstract class AbstractUpgraderResponse implements UpgraderResponseInterface
+class UpgraderResponse implements UpgraderResponseInterface
 {
     /**
      * @var int
@@ -35,6 +35,14 @@ abstract class AbstractUpgraderResponse implements UpgraderResponseInterface
     public function getExitCode(): int
     {
         return $this->exitCode;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOutput(): ?string
+    {
+        return 'Upgrader: ' . $this->output;
     }
 
     /**

@@ -5,17 +5,14 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Business\Upgrader;
+namespace Upgrader\Business\Upgrader\Strategy;
 
-use Upgrader\Business\Upgrader\Request\UpgraderRequest;
 use Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection;
 
-interface UpgraderInterface
+interface UpgradeStrategyInterface
 {
     /**
-     * @param \Upgrader\Business\Upgrader\Request\UpgraderRequest $request
-     *
      * @return \Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection
      */
-    public function upgrade(UpgraderRequest $request): UpgraderResponseCollection;
+    public function upgrade(): UpgraderResponseCollection;
 }

@@ -25,7 +25,7 @@ class UpgraderResponseCollection extends UpgraderCollection
      */
     public function isSuccess(): bool
     {
-        foreach ($this->toArray() as $result) {
+        foreach ($this as $result) {
             if (!$result->isSuccess()) {
                 return false;
             }
@@ -40,5 +40,33 @@ class UpgraderResponseCollection extends UpgraderCollection
     protected function getClassName(): string
     {
         return UpgraderResponseInterface::class;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSuccessfulResponse(): bool
+    {
+        foreach ($this as $response) {
+            if ($response->isSuccess()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSuccessfulResults(): array
+    {
+        $releaseGroups = array_map(function ($response) {
+            if ($response->isSuccess()) {
+                return implode(' ', $response->getPackageList());
+            }
+        }, $this->toArray());
+
+        return array_filter($releaseGroups);
     }
 }

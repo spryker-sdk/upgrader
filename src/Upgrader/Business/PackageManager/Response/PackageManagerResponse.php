@@ -7,9 +7,9 @@
 
 namespace Upgrader\Business\PackageManager\Response;
 
-use Upgrader\Business\Upgrader\Response\AbstractUpgraderResponse;
+use Upgrader\Business\Upgrader\Response\UpgraderResponse;
 
-class PackageManagerResponse extends AbstractUpgraderResponse
+class PackageManagerResponse extends UpgraderResponse
 {
     /**
      * @var array
@@ -42,5 +42,13 @@ class PackageManagerResponse extends AbstractUpgraderResponse
     public function getPackageList(): array
     {
         return $this->packageList;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRawOutput(): ?string
+    {
+        return $this->output;
     }
 }

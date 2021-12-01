@@ -7,6 +7,7 @@
 
 namespace Upgrader\Business;
 
+use Upgrader\Business\Upgrader\Request\UpgraderRequest;
 use Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection;
 
 interface UpgraderFacadeInterface
@@ -19,7 +20,9 @@ interface UpgraderFacadeInterface
      *
      * @api
      *
+     * @param \Upgrader\Business\Upgrader\Request\UpgraderRequest $request
+     *
      * @return \Upgrader\Business\Upgrader\Response\Collection\UpgraderResponseCollection
      */
-    public function upgrade(): UpgraderResponseCollection;
+    public function upgrade(UpgraderRequest $request): UpgraderResponseCollection;
 }

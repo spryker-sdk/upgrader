@@ -14,12 +14,12 @@ use Upgrader\Business\PackageManager\Transfer\PackageTransfer;
 class PackageSoftValidator implements PackageSoftValidatorInterface
 {
     /**
-     * @var \Upgrader\Business\Upgrader\Validator\Package\PackageValidatorInterface[]
+     * @var array<\Upgrader\Business\Upgrader\Validator\Package\PackageValidatorInterface>
      */
     protected $validatorList = [];
 
     /**
-     * @param \Upgrader\Business\Upgrader\Validator\Package\PackageValidatorInterface[] $validatorList
+     * @param array<\Upgrader\Business\Upgrader\Validator\Package\PackageValidatorInterface> $validatorList
      */
     public function __construct(array $validatorList)
     {
