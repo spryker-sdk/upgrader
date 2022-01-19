@@ -21,7 +21,7 @@ use SprykerSdk\SdkContracts\Violation\ViolationReportInterface;
 
 class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, ExecutableCommandInterface
 {
-    protected ?Report $report = null;
+    protected static ?Report $report = null;
 
     /**
      * @var \CodeCompliance\Application\Service\CodeComplianceServiceInterface
@@ -102,7 +102,7 @@ class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, 
      */
     public function getViolationReport(): ?ViolationReportInterface
     {
-        return $this->report;
+        return static::$report;
     }
 
     /**
@@ -122,11 +122,11 @@ class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, 
 
         $codebaseSourceDto = $this->codebaseService->parseSource($codebaseRequestDto);
 
-        $this->report = $this->codeComplianceService->analyze($codebaseSourceDto);
+        static::$report = $this->codeComplianceService->analyze($codebaseSourceDto);
 
         $context->setExitCode(ContextInterface::SUCCESS_EXIT_CODE);
 
-        if ($this->report->hasError()) {
+        if (static::$report->hasError()) {
             $context->setExitCode(ContextInterface::FAILURE_EXIT_CODE);
         }
 
