@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "893f05186b2d4c4cb82f330e331f82ca",
+    "content-hash": "94b05eed08cc798378c8aa4240c22de5",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1828,24 +1828,14 @@
                     "SprykerSdk\\SdkContracts\\": "src/"
                 }
             },
-            "scripts": {
-                "cs-check": [
-                    "phpcs --colors -p -s --extensions=php --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/"
-                ],
-                "cs-fix": [
-                    "phpcbf --colors -p --extensions=php --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/"
-                ],
-                "stan": [
-                    "phpstan analyze -l 8 src/"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "proprietary"
             ],
             "description": "Contracts to extend the Spryker SDK",
             "support": {
-                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/master",
-                "issues": "https://github.com/spryker-sdk/sdk-contracts/issues"
+                "issues": "https://github.com/spryker-sdk/sdk-contracts/issues",
+                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/0.1.0"
             },
             "time": "2021-12-28T08:09:48+00:00"
         },

@@ -28,12 +28,6 @@
     "require-dev": {
         "phpunit/phpunit": "^9.5"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:spryker-sdk/sdk-contracts.git"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "Core\\": "src/Core/",
