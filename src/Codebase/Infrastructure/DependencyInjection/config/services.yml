@@ -1,0 +1,50 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+# Codebase
+    Codebase\Application\:
+        resource: '../../../../Codebase/Application/*'
+
+    Codebase\Infrastructure\:
+        resource: '../../../../Codebase/Infrastructure/*'
+
+    Codebase\Infrastructure\Service\CodebaseService: ~
+    Codebase\Application\Service\CodebaseServiceInterface: '@Codebase\Infrastructure\Service\CodebaseService'
+
+    Codebase\Infrastructure\Dependency\Parser\CodebaseToParserBridge: ~
+    Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface: '@Codebase\Infrastructure\Dependency\Parser\CodebaseToParserBridge'
+
+    Codebase\Infrastructure\Dependency\Finder\CodebaseToFinderBridge: ~
+    Codebase\Infrastructure\Dependency\Finder\CodebaseToFinderInterface: '@Codebase\Infrastructure\Dependency\Finder\CodebaseToFinderBridge'
+
+    php.parser:
+        class: Codebase\Infrastructure\SourceParser\Parser\PhpParser
+
+    transfer_schema.parser:
+        class: Codebase\Infrastructure\SourceParser\Parser\TransferSchemaParser
+
+    database_schema.parser:
+        class: Codebase\Infrastructure\SourceParser\Parser\DatabaseSchemaParser
+
+    codebase.service:
+        class: Codebase\Infrastructure\Service\CodebaseService
+
+    Codebase\Infrastructure\SourceParser\SourceParser:
+        class: Codebase\Infrastructure\SourceParser\SourceParser
+        arguments:
+            - '@Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface'
+            - '@Codebase\Infrastructure\SourceFinder\SourceFinder'
+            - {
+                param1: '@php.parser',
+                param2: '@transfer_schema.parser',
+                param3: '@database_schema.parser'
+            }
+
+# Third-party
+    PhpParser\ParserFactory: ~
+    Symfony\Component\Finder\Finder: ~
+    Symfony\Component\Filesystem\Filesystem: ~
+    Symfony\Component\DependencyInjection\Container: ~
