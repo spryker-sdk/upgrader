@@ -1,49 +1,68 @@
 {
     "name": "spryker-sdk/upgrader",
     "type": "library",
-    "description": "Upgrade spryker vendor.",
+    "description": "Code evaluator and upgrader tool",
     "license": "proprietary",
     "require": {
-        "php": ">=7.3",
+        "php": ">=8.0",
         "ext-json": "*",
-        "davidrjonas/composer-lock-diff": "^1.0",
+        "ext-simplexml": "*",
+        "davidrjonas/composer-lock-diff": "^1.6",
         "ergebnis/json-printer": "^3.1",
-        "guzzlehttp/guzzle": "^7.0",
-        "http-interop/http-factory-guzzle": "^1.0",
-        "knplabs/github-api": "^3.0",
+        "guzzlehttp/guzzle": "^7.3",
+        "knplabs/github-api": "^3.4",
+        "nikic/php-parser": "^4.13",
+        "phpstan/phpstan": "^1.2",
+        "spryker-sdk/sdk-contracts": "dev-master",
+        "spryker/code-sniffer": "^0.17.3",
+        "symfony/config": "^5.0",
         "symfony/console": "^5.0",
-        "symfony/options-resolver": "^5.0",
-        "symfony/process": "^5.0"
+        "symfony/dependency-injection": "^5.0",
+        "symfony/filesystem": "^5.3",
+        "symfony/finder": "^5.3",
+        "symfony/framework-bundle": "5.3.*",
+        "symfony/http-kernel": "^5.0",
+        "symfony/process": "^5.0",
+        "symfony/yaml": "^5.3"
     },
     "require-dev": {
-        "codeception/codeception": "^4.1",
-        "codeception/module-asserts": "^1.1",
-        "codeception/module-phpbrowser": "^1.0.0",
-        "spryker/code-sniffer": "^0.16.0",
-        "phpstan/phpstan": "^0.12.0"
+        "phpunit/phpunit": "^9.5"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:spryker-sdk/sdk-contracts.git"
+        }
+    ],
     "autoload": {
         "psr-4": {
+            "Core\\": "src/Core/",
+            "Codebase\\": "src/Codebase/",
+            "CodeCompliance\\": "src/CodeCompliance/",
+            "Evaluate\\": "src/Evaluate/",
+            "Upgrade\\": "src/Upgrade/",
             "Upgrader\\": "src/Upgrader/"
         }
     },
-    "bin": [
-        "bin/upgrader"
-    ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
+    "autoload-dev": {
+        "psr-4": {
+            "CodeComplianceTest\\": "tests/CodeComplianceTest/",
+            "CodebaseTest\\": "tests/CodebaseTest/",
+            "CoreTest\\": "tests/Core/",
+            "TestProject\\": "tests/data/Evaluate/Project/",
+            "TestCore\\": "tests/data/Evaluate/Core/",
+            "UpgradeData\\": "tests/data/Upgrade/"
         }
     },
     "config": {
         "sort-packages": true
     },
     "scripts": {
-        "cs-check": "phpcs --colors -p -s --extensions=php --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml --ignore=/tests/_data/,/_support/,tests/ src/",
-        "cs-fix": "phpcbf --colors -p --extensions=php --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml --ignore=/tests/_data/,/_support/,tests/ src/",
-        "stan": "phpstan analyze",
-        "test": "codecept build && codecept run"
-    }
+        "cs-check": "phpcs --colors -p -s --extensions=php --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml --ignore=/tests/_data/ tests/ src/",
+        "cs-fix": "phpcbf --colors -p --extensions=php --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml --ignore=/tests/_data/ tests/ src/",
+        "stan": "phpstan analyze -l 8 src/",
+        "tests": "phpunit tests/"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

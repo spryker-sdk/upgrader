@@ -1,0 +1,113 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+# Upgrade
+    Upgrade\Application\:
+        resource: '../../../../Upgrade/Application/*'
+
+    Upgrade\Infrastructure\:
+        resource: '../../../../Upgrade/Infrastructure/*'
+
+    Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter: ~
+    Upgrade\Infrastructure\VersionControlSystem\Adapter\VersionControlSystemAdapterInterface: '@Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter'
+
+    Upgrade\Infrastructure\Services\UpgraderService: ~
+    Upgrade\Application\Services\UpgraderServiceInterface: '@Upgrade\Infrastructure\Services\UpgraderService'
+
+    git.adapter:
+        class: Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter
+
+    Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver:
+        class: Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver
+        arguments:
+            - {
+                param1: '@git.adapter'
+              }
+
+    upgrade.task:
+        class: Upgrade\Infrastructure\Task\UpgradeTask
+        tags: [ 'sdk.task' ]
+
+    check_is_remote_target_branch_exist.step:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckRemoteTargetBranchExistsStep
+
+    check_is_local_target_branch_exist.step:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckLocalTargetBranchExistsStep
+
+    check_uncommitted_changes.step:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckUncommittedChangesStep
+
+    composer_update.step:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\ComposerUpdateStep
+
+    composer_lock_diff.step:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\ComposerLockComparatorStep
+
+    create_branch.step:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CreateBranchStep
+
+    add_changes.step:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\AddChangesStep
+
+    commit_changes.step:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CommitChangesStep
+
+    push_changes.step:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\PushChangesStep
+
+    create_pr.step:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CreatePullRequestStep
+
+    checkout.step:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckoutStep
+
+    composer.strategy:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\ComposerStrategy
+        arguments:
+            - {
+                param1: '@check_is_remote_target_branch_exist.step',
+                param2: '@check_is_local_target_branch_exist.step',
+                param3: '@check_uncommitted_changes.step',
+                param4: '@composer_update.step',
+                param5: '@composer_lock_diff.step',
+                param6: '@create_branch.step',
+                param7: '@add_changes.step',
+                param8: '@commit_changes.step',
+                param9: '@push_changes.step',
+                param10: '@create_pr.step',
+                param11: '@checkout.step'
+             }
+
+    release-app.strategy:
+        class: Upgrade\Infrastructure\Processor\Strategy\ReleaseApp\ReleaseAppStrategy
+
+    Upgrade\Infrastructure\Processor\Strategy\StrategyResolver:
+        class: Upgrade\Infrastructure\Processor\Strategy\StrategyResolver
+        arguments:
+            - {
+                param1: '@composer.strategy',
+                param2: '@release-app.strategy'
+            }
+
+    github.provider:
+        class: Upgrade\Infrastructure\VersionControlSystem\Provider\GitHub\GitHubProvider
+
+    configuration.provider:
+        class: Upgrade\Infrastructure\Configuration\ConfigurationProvider
+
+    Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider:
+        class: Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider
+        arguments:
+            - '@configuration.provider'
+            - {
+                param1: '@github.provider'
+            }
+
+#Third-party dependencies
+    Ergebnis\Json\Printer\Printer: ~
+    Ergebnis\Json\Printer\PrinterInterface: '@Ergebnis\Json\Printer\Printer'
+
+
