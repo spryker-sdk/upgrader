@@ -5,11 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\VersionControlSystem\Provider;
+namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider;
 
 use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
 
-interface ProviderInterface
+interface SourceCodeProviderInterface
 {
     /**
      * @return string

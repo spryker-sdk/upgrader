@@ -10,8 +10,8 @@ namespace UpgradeTest\Infrastructure\VersionControlSystem\Provider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Exception\SourceCodeProviderIsNotDefinedException;
-use Upgrade\Infrastructure\VersionControlSystem\Provider\GitHub\GitHubProvider;
-use Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeSourceCodeProvider;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider;
 
 class SourceCodeProviderTest extends KernelTestCase
 {
@@ -21,14 +21,14 @@ class SourceCodeProviderTest extends KernelTestCase
     public function testGetSourceCodeProviderReturnDefaultProvider(): void
     {
         // Arrange
-        /** @var \Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider $strategyResolver */
+        /** @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $strategyResolver */
         $strategyResolver = static::bootKernel()->getContainer()->get(SourceCodeProvider::class);
 
         // Act
         $sourceCodeProvider = $strategyResolver->getSourceCodeProvider();
 
         // Assert
-        $this->assertInstanceOf(GitHubProvider::class, $sourceCodeProvider);
+        $this->assertInstanceOf(GitHubSourceCodeSourceCodeProvider::class, $sourceCodeProvider);
     }
 
     /**
@@ -43,7 +43,7 @@ class SourceCodeProviderTest extends KernelTestCase
         $configurationProvider->method('getSourceCodeProvider')->willReturn('NOT_DEFINED_PROVIDER');
         $container->set('configuration.provider', $configurationProvider);
 
-        /** @var \Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider $strategyResolver */
+        /** @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $strategyResolver */
         $strategyResolver = $container->get(SourceCodeProvider::class);
 
         // Assert

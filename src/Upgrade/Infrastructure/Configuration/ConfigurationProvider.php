@@ -52,6 +52,7 @@ class ConfigurationProvider
      */
     public function getSourceCodeProvider(): string
     {
+
         return (string)getenv('SOURCE_CODE_PROVIDER') ?: static::GITHUB_SOURCE_CODE_PROVIDER;
     }
 

@@ -12,8 +12,8 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
 use Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException;
 use Upgrade\Infrastructure\Process\ProcessRunner;
-use Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder;
-use Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider;
+use Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider;
 
 class Git
 {
@@ -38,14 +38,14 @@ class Git
     protected $configurationProvider;
 
     /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\Provider\ProviderInterface
+     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface
      */
     protected $sourceCodeProvider;
 
     /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder
+     * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator
      */
-    protected $pullRequestDataBuilder;
+    protected $pullRequestDataGenerator;
 
     /**
      * @var array<string>
@@ -55,19 +55,19 @@ class Git
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      * @param \Upgrade\Infrastructure\Process\ProcessRunner $processRunner
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider $sourceCodeProvider
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder $pullRequestDataBuilder
+     * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $sourceCodeProvider
+     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator $pullRequestDataGenerator
      */
     public function __construct(
         ConfigurationProvider $configurationProvider,
         ProcessRunner $processRunner,
         SourceCodeProvider $sourceCodeProvider,
-        PullRequestDataBuilder $pullRequestDataBuilder
+        PullRequestDataGenerator $pullRequestDataGenerator
     ) {
         $this->configurationProvider = $configurationProvider;
         $this->processRunner = $processRunner;
         $this->sourceCodeProvider = $sourceCodeProvider->getSourceCodeProvider();
-        $this->pullRequestDataBuilder = $pullRequestDataBuilder;
+        $this->pullRequestDataGenerator = $pullRequestDataGenerator;
     }
 
     /**
@@ -192,7 +192,7 @@ class Git
             'base' => $this->getBaseBranch(),
             'head' => $this->getHeadBranch(),
             'title' => 'Updated to the latest Spryker modules up to ' . date('m/d/Y h:i', time()),
-            'body' => $this->pullRequestDataBuilder->buildBody($composerDiffDto),
+            'body' => $this->pullRequestDataGenerator->buildBody($composerDiffDto),
             'auto_merge' => $this->configurationProvider->isPullRequestAutoMergeEnabled(),
         ];
 

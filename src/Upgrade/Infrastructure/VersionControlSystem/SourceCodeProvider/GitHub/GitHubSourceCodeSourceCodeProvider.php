@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\VersionControlSystem\Provider\GitHub;
+namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub;
 
 use Github\AuthMethod;
 use Github\Client;
@@ -13,9 +13,9 @@ use Github\HttpClient\Builder;
 use RuntimeException;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\VersionControlSystem\Provider\ProviderInterface;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface;
 
-class GitHubProvider implements ProviderInterface
+class GitHubSourceCodeSourceCodeProvider implements SourceCodeProviderInterface
 {
     /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider

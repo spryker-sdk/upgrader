@@ -15,7 +15,7 @@ use Upgrade\Infrastructure\Dto\Composer\ComposerLockDiffDto;
 use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
 use Upgrade\Infrastructure\Process\ProcessRunner;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
-use Upgrade\Infrastructure\VersionControlSystem\Provider\GitHub\GitHubProvider;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeSourceCodeProvider;
 
 class GitTest extends KernelTestCase
 {
@@ -127,7 +127,7 @@ class GitTest extends KernelTestCase
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
-        $gitHubProviderMock = $this->getMockBuilder(GitHubProvider::class)
+        $gitHubProviderMock = $this->getMockBuilder(GitHubSourceCodeSourceCodeProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -163,7 +163,7 @@ class GitTest extends KernelTestCase
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
-        $gitHubProviderMock = $this->getMockBuilder(GitHubProvider::class)
+        $gitHubProviderMock = $this->getMockBuilder(GitHubSourceCodeSourceCodeProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
