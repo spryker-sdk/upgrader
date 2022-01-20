@@ -93,13 +93,13 @@ services:
             }
 
     github.provider:
-        class: Upgrade\Infrastructure\VersionControlSystem\Provider\GitHub\GitHubProvider
+        class: Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeSourceCodeProvider
 
     configuration.provider:
         class: Upgrade\Infrastructure\Configuration\ConfigurationProvider
 
-    Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider:
-        class: Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider
+    Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider:
+        class: Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider
         arguments:
             - '@configuration.provider'
             - {
