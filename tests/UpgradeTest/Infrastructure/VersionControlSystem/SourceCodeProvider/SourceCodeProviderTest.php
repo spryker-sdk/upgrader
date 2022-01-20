@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace UpgradeTest\Infrastructure\VersionControlSystem\Provider;
+namespace UpgradeTest\Infrastructure\VersionControlSystem\SourceCodeProvider;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
