@@ -7,6 +7,7 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider;
 
+use Upgrade\Infrastructure\Dto\SourceCodeProvider\PullRequestDto;
 use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
 
 interface SourceCodeProviderInterface
@@ -18,9 +19,16 @@ interface SourceCodeProviderInterface
 
     /**
      * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
-     * @param array $params
+     * @param \Upgrade\Infrastructure\Dto\SourceCodeProvider\PullRequestDto $pullRequestDto
      *
      * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
      */
-    public function createPullRequest(StepsExecutionDto $stepsExecutionDto, array $params): StepsExecutionDto;
+    public function createPullRequest(StepsExecutionDto $stepsExecutionDto, PullRequestDto $pullRequestDto): StepsExecutionDto;
+
+    /**
+     * @throws \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     *
+     * @return void
+     */
+    public function validateCredentials(): void;
 }

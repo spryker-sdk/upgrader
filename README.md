@@ -49,20 +49,51 @@ The Upgrader updates projects via one of the following approaches:
 ​
 To enable the Upgrader to execute this step, apply the following configuration:
 ​
+* Enable GitHub source code provider:
+  ​
+```bash
+export SOURCE_CODE_PROVIDER=github
+```
+​
 * Add a GitHub access token to the project repository with the permissions to push branches and create PRs:
   ​
 ```bash
-export GITHUB_ACCESS_TOKEN=<GITHUB_TOCKEN>
+export ACCESS_TOKEN=<GITHUB_TOCKEN>
 ```
 ​
 * Add the organization name owning the repository of the project you want to update:
 ```bash
-export GITHUB_ORGANIZATION=<ORGANIZATION>
+export ORGANIZATION_NAME=<ORGANIZATION>
 ```
 ​
 * Add the repository name of the project you want to update:
 ```bash
-export GITHUB_REPOSITORY=<REPOSITORY>
+export REPOSITORY_NAME=<REPOSITORY>
+```
+### Adding GitLab configuration for the update step
+​
+To enable the Upgrader to execute this step, apply the following configuration:
+​
+* Enable GitLab source code provider:
+  ​
+```bash
+export SOURCE_CODE_PROVIDER=gitlab
+```
+​
+* Add a GitLab access token to the project repository with the permissions to push branches and create PRs:
+  ​
+```bash
+export ACCESS_TOKEN=<GITLAB_TOCKEN>
+```
+​
+* Add the project id of the project you want to update:
+```bash
+export GITLAB_PROJECT_ID=<GITLAB_PROJECT_ID>
+```
+​
+* Optional. For self-hosted source provider add url of your provider:
+```bash
+export SOURCE_CODE_PROVIDER_URL=<https://git.yourdomain.com>
 ```
 ​
 ### Updating projects via the SDK

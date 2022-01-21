@@ -99,4 +99,11 @@ interface VersionControlSystemAdapterInterface
      * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
      */
     public function restore(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
+
+    /**
+     * @throws \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     *
+     * @return void
+     */
+    public function validateSourceCodeProviderCredentials(): void;
 }

@@ -27,6 +27,16 @@ class ConfigurationProvider
     /**
      * @var string
      */
+    public const GITLAB_SOURCE_CODE_PROVIDER = 'gitlab';
+
+    /**
+     * @var int
+     */
+    public const GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING = 20;
+
+    /**
+     * @var string
+     */
     public const VCS_TYPE = 'git';
 
     /**
@@ -52,7 +62,6 @@ class ConfigurationProvider
      */
     public function getSourceCodeProvider(): string
     {
-
         return (string)getenv('SOURCE_CODE_PROVIDER') ?: static::GITHUB_SOURCE_CODE_PROVIDER;
     }
 
@@ -95,6 +104,16 @@ class ConfigurationProvider
      *
      * @return string
      */
+    public function getSourceCodeProviderUrl(): string
+    {
+        return (string)getenv('SOURCE_CODE_PROVIDER_URL');
+    }
+
+    /**
+     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     *
+     * @return string
+     */
     public function getOrganizationName(): string
     {
         return (string)getenv('ORGANIZATION_NAME');
@@ -108,5 +127,25 @@ class ConfigurationProvider
     public function getRepositoryName(): string
     {
         return (string)getenv('REPOSITORY_NAME');
+    }
+
+    /**
+     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     *
+     * @return string
+     */
+    public function getGitLabProjectId(): string
+    {
+        return (string)getenv('GITLAB_PROJECT_ID');
+    }
+
+    /**
+     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     *
+     * @return int
+     */
+    public function getGitLabDelayBetweenPrCreatingAndMerging(): int
+    {
+        return (int)getenv('GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING') ?: static::GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING;
     }
 }

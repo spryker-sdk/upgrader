@@ -10,7 +10,8 @@ namespace UpgradeTest\Infrastructure\VersionControlSystem\SourceCodeProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Exception\SourceCodeProviderIsNotDefinedException;
-use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeSourceCodeProvider;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeProvider;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabSourceCodeProvider;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider;
 
 class SourceCodeProviderTest extends KernelTestCase
@@ -28,7 +29,29 @@ class SourceCodeProviderTest extends KernelTestCase
         $sourceCodeProvider = $strategyResolver->getSourceCodeProvider();
 
         // Assert
-        $this->assertInstanceOf(GitHubSourceCodeSourceCodeProvider::class, $sourceCodeProvider);
+        $this->assertInstanceOf(GitHubSourceCodeProvider::class, $sourceCodeProvider);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetSourceCodeProviderReturnGitLabProvider(): void
+    {
+        // Arrange
+        $container = static::bootKernel()->getContainer();
+
+        $configurationProvider = $this->createMock(ConfigurationProvider::class);
+        $configurationProvider->method('getSourceCodeProvider')->willReturn(ConfigurationProvider::GITLAB_SOURCE_CODE_PROVIDER);
+        $container->set('configuration.provider', $configurationProvider);
+
+        /** @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $strategyResolver */
+        $strategyResolver = $container->get(SourceCodeProvider::class);
+
+        // Act
+        $sourceCodeProvider = $strategyResolver->getSourceCodeProvider();
+
+        // Assert
+        $this->assertInstanceOf(GitLabSourceCodeProvider::class, $sourceCodeProvider);
     }
 
     /**

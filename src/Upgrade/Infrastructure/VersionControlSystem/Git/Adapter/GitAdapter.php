@@ -154,4 +154,12 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     {
         return $this->git->restore($stepsExecutionDto);
     }
+
+    /**
+     * @return void
+     */
+    public function validateSourceCodeProviderCredentials(): void
+    {
+        $this->git->validateSourceCodeProviderCredentials();
+    }
 }
