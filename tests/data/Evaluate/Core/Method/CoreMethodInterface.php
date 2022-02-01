@@ -12,5 +12,5 @@ interface CoreMethodInterface
     /**
      * @return string
      */
-    public function superMethodFromCore(): string;
+    public function superMethodFromCoreInterfaceSuccess(): string;
 }

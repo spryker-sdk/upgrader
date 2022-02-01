@@ -7,10 +7,7 @@
 
 namespace TestProject\Method;
 
-use TestCore\Method\CoreMethod;
-use TestCore\Method\CoreMethodInterface;
-
-class ProjectMethod extends CoreMethod implements CoreMethodInterface
+class ProjectMethodWithCoreExtension implements ProjectMethodWithCoreExtensionInterface
 {
     /**
      * @return void
@@ -22,9 +19,9 @@ class ProjectMethod extends CoreMethod implements CoreMethodInterface
     /**
      * @return string
      */
-    public function superCoreMethodSuccess(): string
+    public function superMethodFromCoreInterfaceSuccess(): string
     {
-        return 'Core Method';
+        return 'SuperMethod from core interface';
     }
 
     /**
@@ -32,7 +29,7 @@ class ProjectMethod extends CoreMethod implements CoreMethodInterface
      */
     public function projectMethodNameError(): string
     {
-        return 'Custom methodName. NotExtended. Without Test project prefix.';
+        return 'MethodName with core interface extending and without Test project prefix.';
     }
 
     /**
@@ -40,14 +37,6 @@ class ProjectMethod extends CoreMethod implements CoreMethodInterface
      */
     public function testProjectMethodNameSuccess(): string
     {
-        return 'Custom methodName. NotExtended. With Test project prefix.';
-    }
-
-    /**
-     * @return string
-     */
-    public function superMethodFromCoreInterfaceSuccess(): string
-    {
-        return 'SuperMethod from core interface';
+        return 'MethodName with core interface and with Test project prefix.';
     }
 }

@@ -12,5 +12,5 @@ interface ProjectMethodWithoutCoreExtensionInterface
     /**
      * @return string
      */
-    public function projectMethodName(): string;
+    public function projectMethodNameSuccess(): string;
 }

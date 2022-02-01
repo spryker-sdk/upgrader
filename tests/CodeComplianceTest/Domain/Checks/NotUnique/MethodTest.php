@@ -38,7 +38,7 @@ class MethodTest extends BaseCodeComplianceCheckTest
         $violations = $this->methodCheck->getViolations();
 
         // Assert
-        $this->assertCount(2, $violations);
+        $this->assertCount(3, $violations);
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
             $this->assertNotEmpty($violation->getMessage());

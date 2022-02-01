@@ -59,7 +59,7 @@ class ConfigurationProvider
         return [
             $this->getVendorDirectory() . 'spryker' . DIRECTORY_SEPARATOR,
             $this->getVendorDirectory() . 'spryker-eco' . DIRECTORY_SEPARATOR,
-            $this->getVendorDirectory() . 'spryker-shop' . DIRECTORY_SEPARATOR,
+//            $this->getVendorDirectory() . 'spryker-shop' . DIRECTORY_SEPARATOR,
         ];
     }
 

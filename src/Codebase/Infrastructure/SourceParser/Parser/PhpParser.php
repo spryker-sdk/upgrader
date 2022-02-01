@@ -152,9 +152,12 @@ class PhpParser implements ParserInterface
         $transfer->setClassName($namespace);
         $transfer->setConstants($projectClass->getConstants());
         $transfer->setMethods($projectClass->getMethods());
-        $transfer->setInterfaces($projectClass->getInterfaces());
         $transfer->setTraits($projectClass->getTraits());
         $transfer->setReflection($projectClass);
+        $transfer->setExtendCore($this->isExtendCore($projectClass, $coreNamespaces));
+        $transfer->setCoreInterfacesMethods(
+            $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $coreNamespaces),
+        );
 
         if ($coreNamespaces !== []) {
             $projectMethods = $this->getProjectMethods($projectClass->getName(), $projectClass->getMethods(), $coreNamespaces);
@@ -174,6 +177,35 @@ class PhpParser implements ParserInterface
         }
 
         return $transfer;
+    }
+
+    /**
+     * @param \ReflectionClass $projectClass
+     * @param array<string> $coreNamespaces
+     *
+     * @return bool
+     */
+    protected function isExtendCore(ReflectionClass $projectClass, $coreNamespaces): bool
+    {
+        if ($coreNamespaces === []) {
+            return false;
+        }
+
+        $parentClass = $projectClass->getParentClass();
+        if ($parentClass) {
+            $parentMethods = $this->getCoreMethods($parentClass->getMethods(), $coreNamespaces);
+            if (!empty($parentMethods)) {
+                return true;
+            }
+        }
+
+        $interfacesMethods = $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $coreNamespaces);
+        $parentMethods = $this->getCoreMethods($interfacesMethods, $coreNamespaces);
+        if (!empty($parentMethods)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -215,6 +247,22 @@ class PhpParser implements ParserInterface
 
             return false;
         });
+    }
+
+    /**
+     * @param array<\ReflectionClass> $interfaces
+     * @param array<string> $coreNamespaces
+     *
+     * @return array<\ReflectionMethod>
+     */
+    protected function getCoreInterfacesMethods(array $interfaces, array $coreNamespaces): array
+    {
+        $methods = [];
+        foreach ($interfaces as $interface) {
+            $methods = array_merge($methods, $interface->getMethods());
+        }
+
+        return $this->getCoreMethods($methods, $coreNamespaces);
     }
 
     /**

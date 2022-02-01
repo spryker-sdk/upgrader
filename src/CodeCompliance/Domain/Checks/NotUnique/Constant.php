@@ -45,6 +45,10 @@ class Constant extends AbstractCodeComplianceCheck
                 $isConstantUnique = empty($parentConstants) || !array_key_exists($nameConstant, $parentConstants);
                 $hasProjectPrefix = $this->hasProjectPrefix($nameConstant, $projectPrefix);
 
+                dump($this->hasProjectPrefix($nameConstant, $projectPrefix));
+                dump($nameConstant . " : " . $projectPrefix);
+
+
                 if ($coreParent && $isConstantUnique && !$hasProjectPrefix) {
                     $guideline = sprintf($this->getGuideline(), $source->getClassName(), $nameConstant, strtoupper($projectPrefix), $nameConstant);
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
@@ -53,5 +57,16 @@ class Constant extends AbstractCodeComplianceCheck
         }
 
         return $violations;
+    }
+
+    /**
+     * @param string $value
+     * @param string $projectPrefix
+     *
+     * @return bool
+     */
+    protected function hasProjectPrefix(string $value, string $projectPrefix): bool
+    {
+        return stripos($value, strtoupper($projectPrefix)) === 0;
     }
 }
