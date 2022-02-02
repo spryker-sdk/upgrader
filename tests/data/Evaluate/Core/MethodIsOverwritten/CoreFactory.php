@@ -15,4 +15,12 @@ class CoreFactory
     public function createCoreModel(): void
     {
     }
+
+    /**
+     * @return \TestCore\MethodIsOverwritten\FooPluginInterface
+     */
+    protected function getCustomerStepHandler(): FooPluginInterface
+    {
+        return new FooPlugin();
+    }
 }
