@@ -20,7 +20,7 @@ class CoreMethod
     /**
      * @return string
      */
-    public function testSuperCoreMethod(): string
+    public function getTestSuperCoreMethod(): string
     {
         return 'Core Method';
     }

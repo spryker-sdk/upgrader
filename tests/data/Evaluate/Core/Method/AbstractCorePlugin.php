@@ -5,19 +5,20 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace TestProject\Method;
+namespace TestCore\Method;
 
-use TestCore\Method\CoreMethodInterface;
-
-interface ProjectMethodWithCoreExtensionInterface extends CoreMethodInterface
+abstract class AbstractCorePlugin
 {
     /**
      * @return string
      */
-    public function projectMethodNameError(): string;
+    abstract public function superCoreAbstractMethodSuccess(): string;
 
     /**
      * @return string
      */
-    public function getTestProjectMethodNameSuccess(): string;
+    public function superCoreMethodSuccess(): string
+    {
+        return 'we should skip Plugin in general';
+    }
 }

@@ -41,6 +41,9 @@ class Method extends AbstractCodeComplianceCheck
             $namesCoreMethods = array_column($source->getCoreMethods(), static::COLUMN_KEY_NAME);
             $nameCoreInterfaceMethods = array_column($source->getCoreInterfacesMethods(), static::COLUMN_KEY_NAME);
             $projectPrefix = $this->getCodebaseSourceDto()->getProjectPrefix();
+            if ($this->isPlugin($source->getReflection())) {
+                continue;
+            }
             /** @var \ReflectionMethod $projectMethod */
             foreach ($source->getProjectMethods() as $projectMethod) {
                 if ($this->isMagicMethod($projectMethod->getName())) {
@@ -67,6 +70,23 @@ class Method extends AbstractCodeComplianceCheck
         }
 
         return $violations;
+    }
+
+    /**
+     * @param \ReflectionClass $class
+     *
+     * @return bool
+     */
+    protected function isPlugin(ReflectionClass $class): bool
+    {
+        $pattern = '/.*Plugin$/';
+        $parent = $class->getParentClass();
+        $className = $class->getShortName();
+        if (!$parent) {
+            return false;
+        }
+
+        return (preg_match($pattern, $className)) && (preg_match($pattern, $parent->getShortName()));
     }
 
     /**

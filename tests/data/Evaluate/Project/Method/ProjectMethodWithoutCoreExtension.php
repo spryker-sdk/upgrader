@@ -27,7 +27,7 @@ class ProjectMethodWithoutCoreExtension implements ProjectMethodWithoutCoreExten
     /**
      * @return string
      */
-    public function testProjectMethodNameSuccess(): string
+    public function getTestProjectMethodNameSuccess(): string
     {
         return 'MethodName without extending and with Test project prefix.';
     }

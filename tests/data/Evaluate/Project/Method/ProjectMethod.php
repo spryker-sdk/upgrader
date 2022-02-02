@@ -38,7 +38,7 @@ class ProjectMethod extends CoreMethod implements CoreMethodInterface
     /**
      * @return string
      */
-    public function testProjectMethodNameSuccess(): string
+    public function getTestProjectMethodNameSuccess(): string
     {
         return 'Custom methodName. NotExtended. With Test project prefix.';
     }

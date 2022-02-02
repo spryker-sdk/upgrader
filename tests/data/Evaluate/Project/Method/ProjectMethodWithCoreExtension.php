@@ -35,7 +35,7 @@ class ProjectMethodWithCoreExtension implements ProjectMethodWithCoreExtensionIn
     /**
      * @return string
      */
-    public function testProjectMethodNameSuccess(): string
+    public function getTestProjectMethodNameSuccess(): string
     {
         return 'MethodName with core interface and with Test project prefix.';
     }
