@@ -1806,12 +1806,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/sdk-contracts.git",
-                "reference": "73198a6b719012b3d9d8f7129dc3ff0478abf96b"
+                "reference": "444497259b1d952e6384d24392d94d687938954a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/73198a6b719012b3d9d8f7129dc3ff0478abf96b",
-                "reference": "73198a6b719012b3d9d8f7129dc3ff0478abf96b",
+                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/444497259b1d952e6384d24392d94d687938954a",
+                "reference": "444497259b1d952e6384d24392d94d687938954a",
                 "shasum": ""
             },
             "require": {
@@ -1835,9 +1835,9 @@
             "description": "Contracts to extend the Spryker SDK",
             "support": {
                 "issues": "https://github.com/spryker-sdk/sdk-contracts/issues",
-                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/0.1.0"
+                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/master"
             },
-            "time": "2021-12-28T08:09:48+00:00"
+            "time": "2022-02-03T08:14:08+00:00"
         },
         {
             "name": "spryker/code-sniffer",
@@ -6321,5 +6321,5 @@
         "ext-simplexml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
