@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5edb40d4b4d8afb0d8533734359e3470",
+    "content-hash": "94b05eed08cc798378c8aa4240c22de5",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1801,16 +1801,16 @@
         },
         {
             "name": "spryker-sdk/sdk-contracts",
-            "version": "dev-bugfix/sdk-373",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/sdk-contracts.git",
-                "reference": "cc9d67b50f94813be81833057d1662d3d2a368b2"
+                "reference": "d9511b0d338ff99da131ecb98bfa16a863cbffdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/cc9d67b50f94813be81833057d1662d3d2a368b2",
-                "reference": "cc9d67b50f94813be81833057d1662d3d2a368b2",
+                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/d9511b0d338ff99da131ecb98bfa16a863cbffdd",
+                "reference": "d9511b0d338ff99da131ecb98bfa16a863cbffdd",
                 "shasum": ""
             },
             "require": {
@@ -1820,6 +1820,7 @@
                 "phpstan/phpstan": "^1.2",
                 "spryker/code-sniffer": "^0.17.1"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1833,9 +1834,9 @@
             "description": "Contracts to extend the Spryker SDK",
             "support": {
                 "issues": "https://github.com/spryker-sdk/sdk-contracts/issues",
-                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/bugfix/sdk-373"
+                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/master"
             },
-            "time": "2022-02-08T13:49:10+00:00"
+            "time": "2022-02-09T13:19:55+00:00"
         },
         {
             "name": "spryker/code-sniffer",
