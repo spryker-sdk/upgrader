@@ -42,7 +42,7 @@ class Constant extends AbstractCodeComplianceCheck
             $projectPrefix = $this->getCodebaseSourceDto()->getProjectPrefix();
 
             foreach ($source->getConstants() as $nameConstant => $valueConstant) {
-                $isConstantUnique = empty($parentConstants) || !array_key_exists($nameConstant, $parentConstants);
+                $isConstantUnique = !$parentConstants || !array_key_exists($nameConstant, $parentConstants);
                 $hasProjectPrefix = $this->hasProjectPrefix($nameConstant, $projectPrefix);
 
                 if ($coreParent && $isConstantUnique && !$hasProjectPrefix) {

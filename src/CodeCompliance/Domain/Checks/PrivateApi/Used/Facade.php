@@ -58,7 +58,7 @@ class Facade extends AbstractUsedCodeComplianceCheck
                 }
 
                 $usedMethodNames = $this->parseUsedMethodsFromGetter($classFileBody, $privateApiAnnotation);
-                if (empty($usedMethodNames)) {
+                if (!$usedMethodNames) {
                     continue;
                 }
 
