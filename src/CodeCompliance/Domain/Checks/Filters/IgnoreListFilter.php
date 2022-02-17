@@ -68,6 +68,7 @@ class IgnoreListFilter implements FilterInterface
     {
         return [
             '/\/Kernel\//',
+            '/\/Shared\//',
             '/\/\w+Bootstrap$/',
             '/\/\w+ConfigurationProvider$/',
             '/\/Development\//',
