@@ -25,7 +25,7 @@ abstract class BaseCodeComplianceCheckTest extends KernelTestCase
             [APPLICATION_ROOT_DIR . '/tests/data/Evaluate/Project/' . $subFolder],
             [APPLICATION_ROOT_DIR . '/tests/data/Evaluate/Core/' . $subFolder],
             ['TestCore'],
-            'Test',
+            'TestProject',
         );
 
         return static::bootKernel()->getContainer()->get(CodebaseService::class)->parseSource($codebaseRequestDto);
