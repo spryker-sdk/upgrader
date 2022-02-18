@@ -14,7 +14,7 @@ class TestClassProjectConstant extends TestClassCoreConstant
     /**
      * @var string
      */
-    protected const TEST_WITH_PREFIX_CONSTANT_NAME = 'constant name has project specific prefix';
+    protected const TESTPROJECT_WITH_PREFIX_CONSTANT_NAME = 'constant name has project specific prefix';
 
     /**
      * @var string
