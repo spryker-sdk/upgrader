@@ -185,6 +185,28 @@ class PhpParser implements ParserInterface
     }
 
     /**
+     * @param string $projectClassName
+     * @param array<\ReflectionMethod> $methods
+     * @param array<string> $coreNamespaces
+     *
+     * @return array<\ReflectionMethod>
+     */
+    protected function getProjectMethods(string $projectClassName, array $methods, array $coreNamespaces): array
+    {
+        return array_filter($methods, function ($method) use ($projectClassName, $coreNamespaces) {
+            foreach ($coreNamespaces as $coreNamespace) {
+                $isProjectClassMethod = $method->getDeclaringClass()->getName() == $projectClassName;
+                $hasNoCoreNamespace = strpos($method->getDeclaringClass()->getNamespaceName(), $coreNamespace) !== 0;
+                if ($isProjectClassMethod && $hasNoCoreNamespace) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+    }
+
+    /**
      * @param \ReflectionClass $projectClass
      * @param string $projectPrefix
      * @param array $coreNamespaces
@@ -212,28 +234,6 @@ class PhpParser implements ParserInterface
         }
 
         return false;
-    }
-
-    /**
-     * @param string $projectClassName
-     * @param array<\ReflectionMethod> $methods
-     * @param array<string> $coreNamespaces
-     *
-     * @return array<\ReflectionMethod>
-     */
-    protected function getProjectMethods(string $projectClassName, array $methods, array $coreNamespaces): array
-    {
-        return array_filter($methods, function ($method) use ($projectClassName, $coreNamespaces) {
-            foreach ($coreNamespaces as $coreNamespace) {
-                $isProjectClassMethod = $method->getDeclaringClass()->getName() == $projectClassName;
-                $hasNoCoreNamespace = strpos($method->getDeclaringClass()->getNamespaceName(), $coreNamespace) !== 0;
-                if ($isProjectClassMethod && $hasNoCoreNamespace) {
-                    return true;
-                }
-            }
-
-            return false;
-        });
     }
 
     /**
