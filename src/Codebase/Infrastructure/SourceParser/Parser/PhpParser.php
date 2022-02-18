@@ -87,7 +87,7 @@ class PhpParser implements ParserInterface
                 $classCodebaseDto = $this->parseClass(
                     $classString,
                     $codebaseSourceDto->getProjectPrefix(),
-                    $codebaseSourceDto->getCoreNamespaces()
+                    $codebaseSourceDto->getCoreNamespaces(),
                 );
                 if ($classCodebaseDto === null) {
                     continue;
@@ -134,8 +134,9 @@ class PhpParser implements ParserInterface
      * @param string $namespace
      * @param string $projectPrefix
      * @param array $coreNamespaces
-     * @param ClassCodebaseDto|null $transfer
-     * @return ClassCodebaseDto|null
+     * @param \Codebase\Application\Dto\ClassCodebaseDto|null $transfer
+     *
+     * @return \Codebase\Application\Dto\ClassCodebaseDto|null
      */
     protected function parseClass(string $namespace, string $projectPrefix, array $coreNamespaces = [], ?ClassCodebaseDto $transfer = null): ?ClassCodebaseDto
     {
@@ -184,9 +185,10 @@ class PhpParser implements ParserInterface
     }
 
     /**
-     * @param ReflectionClass $projectClass
+     * @param \ReflectionClass $projectClass
      * @param string $projectPrefix
      * @param array $coreNamespaces
+     *
      * @return bool
      */
     protected function isExtendCore(ReflectionClass $projectClass, string $projectPrefix, array $coreNamespaces): bool
@@ -256,6 +258,7 @@ class PhpParser implements ParserInterface
     /**
      * @param array $interfaces
      * @param string $projectPrefix
+     *
      * @return array
      */
     protected function getCoreInterfacesMethods(array $interfaces, string $projectPrefix): array
@@ -290,6 +293,7 @@ class PhpParser implements ParserInterface
     /**
      * @param string $namespaceName
      * @param string $projectPrefix
+     *
      * @return bool
      */
     protected function hasProjectNamespace(string $namespaceName, string $projectPrefix): bool
