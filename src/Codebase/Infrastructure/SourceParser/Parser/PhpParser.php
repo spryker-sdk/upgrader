@@ -222,14 +222,14 @@ class PhpParser implements ParserInterface
         $parentClass = $projectClass->getParentClass();
         if ($parentClass) {
             $parentMethods = $this->getCoreMethods($parentClass->getMethods(), $coreNamespaces);
-            if (!empty($parentMethods)) {
+            if (count($parentMethods)) {
                 return true;
             }
         }
 
         $interfacesMethods = $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $projectPrefix);
         $parentMethods = $this->getCoreMethods($interfacesMethods, $coreNamespaces);
-        if (!empty($parentMethods)) {
+        if (count($parentMethods)) {
             return true;
         }
 
