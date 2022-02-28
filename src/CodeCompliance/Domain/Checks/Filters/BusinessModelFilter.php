@@ -54,6 +54,7 @@ class BusinessModelFilter implements FilterInterface
         return [
             '/\w+Factory$/',
             '/\w+DependencyProvider$/',
+            '/\w+DependencyInjector$/',
             '/\w+Config$/',
             '/\w+Controller$/',
             '/\w+Service$/',
