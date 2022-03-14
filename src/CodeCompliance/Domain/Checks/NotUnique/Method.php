@@ -8,6 +8,7 @@
 namespace CodeCompliance\Domain\Checks\NotUnique;
 
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
+use CodeCompliance\Domain\Checks\Filters\Filters;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 use ReflectionClass;
@@ -35,15 +36,16 @@ class Method extends AbstractCodeComplianceCheck
      */
     public function getViolations(): array
     {
+        $sources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
+        $filteredSources = $this->filterService->filter($sources, [Filters::PLUGIN_FILTER]);
+
         $violations = [];
 
-        foreach ($this->getCodebaseSourceDto()->getPhpCodebaseSources() as $source) {
+        foreach ($filteredSources as $source) {
             $namesCoreMethods = array_column($source->getCoreMethods(), static::COLUMN_KEY_NAME);
             $nameCoreInterfaceMethods = array_column($source->getCoreInterfacesMethods(), static::COLUMN_KEY_NAME);
             $projectPrefix = $this->getCodebaseSourceDto()->getProjectPrefix();
-            if ($this->isPlugin($source->getReflection())) {
-                continue;
-            }
+
             /** @var \ReflectionMethod $projectMethod */
             foreach ($source->getProjectMethods() as $projectMethod) {
                 if ($this->isMagicMethod($projectMethod->getName())) {
@@ -70,23 +72,6 @@ class Method extends AbstractCodeComplianceCheck
         }
 
         return $violations;
-    }
-
-    /**
-     * @param \ReflectionClass $class
-     *
-     * @return bool
-     */
-    protected function isPlugin(ReflectionClass $class): bool
-    {
-        $pattern = '/.*Plugin$/';
-        $parent = $class->getParentClass();
-        $className = $class->getShortName();
-        if (!$parent) {
-            return false;
-        }
-
-        return (preg_match($pattern, $className)) && (preg_match($pattern, $parent->getShortName()));
     }
 
     /**

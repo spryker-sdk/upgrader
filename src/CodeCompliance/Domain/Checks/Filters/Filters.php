@@ -43,4 +43,9 @@ interface Filters
      * @var string
      */
     public const IGNORE_LIST_FILTER = 'IGNORE_LIST_FILTER';
+
+    /**
+     * @var string
+     */
+    public const PLUGIN_FILTER = 'PLUGIN_FILTER';
 }

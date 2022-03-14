@@ -71,15 +71,4 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
 
         return false;
     }
-
-    /**
-     * @param string $value
-     * @param string $projectPrefix
-     *
-     * @return bool
-     */
-    protected function hasProjectPrefix(string $value, string $projectPrefix): bool
-    {
-        return stripos($value, $projectPrefix) === 0;
-    }
 }
