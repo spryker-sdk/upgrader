@@ -7,6 +7,7 @@
 
 namespace Evaluate\Infrastructure\Task\Analyze;
 
+use Codebase\Infrastructure\ProjectConfigurationParser\ProjectConfigurationParserInterface;
 use Codebase\Infrastructure\Service\CodebaseService;
 use CodeCompliance\Application\Service\CodeComplianceServiceInterface;
 use Evaluate\Infrastructure\Command\Analyze\AnalyzeCommand;
@@ -28,6 +29,11 @@ class AnalyzeTask implements TaskInterface
     protected CodeComplianceServiceInterface $codeComplianceService;
 
     /**
+     * @var \Codebase\Infrastructure\ProjectConfigurationParser\ProjectConfigurationParserInterface
+     */
+    protected ProjectConfigurationParserInterface $configurationParser;
+
+    /**
      * @var \Evaluate\Infrastructure\Configuration\ConfigurationProvider
      */
     protected ConfigurationProvider $configurationProvider;
@@ -39,15 +45,18 @@ class AnalyzeTask implements TaskInterface
 
     /**
      * @param \CodeCompliance\Application\Service\CodeComplianceServiceInterface $codeComplianceService
+     * @param \Codebase\Infrastructure\ProjectConfigurationParser\ProjectConfigurationParserInterface $configurationParser
      * @param \Evaluate\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      * @param \Codebase\Infrastructure\Service\CodebaseService $codebaseService
      */
     public function __construct(
         CodeComplianceServiceInterface $codeComplianceService,
+        ProjectConfigurationParserInterface $configurationParser,
         ConfigurationProvider $configurationProvider,
         CodebaseService $codebaseService
     ) {
         $this->codeComplianceService = $codeComplianceService;
+        $this->configurationParser = $configurationParser;
         $this->configurationProvider = $configurationProvider;
         $this->codebaseService = $codebaseService;
     }
@@ -76,6 +85,7 @@ class AnalyzeTask implements TaskInterface
         return [
             new AnalyzeCommand(
                 $this->codeComplianceService,
+                $this->configurationParser,
                 $this->configurationProvider,
                 $this->codebaseService,
             ),

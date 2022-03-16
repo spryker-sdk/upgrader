@@ -7,6 +7,8 @@ services:
 # Codebase
     Codebase\Application\:
         resource: '../../../../Codebase/Application/*'
+        exclude:
+            - '../../../../Codebase/Application/Dto/*'
 
     Codebase\Infrastructure\:
         resource: '../../../../Codebase/Infrastructure/*'

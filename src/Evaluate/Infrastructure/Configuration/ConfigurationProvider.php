@@ -25,19 +25,9 @@ class ConfigurationProvider
     /**
      * @return string
      */
-    public function getProjectPrefix(): string
+    public function getProjectConfigurationFilePath(): string
     {
-        return (string)getenv('PROJECT_PREFIX') ?: 'Pyz';
-    }
-
-    /**
-     * @return array
-     */
-    public function getProjectDirectory(): array
-    {
-        return [
-            $this->getSrcDirectory() . $this->getProjectPrefix() . DIRECTORY_SEPARATOR,
-        ];
+        return (string)getenv('PROJECT_CONFIGURATION_FILE_PATH') ?: 'sdk-tool.yml';
     }
 
     /**
@@ -70,6 +60,14 @@ class ConfigurationProvider
     /**
      * @return string
      */
+    public function getSrcDirectory(): string
+    {
+        return $this->getRootDirectory() . 'src' . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * @return string
+     */
     protected function getVendorDirectory(): string
     {
         return $this->getRootDirectory() . 'vendor' . DIRECTORY_SEPARATOR;
@@ -81,13 +79,5 @@ class ConfigurationProvider
     protected function getRootDirectory(): string
     {
         return getcwd() . DIRECTORY_SEPARATOR;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getSrcDirectory(): string
-    {
-        return $this->getRootDirectory() . 'src' . DIRECTORY_SEPARATOR;
     }
 }
