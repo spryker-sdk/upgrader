@@ -73,7 +73,7 @@ class IgnoreListFilter implements FilterInterface
             '/\/\w+ConfigurationProvider$/',
             '/\/Development\//',
             '/^Spryker\/Zed\/\w+DataImport\//',
-            '/\/Twig\TwigFunctionProvider$/',
+            '/^Spryker\/Shared\/Twig\/Twig\/TwigFunctionProvider$/',
         ];
     }
 }
