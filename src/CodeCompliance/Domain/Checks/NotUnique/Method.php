@@ -57,6 +57,9 @@ class Method extends AbstractCodeComplianceCheck
                 if ($this->isDependencyProviderPluginStack($projectMethod->getName(), $source->getClassName())) {
                     continue;
                 }
+                if ($this->isPluginReturnInDocComment((string)$projectMethod->getDocComment())) {
+                    continue;
+                }
 
                 $isCoreMethod = in_array($projectMethod->getName(), $namesCoreMethods);
                 $isMethodDeclaredInInterface = in_array($projectMethod->getName(), $nameCoreInterfaceMethods);
