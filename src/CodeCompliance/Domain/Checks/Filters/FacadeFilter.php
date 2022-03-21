@@ -10,11 +10,16 @@ namespace CodeCompliance\Domain\Checks\Filters;
 class FacadeFilter implements FilterInterface
 {
     /**
+     * @var string
+     */
+    public const FACADE_FILTER = 'FACADE_FILTER';
+
+    /**
      * @return string
      */
     public function getFilterName(): string
     {
-        return Filters::FACADE_FILTER;
+        return static::FACADE_FILTER;
     }
 
     /**

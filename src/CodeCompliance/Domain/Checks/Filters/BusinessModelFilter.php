@@ -10,11 +10,16 @@ namespace CodeCompliance\Domain\Checks\Filters;
 class BusinessModelFilter implements FilterInterface
 {
     /**
+     * @var string
+     */
+    public const BUSINESS_MODEL_FILTER = 'BUSINESS_MODEL_FILTER';
+
+    /**
      * @return string
      */
     public function getFilterName(): string
     {
-        return Filters::BUSINESS_MODEL_FILTER;
+        return static::BUSINESS_MODEL_FILTER;
     }
 
     /**

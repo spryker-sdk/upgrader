@@ -14,6 +14,11 @@ class BusinessFactoryFilter implements FilterInterface
     /**
      * @var string
      */
+    public const BUSINESS_FACTORY_FILTER = 'BUSINESS_FACTORY_FILTER';
+
+    /**
+     * @var string
+     */
     public const PATTERN = '/.*(BusinessFactory)$/';
 
     /**
@@ -21,7 +26,7 @@ class BusinessFactoryFilter implements FilterInterface
      */
     public function getFilterName(): string
     {
-        return Filters::BUSINESS_FACTORY_FILTER;
+        return static::BUSINESS_FACTORY_FILTER;
     }
 
     /**

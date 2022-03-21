@@ -8,7 +8,7 @@
 namespace CodeCompliance\Domain\Checks\NotUnique;
 
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
-use CodeCompliance\Domain\Checks\Filters\Filters;
+use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 use ReflectionClass;
@@ -37,7 +37,7 @@ class Method extends AbstractCodeComplianceCheck
     public function getViolations(): array
     {
         $sources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
-        $filteredSources = $this->filterService->filter($sources, [Filters::PLUGIN_FILTER]);
+        $filteredSources = $this->filterService->filter($sources, [PluginFilter::PLUGIN_FILTER]);
 
         $violations = [];
 

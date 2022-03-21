@@ -7,7 +7,7 @@
 
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
-use CodeCompliance\Domain\Checks\Filters\Filters;
+use CodeCompliance\Domain\Checks\Filters\PersistenceFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 
@@ -40,7 +40,7 @@ class CorePersistence extends AbstractUsedCodeComplianceCheck
     public function getViolations(): array
     {
         $filteredSources = $this->filterService->filter($this->getCodebaseSourceDto()->getPhpCodebaseSources(), [
-            Filters::PERSISTENCE_FILTER,
+            PersistenceFilter::PERSISTENCE_FILTER,
         ]);
 
         $violations = [];
