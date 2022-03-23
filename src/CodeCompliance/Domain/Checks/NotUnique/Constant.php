@@ -54,4 +54,15 @@ class Constant extends AbstractCodeComplianceCheck
 
         return $violations;
     }
+
+    /**
+     * @param string $value
+     * @param string $projectPrefix
+     *
+     * @return bool
+     */
+    protected function hasProjectPrefix(string $value, string $projectPrefix): bool
+    {
+        return stripos($value, strtoupper($projectPrefix)) === 0;
+    }
 }

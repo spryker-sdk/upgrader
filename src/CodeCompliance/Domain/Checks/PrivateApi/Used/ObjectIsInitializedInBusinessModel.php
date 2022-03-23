@@ -7,7 +7,7 @@
 
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
-use CodeCompliance\Domain\Checks\Filters\Filters;
+use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 
@@ -35,7 +35,7 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
     public function getViolations(): array
     {
         $sources = $this->filterService->filter($this->getCodebaseSourceDto()->getPhpCodebaseSources(), [
-            Filters::BUSINESS_MODEL_FILTER,
+            BusinessModelFilter::BUSINESS_MODEL_FILTER,
         ]);
         $violations = [];
 

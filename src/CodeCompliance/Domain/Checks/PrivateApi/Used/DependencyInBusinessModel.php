@@ -7,7 +7,8 @@
 
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
-use CodeCompliance\Domain\Checks\Filters\Filters;
+use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
+use CodeCompliance\Domain\Checks\Filters\PrivateApiFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 use Exception;
@@ -38,7 +39,7 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
     public function getViolations(): array
     {
         $filteredSources = $this->filterService->filter($this->getCodebaseSourceDto()->getPhpCodebaseSources(), [
-            Filters::BUSINESS_MODEL_FILTER,
+            BusinessModelFilter::BUSINESS_MODEL_FILTER,
         ]);
 
         $violations = [];
@@ -61,7 +62,7 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
                 $this->getCodebaseSourceDto()->getPhpCoreCodebaseSources(),
             );
             $dependencyCoreSources = $this->filterService->filter($dependencyCoreSources, [
-                Filters::PRIVATE_API_FILTER,
+                PrivateApiFilter::PRIVATE_API_FILTER,
             ]);
 
             if (!count($dependencyCoreSources)) {

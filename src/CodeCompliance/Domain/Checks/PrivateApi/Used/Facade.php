@@ -7,7 +7,7 @@
 
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
-use CodeCompliance\Domain\Checks\Filters\Filters;
+use CodeCompliance\Domain\Checks\Filters\FacadeFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 
@@ -46,7 +46,7 @@ class Facade extends AbstractUsedCodeComplianceCheck
     {
         $codebaseSources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
         $filteredSources = $this->filterService->filter($codebaseSources, [
-            Filters::FACADE_FILTER,
+            FacadeFilter::FACADE_FILTER,
         ]);
         $violations = [];
 

@@ -5,23 +5,19 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace TestCore\Method;
+namespace TestProject\Method;
 
-class CoreMethod
+use TestCore\Method\CoreMethodInterface;
+
+interface ProjectMethodWithCoreExtensionInterface extends CoreMethodInterface
 {
     /**
      * @return string
      */
-    public function superCoreMethodSuccess(): string
-    {
-        return 'Core Method';
-    }
+    public function projectMethodNameError(): string;
 
     /**
      * @return string
      */
-    public function getTestSuperCoreMethod(): string
-    {
-        return 'Core Method';
-    }
+    public function getTestProjectMethodNameSuccess(): string;
 }

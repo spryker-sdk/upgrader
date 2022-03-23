@@ -8,25 +8,21 @@
 namespace CodeCompliance\Domain\Checks\Filters;
 
 use Codebase\Application\Dto\CodebaseInterface;
+use ReflectionClass;
 
-class BusinessFactoryFilter implements FilterInterface
+class PluginFilter implements FilterInterface
 {
     /**
      * @var string
      */
-    public const BUSINESS_FACTORY_FILTER = 'BUSINESS_FACTORY_FILTER';
-
-    /**
-     * @var string
-     */
-    public const PATTERN = '/.*(BusinessFactory)$/';
+    public const PLUGIN_FILTER = 'PLUGIN_FILTER';
 
     /**
      * @return string
      */
     public function getFilterName(): string
     {
-        return static::BUSINESS_FACTORY_FILTER;
+        return static::PLUGIN_FILTER;
     }
 
     /**
@@ -36,23 +32,25 @@ class BusinessFactoryFilter implements FilterInterface
      */
     public function filter(array $sources): array
     {
-        return array_filter($sources, function ($source) {
-            return $this->isBusinessFactory($source);
+        return array_filter($sources, function (CodebaseInterface $source) {
+            return !$this->isPlugin($source->getReflection());
         });
     }
 
     /**
-     * @param \Codebase\Application\Dto\CodebaseInterface $source
+     * @param \ReflectionClass $class
      *
      * @return bool
      */
-    protected function isBusinessFactory(CodebaseInterface $source): bool
+    protected function isPlugin(ReflectionClass $class): bool
     {
-        $className = $source->getClassName();
-        if (!$className) {
+        $pattern = '/.*Plugin$/';
+        $parent = $class->getParentClass();
+        $className = $class->getShortName();
+        if (!$parent) {
             return false;
         }
 
-        return (bool)preg_match(static::PATTERN, $className);
+        return (preg_match($pattern, $className)) && (preg_match($pattern, $parent->getShortName()));
     }
 }

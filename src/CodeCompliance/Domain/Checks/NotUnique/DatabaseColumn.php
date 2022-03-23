@@ -54,8 +54,9 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
             $columnsWithoutPrefix = array_filter($source->getChildElements(), function (string $column) use ($projectPrefix, $sourceName, $coreSchemas) {
                 return !in_array($column, $coreSchemas[$sourceName] ?? []) && stripos($column, $projectPrefix) !== 0;
             });
+            $isDbPrefixExist = stripos($source->getName(), $projectPrefix) === 0;
 
-            if ($columnsWithoutPrefix !== [] && $columnsWithoutPrefix !== null) {
+            if ($columnsWithoutPrefix !== [] && $columnsWithoutPrefix !== null && !$isDbPrefixExist) {
                 foreach ($columnsWithoutPrefix as $columnWithoutPrefix) {
                     $guideline = sprintf($this->getGuideline(), $columnWithoutPrefix, $projectPrefix, $source->getPath(), strtolower($projectPrefix), $columnWithoutPrefix);
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());

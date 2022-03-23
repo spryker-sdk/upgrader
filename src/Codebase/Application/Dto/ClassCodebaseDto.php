@@ -12,6 +12,11 @@ use ReflectionClass;
 class ClassCodebaseDto extends AbstractCodebaseDto
 {
     /**
+     * @var bool
+     */
+    protected bool $extendsCore = false;
+
+    /**
      * @var array<string>
      */
     protected array $constants = [];
@@ -20,11 +25,6 @@ class ClassCodebaseDto extends AbstractCodebaseDto
      * @var array<string>
      */
     protected array $methods = [];
-
-    /**
-     * @var array<string>
-     */
-    protected array $interfaces = [];
 
     /**
      * @var array<string>
@@ -45,6 +45,11 @@ class ClassCodebaseDto extends AbstractCodebaseDto
      * @var array<\ReflectionMethod>
      */
     protected array $coreMethods = [];
+
+    /**
+     * @var array<\ReflectionMethod>
+     */
+    protected array $coreInterfacesMethods = [];
 
     /**
      * @return array<string>
@@ -82,26 +87,6 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     public function setMethods(array $methods)
     {
         $this->methods = $methods;
-
-        return $this;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getInterfaces(): array
-    {
-        return $this->interfaces;
-    }
-
-    /**
-     * @param array<string> $interfaces
-     *
-     * @return $this
-     */
-    public function setInterfaces(array $interfaces)
-    {
-        $this->interfaces = $interfaces;
 
         return $this;
     }
@@ -180,5 +165,41 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     public function setCoreMethods(array $coreMethods): void
     {
         $this->coreMethods = $coreMethods;
+    }
+
+    /**
+     * @return array<\ReflectionMethod>
+     */
+    public function getCoreInterfacesMethods(): array
+    {
+        return $this->coreInterfacesMethods;
+    }
+
+    /**
+     * @param array<\ReflectionMethod> $coreInterfacesMethods
+     *
+     * @return void
+     */
+    public function setCoreInterfacesMethods(array $coreInterfacesMethods): void
+    {
+        $this->coreInterfacesMethods = $coreInterfacesMethods;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExtendCore(): bool
+    {
+        return $this->extendsCore;
+    }
+
+    /**
+     * @param bool $extendsCore
+     *
+     * @return void
+     */
+    public function setExtendCore(bool $extendsCore): void
+    {
+        $this->extendsCore = $extendsCore;
     }
 }

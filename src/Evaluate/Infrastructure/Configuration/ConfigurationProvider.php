@@ -56,11 +56,15 @@ class ConfigurationProvider
      */
     public function getCoreDirectory(): array
     {
-        return [
+        $directories = [
             $this->getVendorDirectory() . 'spryker' . DIRECTORY_SEPARATOR,
             $this->getVendorDirectory() . 'spryker-eco' . DIRECTORY_SEPARATOR,
             $this->getVendorDirectory() . 'spryker-shop' . DIRECTORY_SEPARATOR,
         ];
+
+        return array_filter($directories, function ($dir) {
+            return is_dir($dir);
+        });
     }
 
     /**

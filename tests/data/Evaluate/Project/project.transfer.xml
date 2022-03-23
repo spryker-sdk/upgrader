@@ -10,4 +10,8 @@
         <property name="extendedСoreProperty" type="string"/>
     </transfer>
 
+    <transfer name="TestProjectTransfer">
+        <property name="correctPropertyName" type="string"/>
+    </transfer>
+
 </transfers>

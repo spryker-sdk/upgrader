@@ -107,6 +107,9 @@ services:
     private_api.filter:
         class: CodeCompliance\Domain\Checks\Filters\PrivateApiFilter
 
+    plugin.filter:
+        class: CodeCompliance\Domain\Checks\Filters\PluginFilter
+
     CodeCompliance\Domain\Service\FilterService:
         class: CodeCompliance\Domain\Service\FilterService
         arguments:
@@ -117,5 +120,6 @@ services:
                 param4: '@facade.filter',
                 param5: '@ignore_list.filter',
                 param6: '@persistence.filter',
-                param7: '@private_api.filter'
+                param7: '@private_api.filter',
+                param8: '@plugin.filter'
             }

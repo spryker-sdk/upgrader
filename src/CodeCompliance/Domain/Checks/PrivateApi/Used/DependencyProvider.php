@@ -7,7 +7,7 @@
 
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
-use CodeCompliance\Domain\Checks\Filters\Filters;
+use CodeCompliance\Domain\Checks\Filters\BusinessFactoryFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 use ReflectionMethod;
@@ -36,7 +36,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
     public function getViolations(): array
     {
         $filteredSources = $this->filterService->filter($this->getCodebaseSourceDto()->getPhpCodebaseSources(), [
-            Filters::BUSINESS_FACTORY_FILTER,
+            BusinessFactoryFilter::BUSINESS_FACTORY_FILTER,
         ]);
         $violations = [];
 

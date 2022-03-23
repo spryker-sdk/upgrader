@@ -12,11 +12,16 @@ use Codebase\Application\Dto\CodebaseInterface;
 class CoreExtensionFilter implements FilterInterface
 {
     /**
+     * @var string
+     */
+    public const CORE_EXTENSION_FILTER = 'CORE_EXTENSION_FILTER';
+
+    /**
      * @return string
      */
     public function getFilterName(): string
     {
-        return Filters::CORE_EXTENSION_FILTER;
+        return static::CORE_EXTENSION_FILTER;
     }
 
     /**

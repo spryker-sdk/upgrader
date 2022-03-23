@@ -5,12 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace TestCore\Method;
+namespace TestCore\MethodIsOverwritten;
 
-interface CoreMethodInterface
+interface FooPluginInterface
 {
-    /**
-     * @return string
-     */
-    public function superMethodFromCoreInterfaceSuccess(): string;
 }
