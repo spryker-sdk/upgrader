@@ -12,11 +12,16 @@ use Codebase\Application\Dto\CodebaseInterface;
 class PersistenceFilter implements FilterInterface
 {
     /**
+     * @var string
+     */
+    public const PERSISTENCE_FILTER = 'PERSISTENCE_FILTER';
+
+    /**
      * @return string
      */
     public function getFilterName(): string
     {
-        return Filters::PERSISTENCE_FILTER;
+        return static::PERSISTENCE_FILTER;
     }
 
     /**

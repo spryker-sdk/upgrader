@@ -12,11 +12,16 @@ use Codebase\Application\Dto\CodebaseInterface;
 class IgnoreListFilter implements FilterInterface
 {
     /**
+     * @var string
+     */
+    public const IGNORE_LIST_FILTER = 'IGNORE_LIST_FILTER';
+
+    /**
      * @return string
      */
     public function getFilterName(): string
     {
-        return Filters::IGNORE_LIST_FILTER;
+        return static::IGNORE_LIST_FILTER;
     }
 
     /**
@@ -68,11 +73,11 @@ class IgnoreListFilter implements FilterInterface
     {
         return [
             '/\/Kernel\//',
-            '/\/Shared\//',
             '/\/\w+Bootstrap$/',
             '/\/\w+ConfigurationProvider$/',
             '/\/Development\//',
             '/^Spryker\/Zed\/\w+DataImport\//',
+            '/^Spryker\/Shared\/Twig\/TwigFunctionProvider$/',
         ];
     }
 }

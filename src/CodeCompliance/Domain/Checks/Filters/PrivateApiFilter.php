@@ -10,11 +10,16 @@ namespace CodeCompliance\Domain\Checks\Filters;
 class PrivateApiFilter implements FilterInterface
 {
     /**
+     * @var string
+     */
+    public const PRIVATE_API_FILTER = 'PRIVATE_API_FILTER';
+
+    /**
      * @return string
      */
     public function getFilterName(): string
     {
-        return Filters::PRIVATE_API_FILTER;
+        return static::PRIVATE_API_FILTER;
     }
 
     /**

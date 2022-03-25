@@ -13,11 +13,16 @@ use ReflectionClass;
 class PluginFilter implements FilterInterface
 {
     /**
+     * @var string
+     */
+    public const PLUGIN_FILTER = 'PLUGIN_FILTER';
+
+    /**
      * @return string
      */
     public function getFilterName(): string
     {
-        return Filters::PLUGIN_FILTER;
+        return static::PLUGIN_FILTER;
     }
 
     /**

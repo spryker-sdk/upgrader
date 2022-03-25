@@ -71,4 +71,14 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
 
         return false;
     }
+
+    /**
+     * @param string $docComment
+     *
+     * @return bool
+     */
+    protected function isPluginReturnInDocComment(string $docComment): bool
+    {
+        return (bool)preg_match('/.*@return.*PluginInterface.*/m', $docComment);
+    }
 }

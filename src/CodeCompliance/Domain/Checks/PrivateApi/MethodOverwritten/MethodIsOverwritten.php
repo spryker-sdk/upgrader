@@ -142,16 +142,6 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
     }
 
     /**
-     * @param string $docComment
-     *
-     * @return bool
-     */
-    protected function isPluginReturnInDocComment(string $docComment): bool
-    {
-        return (bool)preg_match('/.*@return.*PluginInterface.*/m', $docComment);
-    }
-
-    /**
      * @param \ReflectionMethod $method
      *
      * @return string
