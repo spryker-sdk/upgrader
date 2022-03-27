@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "94b05eed08cc798378c8aa4240c22de5",
+    "content-hash": "fbf6f89408ad6e22a031cff1266b925a",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1805,12 +1805,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/sdk-contracts.git",
-                "reference": "d9511b0d338ff99da131ecb98bfa16a863cbffdd"
+                "reference": "73198a6b719012b3d9d8f7129dc3ff0478abf96b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/d9511b0d338ff99da131ecb98bfa16a863cbffdd",
-                "reference": "d9511b0d338ff99da131ecb98bfa16a863cbffdd",
+                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/73198a6b719012b3d9d8f7129dc3ff0478abf96b",
+                "reference": "73198a6b719012b3d9d8f7129dc3ff0478abf96b",
                 "shasum": ""
             },
             "require": {
@@ -1836,7 +1836,7 @@
                 "issues": "https://github.com/spryker-sdk/sdk-contracts/issues",
                 "source": "https://github.com/spryker-sdk/sdk-contracts/tree/master"
             },
-            "time": "2022-02-09T13:19:55+00:00"
+            "time": "2022-02-11T07:36:31+00:00"
         },
         {
             "name": "spryker/code-sniffer",
