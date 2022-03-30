@@ -16,7 +16,7 @@ class BaseParser extends KernelTestCase
     /**
      * @var string
      */
-    protected const PROJECT_PREFIX = 'Test';
+    protected const PROJECT_PREFIX = ['Test'];
 
     /**
      * @var array<string>
@@ -72,7 +72,7 @@ class BaseParser extends KernelTestCase
     protected function createCodebaseSourceDto(): CodebaseSourceDto
     {
         return (new CodebaseSourceDto())
-            ->setProjectPrefix(static::PROJECT_PREFIX)
+            ->setProjectPrefixList(static::PROJECT_PREFIX)
             ->setCoreNamespaces(static::CORE_NAMESPACES);
     }
 }

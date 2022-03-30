@@ -40,14 +40,21 @@ class TransferName extends AbstractCodeComplianceCheck
         if ($this->getCodebaseSourceDto()->getTransferSchemaCoreCodebaseSources()) {
             $nameFromCoreTransfers = array_column($this->getCodebaseSourceDto()->getTransferSchemaCoreCodebaseSources(), static::COLUMN_KEY_NAME);
         }
-        $projectPrefix = $this->getCodebaseSourceDto()->getProjectPrefix();
+        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixList();
 
         foreach ($this->getCodebaseSourceDto()->getTransferSchemaCodebaseSources() as $transfer) {
             $isTransferUniqueOnTheProjectLevel = !in_array($transfer->getName(), $nameFromCoreTransfers);
-            $isTransferPrefixExist = (stripos($transfer->getName(), $projectPrefix) === 0);
+            $isTransferPrefixExist = $this->hasProjectPrefix($transfer->getName(), $projectPrefixList);
 
             if ($isTransferUniqueOnTheProjectLevel && !$isTransferPrefixExist) {
-                $guideline = sprintf($this->getGuideline(), $transfer->getName(), $projectPrefix, $transfer->getPath(), $projectPrefix, $transfer->getName());
+                $guideline = sprintf(
+                    $this->getGuideline(),
+                    $transfer->getName(),
+                    implode(',', $projectPrefixList),
+                    $transfer->getPath(),
+                    implode(',', $projectPrefixList),
+                    $transfer->getName()
+                );
                 $violations[] = new Violation(new Id(), $guideline, $this->getName());
             }
         }

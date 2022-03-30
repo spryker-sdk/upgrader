@@ -50,9 +50,9 @@ class CodebaseSourceDto
     protected string $type = '';
 
     /**
-     * @var string
+     * @var array<string>
      */
-    protected string $projectPrefix = '';
+    protected array $projectPrefixList = [];
 
     /**
      * @param array<\Codebase\Application\Dto\CodebaseInterface> $codebaseSources
@@ -180,23 +180,22 @@ class CodebaseSourceDto
     }
 
     /**
-     * @param string $projectPrefix
-     *
+     * @param array $projectPrefixList
      * @return $this
      */
-    public function setProjectPrefix(string $projectPrefix)
+    public function setProjectPrefixList(array $projectPrefixList)
     {
-        $this->projectPrefix = $projectPrefix;
+        $this->projectPrefixList = $projectPrefixList;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getProjectPrefix(): string
+    public function getProjectPrefixList(): array
     {
-        return $this->projectPrefix;
+        return $this->projectPrefixList;
     }
 
     /**

@@ -39,30 +39,25 @@ class Constant extends AbstractCodeComplianceCheck
         foreach ($this->getCodebaseSourceDto()->getPhpCodebaseSources() as $source) {
             $coreParent = $source->getCoreParent();
             $parentConstants = $coreParent ? $coreParent->getConstants() : [];
-            $projectPrefix = $this->getCodebaseSourceDto()->getProjectPrefix();
+            $projectPrefix = $this->getCodebaseSourceDto()->getProjectPrefixList();
 
             foreach ($source->getConstants() as $nameConstant => $valueConstant) {
                 $isConstantUnique = empty($parentConstants) || !array_key_exists($nameConstant, $parentConstants);
                 $hasProjectPrefix = $this->hasProjectPrefix($nameConstant, $projectPrefix);
 
                 if ($coreParent && $isConstantUnique && !$hasProjectPrefix) {
-                    $guideline = sprintf($this->getGuideline(), $source->getClassName(), $nameConstant, strtoupper($projectPrefix), $nameConstant);
+                    $guideline = sprintf(
+                        $this->getGuideline(),
+                        $source->getClassName(),
+                        $nameConstant,
+                        strtoupper(implode(',', $projectPrefix)),
+                        $nameConstant
+                    );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
                 }
             }
         }
 
         return $violations;
-    }
-
-    /**
-     * @param string $value
-     * @param string $projectPrefix
-     *
-     * @return bool
-     */
-    protected function hasProjectPrefix(string $value, string $projectPrefix): bool
-    {
-        return stripos($value, strtoupper($projectPrefix)) === 0;
     }
 }

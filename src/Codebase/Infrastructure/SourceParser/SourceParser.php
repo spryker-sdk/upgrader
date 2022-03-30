@@ -79,7 +79,7 @@ class SourceParser
     {
         $codebaseSourceDto = (new CodebaseSourceDto())
             ->setCoreNamespaces($codebaseRequestDto->getCoreNamespaces())
-            ->setProjectPrefix($codebaseRequestDto->getProjectPrefix());
+            ->setProjectPrefixList($codebaseRequestDto->getProjectPrefixList());
 
         foreach ($codebaseRequestDto->getPaths() as $type => $paths) {
             if ($paths === []) {

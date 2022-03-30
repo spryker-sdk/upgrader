@@ -127,13 +127,12 @@ class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, 
             $this->configurationProvider->getSrcDirectory(),
         );
         $projectConfiguration = $this->projectConfigurationParser->parseConfiguration($projectConfigurationRequest);
-
-        // ToDo: adjust to array getProjectPrefixes()[0]
+        
         $codebaseRequestDto = new CodebaseRequestDto(
             $projectConfiguration->getProjectDirectories(),
             $this->configurationProvider->getCoreDirectory(),
             $this->configurationProvider->getCoreNamespaces(),
-            $projectConfiguration->getProjectPrefixes()[0],
+            $projectConfiguration->getProjectPrefixes(),
             $this->configurationProvider->getIgnoreSources(),
         );
 

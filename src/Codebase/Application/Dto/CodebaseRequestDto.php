@@ -35,9 +35,9 @@ class CodebaseRequestDto
     protected array $coreNamespaces;
 
     /**
-     * @var string
+     * @var array
      */
-    protected string $projectPrefix;
+    protected array $projectPrefixList;
 
     /**
      * @var array<string>
@@ -45,23 +45,23 @@ class CodebaseRequestDto
     protected array $excludeList;
 
     /**
-     * @param array<string> $projectPath
-     * @param array<string> $corePath
-     * @param array<string> $coreNamespaces
-     * @param string $projectPrefix
-     * @param array<string> $excludeList
+     * @param array $projectPath
+     * @param array $corePath
+     * @param array $coreNamespaces
+     * @param array $projectPrefixList
+     * @param array $excludeList
      */
     public function __construct(
         array $projectPath = [],
         array $corePath = [],
         array $coreNamespaces = [],
-        string $projectPrefix = '',
+        array $projectPrefixList = [],
         array $excludeList = []
     ) {
         $this->projectPath = $projectPath;
         $this->corePath = $corePath;
         $this->coreNamespaces = $coreNamespaces;
-        $this->projectPrefix = $projectPrefix;
+        $this->projectPrefixList = $projectPrefixList;
         $this->excludeList = $excludeList;
     }
 
@@ -90,11 +90,11 @@ class CodebaseRequestDto
     }
 
     /**
-     * @return string
+     * @return array<string>
      */
-    public function getProjectPrefix(): string
+    public function getProjectPrefixList(): array
     {
-        return $this->projectPrefix;
+        return $this->projectPrefixList;
     }
 
     /**
