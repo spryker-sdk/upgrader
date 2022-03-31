@@ -27,7 +27,7 @@ class ConfigurationProvider
      */
     public function getProjectConfigurationFilePath(): string
     {
-        return (string)getenv('PROJECT_CONFIGURATION_FILE_PATH') ?: 'sdk-tool.yml';
+        return (string)getenv('PROJECT_CONFIGURATION_FILE_PATH') ?: 'tooling.yml';
     }
 
     /**

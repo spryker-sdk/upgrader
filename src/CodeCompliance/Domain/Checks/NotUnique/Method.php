@@ -67,12 +67,12 @@ class Method extends AbstractCodeComplianceCheck
 
                 if ($source->isExtendCore() && !$isCoreMethod && !$hasProjectPrefix && !$isMethodDeclaredInInterface) {
                     $methodParts = preg_split('/(?=[A-Z])/', $projectMethod->getName()) ?: [];
-                    array_splice($methodParts, 1, 0, $projectPrefixList);
+                    array_splice($methodParts, 1, 0, [reset($projectPrefixList)]);
                     $guideline = sprintf(
                         $this->getGuideline(),
                         $source->getClassName(),
                         $projectMethod->getName(),
-                        strtolower(implode(',', $projectPrefixList)),
+                        strtolower((string)reset($projectPrefixList)),
                         ucfirst(implode('', $methodParts)),
                     );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());

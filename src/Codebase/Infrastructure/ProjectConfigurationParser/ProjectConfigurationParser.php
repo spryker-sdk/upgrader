@@ -9,6 +9,8 @@ namespace Codebase\Infrastructure\ProjectConfigurationParser;
 
 use Codebase\Application\Dto\ConfigurationRequestDto;
 use Codebase\Application\Dto\ConfigurationResponseDto;
+use Codebase\Infrastructure\Exception\ProjectConfigurationFileInvalidSyntaxException;
+use Exception;
 use Symfony\Component\Yaml\Yaml;
 
 class ProjectConfigurationParser implements ProjectConfigurationParserInterface
@@ -29,52 +31,70 @@ class ProjectConfigurationParser implements ProjectConfigurationParserInterface
     public const DEFAULT_PREFIX = 'Pyz';
 
     /**
+     * @var string
+     */
+    public const INVALID_TYPE_ERROR_MESSAGE = 'Value of %s.%s should be array of string';
+
+    /**
      * @param \Codebase\Application\Dto\ConfigurationRequestDto $configurationRequestDto
+     *
+     * @throws \Codebase\Infrastructure\Exception\ProjectConfigurationFileInvalidSyntaxException
      *
      * @return \Codebase\Application\Dto\ConfigurationResponseDto
      */
     public function parseConfiguration(ConfigurationRequestDto $configurationRequestDto): ConfigurationResponseDto
     {
-        $fileContent = $this->parseFile($configurationRequestDto->getConfigurationFilePath());
+        $configPath = $configurationRequestDto->getConfigurationFilePath();
+        try {
+            $projectPrefixes = $this->parseProjectPrefixes($configPath);
+        } catch (Exception $exception) {
+            throw new ProjectConfigurationFileInvalidSyntaxException($configPath, $exception->getMessage());
+        }
 
-        $projectPrefixes = $this->getProjectPrefixes($fileContent);
         $projectDirectories = $this->buildProjectDirectories($configurationRequestDto->getSrcDirectory(), $projectPrefixes);
 
         return new ConfigurationResponseDto($projectPrefixes, $projectDirectories);
     }
 
     /**
-     * @param string $path
+     * @param string $configPath
      *
-     * @return array
-     */
-    protected function parseFile(string $path): array
-    {
-        if (!file_exists($path)) {
-            return [];
-        }
-
-        return Yaml::parseFile($path);
-    }
-
-    /**
-     * @param array $configuration
+     * @throws \Exception
      *
      * @return array<string>
      */
-    protected function getProjectPrefixes(array $configuration): array
+    protected function parseProjectPrefixes(string $configPath): array
     {
-        $upgraderConfig = $configuration[self::UPGRADER_KEY] ?? null;
-        if (!$upgraderConfig) {
+        if (!file_exists($configPath)) {
             return [self::DEFAULT_PREFIX];
         }
 
-        $projectPrefixes = $upgraderConfig[self::PREFIXES_KEY] ?? null;
-        if (!$projectPrefixes) {
-            return [self::DEFAULT_PREFIX];
+        $configuration = Yaml::parseFile($configPath);
+        $projectPrefixes = $configuration[self::UPGRADER_KEY][self::PREFIXES_KEY];
+
+        if (!is_array($projectPrefixes) || !$this->isSequentialArrayOfString($projectPrefixes)) {
+            throw new Exception(sprintf(self::INVALID_TYPE_ERROR_MESSAGE, self::UPGRADER_KEY, self::PREFIXES_KEY));
         }
 
         return $projectPrefixes;
+    }
+
+    /**
+     * @param array $array
+     *
+     * @return bool
+     */
+    protected function isSequentialArrayOfString(array $array): bool
+    {
+        if (count(array_filter(array_keys($array), 'is_string'))) {
+            return false;
+        }
+
+        if (count(array_filter(array_values($array), 'is_string')) !== count($array)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

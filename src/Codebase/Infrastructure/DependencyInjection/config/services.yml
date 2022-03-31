@@ -9,9 +9,12 @@ services:
         resource: '../../../../Codebase/Application/*'
         exclude:
             - '../../../../Codebase/Application/Dto/*'
+            - '../../../../Codebase/Infrastructure/Exception/*'
 
     Codebase\Infrastructure\:
         resource: '../../../../Codebase/Infrastructure/*'
+        exclude:
+            - '../../../../Codebase/Infrastructure/Exception/*'
 
     Codebase\Infrastructure\Service\CodebaseService: ~
     Codebase\Application\Service\CodebaseServiceInterface: '@Codebase\Infrastructure\Service\CodebaseService'
