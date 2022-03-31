@@ -50,8 +50,8 @@ class Constant extends AbstractCodeComplianceCheck
                         $this->getGuideline(),
                         $source->getClassName(),
                         $nameConstant,
-                        strtoupper(implode(',', $projectPrefix)),
-                        $nameConstant
+                        strtoupper((string)reset($projectPrefix)),
+                        $nameConstant,
                     );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
                 }

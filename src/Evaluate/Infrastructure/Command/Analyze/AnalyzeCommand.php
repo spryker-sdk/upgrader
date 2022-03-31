@@ -127,7 +127,7 @@ class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, 
             $this->configurationProvider->getSrcDirectory(),
         );
         $projectConfiguration = $this->projectConfigurationParser->parseConfiguration($projectConfigurationRequest);
-        
+
         $codebaseRequestDto = new CodebaseRequestDto(
             $projectConfiguration->getProjectDirectories(),
             $this->configurationProvider->getCoreDirectory(),

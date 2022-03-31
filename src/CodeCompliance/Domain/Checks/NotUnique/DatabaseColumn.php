@@ -52,7 +52,7 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
 
             $sourceName = $source->getName();
             $columnsWithoutPrefix = array_filter($source->getChildElements(), function (string $column) use ($projectPrefixList, $sourceName, $coreSchemas) {
-                return !in_array($column, $coreSchemas[$sourceName] ?? []) && $this->hasProjectPrefix($column, $projectPrefixList);
+                return !in_array($column, $coreSchemas[$sourceName] ?? []) && !$this->hasProjectPrefix($column, $projectPrefixList);
             });
             $isDbPrefixExist = $this->hasProjectPrefix($source->getName(), $projectPrefixList);
 
@@ -63,8 +63,8 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
                         $columnWithoutPrefix,
                         implode(',', $projectPrefixList),
                         $source->getPath(),
-                        strtolower(implode(',', $projectPrefixList)),
-                        $columnWithoutPrefix
+                        strtolower((string)reset($projectPrefixList)),
+                        $columnWithoutPrefix,
                     );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
                 }

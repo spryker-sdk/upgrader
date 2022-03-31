@@ -14,7 +14,7 @@ use Symfony\Component\Finder\Finder;
 class BaseParser extends KernelTestCase
 {
     /**
-     * @var string
+     * @var array<string>
      */
     protected const PROJECT_PREFIX = ['Test'];
 

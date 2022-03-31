@@ -53,8 +53,8 @@ class TransferProperty extends AbstractCodeComplianceCheck
             $propertiesWithoutPrefix = array_filter(
                 $transfer->getChildElements(),
                 function (string $property) use ($projectPrefixList, $sourceName, $coreSchemas) {
-                    return !in_array($property, $coreSchemas[$sourceName] ?? []) && $this->hasProjectPrefix($property, $projectPrefixList);
-                }
+                    return !in_array($property, $coreSchemas[$sourceName] ?? []) && !$this->hasProjectPrefix($property, $projectPrefixList);
+                },
             );
             $isTransferPrefixExist = $this->hasProjectPrefix($transfer->getName(), $projectPrefixList);
 
@@ -66,8 +66,8 @@ class TransferProperty extends AbstractCodeComplianceCheck
                         $transfer->getName(),
                         implode(',', $projectPrefixList),
                         $transfer->getPath(),
-                        strtolower(implode(',', $projectPrefixList)),
-                        ucfirst($propertyWithoutPrefix)
+                        strtolower((string)reset($projectPrefixList)),
+                        ucfirst($propertyWithoutPrefix),
                     );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
                 }

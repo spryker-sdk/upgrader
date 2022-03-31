@@ -50,10 +50,10 @@ class DatabaseTable extends AbstractCodeComplianceCheck
                 $guideline = sprintf(
                     $this->getGuideline(),
                     $schema->getName(),
-                    implode(',',$projectPrefixList),
+                    implode(',', $projectPrefixList),
                     $schema->getPath(),
-                    strtolower(implode(',',$projectPrefixList)),
-                    $schema->getName()
+                    strtolower((string)reset($projectPrefixList)),
+                    $schema->getName(),
                 );
                 $violations[] = new Violation(new Id(), $guideline, $this->getName());
             }

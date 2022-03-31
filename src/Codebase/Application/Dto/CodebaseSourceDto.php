@@ -181,6 +181,7 @@ class CodebaseSourceDto
 
     /**
      * @param array $projectPrefixList
+     *
      * @return $this
      */
     public function setProjectPrefixList(array $projectPrefixList)
@@ -191,7 +192,7 @@ class CodebaseSourceDto
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getProjectPrefixList(): array
     {

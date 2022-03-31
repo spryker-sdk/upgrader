@@ -73,7 +73,7 @@ class Method extends AbstractCodeComplianceCheck
                         $source->getClassName(),
                         $projectMethod->getName(),
                         strtolower(implode(',', $projectPrefixList)),
-                        ucfirst(implode('', $methodParts))
+                        ucfirst(implode('', $methodParts)),
                     );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
                 }
@@ -135,5 +135,22 @@ class Method extends AbstractCodeComplianceCheck
         });
 
         return count($traits) > 0;
+    }
+
+    /**
+     * @param string $value
+     * @param array $projectPrefixList
+     *
+     * @return bool
+     */
+    protected function hasProjectPrefix(string $value, array $projectPrefixList): bool
+    {
+        foreach ($projectPrefixList as $projectPrefix) {
+            if (strpos($value, $projectPrefix) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -52,8 +52,8 @@ class TransferName extends AbstractCodeComplianceCheck
                     $transfer->getName(),
                     implode(',', $projectPrefixList),
                     $transfer->getPath(),
-                    implode(',', $projectPrefixList),
-                    $transfer->getName()
+                    reset($projectPrefixList),
+                    $transfer->getName(),
                 );
                 $violations[] = new Violation(new Id(), $guideline, $this->getName());
             }
