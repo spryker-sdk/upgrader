@@ -148,4 +148,12 @@ class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, 
 
         return $context;
     }
+
+    /**
+     * @return string
+     */
+    public function getStage(): string
+    {
+        return ContextInterface::DEFAULT_STAGE;
+    }
 }

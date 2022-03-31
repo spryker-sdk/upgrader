@@ -8,6 +8,7 @@
 namespace Evaluate\Infrastructure\Command\Report;
 
 use SprykerSdk\SdkContracts\Entity\CommandInterface;
+use SprykerSdk\SdkContracts\Entity\ContextInterface;
 use SprykerSdk\SdkContracts\Entity\ConverterInterface;
 
 class ReportCommand implements CommandInterface
@@ -50,5 +51,13 @@ class ReportCommand implements CommandInterface
     public function getViolationConverter(): ?ConverterInterface
     {
         return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStage(): string
+    {
+        return ContextInterface::DEFAULT_STAGE;
     }
 }

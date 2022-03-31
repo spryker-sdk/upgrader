@@ -8,7 +8,7 @@
 namespace CodeCompliance\Domain\Entity;
 
 use SprykerSdk\SdkContracts\Violation\PackageViolationReportInterface;
-use SprykerSdk\SdkContracts\Violation\ViolationReportConverterInterface;
+use SprykerSdk\SdkContracts\Violation\ViolationInterface;
 
 class Package implements PackageViolationReportInterface
 {
@@ -28,12 +28,12 @@ class Package implements PackageViolationReportInterface
     protected string $path = '';
 
     /**
-     * @var array<\SprykerSdk\SdkContracts\Violation\ViolationReportConverterInterface>
+     * @var array<\SprykerSdk\SdkContracts\Violation\ViolationInterface>
      */
     protected array $violations = [];
 
     /**
-     * @var array<string, array<\SprykerSdk\SdkContracts\Violation\ViolationReportConverterInterface>>>
+     * @var array<string, array<\SprykerSdk\SdkContracts\Violation\ViolationInterface>>
      */
     protected array $fileViolations = [];
 
@@ -66,7 +66,7 @@ class Package implements PackageViolationReportInterface
     }
 
     /**
-     * @return array<\SprykerSdk\SdkContracts\Violation\ViolationReportConverterInterface>
+     * @return array<\SprykerSdk\SdkContracts\Violation\ViolationInterface>
      */
     public function getViolations(): array
     {
@@ -74,7 +74,7 @@ class Package implements PackageViolationReportInterface
     }
 
     /**
-     * @return array<string, array<\SprykerSdk\SdkContracts\Violation\ViolationReportConverterInterface>>>
+     * @return array<string, array<\SprykerSdk\SdkContracts\Violation\ViolationInterface>>>
      */
     public function getFileViolations(): array
     {
@@ -82,11 +82,11 @@ class Package implements PackageViolationReportInterface
     }
 
     /**
-     * @param \SprykerSdk\SdkContracts\Violation\ViolationReportConverterInterface $violation
+     * @param \SprykerSdk\SdkContracts\Violation\ViolationInterface $violation
      *
      * @return $this
      */
-    public function addViolation(ViolationReportConverterInterface $violation)
+    public function addViolation(ViolationInterface $violation)
     {
         $this->violations[] = $violation;
 
@@ -95,11 +95,11 @@ class Package implements PackageViolationReportInterface
 
     /**
      * @param string $file
-     * @param \SprykerSdk\SdkContracts\Violation\ViolationReportConverterInterface $fileViolation
+     * @param \SprykerSdk\SdkContracts\Violation\ViolationInterface $fileViolation
      *
      * @return $this
      */
-    public function addFileViolation(string $file, ViolationReportConverterInterface $fileViolation)
+    public function addFileViolation(string $file, ViolationInterface $fileViolation)
     {
         $this->fileViolations[$file][] = $fileViolation;
 

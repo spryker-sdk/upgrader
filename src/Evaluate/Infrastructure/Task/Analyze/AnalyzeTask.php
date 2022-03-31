@@ -147,4 +147,12 @@ class AnalyzeTask implements TaskInterface
     {
         return new Lifecycle();
     }
+
+    /**
+     * @return array<string>
+     */
+    public function getStages(): array
+    {
+        return [];
+    }
 }
