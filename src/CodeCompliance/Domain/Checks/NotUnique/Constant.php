@@ -39,18 +39,18 @@ class Constant extends AbstractCodeComplianceCheck
         foreach ($this->getCodebaseSourceDto()->getPhpCodebaseSources() as $source) {
             $coreParent = $source->getCoreParent();
             $parentConstants = $coreParent ? $coreParent->getConstants() : [];
-            $projectPrefix = $this->getCodebaseSourceDto()->getProjectPrefixList();
+            $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixList();
 
             foreach ($source->getConstants() as $nameConstant => $valueConstant) {
                 $isConstantUnique = !$parentConstants || !array_key_exists($nameConstant, $parentConstants);
-                $hasProjectPrefix = $this->hasProjectPrefix($nameConstant, $projectPrefix);
+                $hasProjectPrefix = $this->hasProjectPrefix($nameConstant, $projectPrefixList);
 
                 if ($coreParent && $isConstantUnique && !$hasProjectPrefix) {
                     $guideline = sprintf(
                         $this->getGuideline(),
                         $source->getClassName(),
                         $nameConstant,
-                        strtoupper((string)reset($projectPrefix)),
+                        strtoupper((string)reset($projectPrefixList)),
                         $nameConstant,
                     );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
@@ -63,12 +63,18 @@ class Constant extends AbstractCodeComplianceCheck
 
     /**
      * @param string $value
-     * @param string $projectPrefix
+     * @param array $projectPrefixList
      *
      * @return bool
      */
-    protected function hasProjectPrefix(string $value, string $projectPrefix): bool
+    protected function hasProjectPrefix(string $value, array $projectPrefixList): bool
     {
-        return stripos($value, strtoupper($projectPrefix)) === 0;
+        foreach ($projectPrefixList as $projectPrefix) {
+            if (stripos($value, strtoupper($projectPrefix)) === 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
