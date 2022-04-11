@@ -132,8 +132,8 @@ class PhpParser implements ParserInterface
 
     /**
      * @param string $namespace
-     * @param array $projectPrefixList
-     * @param array $coreNamespaces
+     * @param array<string> $projectPrefixList
+     * @param array<string> $coreNamespaces
      * @param \Codebase\Application\Dto\ClassCodebaseDto|null $transfer
      *
      * @return \Codebase\Application\Dto\ClassCodebaseDto|null

@@ -10,9 +10,7 @@ namespace Codebase\Infrastructure\SourceParser;
 use Codebase\Application\Dto\CodebaseRequestDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
 use Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface;
-use Codebase\Infrastructure\Exception\ParserIsNotDefinedException;
 use Codebase\Infrastructure\SourceFinder\SourceFinder;
-use Codebase\Infrastructure\SourceParser\Parser\ParserInterface;
 
 class SourceParser
 {
@@ -98,40 +96,5 @@ class SourceParser
         }
 
         return $codebaseSourceDto;
-    }
-
-    /**
-     * @param array<string> $extensions
-     * @param \Codebase\Application\Dto\CodebaseSourceDto $codebaseSourceDto
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
-    protected function parseSourceByExtension(array $extensions, CodebaseSourceDto $codebaseSourceDto): CodebaseSourceDto
-    {
-        $finder = $this->sourceFinder->findSourceByExtension($extensions);
-        $parser = $this->resolveParserByExtension($extensions[0]);
-
-        return $parser->parse($finder, $codebaseSourceDto);
-    }
-
-    /**
-     * @param string $extension
-     *
-     * @throws \Codebase\Infrastructure\Exception\ParserIsNotDefinedException
-     *
-     * @return \Codebase\Infrastructure\SourceParser\Parser\ParserInterface
-     */
-    protected function resolveParserByExtension(string $extension): ParserInterface
-    {
-        $extensions = explode('.', $extension);
-        $extension = end($extensions);
-
-        foreach ($this->sourceParsers as $sourceParser) {
-            if ($sourceParser->getExtension() === $extension) {
-                return $sourceParser;
-            }
-        }
-
-        throw new ParserIsNotDefinedException();
     }
 }

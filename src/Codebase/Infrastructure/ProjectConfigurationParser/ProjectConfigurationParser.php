@@ -18,22 +18,17 @@ class ProjectConfigurationParser implements ProjectConfigurationParserInterface
     /**
      * @var string
      */
-    public const UPGRADER_KEY = 'upgrader';
+    protected const UPGRADER_KEY = 'upgrader';
 
     /**
      * @var string
      */
-    public const PREFIXES_KEY = 'prefixes';
+    protected const PREFIXES_KEY = 'prefixes';
 
     /**
      * @var string
      */
-    public const DEFAULT_PREFIX = 'Pyz';
-
-    /**
-     * @var string
-     */
-    public const INVALID_TYPE_ERROR_MESSAGE = 'Value of %s.%s should be array of string';
+    protected const DEFAULT_PREFIX = 'Pyz';
 
     /**
      * @param \Codebase\Application\Dto\ConfigurationRequestDto $configurationRequestDto
@@ -51,7 +46,7 @@ class ProjectConfigurationParser implements ProjectConfigurationParserInterface
             throw new ProjectConfigurationFileInvalidSyntaxException($configPath, $exception->getMessage());
         }
 
-        $projectDirectories = $this->buildProjectDirectories($configurationRequestDto->getSrcDirectory(), $projectPrefixes);
+        $projectDirectories = $this->getProjectDirectories($configurationRequestDto->getSrcDirectory(), $projectPrefixes);
 
         return new ConfigurationResponseDto($projectPrefixes, $projectDirectories);
     }
@@ -59,28 +54,31 @@ class ProjectConfigurationParser implements ProjectConfigurationParserInterface
     /**
      * @param string $configPath
      *
-     * @throws \Exception
+     * @throws \Codebase\Infrastructure\Exception\ProjectConfigurationFileInvalidSyntaxException
      *
      * @return array<string>
      */
     protected function parseProjectPrefixes(string $configPath): array
     {
         if (!file_exists($configPath)) {
-            return [self::DEFAULT_PREFIX];
+            return [static::DEFAULT_PREFIX];
         }
 
         $configuration = Yaml::parseFile($configPath);
-        $projectPrefixes = $configuration[self::UPGRADER_KEY][self::PREFIXES_KEY];
+        $projectPrefixes = $configuration[static::UPGRADER_KEY][static::PREFIXES_KEY];
 
         if (!is_array($projectPrefixes) || !$this->isSequentialArrayOfString($projectPrefixes)) {
-            throw new Exception(sprintf(self::INVALID_TYPE_ERROR_MESSAGE, self::UPGRADER_KEY, self::PREFIXES_KEY));
+            throw new ProjectConfigurationFileInvalidSyntaxException(
+                $configPath,
+                sprintf('Value of %s.%s should be array of string', static::UPGRADER_KEY, static::PREFIXES_KEY),
+            );
         }
 
         return $projectPrefixes;
     }
 
     /**
-     * @param array $array
+     * @param array<string> $array
      *
      * @return bool
      */
@@ -99,11 +97,11 @@ class ProjectConfigurationParser implements ProjectConfigurationParserInterface
 
     /**
      * @param string $srcDirectory
-     * @param array $projectPrefixes
+     * @param array<string> $projectPrefixes
      *
-     * @return array
+     * @return array<string>
      */
-    protected function buildProjectDirectories(string $srcDirectory, array $projectPrefixes): array
+    protected function getProjectDirectories(string $srcDirectory, array $projectPrefixes): array
     {
         $projectDirectories = [];
 

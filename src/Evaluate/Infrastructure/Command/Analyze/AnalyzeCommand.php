@@ -7,9 +7,6 @@
 
 namespace Evaluate\Infrastructure\Command\Analyze;
 
-use Codebase\Application\Dto\CodebaseRequestDto;
-use Codebase\Application\Dto\ConfigurationRequestDto;
-use Codebase\Infrastructure\ProjectConfigurationParser\ProjectConfigurationParserInterface;
 use Codebase\Infrastructure\Service\CodebaseService;
 use CodeCompliance\Application\Service\CodeComplianceServiceInterface;
 use CodeCompliance\Domain\Entity\Report;
@@ -31,11 +28,6 @@ class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, 
     protected CodeComplianceServiceInterface $codeComplianceService;
 
     /**
-     * @var \Codebase\Infrastructure\ProjectConfigurationParser\ProjectConfigurationParserInterface
-     */
-    protected ProjectConfigurationParserInterface $projectConfigurationParser;
-
-    /**
      * @var \Evaluate\Infrastructure\Configuration\ConfigurationProvider
      */
     protected ConfigurationProvider $configurationProvider;
@@ -47,18 +39,15 @@ class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, 
 
     /**
      * @param \CodeCompliance\Application\Service\CodeComplianceServiceInterface $codeComplianceService
-     * @param \Codebase\Infrastructure\ProjectConfigurationParser\ProjectConfigurationParserInterface $configurationParser
      * @param \Evaluate\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      * @param \Codebase\Infrastructure\Service\CodebaseService $codebaseService
      */
     public function __construct(
         CodeComplianceServiceInterface $codeComplianceService,
-        ProjectConfigurationParserInterface $configurationParser,
         ConfigurationProvider $configurationProvider,
         CodebaseService $codebaseService
     ) {
         $this->codeComplianceService = $codeComplianceService;
-        $this->projectConfigurationParser = $configurationParser;
         $this->configurationProvider = $configurationProvider;
         $this->codebaseService = $codebaseService;
     }
@@ -122,21 +111,7 @@ class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, 
      */
     public function execute(ContextInterface $context): ContextInterface
     {
-        $projectConfigurationRequest = new ConfigurationRequestDto(
-            $this->configurationProvider->getProjectConfigurationFilePath(),
-            $this->configurationProvider->getSrcDirectory(),
-        );
-        $projectConfiguration = $this->projectConfigurationParser->parseConfiguration($projectConfigurationRequest);
-
-        $codebaseRequestDto = new CodebaseRequestDto(
-            $projectConfiguration->getProjectDirectories(),
-            $this->configurationProvider->getCoreDirectory(),
-            $this->configurationProvider->getCoreNamespaces(),
-            $projectConfiguration->getProjectPrefixes(),
-            $this->configurationProvider->getIgnoreSources(),
-        );
-
-        $codebaseSourceDto = $this->codebaseService->parseSource($codebaseRequestDto);
+        $codebaseSourceDto = $this->codebaseService->parse($this->configurationProvider);
 
         static::$report = $this->codeComplianceService->analyze($codebaseSourceDto);
 

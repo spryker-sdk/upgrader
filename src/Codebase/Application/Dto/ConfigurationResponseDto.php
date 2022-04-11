@@ -20,8 +20,8 @@ class ConfigurationResponseDto
     protected array $projectDirectories;
 
     /**
-     * @param array $projectPrefixes
-     * @param array $projectDirectories
+     * @param array<string> $projectPrefixes
+     * @param array<string> $projectDirectories
      */
     public function __construct(array $projectPrefixes, array $projectDirectories)
     {

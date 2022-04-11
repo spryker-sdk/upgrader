@@ -180,7 +180,7 @@ class CodebaseSourceDto
     }
 
     /**
-     * @param array $projectPrefixList
+     * @param array<string> $projectPrefixList
      *
      * @return $this
      */

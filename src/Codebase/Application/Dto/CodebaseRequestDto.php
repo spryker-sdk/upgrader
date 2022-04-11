@@ -35,7 +35,7 @@ class CodebaseRequestDto
     protected array $coreNamespaces;
 
     /**
-     * @var array
+     * @var array<string>
      */
     protected array $projectPrefixList;
 
@@ -45,11 +45,11 @@ class CodebaseRequestDto
     protected array $excludeList;
 
     /**
-     * @param array $projectPath
-     * @param array $corePath
-     * @param array $coreNamespaces
-     * @param array $projectPrefixList
-     * @param array $excludeList
+     * @param array<string> $projectPath
+     * @param array<string> $corePath
+     * @param array<string> $coreNamespaces
+     * @param array<string> $projectPrefixList
+     * @param array<string> $excludeList
      */
     public function __construct(
         array $projectPath = [],

@@ -84,7 +84,7 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
 
     /**
      * @param string $value
-     * @param array $projectPrefixList
+     * @param array<string> $projectPrefixList
      *
      * @return bool
      */
