@@ -9,7 +9,6 @@ services:
         resource: '../../../../Codebase/Application/*'
         exclude:
             - '../../../../Codebase/Application/Dto/*'
-            - '../../../../Codebase/Infrastructure/Exception/*'
 
     Codebase\Infrastructure\:
         resource: '../../../../Codebase/Infrastructure/*'

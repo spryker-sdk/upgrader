@@ -212,8 +212,8 @@ class PhpParser implements ParserInterface
 
     /**
      * @param \ReflectionClass $projectClass
-     * @param array $projectPrefix
-     * @param array $coreNamespaces
+     * @param array<string> $projectPrefix
+     * @param array<string> $coreNamespaces
      *
      * @return bool
      */
@@ -261,7 +261,7 @@ class PhpParser implements ParserInterface
 
     /**
      * @param array $interfaces
-     * @param array $projectPrefixList
+     * @param array<string> $projectPrefixList
      *
      * @return array
      */
@@ -296,7 +296,7 @@ class PhpParser implements ParserInterface
 
     /**
      * @param string $namespaceName
-     * @param array $projectPrefixList
+     * @param array<string> $projectPrefixList
      *
      * @return bool
      */

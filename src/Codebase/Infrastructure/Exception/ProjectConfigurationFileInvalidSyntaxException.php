@@ -13,11 +13,6 @@ use Throwable;
 class ProjectConfigurationFileInvalidSyntaxException extends Exception
 {
     /**
-     * @var string
-     */
-    protected const ERROR_MESSAGE = 'Invalid configuration file %s. %s';
-
-    /**
      * @param string $configurationFile
      * @param string $message
      * @param int $code
@@ -25,6 +20,6 @@ class ProjectConfigurationFileInvalidSyntaxException extends Exception
      */
     public function __construct(string $configurationFile, string $message, int $code = 0, ?Throwable $previous = null)
     {
-        parent::__construct(sprintf(static::ERROR_MESSAGE, $configurationFile, $message), $code, $previous);
+        parent::__construct(sprintf('Invalid configuration file %s. %s', $configurationFile, $message), $code, $previous);
     }
 }

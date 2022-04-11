@@ -63,7 +63,7 @@ class Constant extends AbstractCodeComplianceCheck
 
     /**
      * @param string $value
-     * @param array $projectPrefixList
+     * @param array<string> $projectPrefixList
      *
      * @return bool
      */
