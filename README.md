@@ -49,7 +49,7 @@ The Upgrader updates projects via one of the following approaches:
 ​
 To enable the Upgrader to execute this step, apply the following configuration:
 ​
-* Enable GitHub source code provider:
+* GitHub is default source code provider. If you want manually define it, use the next environment variable:
   ​
 ```bash
 export SOURCE_CODE_PROVIDER=github

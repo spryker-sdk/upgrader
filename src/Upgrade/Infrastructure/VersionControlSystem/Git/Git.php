@@ -200,9 +200,9 @@ class Git
             $this->getHeadBranch(),
             $this->getBaseBranch(),
             'Updated to the latest Spryker modules up to ' . date('m/d/Y h:i', time()),
+            $this->pullRequestDataGenerator->buildBody($composerDiffDto),
+            $this->configurationProvider->isPullRequestAutoMergeEnabled(),
         );
-        $pullRequestDto->setBody($this->pullRequestDataGenerator->buildBody($composerDiffDto));
-        $pullRequestDto->setAutoMerge($this->configurationProvider->isPullRequestAutoMergeEnabled());
 
         return $this->sourceCodeProvider->createPullRequest($stepsExecutionDto, $pullRequestDto);
     }

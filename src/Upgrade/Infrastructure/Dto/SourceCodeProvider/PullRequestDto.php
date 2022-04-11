@@ -32,37 +32,26 @@ class PullRequestDto
     /**
      * @var bool
      */
-    protected bool $autoMerge = false;
+    protected bool $autoMerge;
 
     /**
      * @param string $sourceBranch
      * @param string $targetBranch
      * @param string $title
+     * @param string|null $body
+     * @param bool $autoMerge
      */
-    public function __construct(string $sourceBranch, string $targetBranch, string $title)
-    {
+    public function __construct(
+        string $sourceBranch,
+        string $targetBranch,
+        string $title,
+        ?string $body = null,
+        bool $autoMerge = false
+    ) {
         $this->sourceBranch = $sourceBranch;
         $this->targetBranch = $targetBranch;
         $this->title = $title;
-    }
-
-    /**
-     * @param string|null $body
-     *
-     * @return void
-     */
-    public function setBody(?string $body): void
-    {
         $this->body = $body;
-    }
-
-    /**
-     * @param bool $autoMerge
-     *
-     * @return void
-     */
-    public function setAutoMerge(bool $autoMerge): void
-    {
         $this->autoMerge = $autoMerge;
     }
 
