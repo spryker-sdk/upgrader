@@ -7,21 +7,18 @@
 
 namespace TestCore\Method;
 
-class CoreMethod
+abstract class AbstractCorePlugin
 {
+    /**
+     * @return string
+     */
+    abstract public function superCoreAbstractMethodSuccess(): string;
+
     /**
      * @return string
      */
     public function superCoreMethodSuccess(): string
     {
-        return 'Core Method';
-    }
-
-    /**
-     * @return string
-     */
-    public function getTestSuperCoreMethod(): string
-    {
-        return 'Core Method';
+        return 'we should skip Plugin in general';
     }
 }

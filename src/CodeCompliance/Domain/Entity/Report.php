@@ -23,7 +23,7 @@ class Report implements ViolationReportInterface
     protected string $path = '';
 
     /**
-     * @var array<\SprykerSdk\SdkContracts\Violation\ViolationReportConverterInterface>
+     * @var array<\SprykerSdk\SdkContracts\Violation\ViolationInterface>
      */
     protected array $violations = [];
 
@@ -43,7 +43,7 @@ class Report implements ViolationReportInterface
     }
 
     /**
-     * @param array<\SprykerSdk\SdkContracts\Violation\ViolationReportConverterInterface> $violations
+     * @param array<\SprykerSdk\SdkContracts\Violation\ViolationInterface> $violations
      *
      * @return $this
      */
@@ -57,7 +57,7 @@ class Report implements ViolationReportInterface
     }
 
     /**
-     * @return array<\SprykerSdk\SdkContracts\Violation\ViolationReportConverterInterface>
+     * @return array<\SprykerSdk\SdkContracts\Violation\ViolationInterface>
      */
     public function getViolations(): array
     {

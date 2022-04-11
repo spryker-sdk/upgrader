@@ -14,7 +14,7 @@ class CustomerAccessBusinessFactory extends CoreCustomerAccessBusinessFactory
     /**
      * @var string
      */
-    protected const TEST_WITH_PREFIX_CONSTANT_NAME_IN_FACTORY = 'TEST_WITH_PREFIX_CONSTANT_NAME_IN_FACTORY';
+    protected const TESTPROJECT_WITH_PREFIX_CONSTANT_NAME_IN_FACTORY = 'TESTPROJECT_WITH_PREFIX_CONSTANT_NAME_IN_FACTORY';
 
     /**
      * @return mixed

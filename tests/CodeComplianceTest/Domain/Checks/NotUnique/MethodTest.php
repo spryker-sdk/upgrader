@@ -6,6 +6,7 @@
 
 namespace CodeComplianceTest\Domain\Checks\NotUnique;
 
+use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Checks\NotUnique\Method;
 use CodeCompliance\Domain\Service\FilterService;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
@@ -22,7 +23,7 @@ class MethodTest extends BaseCodeComplianceCheckTest
      */
     public function setUp(): void
     {
-        $this->methodCheck = new Method(new FilterService());
+        $this->methodCheck = new Method(new FilterService([new PluginFilter()]));
     }
 
     /**
@@ -38,7 +39,7 @@ class MethodTest extends BaseCodeComplianceCheckTest
         $violations = $this->methodCheck->getViolations();
 
         // Assert
-        $this->assertCount(2, $violations);
+        $this->assertCount(4, $violations);
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
             $this->assertNotEmpty($violation->getMessage());

@@ -8,6 +8,7 @@
 namespace CodeCompliance\Domain\Checks\NotUnique;
 
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
+use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 use ReflectionClass;
@@ -35,12 +36,14 @@ class Method extends AbstractCodeComplianceCheck
      */
     public function getViolations(): array
     {
+        $sources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
+        $filteredSources = $this->filterService->filter($sources, [PluginFilter::PLUGIN_FILTER]);
+
         $violations = [];
 
-        foreach ($this->getCodebaseSourceDto()->getPhpCodebaseSources() as $source) {
+        foreach ($filteredSources as $source) {
             $namesCoreMethods = array_column($source->getCoreMethods(), static::COLUMN_KEY_NAME);
-            $interfaceMethods = $this->getInterfaceMethods($source->getInterfaces());
-            $namesInterfaceMethods = array_column($interfaceMethods, static::COLUMN_KEY_NAME);
+            $nameCoreInterfaceMethods = array_column($source->getCoreInterfacesMethods(), static::COLUMN_KEY_NAME);
             $projectPrefix = $this->getCodebaseSourceDto()->getProjectPrefix();
 
             /** @var \ReflectionMethod $projectMethod */
@@ -54,12 +57,15 @@ class Method extends AbstractCodeComplianceCheck
                 if ($this->isDependencyProviderPluginStack($projectMethod->getName(), $source->getClassName())) {
                     continue;
                 }
+                if ($this->isPluginReturnInDocComment((string)$projectMethod->getDocComment())) {
+                    continue;
+                }
 
                 $isCoreMethod = in_array($projectMethod->getName(), $namesCoreMethods);
-                $isMethodDeclaredInInterface = in_array($projectMethod->getName(), $namesInterfaceMethods);
+                $isMethodDeclaredInInterface = in_array($projectMethod->getName(), $nameCoreInterfaceMethods);
                 $hasProjectPrefix = $this->hasProjectPrefix($projectMethod->getName(), $projectPrefix);
 
-                if (!$isCoreMethod && !$hasProjectPrefix && !$isMethodDeclaredInInterface) {
+                if ($source->isExtendCore() && !$isCoreMethod && !$hasProjectPrefix && !$isMethodDeclaredInInterface) {
                     $methodParts = preg_split('/(?=[A-Z])/', $projectMethod->getName()) ?: [];
                     array_splice($methodParts, 1, 0, [$projectPrefix]);
                     $guideline = sprintf($this->getGuideline(), $source->getClassName(), $projectMethod->getName(), strtolower($projectPrefix), ucfirst(implode('', $methodParts)));
@@ -123,5 +129,16 @@ class Method extends AbstractCodeComplianceCheck
         });
 
         return count($traits) > 0;
+    }
+
+    /**
+     * @param string $value
+     * @param string $projectPrefix
+     *
+     * @return bool
+     */
+    protected function hasProjectPrefix(string $value, string $projectPrefix): bool
+    {
+        return strpos($value, $projectPrefix) !== false;
     }
 }

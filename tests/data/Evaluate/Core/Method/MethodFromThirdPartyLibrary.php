@@ -7,10 +7,15 @@
 
 namespace TestCore\Method;
 
-interface CoreMethodInterface
+use PHPUnit\Framework\Constraint\Count;
+
+class MethodFromThirdPartyLibrary extends Count
 {
     /**
      * @return string
      */
-    public function superMethodFromCoreInterfaceSuccess(): string;
+    public function toString(): string
+    {
+        return parent::toString();
+    }
 }

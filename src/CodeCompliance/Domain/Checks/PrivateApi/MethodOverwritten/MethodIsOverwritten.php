@@ -99,8 +99,10 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
         }
 
         return array_filter($source->getProjectMethods(), function ($method) use ($coreMethods, $source) {
+            /** @var \ReflectionMethod $method */
             $isMethodNotUnique = array_key_exists($method->getName(), $coreMethods);
             $isNotPlugin = strpos($method->getName(), 'Plugin') === false;
+            $isPluginByDocComment = $this->isPluginReturnInDocComment((string)$method->getDocComment());
             $isPluginCreatedInContext = $this->isPluginCreatedInContext($this->getMethodBody($method));
             $isProvidedDependency = preg_match('/^provide.*Dependencies$/', $method->getName());
             $isReturnEmptyArrayInContext = $isMethodNotUnique && $this->isReturnEmptyArrayInContext(
@@ -112,6 +114,7 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
                 $source->getCoreParent() &&
                 $isMethodNotUnique &&
                 $isNotPlugin &&
+                !$isPluginByDocComment &&
                 !$isPluginCreatedInContext &&
                 !$isReturnEmptyArrayInContext
             );

@@ -8,7 +8,9 @@
 namespace CodeCompliance\Domain\Checks\PrivateApi\Extended;
 
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
-use CodeCompliance\Domain\Checks\Filters\Filters;
+use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
+use CodeCompliance\Domain\Checks\Filters\CoreExtensionFilter;
+use CodeCompliance\Domain\Checks\Filters\IgnoreListFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 
@@ -37,9 +39,9 @@ class Extended extends AbstractCodeComplianceCheck
     {
         $sources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
         $filteredSources = $this->filterService->filter($sources, [
-            Filters::BUSINESS_MODEL_FILTER,
-            Filters::CORE_EXTENSION_FILTER,
-            Filters::IGNORE_LIST_FILTER,
+            BusinessModelFilter::BUSINESS_MODEL_FILTER,
+            CoreExtensionFilter::CORE_EXTENSION_FILTER,
+            IgnoreListFilter::IGNORE_LIST_FILTER,
         ]);
 
         $violations = [];

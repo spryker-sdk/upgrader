@@ -73,13 +73,12 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
     }
 
     /**
-     * @param string $value
-     * @param string $projectPrefix
+     * @param string $docComment
      *
      * @return bool
      */
-    protected function hasProjectPrefix(string $value, string $projectPrefix): bool
+    protected function isPluginReturnInDocComment(string $docComment): bool
     {
-        return stripos($value, $projectPrefix) === 0;
+        return (bool)preg_match('/.*@return.*PluginInterface.*/m', $docComment);
     }
 }

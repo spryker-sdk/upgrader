@@ -14,5 +14,5 @@ class ProductPageSearchDependencyProvider extends CoreProductPageSearchDependenc
     /**
      * @var string
      */
-    public const TEST_WITH_PREFIX_CONSTANT_NAME = 'constant name has project specific prefix';
+    public const TESTPROJECT_WITH_PREFIX_CONSTANT_NAME = 'constant name has project specific prefix';
 }
