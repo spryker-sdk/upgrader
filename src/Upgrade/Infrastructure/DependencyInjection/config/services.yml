@@ -27,10 +27,6 @@ services:
                 param1: '@git.adapter'
               }
 
-    upgrade.task:
-        class: Upgrade\Infrastructure\Task\UpgradeTask
-        tags: [ 'sdk.task' ]
-
     check_is_remote_target_branch_exist.step:
         class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckRemoteTargetBranchExistsStep
 
