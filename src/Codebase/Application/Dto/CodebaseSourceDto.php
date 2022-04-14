@@ -52,7 +52,7 @@ class CodebaseSourceDto
     /**
      * @var array<string>
      */
-    protected array $projectPrefixList = [];
+    protected array $projectPrefixes = [];
 
     /**
      * @param array<\Codebase\Application\Dto\CodebaseInterface> $codebaseSources
@@ -180,13 +180,13 @@ class CodebaseSourceDto
     }
 
     /**
-     * @param array<string> $projectPrefixList
+     * @param array<string> $projectPrefixes
      *
      * @return $this
      */
-    public function setProjectPrefixList(array $projectPrefixList)
+    public function setProjectPrefixes(array $projectPrefixes)
     {
-        $this->projectPrefixList = $projectPrefixList;
+        $this->projectPrefixes = $projectPrefixes;
 
         return $this;
     }
@@ -194,9 +194,9 @@ class CodebaseSourceDto
     /**
      * @return array<string>
      */
-    public function getProjectPrefixList(): array
+    public function getProjectPrefixes(): array
     {
-        return $this->projectPrefixList;
+        return $this->projectPrefixes;
     }
 
     /**

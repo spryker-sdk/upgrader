@@ -44,7 +44,7 @@ class Method extends AbstractCodeComplianceCheck
         foreach ($filteredSources as $source) {
             $namesCoreMethods = array_column($source->getCoreMethods(), static::COLUMN_KEY_NAME);
             $nameCoreInterfaceMethods = array_column($source->getCoreInterfacesMethods(), static::COLUMN_KEY_NAME);
-            $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixList();
+            $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
             /** @var \ReflectionMethod $projectMethod */
             foreach ($source->getProjectMethods() as $projectMethod) {

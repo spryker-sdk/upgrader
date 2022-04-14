@@ -39,7 +39,6 @@ services:
     Codebase\Infrastructure\SourceParser\SourceParser:
         class: Codebase\Infrastructure\SourceParser\SourceParser
         arguments:
-            - '@Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface'
             - '@Codebase\Infrastructure\SourceFinder\SourceFinder'
             - {
                 param1: '@php.parser',

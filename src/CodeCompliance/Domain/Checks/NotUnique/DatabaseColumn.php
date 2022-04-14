@@ -43,7 +43,7 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
                 $coreSchemas[$coreSource->getName()] = array_merge($coreSchemas[$coreSource->getName()] ?? [], $coreSource->getChildElements());
             }
         }
-        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixList();
+        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
         foreach ($this->getCodebaseSourceDto()->getDatabaseSchemaCodebaseSources() as $source) {
             if ($source->getChildElements() === []) {

@@ -86,7 +86,7 @@ class PhpParser implements ParserInterface
                 $classString = (string)$classNode->namespacedName;
                 $classCodebaseDto = $this->parseClass(
                     $classString,
-                    $codebaseSourceDto->getProjectPrefixList(),
+                    $codebaseSourceDto->getProjectPrefixes(),
                     $codebaseSourceDto->getCoreNamespaces(),
                 );
                 if ($classCodebaseDto === null) {
@@ -270,7 +270,13 @@ class PhpParser implements ParserInterface
         $methods = [];
 
         $coreInterfaces = array_filter($interfaces, function ($interface) use ($projectPrefixList) {
-            return !$this->isProjectNamespace($interface->getNamespaceName(), $projectPrefixList);
+            foreach ($projectPrefixList as $projectPrefix) {
+                if (strpos($interface->getNamespaceName(), $projectPrefix) === 0) {
+                    return false;
+                }
+            }
+
+            return true;
         });
 
         foreach ($coreInterfaces as $interface) {
@@ -292,22 +298,5 @@ class PhpParser implements ParserInterface
         $nodeTraverser->addVisitor(new NameResolver());
 
         return $nodeTraverser->traverse($originalSyntaxTree);
-    }
-
-    /**
-     * @param string $namespaceName
-     * @param array<string> $projectPrefixList
-     *
-     * @return bool
-     */
-    protected function isProjectNamespace(string $namespaceName, array $projectPrefixList): bool
-    {
-        foreach ($projectPrefixList as $projectPrefix) {
-            if (strpos($namespaceName, $projectPrefix) === 0) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

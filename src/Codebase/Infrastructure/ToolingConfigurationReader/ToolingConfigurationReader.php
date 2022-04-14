@@ -5,15 +5,14 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Codebase\Infrastructure\ProjectConfigurationParser;
+namespace Codebase\Infrastructure\ToolingConfigurationReader;
 
-use Codebase\Application\Dto\ConfigurationRequestDto;
 use Codebase\Application\Dto\ConfigurationResponseDto;
 use Codebase\Infrastructure\Exception\ProjectConfigurationFileInvalidSyntaxException;
 use Exception;
 use Symfony\Component\Yaml\Yaml;
 
-class ProjectConfigurationParser implements ProjectConfigurationParserInterface
+class ToolingConfigurationReader implements ToolingConfigurationReaderInterface
 {
     /**
      * @var string
@@ -31,24 +30,21 @@ class ProjectConfigurationParser implements ProjectConfigurationParserInterface
     protected const DEFAULT_PREFIX = 'Pyz';
 
     /**
-     * @param \Codebase\Application\Dto\ConfigurationRequestDto $configurationRequestDto
+     * @param string $configurationFilePath
      *
      * @throws \Codebase\Infrastructure\Exception\ProjectConfigurationFileInvalidSyntaxException
      *
      * @return \Codebase\Application\Dto\ConfigurationResponseDto
      */
-    public function parseConfiguration(ConfigurationRequestDto $configurationRequestDto): ConfigurationResponseDto
+    public function readConfiguration(string $configurationFilePath): ConfigurationResponseDto
     {
-        $configPath = $configurationRequestDto->getConfigurationFilePath();
         try {
-            $projectPrefixes = $this->parseProjectPrefixes($configPath);
+            $projectPrefixes = $this->parseProjectPrefixes($configurationFilePath);
         } catch (Exception $exception) {
-            throw new ProjectConfigurationFileInvalidSyntaxException($configPath, $exception->getMessage());
+            throw new ProjectConfigurationFileInvalidSyntaxException($configurationFilePath, $exception->getMessage());
         }
 
-        $projectDirectories = $this->getProjectDirectories($configurationRequestDto->getSrcDirectory(), $projectPrefixes);
-
-        return new ConfigurationResponseDto($projectPrefixes, $projectDirectories);
+        return new ConfigurationResponseDto($projectPrefixes);
     }
 
     /**
@@ -93,22 +89,5 @@ class ProjectConfigurationParser implements ProjectConfigurationParserInterface
         }
 
         return true;
-    }
-
-    /**
-     * @param string $srcDirectory
-     * @param array<string> $projectPrefixes
-     *
-     * @return array<string>
-     */
-    protected function getProjectDirectories(string $srcDirectory, array $projectPrefixes): array
-    {
-        $projectDirectories = [];
-
-        foreach ($projectPrefixes as $prefix) {
-            $projectDirectories[] = $srcDirectory . $prefix . DIRECTORY_SEPARATOR;
-        }
-
-        return $projectDirectories;
     }
 }

@@ -43,7 +43,7 @@ class TransferProperty extends AbstractCodeComplianceCheck
                 $coreSchemas[$coreSource->getName()] = array_merge($coreSchemas[$coreSource->getName()] ?? [], $coreSource->getChildElements());
             }
         }
-        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixList();
+        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
         foreach ($this->getCodebaseSourceDto()->getTransferSchemaCodebaseSources() as $transfer) {
             if ($transfer->getChildElements() === []) {

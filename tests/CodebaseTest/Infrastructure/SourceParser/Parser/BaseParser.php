@@ -72,7 +72,7 @@ class BaseParser extends KernelTestCase
     protected function createCodebaseSourceDto(): CodebaseSourceDto
     {
         return (new CodebaseSourceDto())
-            ->setProjectPrefixList(static::PROJECT_PREFIX)
+            ->setProjectPrefixes(static::PROJECT_PREFIX)
             ->setCoreNamespaces(static::CORE_NAMESPACES);
     }
 }

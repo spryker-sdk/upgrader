@@ -39,7 +39,7 @@ class Constant extends AbstractCodeComplianceCheck
         foreach ($this->getCodebaseSourceDto()->getPhpCodebaseSources() as $source) {
             $coreParent = $source->getCoreParent();
             $parentConstants = $coreParent ? $coreParent->getConstants() : [];
-            $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixList();
+            $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
             foreach ($source->getConstants() as $nameConstant => $valueConstant) {
                 $isConstantUnique = !$parentConstants || !array_key_exists($nameConstant, $parentConstants);

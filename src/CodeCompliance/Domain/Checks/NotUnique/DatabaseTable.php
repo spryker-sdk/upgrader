@@ -36,7 +36,7 @@ class DatabaseTable extends AbstractCodeComplianceCheck
     {
         $violations = [];
         $namesFromCoreSchemas = [];
-        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixList();
+        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
         if ($this->getCodebaseSourceDto()->getDatabaseSchemaCoreCodebaseSources()) {
             $namesFromCoreSchemas = array_column($this->getCodebaseSourceDto()->getDatabaseSchemaCoreCodebaseSources(), static::COLUMN_KEY_NAME);

@@ -40,7 +40,7 @@ class TransferName extends AbstractCodeComplianceCheck
         if ($this->getCodebaseSourceDto()->getTransferSchemaCoreCodebaseSources()) {
             $nameFromCoreTransfers = array_column($this->getCodebaseSourceDto()->getTransferSchemaCoreCodebaseSources(), static::COLUMN_KEY_NAME);
         }
-        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixList();
+        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
         foreach ($this->getCodebaseSourceDto()->getTransferSchemaCodebaseSources() as $transfer) {
             $isTransferUniqueOnTheProjectLevel = !in_array($transfer->getName(), $nameFromCoreTransfers);

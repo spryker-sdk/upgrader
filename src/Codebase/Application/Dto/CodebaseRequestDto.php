@@ -20,14 +20,19 @@ class CodebaseRequestDto
     public const CORE_TYPE = 'core';
 
     /**
-     * @var array<string>
+     * @var string
      */
-    protected array $projectPath;
+    protected string $srcDirectory;
+
+    /**
+     * @var string
+     */
+    protected string $toolingConfigurationPath;
 
     /**
      * @var array<string>
      */
-    protected array $corePath;
+    protected array $corePaths;
 
     /**
      * @var array<string>
@@ -37,48 +42,59 @@ class CodebaseRequestDto
     /**
      * @var array<string>
      */
-    protected array $projectPrefixList;
+    protected array $excludeList;
 
     /**
      * @var array<string>
      */
-    protected array $excludeList;
+    protected array $projectPaths;
 
     /**
-     * @param array<string> $projectPath
-     * @param array<string> $corePath
+     * @var array<string>
+     */
+    protected array $projectPrefixes;
+
+    /**
+     * @param string $srcDirectory
+     * @param string $toolingConfigurationPath
+     * @param array<string> $corePaths
      * @param array<string> $coreNamespaces
-     * @param array<string> $projectPrefixList
      * @param array<string> $excludeList
      */
     public function __construct(
-        array $projectPath = [],
-        array $corePath = [],
+        string $srcDirectory = '',
+        string $toolingConfigurationPath = '',
+        array $corePaths = [],
         array $coreNamespaces = [],
-        array $projectPrefixList = [],
         array $excludeList = []
     ) {
-        $this->projectPath = $projectPath;
-        $this->corePath = $corePath;
+        $this->srcDirectory = $srcDirectory;
+        $this->toolingConfigurationPath = $toolingConfigurationPath;
+        $this->corePaths = $corePaths;
         $this->coreNamespaces = $coreNamespaces;
-        $this->projectPrefixList = $projectPrefixList;
         $this->excludeList = $excludeList;
+        $this->projectPaths = [];
+        $this->projectPrefixes = [];
     }
 
     /**
      * @return array<string>
      */
-    public function getProjectPath(): array
+    public function getProjectPaths(): array
     {
-        return $this->projectPath;
+        if ($this->projectPaths == []) {
+            $this->projectPaths = $this->getProjectDirectories($this->getSrcDirectory(), $this->getProjectPrefixes());
+        }
+
+        return $this->projectPaths;
     }
 
     /**
      * @return array<string>
      */
-    public function getCorePath(): array
+    public function getCorePaths(): array
     {
-        return $this->corePath;
+        return $this->corePaths;
     }
 
     /**
@@ -92,9 +108,9 @@ class CodebaseRequestDto
     /**
      * @return array<string>
      */
-    public function getProjectPrefixList(): array
+    public function getProjectPrefixes(): array
     {
-        return $this->projectPrefixList;
+        return $this->projectPrefixes;
     }
 
     /**
@@ -103,8 +119,8 @@ class CodebaseRequestDto
     public function getPaths(): array
     {
         return [
-            'project' => $this->getProjectPath(),
-            'core' => $this->getCorePath(),
+            static::PROJECT_TYPE => $this->getProjectPaths(),
+            static::CORE_TYPE => $this->getCorePaths(),
         ];
     }
 
@@ -114,5 +130,58 @@ class CodebaseRequestDto
     public function getExcludeList(): array
     {
         return $this->excludeList;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToolingConfigurationPath(): string
+    {
+        return $this->toolingConfigurationPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSrcDirectory(): string
+    {
+        return $this->srcDirectory;
+    }
+
+    /**
+     * @param array<string> $projectPrefixes
+     *
+     * @return void
+     */
+    public function setProjectPrefixes(array $projectPrefixes): void
+    {
+        $this->projectPrefixes = $projectPrefixes;
+    }
+
+    /**
+     * @param array<string> $projectPaths
+     *
+     * @return void
+     */
+    public function setProjectPaths(array $projectPaths): void
+    {
+        $this->projectPaths = $projectPaths;
+    }
+
+    /**
+     * @param string $srcDirectory
+     * @param array<string> $projectPrefixes
+     *
+     * @return array<string>
+     */
+    protected function getProjectDirectories(string $srcDirectory, array $projectPrefixes): array
+    {
+        $projectDirectories = [];
+
+        foreach ($projectPrefixes as $prefix) {
+            $projectDirectories[] = $srcDirectory . $prefix . DIRECTORY_SEPARATOR;
+        }
+
+        return $projectDirectories;
     }
 }

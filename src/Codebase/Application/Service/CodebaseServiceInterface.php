@@ -9,19 +9,10 @@ namespace Codebase\Application\Service;
 
 use Codebase\Application\Dto\CodebaseRequestDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
-use Codebase\Application\Dto\ConfigurationRequestDto;
 use Codebase\Application\Dto\ConfigurationResponseDto;
-use Evaluate\Infrastructure\Configuration\ConfigurationProvider;
 
 interface CodebaseServiceInterface
 {
-    /**
-     * @param \Evaluate\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
-    public function parse(ConfigurationProvider $configurationProvider): CodebaseSourceDto;
-
     /**
      * @param \Codebase\Application\Dto\CodebaseRequestDto $codebaseRequestDto
      *
@@ -30,9 +21,9 @@ interface CodebaseServiceInterface
     public function parseSource(CodebaseRequestDto $codebaseRequestDto): CodebaseSourceDto;
 
     /**
-     * @param \Codebase\Application\Dto\ConfigurationRequestDto $configurationRequestDto
+     * @param string $configurationFilePath
      *
      * @return \Codebase\Application\Dto\ConfigurationResponseDto
      */
-    public function parseProjectConfiguration(ConfigurationRequestDto $configurationRequestDto): ConfigurationResponseDto;
+    public function readToolingConfiguration(string $configurationFilePath): ConfigurationResponseDto;
 }

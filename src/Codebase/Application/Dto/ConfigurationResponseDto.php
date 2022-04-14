@@ -15,18 +15,11 @@ class ConfigurationResponseDto
     protected array $projectPrefixes;
 
     /**
-     * @var array<string>
-     */
-    protected array $projectDirectories;
-
-    /**
      * @param array<string> $projectPrefixes
-     * @param array<string> $projectDirectories
      */
-    public function __construct(array $projectPrefixes, array $projectDirectories)
+    public function __construct(array $projectPrefixes)
     {
         $this->projectPrefixes = $projectPrefixes;
-        $this->projectDirectories = $projectDirectories;
     }
 
     /**
@@ -35,13 +28,5 @@ class ConfigurationResponseDto
     public function getProjectPrefixes(): array
     {
         return $this->projectPrefixes;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getProjectDirectories(): array
-    {
-        return $this->projectDirectories;
     }
 }

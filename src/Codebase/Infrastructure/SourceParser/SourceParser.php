@@ -9,7 +9,6 @@ namespace Codebase\Infrastructure\SourceParser;
 
 use Codebase\Application\Dto\CodebaseRequestDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
-use Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface;
 use Codebase\Infrastructure\SourceFinder\SourceFinder;
 
 class SourceParser
@@ -17,26 +16,7 @@ class SourceParser
     /**
      * @var string
      */
-    protected const SCHEMA_XML_EXTENSION = '*.schema.xml';
-
-    /**
-     * @var string
-     */
-    protected const PHP_EXTENSION = '*.php';
-
-    /**
-     * @var string
-     */
-    protected const TRANSFER_XML_EXTENSION = '*.transfer.xml';
-
-    /**
-     * @var array<string>
-     */
-    protected const EXTENSIONS = [
-        self::SCHEMA_XML_EXTENSION,
-        self::PHP_EXTENSION,
-        self::TRANSFER_XML_EXTENSION,
-    ];
+    protected const FINDER_PREFIX = '*.';
 
     /**
      * @var \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface
@@ -54,16 +34,13 @@ class SourceParser
     protected $sourceParsers;
 
     /**
-     * @param \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface $parser
      * @param \Codebase\Infrastructure\SourceFinder\SourceFinder $sourceFinder
      * @param array<\Codebase\Infrastructure\SourceParser\Parser\ParserInterface> $sourceParsers
      */
     public function __construct(
-        CodebaseToParserInterface $parser,
         SourceFinder $sourceFinder,
         array $sourceParsers
     ) {
-        $this->parser = $parser;
         $this->sourceFinder = $sourceFinder;
         $this->sourceParsers = $sourceParsers;
     }
@@ -77,21 +54,17 @@ class SourceParser
     {
         $codebaseSourceDto = (new CodebaseSourceDto())
             ->setCoreNamespaces($codebaseRequestDto->getCoreNamespaces())
-            ->setProjectPrefixList($codebaseRequestDto->getProjectPrefixList());
+            ->setProjectPrefixes($codebaseRequestDto->getProjectPrefixes());
 
         foreach ($codebaseRequestDto->getPaths() as $type => $paths) {
             if ($paths === []) {
                 continue;
             }
             $codebaseSourceDto = $codebaseSourceDto->setType($type);
-            foreach (static::EXTENSIONS as $extension) {
-                $finder = $this->sourceFinder->findSourceByExtension([$extension], $paths, $codebaseRequestDto->getExcludeList());
-
-                foreach ($this->sourceParsers as $sourceParser) {
-                    if (strpos($extension, $sourceParser->getExtension())) {
-                        $codebaseSourceDto = $sourceParser->parse($finder, $codebaseSourceDto);
-                    }
-                }
+            foreach ($this->sourceParsers as $sourceParser) {
+                $extensions = [static::FINDER_PREFIX . $sourceParser->getExtension()];
+                $finder = $this->sourceFinder->findSourceByExtension($extensions, $paths, $codebaseRequestDto->getExcludeList());
+                $codebaseSourceDto = $sourceParser->parse($finder, $codebaseSourceDto);
             }
         }
 
