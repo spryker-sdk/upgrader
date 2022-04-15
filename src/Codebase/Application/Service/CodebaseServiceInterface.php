@@ -18,7 +18,7 @@ interface CodebaseServiceInterface
      *
      * @return \Codebase\Application\Dto\CodebaseSourceDto
      */
-    public function parseSource(CodebaseRequestDto $codebaseRequestDto): CodebaseSourceDto;
+    public function readCodeBase(CodebaseRequestDto $codebaseRequestDto): CodebaseSourceDto;
 
     /**
      * @param string $configurationFilePath

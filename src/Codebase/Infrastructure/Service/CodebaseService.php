@@ -41,7 +41,7 @@ class CodebaseService implements CodebaseServiceInterface
      *
      * @return \Codebase\Application\Dto\CodebaseSourceDto
      */
-    public function parseSource(CodebaseRequestDto $codebaseRequestDto): CodebaseSourceDto
+    public function readCodeBase(CodebaseRequestDto $codebaseRequestDto): CodebaseSourceDto
     {
         return $this->codeBaseReader->readCodeBase($codebaseRequestDto);
     }

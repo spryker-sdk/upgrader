@@ -120,7 +120,7 @@ class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, 
             $this->configurationProvider->getIgnoreSources(),
         );
 
-        $codebaseSourceDto = $this->codebaseService->parseSource($codebaseRequestDto);
+        $codebaseSourceDto = $this->codebaseService->readCodeBase($codebaseRequestDto);
 
         static::$report = $this->codeComplianceService->analyze($codebaseSourceDto);
 

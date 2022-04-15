@@ -60,21 +60,4 @@ class Constant extends AbstractCodeComplianceCheck
 
         return $violations;
     }
-
-    /**
-     * @param string $value
-     * @param array<string> $projectPrefixList
-     *
-     * @return bool
-     */
-    protected function hasProjectPrefix(string $value, array $projectPrefixList): bool
-    {
-        foreach ($projectPrefixList as $projectPrefix) {
-            if (stripos($value, strtoupper($projectPrefix)) === 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
