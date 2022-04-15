@@ -6,7 +6,7 @@ services:
 
 # Evaluate
     Upgrader\:
-        resource: '../../../../Upgrader/*'
+        resource: '../../../Upgrader/*'
 
     upgrade.task:
         class: Upgrader\Tasks\Upgrade\UpgradeTask
@@ -18,6 +18,14 @@ services:
 
     report.task:
         class: Upgrader\Tasks\Evaluate\Report\ReportTask
+        tags: [ 'sdk.task' ]
+
+    integrator.task:
+        class: Upgrader\Tasks\Intergrator\IntegratorTask
+        tags: [ 'sdk.task' ]
+
+    upgrader.task:
+        class: Upgrader\Tasks\UpgraderTask
         tags: [ 'sdk.task' ]
 
     report.listener:
