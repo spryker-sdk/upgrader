@@ -24,7 +24,7 @@ class UpgraderExtension extends Extension
     {
         $configurationFiles = array_merge(
             glob(__DIR__ . '/../../src/*/*/DependencyInjection/config/') ?: [],
-            glob(__DIR__ . '/../../src/*/DependencyInjection/config/') ?: []
+            glob(__DIR__ . '/../../src/*/DependencyInjection/config/') ?: [],
         );
 
         if (!$configurationFiles) {
