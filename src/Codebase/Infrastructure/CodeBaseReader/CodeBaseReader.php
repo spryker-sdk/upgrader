@@ -20,9 +20,9 @@ class CodeBaseReader implements CodeBaseReaderInterface
     protected SourceParserInterface $sourceParser;
 
     /**
-     * @var \Codebase\Infrastructure\CodeBaseReader\SourceParserRequestBuilderInterface
+     * @var \Codebase\Infrastructure\CodeBaseReader\SourceParserRequestMapperInterface
      */
-    protected SourceParserRequestBuilderInterface $sourceParserRequestBuilder;
+    protected SourceParserRequestMapperInterface $sourceParserRequestMapper;
 
     /**
      * @var \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface
@@ -31,16 +31,16 @@ class CodeBaseReader implements CodeBaseReaderInterface
 
     /**
      * @param \Codebase\Infrastructure\SourceParser\SourceParserInterface $sourceParser
-     * @param \Codebase\Infrastructure\CodeBaseReader\SourceParserRequestBuilderInterface $sourceParserRequestBuilder
+     * @param \Codebase\Infrastructure\CodeBaseReader\SourceParserRequestMapperInterface $sourceParserRequestMapper
      * @param \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface $toolingConfigurationReader
      */
     public function __construct(
-        SourceParserInterface $sourceParser,
-        SourceParserRequestBuilderInterface $sourceParserRequestBuilder,
+        SourceParserInterface               $sourceParser,
+        SourceParserRequestMapperInterface  $sourceParserRequestMapper,
         ToolingConfigurationReaderInterface $toolingConfigurationReader
     ) {
         $this->sourceParser = $sourceParser;
-        $this->sourceParserRequestBuilder = $sourceParserRequestBuilder;
+        $this->sourceParserRequestMapper = $sourceParserRequestMapper;
         $this->toolingConfigurationReader = $toolingConfigurationReader;
     }
 
@@ -53,7 +53,7 @@ class CodeBaseReader implements CodeBaseReaderInterface
     {
         $configurationFilePath = $codebaseRequestDto->getToolingConfigurationPath();
         $configurationResponseDto = $this->toolingConfigurationReader->readConfiguration($configurationFilePath);
-        $sourceParserRequest = $this->sourceParserRequestBuilder->getSourceParserRequest($codebaseRequestDto, $configurationResponseDto);
+        $sourceParserRequest = $this->sourceParserRequestMapper->getSourceParserRequest($codebaseRequestDto, $configurationResponseDto);
 
         return $this->sourceParser->parseSource($sourceParserRequest);
     }

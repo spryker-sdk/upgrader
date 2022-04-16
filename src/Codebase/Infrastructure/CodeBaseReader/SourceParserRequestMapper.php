@@ -11,7 +11,7 @@ use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Application\Dto\ConfigurationResponseDto;
 use Codebase\Application\Dto\SourceParserRequestDto;
 
-class SourceParserRequestBuilder implements SourceParserRequestBuilderInterface
+class SourceParserRequestMapper implements SourceParserRequestMapperInterface
 {
     /**
      * @param \Codebase\Application\Dto\CodeBaseRequestDto $codebaseRequestDto
