@@ -35,8 +35,8 @@ class CodeBaseReader implements CodeBaseReaderInterface
      * @param \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface $toolingConfigurationReader
      */
     public function __construct(
-        SourceParserInterface               $sourceParser,
-        SourceParserRequestMapperInterface  $sourceParserRequestMapper,
+        SourceParserInterface $sourceParser,
+        SourceParserRequestMapperInterface $sourceParserRequestMapper,
         ToolingConfigurationReaderInterface $toolingConfigurationReader
     ) {
         $this->sourceParser = $sourceParser;
