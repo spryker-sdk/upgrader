@@ -10,16 +10,31 @@ namespace Codebase\Application\Dto;
 class ConfigurationResponseDto
 {
     /**
-     * @var array<string>
+     * @var string
      */
-    protected array $projectPrefixes;
+    public const UPGRADER_KEY = 'upgrader';
 
     /**
-     * @param array<string> $projectPrefixes
+     * @var string
      */
-    public function __construct(array $projectPrefixes)
+    public const PREFIXES_KEY = 'prefixes';
+
+    /**
+     * @var array<string>
+     */
+    protected const DEFAULT_PREFIXES = ['Pyz'];
+
+    /**
+     * @var array
+     */
+    protected array $configuration;
+
+    /**
+     * @param array $configuration
+     */
+    public function __construct(array $configuration = [])
     {
-        $this->projectPrefixes = $projectPrefixes;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -27,6 +42,10 @@ class ConfigurationResponseDto
      */
     public function getProjectPrefixes(): array
     {
-        return $this->projectPrefixes;
+        if (isset($this->configuration[static::UPGRADER_KEY][static::PREFIXES_KEY])) {
+            return $this->configuration[static::UPGRADER_KEY][static::PREFIXES_KEY];
+        }
+
+        return static::DEFAULT_PREFIXES;
     }
 }

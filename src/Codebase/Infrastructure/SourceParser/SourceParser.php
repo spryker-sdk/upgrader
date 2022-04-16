@@ -52,9 +52,6 @@ class SourceParser implements SourceParserInterface
      */
     public function parseSource(SourceParserRequestDto $codebaseRequestDto): CodebaseSourceDto
     {
-//        var_dump($codebaseRequestDto);
-//        exit();
-
         $codebaseSourceDto = new CodebaseSourceDto(
             $codebaseRequestDto->getCoreNamespaces(),
             $codebaseRequestDto->getProjectPrefixes(),
