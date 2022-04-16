@@ -7,11 +7,11 @@
 
 namespace Codebase\Infrastructure\SourceParser;
 
-use Codebase\Application\Dto\CodebaseRequestDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
+use Codebase\Application\Dto\SourceParserRequestDto;
 use Codebase\Infrastructure\SourceFinder\SourceFinder;
 
-class SourceParser
+class SourceParser implements SourceParserInterface
 {
     /**
      * @var string
@@ -46,15 +46,19 @@ class SourceParser
     }
 
     /**
-     * @param \Codebase\Application\Dto\CodebaseRequestDto $codebaseRequestDto
+     * @param \Codebase\Application\Dto\SourceParserRequestDto $codebaseRequestDto
      *
      * @return \Codebase\Application\Dto\CodebaseSourceDto
      */
-    public function parseSource(CodebaseRequestDto $codebaseRequestDto): CodebaseSourceDto
+    public function parseSource(SourceParserRequestDto $codebaseRequestDto): CodebaseSourceDto
     {
-        $codebaseSourceDto = (new CodebaseSourceDto())
-            ->setCoreNamespaces($codebaseRequestDto->getCoreNamespaces())
-            ->setProjectPrefixes($codebaseRequestDto->getProjectPrefixes());
+//        var_dump($codebaseRequestDto);
+//        exit();
+
+        $codebaseSourceDto = new CodebaseSourceDto(
+            $codebaseRequestDto->getCoreNamespaces(),
+            $codebaseRequestDto->getProjectPrefixes(),
+        );
 
         foreach ($codebaseRequestDto->getPaths() as $type => $paths) {
             if ($paths === []) {

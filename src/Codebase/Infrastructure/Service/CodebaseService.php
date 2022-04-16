@@ -7,19 +7,19 @@
 
 namespace Codebase\Infrastructure\Service;
 
-use Codebase\Application\Dto\CodebaseRequestDto;
+use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
 use Codebase\Application\Dto\ConfigurationResponseDto;
 use Codebase\Application\Service\CodebaseServiceInterface;
-use Codebase\Infrastructure\SourceParser\CodeBaseReader;
+use Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface;
 use Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface;
 
 class CodebaseService implements CodebaseServiceInterface
 {
     /**
-     * @var \Codebase\Infrastructure\SourceParser\CodeBaseReader
+     * @var \Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface
      */
-    protected $codeBaseReader;
+    protected CodeBaseReaderInterface $codeBaseReader;
 
     /**
      * @var \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface
@@ -27,21 +27,21 @@ class CodebaseService implements CodebaseServiceInterface
     protected ToolingConfigurationReaderInterface $projectConfigurationParser;
 
     /**
-     * @param \Codebase\Infrastructure\SourceParser\CodeBaseReader $codeBaseReader
+     * @param \Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface $codeBaseReader
      * @param \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface $projectConfigurationParser
      */
-    public function __construct(CodeBaseReader $codeBaseReader, ToolingConfigurationReaderInterface $projectConfigurationParser)
+    public function __construct(CodeBaseReaderInterface $codeBaseReader, ToolingConfigurationReaderInterface $projectConfigurationParser)
     {
         $this->codeBaseReader = $codeBaseReader;
         $this->projectConfigurationParser = $projectConfigurationParser;
     }
 
     /**
-     * @param \Codebase\Application\Dto\CodebaseRequestDto $codebaseRequestDto
+     * @param \Codebase\Application\Dto\CodeBaseRequestDto $codebaseRequestDto
      *
      * @return \Codebase\Application\Dto\CodebaseSourceDto
      */
-    public function readCodeBase(CodebaseRequestDto $codebaseRequestDto): CodebaseSourceDto
+    public function readCodeBase(CodeBaseRequestDto $codebaseRequestDto): CodebaseSourceDto
     {
         return $this->codeBaseReader->readCodeBase($codebaseRequestDto);
     }

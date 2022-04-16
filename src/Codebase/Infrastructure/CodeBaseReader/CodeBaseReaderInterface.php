@@ -5,13 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Codebase\Application\Service;
+namespace Codebase\Infrastructure\CodeBaseReader;
 
 use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
-use Codebase\Application\Dto\ConfigurationResponseDto;
 
-interface CodebaseServiceInterface
+interface CodeBaseReaderInterface
 {
     /**
      * @param \Codebase\Application\Dto\CodeBaseRequestDto $codebaseRequestDto
@@ -19,11 +18,4 @@ interface CodebaseServiceInterface
      * @return \Codebase\Application\Dto\CodebaseSourceDto
      */
     public function readCodeBase(CodeBaseRequestDto $codebaseRequestDto): CodebaseSourceDto;
-
-    /**
-     * @param string $configurationFilePath
-     *
-     * @return \Codebase\Application\Dto\ConfigurationResponseDto
-     */
-    public function readToolingConfiguration(string $configurationFilePath): ConfigurationResponseDto;
 }
