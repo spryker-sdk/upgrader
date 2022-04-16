@@ -24,16 +24,16 @@ class CodebaseService implements CodebaseServiceInterface
     /**
      * @var \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface
      */
-    protected ToolingConfigurationReaderInterface $projectConfigurationParser;
+    protected ToolingConfigurationReaderInterface $toolingConfigurationReader;
 
     /**
      * @param \Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface $codeBaseReader
-     * @param \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface $projectConfigurationParser
+     * @param \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface $toolingConfigurationReader
      */
-    public function __construct(CodeBaseReaderInterface $codeBaseReader, ToolingConfigurationReaderInterface $projectConfigurationParser)
+    public function __construct(CodeBaseReaderInterface $codeBaseReader, ToolingConfigurationReaderInterface $toolingConfigurationReader)
     {
         $this->codeBaseReader = $codeBaseReader;
-        $this->projectConfigurationParser = $projectConfigurationParser;
+        $this->toolingConfigurationReader = $toolingConfigurationReader;
     }
 
     /**
@@ -53,6 +53,6 @@ class CodebaseService implements CodebaseServiceInterface
      */
     public function readToolingConfiguration(string $configurationFilePath): ConfigurationResponseDto
     {
-        return $this->projectConfigurationParser->readConfiguration($configurationFilePath);
+        return $this->toolingConfigurationReader->readConfiguration($configurationFilePath);
     }
 }
