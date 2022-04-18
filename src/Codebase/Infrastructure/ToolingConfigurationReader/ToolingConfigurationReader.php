@@ -30,7 +30,7 @@ class ToolingConfigurationReader implements ToolingConfigurationReaderInterface
      *
      * @return \Codebase\Application\Dto\ConfigurationResponseDto
      */
-    public function readConfiguration(string $configurationFilePath): ConfigurationResponseDto
+    public function readToolingConfiguration(string $configurationFilePath): ConfigurationResponseDto
     {
         if (!file_exists($configurationFilePath)) {
             return new ConfigurationResponseDto();

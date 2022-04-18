@@ -25,7 +25,7 @@ class ConfigurationProvider
     /**
      * @return string
      */
-    public function getToolingConfigurationPath(): string
+    public function getToolingConfigurationFilePath(): string
     {
         return (string)getenv('PROJECT_CONFIGURATION_FILE_PATH') ?: 'tooling.yml';
     }

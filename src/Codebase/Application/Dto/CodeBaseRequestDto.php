@@ -58,7 +58,7 @@ class CodeBaseRequestDto
     /**
      * @return string
      */
-    public function getToolingConfigurationPath(): string
+    public function getToolingConfigurationFilePath(): string
     {
         return $this->toolingConfigurationPath;
     }
