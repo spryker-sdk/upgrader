@@ -53,7 +53,7 @@ class CodeBaseReader implements CodeBaseReaderInterface
     {
         $configurationFilePath = $codebaseRequestDto->getToolingConfigurationFilePath();
         $configurationResponseDto = $this->toolingConfigurationReader->readToolingConfiguration($configurationFilePath);
-        $sourceParserRequest = $this->sourceParserRequestMapper->getSourceParserRequest($codebaseRequestDto, $configurationResponseDto);
+        $sourceParserRequest = $this->sourceParserRequestMapper->mapToSourceParserRequest($codebaseRequestDto, $configurationResponseDto);
 
         return $this->sourceParser->parseSource($sourceParserRequest);
     }

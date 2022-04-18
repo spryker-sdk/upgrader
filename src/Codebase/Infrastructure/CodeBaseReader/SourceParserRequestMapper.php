@@ -19,7 +19,7 @@ class SourceParserRequestMapper implements SourceParserRequestMapperInterface
      *
      * @return \Codebase\Application\Dto\SourceParserRequestDto
      */
-    public function getSourceParserRequest(
+    public function mapToSourceParserRequest(
         CodeBaseRequestDto $codebaseRequestDto,
         ConfigurationResponseDto $configurationResponseDto
     ): SourceParserRequestDto {
