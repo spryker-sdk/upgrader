@@ -7,12 +7,12 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Builder;
 
-use Upgrade\Infrastructure\Dto\Composer\ComposerLockDiffDto;
+use Upgrade\Application\Dto\Composer\ComposerLockDiffDto;
 
 class PullRequestDataBuilder
 {
     /**
-     * @param \Upgrade\Infrastructure\Dto\Composer\ComposerLockDiffDto $composerDiffDto
+     * @param \Upgrade\Application\Dto\Composer\ComposerLockDiffDto $composerDiffDto
      *
      * @return string
      */
@@ -40,7 +40,7 @@ class PullRequestDataBuilder
     }
 
     /**
-     * @param array<\Upgrade\Infrastructure\Dto\Composer\PackageDto> $packageDtos
+     * @param array<\Upgrade\Application\Dto\Composer\PackageDto> $packageDtos
      *
      * @return string
      */

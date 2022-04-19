@@ -7,7 +7,7 @@
 
 namespace Upgrade\Infrastructure\Processor\Strategy\Comparator;
 
-use Upgrade\Infrastructure\Dto\Composer\ComposerLockDiffDto;
+use Upgrade\Application\Dto\Composer\ComposerLockDiffDto;
 use Upgrade\Infrastructure\Process\ProcessRunner;
 
 class ComposerLockComparator
@@ -36,12 +36,12 @@ class ComposerLockComparator
     }
 
     /**
-     * @return \Upgrade\Infrastructure\Dto\Composer\ComposerLockDiffDto
+     * @return \Upgrade\Application\Dto\Composer\ComposerLockDiffDto
      */
     public function getComposerLockDiff(): ComposerLockDiffDto
     {
         $command = sprintf('%s %s', APPLICATION_ROOT_DIR . static::RUNNER, static::JSON_OUTPUT_FLAG);
-        $process = $this->processRunner->run(explode(' ', $command));
+        $process = $this->processRunner->runProcess(explode(' ', $command));
         $composerLockDiff = json_decode((string)$process->getOutput(), true) ?? [];
 
         return new ComposerLockDiffDto($composerLockDiff);

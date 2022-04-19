@@ -7,14 +7,14 @@
 
 namespace Upgrade\Infrastructure\Processor\Strategy;
 
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Dto\Step\StepsExecutionDto;
 
 interface StepInterface
 {
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
      */
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 }

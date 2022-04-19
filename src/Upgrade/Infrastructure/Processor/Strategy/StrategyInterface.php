@@ -7,7 +7,7 @@
 
 namespace Upgrade\Infrastructure\Processor\Strategy;
 
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Dto\Step\StepsExecutionDto;
 
 interface StrategyInterface
 {
@@ -17,7 +17,7 @@ interface StrategyInterface
     public function getStrategyName(): string;
 
     /**
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
      */
     public function upgrade(): StepsExecutionDto;
 }

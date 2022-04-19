@@ -7,9 +7,9 @@
 
 namespace Upgrade\Infrastructure\Services;
 
+use Upgrade\Application\Dto\Step\StepsExecutionDto;
 use Upgrade\Application\Services\UpgraderServiceInterface;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
 use Upgrade\Infrastructure\Processor\Strategy\StrategyResolver;
 
 class UpgraderService implements UpgraderServiceInterface
@@ -35,7 +35,7 @@ class UpgraderService implements UpgraderServiceInterface
     }
 
     /**
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
      */
     public function upgrade(): StepsExecutionDto
     {

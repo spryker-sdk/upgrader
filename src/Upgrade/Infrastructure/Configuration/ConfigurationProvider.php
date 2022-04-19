@@ -44,7 +44,7 @@ class ConfigurationProvider
      */
     public function getUpgradeStrategy(): string
     {
-        return (string)getenv('UPGRADE_STRATEGY') ?: static::COMPOSER_STRATEGY;
+        return (string)getenv('UPGRADE_STRATEGY') ?: static::RELEASE_APP_STRATEGY;
     }
 
     /**
@@ -107,5 +107,77 @@ class ConfigurationProvider
     public function getRepositoryName(): string
     {
         return (string)getenv('REPOSITORY_NAME');
+    }
+
+    /**
+     * @var string
+     */
+    protected const UPGRADER_RELEASE_APP_URL = 'UPGRADER_RELEASE_APP_URL';
+
+    /**
+     * @var string
+     */
+    protected const DEFAULT_RELEASE_APP_URL = 'https://api.release.spryker.com';
+
+    /**
+     * @return string
+     */
+    public function getReleaseAppUrl(): string
+    {
+        return (string)getenv(static::UPGRADER_RELEASE_APP_URL) ?: static::DEFAULT_RELEASE_APP_URL;
+    }
+
+    /**
+     * @var string
+     */
+    protected const UPGRADER_HTTP_RETRIEVE_ATTEMPTS_COUNT = 'UPGRADER_HTTP_RETRIEVE_ATTEMPTS_COUNT';
+
+    /**
+     * @var int
+     */
+    protected const DEFAULT_HTTP_RETRIEVE_ATTEMPTS_COUNT = 5;
+
+    /**
+     * @var string
+     */
+    protected const UPGRADER_HTTP_RETRIEVE_RETRY_DELAY = 'UPGRADER_HTTP_RETRIEVE_RETRY_DELAY';
+
+    /**
+     * @var int
+     */
+    protected const DEFAULT_HTTP_RETRIEVE_RETRY_DELAY = 10;
+
+    /**
+     * @return int
+     */
+    public function getHttpRetrieveAttemptsCount(): int
+    {
+        return (int)getenv(static::UPGRADER_HTTP_RETRIEVE_ATTEMPTS_COUNT) ?: static::DEFAULT_HTTP_RETRIEVE_ATTEMPTS_COUNT;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHttpRetrieveRetryDelay(): int
+    {
+        return (int)getenv(static::UPGRADER_HTTP_RETRIEVE_RETRY_DELAY) ?: static::DEFAULT_HTTP_RETRIEVE_RETRY_DELAY;
+    }
+
+    /**
+     * @var string
+     */
+    protected const UPGRADER_COMMAND_EXECUTION_TIMEOUT = 'UPGRADER_COMMAND_EXECUTION_TIMEOUT';
+
+    /**
+     * @var int
+     */
+    protected const DEFAULT_COMMAND_EXECUTION_TIMEOUT = 600;
+
+    /**
+     * @return int
+     */
+    public function getCommandExecutionTimeout(): int
+    {
+        return (int)getenv(static::UPGRADER_COMMAND_EXECUTION_TIMEOUT) ?: static::DEFAULT_COMMAND_EXECUTION_TIMEOUT;
     }
 }

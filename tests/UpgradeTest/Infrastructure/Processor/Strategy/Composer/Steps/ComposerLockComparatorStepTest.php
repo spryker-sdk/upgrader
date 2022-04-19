@@ -9,11 +9,11 @@ namespace UpgradeTest\Infrastructure\Processor\Strategy\Composer\Steps;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
-use Upgrade\Infrastructure\Dto\Composer\ComposerLockDiffDto;
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Dto\Composer\ComposerLockDiffDto;
+use Upgrade\Application\Dto\Step\StepsExecutionDto;
 use Upgrade\Infrastructure\Process\ProcessRunner;
+use Upgrade\Infrastructure\Processor\Strategy\CommonStep\ComposerLockComparatorStep;
 use Upgrade\Infrastructure\Processor\Strategy\Comparator\ComposerLockComparator;
-use Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\ComposerLockComparatorStep;
 
 class ComposerLockComparatorStepTest extends TestCase
 {
@@ -99,7 +99,7 @@ class ComposerLockComparatorStepTest extends TestCase
         $processMock->method('getOutput')->willReturn($outputMessage);
 
         $processRunnerMock = $this->createMock(ProcessRunner::class);
-        $processRunnerMock->method('run')->willReturn($processMock);
+        $processRunnerMock->method('runProcess')->willReturn($processMock);
 
         return $processRunnerMock;
     }

@@ -9,14 +9,14 @@ namespace Upgrade\Infrastructure\Process;
 
 use Symfony\Component\Process\Process;
 
-class ProcessRunner
+class ProcessRunner implements ProcessRunnerInterface
 {
     /**
      * @param array $command
      *
      * @return \Symfony\Component\Process\Process
      */
-    public function run(array $command): Process
+    public function runProcess(array $command): Process
     {
         $process = new Process($command, (string)getcwd());
         $process->setTimeout(300);

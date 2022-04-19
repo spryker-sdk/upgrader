@@ -7,7 +7,7 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Provider;
 
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Dto\Step\StepsExecutionDto;
 
 interface ProviderInterface
 {
@@ -17,10 +17,10 @@ interface ProviderInterface
     public function getName(): string;
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
      * @param array $params
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
      */
     public function createPullRequest(StepsExecutionDto $stepsExecutionDto, array $params): StepsExecutionDto;
 }
