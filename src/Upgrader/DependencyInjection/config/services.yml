@@ -20,10 +20,6 @@ services:
         class: Upgrader\Tasks\Evaluate\Report\ReportTask
         tags: [ 'sdk.task' ]
 
-    integrator.task:
-        class: Upgrader\Tasks\Intergrator\IntegratorTask
-        tags: [ 'sdk.task' ]
-
     upgrader.task:
         class: Upgrader\Tasks\UpgraderTask
         tags: [ 'sdk.task' ]

@@ -14,7 +14,6 @@ use SprykerSdk\SdkContracts\Entity\TaskInterface;
 use Upgrade\Application\Services\UpgraderServiceInterface;
 use Upgrader\Commands\Evaluate\Analyze\AnalyzeCommand;
 use Upgrader\Commands\Evaluate\Report\ReportCommand;
-use Upgrader\Commands\Integrator\IntegratorCommand;
 use Upgrader\Commands\Upgrade\UpgradeCommand;
 use Upgrader\Configuration\ConfigurationProvider;
 use Upgrader\Lifecycle\Lifecycle;
@@ -93,7 +92,6 @@ class UpgraderTask implements TaskInterface
             ),
             new ReportCommand(),
             new UpgradeCommand($this->upgraderService),
-            new IntegratorCommand(),
         ];
     }
 
