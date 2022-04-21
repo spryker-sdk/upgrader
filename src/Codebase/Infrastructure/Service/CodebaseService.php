@@ -53,6 +53,6 @@ class CodebaseService implements CodebaseServiceInterface
      */
     public function readToolingConfiguration(string $configurationFilePath): ConfigurationResponseDto
     {
-        return $this->toolingConfigurationReader->readConfiguration($configurationFilePath);
+        return $this->toolingConfigurationReader->readToolingConfiguration($configurationFilePath);
     }
 }

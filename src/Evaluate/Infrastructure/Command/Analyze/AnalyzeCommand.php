@@ -113,7 +113,7 @@ class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, 
     public function execute(ContextInterface $context): ContextInterface
     {
         $codebaseRequestDto = new CodeBaseRequestDto(
-            $this->configurationProvider->getToolingConfigurationPath(),
+            $this->configurationProvider->getToolingConfigurationFilePath(),
             $this->configurationProvider->getSrcPath(),
             $this->configurationProvider->getCorePaths(),
             $this->configurationProvider->getCoreNamespaces(),

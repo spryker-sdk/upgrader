@@ -51,9 +51,9 @@ class CodeBaseReader implements CodeBaseReaderInterface
      */
     public function readCodeBase(CodeBaseRequestDto $codebaseRequestDto): CodebaseSourceDto
     {
-        $configurationFilePath = $codebaseRequestDto->getToolingConfigurationPath();
-        $configurationResponseDto = $this->toolingConfigurationReader->readConfiguration($configurationFilePath);
-        $sourceParserRequest = $this->sourceParserRequestMapper->getSourceParserRequest($codebaseRequestDto, $configurationResponseDto);
+        $configurationFilePath = $codebaseRequestDto->getToolingConfigurationFilePath();
+        $configurationResponseDto = $this->toolingConfigurationReader->readToolingConfiguration($configurationFilePath);
+        $sourceParserRequest = $this->sourceParserRequestMapper->mapToSourceParserRequest($codebaseRequestDto, $configurationResponseDto);
 
         return $this->sourceParser->parseSource($sourceParserRequest);
     }
