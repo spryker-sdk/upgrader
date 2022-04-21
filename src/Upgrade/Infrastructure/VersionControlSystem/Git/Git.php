@@ -104,7 +104,7 @@ class Git
         }
 
         $stepsExecutionDto->setIsSuccessful(true);
-        $stepsExecutionDto->setOutputMessage(implode(PHP_EOL, $command));
+        $stepsExecutionDto->addOutputMessage(implode(PHP_EOL, $command));
 
         return $stepsExecutionDto;
     }
@@ -351,6 +351,6 @@ class Git
 
         return $stepsExecutionDto
             ->setIsSuccessful($process->isSuccessful())
-            ->setOutputMessage(implode(PHP_EOL, $outputs));
+            ->addOutputMessage(implode(PHP_EOL, $outputs));
     }
 }

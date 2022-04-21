@@ -9,7 +9,7 @@ namespace Upgrade\Infrastructure\PackageManager\Client\Composer;
 
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection;
-use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto;
+use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto;
 use Upgrade\Infrastructure\Process\ProcessRunnerInterface;
 
 class ComposerCallExecutor implements ComposerCallExecutorInterface
@@ -55,9 +55,9 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
     /**
      * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function require(PackageDtoCollection $packageCollection): PackageManagerResponseDtoDto
+    public function require(PackageDtoCollection $packageCollection): PackageManagerResponseDto
     {
         $command = sprintf(
             '%s%s %s %s',
@@ -74,9 +74,9 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
     /**
      * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function requireDev(PackageDtoCollection $packageCollection): PackageManagerResponseDtoDto
+    public function requireDev(PackageDtoCollection $packageCollection): PackageManagerResponseDto
     {
         $command = sprintf(
             '%s%s %s %s %s',
@@ -92,9 +92,9 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
     }
 
     /**
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function update(): PackageManagerResponseDtoDto
+    public function update(): PackageManagerResponseDto
     {
         $command = sprintf(
             '%s %s %s',
@@ -126,14 +126,14 @@ class ComposerCallExecutor implements ComposerCallExecutorInterface
     /**
      * @param \Symfony\Component\Process\Process $process
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function createResponse(Process $process): PackageManagerResponseDtoDto
+    public function createResponse(Process $process): PackageManagerResponseDto
     {
         $command = str_replace('\'', '', $process->getCommandLine());
         $output = $process->getExitCode() ? $process->getErrorOutput() : '';
         $outputs = array_filter([$command, $output]);
 
-        return new PackageManagerResponseDtoDto($process->isSuccessful(), implode(PHP_EOL, $outputs));
+        return new PackageManagerResponseDto($process->isSuccessful(), implode(PHP_EOL, $outputs));
     }
 }

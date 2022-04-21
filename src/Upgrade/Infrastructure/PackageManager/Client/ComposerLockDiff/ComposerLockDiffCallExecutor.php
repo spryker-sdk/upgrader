@@ -8,7 +8,7 @@
 namespace Upgrade\Infrastructure\PackageManager\Client\ComposerLockDiff;
 
 use Symfony\Component\Process\Process;
-use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto;
+use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto;
 use Upgrade\Infrastructure\Process\ProcessRunnerInterface;
 
 class ComposerLockDiffCallExecutor implements ComposerLockDiffCallExecutorInterface
@@ -37,9 +37,9 @@ class ComposerLockDiffCallExecutor implements ComposerLockDiffCallExecutorInterf
     }
 
     /**
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function getComposerLockDiff(): PackageManagerResponseDtoDto
+    public function getComposerLockDiff(): PackageManagerResponseDto
     {
         $command = sprintf('%s %s', static::RUNNER, static::JSON_OUTPUT_FLAG);
         $process = $this->processRunner->runProcess(explode(' ', $command));
@@ -50,10 +50,10 @@ class ComposerLockDiffCallExecutor implements ComposerLockDiffCallExecutorInterf
     /**
      * @param \Symfony\Component\Process\Process $process
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    protected function createResponse(Process $process): PackageManagerResponseDtoDto
+    protected function createResponse(Process $process): PackageManagerResponseDto
     {
-        return new PackageManagerResponseDtoDto($process->isSuccessful(), $process->getOutput());
+        return new PackageManagerResponseDto($process->isSuccessful(), $process->getOutput());
     }
 }

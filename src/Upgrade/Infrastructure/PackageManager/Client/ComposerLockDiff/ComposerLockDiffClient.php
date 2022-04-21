@@ -9,7 +9,7 @@ namespace Upgrade\Infrastructure\PackageManager\Client\ComposerLockDiff;
 
 use Upgrade\Application\Dto\PackageManager\Collection\PackageManagerResponseDtoCollection;
 use Upgrade\Application\Dto\PackageManager\ComposerLockDiffResponseDto;
-use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto;
+use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto;
 use Upgrade\Infrastructure\PackageManager\Client\ComposerLockDiffClientInterface;
 
 class ComposerLockDiffClient implements ComposerLockDiffClientInterface
@@ -55,10 +55,10 @@ class ComposerLockDiffClient implements ComposerLockDiffClientInterface
      * @param string|null $output
      * @param array $packageList
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    protected function createSuccessResponse(?string $output, array $packageList): PackageManagerResponseDtoDto
+    protected function createSuccessResponse(?string $output, array $packageList): PackageManagerResponseDto
     {
-        return new PackageManagerResponseDtoDto(true, $output, $packageList);
+        return new PackageManagerResponseDto(true, $output, $packageList);
     }
 }

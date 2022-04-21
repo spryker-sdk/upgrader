@@ -14,9 +14,9 @@ services:
         resource: '../../../../Upgrade/Infrastructure/*'
         exclude:
             - '../../../../Upgrade/Infrastructure/Dto/*'
-            - '../../../../Upgrade/Infrastructure/PackageManagementSystem/Client/ReleaseApp/Http/HttpResponse.php'
-            - '../../../../Upgrade/Infrastructure/PackageManagementSystem/Client/ReleaseApp/Http/UpgradeAnalysis/*'
-            - '../../../../Upgrade/Infrastructure/PackageManagementSystem/Client/ReleaseApp/Http/UpgradeInstructions/*'
+            - '../../../../Upgrade/Infrastructure/ReleaseAppClient/Http/HttpResponse.php'
+            - '../../../../Upgrade/Infrastructure/ReleaseAppClient/Http/UpgradeAnalysis/*'
+            - '../../../../Upgrade/Infrastructure/ReleaseAppClient/Http/UpgradeInstructions/*'
 
     Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter: ~
     Upgrade\Infrastructure\VersionControlSystem\Adapter\VersionControlSystemAdapterInterface: '@Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter'
@@ -39,43 +39,43 @@ services:
         tags: [ 'sdk.task' ]
 
     check_is_remote_target_branch_exist.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\CommonStep\CheckRemoteTargetBranchExistsStep
+        class: Upgrade\Infrastructure\Strategy\CommonStep\CheckRemoteTargetBranchExistsStep
 
     check_is_local_target_branch_exist.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\CommonStep\CheckLocalTargetBranchExistsStep
+        class: Upgrade\Infrastructure\Strategy\CommonStep\CheckLocalTargetBranchExistsStep
 
     check_uncommitted_changes.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\CommonStep\CheckUncommittedChangesStep
+        class: Upgrade\Infrastructure\Strategy\CommonStep\CheckUncommittedChangesStep
 
     composer_update.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Step\ComposerUpdateStep
+        class: Upgrade\Infrastructure\Strategy\Composer\Step\ComposerUpdateStep
 
     composer_lock_diff.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\CommonStep\ComposerLockComparatorStep
+        class: Upgrade\Infrastructure\Strategy\CommonStep\ComposerLockComparatorStep
 
     create_branch.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\CommonStep\CreateBranchStep
+        class: Upgrade\Infrastructure\Strategy\CommonStep\CreateBranchStep
 
     add_changes.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\CommonStep\AddChangesStep
+        class: Upgrade\Infrastructure\Strategy\CommonStep\AddChangesStep
 
     commit_changes.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\CommonStep\CommitChangesStep
+        class: Upgrade\Infrastructure\Strategy\CommonStep\CommitChangesStep
 
     push_changes.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\CommonStep\PushChangesStep
+        class: Upgrade\Infrastructure\Strategy\CommonStep\PushChangesStep
 
     create_pr.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\CommonStep\CreatePullRequestStep
+        class: Upgrade\Infrastructure\Strategy\CommonStep\CreatePullRequestStep
 
     checkout.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\CommonStep\CheckoutStep
+        class: Upgrade\Infrastructure\Strategy\CommonStep\CheckoutStep
 
     release_group_update.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep
 
     composer.strategy:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\ComposerStrategy
+        class: Upgrade\Infrastructure\Strategy\Composer\ComposerStrategy
         arguments:
             - {
                 param1: '@check_is_remote_target_branch_exist.step',
@@ -92,7 +92,7 @@ services:
              }
 
     release-app.strategy:
-        class: Upgrade\Infrastructure\Processor\Strategy\ReleaseApp\ReleaseAppStrategy
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\ReleaseAppStrategy
         arguments:
             - {
                 param1: '@check_is_remote_target_branch_exist.step',
@@ -108,8 +108,8 @@ services:
                 param11: '@checkout.step'
             }
 
-    Upgrade\Infrastructure\Processor\Strategy\StrategyResolver:
-        class: Upgrade\Infrastructure\Processor\Strategy\StrategyResolver
+    Upgrade\Infrastructure\Strategy\StrategyResolver:
+        class: Upgrade\Infrastructure\Strategy\StrategyResolver
         arguments:
             - {
                 param1: '@composer.strategy',
@@ -131,30 +131,45 @@ services:
             }
 
     validator.already_installed:
-        class: Upgrade\Infrastructure\Processor\Strategy\ReleaseApp\Validator\Package\AlreadyInstalledValidator
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Package\AlreadyInstalledValidator
 
-    Upgrade\Infrastructure\Processor\Strategy\ReleaseApp\Validator\PackageSoftValidator:
-        class: Upgrade\Infrastructure\Processor\Strategy\ReleaseApp\Validator\PackageSoftValidator
+    Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\PackageSoftValidator:
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\PackageSoftValidator
         arguments:
             - {
                 param1: '@validator.already_installed'
             }
 
     validator.project_changes:
-        class: Upgrade\Infrastructure\Processor\Strategy\ReleaseApp\Validator\ReleaseGroup\ProjectChangesValidator
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ReleaseGroup\ProjectChangesValidator
 
     validator.release_major:
-        class: Upgrade\Infrastructure\Processor\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator
 
-    Upgrade\Infrastructure\Processor\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
-        class: Upgrade\Infrastructure\Processor\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
+    Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
         arguments:
             - {
                 param1: '@validator.project_changes',
                 param2: '@validator.release_major',
             }
 
-#Third-party dependencies
+    processor.aggregate_release_group_require:
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Processor\AggregateReleaseGroupRequireProcessor
+
+    processor.sequential_release_group_require:
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Processor\SequentialReleaseGroupRequireProcessor
+
+    Upgrade\Infrastructure\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver:
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver
+        arguments:
+            - '@configuration.provider'
+            - {
+                param1: '@processor.aggregate_release_group_require',
+                param2: '@processor.sequential_release_group_require',
+            }
+
+    #Third-party dependencies
     Ergebnis\Json\Printer\Printer: ~
     Ergebnis\Json\Printer\PrinterInterface: '@Ergebnis\Json\Printer\Printer'
 

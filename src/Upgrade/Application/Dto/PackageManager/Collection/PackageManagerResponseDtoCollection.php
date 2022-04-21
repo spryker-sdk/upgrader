@@ -7,7 +7,7 @@
 
 namespace Upgrade\Application\Dto\PackageManager\Collection;
 
-use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto;
+use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto;
 
 class PackageManagerResponseDtoCollection extends ResponseCollection
 {
@@ -16,6 +16,6 @@ class PackageManagerResponseDtoCollection extends ResponseCollection
      */
     protected function getClassName(): string
     {
-        return PackageManagerResponseDtoDto::class;
+        return PackageManagerResponseDto::class;
     }
 }

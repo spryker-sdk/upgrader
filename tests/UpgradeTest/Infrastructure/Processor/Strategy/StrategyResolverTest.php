@@ -10,9 +10,9 @@ namespace UpgradeTest\Infrastructure\Processor\Strategy;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Exception\UpgradeStrategyIsNotDefinedException;
-use Upgrade\Infrastructure\Processor\Strategy\Composer\ComposerStrategy;
-use Upgrade\Infrastructure\Processor\Strategy\ReleaseApp\ReleaseAppStrategy;
-use Upgrade\Infrastructure\Processor\Strategy\StrategyResolver;
+use Upgrade\Infrastructure\Strategy\Composer\ComposerStrategy;
+use Upgrade\Infrastructure\Strategy\ReleaseApp\ReleaseAppStrategy;
+use Upgrade\Infrastructure\Strategy\StrategyResolver;
 
 class StrategyResolverTest extends KernelTestCase
 {
@@ -22,7 +22,7 @@ class StrategyResolverTest extends KernelTestCase
     public function testGetStrategyReturnComposerStrategy(): void
     {
         // Arrange
-        /** @var \Upgrade\Infrastructure\Processor\Strategy\StrategyResolver $strategyResolver */
+        /** @var \Upgrade\Infrastructure\Strategy\StrategyResolver $strategyResolver */
         $strategyResolver = static::bootKernel()->getContainer()->get(StrategyResolver::class);
 
         // Act
@@ -38,7 +38,7 @@ class StrategyResolverTest extends KernelTestCase
     public function testGetStrategyReturnReleaseAppStrategy(): void
     {
         // Arrange
-        /** @var \Upgrade\Infrastructure\Processor\Strategy\StrategyResolver $strategyResolver */
+        /** @var \Upgrade\Infrastructure\Strategy\StrategyResolver $strategyResolver */
         $strategyResolver = static::bootKernel()->getContainer()->get(StrategyResolver::class);
 
         // Act
@@ -54,7 +54,7 @@ class StrategyResolverTest extends KernelTestCase
     public function testGetStrategyThrowNotDefinedException(): void
     {
         // Arrange
-        /** @var \Upgrade\Infrastructure\Processor\Strategy\StrategyResolver $strategyResolver */
+        /** @var \Upgrade\Infrastructure\Strategy\StrategyResolver $strategyResolver */
         $strategyResolver = static::bootKernel()->getContainer()->get(StrategyResolver::class);
 
         // Assert

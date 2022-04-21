@@ -17,9 +17,9 @@ class StepsExecutionDto
     protected bool $isSuccessful;
 
     /**
-     * @var string|null
+     * @var array<string>
      */
-    protected ?string $outputMessage;
+    protected array $outputMessageList = [];
 
     /**
      * @var \Upgrade\Application\Dto\Composer\ComposerLockDiffDto|null
@@ -38,7 +38,9 @@ class StepsExecutionDto
     public function __construct(bool $isSuccessful = true, ?string $outputMessage = null)
     {
         $this->isSuccessful = $isSuccessful;
-        $this->outputMessage = $outputMessage;
+        if ($outputMessage) {
+            $this->outputMessageList[] = $outputMessage;
+        }
     }
 
     /**
@@ -66,7 +68,7 @@ class StepsExecutionDto
      */
     public function getOutputMessage(): ?string
     {
-        return $this->outputMessage;
+        return implode(PHP_EOL, $this->outputMessageList);
     }
 
     /**
@@ -74,9 +76,11 @@ class StepsExecutionDto
      *
      * @return $this
      */
-    public function setOutputMessage(?string $outputMessage = null)
+    public function addOutputMessage(?string $outputMessage)
     {
-        $this->outputMessage = $outputMessage;
+        if ($outputMessage) {
+            $this->outputMessageList[] = $outputMessage;
+        }
 
         return $this;
     }

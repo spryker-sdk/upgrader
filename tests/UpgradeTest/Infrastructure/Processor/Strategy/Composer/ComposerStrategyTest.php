@@ -9,7 +9,7 @@ namespace UpgradeTest\Infrastructure\Processor\Strategy\Composer;
 
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Processor\Strategy\Composer\ComposerStrategy;
+use Upgrade\Infrastructure\Strategy\Composer\ComposerStrategy;
 use UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps\FooRollbackStep;
 use UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps\FooStep;
 

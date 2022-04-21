@@ -8,26 +8,26 @@
 namespace Upgrade\Infrastructure\PackageManager\Client\Composer;
 
 use Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection;
-use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto;
+use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto;
 
 interface ComposerCallExecutorInterface
 {
     /**
      * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function require(PackageDtoCollection $packageCollection): PackageManagerResponseDtoDto;
+    public function require(PackageDtoCollection $packageCollection): PackageManagerResponseDto;
 
     /**
      * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function requireDev(PackageDtoCollection $packageCollection): PackageManagerResponseDtoDto;
+    public function requireDev(PackageDtoCollection $packageCollection): PackageManagerResponseDto;
 
     /**
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function update(): PackageManagerResponseDtoDto;
+    public function update(): PackageManagerResponseDto;
 }

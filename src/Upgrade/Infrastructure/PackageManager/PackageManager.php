@@ -9,7 +9,7 @@ namespace Upgrade\Infrastructure\PackageManager;
 
 use Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection;
 use Upgrade\Application\Dto\PackageManager\Collection\PackageManagerResponseDtoCollection;
-use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto;
+use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto;
 use Upgrade\Infrastructure\PackageManager\Client\ComposerClientInterface;
 use Upgrade\Infrastructure\PackageManager\Client\ComposerLockDiffClientInterface;
 
@@ -64,9 +64,9 @@ class PackageManager implements PackageManagerInterface
     /**
      * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function require(PackageDtoCollection $packageCollection): PackageManagerResponseDtoDto
+    public function require(PackageDtoCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->packageManagerClient->require($packageCollection);
     }
@@ -74,9 +74,9 @@ class PackageManager implements PackageManagerInterface
     /**
      * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function requireDev(PackageDtoCollection $packageCollection): PackageManagerResponseDtoDto
+    public function requireDev(PackageDtoCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->packageManagerClient->requireDev($packageCollection);
     }
@@ -92,7 +92,7 @@ class PackageManager implements PackageManagerInterface
         if ($response->isSuccess()) {
             $composerLockDiffResponseCollection = $this->composerLockDiffClient->getComposerLockDiff();
             foreach ($composerLockDiffResponseCollection as $diffResponse) {
-                $response = new PackageManagerResponseDtoDto(
+                $response = new PackageManagerResponseDto(
                     true,
                     $response->getOutput(),
                     $diffResponse->getPackageList(),

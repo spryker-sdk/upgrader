@@ -7,12 +7,12 @@
 
 namespace Upgrade\Infrastructure\PackageManager\Client\ComposerLockDiff;
 
-use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto;
+use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto;
 
 interface ComposerLockDiffCallExecutorInterface
 {
     /**
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function getComposerLockDiff(): PackageManagerResponseDtoDto;
+    public function getComposerLockDiff(): PackageManagerResponseDto;
 }

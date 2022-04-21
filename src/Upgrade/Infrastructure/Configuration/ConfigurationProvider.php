@@ -22,6 +22,16 @@ class ConfigurationProvider
     /**
      * @var string
      */
+    public const SEQUENTIAL_RELEASE_GROUP_REQUIRE_PROCESSOR = 'sequential-release-group-require-processor';
+
+    /**
+     * @var string
+     */
+    public const AGGREGATE_RELEASE_GROUP_REQUIRE_PROCESSOR = 'aggregate-release-group-require-processor';
+
+    /**
+     * @var string
+     */
     public const GITHUB_SOURCE_CODE_PROVIDER = 'github';
 
     /**
@@ -45,6 +55,14 @@ class ConfigurationProvider
     public function getUpgradeStrategy(): string
     {
         return (string)getenv('UPGRADE_STRATEGY') ?: static::RELEASE_APP_STRATEGY;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReleaseGroupRequireProcessor(): string
+    {
+        return (string)getenv('RELEASE_GROUP_REQUIRE_PROCESSOR') ?: static::AGGREGATE_RELEASE_GROUP_REQUIRE_PROCESSOR;
     }
 
     /**

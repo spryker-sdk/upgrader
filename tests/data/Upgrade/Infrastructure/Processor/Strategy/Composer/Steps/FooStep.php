@@ -8,7 +8,7 @@
 namespace UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps;
 
 use Upgrade\Application\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Processor\Strategy\StepInterface;
+use Upgrade\Infrastructure\Strategy\StepInterface;
 
 class FooStep implements StepInterface
 {

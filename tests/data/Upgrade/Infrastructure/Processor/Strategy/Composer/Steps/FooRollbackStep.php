@@ -8,7 +8,7 @@
 namespace UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps;
 
 use Upgrade\Application\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Processor\Strategy\RollbackStepInterface;
+use Upgrade\Infrastructure\Strategy\RollbackStepInterface;
 
 class FooRollbackStep implements RollbackStepInterface
 {

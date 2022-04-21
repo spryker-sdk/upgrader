@@ -12,8 +12,8 @@ use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\Composer\ComposerLockDiffDto;
 use Upgrade\Application\Dto\Step\StepsExecutionDto;
 use Upgrade\Infrastructure\Process\ProcessRunner;
-use Upgrade\Infrastructure\Processor\Strategy\CommonStep\ComposerLockComparatorStep;
-use Upgrade\Infrastructure\Processor\Strategy\Comparator\ComposerLockComparator;
+use Upgrade\Infrastructure\Strategy\CommonStep\ComposerLockComparatorStep;
+use Upgrade\Infrastructure\Strategy\Comparator\ComposerLockComparator;
 
 class ComposerLockComparatorStepTest extends TestCase
 {

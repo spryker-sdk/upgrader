@@ -63,7 +63,7 @@ class GitHubProvider implements ProviderInterface
         } catch (RuntimeException $runtimeException) {
             return $stepsExecutionDto
                 ->setIsSuccessful(false)
-                ->setOutputMessage($runtimeException->getMessage());
+                ->addOutputMessage($runtimeException->getMessage());
         }
     }
 

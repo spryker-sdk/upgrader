@@ -8,7 +8,7 @@
 namespace Upgrade\Infrastructure\PackageManager\Client\Composer;
 
 use Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection;
-use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto;
+use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto;
 use Upgrade\Infrastructure\PackageManager\Client\Composer\Json\Reader\ComposerJsonReaderInterface;
 use Upgrade\Infrastructure\PackageManager\Client\Composer\Lock\Reader\ComposerLockReaderInterface;
 use Upgrade\Infrastructure\PackageManager\Client\ComposerClientInterface;
@@ -89,9 +89,9 @@ class ComposerClient implements ComposerClientInterface
     /**
      * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function require(PackageDtoCollection $packageCollection): PackageManagerResponseDtoDto
+    public function require(PackageDtoCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->composerCallExecutor->require($packageCollection);
     }
@@ -99,17 +99,17 @@ class ComposerClient implements ComposerClientInterface
     /**
      * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function requireDev(PackageDtoCollection $packageCollection): PackageManagerResponseDtoDto
+    public function requireDev(PackageDtoCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->composerCallExecutor->requireDev($packageCollection);
     }
 
     /**
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDtoDto
+     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
      */
-    public function update(): PackageManagerResponseDtoDto
+    public function update(): PackageManagerResponseDto
     {
         return $this->composerCallExecutor->update();
     }
