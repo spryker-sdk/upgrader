@@ -22,4 +22,17 @@ class ReleaseGroupDtoCollection extends UpgraderCollection
     {
         return ReleaseGroupDto::class;
     }
+
+    /**
+     * @return ModuleDtoCollection
+     */
+    public function getCommonModuleCollection(): ModuleDtoCollection
+    {
+        $resultCollection = new ModuleDtoCollection();
+        foreach ($this as $releaseGroup) {
+            $resultCollection->addCollection($releaseGroup->getModuleCollection());
+        }
+
+        return $resultCollection;
+    }
 }

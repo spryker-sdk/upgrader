@@ -21,7 +21,7 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
      */
     public function validate(ReleaseGroupDto $releaseGroup): void
     {
-        if ($releaseGroup->getModuleCollection()->isContainsMajorUpdates()) {
+        if ($releaseGroup->getModuleCollection()->getMajorAmount()) {
             $message = sprintf(
                 '%s %s',
                 'Release group contains major changes. Name:',

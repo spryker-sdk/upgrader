@@ -198,4 +198,44 @@ class ConfigurationProvider
     {
         return (int)getenv(static::UPGRADER_COMMAND_EXECUTION_TIMEOUT) ?: static::DEFAULT_COMMAND_EXECUTION_TIMEOUT;
     }
+
+    public const DEFAULT_SOFT_THRESHOLD_BUGFIX_AMOUNT = 2;
+
+    public const DEFAULT_SOFT_THRESHOLD_MINOR_AMOUNT = 2;
+
+    public const DEFAULT_SOFT_THRESHOLD_MAJOR_AMOUNT = 0;
+
+    public const DEFAULT_THRESHOLD_RELEASE_GROUP_AMOUNT = 50;
+
+    /**
+     * @return int
+     */
+    public function getSoftThresholdBugfixAmount(): int
+    {
+        return (int)getenv('SOFT_THRESHOLD_BUGFIX_AMOUNT') ?: static::DEFAULT_SOFT_THRESHOLD_BUGFIX_AMOUNT;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSoftThresholdMinorAmount(): int
+    {
+        return (int)getenv('SOFT_THRESHOLD_MINOR_AMOUNT') ?: static::DEFAULT_SOFT_THRESHOLD_MINOR_AMOUNT;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSoftThresholdMajorAmount(): int
+    {
+        return (int)getenv('SOFT_THRESHOLD_MAJOR_AMOUNT') ?: static::DEFAULT_SOFT_THRESHOLD_MAJOR_AMOUNT;
+    }
+
+    /**
+     * @return int
+     */
+    public function getThresholdReleaseGroupAmount(): int
+    {
+        return (int)getenv('THRESHOLD_RELEASE_GROUP_AMOUNT') ?: static::DEFAULT_THRESHOLD_RELEASE_GROUP_AMOUNT;
+    }
 }

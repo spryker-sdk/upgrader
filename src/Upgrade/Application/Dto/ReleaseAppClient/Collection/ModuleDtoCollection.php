@@ -25,16 +25,47 @@ class ModuleDtoCollection extends UpgraderCollection
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isContainsMajorUpdates(): bool
+    public function getMajorAmount(): int
     {
+        $result = 0;
         foreach ($this as $module) {
             if ($module->getVersionType() === ReleaseAppConst::MODULE_TYPE_MAJOR) {
-                return true;
+                $result++;
             }
         }
 
-        return false;
+        return $result;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMinorAmount(): int
+    {
+        $result = 0;
+        foreach ($this as $module) {
+            if ($module->getVersionType() === ReleaseAppConst::MODULE_TYPE_MINOR) {
+                $result++;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPathAmount(): int
+    {
+        $result = 0;
+        foreach ($this as $module) {
+            if ($module->getVersionType() === ReleaseAppConst::MODULE_TYPE_PATCH) {
+                $result++;
+            }
+        }
+
+        return $result;
     }
 }

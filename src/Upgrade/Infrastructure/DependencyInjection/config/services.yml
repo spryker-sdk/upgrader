@@ -154,6 +154,28 @@ services:
                 param2: '@validator.release_major',
             }
 
+    validator.threshold_major:
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Threshold\MajorThresholdValidator
+
+    validator.threshold_minor:
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Threshold\MinorThresholdValidator
+
+    validator.threshold_path:
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Threshold\PathThresholdValidator
+
+    validator.threshold_release_group:
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Threshold\ReleaseGroupThresholdValidator
+
+    Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ThresholdSoftValidator:
+        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ThresholdSoftValidator
+        arguments:
+            - {
+                param1: '@validator.threshold_major',
+                param2: '@validator.threshold_minor',
+                param3: '@validator.threshold_path',
+                param4: '@validator.threshold_release_group',
+            }
+
     processor.aggregate_release_group_require:
         class: Upgrade\Infrastructure\Strategy\ReleaseApp\Processor\AggregateReleaseGroupRequireProcessor
 

@@ -20,9 +20,9 @@ interface ReleaseGroupRequireProcessorInterface
     public function getProcessorName(): string;
 
     /**
-     * @param \Upgrade\Application\Dto\ReleaseAppClient\Collection\ReleaseGroupDtoCollection $releaseGroupCollection
+     * @param \Upgrade\Application\Dto\ReleaseAppClient\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
      *
      * @return \Upgrade\Application\Dto\PackageManager\Collection\PackageManagerResponseDtoCollection
      */
-    public function requireCollection(ReleaseGroupDtoCollection $releaseGroupCollection): PackageManagerResponseDtoCollection;
+    public function requireCollection(ReleaseGroupDtoCollection $requiteRequestCollection): PackageManagerResponseDtoCollection;
 }
