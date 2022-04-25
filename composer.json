@@ -35,7 +35,10 @@
             "CodeCompliance\\": "src/CodeCompliance/",
             "Evaluate\\": "src/Evaluate/",
             "Upgrade\\": "src/Upgrade/",
-            "Upgrader\\": "src/Upgrader/"
+            "Upgrader\\": "src/Upgrader/",
+            "ReleaseAppClient\\": "src/ReleaseAppClient/",
+            "PackageManager\\": "src/PackageManager/",
+            "ProcessRunner\\": "src/ProcessRunner/"
         }
     },
     "autoload-dev": {

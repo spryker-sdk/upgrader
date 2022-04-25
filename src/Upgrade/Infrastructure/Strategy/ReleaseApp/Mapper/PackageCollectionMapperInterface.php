@@ -7,36 +7,36 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Mapper;
 
-use Upgrade\Application\Dto\ReleaseAppClient\Collection\ModuleDtoCollection;
-use Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection;
+use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
+use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 
 interface PackageCollectionMapperInterface
 {
     /**
-     * @param \Upgrade\Application\Dto\ReleaseAppClient\Collection\ModuleDtoCollection $moduleCollection
+     * @param \ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection $moduleCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection
+     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
      */
     public function mapModuleCollectionToPackageCollection(ModuleDtoCollection $moduleCollection): PackageDtoCollection;
 
     /**
-     * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
+     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection
+     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
      */
     public function filterInvalidPackage(PackageDtoCollection $packageCollection): PackageDtoCollection;
 
     /**
-     * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
+     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection
+     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
      */
     public function getRequiredPackages(PackageDtoCollection $packageCollection): PackageDtoCollection;
 
     /**
-     * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
+     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection
+     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
      */
     public function getRequiredDevPackages(PackageDtoCollection $packageCollection): PackageDtoCollection;
 }

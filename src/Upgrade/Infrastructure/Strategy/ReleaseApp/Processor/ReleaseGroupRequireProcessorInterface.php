@@ -7,10 +7,10 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Processor;
 
-use Upgrade\Application\Dto\ReleaseAppClient\Collection\ReleaseGroupDtoCollection;
-use Upgrade\Application\Dto\ReleaseAppClient\ReleaseGroupDto;
-use Upgrade\Application\Dto\PackageManager\Collection\PackageManagerResponseDtoCollection;
-use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto;
+use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
+use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
+use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
+use PackageManager\Domain\Dto\PackageManagerResponseDto;
 
 interface ReleaseGroupRequireProcessorInterface
 {
@@ -20,9 +20,9 @@ interface ReleaseGroupRequireProcessorInterface
     public function getProcessorName(): string;
 
     /**
-     * @param \Upgrade\Application\Dto\ReleaseAppClient\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
+     * @param \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\Collection\PackageManagerResponseDtoCollection
+     * @return \PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection
      */
     public function requireCollection(ReleaseGroupDtoCollection $requiteRequestCollection): PackageManagerResponseDtoCollection;
 }

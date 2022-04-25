@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\Composer\ComposerLockDiffDto;
 use Upgrade\Application\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Process\ProcessRunner;
+use ProcessRunner\Application\Service\ProcessRunnerService;
 use Upgrade\Infrastructure\Strategy\CommonStep\ComposerLockComparatorStep;
 use Upgrade\Infrastructure\Strategy\Comparator\ComposerLockComparator;
 
@@ -91,14 +91,14 @@ class ComposerLockComparatorStepTest extends TestCase
     /**
      * @param string $outputMessage
      *
-     * @return \Upgrade\Infrastructure\Process\ProcessRunner
+     * @return \ProcessRunner\Application\Service\ProcessRunnerService
      */
-    protected function mockProcessRunnerWithOutput(string $outputMessage): ProcessRunner
+    protected function mockProcessRunnerWithOutput(string $outputMessage): ProcessRunnerService
     {
         $processMock = $this->createMock(Process::class);
         $processMock->method('getOutput')->willReturn($outputMessage);
 
-        $processRunnerMock = $this->createMock(ProcessRunner::class);
+        $processRunnerMock = $this->createMock(ProcessRunnerService::class);
         $processRunnerMock->method('runProcess')->willReturn($processMock);
 
         return $processRunnerMock;

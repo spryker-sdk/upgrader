@@ -7,14 +7,14 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Processor;
 
-use Upgrade\Application\Dto\ReleaseAppClient\Collection\ModuleDtoCollection;
-use Upgrade\Application\Dto\ReleaseAppClient\Collection\ReleaseGroupDtoCollection;
-use Upgrade\Application\Dto\ReleaseAppClient\ReleaseGroupDto;
-use Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection;
-use Upgrade\Application\Dto\PackageManager\Collection\PackageManagerResponseDtoCollection;
-use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto;
+use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
+use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
+use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
+use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
+use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
+use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Infrastructure\PackageManager\PackageManagerInterface;
+use PackageManager\Application\Service\PackageManagerInterface;
 use Upgrade\Infrastructure\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface;
 use Upgrade\Infrastructure\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
@@ -38,7 +38,7 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     protected $packageCollectionMapper;
 
     /**
-     * @var \Upgrade\Infrastructure\PackageManager\PackageManagerInterface
+     * @var \PackageManager\Application\Service\PackageManagerInterface
      */
     protected $packageManager;
 
@@ -46,7 +46,7 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
      * @param \Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
      * @param ThresholdSoftValidatorInterface  $thresholdSoftValidator
      * @param \Upgrade\Infrastructure\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface $packageCollectionBuilder
-     * @param \Upgrade\Infrastructure\PackageManager\PackageManagerInterface $packageManager
+     * @param \PackageManager\Application\Service\PackageManagerInterface $packageManager
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
@@ -69,9 +69,9 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     }
 
     /**
-     * @param \Upgrade\Application\Dto\ReleaseAppClient\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
+     * @param \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\Collection\PackageManagerResponseDtoCollection
+     * @return \PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection
      */
     public function requireCollection(ReleaseGroupDtoCollection $requiteRequestCollection): PackageManagerResponseDtoCollection
     {
@@ -97,9 +97,9 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     }
 
     /**
-     * @param \Upgrade\Application\Dto\ReleaseAppClient\ReleaseGroupDto $releaseGroup
+     * @param \ReleaseAppClient\Domain\Dto\ReleaseGroupDto $releaseGroup
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
+     * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
      */
     public function require(ReleaseGroupDto $releaseGroup): PackageManagerResponseDto
     {
@@ -123,9 +123,9 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     }
 
     /**
-     * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
+     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
+     * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
      */
     protected function requirePackageCollection(PackageDtoCollection $packageCollection): PackageManagerResponseDto
     {

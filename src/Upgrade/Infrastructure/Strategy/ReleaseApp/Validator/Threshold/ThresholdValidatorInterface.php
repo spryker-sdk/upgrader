@@ -2,9 +2,9 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Threshold;
 
-use Upgrade\Application\Dto\ReleaseAppClient\Collection\ModuleDtoCollection;
-use Upgrade\Application\Dto\ReleaseAppClient\Collection\ReleaseGroupDtoCollection;
-use Upgrade\Application\Dto\ReleaseAppClient\ReleaseGroupDto;
+use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
+use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
+use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
 
 interface ThresholdValidatorInterface
 {

@@ -7,27 +7,26 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Bridge;
 
-use Upgrade\Application\Dto\ReleaseAppClient\ReleaseAppClientRequestDto;
-use Upgrade\Application\Dto\ReleaseAppClient\ReleaseAppClientResponseDto;
-use Upgrade\Infrastructure\ReleaseAppClient\ReleaseAppClientInterface;
-use Upgrade\Infrastructure\PackageManagementSystem\PackageManagementSystemInterface;
-use Upgrade\Infrastructure\PackageManager\PackageManagerInterface;
+use ReleaseAppClient\Domain\Dto\ReleaseAppClientRequestDto;
+use ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto;
+use ReleaseAppClient\Domain\Client\ReleaseAppClientInterface;
+use PackageManager\Application\Service\PackageManagerInterface;
 
 class ReleaseAppClientBridge implements ReleaseAppClientBridgeInterface
 {
     /**
      * @var ReleaseAppClientInterface
      */
-    protected $releaseAppClient;
+    protected ReleaseAppClientInterface $releaseAppClient;
 
     /**
-     * @var \Upgrade\Infrastructure\PackageManager\PackageManagerInterface
+     * @var \PackageManager\Application\Service\PackageManagerInterface
      */
     protected $packageManager;
 
     /**
      * @param ReleaseAppClientInterface $dataProvider
-     * @param \Upgrade\Infrastructure\PackageManager\PackageManagerInterface $packageManager
+     * @param \PackageManager\Application\Service\PackageManagerInterface $packageManager
      */
     public function __construct(ReleaseAppClientInterface $dataProvider, PackageManagerInterface $packageManager)
     {
@@ -36,7 +35,7 @@ class ReleaseAppClientBridge implements ReleaseAppClientBridgeInterface
     }
 
     /**
-     * @return \Upgrade\Application\Dto\ReleaseAppClient\ReleaseAppClientResponseDto
+     * @return \ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto
      */
     public function getNotInstalledReleaseGroupList(): ReleaseAppClientResponseDto
     {
@@ -46,7 +45,7 @@ class ReleaseAppClientBridge implements ReleaseAppClientBridgeInterface
     }
 
     /**
-     * @return \Upgrade\Application\Dto\ReleaseAppClient\ReleaseAppClientRequestDto
+     * @return \ReleaseAppClient\Domain\Dto\ReleaseAppClientRequestDto
      */
     protected function createDataProviderRequest(): ReleaseAppClientRequestDto
     {

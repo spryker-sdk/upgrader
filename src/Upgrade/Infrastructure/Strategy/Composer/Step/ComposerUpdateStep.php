@@ -8,7 +8,7 @@
 namespace Upgrade\Infrastructure\Strategy\Composer\Step;
 
 use Upgrade\Application\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\PackageManager\PackageManagerInterface;
+use PackageManager\Application\Service\PackageManagerInterface;
 use Upgrade\Infrastructure\Strategy\CommonStep\AbstractStep;
 use Upgrade\Infrastructure\Strategy\RollbackStepInterface;
 use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver;
@@ -16,13 +16,13 @@ use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlS
 class ComposerUpdateStep extends AbstractStep implements RollbackStepInterface
 {
     /**
-     * @var \Upgrade\Infrastructure\PackageManager\PackageManagerInterface
+     * @var \PackageManager\Application\Service\PackageManagerInterface
      */
     protected $packageManager;
 
     /**
      * @param \Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver $vscAdapterResolver
-     * @param \Upgrade\Infrastructure\PackageManager\PackageManagerInterface $packageManager
+     * @param \PackageManager\Application\Service\PackageManagerInterface $packageManager
      */
     public function __construct(VersionControlSystemAdapterResolver $vscAdapterResolver, PackageManagerInterface $packageManager)
     {

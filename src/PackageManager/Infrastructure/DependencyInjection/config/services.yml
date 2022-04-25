@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+# PackageManager
+#    PackageManager\Application\:
+#        resource: '../../../../PackageManager/Application/*'
+#
+#    PackageManager\Infrastructure\:
+#        resource: '../../../../PackageManager/Infrastructure/*'
+#
+#    PackageManager\Domain\:
+#        resource: '../../../../PackageManager/Domain/*'
+#        exclude:
+#            - '../../../../PackageManager/Domain/Dto/*'

@@ -7,13 +7,13 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ReleaseGroup;
 
-use Upgrade\Application\Dto\ReleaseAppClient\ReleaseGroupDto;
+use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
 use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class ProjectChangesValidator implements ReleaseGroupValidatorInterface
 {
     /**
-     * @param \Upgrade\Application\Dto\ReleaseAppClient\ReleaseGroupDto $releaseGroup
+     * @param \ReleaseAppClient\Domain\Dto\ReleaseGroupDto $releaseGroup
      *
      * @return void
      *@throws \Upgrade\Infrastructure\Exception\UpgraderException

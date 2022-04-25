@@ -2,8 +2,8 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Threshold;
 
-use Upgrade\Application\Dto\ReleaseAppClient\Collection\ModuleDtoCollection;
-use Upgrade\Application\Dto\ReleaseAppClient\Collection\ReleaseGroupDtoCollection;
+use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
+use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Exception\UpgraderException;
 

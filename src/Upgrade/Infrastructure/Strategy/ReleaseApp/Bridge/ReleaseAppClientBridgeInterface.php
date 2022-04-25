@@ -7,12 +7,12 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Bridge;
 
-use Upgrade\Application\Dto\ReleaseAppClient\ReleaseAppClientResponseDto;
+use ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto;
 
 interface ReleaseAppClientBridgeInterface
 {
     /**
-     * @return \Upgrade\Application\Dto\ReleaseAppClient\ReleaseAppClientResponseDto
+     * @return \ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto
      */
     public function getNotInstalledReleaseGroupList(): ReleaseAppClientResponseDto;
 }

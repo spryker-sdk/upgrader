@@ -7,19 +7,19 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Package;
 
-use Upgrade\Application\Dto\PackageManager\PackageDto;
+use PackageManager\Domain\Dto\PackageDto;
 use Upgrade\Infrastructure\Exception\UpgraderException;
-use Upgrade\Infrastructure\PackageManager\PackageManagerInterface;
+use PackageManager\Application\Service\PackageManagerInterface;
 
 class AlreadyInstalledValidator implements PackageValidatorInterface
 {
     /**
-     * @var \Upgrade\Infrastructure\PackageManager\PackageManagerInterface
+     * @var \PackageManager\Application\Service\PackageManagerInterface
      */
     protected $packageManager;
 
     /**
-     * @param \Upgrade\Infrastructure\PackageManager\PackageManagerInterface $packageManager
+     * @param \PackageManager\Application\Service\PackageManagerInterface $packageManager
      */
     public function __construct(PackageManagerInterface $packageManager)
     {
@@ -27,11 +27,11 @@ class AlreadyInstalledValidator implements PackageValidatorInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\PackageManager\PackageDto $package
-     *
-     * @throws \Upgrade\Infrastructure\Exception\UpgraderException
+     * @param \PackageManager\Domain\Dto\PackageDto $package
      *
      * @return void
+     *@throws \Upgrade\Infrastructure\Exception\UpgraderException
+     *
      */
     public function validate(PackageDto $package): void
     {

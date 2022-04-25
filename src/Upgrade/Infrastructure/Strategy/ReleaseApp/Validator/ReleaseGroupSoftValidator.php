@@ -7,8 +7,8 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Validator;
 
-use Upgrade\Application\Dto\ReleaseAppClient\ReleaseGroupDto;
-use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto;
+use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
+use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class ReleaseGroupSoftValidator implements ReleaseGroupSoftValidatorInterface
@@ -27,9 +27,9 @@ class ReleaseGroupSoftValidator implements ReleaseGroupSoftValidatorInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\ReleaseAppClient\ReleaseGroupDto $releaseGroup
+     * @param \ReleaseAppClient\Domain\Dto\ReleaseGroupDto $releaseGroup
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
+     * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
      */
     public function isValidReleaseGroup(ReleaseGroupDto $releaseGroup): PackageManagerResponseDto
     {

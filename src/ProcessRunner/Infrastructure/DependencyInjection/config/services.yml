@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+# ReleaseAppClient
+    ProcessRunner\:
+        resource: '../../../../ProcessRunner/*'
+
+    ProcessRunner\Application\Service\ProcessRunnerService: ~
+    ProcessRunner\Application\Service\ProcessRunnerServiceInterface: '@ProcessRunner\Application\Service\ProcessRunnerService'

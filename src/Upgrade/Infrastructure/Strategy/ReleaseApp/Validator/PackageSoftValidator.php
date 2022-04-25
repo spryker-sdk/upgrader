@@ -7,8 +7,8 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Validator;
 
-use Upgrade\Application\Dto\PackageManager\PackageDto;
-use Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto;
+use PackageManager\Domain\Dto\PackageDto;
+use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class PackageSoftValidator implements PackageSoftValidatorInterface
@@ -27,9 +27,9 @@ class PackageSoftValidator implements PackageSoftValidatorInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\PackageManager\PackageDto $package
+     * @param \PackageManager\Domain\Dto\PackageDto $package
      *
-     * @return \Upgrade\Application\Dto\PackageManager\PackageManagerResponseDto
+     * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
      */
     public function isValidPackage(PackageDto $package): PackageManagerResponseDto
     {

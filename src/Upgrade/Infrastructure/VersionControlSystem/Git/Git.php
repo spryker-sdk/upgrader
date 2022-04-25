@@ -11,7 +11,7 @@ use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\Step\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException;
-use Upgrade\Infrastructure\Process\ProcessRunner;
+use ProcessRunner\Application\Service\ProcessRunnerService;
 use Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder;
 use Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider;
 
@@ -28,9 +28,9 @@ class Git
     protected $baseBranch = '';
 
     /**
-     * @var \Upgrade\Infrastructure\Process\ProcessRunner
+     * @var \ProcessRunner\Application\Service\ProcessRunnerService
      */
-    protected ProcessRunner $processRunner;
+    protected ProcessRunnerService $processRunner;
 
     /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
@@ -54,14 +54,14 @@ class Git
 
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Upgrade\Infrastructure\Process\ProcessRunner $processRunner
+     * @param \ProcessRunner\Application\Service\ProcessRunnerService $processRunner
      * @param \Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider $sourceCodeProvider
      * @param \Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder $pullRequestDataBuilder
      */
     public function __construct(
-        ConfigurationProvider $configurationProvider,
-        ProcessRunner $processRunner,
-        SourceCodeProvider $sourceCodeProvider,
+        ConfigurationProvider  $configurationProvider,
+        ProcessRunnerService   $processRunner,
+        SourceCodeProvider     $sourceCodeProvider,
         PullRequestDataBuilder $pullRequestDataBuilder
     ) {
         $this->configurationProvider = $configurationProvider;

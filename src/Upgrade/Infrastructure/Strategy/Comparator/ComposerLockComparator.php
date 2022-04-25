@@ -8,7 +8,7 @@
 namespace Upgrade\Infrastructure\Strategy\Comparator;
 
 use Upgrade\Application\Dto\Composer\ComposerLockDiffDto;
-use Upgrade\Infrastructure\Process\ProcessRunner;
+use ProcessRunner\Application\Service\ProcessRunnerService;
 
 class ComposerLockComparator
 {
@@ -23,14 +23,14 @@ class ComposerLockComparator
     protected const JSON_OUTPUT_FLAG = '--json';
 
     /**
-     * @var \Upgrade\Infrastructure\Process\ProcessRunner
+     * @var \ProcessRunner\Application\Service\ProcessRunnerService
      */
-    protected ProcessRunner $processRunner;
+    protected ProcessRunnerService $processRunner;
 
     /**
-     * @param \Upgrade\Infrastructure\Process\ProcessRunner $processRunner
+     * @param \ProcessRunner\Application\Service\ProcessRunnerService $processRunner
      */
-    public function __construct(ProcessRunner $processRunner)
+    public function __construct(ProcessRunnerService $processRunner)
     {
         $this->processRunner = $processRunner;
     }

@@ -13,7 +13,7 @@ use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\Composer\ComposerLockDiffDto;
 use Upgrade\Application\Dto\Step\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Infrastructure\Process\ProcessRunner;
+use ProcessRunner\Application\Service\ProcessRunnerService;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
 use Upgrade\Infrastructure\VersionControlSystem\Provider\GitHub\GitHubProvider;
 
@@ -193,11 +193,11 @@ class GitTest extends KernelTestCase
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Process\ProcessRunner $processRunner
+     * @param \ProcessRunner\Application\Service\ProcessRunnerService $processRunner
      *
      * @return \Upgrade\Infrastructure\VersionControlSystem\Git\Git
      */
-    protected function getGitWithProcessRunner(ProcessRunner $processRunner): Git
+    protected function getGitWithProcessRunner(ProcessRunnerService $processRunner): Git
     {
         /** @var \Upgrade\Infrastructure\VersionControlSystem\Git\Git $git */
         $git = static::bootKernel()->getContainer()->get(Git::class);
@@ -218,15 +218,15 @@ class GitTest extends KernelTestCase
      * @param string $outputMessage
      * @param bool $isSuccessful
      *
-     * @return \Upgrade\Infrastructure\Process\ProcessRunner
+     * @return \ProcessRunner\Application\Service\ProcessRunnerService
      */
-    protected function mockProcessRunnerWithOutput(string $outputMessage, bool $isSuccessful = true): ProcessRunner
+    protected function mockProcessRunnerWithOutput(string $outputMessage, bool $isSuccessful = true): ProcessRunnerService
     {
         $processMock = $this->createMock(Process::class);
         $processMock->method('getOutput')->willReturn($outputMessage);
         $processMock->method('isSuccessful')->willReturn($isSuccessful);
 
-        $processRunnerMock = $this->createMock(ProcessRunner::class);
+        $processRunnerMock = $this->createMock(ProcessRunnerService::class);
         $processRunnerMock->method('runProcess')->willReturn($processMock);
 
         return $processRunnerMock;

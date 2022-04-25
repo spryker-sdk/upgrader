@@ -7,16 +7,16 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Package;
 
-use Upgrade\Application\Dto\PackageManager\PackageDto;
+use PackageManager\Domain\Dto\PackageDto;
 
 interface PackageValidatorInterface
 {
     /**
-     * @param \Upgrade\Application\Dto\PackageManager\PackageDto $package
-     *
-     * @throws \Upgrade\Infrastructure\Exception\UpgraderException
+     * @param \PackageManager\Domain\Dto\PackageDto $package
      *
      * @return void
+     *@throws \Upgrade\Infrastructure\Exception\UpgraderException
+     *
      */
     public function validate(PackageDto $package): void;
 }

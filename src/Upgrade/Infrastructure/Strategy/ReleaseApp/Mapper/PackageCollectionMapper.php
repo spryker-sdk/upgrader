@@ -7,10 +7,10 @@
 
 namespace Upgrade\Infrastructure\Strategy\ReleaseApp\Mapper;
 
-use Upgrade\Application\Dto\ReleaseAppClient\Collection\ModuleDtoCollection;
-use Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection;
-use Upgrade\Application\Dto\PackageManager\PackageDto;
-use Upgrade\Infrastructure\PackageManager\PackageManagerInterface;
+use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
+use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
+use PackageManager\Domain\Dto\PackageDto;
+use PackageManager\Application\Service\PackageManagerInterface;
 use Upgrade\Infrastructure\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface;
 
@@ -22,13 +22,13 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     protected $packageValidator;
 
     /**
-     * @var \Upgrade\Infrastructure\PackageManager\PackageManagerInterface
+     * @var \PackageManager\Application\Service\PackageManagerInterface
      */
     protected $packageManager;
 
     /**
      * @param \Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface $packageValidator
-     * @param \Upgrade\Infrastructure\PackageManager\PackageManagerInterface $packageManager
+     * @param \PackageManager\Application\Service\PackageManagerInterface $packageManager
      */
     public function __construct(PackageSoftValidatorInterface $packageValidator, PackageManagerInterface $packageManager)
     {
@@ -37,9 +37,9 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\ReleaseAppClient\Collection\ModuleDtoCollection $moduleCollection
+     * @param \ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection $moduleCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection
+     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
      */
     public function mapModuleCollectionToPackageCollection(ModuleDtoCollection $moduleCollection): PackageDtoCollection
     {
@@ -55,9 +55,9 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
+     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection
+     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
      */
     public function filterInvalidPackage(PackageDtoCollection $packageCollection): PackageDtoCollection
     {
@@ -74,9 +74,9 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
+     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection
+     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
      */
     public function getRequiredPackages(PackageDtoCollection $packageCollection): PackageDtoCollection
     {
@@ -92,9 +92,9 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection $packageCollection
+     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManager\Collection\PackageDtoCollection
+     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
      */
     public function getRequiredDevPackages(PackageDtoCollection $packageCollection): PackageDtoCollection
     {
