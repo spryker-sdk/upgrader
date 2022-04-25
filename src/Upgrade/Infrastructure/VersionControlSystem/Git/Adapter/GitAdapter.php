@@ -7,7 +7,7 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Git\Adapter;
 
-use Upgrade\Application\Dto\Step\StepsExecutionDto;
+use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Adapter\VersionControlSystemAdapterInterface;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
@@ -36,9 +36,9 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function isRemoteTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -46,9 +46,9 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function isLocalTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -56,9 +56,9 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function hasAnyUncommittedChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -66,9 +66,9 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function createBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -76,9 +76,9 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function addChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -86,9 +86,9 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function commitChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -96,9 +96,9 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function pushChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -106,9 +106,9 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function createPullRequest(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -116,9 +116,9 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function checkout(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -126,9 +126,9 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function deleteLocalBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -136,9 +136,9 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function deleteRemoteBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -146,9 +146,9 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function restore(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {

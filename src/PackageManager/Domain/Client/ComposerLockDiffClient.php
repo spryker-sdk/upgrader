@@ -7,7 +7,7 @@
 
 namespace PackageManager\Domain\Client;
 
-use PackageManager\Domain\Client\ComposerLockDiff\ComposerLockDiffCommandBuilderInterface;
+use PackageManager\Domain\Client\ComposerLockDiff\ComposerLockDiffCommandExecutorInterface;
 use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
 use PackageManager\Domain\Dto\ComposerLockDiffResponseDto;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
@@ -16,14 +16,14 @@ use PackageManager\Domain\Client\ComposerLockDiffClientInterface;
 class ComposerLockDiffClient implements ComposerLockDiffClientInterface
 {
     /**
-     * @var \PackageManager\Domain\Client\ComposerLockDiff\ComposerLockDiffCommandBuilderInterface
+     * @var \PackageManager\Domain\Client\ComposerLockDiff\ComposerLockDiffCommandExecutorInterface
      */
     protected $composerLockDiffCallExecutor;
 
     /**
-     * @param \PackageManager\Domain\Client\ComposerLockDiff\ComposerLockDiffCommandBuilderInterface $composerLockDiffCallExecutor
+     * @param \PackageManager\Domain\Client\ComposerLockDiff\ComposerLockDiffCommandExecutorInterface $composerLockDiffCallExecutor
      */
-    public function __construct(ComposerLockDiffCommandBuilderInterface $composerLockDiffCallExecutor)
+    public function __construct(ComposerLockDiffCommandExecutorInterface $composerLockDiffCallExecutor)
     {
         $this->composerLockDiffCallExecutor = $composerLockDiffCallExecutor;
     }

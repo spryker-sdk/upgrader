@@ -8,7 +8,7 @@
 namespace Upgrade\Infrastructure\VersionControlSystem\Git;
 
 use Symfony\Component\Process\Process;
-use Upgrade\Application\Dto\Step\StepsExecutionDto;
+use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException;
 use ProcessRunner\Application\Service\ProcessRunnerService;
@@ -71,9 +71,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function isRemoteTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -89,9 +89,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function isLocalTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -110,9 +110,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function hasAnyUncommittedChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -128,9 +128,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function createBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -140,9 +140,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function add(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -152,9 +152,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function commit(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -164,9 +164,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function push(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -177,9 +177,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function createPullRequest(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -200,9 +200,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function checkout(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -212,9 +212,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function deleteLocalBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -224,9 +224,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function deleteRemoteBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -236,9 +236,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function restore(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -325,10 +325,10 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      * @param array $command
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function process(StepsExecutionDto $stepsExecutionDto, array $command)
     {
@@ -338,10 +338,10 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      * @param \Symfony\Component\Process\Process $process
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     protected function prepareStepsExecutionDto(StepsExecutionDto $stepsExecutionDto, Process $process): StepsExecutionDto
     {

@@ -7,7 +7,7 @@
 
 namespace ReleaseAppClient\Domain\Dto\Collection;
 
-use Upgrade\Application\Dto\Collection\UpgraderCollection;
+use Upgrade\Domain\Dto\Collection\UpgraderCollection;
 use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
 
 /**

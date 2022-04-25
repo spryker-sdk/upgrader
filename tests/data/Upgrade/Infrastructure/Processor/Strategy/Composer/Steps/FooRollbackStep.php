@@ -7,15 +7,15 @@
 
 namespace UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps;
 
-use Upgrade\Application\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Strategy\RollbackStepInterface;
+use Upgrade\Domain\Dto\Step\StepsExecutionDto;
+use Upgrade\Domain\Strategy\RollbackStepInterface;
 
 class FooRollbackStep implements RollbackStepInterface
 {
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -23,9 +23,9 @@ class FooRollbackStep implements RollbackStepInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function rollBack(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {

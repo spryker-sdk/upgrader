@@ -7,7 +7,7 @@
 
 namespace ReleaseAppClient\Domain\Http\UpgradeAnalysis\Collection;
 
-use Upgrade\Application\Dto\Collection\UpgraderCollection;
+use Upgrade\Domain\Dto\Collection\UpgraderCollection;
 use ReleaseAppClient\Domain\Http\UpgradeAnalysis\HttpUpgradeAnalysisModule;
 
 /**

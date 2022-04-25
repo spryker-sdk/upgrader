@@ -7,7 +7,7 @@
 
 namespace ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\Collection;
 
-use Upgrade\Application\Dto\Collection\UpgraderCollection;
+use Upgrade\Domain\Dto\Collection\UpgraderCollection;
 use Upgrade\Infrastructure\Exception\UpgraderException;
 use ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\HttpUpgradeInstructionsReleaseGroup;
 

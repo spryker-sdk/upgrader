@@ -11,7 +11,7 @@ use Github\AuthMethod;
 use Github\Client;
 use Github\HttpClient\Builder;
 use RuntimeException;
-use Upgrade\Application\Dto\Step\StepsExecutionDto;
+use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Provider\ProviderInterface;
 
@@ -45,10 +45,10 @@ class GitHubProvider implements ProviderInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      * @param array $params
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function createPullRequest(StepsExecutionDto $stepsExecutionDto, array $params): StepsExecutionDto
     {

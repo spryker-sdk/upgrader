@@ -10,18 +10,18 @@ namespace Upgrade\Infrastructure\Commands;
 use SprykerSdk\SdkContracts\Entity\ContextInterface;
 use SprykerSdk\SdkContracts\Entity\ConverterInterface;
 use SprykerSdk\SdkContracts\Entity\ExecutableCommandInterface;
-use Upgrade\Application\Services\UpgraderServiceInterface;
-use Upgrade\Domain\Entity\Message;
+use Upgrade\Application\Service\UpgraderServiceInterface;
+use Upgrade\Domain\Dto\MessageDto;
 
 class UpgradeCommand implements ExecutableCommandInterface
 {
     /**
-     * @var \Upgrade\Application\Services\UpgraderServiceInterface
+     * @var \Upgrade\Application\Service\UpgraderServiceInterface
      */
     protected $upgraderService;
 
     /**
-     * @param \Upgrade\Application\Services\UpgraderServiceInterface $upgraderService
+     * @param \Upgrade\Application\Service\UpgraderServiceInterface $upgraderService
      */
     public function __construct(UpgraderServiceInterface $upgraderService)
     {
@@ -77,7 +77,7 @@ class UpgradeCommand implements ExecutableCommandInterface
     {
         $stepsExecutionDto = $this->upgraderService->upgrade();
 
-        $message = new Message((string)$stepsExecutionDto->getOutputMessage());
+        $message = new MessageDto((string)$stepsExecutionDto->getOutputMessage());
 
         $context->addMessage(static::class, $message);
 

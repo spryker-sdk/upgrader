@@ -17,7 +17,7 @@ services:
     Upgrade\Infrastructure\VersionControlSystem\Adapter\VersionControlSystemAdapterInterface: '@Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter'
 
     Upgrade\Infrastructure\Services\UpgraderService: ~
-    Upgrade\Application\Services\UpgraderServiceInterface: '@Upgrade\Infrastructure\Services\UpgraderService'
+    Upgrade\Application\Services\UpgraderServiceInterface: '@Upgrade\Application\Service\UpgraderService'
 
     git.adapter:
         class: Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter
@@ -34,43 +34,43 @@ services:
         tags: [ 'sdk.task' ]
 
     check_is_remote_target_branch_exist.step:
-        class: Upgrade\Infrastructure\Strategy\CommonStep\CheckRemoteTargetBranchExistsStep
+        class: Upgrade\Domain\Strategy\CommonStep\CheckRemoteTargetBranchExistsStep
 
     check_is_local_target_branch_exist.step:
-        class: Upgrade\Infrastructure\Strategy\CommonStep\CheckLocalTargetBranchExistsStep
+        class: Upgrade\Domain\Strategy\CommonStep\CheckLocalTargetBranchExistsStep
 
     check_uncommitted_changes.step:
-        class: Upgrade\Infrastructure\Strategy\CommonStep\CheckUncommittedChangesStep
+        class: Upgrade\Domain\Strategy\CommonStep\CheckUncommittedChangesStep
 
     composer_update.step:
-        class: Upgrade\Infrastructure\Strategy\Composer\Step\ComposerUpdateStep
+        class: Upgrade\Domain\Strategy\Composer\Step\ComposerUpdateStep
 
     composer_lock_diff.step:
-        class: Upgrade\Infrastructure\Strategy\CommonStep\ComposerLockComparatorStep
+        class: Upgrade\Domain\Strategy\CommonStep\ComposerLockComparatorStep
 
     create_branch.step:
-        class: Upgrade\Infrastructure\Strategy\CommonStep\CreateBranchStep
+        class: Upgrade\Domain\Strategy\CommonStep\CreateBranchStep
 
     add_changes.step:
-        class: Upgrade\Infrastructure\Strategy\CommonStep\AddChangesStep
+        class: Upgrade\Domain\Strategy\CommonStep\AddChangesStep
 
     commit_changes.step:
-        class: Upgrade\Infrastructure\Strategy\CommonStep\CommitChangesStep
+        class: Upgrade\Domain\Strategy\CommonStep\CommitChangesStep
 
     push_changes.step:
-        class: Upgrade\Infrastructure\Strategy\CommonStep\PushChangesStep
+        class: Upgrade\Domain\Strategy\CommonStep\PushChangesStep
 
     create_pr.step:
-        class: Upgrade\Infrastructure\Strategy\CommonStep\CreatePullRequestStep
+        class: Upgrade\Domain\Strategy\CommonStep\CreatePullRequestStep
 
     checkout.step:
-        class: Upgrade\Infrastructure\Strategy\CommonStep\CheckoutStep
+        class: Upgrade\Domain\Strategy\CommonStep\CheckoutStep
 
     release_group_update.step:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep
+        class: Upgrade\Domain\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep
 
     composer.strategy:
-        class: Upgrade\Infrastructure\Strategy\Composer\ComposerStrategy
+        class: Upgrade\Domain\Strategy\Composer\ComposerStrategy
         arguments:
             - {
                 param1: '@check_is_remote_target_branch_exist.step',
@@ -87,7 +87,7 @@ services:
              }
 
     release-app.strategy:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\ReleaseAppStrategy
+        class: Upgrade\Domain\Strategy\ReleaseApp\ReleaseAppStrategy
         arguments:
             - {
                 param1: '@check_is_remote_target_branch_exist.step',
@@ -104,7 +104,7 @@ services:
             }
 
     Upgrade\Infrastructure\Strategy\StrategyResolver:
-        class: Upgrade\Infrastructure\Strategy\StrategyResolver
+        class: Upgrade\Domain\Strategy\StrategyResolver
         arguments:
             - {
                 param1: '@composer.strategy',
@@ -126,23 +126,23 @@ services:
             }
 
     validator.already_installed:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Package\AlreadyInstalledValidator
+        class: Upgrade\Domain\Strategy\ReleaseApp\Validator\Package\AlreadyInstalledValidator
 
     Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\PackageSoftValidator:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\PackageSoftValidator
+        class: Upgrade\Domain\Strategy\ReleaseApp\Validator\PackageSoftValidator
         arguments:
             - {
                 param1: '@validator.already_installed'
             }
 
     validator.project_changes:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ReleaseGroup\ProjectChangesValidator
+        class: Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroup\ProjectChangesValidator
 
     validator.release_major:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator
+        class: Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator
 
     Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
+        class: Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
         arguments:
             - {
                 param1: '@validator.project_changes',
@@ -150,19 +150,19 @@ services:
             }
 
     validator.threshold_major:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Threshold\MajorThresholdValidator
+        class: Upgrade\Domain\Strategy\ReleaseApp\Validator\Threshold\MajorThresholdValidator
 
     validator.threshold_minor:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Threshold\MinorThresholdValidator
+        class: Upgrade\Domain\Strategy\ReleaseApp\Validator\Threshold\MinorThresholdValidator
 
     validator.threshold_path:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Threshold\PathThresholdValidator
+        class: Upgrade\Domain\Strategy\ReleaseApp\Validator\Threshold\PathThresholdValidator
 
     validator.threshold_release_group:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\Threshold\ReleaseGroupThresholdValidator
+        class: Upgrade\Domain\Strategy\ReleaseApp\Validator\Threshold\ReleaseGroupThresholdValidator
 
     Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ThresholdSoftValidator:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Validator\ThresholdSoftValidator
+        class: Upgrade\Domain\Strategy\ReleaseApp\Validator\ThresholdSoftValidator
         arguments:
             - {
                 param1: '@validator.threshold_major',
@@ -172,13 +172,13 @@ services:
             }
 
     processor.aggregate_release_group_require:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Processor\AggregateReleaseGroupRequireProcessor
+        class: Upgrade\Domain\Strategy\ReleaseApp\Processor\AggregateReleaseGroupRequireProcessor
 
     processor.sequential_release_group_require:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Processor\SequentialReleaseGroupRequireProcessor
+        class: Upgrade\Domain\Strategy\ReleaseApp\Processor\SequentialReleaseGroupRequireProcessor
 
     Upgrade\Infrastructure\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver
+        class: Upgrade\Domain\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver
         arguments:
             - '@configuration.provider'
             - {
@@ -190,10 +190,10 @@ services:
         class: ReleaseAppClient\Application\Client\ReleaseAppClient
 
     client.package_manager:
-        class: PackageManager\Application\Service\PackageManager
+        class: PackageManager\Application\Service\PackageManagerService
 
     Upgrade\Infrastructure\Strategy\ReleaseApp\Bridge\ReleaseAppClientBridge:
-        class: Upgrade\Infrastructure\Strategy\ReleaseApp\Bridge\ReleaseAppClientBridge
+        class: Upgrade\Domain\Strategy\ReleaseApp\Bridge\ReleaseAppClientBridge
         arguments:
             - '@client.release_app'
             - '@client.package_manager'

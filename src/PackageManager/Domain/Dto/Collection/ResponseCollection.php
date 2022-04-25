@@ -7,7 +7,7 @@
 
 namespace PackageManager\Domain\Dto\Collection;
 
-use Upgrade\Application\Dto\Collection\UpgraderCollection;
+use Upgrade\Domain\Dto\Collection\UpgraderCollection;
 use PackageManager\Domain\Dto\ResponseDto;
 
 class ResponseCollection extends UpgraderCollection

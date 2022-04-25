@@ -9,19 +9,19 @@ namespace Upgrade\Infrastructure\Task;
 
 use SprykerSdk\SdkContracts\Entity\Lifecycle\LifecycleInterface;
 use SprykerSdk\SdkContracts\Entity\TaskInterface;
-use Upgrade\Application\Services\UpgraderServiceInterface;
+use Upgrade\Application\Service\UpgraderServiceInterface;
 use Upgrade\Infrastructure\Commands\UpgradeCommand;
 use Upgrade\Infrastructure\Lifecycle\Lifecycle;
 
 class UpgradeTask implements TaskInterface
 {
     /**
-     * @var \Upgrade\Application\Services\UpgraderServiceInterface
+     * @var \Upgrade\Application\Service\UpgraderServiceInterface
      */
     protected $upgraderService;
 
     /**
-     * @param \Upgrade\Application\Services\UpgraderServiceInterface $upgraderService
+     * @param \Upgrade\Application\Service\UpgraderServiceInterface $upgraderService
      */
     public function __construct(UpgraderServiceInterface $upgraderService)
     {

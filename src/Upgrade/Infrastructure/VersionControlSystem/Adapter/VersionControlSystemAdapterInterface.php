@@ -7,7 +7,7 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Adapter;
 
-use Upgrade\Application\Dto\Step\StepsExecutionDto;
+use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 
 interface VersionControlSystemAdapterInterface
 {
@@ -17,86 +17,86 @@ interface VersionControlSystemAdapterInterface
     public function getType(): string;
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function isRemoteTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function isLocalTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function hasAnyUncommittedChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function createBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function addChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function commitChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function pushChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function createPullRequest(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function checkout(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function deleteLocalBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function deleteRemoteBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 
     /**
-     * @param \Upgrade\Application\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function restore(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 }

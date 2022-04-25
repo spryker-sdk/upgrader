@@ -7,7 +7,7 @@
 
 namespace PackageManager\Domain\Client;
 
-use PackageManager\Domain\Client\Composer\ComposerCommandBuilderInterface;
+use PackageManager\Domain\Client\Composer\ComposerCommandExecutorInterface;
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use PackageManager\Domain\Client\Composer\Reader\ComposerJsonReaderInterface;
@@ -31,9 +31,9 @@ class ComposerClient implements ComposerClientInterface
     protected const VERSION_KEY = 'version';
 
     /**
-     * @var \PackageManager\Domain\Client\Composer\ComposerCommandBuilderInterface
+     * @var \PackageManager\Domain\Client\Composer\ComposerCommandExecutorInterface
      */
-    protected $composerCommandBuilder;
+    protected $composerCommandExecutor;
 
     /**
      * @var \PackageManager\Domain\Client\Composer\Reader\ComposerJsonReaderInterface
@@ -46,16 +46,16 @@ class ComposerClient implements ComposerClientInterface
     protected $composerLockReader;
 
     /**
-     * @param \PackageManager\Domain\Client\Composer\ComposerCommandBuilderInterface $composerCallExecutor
+     * @param \PackageManager\Domain\Client\Composer\ComposerCommandExecutorInterface $composerCallExecutor
      * @param \PackageManager\Domain\Client\Composer\Reader\ComposerJsonReaderInterface $composerJsonReader
      * @param \PackageManager\Domain\Client\Composer\Reader\ComposerLockReaderInterface $composerLockReader
      */
     public function __construct(
-        ComposerCommandBuilderInterface $composerCallExecutor,
-        ComposerJsonReaderInterface     $composerJsonReader,
-        ComposerLockReaderInterface     $composerLockReader
+        ComposerCommandExecutorInterface $composerCallExecutor,
+        ComposerJsonReaderInterface      $composerJsonReader,
+        ComposerLockReaderInterface      $composerLockReader
     ) {
-        $this->composerCommandBuilder = $composerCallExecutor;
+        $this->composerCommandExecutor = $composerCallExecutor;
         $this->composerJsonReader = $composerJsonReader;
         $this->composerLockReader = $composerLockReader;
     }
@@ -93,7 +93,7 @@ class ComposerClient implements ComposerClientInterface
      */
     public function require(PackageDtoCollection $packageCollection): PackageManagerResponseDto
     {
-        return $this->composerCommandBuilder->require($packageCollection);
+        return $this->composerCommandExecutor->require($packageCollection);
     }
 
     /**
@@ -103,7 +103,7 @@ class ComposerClient implements ComposerClientInterface
      */
     public function requireDev(PackageDtoCollection $packageCollection): PackageManagerResponseDto
     {
-        return $this->composerCommandBuilder->requireDev($packageCollection);
+        return $this->composerCommandExecutor->requireDev($packageCollection);
     }
 
     /**
@@ -111,7 +111,7 @@ class ComposerClient implements ComposerClientInterface
      */
     public function update(): PackageManagerResponseDto
     {
-        return $this->composerCommandBuilder->update();
+        return $this->composerCommandExecutor->update();
     }
 
     /**
