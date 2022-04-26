@@ -7,7 +7,7 @@
 
 namespace CodebaseTest\Infrastructure\Service;
 
-use Codebase\Application\Dto\CodebaseRequestDto;
+use Codebase\Application\Dto\SourceParserRequestDto;
 use Codebase\Infrastructure\SourceParser\SourceParser;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
@@ -20,13 +20,12 @@ class CodebaseServiceTest extends KernelTestCase
     public function testParseSourceWithValidPath(): void
     {
         //Arrange
-        $codebaseRequestDto = new CodebaseRequestDto(
-            '',
-            '',
+        $codebaseRequestDto = new SourceParserRequestDto(
+            [APPLICATION_ROOT_DIR . '/tests/data/Evaluate/Project/'],
             [APPLICATION_ROOT_DIR . '/tests/data/Evaluate/Core/'],
             ['TestCore'],
+            [],
         );
-        $codebaseRequestDto->setProjectPaths([APPLICATION_ROOT_DIR . '/tests/data/Evaluate/Project/']);
 
         //Act
         $codebaseSourceDto = static::bootKernel()->getContainer()->get(SourceParser::class)->parseSource($codebaseRequestDto);
@@ -52,10 +51,11 @@ class CodebaseServiceTest extends KernelTestCase
         $this->expectException(DirectoryNotFoundException::class);
 
         //Arrange
-        $codebaseRequestDto = new CodebaseRequestDto(
-            APPLICATION_ROOT_DIR . '/invalidPath/',
-            '',
+        $codebaseRequestDto = new SourceParserRequestDto(
             [APPLICATION_ROOT_DIR . '/invalidPath/'],
+            [APPLICATION_ROOT_DIR . '/invalidPath/'],
+            ['TestCore'],
+            [],
         );
 
         //Act

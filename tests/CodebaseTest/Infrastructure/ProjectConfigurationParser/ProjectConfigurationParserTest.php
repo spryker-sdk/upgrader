@@ -9,6 +9,7 @@ namespace CodebaseTest\Infrastructure\ProjectConfigurationParser;
 
 use Codebase\Infrastructure\Exception\ProjectConfigurationFileInvalidSyntaxException;
 use Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReader;
+use Codebase\Infrastructure\ToolingConfigurationReader\Validator\ProjectPrefixesValidator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ProjectConfigurationParserTest extends KernelTestCase
@@ -19,10 +20,10 @@ class ProjectConfigurationParserTest extends KernelTestCase
     public function testSuccessParse(): void
     {
         //Arrange
-        $parser = new ToolingConfigurationReader();
+        $parser = new ToolingConfigurationReader([new ProjectPrefixesValidator()]);
 
         //Act
-        $configurationResponseDto = $parser->readConfiguration('tests/data/Evaluate/Project/tooling.yml');
+        $configurationResponseDto = $parser->readToolingConfiguration('tests/data/Evaluate/Project/tooling.yml');
 
         //Assert
         $this->assertEquals(['Pyz', 'Zyp'], $configurationResponseDto->getProjectPrefixes());
@@ -34,10 +35,10 @@ class ProjectConfigurationParserTest extends KernelTestCase
     public function testParseDefaultValue(): void
     {
         //Arrange
-        $parser = new ToolingConfigurationReader();
+        $parser = new ToolingConfigurationReader([new ProjectPrefixesValidator()]);
 
         //Act
-        $configurationResponseDto = $parser->readConfiguration('not-exists-tooling.yml');
+        $configurationResponseDto = $parser->readToolingConfiguration('not-exists-tooling.yml');
 
         //Assert
         $this->assertEquals(['Pyz'], $configurationResponseDto->getProjectPrefixes());
@@ -49,14 +50,14 @@ class ProjectConfigurationParserTest extends KernelTestCase
     public function testInvalidKeyParse(): void
     {
         //Arrange
-        $parser = new ToolingConfigurationReader();
+        $parser = new ToolingConfigurationReader([new ProjectPrefixesValidator()]);
 
         //Assert
         $this->expectException(ProjectConfigurationFileInvalidSyntaxException::class);
-        $this->expectExceptionMessage('Invalid configuration file tests/data/Evaluate/Project/tooling-invalid-key.yml. Undefined array key "upgrader"');
+        $this->expectExceptionMessage('Invalid tooling configuration file structure. Key upgrader.prefixes not exist');
 
         //Act
-        $configurationResponseDto = $parser->readConfiguration('tests/data/Evaluate/Project/tooling-invalid-key.yml');
+        $configurationResponseDto = $parser->readToolingConfiguration('tests/data/Evaluate/Project/tooling-invalid-key.yml');
     }
 
     /**
@@ -65,14 +66,14 @@ class ProjectConfigurationParserTest extends KernelTestCase
     public function testInvalidTypeOneParse(): void
     {
         //Arrange
-        $parser = new ToolingConfigurationReader();
+        $parser = new ToolingConfigurationReader([new ProjectPrefixesValidator()]);
 
         //Assert
         $this->expectException(ProjectConfigurationFileInvalidSyntaxException::class);
-        $this->expectExceptionMessage('Invalid configuration file tests/data/Evaluate/Project/tooling-invalid-value-1.yml. Value of upgrader.prefixes should be array of string');
+        $this->expectExceptionMessage('Invalid tooling configuration file structure. Value of upgrader.prefixes should be array of string');
 
         //Act
-        $configurationResponseDto = $parser->readConfiguration('tests/data/Evaluate/Project/tooling-invalid-value-1.yml');
+        $configurationResponseDto = $parser->readToolingConfiguration('tests/data/Evaluate/Project/tooling-invalid-value-1.yml');
     }
 
     /**
@@ -81,14 +82,14 @@ class ProjectConfigurationParserTest extends KernelTestCase
     public function testInvalidTypeTwoParse(): void
     {
         //Arrange
-        $parser = new ToolingConfigurationReader();
+        $parser = new ToolingConfigurationReader([new ProjectPrefixesValidator()]);
 
         //Assert
         $this->expectException(ProjectConfigurationFileInvalidSyntaxException::class);
-        $this->expectExceptionMessage('Invalid configuration file tests/data/Evaluate/Project/tooling-invalid-value-2.yml. Value of upgrader.prefixes should be array of string');
+        $this->expectExceptionMessage('Invalid tooling configuration file structure. Value of upgrader.prefixes should be array of string');
 
         //Act
-        $configurationResponseDto = $parser->readConfiguration('tests/data/Evaluate/Project/tooling-invalid-value-2.yml');
+        $configurationResponseDto = $parser->readToolingConfiguration('tests/data/Evaluate/Project/tooling-invalid-value-2.yml');
     }
 
     /**
@@ -97,13 +98,13 @@ class ProjectConfigurationParserTest extends KernelTestCase
     public function testInvalidTypeThreeParse(): void
     {
         //Arrange
-        $parser = new ToolingConfigurationReader();
+        $parser = new ToolingConfigurationReader([new ProjectPrefixesValidator()]);
 
         //Assert
         $this->expectException(ProjectConfigurationFileInvalidSyntaxException::class);
-        $this->expectExceptionMessage('Invalid configuration file tests/data/Evaluate/Project/tooling-invalid-value-3.yml. Value of upgrader.prefixes should be array of string');
+        $this->expectExceptionMessage('Invalid tooling configuration file structure. Value of upgrader.prefixes should be array of string');
 
         //Act
-        $configurationResponseDto = $parser->readConfiguration('tests/data/Evaluate/Project/tooling-invalid-value-3.yml');
+        $configurationResponseDto = $parser->readToolingConfiguration('tests/data/Evaluate/Project/tooling-invalid-value-3.yml');
     }
 }

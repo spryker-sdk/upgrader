@@ -25,7 +25,7 @@ class ConfigurationProvider
     /**
      * @return string
      */
-    public function getToolingConfiguration(): string
+    public function getToolingConfigurationFilePath(): string
     {
         return (string)getenv('PROJECT_CONFIGURATION_FILE_PATH') ?: 'tooling.yml';
     }
@@ -44,12 +44,12 @@ class ConfigurationProvider
     /**
      * @return array
      */
-    public function getCoreDirectory(): array
+    public function getCorePaths(): array
     {
         $directories = [
-            $this->getVendorDirectory() . 'spryker' . DIRECTORY_SEPARATOR,
-            $this->getVendorDirectory() . 'spryker-eco' . DIRECTORY_SEPARATOR,
-            $this->getVendorDirectory() . 'spryker-shop' . DIRECTORY_SEPARATOR,
+            $this->getVendorPath() . 'spryker' . DIRECTORY_SEPARATOR,
+            $this->getVendorPath() . 'spryker-eco' . DIRECTORY_SEPARATOR,
+            $this->getVendorPath() . 'spryker-shop' . DIRECTORY_SEPARATOR,
         ];
 
         return array_filter($directories, function ($dir) {
@@ -60,23 +60,23 @@ class ConfigurationProvider
     /**
      * @return string
      */
-    public function getSrcDirectory(): string
+    public function getSrcPath(): string
     {
-        return $this->getRootDirectory() . 'src' . DIRECTORY_SEPARATOR;
+        return $this->getRootPath() . 'src' . DIRECTORY_SEPARATOR;
     }
 
     /**
      * @return string
      */
-    protected function getVendorDirectory(): string
+    protected function getVendorPath(): string
     {
-        return $this->getRootDirectory() . 'vendor' . DIRECTORY_SEPARATOR;
+        return $this->getRootPath() . 'vendor' . DIRECTORY_SEPARATOR;
     }
 
     /**
      * @return string
      */
-    protected function getRootDirectory(): string
+    protected function getRootPath(): string
     {
         return getcwd() . DIRECTORY_SEPARATOR;
     }

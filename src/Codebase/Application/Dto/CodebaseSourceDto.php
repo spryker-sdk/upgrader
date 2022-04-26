@@ -55,6 +55,16 @@ class CodebaseSourceDto
     protected array $projectPrefixes = [];
 
     /**
+     * @param array<string> $coreNamespaces
+     * @param array<string> $projectPrefixes
+     */
+    public function __construct(array $coreNamespaces, array $projectPrefixes)
+    {
+        $this->coreNamespaces = $coreNamespaces;
+        $this->projectPrefixes = $projectPrefixes;
+    }
+
+    /**
      * @param array<\Codebase\Application\Dto\CodebaseInterface> $codebaseSources
      * @param string|null $type
      *
@@ -62,7 +72,7 @@ class CodebaseSourceDto
      */
     public function setPhpCodebaseSources(array $codebaseSources, ?string $type = null)
     {
-        if ($type === null || $type === CodebaseRequestDto::PROJECT_TYPE) {
+        if ($type === null || $type === SourceParserRequestDto::PROJECT_TYPE) {
             $this->phpCodebaseSources = array_merge($this->phpCodebaseSources, $codebaseSources);
 
             return $this;
@@ -81,7 +91,7 @@ class CodebaseSourceDto
      */
     public function setDatabaseSchemaCodebaseSources(array $codebaseSources, ?string $type = null)
     {
-        if ($type === null || $type === CodebaseRequestDto::PROJECT_TYPE) {
+        if ($type === null || $type === SourceParserRequestDto::PROJECT_TYPE) {
             $this->xmlDatabaseSchemaCodebaseSources = array_merge($this->xmlDatabaseSchemaCodebaseSources, $codebaseSources);
 
             return $this;
@@ -100,7 +110,7 @@ class CodebaseSourceDto
      */
     public function setTransferSchemaCodebaseSources(array $codebaseSources, ?string $type = null)
     {
-        if ($type === null || $type === CodebaseRequestDto::PROJECT_TYPE) {
+        if ($type === null || $type === SourceParserRequestDto::PROJECT_TYPE) {
             $this->xmlTransferSchemaCodebaseSources = array_merge($this->xmlTransferSchemaCodebaseSources, $codebaseSources);
 
             return $this;
@@ -165,30 +175,6 @@ class CodebaseSourceDto
     public function getCoreNamespaces(): array
     {
         return $this->coreNamespaces;
-    }
-
-    /**
-     * @param array<string> $coreNamespaces
-     *
-     * @return $this
-     */
-    public function setCoreNamespaces(array $coreNamespaces)
-    {
-        $this->coreNamespaces = $coreNamespaces;
-
-        return $this;
-    }
-
-    /**
-     * @param array<string> $projectPrefixes
-     *
-     * @return $this
-     */
-    public function setProjectPrefixes(array $projectPrefixes)
-    {
-        $this->projectPrefixes = $projectPrefixes;
-
-        return $this;
     }
 
     /**

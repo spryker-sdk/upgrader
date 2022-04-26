@@ -46,6 +46,16 @@ services:
                 param3: '@database_schema.parser'
             }
 
+    tooling_configuration_validator.project_prefixes:
+        class: Codebase\Infrastructure\ToolingConfigurationReader\Validator\ProjectPrefixesValidator
+
+    Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReader:
+        class: Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReader
+        arguments:
+            - {
+                param1: '@tooling_configuration_validator.project_prefixes'
+            }
+
 # Third-party
     PhpParser\ParserFactory: ~
     Symfony\Component\Finder\Finder: ~
