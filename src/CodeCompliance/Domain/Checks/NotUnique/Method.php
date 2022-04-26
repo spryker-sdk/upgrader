@@ -28,7 +28,7 @@ class Method extends AbstractCodeComplianceCheck
      */
     public function getGuideline(): string
     {
-        return 'Method name %s::%s() should contains project prefix, like %s';
+        return 'Method name %s::%s() should contains project prefix, like %s%s';
     }
 
     /**
@@ -68,7 +68,7 @@ class Method extends AbstractCodeComplianceCheck
                 if ($source->isExtendCore() && !$isCoreMethod && !$hasProjectPrefix && !$isMethodDeclaredInInterface) {
                     $methodParts = preg_split('/(?=[A-Z])/', $projectMethod->getName()) ?: [];
                     array_splice($methodParts, 1, 0, [$projectPrefix]);
-                    $guideline = sprintf($this->getGuideline(), $source->getClassName(), $projectMethod->getName(), lcfirst(implode('', $methodParts)));
+                    $guideline = sprintf($this->getGuideline(), $source->getClassName(), $projectMethod->getName(), strtolower($projectPrefix), ucfirst(implode('', $methodParts)));
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
                 }
             }
