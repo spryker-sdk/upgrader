@@ -80,7 +80,6 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
             $thresholdValidationResult = $this->thresholdValidator->isWithInThreshold($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccess()) {
                 $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutput());
-                var_dump($thresholdValidationResult->getOutput());
 
                 break;
             }
@@ -106,8 +105,6 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     {
         $validateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
         if (!$validateResult->isSuccess()) {
-            var_dump($validateResult->getOutput());
-
             return $validateResult;
         }
 
