@@ -12,21 +12,39 @@ class PackageDto
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var string
      */
-    protected $version;
+    protected string $version;
+
+    /**
+     * @var string
+     */
+    protected string $previousVersion;
+
+    /**
+     * @var string
+     */
+    protected string $diffLink;
 
     /**
      * @param string $name
      * @param string $version
+     * @param string $previousVersion
+     * @param string $diffLink
      */
-    public function __construct(string $name, string $version)
-    {
+    public function __construct(
+        string $name = '',
+        string $version = '',
+        string $previousVersion = '',
+        string $diffLink = ''
+    ) {
         $this->name = $name;
         $this->version = $version;
+        $this->previousVersion = $previousVersion;
+        $this->diffLink = $diffLink;
     }
 
     /**
@@ -51,5 +69,21 @@ class PackageDto
     public function __toString(): string
     {
         return sprintf('%s:%s', $this->getName(), $this->getVersion());
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreviousVersion(): string
+    {
+        return $this->previousVersion;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiffLink(): string
+    {
+        return $this->diffLink;
     }
 }

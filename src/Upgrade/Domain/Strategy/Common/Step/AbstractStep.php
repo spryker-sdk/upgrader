@@ -6,7 +6,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Domain\Strategy\CommonStep;
+namespace Upgrade\Domain\Strategy\Common\Step;
 
 use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver;
 

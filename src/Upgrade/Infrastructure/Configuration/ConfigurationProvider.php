@@ -7,47 +7,10 @@
 
 namespace Upgrade\Infrastructure\Configuration;
 
-class ConfigurationProvider
+use Upgrade\Domain\Configuration\ConfigurationProviderInterface;
+
+class ConfigurationProvider implements ConfigurationProviderInterface
 {
-    /**
-     * @var string
-     */
-    public const COMPOSER_STRATEGY = 'composer';
-
-    /**
-     * @var string
-     */
-    public const RELEASE_APP_STRATEGY = 'release-app';
-
-    /**
-     * @var string
-     */
-    public const SEQUENTIAL_RELEASE_GROUP_REQUIRE_PROCESSOR = 'sequential-release-group-require-processor';
-
-    /**
-     * @var string
-     */
-    public const AGGREGATE_RELEASE_GROUP_REQUIRE_PROCESSOR = 'aggregate-release-group-require-processor';
-
-    /**
-     * @var string
-     */
-    public const GITHUB_SOURCE_CODE_PROVIDER = 'github';
-
-    /**
-     * @var string
-     */
-    public const VCS_TYPE = 'git';
-
-    /**
-     * @var string
-     */
-    protected const BRANCH_PATTERN = 'upgradebot/upgrade-for-%s-%s';
-
-    /**
-     * @var bool
-     */
-    protected const IS_PR_AUTO_MERGE_ENABLED = false;
 
     /**
      * @return string

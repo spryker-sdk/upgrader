@@ -5,14 +5,15 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Domain\Strategy\ReleaseApp\Bridge;
+namespace Upgrade\Infrastructure\Adapter;
 
 use ReleaseAppClient\Domain\Dto\ReleaseAppClientRequestDto;
 use ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto;
 use ReleaseAppClient\Domain\Client\ReleaseAppClientInterface;
 use PackageManager\Application\Service\PackageManagerServiceInterface;
+use Upgrade\Domain\Adapter\ReleaseAppClientAdapterInterface;
 
-class ReleaseAppClientBridge implements ReleaseAppClientBridgeInterface
+class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
 {
     /**
      * @var ReleaseAppClientInterface

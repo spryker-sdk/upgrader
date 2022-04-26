@@ -12,7 +12,7 @@ use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use PackageManager\Domain\Client\ComposerClientInterface;
 use PackageManager\Domain\Client\ComposerLockComparatorClientInterface;
-use Upgrade\Domain\Dto\Composer\ComposerLockDiffDto;
+use PackageManager\Domain\Dto\ComposerLockDiffDto;
 
 class PackageManagerService implements PackageManagerServiceInterface
 {

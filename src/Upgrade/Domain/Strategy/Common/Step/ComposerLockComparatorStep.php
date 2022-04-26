@@ -5,23 +5,24 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Domain\Strategy\CommonStep;
+namespace Upgrade\Domain\Strategy\Common\Step;
 
 use PackageManager\Application\Service\PackageManagerService;
+use Upgrade\Domain\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Domain\Strategy\StepInterface;
 
 class ComposerLockComparatorStep implements StepInterface
 {
     /**
-     * @var \Upgrade\Domain\Strategy\Comparator\ComposerLockComparator
+     * @var PackageManagerAdapterInterface|PackageManagerService
      */
-    protected PackageManagerService $packageManagerService;
+    protected PackageManagerAdapterInterface $packageManagerService;
 
     /**
-     * @param PackageManagerService $composerLockComparator
+     * @param PackageManagerAdapterInterface $composerLockComparator
      */
-    public function __construct(PackageManagerService $composerLockComparator)
+    public function __construct(PackageManagerAdapterInterface $composerLockComparator)
     {
         $this->packageManagerService = $composerLockComparator;
     }

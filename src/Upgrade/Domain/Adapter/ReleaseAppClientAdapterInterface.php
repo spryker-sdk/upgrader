@@ -5,11 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Domain\Strategy\ReleaseApp\Bridge;
+namespace Upgrade\Domain\Adapter;
 
 use ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto;
 
-interface ReleaseAppClientBridgeInterface
+interface ReleaseAppClientAdapterInterface
 {
     /**
      * @return \ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto

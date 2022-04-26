@@ -7,8 +7,8 @@
 
 namespace Upgrade\Application\Service;
 
+use Upgrade\Domain\Configuration\ConfigurationProviderInterface;
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Domain\Strategy\StrategyResolver;
 
 class UpgraderService implements UpgraderServiceInterface
@@ -19,15 +19,15 @@ class UpgraderService implements UpgraderServiceInterface
     protected StrategyResolver $strategyResolver;
 
     /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
+     * @var ConfigurationProviderInterface
      */
-    protected ConfigurationProvider $configurationProvider;
+    protected ConfigurationProviderInterface $configurationProvider;
 
     /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
+     * @param ConfigurationProviderInterface $configurationProvider
      * @param \Upgrade\Domain\Strategy\StrategyResolver $strategyResolver
      */
-    public function __construct(ConfigurationProvider $configurationProvider, StrategyResolver $strategyResolver)
+    public function __construct(ConfigurationProviderInterface $configurationProvider, StrategyResolver $strategyResolver)
     {
         $this->configurationProvider = $configurationProvider;
         $this->strategyResolver = $strategyResolver;

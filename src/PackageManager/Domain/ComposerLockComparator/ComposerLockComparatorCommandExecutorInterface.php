@@ -7,12 +7,12 @@
 
 namespace PackageManager\Domain\ComposerLockComparator;
 
-use Upgrade\Domain\Dto\Composer\ComposerLockDiffDto;
+use PackageManager\Domain\Dto\ComposerLockDiffDto;
 
 interface ComposerLockComparatorCommandExecutorInterface
 {
     /**
-     * @return ComposerLockDiffDto
+     * @return \PackageManager\Domain\Dto\ComposerLockDiffDto
      */
     public function getComposerLockDiff(): ComposerLockDiffDto;
 }

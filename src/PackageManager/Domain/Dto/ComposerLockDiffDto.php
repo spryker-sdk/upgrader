@@ -5,7 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Domain\Dto\Composer;
+namespace PackageManager\Domain\Dto;
+
 
 class ComposerLockDiffDto
 {
@@ -33,7 +34,7 @@ class ComposerLockDiffDto
     }
 
     /**
-     * @return array<\Upgrade\Domain\Dto\Composer\PackageDto>
+     * @return array<PackageDto>
      */
     public function getRequireChanges(): array
     {
@@ -49,7 +50,7 @@ class ComposerLockDiffDto
     }
 
     /**
-     * @return array<\Upgrade\Domain\Dto\Composer\PackageDto>
+     * @return array<PackageDto>
      */
     public function getRequireDevChanges(): array
     {
@@ -59,7 +60,7 @@ class ComposerLockDiffDto
     /**
      * @param string $key
      *
-     * @return array<\Upgrade\Domain\Dto\Composer\PackageDto>
+     * @return array<PackageDto>
      */
     protected function getChangesByKey(string $key): array
     {

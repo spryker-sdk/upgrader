@@ -12,8 +12,8 @@ use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
+use Upgrade\Domain\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use PackageManager\Application\Service\PackageManagerServiceInterface;
 use Upgrade\Domain\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Domain\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
@@ -36,21 +36,21 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
     protected PackageCollectionMapperInterface $packageCollectionMapper;
 
     /**
-     * @var \PackageManager\Application\Service\PackageManagerServiceInterface
+     * @var PackageManagerAdapterInterface
      */
-    protected PackageManagerServiceInterface $packageManager;
+    protected PackageManagerAdapterInterface $packageManager;
 
     /**
      * @param \Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
      * @param ThresholdSoftValidatorInterface $thresholdSoftValidator
      * @param \Upgrade\Domain\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface $packageCollectionBuilder
-     * @param \PackageManager\Application\Service\PackageManagerServiceInterface $packageManager
+     * @param PackageManagerAdapterInterface $packageManager
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
         ThresholdSoftValidatorInterface $thresholdSoftValidator,
         PackageCollectionMapperInterface   $packageCollectionBuilder,
-        PackageManagerServiceInterface $packageManager
+        PackageManagerAdapterInterface $packageManager
     ) {
         $this->releaseGroupValidator = $releaseGroupValidateManager;
         $this->thresholdValidator = $thresholdSoftValidator;

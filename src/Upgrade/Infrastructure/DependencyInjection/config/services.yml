@@ -31,37 +31,37 @@ services:
         tags: [ 'sdk.task' ]
 
     check_is_remote_target_branch_exist.step:
-        class: Upgrade\Domain\Strategy\CommonStep\CheckRemoteTargetBranchExistsStep
+        class: Upgrade\Domain\Strategy\Common\Step\CheckRemoteTargetBranchExistsStep
 
     check_is_local_target_branch_exist.step:
-        class: Upgrade\Domain\Strategy\CommonStep\CheckLocalTargetBranchExistsStep
+        class: Upgrade\Domain\Strategy\Common\Step\CheckLocalTargetBranchExistsStep
 
     check_uncommitted_changes.step:
-        class: Upgrade\Domain\Strategy\CommonStep\CheckUncommittedChangesStep
+        class: Upgrade\Domain\Strategy\Common\Step\CheckUncommittedChangesStep
 
     composer_update.step:
         class: Upgrade\Domain\Strategy\Composer\Step\ComposerUpdateStep
 
     composer_lock_diff.step:
-        class: Upgrade\Domain\Strategy\CommonStep\ComposerLockComparatorStep
+        class: Upgrade\Domain\Strategy\Common\Step\ComposerLockComparatorStep
 
     create_branch.step:
-        class: Upgrade\Domain\Strategy\CommonStep\CreateBranchStep
+        class: Upgrade\Domain\Strategy\Common\Step\CreateBranchStep
 
     add_changes.step:
-        class: Upgrade\Domain\Strategy\CommonStep\AddChangesStep
+        class: Upgrade\Domain\Strategy\Common\Step\AddChangesStep
 
     commit_changes.step:
-        class: Upgrade\Domain\Strategy\CommonStep\CommitChangesStep
+        class: Upgrade\Domain\Strategy\Common\Step\CommitChangesStep
 
     push_changes.step:
-        class: Upgrade\Domain\Strategy\CommonStep\PushChangesStep
+        class: Upgrade\Domain\Strategy\Common\Step\PushChangesStep
 
     create_pr.step:
-        class: Upgrade\Domain\Strategy\CommonStep\CreatePullRequestStep
+        class: Upgrade\Domain\Strategy\Common\Step\CreatePullRequestStep
 
     checkout.step:
-        class: Upgrade\Domain\Strategy\CommonStep\CheckoutStep
+        class: Upgrade\Domain\Strategy\Common\Step\CheckoutStep
 
     release_group_update.step:
         class: Upgrade\Domain\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep

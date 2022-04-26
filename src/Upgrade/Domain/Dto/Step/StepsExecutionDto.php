@@ -7,7 +7,7 @@
 
 namespace Upgrade\Domain\Dto\Step;
 
-use Upgrade\Domain\Dto\Composer\ComposerLockDiffDto;
+use PackageManager\Domain\Dto\ComposerLockDiffDto;
 
 class StepsExecutionDto
 {
@@ -22,7 +22,7 @@ class StepsExecutionDto
     protected array $outputMessageList = [];
 
     /**
-     * @var \Upgrade\Domain\Dto\Composer\ComposerLockDiffDto|null
+     * @var \PackageManager\Domain\Dto\ComposerLockDiffDto|null
      */
     protected $composerLockDiffDto;
 
@@ -86,7 +86,7 @@ class StepsExecutionDto
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Composer\ComposerLockDiffDto|null $composerLockDiffDto
+     * @param \PackageManager\Domain\Dto\ComposerLockDiffDto|null $composerLockDiffDto
      *
      * @return $this
      */
@@ -98,7 +98,7 @@ class StepsExecutionDto
     }
 
     /**
-     * @return \Upgrade\Domain\Dto\Composer\ComposerLockDiffDto|null
+     * @return \PackageManager\Domain\Dto\ComposerLockDiffDto|null
      */
     public function getComposerLockDiff(): ?ComposerLockDiffDto
     {

@@ -5,12 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Domain\Strategy\CommonStep;
+namespace Upgrade\Domain\Strategy\Common\Step;
 
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Domain\Strategy\StepInterface;
 
-class CommitChangesStep extends AbstractStep implements StepInterface
+class AddChangesStep extends AbstractStep implements StepInterface
 {
     /**
      * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
@@ -19,6 +19,6 @@ class CommitChangesStep extends AbstractStep implements StepInterface
      */
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        return $this->vsc->commitChanges($stepsExecutionDto);
+        return $this->vsc->addChanges($stepsExecutionDto);
     }
 }

@@ -7,25 +7,27 @@
 
 namespace Upgrade\Domain\Strategy\Composer\Step;
 
+use Upgrade\Domain\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
-use PackageManager\Application\Service\PackageManagerServiceInterface;
-use Upgrade\Domain\Strategy\CommonStep\AbstractStep;
+use Upgrade\Domain\Strategy\Common\Step\AbstractStep;
 use Upgrade\Domain\Strategy\RollbackStepInterface;
 use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver;
 
 class ComposerUpdateStep extends AbstractStep implements RollbackStepInterface
 {
     /**
-     * @var \PackageManager\Application\Service\PackageManagerServiceInterface
+     * @var PackageManagerAdapterInterface
      */
-    protected $packageManager;
+    protected PackageManagerAdapterInterface $packageManager;
 
     /**
      * @param \Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver $vscAdapterResolver
-     * @param \PackageManager\Application\Service\PackageManagerServiceInterface $packageManager
+     * @param PackageManagerAdapterInterface $packageManager
      */
-    public function __construct(VersionControlSystemAdapterResolver $vscAdapterResolver, PackageManagerServiceInterface $packageManager)
-    {
+    public function __construct(
+        VersionControlSystemAdapterResolver $vscAdapterResolver,
+        PackageManagerAdapterInterface $packageManager
+    ){
         parent::__construct($vscAdapterResolver);
 
         $this->packageManager = $packageManager;

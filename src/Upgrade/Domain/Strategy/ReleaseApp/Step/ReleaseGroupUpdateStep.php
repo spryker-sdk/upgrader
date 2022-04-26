@@ -7,8 +7,8 @@
 
 namespace Upgrade\Domain\Strategy\ReleaseApp\Step;
 
+use Upgrade\Domain\Adapter\ReleaseAppClientAdapterInterface;
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
-use Upgrade\Domain\Strategy\ReleaseApp\Bridge\ReleaseAppClientBridge;
 use Upgrade\Domain\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface;
 use Upgrade\Domain\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver;
 use Upgrade\Domain\Strategy\StepInterface;
@@ -16,9 +16,9 @@ use Upgrade\Domain\Strategy\StepInterface;
 class ReleaseGroupUpdateStep implements StepInterface
 {
     /**
-     * @var \Upgrade\Domain\Strategy\ReleaseApp\Bridge\ReleaseAppClientBridge
+     * @var ReleaseAppClientAdapterInterface
      */
-    protected ReleaseAppClientBridge $packageManagementSystemBridge;
+    protected ReleaseAppClientAdapterInterface $packageManagementSystemBridge;
 
     /**
      * @var \Upgrade\Domain\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface
@@ -26,11 +26,11 @@ class ReleaseGroupUpdateStep implements StepInterface
     protected ReleaseGroupRequireProcessorInterface $releaseGroupRequireProcessor;
 
     /**
-     * @param \Upgrade\Domain\Strategy\ReleaseApp\Bridge\ReleaseAppClientBridge $packageManagementSystemBridge
+     * @param ReleaseAppClientAdapterInterface $packageManagementSystemBridge
      * @param \Upgrade\Domain\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface $groupRequireProcessorResolver
      */
     public function __construct(
-        ReleaseAppClientBridge        $packageManagementSystemBridge,
+        ReleaseAppClientAdapterInterface              $packageManagementSystemBridge,
         ReleaseGroupRequireProcessorResolver $groupRequireProcessorResolver
     ) {
         $this->packageManagementSystemBridge = $packageManagementSystemBridge;

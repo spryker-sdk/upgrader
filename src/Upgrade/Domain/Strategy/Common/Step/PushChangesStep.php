@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Domain\Strategy\CommonStep;
+namespace Upgrade\Domain\Strategy\Common\Step;
 
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Domain\Strategy\RollbackStepInterface;

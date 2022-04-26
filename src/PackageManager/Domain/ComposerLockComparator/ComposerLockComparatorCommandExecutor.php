@@ -8,8 +8,7 @@
 namespace PackageManager\Domain\ComposerLockComparator;
 
 use PackageManager\Domain\ProcessRunner\ProcessRunnerInterface;
-use ProcessRunner\Application\Service\ProcessRunnerService;
-use Upgrade\Domain\Dto\Composer\ComposerLockDiffDto;
+use PackageManager\Domain\Dto\ComposerLockDiffDto;
 
 class ComposerLockComparatorCommandExecutor implements ComposerLockComparatorCommandExecutorInterface
 {
@@ -24,12 +23,12 @@ class ComposerLockComparatorCommandExecutor implements ComposerLockComparatorCom
     protected const JSON_OUTPUT_FLAG = '--json';
 
     /**
-     * @var ProcessRunnerInterface|ProcessRunnerService
+     * @var ProcessRunnerInterface
      */
     protected ProcessRunnerInterface $processRunner;
 
     /**
-     * @param \ProcessRunner\Application\Service\ProcessRunnerService $processRunner
+     * @param ProcessRunnerInterface $processRunner
      */
     public function __construct(ProcessRunnerInterface $processRunner)
     {
@@ -37,7 +36,7 @@ class ComposerLockComparatorCommandExecutor implements ComposerLockComparatorCom
     }
 
     /**
-     * @return ComposerLockDiffDto
+     * @return \PackageManager\Domain\Dto\ComposerLockDiffDto
      */
     public function getComposerLockDiff(): ComposerLockDiffDto
     {

@@ -8,11 +8,7 @@
 namespace PackageManager\Domain\Client;
 
 use PackageManager\Domain\ComposerLockComparator\ComposerLockComparatorCommandExecutorInterface;
-use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
-use PackageManager\Domain\Dto\ComposerLockDiffResponseDto;
-use PackageManager\Domain\Dto\PackageManagerResponseDto;
-use PackageManager\Domain\Client\ComposerLockComparatorClientInterface;
-use Upgrade\Domain\Dto\Composer\ComposerLockDiffDto;
+use PackageManager\Domain\Dto\ComposerLockDiffDto;
 
 class ComposerLockComparatorClient implements ComposerLockComparatorClientInterface
 {
@@ -30,7 +26,7 @@ class ComposerLockComparatorClient implements ComposerLockComparatorClientInterf
     }
 
     /**
-     * @return ComposerLockDiffDto
+     * @return \PackageManager\Domain\Dto\ComposerLockDiffDto
      */
     public function getComposerLockDiff(): ComposerLockDiffDto
     {
