@@ -7,6 +7,7 @@
 
 namespace ReleaseAppClient\Domain\Client;
 
+use ReleaseAppClient\Domain\Configuration\ConfigurationProviderInterface;
 use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
 use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
 use ReleaseAppClient\Domain\Dto\ModuleDto;
@@ -19,20 +20,28 @@ use ReleaseAppClient\Domain\Http\UpgradeAnalysis\Request\HttpUpgradeAnalysisRequ
 use ReleaseAppClient\Domain\Http\UpgradeInstructions\Request\HttpUpgradeInstructionsRequest;
 use ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\Collection\HttpUpgradeInstructionsReleaseGroupCollection;
 use ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\HttpUpgradeInstructionsReleaseGroup;
+use ReleaseAppClient\Domain\ReleaseAppConst;
 
 class ReleaseAppClient implements ReleaseAppClientInterface
 {
     /**
      * @var \ReleaseAppClient\Domain\Http\HttpClientInterface
      */
-    protected $httpClient;
+    protected HttpClientInterface $httpClient;
+
+    /**
+     * @var \ReleaseAppClient\Domain\Configuration\ConfigurationProviderInterface
+     */
+    protected ConfigurationProviderInterface $configurationProvider;
 
     /**
      * @param \ReleaseAppClient\Domain\Http\HttpClientInterface $httpClient
+     * @param \ReleaseAppClient\Domain\Configuration\ConfigurationProviderInterface $configurationProvider
      */
-    public function __construct(HttpClientInterface $httpClient)
+    public function __construct(HttpClientInterface $httpClient, ConfigurationProviderInterface $configurationProvider)
     {
         $this->httpClient = $httpClient;
+        $this->configurationProvider = $configurationProvider;
     }
 
     /**
@@ -65,6 +74,7 @@ class ReleaseAppClient implements ReleaseAppClientInterface
                 $releaseGroup->getName(),
                 $this->buildModuleTransferCollection($releaseGroup),
                 $releaseGroup->isContainsProjectChanges(),
+                $this->getReleaseGroupLink($releaseGroup->getId()),
             );
             $dataProviderReleaseGroupCollection->add($dataProviderReleaseGroup);
         }
@@ -86,6 +96,16 @@ class ReleaseAppClient implements ReleaseAppClientInterface
         }
 
         return $dataProviderModuleCollection;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return string
+     */
+    protected function getReleaseGroupLink(int $id): string
+    {
+        return sprintf(ReleaseAppConst::RELEASE_GROUP_LINK_TEMPLATE, $this->configurationProvider->getReleaseAppUrl(), $id);
     }
 
     /**

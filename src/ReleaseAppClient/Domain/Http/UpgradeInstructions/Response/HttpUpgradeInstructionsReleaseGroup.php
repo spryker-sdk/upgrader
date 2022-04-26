@@ -36,6 +36,11 @@ class HttpUpgradeInstructionsReleaseGroup
     protected const NAME_KEY = 'name';
 
     /**
+     * @var string
+     */
+    protected const ID_KEY = 'id';
+
+    /**
      * @var array
      */
     protected $bodyArray;
@@ -67,6 +72,14 @@ class HttpUpgradeInstructionsReleaseGroup
     public function isContainsProjectChanges(): bool
     {
         return $this->bodyArray[static::PROJECT_CHANGES_KEY];
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return (int)$this->bodyArray[static::ID_KEY];
     }
 
     /**

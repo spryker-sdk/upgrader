@@ -79,6 +79,7 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
         foreach ($requiteRequestCollection->toArray() as $releaseGroup) {
             $thresholdValidationResult = $this->thresholdValidator->isWithInThreshold($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccess()) {
+                $stepsExecutionDto->setIsSuccessful(false);
                 $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutput());
 
                 break;
@@ -87,6 +88,7 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
 
             $requireResult = $this->require($releaseGroup);
             if (!$requireResult->isSuccess()) {
+                $stepsExecutionDto->setIsSuccessful(false);
                 $stepsExecutionDto->addOutputMessage($requireResult->getOutput());
 
                 break;

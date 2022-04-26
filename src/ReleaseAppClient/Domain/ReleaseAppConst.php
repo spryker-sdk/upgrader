@@ -28,4 +28,9 @@ class ReleaseAppConst
      * @var string
      */
     public const MODULE_TYPE_PATCH = 'patch';
+
+    /**
+     * @var string
+     */
+    public const RELEASE_GROUP_LINK_TEMPLATE = '%s/release-groups/view/%s';
 }

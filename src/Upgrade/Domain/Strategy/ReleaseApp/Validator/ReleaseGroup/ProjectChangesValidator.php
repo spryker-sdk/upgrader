@@ -23,9 +23,9 @@ class ProjectChangesValidator implements ReleaseGroupValidatorInterface
     {
         if ($releaseGroup->isContainsProjectChanges()) {
             $message = sprintf(
-                '%s %s',
-                'Release group contains changes on project level. Name:',
+                'Release group %s contains changes on project level. Please follow the link below to find all documentation needed to help you upgrade to the latest release %s',
                 $releaseGroup->getName(),
+                PHP_EOL . $releaseGroup->getLink(),
             );
 
             throw new UpgraderException($message);

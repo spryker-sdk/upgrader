@@ -72,6 +72,20 @@ class ModuleDtoCollection
     }
 
     /**
+     * @return \ReleaseAppClient\Domain\Dto\ModuleDto|null
+     */
+    public function getFirstMajor(): ?ModuleDto
+    {
+        foreach ($this->elements as $module) {
+            if ($module->getVersionType() === ReleaseAppConst::MODULE_TYPE_MAJOR) {
+                return $module;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @return int
      */
     public function getMajorAmount(): int

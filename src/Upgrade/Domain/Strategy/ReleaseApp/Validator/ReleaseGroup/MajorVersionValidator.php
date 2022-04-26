@@ -21,11 +21,12 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
      */
     public function validate(ReleaseGroupDto $releaseGroup): void
     {
-        if ($releaseGroup->getModuleCollection()->getMajorAmount()) {
+        $moduleWithMajorUpdate = $releaseGroup->getModuleCollection()->getFirstMajor();
+        if ($moduleWithMajorUpdate) {
             $message = sprintf(
-                '%s %s',
-                'Release group contains major changes. Name:',
-                $releaseGroup->getName(),
+                'There is a major release available for module %s. Please follow the link below to find all documentation needed to help you upgrade to the latest release %s',
+                $moduleWithMajorUpdate->getName(),
+                PHP_EOL . $releaseGroup->getLink(),
             );
 
             throw new UpgraderException($message);

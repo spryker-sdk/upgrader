@@ -27,13 +27,20 @@ class ReleaseGroupDto
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $link;
+
+    /**
      * @param string $name
      * @param \ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection $moduleCollection
      * @param bool $containsProjectChanges
+     * @param string $link
      */
-    public function __construct(string $name, ModuleDtoCollection $moduleCollection, bool $containsProjectChanges)
+    public function __construct(string $name, ModuleDtoCollection $moduleCollection, bool $containsProjectChanges, string $link)
     {
         $this->name = $name;
+        $this->link = $link;
         $this->moduleCollection = $moduleCollection;
         $this->containsProjectChanges = $containsProjectChanges;
     }
@@ -60,5 +67,13 @@ class ReleaseGroupDto
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLink(): string
+    {
+        return $this->link;
     }
 }
