@@ -14,9 +14,9 @@ use Symfony\Component\Finder\Finder;
 class BaseParser extends KernelTestCase
 {
     /**
-     * @var string
+     * @var array<string>
      */
-    protected const PROJECT_PREFIX = 'Test';
+    protected const PROJECT_PREFIX = ['Test'];
 
     /**
      * @var array<string>
@@ -71,8 +71,6 @@ class BaseParser extends KernelTestCase
      */
     protected function createCodebaseSourceDto(): CodebaseSourceDto
     {
-        return (new CodebaseSourceDto())
-            ->setProjectPrefix(static::PROJECT_PREFIX)
-            ->setCoreNamespaces(static::CORE_NAMESPACES);
+        return new CodebaseSourceDto(static::PROJECT_PREFIX, static::CORE_NAMESPACES);
     }
 }

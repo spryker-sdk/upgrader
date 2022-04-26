@@ -86,7 +86,7 @@ class PhpParser implements ParserInterface
                 $classString = (string)$classNode->namespacedName;
                 $classCodebaseDto = $this->parseClass(
                     $classString,
-                    $codebaseSourceDto->getProjectPrefix(),
+                    $codebaseSourceDto->getProjectPrefixes(),
                     $codebaseSourceDto->getCoreNamespaces(),
                 );
                 if ($classCodebaseDto === null) {
@@ -132,14 +132,18 @@ class PhpParser implements ParserInterface
 
     /**
      * @param string $namespace
-     * @param string $projectPrefix
-     * @param array $coreNamespaces
+     * @param array<string> $projectPrefixList
+     * @param array<string> $coreNamespaces
      * @param \Codebase\Application\Dto\ClassCodebaseDto|null $transfer
      *
      * @return \Codebase\Application\Dto\ClassCodebaseDto|null
      */
-    protected function parseClass(string $namespace, string $projectPrefix, array $coreNamespaces = [], ?ClassCodebaseDto $transfer = null): ?ClassCodebaseDto
-    {
+    protected function parseClass(
+        string $namespace,
+        array $projectPrefixList,
+        array $coreNamespaces = [],
+        ?ClassCodebaseDto $transfer = null
+    ): ?ClassCodebaseDto {
         try {
             if (!class_exists($namespace) && !interface_exists($namespace)) {
                 return null;
@@ -159,9 +163,9 @@ class PhpParser implements ParserInterface
         $transfer->setMethods($projectClass->getMethods());
         $transfer->setTraits($projectClass->getTraits());
         $transfer->setReflection($projectClass);
-        $transfer->setExtendCore($this->isExtendCore($projectClass, $projectPrefix, $coreNamespaces));
+        $transfer->setExtendCore($this->isExtendCore($projectClass, $projectPrefixList, $coreNamespaces));
         $transfer->setCoreInterfacesMethods(
-            $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $projectPrefix),
+            $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $projectPrefixList),
         );
 
         if ($coreNamespaces !== []) {
@@ -177,7 +181,7 @@ class PhpParser implements ParserInterface
             }
 
             $transfer->setParent(
-                $this->parseClass($parentClass->getName(), $projectPrefix, $coreNamespaces),
+                $this->parseClass($parentClass->getName(), $projectPrefixList, $coreNamespaces),
             );
         }
 
@@ -208,12 +212,12 @@ class PhpParser implements ParserInterface
 
     /**
      * @param \ReflectionClass $projectClass
-     * @param string $projectPrefix
-     * @param array $coreNamespaces
+     * @param array<string> $projectPrefix
+     * @param array<string> $coreNamespaces
      *
      * @return bool
      */
-    protected function isExtendCore(ReflectionClass $projectClass, string $projectPrefix, array $coreNamespaces): bool
+    protected function isExtendCore(ReflectionClass $projectClass, array $projectPrefix, array $coreNamespaces): bool
     {
         if ($coreNamespaces === []) {
             return false;
@@ -257,16 +261,22 @@ class PhpParser implements ParserInterface
 
     /**
      * @param array $interfaces
-     * @param string $projectPrefix
+     * @param array<string> $projectPrefixList
      *
      * @return array
      */
-    protected function getCoreInterfacesMethods(array $interfaces, string $projectPrefix): array
+    protected function getCoreInterfacesMethods(array $interfaces, array $projectPrefixList): array
     {
         $methods = [];
 
-        $coreInterfaces = array_filter($interfaces, function ($interface) use ($projectPrefix) {
-            return !$this->hasProjectNamespace($interface->getNamespaceName(), $projectPrefix);
+        $coreInterfaces = array_filter($interfaces, function ($interface) use ($projectPrefixList) {
+            foreach ($projectPrefixList as $projectPrefix) {
+                if (strpos($interface->getNamespaceName(), $projectPrefix) === 0) {
+                    return false;
+                }
+            }
+
+            return true;
         });
 
         foreach ($coreInterfaces as $interface) {
@@ -288,16 +298,5 @@ class PhpParser implements ParserInterface
         $nodeTraverser->addVisitor(new NameResolver());
 
         return $nodeTraverser->traverse($originalSyntaxTree);
-    }
-
-    /**
-     * @param string $namespaceName
-     * @param string $projectPrefix
-     *
-     * @return bool
-     */
-    protected function hasProjectNamespace(string $namespaceName, string $projectPrefix): bool
-    {
-        return strpos($namespaceName, $projectPrefix) === 0;
     }
 }
