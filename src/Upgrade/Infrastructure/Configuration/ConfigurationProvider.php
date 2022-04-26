@@ -124,7 +124,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function getSoftThresholdBugfix(): int
     {
-        return (int)getenv('SOFT_THRESHOLD_BUGFIX_AMOUNT') ?: static::DEFAULT_SOFT_THRESHOLD_BUGFIX;
+        return (int)getenv('SOFT_THRESHOLD_BUGFIX') ?: static::DEFAULT_SOFT_THRESHOLD_BUGFIX;
     }
 
     /**
@@ -132,7 +132,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function getSoftThresholdMinor(): int
     {
-        return (int)getenv('SOFT_THRESHOLD_MINOR_AMOUNT') ?: static::DEFAULT_SOFT_THRESHOLD_MINOR;
+        return (int)getenv('SOFT_THRESHOLD_MINOR') ?: static::DEFAULT_SOFT_THRESHOLD_MINOR;
     }
 
     /**
@@ -140,7 +140,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function getSoftThresholdMajor(): int
     {
-        return (int)getenv('SOFT_THRESHOLD_MAJOR_AMOUNT') ?: static::DEFAULT_SOFT_THRESHOLD_MAJOR;
+        return (int)getenv('SOFT_THRESHOLD_MAJOR') ?: static::DEFAULT_SOFT_THRESHOLD_MAJOR;
     }
 
     /**
@@ -148,6 +148,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function getThresholdReleaseGroup(): int
     {
-        return (int)getenv('THRESHOLD_RELEASE_GROUP_AMOUNT') ?: static::DEFAULT_THRESHOLD_RELEASE_GROUP;
+        return (int)getenv('THRESHOLD_RELEASE_GROUP') ?: static::DEFAULT_THRESHOLD_RELEASE_GROUP;
     }
 }
