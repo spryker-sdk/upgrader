@@ -227,7 +227,7 @@ class GitTest extends KernelTestCase
         $processMock->method('isSuccessful')->willReturn($isSuccessful);
 
         $processRunnerMock = $this->createMock(ProcessRunnerService::class);
-        $processRunnerMock->method('runProcess')->willReturn($processMock);
+        $processRunnerMock->method('runCommand')->willReturn($processMock);
 
         return $processRunnerMock;
     }

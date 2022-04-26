@@ -11,7 +11,8 @@ use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use PackageManager\Domain\Client\ComposerClientInterface;
-use PackageManager\Domain\Client\ComposerLockDiffClientInterface;
+use PackageManager\Domain\Client\ComposerLockComparatorClientInterface;
+use Upgrade\Domain\Dto\Composer\ComposerLockDiffDto;
 
 class PackageManagerService implements PackageManagerServiceInterface
 {
@@ -21,20 +22,20 @@ class PackageManagerService implements PackageManagerServiceInterface
     protected $packageManagerClient;
 
     /**
-     * @var \PackageManager\Domain\Client\ComposerLockDiffClientInterface
+     * @var \PackageManager\Domain\Client\ComposerLockComparatorClientInterface
      */
-    protected $composerLockDiffClient;
+    protected $composerLockComparatorClint;
 
     /**
      * @param \PackageManager\Domain\Client\ComposerClientInterface $packageManagerClient
-     * @param \PackageManager\Domain\Client\ComposerLockDiffClientInterface $composerLockDiffClient
+     * @param \PackageManager\Domain\Client\ComposerLockComparatorClientInterface $composerLockDiffClient
      */
     public function __construct(
         ComposerClientInterface $packageManagerClient,
-        ComposerLockDiffClientInterface $composerLockDiffClient
+        ComposerLockComparatorClientInterface $composerLockDiffClient
     ) {
         $this->packageManagerClient = $packageManagerClient;
-        $this->composerLockDiffClient = $composerLockDiffClient;
+        $this->composerLockComparatorClint = $composerLockDiffClient;
     }
 
     /**
@@ -89,23 +90,17 @@ class PackageManagerService implements PackageManagerServiceInterface
         $responseCollection = new PackageManagerResponseDtoCollection();
         $response = $this->packageManagerClient->update();
 
-        if ($response->isSuccess()) {
-            $composerLockDiffResponseCollection = $this->composerLockDiffClient->getComposerLockDiff();
-            foreach ($composerLockDiffResponseCollection as $diffResponse) {
-                $response = new PackageManagerResponseDto(
-                    true,
-                    $response->getOutput(),
-                    $diffResponse->getPackageList(),
-                );
-                $responseCollection->add($response);
-            }
-
-            return $responseCollection;
-        }
-
         $responseCollection->add($response);
 
         return $responseCollection;
+    }
+
+    /**
+     * @return ComposerLockDiffDto
+     */
+    public function getComposerLockDiff(): ComposerLockDiffDto
+    {
+        return $this->composerLockComparatorClint->getComposerLockDiff();
     }
 
     /**

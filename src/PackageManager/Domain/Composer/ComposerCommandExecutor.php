@@ -5,11 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace PackageManager\Domain\Client\Composer;
+namespace PackageManager\Domain\Composer;
 
-use PackageManager\Domain\Client\ProcessRunnerInterface;
+use PackageManager\Domain\ProcessRunner\ProcessRunnerInterface;
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
+use Symfony\Component\Process\Process;
 
 class ComposerCommandExecutor implements ComposerCommandExecutorInterface
 {
@@ -39,12 +40,12 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     protected const DEV_FLAG = '--dev';
 
     /**
-     * @var ProcessRunnerInterface
+     * @var \PackageManager\Domain\ProcessRunner\ProcessRunnerInterface
      */
     protected ProcessRunnerInterface $processRunner;
 
     /**
-     * @param ProcessRunnerInterface $processRunner
+     * @param \PackageManager\Domain\ProcessRunner\ProcessRunnerInterface $processRunner
      */
     public function __construct(ProcessRunnerInterface $processRunner)
     {
@@ -66,7 +67,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             static::WITH_ALL_DEPENDENCIES_FLAG,
         );
 
-        return $this->processRunner->runProcess(explode(' ', $command));
+        return $this->processRunner->runCommand(explode(' ', $command));
     }
 
     /**
@@ -85,7 +86,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             static::DEV_FLAG,
         );
 
-        return $this->processRunner->runProcess(explode(' ', $command));
+        return $this->processRunner->runCommand(explode(' ', $command));
     }
 
     /**
@@ -100,7 +101,9 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             static::WITH_ALL_DEPENDENCIES_FLAG,
         );
 
-        return $this->processRunner->runProcess(explode(' ', $command));
+        $process = $this->processRunner->runCommand(explode(' ', $command));
+
+        return $this->createResponse($process);
     }
 
     /**
@@ -117,5 +120,19 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param \Symfony\Component\Process\Process $process
+     *
+     * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
+     */
+    protected function createResponse(Process $process): PackageManagerResponseDto
+    {
+        $command = str_replace('\'', '', $process->getCommandLine());
+        $output = $process->getExitCode() ? $process->getErrorOutput() : '';
+        $outputs = array_filter([$command, $output]);
+
+        return new PackageManagerResponseDto($process->isSuccessful(), implode(PHP_EOL, $outputs));
     }
 }

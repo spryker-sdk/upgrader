@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace PackageManager\Domain\Client\Composer;
+namespace PackageManager\Domain\Composer;
 
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;

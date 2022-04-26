@@ -5,12 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Domain\Strategy\Comparator;
+namespace PackageManager\Domain\ComposerLockComparator;
 
-use Upgrade\Domain\Dto\Composer\ComposerLockDiffDto;
+use PackageManager\Domain\ProcessRunner\ProcessRunnerInterface;
 use ProcessRunner\Application\Service\ProcessRunnerService;
+use Upgrade\Domain\Dto\Composer\ComposerLockDiffDto;
 
-class ComposerLockComparator
+class ComposerLockComparatorCommandExecutor implements ComposerLockComparatorCommandExecutorInterface
 {
     /**
      * @var string
@@ -23,25 +24,25 @@ class ComposerLockComparator
     protected const JSON_OUTPUT_FLAG = '--json';
 
     /**
-     * @var \ProcessRunner\Application\Service\ProcessRunnerService
+     * @var ProcessRunnerInterface|ProcessRunnerService
      */
-    protected ProcessRunnerService $processRunner;
+    protected ProcessRunnerInterface $processRunner;
 
     /**
      * @param \ProcessRunner\Application\Service\ProcessRunnerService $processRunner
      */
-    public function __construct(ProcessRunnerService $processRunner)
+    public function __construct(ProcessRunnerInterface $processRunner)
     {
         $this->processRunner = $processRunner;
     }
 
     /**
-     * @return \Upgrade\Domain\Dto\Composer\ComposerLockDiffDto
+     * @return ComposerLockDiffDto
      */
     public function getComposerLockDiff(): ComposerLockDiffDto
     {
         $command = sprintf('%s %s', APPLICATION_ROOT_DIR . static::RUNNER, static::JSON_OUTPUT_FLAG);
-        $process = $this->processRunner->runProcess(explode(' ', $command));
+        $process = $this->processRunner->runCommand(explode(' ', $command));
         $composerLockDiff = json_decode((string)$process->getOutput(), true) ?? [];
 
         return new ComposerLockDiffDto($composerLockDiff);

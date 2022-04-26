@@ -12,7 +12,7 @@ class ProcessRunner implements ProcessRunnerServiceInterface
      *
      * @return \Symfony\Component\Process\Process
      */
-    public function runProcess(array $command): Process
+    public function runCommand(array $command): Process
     {
         var_dump(implode(' ', $command));
 

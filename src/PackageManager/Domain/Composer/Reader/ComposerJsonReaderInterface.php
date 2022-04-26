@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace PackageManager\Domain\Client\Composer\Reader;
+namespace PackageManager\Domain\Composer\Reader;
 
 interface ComposerJsonReaderInterface
 {

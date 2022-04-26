@@ -7,7 +7,7 @@
 
 namespace PackageManager\Infrastructure\Composer\Reader;
 
-use PackageManager\Domain\Client\Composer\Reader\ComposerLockReaderInterface;
+use PackageManager\Domain\Composer\Reader\ComposerLockReaderInterface;
 use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class ComposerLockReader implements ComposerLockReaderInterface

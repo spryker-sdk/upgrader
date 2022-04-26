@@ -78,7 +78,7 @@ class Git
     public function isRemoteTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $command = ['git', 'ls-remote', '--heads', $this->getRemote(), $this->getHeadBranch()];
-        $process = $this->processRunner->runProcess($command);
+        $process = $this->processRunner->runCommand($command);
         if (strlen($process->getOutput()) > 0) {
             $stepsExecutionDto->setIsSuccessful(false);
 
@@ -96,7 +96,7 @@ class Git
     public function isLocalTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $command = ['git', 'rev-parse', '--verify', $this->getHeadBranch()];
-        $process = $this->processRunner->runProcess($command);
+        $process = $this->processRunner->runCommand($command);
         if ($process->isSuccessful()) {
             $stepsExecutionDto->setIsSuccessful(false);
 
@@ -117,7 +117,7 @@ class Git
     public function hasAnyUncommittedChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $command = ['git', 'status', '--porcelain'];
-        $process = $this->processRunner->runProcess($command);
+        $process = $this->processRunner->runCommand($command);
         if (strlen($process->getOutput()) > 0) {
             $stepsExecutionDto->setIsSuccessful(false);
 
@@ -171,7 +171,7 @@ class Git
     public function push(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $command = ['git', 'push', '--set-upstream', $this->getRemote(), $this->getHeadBranch()];
-        $process = $this->processRunner->runProcess($command);
+        $process = $this->processRunner->runCommand($command);
 
         return $this->prepareStepsExecutionDto($stepsExecutionDto, $process);
     }
@@ -303,7 +303,7 @@ class Git
     {
         if ($this->baseBranch === '') {
             $command = ['git', 'rev-parse', '--abbrev-ref', 'HEAD'];
-            $process = $this->processRunner->runProcess($command);
+            $process = $this->processRunner->runCommand($command);
             $this->baseBranch = trim($process->getOutput());
         }
 
@@ -317,7 +317,7 @@ class Git
     {
         if ($this->commitHash === '') {
             $command = ['git', 'rev-parse', 'HEAD'];
-            $process = $this->processRunner->runProcess($command);
+            $process = $this->processRunner->runCommand($command);
             $this->commitHash = trim($process->getOutput());
         }
 
@@ -332,7 +332,7 @@ class Git
      */
     public function process(StepsExecutionDto $stepsExecutionDto, array $command)
     {
-        $process = $this->processRunner->runProcess($command);
+        $process = $this->processRunner->runCommand($command);
 
         return $this->prepareStepsExecutionDto($stepsExecutionDto, $process);
     }

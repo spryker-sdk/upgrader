@@ -1,8 +1,9 @@
 <?php
 
-namespace PackageManager\Domain\Client;
+namespace PackageManager\Domain\ProcessRunner;
 
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
+use Symfony\Component\Process\Process;
 
 interface ProcessRunnerInterface
 {
@@ -12,6 +13,6 @@ interface ProcessRunnerInterface
      *
      * @return \Symfony\Component\Process\Process
      */
-    public function runProcess(array $command): PackageManagerResponseDto;
+    public function runCommand(array $command): Process;
 
 }

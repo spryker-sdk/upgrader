@@ -7,7 +7,7 @@
 
 namespace PackageManager\Infrastructure\Composer\Reader;
 
-use PackageManager\Domain\Client\Composer\Reader\ComposerJsonReaderInterface;
+use PackageManager\Domain\Composer\Reader\ComposerJsonReaderInterface;
 use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class ComposerJsonReader implements ComposerJsonReaderInterface

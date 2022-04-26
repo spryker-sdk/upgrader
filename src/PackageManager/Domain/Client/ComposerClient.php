@@ -7,11 +7,11 @@
 
 namespace PackageManager\Domain\Client;
 
-use PackageManager\Domain\Client\Composer\ComposerCommandExecutorInterface;
+use PackageManager\Domain\Composer\ComposerCommandExecutorInterface;
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
-use PackageManager\Domain\Client\Composer\Reader\ComposerJsonReaderInterface;
-use PackageManager\Domain\Client\Composer\Reader\ComposerLockReaderInterface;
+use PackageManager\Domain\Composer\Reader\ComposerJsonReaderInterface;
+use PackageManager\Domain\Composer\Reader\ComposerLockReaderInterface;
 
 class ComposerClient implements ComposerClientInterface
 {
@@ -31,24 +31,24 @@ class ComposerClient implements ComposerClientInterface
     protected const VERSION_KEY = 'version';
 
     /**
-     * @var \PackageManager\Domain\Client\Composer\ComposerCommandExecutorInterface
+     * @var \PackageManager\Domain\Composer\ComposerCommandExecutorInterface
      */
     protected $composerCommandExecutor;
 
     /**
-     * @var \PackageManager\Domain\Client\Composer\Reader\ComposerJsonReaderInterface
+     * @var \PackageManager\Domain\Composer\Reader\ComposerJsonReaderInterface
      */
     protected $composerJsonReader;
 
     /**
-     * @var \PackageManager\Domain\Client\Composer\Reader\ComposerLockReaderInterface
+     * @var \PackageManager\Domain\Composer\Reader\ComposerLockReaderInterface
      */
     protected $composerLockReader;
 
     /**
-     * @param \PackageManager\Domain\Client\Composer\ComposerCommandExecutorInterface $composerCallExecutor
-     * @param \PackageManager\Domain\Client\Composer\Reader\ComposerJsonReaderInterface $composerJsonReader
-     * @param \PackageManager\Domain\Client\Composer\Reader\ComposerLockReaderInterface $composerLockReader
+     * @param \PackageManager\Domain\Composer\ComposerCommandExecutorInterface $composerCallExecutor
+     * @param \PackageManager\Domain\Composer\Reader\ComposerJsonReaderInterface $composerJsonReader
+     * @param \PackageManager\Domain\Composer\Reader\ComposerLockReaderInterface $composerLockReader
      */
     public function __construct(
         ComposerCommandExecutorInterface $composerCallExecutor,

@@ -99,7 +99,7 @@ class ComposerLockComparatorStepTest extends TestCase
         $processMock->method('getOutput')->willReturn($outputMessage);
 
         $processRunnerMock = $this->createMock(ProcessRunnerService::class);
-        $processRunnerMock->method('runProcess')->willReturn($processMock);
+        $processRunnerMock->method('runCommand')->willReturn($processMock);
 
         return $processRunnerMock;
     }
