@@ -45,10 +45,7 @@ class ReleaseGroupUpdateStep implements StepInterface
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $dataProviderResponse = $this->packageManagementSystemBridge->getNotInstalledReleaseGroupList();
-        $this->releaseGroupRequireProcessor->requireCollection($dataProviderResponse->getReleaseGroupCollection());
 
-        $stepsExecutionDto->addOutputMessage('ToDo: some major not installed');
-
-        return $stepsExecutionDto;
+        return $this->releaseGroupRequireProcessor->requireCollection($dataProviderResponse->getReleaseGroupCollection(), $stepsExecutionDto);
     }
 }

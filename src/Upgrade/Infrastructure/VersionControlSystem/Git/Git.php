@@ -99,12 +99,12 @@ class Git
         $process = $this->processRunner->runCommand($command);
         if ($process->isSuccessful()) {
             $stepsExecutionDto->setIsSuccessful(false);
+            $stepsExecutionDto->addOutputMessage(implode(PHP_EOL, $command));
 
             return $stepsExecutionDto;
         }
 
         $stepsExecutionDto->setIsSuccessful(true);
-        $stepsExecutionDto->addOutputMessage(implode(PHP_EOL, $command));
 
         return $stepsExecutionDto;
     }
@@ -349,8 +349,11 @@ class Git
         $output = $process->getExitCode() ? $process->getErrorOutput() : '';
         $outputs = array_filter([$command, $output]);
 
-        return $stepsExecutionDto
-            ->setIsSuccessful($process->isSuccessful())
-            ->addOutputMessage(implode(PHP_EOL, $outputs));
+        $stepsExecutionDto->setIsSuccessful($process->isSuccessful());
+        if (!$process->isSuccessful()) {
+            $stepsExecutionDto->addOutputMessage(implode(PHP_EOL, $outputs));
+        }
+
+        return $stepsExecutionDto;
     }
 }

@@ -8,11 +8,11 @@
 namespace Upgrade\Domain\Strategy\ReleaseApp\Processor;
 
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
-use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
 use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Domain\Adapter\PackageManagerAdapterInterface;
+use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Domain\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Domain\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
@@ -68,17 +68,18 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
 
     /**
      * @param \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
-    public function requireCollection(ReleaseGroupDtoCollection $requiteRequestCollection): PackageManagerResponseDtoCollection
+    public function requireCollection(ReleaseGroupDtoCollection $requiteRequestCollection, StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        $responseDtoCollection = new PackageManagerResponseDtoCollection();
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
         foreach ($requiteRequestCollection->toArray() as $releaseGroup) {
             var_dump('RG_NAME: ' . $releaseGroup->getName());
             $thresholdValidationResult = $this->thresholdValidator->isWithInThreshold($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccess()) {
+                $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutput());
                 var_dump($thresholdValidationResult->getOutput());
 
                 break;
@@ -86,8 +87,8 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
 
             $releaseGroupValidateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
             if (!$releaseGroupValidateResult->isSuccess()) {
+                $stepsExecutionDto->addOutputMessage($releaseGroupValidateResult->getOutput());
                 var_dump($releaseGroupValidateResult->getOutput());
-                $responseDtoCollection->add($releaseGroupValidateResult);
 
                 break;
             }
@@ -96,9 +97,11 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
         }
 
         $requireResult = $this->require($aggregatedReleaseGroupCollection->getCommonModuleCollection());
-        $responseDtoCollection->add($requireResult);
+        if (!$requireResult->isSuccess()) {
+            $stepsExecutionDto->addOutputMessage($requireResult->getOutput());
+        }
 
-        return $responseDtoCollection;
+        return $stepsExecutionDto;
     }
 
     /**

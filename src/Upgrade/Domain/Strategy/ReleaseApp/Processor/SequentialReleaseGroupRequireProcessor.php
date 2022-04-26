@@ -8,11 +8,11 @@
 namespace Upgrade\Domain\Strategy\ReleaseApp\Processor;
 
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
-use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
 use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
 use Upgrade\Domain\Adapter\PackageManagerAdapterInterface;
+use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Domain\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Domain\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
@@ -68,17 +68,18 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
 
     /**
      * @param \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
+     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
-    public function requireCollection(ReleaseGroupDtoCollection $requiteRequestCollection): PackageManagerResponseDtoCollection
+    public function requireCollection(ReleaseGroupDtoCollection $requiteRequestCollection, StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        $collection = new PackageManagerResponseDtoCollection();
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
 
         foreach ($requiteRequestCollection->toArray() as $releaseGroup) {
             $thresholdValidationResult = $this->thresholdValidator->isWithInThreshold($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccess()) {
+                $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutput());
                 var_dump($thresholdValidationResult->getOutput());
 
                 break;
@@ -86,13 +87,14 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
             $aggregatedReleaseGroupCollection->add($releaseGroup);
 
             $requireResult = $this->require($releaseGroup);
-            $collection->add($requireResult);
             if (!$requireResult->isSuccess()) {
+                $stepsExecutionDto->addOutputMessage($requireResult->getOutput());
+
                 break;
             }
         }
 
-        return $collection;
+        return $stepsExecutionDto;
     }
 
     /**
