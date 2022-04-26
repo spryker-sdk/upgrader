@@ -93,20 +93,20 @@ interface ConfigurationProviderInterface
     /**
      * @return int
      */
-    public function getSoftThresholdBugfixAmount(): int;
+    public function getSoftThresholdBugfix(): int;
 
     /**
      * @return int
      */
-    public function getSoftThresholdMinorAmount(): int;
+    public function getSoftThresholdMinor(): int;
 
     /**
      * @return int
      */
-    public function getSoftThresholdMajorAmount(): int;
+    public function getSoftThresholdMajor(): int;
 
     /**
      * @return int
      */
-    public function getThresholdReleaseGroupAmount(): int;
+    public function getThresholdReleaseGroup(): int;
 }

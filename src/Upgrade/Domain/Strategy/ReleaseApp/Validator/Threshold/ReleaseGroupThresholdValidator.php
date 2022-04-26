@@ -36,7 +36,7 @@ class ReleaseGroupThresholdValidator implements ThresholdValidatorInterface
     public function validate(ReleaseGroupDtoCollection $releaseGroupDtoCollection): void
     {
         if (
-            $releaseGroupDtoCollection->count() >= $this->configurationProvider->getThresholdReleaseGroupAmount()
+            $releaseGroupDtoCollection->count() >= $this->configurationProvider->getThresholdReleaseGroup()
             &&
             $this->configurationProvider->getReleaseGroupRequireProcessor() == ConfigurationProvider::SEQUENTIAL_RELEASE_GROUP_REQUIRE_PROCESSOR
         ) {

@@ -24,22 +24,22 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * @var int
      */
-    public const DEFAULT_SOFT_THRESHOLD_BUGFIX_AMOUNT = 2;
+    public const DEFAULT_SOFT_THRESHOLD_BUGFIX = 30;
 
     /**
      * @var int
      */
-    public const DEFAULT_SOFT_THRESHOLD_MINOR_AMOUNT = 2;
+    public const DEFAULT_SOFT_THRESHOLD_MINOR = 10;
 
     /**
      * @var int
      */
-    public const DEFAULT_SOFT_THRESHOLD_MAJOR_AMOUNT = 0;
+    public const DEFAULT_SOFT_THRESHOLD_MAJOR = 0;
 
     /**
      * @var int
      */
-    public const DEFAULT_THRESHOLD_RELEASE_GROUP_AMOUNT = 50;
+    public const DEFAULT_THRESHOLD_RELEASE_GROUP = 30;
 
     /**
      * @return string
@@ -122,32 +122,32 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * @return int
      */
-    public function getSoftThresholdBugfixAmount(): int
+    public function getSoftThresholdBugfix(): int
     {
-        return (int)getenv('SOFT_THRESHOLD_BUGFIX_AMOUNT') ?: static::DEFAULT_SOFT_THRESHOLD_BUGFIX_AMOUNT;
+        return (int)getenv('SOFT_THRESHOLD_BUGFIX_AMOUNT') ?: static::DEFAULT_SOFT_THRESHOLD_BUGFIX;
     }
 
     /**
      * @return int
      */
-    public function getSoftThresholdMinorAmount(): int
+    public function getSoftThresholdMinor(): int
     {
-        return (int)getenv('SOFT_THRESHOLD_MINOR_AMOUNT') ?: static::DEFAULT_SOFT_THRESHOLD_MINOR_AMOUNT;
+        return (int)getenv('SOFT_THRESHOLD_MINOR_AMOUNT') ?: static::DEFAULT_SOFT_THRESHOLD_MINOR;
     }
 
     /**
      * @return int
      */
-    public function getSoftThresholdMajorAmount(): int
+    public function getSoftThresholdMajor(): int
     {
-        return (int)getenv('SOFT_THRESHOLD_MAJOR_AMOUNT') ?: static::DEFAULT_SOFT_THRESHOLD_MAJOR_AMOUNT;
+        return (int)getenv('SOFT_THRESHOLD_MAJOR_AMOUNT') ?: static::DEFAULT_SOFT_THRESHOLD_MAJOR;
     }
 
     /**
      * @return int
      */
-    public function getThresholdReleaseGroupAmount(): int
+    public function getThresholdReleaseGroup(): int
     {
-        return (int)getenv('THRESHOLD_RELEASE_GROUP_AMOUNT') ?: static::DEFAULT_THRESHOLD_RELEASE_GROUP_AMOUNT;
+        return (int)getenv('THRESHOLD_RELEASE_GROUP_AMOUNT') ?: static::DEFAULT_THRESHOLD_RELEASE_GROUP;
     }
 }
