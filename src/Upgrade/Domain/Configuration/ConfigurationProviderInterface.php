@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace Upgrade\Domain\Configuration;
 
 interface ConfigurationProviderInterface
@@ -33,16 +38,6 @@ interface ConfigurationProviderInterface
      * @var string
      */
     public const VCS_TYPE = 'git';
-
-    /**
-     * @var string
-     */
-    public const BRANCH_PATTERN = 'upgradebot/upgrade-for-%s-%s';
-
-    /**
-     * @var bool
-     */
-    public const IS_PR_AUTO_MERGE_ENABLED = false;
 
     /**
      * @return string
@@ -94,26 +89,6 @@ interface ConfigurationProviderInterface
      * @return string
      */
     public function getRepositoryName(): string;
-
-    /**
-     * @return string
-     */
-    public function getReleaseAppUrl(): string;
-
-    /**
-     * @return int
-     */
-    public function getHttpRetrieveAttemptsCount(): int;
-
-    /**
-     * @return int
-     */
-    public function getHttpRetrieveRetryDelay(): int;
-
-    /**
-     * @return int
-     */
-    public function getCommandExecutionTimeout(): int;
 
     /**
      * @return int

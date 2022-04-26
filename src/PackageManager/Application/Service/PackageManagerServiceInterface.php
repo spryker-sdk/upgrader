@@ -9,6 +9,7 @@ namespace PackageManager\Application\Service;
 
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
+use PackageManager\Domain\Dto\ComposerLockDiffDto;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
 
 interface PackageManagerServiceInterface
@@ -60,4 +61,9 @@ interface PackageManagerServiceInterface
      * @return bool
      */
     public function isDevPackage(string $packageName): bool;
+
+    /**
+     * @return \PackageManager\Domain\Dto\ComposerLockDiffDto
+     */
+    public function getComposerLockDiff(): ComposerLockDiffDto;
 }

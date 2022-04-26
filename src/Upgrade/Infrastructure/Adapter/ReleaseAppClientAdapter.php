@@ -7,16 +7,16 @@
 
 namespace Upgrade\Infrastructure\Adapter;
 
+use PackageManager\Application\Service\PackageManagerServiceInterface;
+use ReleaseAppClient\Domain\Client\ReleaseAppClientInterface;
 use ReleaseAppClient\Domain\Dto\ReleaseAppClientRequestDto;
 use ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto;
-use ReleaseAppClient\Domain\Client\ReleaseAppClientInterface;
-use PackageManager\Application\Service\PackageManagerServiceInterface;
 use Upgrade\Domain\Adapter\ReleaseAppClientAdapterInterface;
 
 class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
 {
     /**
-     * @var ReleaseAppClientInterface
+     * @var \ReleaseAppClient\Domain\Client\ReleaseAppClientInterface
      */
     protected ReleaseAppClientInterface $releaseAppClient;
 
@@ -26,7 +26,7 @@ class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
     protected $packageManager;
 
     /**
-     * @param ReleaseAppClientInterface $dataProvider
+     * @param \ReleaseAppClient\Domain\Client\ReleaseAppClientInterface $dataProvider
      * @param \PackageManager\Application\Service\PackageManagerServiceInterface $packageManager
      */
     public function __construct(ReleaseAppClientInterface $dataProvider, PackageManagerServiceInterface $packageManager)

@@ -16,7 +16,7 @@ use Upgrade\Domain\Strategy\StepInterface;
 class ReleaseGroupUpdateStep implements StepInterface
 {
     /**
-     * @var ReleaseAppClientAdapterInterface
+     * @var \Upgrade\Domain\Adapter\ReleaseAppClientAdapterInterface
      */
     protected ReleaseAppClientAdapterInterface $packageManagementSystemBridge;
 
@@ -26,11 +26,11 @@ class ReleaseGroupUpdateStep implements StepInterface
     protected ReleaseGroupRequireProcessorInterface $releaseGroupRequireProcessor;
 
     /**
-     * @param ReleaseAppClientAdapterInterface $packageManagementSystemBridge
-     * @param \Upgrade\Domain\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface $groupRequireProcessorResolver
+     * @param \Upgrade\Domain\Adapter\ReleaseAppClientAdapterInterface $packageManagementSystemBridge
+     * @param \Upgrade\Domain\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver $groupRequireProcessorResolver
      */
     public function __construct(
-        ReleaseAppClientAdapterInterface              $packageManagementSystemBridge,
+        ReleaseAppClientAdapterInterface $packageManagementSystemBridge,
         ReleaseGroupRequireProcessorResolver $groupRequireProcessorResolver
     ) {
         $this->packageManagementSystemBridge = $packageManagementSystemBridge;
@@ -45,7 +45,7 @@ class ReleaseGroupUpdateStep implements StepInterface
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $dataProviderResponse = $this->packageManagementSystemBridge->getNotInstalledReleaseGroupList();
-        $requireResponse = $this->releaseGroupRequireProcessor->requireCollection($dataProviderResponse->getReleaseGroupCollection());
+        $this->releaseGroupRequireProcessor->requireCollection($dataProviderResponse->getReleaseGroupCollection());
 
         $stepsExecutionDto->addOutputMessage('ToDo: some major not installed');
 

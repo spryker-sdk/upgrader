@@ -7,8 +7,8 @@
 
 namespace ReleaseAppClient\Domain\Http\UpgradeInstructions\Response;
 
-use Upgrade\Infrastructure\Exception\UpgraderException;
 use ReleaseAppClient\Domain\Http\HttpResponse;
+use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class HttpUpgradeInstructionsResponse extends HttpResponse
 {
@@ -18,9 +18,9 @@ class HttpUpgradeInstructionsResponse extends HttpResponse
     protected const RELEASE_GROUP_KEY = 'release_group';
 
     /**
-     * @return \ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\HttpUpgradeInstructionsReleaseGroup
      * @throws \Upgrade\Infrastructure\Exception\UpgraderException
      *
+     * @return \ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\HttpUpgradeInstructionsReleaseGroup
      */
     public function getReleaseGroup(): HttpUpgradeInstructionsReleaseGroup
     {

@@ -16,18 +16,18 @@ use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlS
 class ComposerUpdateStep extends AbstractStep implements RollbackStepInterface
 {
     /**
-     * @var PackageManagerAdapterInterface
+     * @var \Upgrade\Domain\Adapter\PackageManagerAdapterInterface
      */
     protected PackageManagerAdapterInterface $packageManager;
 
     /**
      * @param \Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver $vscAdapterResolver
-     * @param PackageManagerAdapterInterface $packageManager
+     * @param \Upgrade\Domain\Adapter\PackageManagerAdapterInterface $packageManager
      */
     public function __construct(
         VersionControlSystemAdapterResolver $vscAdapterResolver,
         PackageManagerAdapterInterface $packageManager
-    ){
+    ) {
         parent::__construct($vscAdapterResolver);
 
         $this->packageManager = $packageManager;

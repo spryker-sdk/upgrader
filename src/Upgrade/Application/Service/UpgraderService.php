@@ -19,12 +19,12 @@ class UpgraderService implements UpgraderServiceInterface
     protected StrategyResolver $strategyResolver;
 
     /**
-     * @var ConfigurationProviderInterface
+     * @var \Upgrade\Domain\Configuration\ConfigurationProviderInterface
      */
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
-     * @param ConfigurationProviderInterface $configurationProvider
+     * @param \Upgrade\Domain\Configuration\ConfigurationProviderInterface $configurationProvider
      * @param \Upgrade\Domain\Strategy\StrategyResolver $strategyResolver
      */
     public function __construct(ConfigurationProviderInterface $configurationProvider, StrategyResolver $strategyResolver)

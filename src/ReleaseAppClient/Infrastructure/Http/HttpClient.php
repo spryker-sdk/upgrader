@@ -7,11 +7,11 @@
 
 namespace ReleaseAppClient\Infrastructure\Http;
 
-use ReleaseAppClient\Infrastructure\Http\Builder\HttpRequestBuilderInterface;
-use ReleaseAppClient\Infrastructure\Http\Builder\HttpResponseBuilderInterface;
 use ReleaseAppClient\Domain\Http\HttpClientInterface;
 use ReleaseAppClient\Domain\Http\HttpRequestInterface;
 use ReleaseAppClient\Domain\Http\HttpResponseInterface;
+use ReleaseAppClient\Infrastructure\Http\Builder\HttpRequestBuilderInterface;
+use ReleaseAppClient\Infrastructure\Http\Builder\HttpResponseBuilderInterface;
 
 class HttpClient implements HttpClientInterface
 {

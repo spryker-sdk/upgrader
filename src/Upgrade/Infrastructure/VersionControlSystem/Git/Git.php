@@ -7,11 +7,11 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Git;
 
+use ProcessRunner\Application\Service\ProcessRunnerService;
 use Symfony\Component\Process\Process;
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException;
-use ProcessRunner\Application\Service\ProcessRunnerService;
 use Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder;
 use Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider;
 
@@ -59,9 +59,9 @@ class Git
      * @param \Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder $pullRequestDataBuilder
      */
     public function __construct(
-        ConfigurationProvider  $configurationProvider,
-        ProcessRunnerService   $processRunner,
-        SourceCodeProvider     $sourceCodeProvider,
+        ConfigurationProvider $configurationProvider,
+        ProcessRunnerService $processRunner,
+        SourceCodeProvider $sourceCodeProvider,
         PullRequestDataBuilder $pullRequestDataBuilder
     ) {
         $this->configurationProvider = $configurationProvider;

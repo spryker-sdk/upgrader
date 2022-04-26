@@ -7,9 +7,9 @@
 
 namespace PackageManager\Domain\Composer;
 
-use PackageManager\Domain\ProcessRunner\ProcessRunnerInterface;
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
+use PackageManager\Domain\ProcessRunner\ProcessRunnerInterface;
 use Symfony\Component\Process\Process;
 
 class ComposerCommandExecutor implements ComposerCommandExecutorInterface
@@ -118,7 +118,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     protected function getPackageString(PackageDtoCollection $packageCollection): string
     {
         $result = '';
-        foreach ($packageCollection as $package) {
+        foreach ($packageCollection->toArray() as $package) {
             $package = sprintf('%s:%s', $package->getName(), $package->getVersion());
             $result = sprintf('%s %s', $result, $package);
         }

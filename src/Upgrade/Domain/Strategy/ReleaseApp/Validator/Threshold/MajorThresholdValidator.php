@@ -1,8 +1,12 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace Upgrade\Domain\Strategy\ReleaseApp\Validator\Threshold;
 
-use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
 use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Exception\UpgraderException;
@@ -10,13 +14,12 @@ use Upgrade\Infrastructure\Exception\UpgraderException;
 class MajorThresholdValidator implements ThresholdValidatorInterface
 {
     /**
-     * @var ConfigurationProvider
+     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
      */
     protected ConfigurationProvider $configurationProvider;
 
     /**
-     * @param array $processorList
-     * @param ConfigurationProvider $configurationProvider
+     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      */
     public function __construct(ConfigurationProvider $configurationProvider)
     {
@@ -24,16 +27,18 @@ class MajorThresholdValidator implements ThresholdValidatorInterface
     }
 
     /**
-     * @param ReleaseGroupDtoCollection $releaseReleaseGroupDtoCollection
+     * @param \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection $releaseReleaseGroupDtoCollection
+     *
+     * @throws \Upgrade\Infrastructure\Exception\UpgraderException
+     *
      * @return void
-     * @throws UpgraderException
      */
     public function validate(ReleaseGroupDtoCollection $releaseReleaseGroupDtoCollection): void
     {
         $softThreshold = $this->configurationProvider->getSoftThresholdMajorAmount();
         if ($releaseReleaseGroupDtoCollection->getCommonModuleCollection()->getMajorAmount() > $softThreshold) {
             throw new UpgraderException(
-                sprintf('Soft threshold hit by %s major releases amount', $softThreshold)
+                sprintf('Soft threshold hit by %s major releases amount', $softThreshold),
             );
         }
     }

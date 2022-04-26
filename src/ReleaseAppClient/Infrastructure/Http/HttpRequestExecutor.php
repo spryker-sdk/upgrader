@@ -11,7 +11,7 @@ use GuzzleHttp\Client as GuzzleHttp;
 use GuzzleHttp\Exception\ServerException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
+use ReleaseAppClient\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class HttpRequestExecutor implements HttpRequestExecutorInterface
@@ -22,12 +22,12 @@ class HttpRequestExecutor implements HttpRequestExecutorInterface
     protected $guzzleClient;
 
     /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
+     * @var \ReleaseAppClient\Infrastructure\Configuration\ConfigurationProvider
      */
-    protected $config;
+    protected ConfigurationProvider $config;
 
     /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $config
+     * @param \ReleaseAppClient\Infrastructure\Configuration\ConfigurationProvider $config
      */
     public function __construct(ConfigurationProvider $config)
     {

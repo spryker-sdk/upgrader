@@ -183,18 +183,6 @@ services:
                 param2: '@processor.sequential_release_group_require',
             }
 
-    client.release_app:
-        class: ReleaseAppClient\Application\Client\ReleaseAppClient
-
-    client.package_manager:
-        class: PackageManager\Application\Service\PackageManagerService
-
-    Upgrade\Domain\Strategy\ReleaseApp\Bridge\ReleaseAppClientBridge:
-        class: Upgrade\Domain\Strategy\ReleaseApp\Bridge\ReleaseAppClientBridge
-        arguments:
-            - '@client.release_app'
-            - '@client.package_manager'
-
     #Third-party dependencies
     Ergebnis\Json\Printer\Printer: ~
     Ergebnis\Json\Printer\PrinterInterface: '@Ergebnis\Json\Printer\Printer'

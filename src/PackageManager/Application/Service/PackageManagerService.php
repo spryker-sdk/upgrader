@@ -7,12 +7,12 @@
 
 namespace PackageManager\Application\Service;
 
-use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
-use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
-use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use PackageManager\Domain\Client\ComposerClientInterface;
 use PackageManager\Domain\Client\ComposerLockComparatorClientInterface;
+use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
+use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
 use PackageManager\Domain\Dto\ComposerLockDiffDto;
+use PackageManager\Domain\Dto\PackageManagerResponseDto;
 
 class PackageManagerService implements PackageManagerServiceInterface
 {
@@ -96,7 +96,7 @@ class PackageManagerService implements PackageManagerServiceInterface
     }
 
     /**
-     * @return ComposerLockDiffDto
+     * @return \PackageManager\Domain\Dto\ComposerLockDiffDto
      */
     public function getComposerLockDiff(): ComposerLockDiffDto
     {

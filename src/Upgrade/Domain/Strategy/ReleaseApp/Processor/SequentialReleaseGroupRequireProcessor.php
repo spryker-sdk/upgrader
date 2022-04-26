@@ -7,16 +7,16 @@
 
 namespace Upgrade\Domain\Strategy\ReleaseApp\Processor;
 
-use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
-use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
+use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
+use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
 use Upgrade\Domain\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Domain\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Domain\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProcessorInterface
 {
@@ -26,7 +26,7 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     protected $releaseGroupValidator;
 
     /**
-     * @var ThresholdSoftValidatorInterface
+     * @var \Upgrade\Domain\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface
      */
     protected ThresholdSoftValidatorInterface $thresholdValidator;
 
@@ -36,20 +36,20 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     protected $packageCollectionMapper;
 
     /**
-     * @var PackageManagerAdapterInterface
+     * @var \Upgrade\Domain\Adapter\PackageManagerAdapterInterface
      */
     protected PackageManagerAdapterInterface $packageManager;
 
     /**
      * @param \Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
-     * @param ThresholdSoftValidatorInterface  $thresholdSoftValidator
+     * @param \Upgrade\Domain\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
      * @param \Upgrade\Domain\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface $packageCollectionBuilder
-     * @param PackageManagerAdapterInterface $packageManager
+     * @param \Upgrade\Domain\Adapter\PackageManagerAdapterInterface $packageManager
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
-        ThresholdSoftValidatorInterface   $thresholdSoftValidator,
-        PackageCollectionMapperInterface   $packageCollectionBuilder,
+        ThresholdSoftValidatorInterface $thresholdSoftValidator,
+        PackageCollectionMapperInterface $packageCollectionBuilder,
         PackageManagerAdapterInterface $packageManager
     ) {
         $this->releaseGroupValidator = $releaseGroupValidateManager;
@@ -76,10 +76,11 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
         $collection = new PackageManagerResponseDtoCollection();
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
 
-        foreach ($requiteRequestCollection as $releaseGroup) {
+        foreach ($requiteRequestCollection->toArray() as $releaseGroup) {
             $thresholdValidationResult = $this->thresholdValidator->isWithInThreshold($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccess()) {
                 var_dump($thresholdValidationResult->getOutput());
+
                 break;
             }
             $aggregatedReleaseGroupCollection->add($releaseGroup);
@@ -104,6 +105,7 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
         $validateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
         if (!$validateResult->isSuccess()) {
             var_dump($validateResult->getOutput());
+
             return $validateResult;
         }
 

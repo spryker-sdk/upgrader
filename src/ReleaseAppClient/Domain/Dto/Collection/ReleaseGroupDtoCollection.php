@@ -7,29 +7,76 @@
 
 namespace ReleaseAppClient\Domain\Dto\Collection;
 
-use Upgrade\Domain\Dto\Collection\UpgraderCollection;
 use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
 
-/**
- * @method \ReleaseAppClient\Domain\Dto\ReleaseGroupDto[]|\ArrayIterator|\Traversable getIterator()
- */
-class ReleaseGroupDtoCollection extends UpgraderCollection
+class ReleaseGroupDtoCollection
 {
     /**
-     * @return string
+     * @var array<\ReleaseAppClient\Domain\Dto\ReleaseGroupDto>
      */
-    protected function getClassName(): string
+    protected $elements = [];
+
+    /**
+     * @param array $elements
+     */
+    public function __construct(array $elements = [])
     {
-        return ReleaseGroupDto::class;
+        $this->elements = $elements;
     }
 
     /**
-     * @return ModuleDtoCollection
+     * @param \ReleaseAppClient\Domain\Dto\ReleaseGroupDto $element
+     *
+     * @return void
+     */
+    public function add(ReleaseGroupDto $element): void
+    {
+        $this->elements[] = $element;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->elements;
+    }
+
+    /**
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->elements);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return !$this->elements;
+    }
+
+    /**
+     * @param \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection|self $collectionToMerge
+     *
+     * @return void
+     */
+    public function addCollection(self $collectionToMerge): void
+    {
+        foreach ($collectionToMerge->toArray() as $element) {
+            $this->add($element);
+        }
+    }
+
+    /**
+     * @return \ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection
      */
     public function getCommonModuleCollection(): ModuleDtoCollection
     {
         $resultCollection = new ModuleDtoCollection();
-        foreach ($this as $releaseGroup) {
+        foreach ($this->elements as $releaseGroup) {
             $resultCollection->addCollection($releaseGroup->getModuleCollection());
         }
 

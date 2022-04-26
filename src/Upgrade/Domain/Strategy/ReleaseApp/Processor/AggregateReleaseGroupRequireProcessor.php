@@ -7,16 +7,16 @@
 
 namespace Upgrade\Domain\Strategy\ReleaseApp\Processor;
 
-use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
-use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
+use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
+use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Domain\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Domain\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Domain\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProcessorInterface
 {
@@ -26,7 +26,7 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
     protected ReleaseGroupSoftValidatorInterface $releaseGroupValidator;
 
     /**
-     * @var ThresholdSoftValidatorInterface
+     * @var \Upgrade\Domain\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface
      */
     protected ThresholdSoftValidatorInterface $thresholdValidator;
 
@@ -36,20 +36,20 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
     protected PackageCollectionMapperInterface $packageCollectionMapper;
 
     /**
-     * @var PackageManagerAdapterInterface
+     * @var \Upgrade\Domain\Adapter\PackageManagerAdapterInterface
      */
     protected PackageManagerAdapterInterface $packageManager;
 
     /**
      * @param \Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
-     * @param ThresholdSoftValidatorInterface $thresholdSoftValidator
+     * @param \Upgrade\Domain\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
      * @param \Upgrade\Domain\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface $packageCollectionBuilder
-     * @param PackageManagerAdapterInterface $packageManager
+     * @param \Upgrade\Domain\Adapter\PackageManagerAdapterInterface $packageManager
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
         ThresholdSoftValidatorInterface $thresholdSoftValidator,
-        PackageCollectionMapperInterface   $packageCollectionBuilder,
+        PackageCollectionMapperInterface $packageCollectionBuilder,
         PackageManagerAdapterInterface $packageManager
     ) {
         $this->releaseGroupValidator = $releaseGroupValidateManager;
@@ -75,18 +75,20 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
     {
         $responseDtoCollection = new PackageManagerResponseDtoCollection();
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
-        foreach ($requiteRequestCollection as $releaseGroup) {
+        foreach ($requiteRequestCollection->toArray() as $releaseGroup) {
             var_dump('RG_NAME: ' . $releaseGroup->getName());
             $thresholdValidationResult = $this->thresholdValidator->isWithInThreshold($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccess()) {
                 var_dump($thresholdValidationResult->getOutput());
+
                 break;
             }
 
-            $releaseGroupValidateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup, );
+            $releaseGroupValidateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
             if (!$releaseGroupValidateResult->isSuccess()) {
                 var_dump($releaseGroupValidateResult->getOutput());
                 $responseDtoCollection->add($releaseGroupValidateResult);
+
                 break;
             }
 
@@ -100,8 +102,9 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
     }
 
     /**
-     * @param ModuleDtoCollection $moduleCollection
-     * @return PackageManagerResponseDto
+     * @param \ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection $moduleCollection
+     *
+     * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
      */
     public function require(ModuleDtoCollection $moduleCollection): PackageManagerResponseDto
     {

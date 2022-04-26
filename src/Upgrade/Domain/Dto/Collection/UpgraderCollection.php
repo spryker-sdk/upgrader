@@ -25,9 +25,6 @@ abstract class UpgraderCollection implements Countable, IteratorAggregate, Array
      */
     public function __construct(array $elements = [])
     {
-        foreach ($elements as $element) {
-            $this->validateElement($element);
-        }
         $this->elements = $elements;
     }
 

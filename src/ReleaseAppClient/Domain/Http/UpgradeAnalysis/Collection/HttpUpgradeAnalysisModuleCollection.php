@@ -7,20 +7,31 @@
 
 namespace ReleaseAppClient\Domain\Http\UpgradeAnalysis\Collection;
 
-use Upgrade\Domain\Dto\Collection\UpgraderCollection;
 use ReleaseAppClient\Domain\Http\UpgradeAnalysis\HttpUpgradeAnalysisModule;
 
-/**
- * @method \ReleaseAppClient\Domain\Http\UpgradeAnalysis\HttpUpgradeAnalysisModule[]|\ArrayIterator|\Traversable getIterator()
- */
-class HttpUpgradeAnalysisModuleCollection extends UpgraderCollection
+class HttpUpgradeAnalysisModuleCollection
 {
     /**
-     * @return string
+     * @var array<\ReleaseAppClient\Domain\Http\UpgradeAnalysis\HttpUpgradeAnalysisModule>
      */
-    protected function getClassName(): string
+    protected $elements = [];
+
+    /**
+     * @param array $elements
+     */
+    public function __construct(array $elements = [])
     {
-        return HttpUpgradeAnalysisModule::class;
+        $this->elements = $elements;
+    }
+
+    /**
+     * @param \ReleaseAppClient\Domain\Http\UpgradeAnalysis\HttpUpgradeAnalysisModule $element
+     *
+     * @return void
+     */
+    public function add(HttpUpgradeAnalysisModule $element): void
+    {
+        $this->elements[] = $element;
     }
 
     /**
@@ -29,7 +40,7 @@ class HttpUpgradeAnalysisModuleCollection extends UpgraderCollection
     public function getModulesThatContainsAtListOneModuleVersion(): self
     {
         $collection = new self();
-        foreach ($this as $module) {
+        foreach ($this->elements as $module) {
             if (!$module->getModuleVersionCollection()->isEmpty()) {
                 $collection->add($module);
             }
@@ -45,8 +56,8 @@ class HttpUpgradeAnalysisModuleCollection extends UpgraderCollection
     {
         $collection = new HttpUpgradeAnalysisModuleVersionCollection();
 
-        foreach ($this as $module) {
-            foreach ($module->getModuleVersionCollection() as $moduleVersion) {
+        foreach ($this->elements as $module) {
+            foreach ($module->getModuleVersionCollection()->toArray() as $moduleVersion) {
                 $collection->add($moduleVersion);
             }
         }

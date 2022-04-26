@@ -7,24 +7,23 @@
 
 namespace Upgrade\Domain\Strategy\Common\Step;
 
-use PackageManager\Application\Service\PackageManagerService;
-use Upgrade\Domain\Adapter\PackageManagerAdapterInterface;
+use Upgrade\Domain\Adapter\ComposerLockComparatorAdapterInterface;
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Domain\Strategy\StepInterface;
 
 class ComposerLockComparatorStep implements StepInterface
 {
     /**
-     * @var PackageManagerAdapterInterface|PackageManagerService
+     * @var \Upgrade\Domain\Adapter\ComposerLockComparatorAdapterInterface
      */
-    protected PackageManagerAdapterInterface $packageManagerService;
+    protected ComposerLockComparatorAdapterInterface $composerLockComparator;
 
     /**
-     * @param PackageManagerAdapterInterface $composerLockComparator
+     * @param \Upgrade\Domain\Adapter\ComposerLockComparatorAdapterInterface $composerLockComparator
      */
-    public function __construct(PackageManagerAdapterInterface $composerLockComparator)
+    public function __construct(ComposerLockComparatorAdapterInterface $composerLockComparator)
     {
-        $this->packageManagerService = $composerLockComparator;
+        $this->composerLockComparator = $composerLockComparator;
     }
 
     /**
@@ -34,7 +33,7 @@ class ComposerLockComparatorStep implements StepInterface
      */
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        $composerLockDiffDto = $this->packageManagerService->getComposerLockDiff();
+        $composerLockDiffDto = $this->composerLockComparator->getComposerLockDiff();
 
         if ($composerLockDiffDto->isEmpty()) {
             return $stepsExecutionDto

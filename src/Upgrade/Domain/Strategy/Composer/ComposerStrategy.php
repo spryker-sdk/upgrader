@@ -7,8 +7,8 @@
 
 namespace Upgrade\Domain\Strategy\Composer;
 
-use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Domain\Strategy\AbstractStrategy;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class ComposerStrategy extends AbstractStrategy
 {

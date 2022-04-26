@@ -7,19 +7,66 @@
 
 namespace ReleaseAppClient\Domain\Http\UpgradeAnalysis\Collection;
 
-use Upgrade\Domain\Dto\Collection\UpgraderCollection;
 use ReleaseAppClient\Domain\Http\UpgradeAnalysis\HttpUpgradeAnalysisModuleVersion;
 
-/**
- * @method \ReleaseAppClient\Domain\Http\UpgradeAnalysis\HttpUpgradeAnalysisModuleVersion[]|\ArrayIterator|\Traversable getIterator()
- */
-class HttpUpgradeAnalysisModuleVersionCollection extends UpgraderCollection
+class HttpUpgradeAnalysisModuleVersionCollection
 {
     /**
-     * @return string
+     * @var array<\ReleaseAppClient\Domain\Http\UpgradeAnalysis\HttpUpgradeAnalysisModuleVersion>
      */
-    protected function getClassName(): string
+    protected $elements = [];
+
+    /**
+     * @param array $elements
+     */
+    public function __construct(array $elements = [])
     {
-        return HttpUpgradeAnalysisModuleVersion::class;
+        $this->elements = $elements;
+    }
+
+    /**
+     * @param \ReleaseAppClient\Domain\Http\UpgradeAnalysis\HttpUpgradeAnalysisModuleVersion $element
+     *
+     * @return void
+     */
+    public function add(HttpUpgradeAnalysisModuleVersion $element): void
+    {
+        $this->elements[] = $element;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->elements;
+    }
+
+    /**
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->elements);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return !$this->elements;
+    }
+
+    /**
+     * @param \ReleaseAppClient\Domain\Http\UpgradeAnalysis\Collection\HttpUpgradeAnalysisModuleVersionCollection|self $collectionToMerge
+     *
+     * @return void
+     */
+    public function addCollection(self $collectionToMerge): void
+    {
+        foreach ($collectionToMerge->toArray() as $element) {
+            $this->add($element);
+        }
     }
 }

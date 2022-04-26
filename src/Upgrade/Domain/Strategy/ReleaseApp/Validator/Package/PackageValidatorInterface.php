@@ -14,9 +14,9 @@ interface PackageValidatorInterface
     /**
      * @param \PackageManager\Domain\Dto\PackageDto $package
      *
-     * @return void
-     *@throws \Upgrade\Infrastructure\Exception\UpgraderException
+     * @throws \Upgrade\Infrastructure\Exception\UpgraderException
      *
+     * @return void
      */
     public function validate(PackageDto $package): void;
 }

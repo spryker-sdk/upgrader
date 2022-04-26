@@ -9,9 +9,9 @@ namespace ReleaseAppClient\Domain\Http\UpgradeInstructions\Response;
 
 use DateTime;
 use DateTimeInterface;
-use Upgrade\Infrastructure\Exception\UpgraderException;
 use ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\Collection\HttpUpgradeInstructionModuleCollection;
 use ReleaseAppClient\Domain\ReleaseAppConst;
+use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class HttpUpgradeInstructionsReleaseGroup
 {

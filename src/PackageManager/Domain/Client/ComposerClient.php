@@ -8,10 +8,10 @@
 namespace PackageManager\Domain\Client;
 
 use PackageManager\Domain\Composer\ComposerCommandExecutorInterface;
-use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
-use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use PackageManager\Domain\Composer\Reader\ComposerJsonReaderInterface;
 use PackageManager\Domain\Composer\Reader\ComposerLockReaderInterface;
+use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
+use PackageManager\Domain\Dto\PackageManagerResponseDto;
 
 class ComposerClient implements ComposerClientInterface
 {
@@ -52,8 +52,8 @@ class ComposerClient implements ComposerClientInterface
      */
     public function __construct(
         ComposerCommandExecutorInterface $composerCallExecutor,
-        ComposerJsonReaderInterface      $composerJsonReader,
-        ComposerLockReaderInterface      $composerLockReader
+        ComposerJsonReaderInterface $composerJsonReader,
+        ComposerLockReaderInterface $composerLockReader
     ) {
         $this->composerCommandExecutor = $composerCallExecutor;
         $this->composerJsonReader = $composerJsonReader;

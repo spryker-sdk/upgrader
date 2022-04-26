@@ -1,9 +1,13 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace PackageManager\Infrastructure\Adapter;
 
 use PackageManager\Domain\ProcessRunner\ProcessRunnerInterface;
-use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use ProcessRunner\Application\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
 
@@ -23,8 +27,9 @@ class ProcessRunnerAdapter implements ProcessRunnerInterface
     }
 
     /**
-     * @param array $command
-     * @return PackageManagerResponseDto
+     * @param array<string> $command
+     *
+     * @return \Symfony\Component\Process\Process
      */
     public function runCommand(array $command): Process
     {

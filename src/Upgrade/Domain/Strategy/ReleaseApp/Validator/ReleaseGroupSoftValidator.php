@@ -7,8 +7,8 @@
 
 namespace Upgrade\Domain\Strategy\ReleaseApp\Validator;
 
-use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
+use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
 use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class ReleaseGroupSoftValidator implements ReleaseGroupSoftValidatorInterface

@@ -40,7 +40,7 @@ class PullRequestDataBuilder
     }
 
     /**
-     * @param array<\Upgrade\Domain\Dto\Composer\PackageDto> $packageDtos
+     * @param array<\PackageManager\Domain\Dto\PackageDto> $packageDtos
      *
      * @return string
      */

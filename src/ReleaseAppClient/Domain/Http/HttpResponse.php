@@ -7,8 +7,6 @@
 
 namespace ReleaseAppClient\Domain\Http;
 
-use ReleaseAppClient\Domain\Http\HttpResponseInterface;
-
 class HttpResponse implements HttpResponseInterface
 {
     /**

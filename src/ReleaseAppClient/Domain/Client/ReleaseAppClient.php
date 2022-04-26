@@ -7,29 +7,28 @@
 
 namespace ReleaseAppClient\Domain\Client;
 
-
 use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
 use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
 use ReleaseAppClient\Domain\Dto\ModuleDto;
 use ReleaseAppClient\Domain\Dto\ReleaseAppClientRequestDto;
 use ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto;
 use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
+use ReleaseAppClient\Domain\Http\HttpClientInterface;
 use ReleaseAppClient\Domain\Http\UpgradeAnalysis\Collection\HttpUpgradeAnalysisModuleVersionCollection;
 use ReleaseAppClient\Domain\Http\UpgradeAnalysis\Request\HttpUpgradeAnalysisRequest;
 use ReleaseAppClient\Domain\Http\UpgradeInstructions\Request\HttpUpgradeInstructionsRequest;
 use ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\Collection\HttpUpgradeInstructionsReleaseGroupCollection;
 use ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\HttpUpgradeInstructionsReleaseGroup;
-use ReleaseAppClient\Domain\Http\HttpClientInterface;
 
 class ReleaseAppClient implements ReleaseAppClientInterface
 {
     /**
-     * @var HttpClientInterface
+     * @var \ReleaseAppClient\Domain\Http\HttpClientInterface
      */
     protected $httpClient;
 
     /**
-     * @param HttpClientInterface $httpClient
+     * @param \ReleaseAppClient\Domain\Http\HttpClientInterface $httpClient
      */
     public function __construct(HttpClientInterface $httpClient)
     {
@@ -37,8 +36,9 @@ class ReleaseAppClient implements ReleaseAppClientInterface
     }
 
     /**
-     * @param ReleaseAppClientRequestDto $request
-     * @return ReleaseAppClientResponseDto
+     * @param \ReleaseAppClient\Domain\Dto\ReleaseAppClientRequestDto $request
+     *
+     * @return \ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto
      */
     public function getNotInstalledReleaseGroupList(ReleaseAppClientRequestDto $request): ReleaseAppClientResponseDto
     {
@@ -51,15 +51,16 @@ class ReleaseAppClient implements ReleaseAppClientInterface
     }
 
     /**
-     * @param HttpUpgradeInstructionsReleaseGroupCollection $releaseGroupCollection
-     * @return ReleaseGroupDtoCollection
+     * @param \ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\Collection\HttpUpgradeInstructionsReleaseGroupCollection $releaseGroupCollection
+     *
+     * @return \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection
      */
     protected function buildReleaseGroupTransferCollection(
         HttpUpgradeInstructionsReleaseGroupCollection $releaseGroupCollection
     ): ReleaseGroupDtoCollection {
         $dataProviderReleaseGroupCollection = new ReleaseGroupDtoCollection();
 
-        foreach ($releaseGroupCollection as $releaseGroup) {
+        foreach ($releaseGroupCollection->toArray() as $releaseGroup) {
             $dataProviderReleaseGroup = new ReleaseGroupDto(
                 $releaseGroup->getName(),
                 $this->buildModuleTransferCollection($releaseGroup),
@@ -72,13 +73,14 @@ class ReleaseAppClient implements ReleaseAppClientInterface
     }
 
     /**
-     * @param HttpUpgradeInstructionsReleaseGroup $releaseGroup
-     * @return ModuleDtoCollection
+     * @param \ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\HttpUpgradeInstructionsReleaseGroup $releaseGroup
+     *
+     * @return \ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection
      */
     protected function buildModuleTransferCollection(HttpUpgradeInstructionsReleaseGroup $releaseGroup): ModuleDtoCollection
     {
         $dataProviderModuleCollection = new ModuleDtoCollection();
-        foreach ($releaseGroup->getModuleCollection() as $module) {
+        foreach ($releaseGroup->getModuleCollection()->toArray() as $module) {
             $dataProviderModule = new ModuleDto($module->getName(), $module->getVersion(), $module->getType());
             $dataProviderModuleCollection->add($dataProviderModule);
         }
@@ -87,18 +89,19 @@ class ReleaseAppClient implements ReleaseAppClientInterface
     }
 
     /**
-     * @param HttpUpgradeAnalysisModuleVersionCollection $moduleVersionCollection
-     * @return HttpUpgradeInstructionsReleaseGroupCollection
+     * @param \ReleaseAppClient\Domain\Http\UpgradeAnalysis\Collection\HttpUpgradeAnalysisModuleVersionCollection $moduleVersionCollection
+     *
+     * @return \ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\Collection\HttpUpgradeInstructionsReleaseGroupCollection
      */
     protected function getReleaseGroupCollection(
         HttpUpgradeAnalysisModuleVersionCollection $moduleVersionCollection
     ): HttpUpgradeInstructionsReleaseGroupCollection {
         $releaseGroupCollection = new HttpUpgradeInstructionsReleaseGroupCollection();
 
-        foreach ($moduleVersionCollection as $moduleVersion) {
+        foreach ($moduleVersionCollection->toArray() as $moduleVersion) {
             $request = $this->createUpgradeInstructionsRequest($moduleVersion->getId());
 
-            /** @var  \ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\HttpUpgradeInstructionsResponse $response */
+            /** @var \ReleaseAppClient\Domain\Http\UpgradeInstructions\Response\HttpUpgradeInstructionsResponse $response */
             $response = $this->httpClient->send($request);
 
             $releaseGroupCollection->add($response->getReleaseGroup());
@@ -108,8 +111,9 @@ class ReleaseAppClient implements ReleaseAppClientInterface
     }
 
     /**
-     * @param ReleaseAppClientRequestDto $request
-     * @return HttpUpgradeAnalysisModuleVersionCollection
+     * @param \ReleaseAppClient\Domain\Dto\ReleaseAppClientRequestDto $request
+     *
+     * @return \ReleaseAppClient\Domain\Http\UpgradeAnalysis\Collection\HttpUpgradeAnalysisModuleVersionCollection
      */
     protected function getModuleVersionCollection(
         ReleaseAppClientRequestDto $request
@@ -126,8 +130,9 @@ class ReleaseAppClient implements ReleaseAppClientInterface
     }
 
     /**
-     * @param ReleaseAppClientRequestDto $request
-     * @return HttpUpgradeAnalysisRequest
+     * @param \ReleaseAppClient\Domain\Dto\ReleaseAppClientRequestDto $request
+     *
+     * @return \ReleaseAppClient\Domain\Http\UpgradeAnalysis\Request\HttpUpgradeAnalysisRequest
      */
     protected function createUpgradeAnalysisRequest(ReleaseAppClientRequestDto $request): HttpUpgradeAnalysisRequest
     {
@@ -140,7 +145,8 @@ class ReleaseAppClient implements ReleaseAppClientInterface
 
     /**
      * @param int $moduleVersionId
-     * @return HttpUpgradeInstructionsRequest
+     *
+     * @return \ReleaseAppClient\Domain\Http\UpgradeInstructions\Request\HttpUpgradeInstructionsRequest
      */
     protected function createUpgradeInstructionsRequest(int $moduleVersionId): HttpUpgradeInstructionsRequest
     {

@@ -8,8 +8,8 @@
 namespace ReleaseAppClient\Infrastructure\Http\Builder;
 
 use GuzzleHttp\Psr7\Request;
-use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use ReleaseAppClient\Domain\Http\HttpRequestInterface;
+use ReleaseAppClient\Infrastructure\Configuration\ConfigurationProvider;
 
 class HttpRequestBuilder implements HttpRequestBuilderInterface
 {
@@ -19,16 +19,16 @@ class HttpRequestBuilder implements HttpRequestBuilderInterface
     protected const HTTP_HEADER_LIST = ['Content-Type' => 'application/json'];
 
     /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
+     * @var \ReleaseAppClient\Infrastructure\Configuration\ConfigurationProvider
      */
-    protected $upgraderConfig;
+    protected ConfigurationProvider $upgraderConfig;
 
     /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $upgraderConfig
+     * @param \ReleaseAppClient\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      */
-    public function __construct(ConfigurationProvider $upgraderConfig)
+    public function __construct(ConfigurationProvider $configurationProvider)
     {
-        $this->upgraderConfig = $upgraderConfig;
+        $this->upgraderConfig = $configurationProvider;
     }
 
     /**

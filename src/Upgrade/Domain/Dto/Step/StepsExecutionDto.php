@@ -68,6 +68,10 @@ class StepsExecutionDto
      */
     public function getOutputMessage(): ?string
     {
+        if (!$this->outputMessageList) {
+            return null;
+        }
+
         return implode(PHP_EOL, $this->outputMessageList);
     }
 

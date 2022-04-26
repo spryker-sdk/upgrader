@@ -12,9 +12,9 @@ use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 interface UpgraderServiceInterface
 {
     /**
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
-     *@throws \Upgrade\Infrastructure\Exception\UpgradeStrategyIsNotDefinedException
+     * @throws \Upgrade\Infrastructure\Exception\UpgradeStrategyIsNotDefinedException
      *
+     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function upgrade(): StepsExecutionDto;
 }

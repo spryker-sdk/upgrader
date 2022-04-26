@@ -7,11 +7,10 @@
 
 namespace Upgrade\Domain\Strategy\ReleaseApp\Mapper;
 
-use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
+use PackageManager\Application\Service\PackageManagerServiceInterface;
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\PackageDto;
-use PackageManager\Application\Service\PackageManagerServiceInterface;
-use Upgrade\Domain\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
+use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
 use Upgrade\Domain\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface;
 
 class PackageCollectionMapper implements PackageCollectionMapperInterface
@@ -45,7 +44,7 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     {
         $packageCollection = new PackageDtoCollection();
 
-        foreach ($moduleCollection as $module) {
+        foreach ($moduleCollection->toArray() as $module) {
             $name = $this->removeTypeFromPackageName($module->getName());
             $package = new PackageDto($name, $module->getVersion());
             $packageCollection->add($package);
@@ -63,7 +62,7 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     {
         $resultCollection = new PackageDtoCollection();
 
-        foreach ($packageCollection as $package) {
+        foreach ($packageCollection->toArray() as $package) {
             $validateResult = $this->packageValidator->isValidPackage($package);
             if ($validateResult->isSuccess()) {
                 $resultCollection->add($package);
@@ -82,7 +81,7 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     {
         $resultCollection = new PackageDtoCollection();
 
-        foreach ($packageCollection as $package) {
+        foreach ($packageCollection->toArray() as $package) {
             if (!$this->packageManager->isDevPackage($package->getName())) {
                 $resultCollection->add($package);
             }
@@ -100,7 +99,7 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     {
         $resultCollection = new PackageDtoCollection();
 
-        foreach ($packageCollection as $package) {
+        foreach ($packageCollection->toArray() as $package) {
             if ($this->packageManager->isDevPackage($package->getName())) {
                 $resultCollection->add($package);
             }

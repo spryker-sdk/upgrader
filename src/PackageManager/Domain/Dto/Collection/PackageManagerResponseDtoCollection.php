@@ -7,15 +7,52 @@
 
 namespace PackageManager\Domain\Dto\Collection;
 
-use PackageManager\Domain\Dto\PackageManagerResponseDto;
+use PackageManager\Domain\Dto\ResponseDto;
 
-class PackageManagerResponseDtoCollection extends ResponseCollection
+class PackageManagerResponseDtoCollection
 {
     /**
-     * @return string
+     * @var array<\PackageManager\Domain\Dto\ResponseDto>
      */
-    protected function getClassName(): string
+    protected $elements = [];
+
+    /**
+     * @param array $elements
+     */
+    public function __construct(array $elements = [])
     {
-        return PackageManagerResponseDto::class;
+        $this->elements = $elements;
+    }
+
+    /**
+     * @param \PackageManager\Domain\Dto\ResponseDto $element
+     *
+     * @return void
+     */
+    public function add(ResponseDto $element): void
+    {
+        $this->elements[] = $element;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExitCode(): int
+    {
+        return $this->isSuccess() ? ResponseDto::CODE_SUCCESS : ResponseDto::CODE_ERROR;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuccess(): bool
+    {
+        foreach ($this->elements as $result) {
+            if (!$result->isSuccess()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

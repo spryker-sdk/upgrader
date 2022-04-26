@@ -5,16 +5,13 @@ services:
         public: true
 
 # ReleaseAppClient
-    ReleaseAppClient\Application\:
-        resource: '../../../../ReleaseAppClient/Application/*'
-
-    ReleaseAppClient\Infrastructure\:
-        resource: '../../../../ReleaseAppClient/Infrastructure/*'
-
-    ReleaseAppClient\Domain\:
-        resource: '../../../../ReleaseAppClient/Domain/*'
+    ReleaseAppClient\:
+        resource: '../../../../ReleaseAppClient/*'
         exclude:
             - '../../../../ReleaseAppClient/Domain/Dto/*'
             - '../../../../ReleaseAppClient/Domain/Http/HttpResponse.php'
             - '../../../../ReleaseAppClient/Domain/Http/UpgradeAnalysis/*'
             - '../../../../ReleaseAppClient/Domain/Http/UpgradeInstructions/*'
+
+    ReleaseAppClient\Application\Client\ReleaseAppClient: ~
+    ReleaseAppClient\Domain\Client\ReleaseAppClientInterface: '@ReleaseAppClient\Application\Client\ReleaseAppClient'

@@ -7,7 +7,6 @@
 
 namespace PackageManager\Domain\Dto;
 
-
 class ComposerLockDiffDto
 {
     /**
@@ -34,7 +33,7 @@ class ComposerLockDiffDto
     }
 
     /**
-     * @return array<PackageDto>
+     * @return array<\PackageManager\Domain\Dto\PackageDto>
      */
     public function getRequireChanges(): array
     {
@@ -50,7 +49,7 @@ class ComposerLockDiffDto
     }
 
     /**
-     * @return array<PackageDto>
+     * @return array<\PackageManager\Domain\Dto\PackageDto>
      */
     public function getRequireDevChanges(): array
     {
@@ -60,7 +59,7 @@ class ComposerLockDiffDto
     /**
      * @param string $key
      *
-     * @return array<PackageDto>
+     * @return array<\PackageManager\Domain\Dto\PackageDto>
      */
     protected function getChangesByKey(string $key): array
     {

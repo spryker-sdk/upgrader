@@ -7,10 +7,8 @@
 
 namespace Upgrade\Domain\Strategy\ReleaseApp\Processor;
 
-use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
-use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
 use PackageManager\Domain\Dto\Collection\PackageManagerResponseDtoCollection;
-use PackageManager\Domain\Dto\PackageManagerResponseDto;
+use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
 
 interface ReleaseGroupRequireProcessorInterface
 {

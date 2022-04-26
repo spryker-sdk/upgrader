@@ -9,8 +9,8 @@ namespace ReleaseAppClient\Domain\Http\UpgradeAnalysis;
 
 use DateTime;
 use DateTimeInterface;
-use Upgrade\Infrastructure\Exception\UpgraderException;
 use ReleaseAppClient\Domain\ReleaseAppConst;
+use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class HttpUpgradeAnalysisModuleVersion
 {

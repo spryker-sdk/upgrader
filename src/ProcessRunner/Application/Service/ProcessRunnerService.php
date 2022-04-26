@@ -13,12 +13,12 @@ use Symfony\Component\Process\Process;
 class ProcessRunnerService implements ProcessRunnerServiceInterface
 {
     /**
-     * @var ProcessRunner
+     * @var \ProcessRunner\Infrastructure\Process\ProcessRunner
      */
     protected ProcessRunner $processRunner;
 
     /**
-     * @param ProcessRunner $processRunner
+     * @param \ProcessRunner\Infrastructure\Process\ProcessRunner $processRunner
      */
     public function __construct(ProcessRunner $processRunner)
     {

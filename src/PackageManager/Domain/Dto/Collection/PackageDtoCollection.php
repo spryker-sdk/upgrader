@@ -7,20 +7,67 @@
 
 namespace PackageManager\Domain\Dto\Collection;
 
-use Upgrade\Domain\Dto\Collection\UpgraderCollection;
 use PackageManager\Domain\Dto\PackageDto;
 
-/**
- * @method \PackageManager\Domain\Dto\PackageDto[]|\ArrayIterator|\Traversable getIterator()
- */
-class PackageDtoCollection extends UpgraderCollection
+class PackageDtoCollection
 {
     /**
-     * @return string
+     * @var array<\PackageManager\Domain\Dto\PackageDto>
      */
-    protected function getClassName(): string
+    protected $elements = [];
+
+    /**
+     * @param array $elements
+     */
+    public function __construct(array $elements = [])
     {
-        return PackageDto::class;
+        $this->elements = $elements;
+    }
+
+    /**
+     * @param \PackageManager\Domain\Dto\PackageDto $element
+     *
+     * @return void
+     */
+    public function add(PackageDto $element): void
+    {
+        $this->elements[] = $element;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->elements;
+    }
+
+    /**
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->elements);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return !$this->elements;
+    }
+
+    /**
+     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection|self $collectionToMerge
+     *
+     * @return void
+     */
+    public function addCollection(self $collectionToMerge): void
+    {
+        foreach ($collectionToMerge->toArray() as $element) {
+            $this->add($element);
+        }
     }
 
     /**
@@ -30,7 +77,7 @@ class PackageDtoCollection extends UpgraderCollection
     {
         $result = [];
 
-        foreach ($this as $package) {
+        foreach ($this->elements as $package) {
             $result[] = (string)$package;
         }
 

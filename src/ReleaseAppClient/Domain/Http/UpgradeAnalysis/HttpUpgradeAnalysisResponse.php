@@ -7,9 +7,9 @@
 
 namespace ReleaseAppClient\Domain\Http\UpgradeAnalysis;
 
-use Upgrade\Infrastructure\Exception\UpgraderException;
 use ReleaseAppClient\Domain\Http\HttpResponse;
 use ReleaseAppClient\Domain\Http\UpgradeAnalysis\Collection\HttpUpgradeAnalysisModuleCollection;
+use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class HttpUpgradeAnalysisResponse extends HttpResponse
 {

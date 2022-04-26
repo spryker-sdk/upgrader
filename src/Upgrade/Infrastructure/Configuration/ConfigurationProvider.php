@@ -11,6 +11,35 @@ use Upgrade\Domain\Configuration\ConfigurationProviderInterface;
 
 class ConfigurationProvider implements ConfigurationProviderInterface
 {
+    /**
+     * @var string
+     */
+    protected const DEFAULT_BRANCH_PATTERN = 'upgradebot/upgrade-for-%s-%s';
+
+    /**
+     * @var bool
+     */
+    protected const DEFAULT_IS_PR_AUTO_MERGE_ENABLED = false;
+
+    /**
+     * @var int
+     */
+    public const DEFAULT_SOFT_THRESHOLD_BUGFIX_AMOUNT = 2;
+
+    /**
+     * @var int
+     */
+    public const DEFAULT_SOFT_THRESHOLD_MINOR_AMOUNT = 2;
+
+    /**
+     * @var int
+     */
+    public const DEFAULT_SOFT_THRESHOLD_MAJOR_AMOUNT = 0;
+
+    /**
+     * @var int
+     */
+    public const DEFAULT_THRESHOLD_RELEASE_GROUP_AMOUNT = 50;
 
     /**
      * @return string
@@ -31,17 +60,9 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * @return string
      */
-    public function getSourceCodeProvider(): string
-    {
-        return (string)getenv('SOURCE_CODE_PROVIDER') ?: static::GITHUB_SOURCE_CODE_PROVIDER;
-    }
-
-    /**
-     * @return string
-     */
     public function getBranchPattern(): string
     {
-        return (string)getenv('BRANCH_PATTERN') ?: static::BRANCH_PATTERN;
+        return (string)getenv('BRANCH_PATTERN') ?: static::DEFAULT_BRANCH_PATTERN;
     }
 
     /**
@@ -57,7 +78,15 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function isPullRequestAutoMergeEnabled(): bool
     {
-        return (bool)getenv('IS_PR_AUTO_MERGE_ENABLED') ?: static::IS_PR_AUTO_MERGE_ENABLED;
+        return (bool)getenv('IS_PR_AUTO_MERGE_ENABLED') ?: static::DEFAULT_IS_PR_AUTO_MERGE_ENABLED;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSourceCodeProvider(): string
+    {
+        return (string)getenv('SOURCE_CODE_PROVIDER') ?: static::GITHUB_SOURCE_CODE_PROVIDER;
     }
 
     /**
@@ -89,86 +118,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     {
         return (string)getenv('REPOSITORY_NAME');
     }
-
-    /**
-     * @var string
-     */
-    protected const UPGRADER_RELEASE_APP_URL = 'UPGRADER_RELEASE_APP_URL';
-
-    /**
-     * @var string
-     */
-    protected const DEFAULT_RELEASE_APP_URL = 'https://api.release.spryker.com';
-
-    /**
-     * @return string
-     */
-    public function getReleaseAppUrl(): string
-    {
-        return (string)getenv(static::UPGRADER_RELEASE_APP_URL) ?: static::DEFAULT_RELEASE_APP_URL;
-    }
-
-    /**
-     * @var string
-     */
-    protected const UPGRADER_HTTP_RETRIEVE_ATTEMPTS_COUNT = 'UPGRADER_HTTP_RETRIEVE_ATTEMPTS_COUNT';
-
-    /**
-     * @var int
-     */
-    protected const DEFAULT_HTTP_RETRIEVE_ATTEMPTS_COUNT = 5;
-
-    /**
-     * @var string
-     */
-    protected const UPGRADER_HTTP_RETRIEVE_RETRY_DELAY = 'UPGRADER_HTTP_RETRIEVE_RETRY_DELAY';
-
-    /**
-     * @var int
-     */
-    protected const DEFAULT_HTTP_RETRIEVE_RETRY_DELAY = 10;
-
-    /**
-     * @return int
-     */
-    public function getHttpRetrieveAttemptsCount(): int
-    {
-        return (int)getenv(static::UPGRADER_HTTP_RETRIEVE_ATTEMPTS_COUNT) ?: static::DEFAULT_HTTP_RETRIEVE_ATTEMPTS_COUNT;
-    }
-
-    /**
-     * @return int
-     */
-    public function getHttpRetrieveRetryDelay(): int
-    {
-        return (int)getenv(static::UPGRADER_HTTP_RETRIEVE_RETRY_DELAY) ?: static::DEFAULT_HTTP_RETRIEVE_RETRY_DELAY;
-    }
-
-    /**
-     * @var string
-     */
-    protected const UPGRADER_COMMAND_EXECUTION_TIMEOUT = 'UPGRADER_COMMAND_EXECUTION_TIMEOUT';
-
-    /**
-     * @var int
-     */
-    protected const DEFAULT_COMMAND_EXECUTION_TIMEOUT = 600;
-
-    /**
-     * @return int
-     */
-    public function getCommandExecutionTimeout(): int
-    {
-        return (int)getenv(static::UPGRADER_COMMAND_EXECUTION_TIMEOUT) ?: static::DEFAULT_COMMAND_EXECUTION_TIMEOUT;
-    }
-
-    public const DEFAULT_SOFT_THRESHOLD_BUGFIX_AMOUNT = 2;
-
-    public const DEFAULT_SOFT_THRESHOLD_MINOR_AMOUNT = 2;
-
-    public const DEFAULT_SOFT_THRESHOLD_MAJOR_AMOUNT = 0;
-
-    public const DEFAULT_THRESHOLD_RELEASE_GROUP_AMOUNT = 50;
 
     /**
      * @return int
