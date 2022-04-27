@@ -43,7 +43,7 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
                 $coreSchemas[$coreSource->getName()] = array_merge($coreSchemas[$coreSource->getName()] ?? [], $coreSource->getChildElements());
             }
         }
-        $projectPrefix = $this->getCodebaseSourceDto()->getProjectPrefix();
+        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
         foreach ($this->getCodebaseSourceDto()->getDatabaseSchemaCodebaseSources() as $source) {
             if ($source->getChildElements() === []) {
@@ -51,14 +51,21 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
             }
 
             $sourceName = $source->getName();
-            $columnsWithoutPrefix = array_filter($source->getChildElements(), function (string $column) use ($projectPrefix, $sourceName, $coreSchemas) {
-                return !in_array($column, $coreSchemas[$sourceName] ?? []) && stripos($column, $projectPrefix) !== 0;
+            $columnsWithoutPrefix = array_filter($source->getChildElements(), function (string $column) use ($projectPrefixList, $sourceName, $coreSchemas) {
+                return !in_array($column, $coreSchemas[$sourceName] ?? []) && !$this->hasProjectPrefix($column, $projectPrefixList);
             });
-            $isDbPrefixExist = stripos($source->getName(), $projectPrefix) === 0;
+            $isDbPrefixExist = $this->hasProjectPrefix($source->getName(), $projectPrefixList);
 
             if ($columnsWithoutPrefix !== [] && $columnsWithoutPrefix !== null && !$isDbPrefixExist) {
                 foreach ($columnsWithoutPrefix as $columnWithoutPrefix) {
-                    $guideline = sprintf($this->getGuideline(), $columnWithoutPrefix, $projectPrefix, $source->getPath(), strtolower($projectPrefix), $columnWithoutPrefix);
+                    $guideline = sprintf(
+                        $this->getGuideline(),
+                        $columnWithoutPrefix,
+                        implode(',', $projectPrefixList),
+                        $source->getPath(),
+                        strtolower((string)reset($projectPrefixList)),
+                        $columnWithoutPrefix,
+                    );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
                 }
             }

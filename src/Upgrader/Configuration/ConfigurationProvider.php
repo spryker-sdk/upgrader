@@ -25,19 +25,9 @@ class ConfigurationProvider
     /**
      * @return string
      */
-    public function getProjectPrefix(): string
+    public function getToolingConfigurationFilePath(): string
     {
-        return (string)getenv('PROJECT_PREFIX') ?: 'Pyz';
-    }
-
-    /**
-     * @return array
-     */
-    public function getProjectDirectory(): array
-    {
-        return [
-            $this->getSrcDirectory() . $this->getProjectPrefix() . DIRECTORY_SEPARATOR,
-        ];
+        return (string)getenv('PROJECT_CONFIGURATION_FILE_PATH') ?: 'tooling.yml';
     }
 
     /**
@@ -54,12 +44,12 @@ class ConfigurationProvider
     /**
      * @return array
      */
-    public function getCoreDirectory(): array
+    public function getCorePaths(): array
     {
         $directories = [
-            $this->getVendorDirectory() . 'spryker' . DIRECTORY_SEPARATOR,
-            $this->getVendorDirectory() . 'spryker-eco' . DIRECTORY_SEPARATOR,
-            $this->getVendorDirectory() . 'spryker-shop' . DIRECTORY_SEPARATOR,
+            $this->getVendorPath() . 'spryker' . DIRECTORY_SEPARATOR,
+            $this->getVendorPath() . 'spryker-eco' . DIRECTORY_SEPARATOR,
+            $this->getVendorPath() . 'spryker-shop' . DIRECTORY_SEPARATOR,
         ];
 
         return array_filter($directories, function ($dir) {
@@ -70,24 +60,24 @@ class ConfigurationProvider
     /**
      * @return string
      */
-    protected function getVendorDirectory(): string
+    public function getSrcPath(): string
     {
-        return $this->getRootDirectory() . 'vendor' . DIRECTORY_SEPARATOR;
+        return $this->getRootPath() . 'src' . DIRECTORY_SEPARATOR;
     }
 
     /**
      * @return string
      */
-    protected function getRootDirectory(): string
+    protected function getVendorPath(): string
+    {
+        return $this->getRootPath() . 'vendor' . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getRootPath(): string
     {
         return getcwd() . DIRECTORY_SEPARATOR;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getSrcDirectory(): string
-    {
-        return $this->getRootDirectory() . 'src' . DIRECTORY_SEPARATOR;
     }
 }

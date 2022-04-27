@@ -7,33 +7,52 @@
 
 namespace Codebase\Infrastructure\Service;
 
-use Codebase\Application\Dto\CodebaseRequestDto;
+use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
+use Codebase\Application\Dto\ConfigurationResponseDto;
 use Codebase\Application\Service\CodebaseServiceInterface;
-use Codebase\Infrastructure\SourceParser\SourceParser;
+use Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface;
+use Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface;
 
 class CodebaseService implements CodebaseServiceInterface
 {
     /**
-     * @var \Codebase\Infrastructure\SourceParser\SourceParser
+     * @var \Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface
      */
-    protected $sourceParser;
+    protected CodeBaseReaderInterface $codeBaseReader;
 
     /**
-     * @param \Codebase\Infrastructure\SourceParser\SourceParser $sourceParser
+     * @var \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface
      */
-    public function __construct(SourceParser $sourceParser)
+    protected ToolingConfigurationReaderInterface $toolingConfigurationReader;
+
+    /**
+     * @param \Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface $codeBaseReader
+     * @param \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface $toolingConfigurationReader
+     */
+    public function __construct(CodeBaseReaderInterface $codeBaseReader, ToolingConfigurationReaderInterface $toolingConfigurationReader)
     {
-        $this->sourceParser = $sourceParser;
+        $this->codeBaseReader = $codeBaseReader;
+        $this->toolingConfigurationReader = $toolingConfigurationReader;
     }
 
     /**
-     * @param \Codebase\Application\Dto\CodebaseRequestDto $codebaseRequestDto
+     * @param \Codebase\Application\Dto\CodeBaseRequestDto $codebaseRequestDto
      *
      * @return \Codebase\Application\Dto\CodebaseSourceDto
      */
-    public function parseSource(CodebaseRequestDto $codebaseRequestDto): CodebaseSourceDto
+    public function readCodeBase(CodeBaseRequestDto $codebaseRequestDto): CodebaseSourceDto
     {
-        return $this->sourceParser->parseSource($codebaseRequestDto);
+        return $this->codeBaseReader->readCodeBase($codebaseRequestDto);
+    }
+
+    /**
+     * @param string $configurationFilePath
+     *
+     * @return \Codebase\Application\Dto\ConfigurationResponseDto
+     */
+    public function readToolingConfiguration(string $configurationFilePath): ConfigurationResponseDto
+    {
+        return $this->toolingConfigurationReader->readToolingConfiguration($configurationFilePath);
     }
 }
