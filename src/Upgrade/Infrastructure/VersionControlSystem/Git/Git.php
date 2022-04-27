@@ -244,10 +244,12 @@ class Git
     {
         $restore = array_merge(['git', 'restore'], $this->targetFiles);
         $restoreStaged = array_merge(['git', 'restore', '--staged'], $this->targetFiles);
+        $removeUntracked = ['git', 'clean', '-df'];
 
         $stepsExecutionDto = $this->process($stepsExecutionDto, $restoreStaged);
+        $stepsExecutionDto = $this->process($stepsExecutionDto, $restore);
 
-        return $this->process($stepsExecutionDto, $restore);
+        return $this->process($stepsExecutionDto, $removeUntracked);
     }
 
     /**
