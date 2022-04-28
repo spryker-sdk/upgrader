@@ -13,7 +13,7 @@ class IntegratorStep  extends AbstractStep implements RollbackStepInterface
     /**
      * @var string
      */
-    protected const RUNNER = 'console integrator:manifest:run';
+    protected const RUNNER = '~/.composer/vendor/bin/integrator';
 
     /**
      * @var string
