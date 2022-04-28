@@ -13,7 +13,7 @@ class IntegratorStep  extends AbstractStep implements RollbackStepInterface
     /**
      * @var string
      */
-    protected const RUNNER = '~/.composer/vendor/bin/integrator';
+        protected const RUNNER = '/home/spryker/.composer/vendor/bin/integrator';
 
     /**
      * @var string
