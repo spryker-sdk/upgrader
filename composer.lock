@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cab1e2fe7afc7e9389abba45686f453b",
+    "content-hash": "1220d621d73e181c21c5e4392127ad1d",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -2811,16 +2811,16 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "dev-master",
+            "version": "dev-feature/pplus-510-integrator-as-part-of-upgrader",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "27aa0a2969fe607e899c1716483b2befeb96359e"
+                "reference": "a8e669b78012deee4eb93f3ec535d9ac68ae58a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/27aa0a2969fe607e899c1716483b2befeb96359e",
-                "reference": "27aa0a2969fe607e899c1716483b2befeb96359e",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/a8e669b78012deee4eb93f3ec535d9ac68ae58a0",
+                "reference": "a8e669b78012deee4eb93f3ec535d9ac68ae58a0",
                 "shasum": ""
             },
             "require": {
@@ -2839,7 +2839,6 @@
                 "spryker/code-sniffer": "@stable",
                 "symfony/filesystem": "^5.3.0"
             },
-            "default-branch": true,
             "bin": [
                 "bin/integrator"
             ],
@@ -2862,9 +2861,9 @@
             "description": "Integrator module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
-                "source": "https://github.com/spryker-sdk/integrator/tree/master"
+                "source": "https://github.com/spryker-sdk/integrator/tree/feature/pplus-510-integrator-as-part-of-upgrader"
             },
-            "time": "2022-04-11T12:54:35+00:00"
+            "time": "2022-04-28T08:06:07+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
@@ -7328,5 +7327,5 @@
         "ext-simplexml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.1.0"
 }
