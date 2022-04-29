@@ -5,10 +5,9 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace CodeComplianceTest\Domain\Filters;
+namespace CodeComplianceTest\Domain\Checks\Filters;
 
 use CodeCompliance\Domain\Checks\Filters\PersistenceFilter;
-use CodeComplianceTest\Domain\Checks\Filters\BaseFilterTest;
 
 class PersistenceFilterTest extends BaseFilterTest
 {
