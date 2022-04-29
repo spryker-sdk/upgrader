@@ -31,6 +31,16 @@ class ComposerClient
     /**
      * @var string
      */
+    protected const NO_PLUGINS_FLAG = '--no-plugins';
+
+    /**
+     * @var string
+     */
+    protected const NO_INTERACTION_FLAG = '--no-interaction';
+
+    /**
+     * @var string
+     */
     protected const WITH_ALL_DEPENDENCIES_FLAG = '--with-all-dependencies';
 
     /**
@@ -59,10 +69,12 @@ class ComposerClient
     public function update(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $command = sprintf(
-            '%s %s %s',
+            '%s %s %s %s %s',
             static::UPDATE_COMMAND_NAME,
-            static::NO_SCRIPTS_FLAG,
             static::WITH_ALL_DEPENDENCIES_FLAG,
+            static::NO_SCRIPTS_FLAG,
+            static::NO_PLUGINS_FLAG,
+            static::NO_INTERACTION_FLAG
         );
 
         $process = $this->processRunner->run(explode(' ', $command));
