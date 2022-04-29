@@ -74,7 +74,7 @@ class ComposerClient
             static::WITH_ALL_DEPENDENCIES_FLAG,
             static::NO_SCRIPTS_FLAG,
             static::NO_PLUGINS_FLAG,
-            static::NO_INTERACTION_FLAG
+            static::NO_INTERACTION_FLAG,
         );
 
         $process = $this->processRunner->run(explode(' ', $command));

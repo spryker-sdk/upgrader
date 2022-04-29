@@ -1,38 +1,33 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace Upgrade\Infrastructure\Processor\Strategy\Composer\Steps;
 
 use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Process\ProcessRunner;
+use Upgrade\Infrastructure\Processor\Strategy\IntegratorClient\IntegratorClientInterface;
 use Upgrade\Infrastructure\Processor\Strategy\RollbackStepInterface;
 use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver;
 
-class IntegratorStep  extends AbstractStep implements RollbackStepInterface
+class IntegratorStep extends AbstractStep implements RollbackStepInterface
 {
+    /**
+     * @var \Upgrade\Infrastructure\Processor\Strategy\IntegratorClient\IntegratorClientInterface
+     */
+    protected IntegratorClientInterface $integratorClient;
 
     /**
-     * @var string
+     * @param \Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver $vscAdapterResolver
+     * @param \Upgrade\Infrastructure\Processor\Strategy\IntegratorClient\IntegratorClientInterface $integratorClient
      */
-        protected const RUNNER = '/home/spryker/.composer/vendor/bin/integrator';
-
-    /**
-     * @var string
-     */
-    protected const FLAG = '--no-interaction';
-
-    /**
-     * @var \Upgrade\Infrastructure\Process\ProcessRunner
-     */
-    protected ProcessRunner $processRunner;
-
-    /**
-     * @param \Upgrade\Infrastructure\Process\ProcessRunner $processRunner
-     */
-    public function __construct(VersionControlSystemAdapterResolver $vscAdapterResolver, ProcessRunner $processRunner)
+    public function __construct(VersionControlSystemAdapterResolver $vscAdapterResolver, IntegratorClientInterface $integratorClient)
     {
         parent::__construct($vscAdapterResolver);
 
-        $this->processRunner = $processRunner;
+        $this->integratorClient = $integratorClient;
     }
 
     /**
@@ -42,16 +37,7 @@ class IntegratorStep  extends AbstractStep implements RollbackStepInterface
      */
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        $command = sprintf('%s %s', static::RUNNER, static::FLAG);
-        $process = $this->processRunner->run(explode(' ', $command));
-
-        $stepsExecutionDto->setIsSuccessful(!$process->getExitCode());
-        if(!$stepsExecutionDto->getIsSuccessful()){
-            $stepsExecutionDto->setOutputMessage(
-                $command . "\n" . $process->getErrorOutput() . "\n Error code:" . $process->getExitCode()
-            );
-        }
-        return $stepsExecutionDto;
+        return $this->integratorClient->runIntegrator($stepsExecutionDto);
     }
 
     /**
