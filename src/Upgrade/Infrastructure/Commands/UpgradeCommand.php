@@ -83,4 +83,12 @@ class UpgradeCommand implements ExecutableCommandInterface
 
         return $context;
     }
+
+    /**
+     * @return string
+     */
+    public function getStage(): string
+    {
+        return ContextInterface::DEFAULT_STAGE;
+    }
 }

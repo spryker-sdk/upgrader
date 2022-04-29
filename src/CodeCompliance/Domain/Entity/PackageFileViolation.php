@@ -7,9 +7,10 @@
 
 namespace CodeCompliance\Domain\Entity;
 
-use SprykerSdk\SdkContracts\Violation\ViolationReportConverterInterface;
+use SprykerSdk\SdkContracts\Violation\ViolationFixInterface;
+use SprykerSdk\SdkContracts\Violation\ViolationInterface;
 
-class PackageFileViolation implements ViolationReportConverterInterface
+class PackageFileViolation implements ViolationInterface
 {
     /**
      * @var string
@@ -30,6 +31,11 @@ class PackageFileViolation implements ViolationReportConverterInterface
      * @var string
      */
     protected string $producedBy = '';
+
+    /**
+     * @var string
+     */
+    protected string $severity;
 
     /**
      * @var string|null
@@ -75,6 +81,7 @@ class PackageFileViolation implements ViolationReportConverterInterface
      * @param string $id
      * @param string $message
      * @param string $producedBy
+     * @param string $severity
      * @param array $additionalAttributes
      * @param bool $isFixable
      * @param string|null $class
@@ -89,6 +96,7 @@ class PackageFileViolation implements ViolationReportConverterInterface
         string $id = '',
         string $message = '',
         string $producedBy = '',
+        string $severity = ViolationInterface::SEVERITY_ERROR,
         array $additionalAttributes = [],
         bool $isFixable = false,
         ?string $class = null,
@@ -102,6 +110,7 @@ class PackageFileViolation implements ViolationReportConverterInterface
         $this->id = $id;
         $this->message = $message;
         $this->producedBy = $producedBy;
+        $this->severity = $severity;
         $this->additionalAttributes = $additionalAttributes;
         $this->isFixable = $isFixable;
         $this->class = $class;
@@ -143,6 +152,16 @@ class PackageFileViolation implements ViolationReportConverterInterface
     public function producedBy(): string
     {
         return $this->producedBy;
+    }
+
+    /**
+     * INFO, WARNING, ERROR
+     *
+     * @return string
+     */
+    public function getSeverity(): string
+    {
+        return $this->severity;
     }
 
     /**
@@ -207,5 +226,13 @@ class PackageFileViolation implements ViolationReportConverterInterface
     public function getAdditionalAttributes(): array
     {
         return $this->additionalAttributes;
+    }
+
+    /**
+     * @return \SprykerSdk\SdkContracts\Violation\ViolationFixInterface|null
+     */
+    public function getFix(): ?ViolationFixInterface
+    {
+        return null;
     }
 }

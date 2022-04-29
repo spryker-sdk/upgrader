@@ -28,7 +28,7 @@ class Method extends AbstractCodeComplianceCheck
      */
     public function getGuideline(): string
     {
-        return 'Method name %s::%s() should contains project prefix, like %s%s';
+        return 'Method name %s::%s() should contains project prefix, like %s';
     }
 
     /**
@@ -44,7 +44,7 @@ class Method extends AbstractCodeComplianceCheck
         foreach ($filteredSources as $source) {
             $namesCoreMethods = array_column($source->getCoreMethods(), static::COLUMN_KEY_NAME);
             $nameCoreInterfaceMethods = array_column($source->getCoreInterfacesMethods(), static::COLUMN_KEY_NAME);
-            $projectPrefix = $this->getCodebaseSourceDto()->getProjectPrefix();
+            $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
             /** @var \ReflectionMethod $projectMethod */
             foreach ($source->getProjectMethods() as $projectMethod) {
@@ -63,12 +63,17 @@ class Method extends AbstractCodeComplianceCheck
 
                 $isCoreMethod = in_array($projectMethod->getName(), $namesCoreMethods);
                 $isMethodDeclaredInInterface = in_array($projectMethod->getName(), $nameCoreInterfaceMethods);
-                $hasProjectPrefix = $this->hasProjectPrefix($projectMethod->getName(), $projectPrefix);
+                $hasProjectPrefix = $this->hasProjectPrefix($projectMethod->getName(), $projectPrefixList);
 
                 if ($source->isExtendCore() && !$isCoreMethod && !$hasProjectPrefix && !$isMethodDeclaredInInterface) {
                     $methodParts = preg_split('/(?=[A-Z])/', $projectMethod->getName()) ?: [];
-                    array_splice($methodParts, 1, 0, [$projectPrefix]);
-                    $guideline = sprintf($this->getGuideline(), $source->getClassName(), $projectMethod->getName(), strtolower($projectPrefix), ucfirst(implode('', $methodParts)));
+                    array_splice($methodParts, 1, 0, [reset($projectPrefixList)]);
+                    $guideline = sprintf(
+                        $this->getGuideline(),
+                        $source->getClassName(),
+                        $projectMethod->getName(),
+                        lcfirst(implode('', $methodParts))
+                    );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
                 }
             }
@@ -133,12 +138,18 @@ class Method extends AbstractCodeComplianceCheck
 
     /**
      * @param string $value
-     * @param string $projectPrefix
+     * @param array<string> $projectPrefixList
      *
      * @return bool
      */
-    protected function hasProjectPrefix(string $value, string $projectPrefix): bool
+    protected function hasProjectPrefix(string $value, array $projectPrefixList): bool
     {
-        return strpos($value, $projectPrefix) !== false;
+        foreach ($projectPrefixList as $projectPrefix) {
+            if (strpos($value, $projectPrefix) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

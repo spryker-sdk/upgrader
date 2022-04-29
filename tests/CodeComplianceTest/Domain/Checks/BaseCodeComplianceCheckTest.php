@@ -7,9 +7,9 @@
 
 namespace CodeComplianceTest\Domain\Checks;
 
-use Codebase\Application\Dto\CodebaseRequestDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
-use Codebase\Infrastructure\Service\CodebaseService;
+use Codebase\Application\Dto\SourceParserRequestDto;
+use Codebase\Infrastructure\SourceParser\SourceParser;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 abstract class BaseCodeComplianceCheckTest extends KernelTestCase
@@ -21,13 +21,13 @@ abstract class BaseCodeComplianceCheckTest extends KernelTestCase
      */
     public function readTestCodebase(?string $subFolder = null): CodebaseSourceDto
     {
-        $codebaseRequestDto = new CodebaseRequestDto(
+        $codebaseRequestDto = new SourceParserRequestDto(
             [APPLICATION_ROOT_DIR . '/tests/data/Evaluate/Project/' . $subFolder],
             [APPLICATION_ROOT_DIR . '/tests/data/Evaluate/Core/' . $subFolder],
             ['TestCore'],
-            'TestProject',
+            ['TestProject'],
         );
 
-        return static::bootKernel()->getContainer()->get(CodebaseService::class)->parseSource($codebaseRequestDto);
+        return static::bootKernel()->getContainer()->get(SourceParser::class)->parseSource($codebaseRequestDto);
     }
 }
