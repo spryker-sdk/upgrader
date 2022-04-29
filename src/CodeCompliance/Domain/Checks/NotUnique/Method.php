@@ -72,7 +72,7 @@ class Method extends AbstractCodeComplianceCheck
                         $this->getGuideline(),
                         $source->getClassName(),
                         $projectMethod->getName(),
-                        lcfirst(implode('', $methodParts))
+                        lcfirst(implode('', $methodParts)),
                     );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
                 }
