@@ -52,8 +52,7 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "spryker-sdk/integrator": true
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "scripts": {

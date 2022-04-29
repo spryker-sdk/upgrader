@@ -2815,12 +2815,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "a8e669b78012deee4eb93f3ec535d9ac68ae58a0"
+                "reference": "2ce11896a8a6c7c7b72587b46e12d1542f30fb71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/a8e669b78012deee4eb93f3ec535d9ac68ae58a0",
-                "reference": "a8e669b78012deee4eb93f3ec535d9ac68ae58a0",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/2ce11896a8a6c7c7b72587b46e12d1542f30fb71",
+                "reference": "2ce11896a8a6c7c7b72587b46e12d1542f30fb71",
                 "shasum": ""
             },
             "require": {
@@ -2863,7 +2863,7 @@
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
                 "source": "https://github.com/spryker-sdk/integrator/tree/feature/pplus-510-integrator-as-part-of-upgrader"
             },
-            "time": "2022-04-28T08:06:07+00:00"
+            "time": "2022-04-29T11:43:49+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
@@ -7327,5 +7327,5 @@
         "ext-simplexml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
