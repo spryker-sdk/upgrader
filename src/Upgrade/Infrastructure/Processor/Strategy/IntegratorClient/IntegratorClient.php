@@ -15,7 +15,7 @@ class IntegratorClient implements IntegratorClientInterface
     /**
      * @var string
      */
-    protected const RUNNER = '/home/spryker/.composer/vendor/bin/integrator';
+    protected const RUNNER = 'vendor/bin/integrator';
 
     /**
      * @var string
@@ -43,6 +43,10 @@ class IntegratorClient implements IntegratorClientInterface
     public function runIntegrator(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $command = sprintf('%s %s', static::RUNNER, static::FLAG);
+        $runnerDir = dirname(__DIR__, 4);
+        if (strpos($runnerDir, '.composer') !== false) {
+            $command = sprintf('%s %s', $runnerDir . DIRECTORY_SEPARATOR . static::RUNNER, static::FLAG);
+        }
         $process = $this->processRunner->run(explode(' ', $command));
 
         $stepsExecutionDto->setIsSuccessful(!$process->getExitCode());

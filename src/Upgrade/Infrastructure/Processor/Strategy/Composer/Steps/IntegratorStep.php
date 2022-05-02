@@ -37,13 +37,6 @@ class IntegratorStep extends AbstractStep implements RollbackStepInterface
      */
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-
-        defined('INTEGRATOR_ROOT_DIR') || define('INTEGRATOR_ROOT_DIR', dirname(__DIR__, 4) );
-
-        var_dump('++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-        var_dump(INTEGRATOR_ROOT_DIR);
-        var_dump('++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-
         return $this->integratorClient->runIntegrator($stepsExecutionDto);
     }
 
