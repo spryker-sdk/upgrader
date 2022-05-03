@@ -51,8 +51,8 @@ class ConfigurationProvider
 
     /**
      * Specification:
-     * - The method define strategy for project upgrades.
-     * - Available two option: composer strategy (default) and release-app strategy.
+     * - Defines upgrade strategy.
+     * - Possible strategies: composer and release-app (default).
      *
      * @return string
      */
@@ -63,8 +63,8 @@ class ConfigurationProvider
 
     /**
      * Specification:
-     * - The method define source code provider for upgrade process.
-     * - Available GitHub (default) and GitLab code source providers.
+     * - Defines the default source code provider.
+     * - Available options: GitHub (default) and GitLab.
      *
      * @return string
      */
@@ -75,7 +75,7 @@ class ConfigurationProvider
 
     /**
      * Specification:
-     * - The method define pattern for branch that will be created during upgrade process.
+     * - Defines pattern for branch that will be created during upgrade process.
      *
      * @return string
      */
@@ -86,7 +86,7 @@ class ConfigurationProvider
 
     /**
      * Specification:
-     * - The method define commit message that will be used during upgrade process.
+     * - Defines commit message that will be used during upgrade process.
      *
      * @return string
      */
@@ -97,7 +97,7 @@ class ConfigurationProvider
 
     /**
      * Specification:
-     * - The method define whether the changes will be automatically applied after the upgrade process.
+     * - Defines automatically applied changes after the upgrade process.
      *
      * @return bool
      */
@@ -108,9 +108,7 @@ class ConfigurationProvider
 
     /**
      * Specification:
-     * - The method return access token for code source provider system.
-     *
-     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     * - Defines access token for code source provider system.
      *
      * @return string
      */
@@ -121,10 +119,7 @@ class ConfigurationProvider
 
     /**
      * Specification:
-     * - The method return link to your own code source provider system.
-     * - By default left it empty.
-     *
-     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     * - Returns the link to the source code provider.
      *
      * @return string
      */
@@ -135,10 +130,7 @@ class ConfigurationProvider
 
     /**
      * Specification:
-     * - The method return GitHub organization name for your project.
-     * - Define ORGANIZATION_NAME environment variable if you use GitHub source code provider.
-     *
-     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     * - Defines organisation name for source provider.
      *
      * @return string
      */
@@ -149,10 +141,7 @@ class ConfigurationProvider
 
     /**
      * Specification:
-     * - The method return GitHub repository name for your project.
-     * - Define REPOSITORY_NAME environment variable if you use GitHub source code provider.
-     *
-     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     * - Defines repository name for your project.
      *
      * @return string
      */
@@ -163,10 +152,7 @@ class ConfigurationProvider
 
     /**
      * Specification:
-     * - The method return id of your GitLab project.
-     * - Define GITLAB_PROJECT_ID environment variable if you use GitLab source code provider.
-     *
-     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     * - Defines id of your GitLab project.
      *
      * @return string
      */
@@ -177,9 +163,7 @@ class ConfigurationProvider
 
     /**
      * Specification:
-     * - The method return delay in seconds between request for PR creation and enable auto merging if the option is enabled.
-     *
-     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     * - Defines delay in seconds between request for PR creation and enable auto merging.
      *
      * @return int
      */
