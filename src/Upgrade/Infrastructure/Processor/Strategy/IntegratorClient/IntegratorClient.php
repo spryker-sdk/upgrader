@@ -15,12 +15,12 @@ class IntegratorClient implements IntegratorClientInterface
     /**
      * @var string
      */
-    protected const RUNNER = 'vendor/bin/integrator';
+    protected const BINARY_INTEGRATOR_PATH = 'vendor/bin/integrator';
 
     /**
      * @var string
      */
-    protected const FLAG = '--no-interaction';
+    protected const NO_INTERACTION_COMPOSER_FLAG = '--no-interaction';
 
     /**
      * @var \Upgrade\Infrastructure\Process\ProcessRunner
@@ -42,10 +42,15 @@ class IntegratorClient implements IntegratorClientInterface
      */
     public function runIntegrator(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        $command = sprintf('%s %s', static::RUNNER, static::FLAG);
-        $runnerDir = dirname(__DIR__, 4);
-        if (strpos($runnerDir, '.composer') !== false) {
-            $command = sprintf('%s %s', $runnerDir . DIRECTORY_SEPARATOR . static::RUNNER, static::FLAG);
+        $command = sprintf('%s %s', static::BINARY_INTEGRATOR_PATH, static::NO_INTERACTION_COMPOSER_FLAG);
+        $dirname = dirname(__DIR__, 4);
+        $isGlobalExecution = strpos($dirname, '.composer') !== false;
+        if ($isGlobalExecution) {
+            $command = sprintf(
+                '%s %s',
+                $dirname . DIRECTORY_SEPARATOR . static::BINARY_INTEGRATOR_PATH,
+                static::NO_INTERACTION_COMPOSER_FLAG
+            );
         }
         $process = $this->processRunner->run(explode(' ', $command));
 

@@ -76,7 +76,7 @@ class UpgraderTask implements TaskInterface
      */
     public function getShortDescription(): string
     {
-        return '';
+        return 'Upgrades your system to the latest Spryker version (minor + patches)';
     }
 
     /**
@@ -108,7 +108,7 @@ class UpgraderTask implements TaskInterface
      */
     public function getHelp(): ?string
     {
-        return null;
+        return 'Helps provide upgrades for Spryker projects';
     }
 
     /**
