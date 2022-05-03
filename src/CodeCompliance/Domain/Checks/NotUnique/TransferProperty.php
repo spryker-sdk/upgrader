@@ -43,7 +43,7 @@ class TransferProperty extends AbstractCodeComplianceCheck
                 $coreSchemas[$coreSource->getName()] = array_merge($coreSchemas[$coreSource->getName()] ?? [], $coreSource->getChildElements());
             }
         }
-        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
+        $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
         foreach ($this->getCodebaseSourceDto()->getTransferSchemaCodebaseSources() as $transfer) {
             if ($transfer->getChildElements() === []) {
@@ -52,11 +52,11 @@ class TransferProperty extends AbstractCodeComplianceCheck
             $sourceName = $transfer->getName();
             $propertiesWithoutPrefix = array_filter(
                 $transfer->getChildElements(),
-                function (string $property) use ($projectPrefixList, $sourceName, $coreSchemas) {
-                    return !in_array($property, $coreSchemas[$sourceName] ?? []) && !$this->hasProjectPrefix($property, $projectPrefixList);
+                function (string $property) use ($projectPrefixes, $sourceName, $coreSchemas) {
+                    return !in_array($property, $coreSchemas[$sourceName] ?? []) && !$this->hasProjectPrefix($property, $projectPrefixes);
                 },
             );
-            $isTransferPrefixExist = $this->hasProjectPrefix($transfer->getName(), $projectPrefixList);
+            $isTransferPrefixExist = $this->hasProjectPrefix($transfer->getName(), $projectPrefixes);
 
             if ($propertiesWithoutPrefix !== [] && $propertiesWithoutPrefix !== null && !$isTransferPrefixExist) {
                 foreach ($propertiesWithoutPrefix as $propertyWithoutPrefix) {
@@ -64,9 +64,9 @@ class TransferProperty extends AbstractCodeComplianceCheck
                         $this->getGuideline(),
                         $propertyWithoutPrefix,
                         $transfer->getName(),
-                        implode(',', $projectPrefixList),
+                        implode(',', $projectPrefixes),
                         $transfer->getPath(),
-                        strtolower((string)reset($projectPrefixList)),
+                        strtolower((string)reset($projectPrefixes)),
                         ucfirst($propertyWithoutPrefix),
                     );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());

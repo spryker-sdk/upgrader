@@ -132,7 +132,7 @@ class PhpParser implements ParserInterface
 
     /**
      * @param string $namespace
-     * @param array<string> $projectPrefixList
+     * @param array<string> $projectPrefixes
      * @param array<string> $coreNamespaces
      * @param \Codebase\Application\Dto\ClassCodebaseDto|null $transfer
      *
@@ -140,7 +140,7 @@ class PhpParser implements ParserInterface
      */
     protected function parseClass(
         string $namespace,
-        array $projectPrefixList,
+        array $projectPrefixes,
         array $coreNamespaces = [],
         ?ClassCodebaseDto $transfer = null
     ): ?ClassCodebaseDto {
@@ -163,9 +163,9 @@ class PhpParser implements ParserInterface
         $transfer->setMethods($projectClass->getMethods());
         $transfer->setTraits($projectClass->getTraits());
         $transfer->setReflection($projectClass);
-        $transfer->setExtendCore($this->isExtendCore($projectClass, $projectPrefixList, $coreNamespaces));
+        $transfer->setExtendCore($this->isExtendCore($projectClass, $projectPrefixes, $coreNamespaces));
         $transfer->setCoreInterfacesMethods(
-            $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $projectPrefixList),
+            $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $projectPrefixes),
         );
 
         if ($coreNamespaces !== []) {
@@ -181,7 +181,7 @@ class PhpParser implements ParserInterface
             }
 
             $transfer->setParent(
-                $this->parseClass($parentClass->getName(), $projectPrefixList, $coreNamespaces),
+                $this->parseClass($parentClass->getName(), $projectPrefixes, $coreNamespaces),
             );
         }
 
@@ -261,16 +261,16 @@ class PhpParser implements ParserInterface
 
     /**
      * @param array $interfaces
-     * @param array<string> $projectPrefixList
+     * @param array<string> $projectPrefixes
      *
      * @return array
      */
-    protected function getCoreInterfacesMethods(array $interfaces, array $projectPrefixList): array
+    protected function getCoreInterfacesMethods(array $interfaces, array $projectPrefixes): array
     {
         $methods = [];
 
-        $coreInterfaces = array_filter($interfaces, function ($interface) use ($projectPrefixList) {
-            foreach ($projectPrefixList as $projectPrefix) {
+        $coreInterfaces = array_filter($interfaces, function ($interface) use ($projectPrefixes) {
+            foreach ($projectPrefixes as $projectPrefix) {
                 if (strpos($interface->getNamespaceName(), $projectPrefix) === 0) {
                     return false;
                 }

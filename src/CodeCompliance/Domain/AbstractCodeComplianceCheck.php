@@ -84,13 +84,13 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
 
     /**
      * @param string $value
-     * @param array<string> $projectPrefixList
+     * @param array<string> $projectPrefixes
      *
      * @return bool
      */
-    protected function hasProjectPrefix(string $value, array $projectPrefixList): bool
+    protected function hasProjectPrefix(string $value, array $projectPrefixes): bool
     {
-        foreach ($projectPrefixList as $projectPrefix) {
+        foreach ($projectPrefixes as $projectPrefix) {
             if (stripos($value, $projectPrefix) === 0) {
                 return true;
             }

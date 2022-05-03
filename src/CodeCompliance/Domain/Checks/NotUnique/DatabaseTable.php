@@ -36,7 +36,7 @@ class DatabaseTable extends AbstractCodeComplianceCheck
     {
         $violations = [];
         $namesFromCoreSchemas = [];
-        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
+        $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
         if ($this->getCodebaseSourceDto()->getDatabaseSchemaCoreCodebaseSources()) {
             $namesFromCoreSchemas = array_column($this->getCodebaseSourceDto()->getDatabaseSchemaCoreCodebaseSources(), static::COLUMN_KEY_NAME);
@@ -44,15 +44,15 @@ class DatabaseTable extends AbstractCodeComplianceCheck
 
         foreach ($this->getCodebaseSourceDto()->getDatabaseSchemaCodebaseSources() as $schema) {
             $isDbUniqueOnTheProjectLevel = !in_array($schema->getName(), $namesFromCoreSchemas);
-            $isDbPrefixExist = $this->hasProjectPrefix($schema->getName(), $projectPrefixList);
+            $isDbPrefixExist = $this->hasProjectPrefix($schema->getName(), $projectPrefixes);
 
             if ($isDbUniqueOnTheProjectLevel && !$isDbPrefixExist) {
                 $guideline = sprintf(
                     $this->getGuideline(),
                     $schema->getName(),
-                    implode(',', $projectPrefixList),
+                    implode(',', $projectPrefixes),
                     $schema->getPath(),
-                    strtolower((string)reset($projectPrefixList)),
+                    strtolower((string)reset($projectPrefixes)),
                     $schema->getName(),
                 );
                 $violations[] = new Violation(new Id(), $guideline, $this->getName());

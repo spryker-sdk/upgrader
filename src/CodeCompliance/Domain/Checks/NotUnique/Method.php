@@ -44,7 +44,7 @@ class Method extends AbstractCodeComplianceCheck
         foreach ($filteredSources as $source) {
             $namesCoreMethods = array_column($source->getCoreMethods(), static::COLUMN_KEY_NAME);
             $nameCoreInterfaceMethods = array_column($source->getCoreInterfacesMethods(), static::COLUMN_KEY_NAME);
-            $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
+            $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
             /** @var \ReflectionMethod $projectMethod */
             foreach ($source->getProjectMethods() as $projectMethod) {
@@ -63,16 +63,16 @@ class Method extends AbstractCodeComplianceCheck
 
                 $isCoreMethod = in_array($projectMethod->getName(), $namesCoreMethods);
                 $isMethodDeclaredInInterface = in_array($projectMethod->getName(), $nameCoreInterfaceMethods);
-                $hasProjectPrefix = $this->hasProjectPrefix($projectMethod->getName(), $projectPrefixList);
+                $hasProjectPrefix = $this->hasProjectPrefix($projectMethod->getName(), $projectPrefixes);
 
                 if ($source->isExtendCore() && !$isCoreMethod && !$hasProjectPrefix && !$isMethodDeclaredInInterface) {
                     $methodParts = preg_split('/(?=[A-Z])/', $projectMethod->getName()) ?: [];
-                    array_splice($methodParts, 1, 0, [reset($projectPrefixList)]);
+                    array_splice($methodParts, 1, 0, [reset($projectPrefixes)]);
                     $guideline = sprintf(
                         $this->getGuideline(),
                         $source->getClassName(),
                         $projectMethod->getName(),
-                        strtolower((string)reset($projectPrefixList)),
+                        strtolower((string)reset($projectPrefixes)),
                         ucfirst(implode('', $methodParts)),
                     );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
@@ -139,13 +139,13 @@ class Method extends AbstractCodeComplianceCheck
 
     /**
      * @param string $value
-     * @param array<string> $projectPrefixList
+     * @param array<string> $projectPrefixes
      *
      * @return bool
      */
-    protected function hasProjectPrefix(string $value, array $projectPrefixList): bool
+    protected function hasProjectPrefix(string $value, array $projectPrefixes): bool
     {
-        foreach ($projectPrefixList as $projectPrefix) {
+        foreach ($projectPrefixes as $projectPrefix) {
             if (strpos($value, $projectPrefix) !== false) {
                 return true;
             }

@@ -43,7 +43,7 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
                 $coreSchemas[$coreSource->getName()] = array_merge($coreSchemas[$coreSource->getName()] ?? [], $coreSource->getChildElements());
             }
         }
-        $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
+        $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
         foreach ($this->getCodebaseSourceDto()->getDatabaseSchemaCodebaseSources() as $source) {
             if ($source->getChildElements() === []) {
@@ -51,19 +51,19 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
             }
 
             $sourceName = $source->getName();
-            $columnsWithoutPrefix = array_filter($source->getChildElements(), function (string $column) use ($projectPrefixList, $sourceName, $coreSchemas) {
-                return !in_array($column, $coreSchemas[$sourceName] ?? []) && !$this->hasProjectPrefix($column, $projectPrefixList);
+            $columnsWithoutPrefix = array_filter($source->getChildElements(), function (string $column) use ($projectPrefixes, $sourceName, $coreSchemas) {
+                return !in_array($column, $coreSchemas[$sourceName] ?? []) && !$this->hasProjectPrefix($column, $projectPrefixes);
             });
-            $isDbPrefixExist = $this->hasProjectPrefix($source->getName(), $projectPrefixList);
+            $isDbPrefixExist = $this->hasProjectPrefix($source->getName(), $projectPrefixes);
 
             if ($columnsWithoutPrefix !== [] && $columnsWithoutPrefix !== null && !$isDbPrefixExist) {
                 foreach ($columnsWithoutPrefix as $columnWithoutPrefix) {
                     $guideline = sprintf(
                         $this->getGuideline(),
                         $columnWithoutPrefix,
-                        implode(',', $projectPrefixList),
+                        implode(',', $projectPrefixes),
                         $source->getPath(),
-                        strtolower((string)reset($projectPrefixList)),
+                        strtolower((string)reset($projectPrefixes)),
                         $columnWithoutPrefix,
                     );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
