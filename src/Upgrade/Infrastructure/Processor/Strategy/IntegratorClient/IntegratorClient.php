@@ -49,7 +49,7 @@ class IntegratorClient implements IntegratorClientInterface
             $command = sprintf(
                 '%s %s',
                 $dirname . DIRECTORY_SEPARATOR . static::BINARY_INTEGRATOR_PATH,
-                static::NO_INTERACTION_COMPOSER_FLAG
+                static::NO_INTERACTION_COMPOSER_FLAG,
             );
         }
         $process = $this->processRunner->run(explode(' ', $command));

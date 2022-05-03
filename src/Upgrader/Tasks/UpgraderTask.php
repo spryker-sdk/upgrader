@@ -108,7 +108,7 @@ class UpgraderTask implements TaskInterface
      */
     public function getHelp(): ?string
     {
-        return 'Helps provide upgrades for Spryker projects';
+        return 'Helps provide upgrades for Spryker project';
     }
 
     /**
