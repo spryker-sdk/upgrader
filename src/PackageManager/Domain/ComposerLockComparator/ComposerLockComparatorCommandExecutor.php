@@ -41,7 +41,7 @@ class ComposerLockComparatorCommandExecutor implements ComposerLockComparatorCom
     public function getComposerLockDiff(): ComposerLockDiffDto
     {
         $command = sprintf('%s %s', APPLICATION_ROOT_DIR . static::RUNNER, static::JSON_OUTPUT_FLAG);
-        $process = $this->processRunner->runCommand(explode(' ', $command));
+        $process = $this->processRunner->run(explode(' ', $command));
         $composerLockDiff = json_decode((string)$process->getOutput(), true) ?? [];
 
         return new ComposerLockDiffDto($composerLockDiff);

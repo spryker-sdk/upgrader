@@ -21,14 +21,14 @@ class HttpRequestBuilder implements HttpRequestBuilderInterface
     /**
      * @var \ReleaseAppClient\Infrastructure\Configuration\ConfigurationProvider
      */
-    protected ConfigurationProvider $upgraderConfig;
+    protected ConfigurationProvider $releaseAppConfig;
 
     /**
      * @param \ReleaseAppClient\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      */
     public function __construct(ConfigurationProvider $configurationProvider)
     {
-        $this->upgraderConfig = $configurationProvider;
+        $this->releaseAppConfig = $configurationProvider;
     }
 
     /**
@@ -51,6 +51,6 @@ class HttpRequestBuilder implements HttpRequestBuilderInterface
      */
     protected function getBaseUrl(): string
     {
-        return $this->upgraderConfig->getReleaseAppUrl();
+        return $this->releaseAppConfig->getReleaseAppUrl();
     }
 }

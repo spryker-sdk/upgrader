@@ -67,7 +67,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             static::WITH_ALL_DEPENDENCIES_FLAG,
         );
 
-        $process = $this->processRunner->runCommand(explode(' ', $command));
+        $process = $this->processRunner->run(explode(' ', $command));
 
         return $this->createResponse($process);
     }
@@ -88,7 +88,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             static::DEV_FLAG,
         );
 
-        $process = $this->processRunner->runCommand(explode(' ', $command));
+        $process = $this->processRunner->run(explode(' ', $command));
 
         return $this->createResponse($process);
     }
@@ -105,7 +105,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             static::WITH_ALL_DEPENDENCIES_FLAG,
         );
 
-        $process = $this->processRunner->runCommand(explode(' ', $command));
+        $process = $this->processRunner->run(explode(' ', $command));
 
         return $this->createResponse($process);
     }

@@ -69,6 +69,14 @@ class HttpUpgradeAnalysisRequest implements HttpRequestInterface
     }
 
     /**
+     * @return string
+     */
+    public function getResponseClass(): string
+    {
+        return HttpUpgradeAnalysisResponse::class;
+    }
+
+    /**
      * @return array
      */
     protected function getBodyArray(): array
@@ -81,13 +89,5 @@ class HttpUpgradeAnalysisRequest implements HttpRequestInterface
             'composerJson' => $composerJsonContent,
             'composerLock' => $composerLockContent,
         ];
-    }
-
-    /**
-     * @return string
-     */
-    public function getResponseClass(): string
-    {
-        return HttpUpgradeAnalysisResponse::class;
     }
 }

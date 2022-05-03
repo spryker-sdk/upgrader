@@ -16,5 +16,5 @@ interface ProcessRunnerInterface
   *
   * @return \Symfony\Component\Process\Process
   */
-    public function runCommand(array $command): Process;
+    public function run(array $command): Process;
 }

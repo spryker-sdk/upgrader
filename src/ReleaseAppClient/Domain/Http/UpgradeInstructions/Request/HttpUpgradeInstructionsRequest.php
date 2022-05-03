@@ -41,14 +41,6 @@ class HttpUpgradeInstructionsRequest implements HttpRequestInterface
     /**
      * @return string
      */
-    protected function getParametersAsString(): string
-    {
-        return sprintf('%s=%s', 'module_version_id', $this->idModuleVersion);
-    }
-
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return static::REQUEST_TYPE_GET;
@@ -68,5 +60,13 @@ class HttpUpgradeInstructionsRequest implements HttpRequestInterface
     public function getResponseClass(): string
     {
         return HttpUpgradeInstructionsResponse::class;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getParametersAsString(): string
+    {
+        return sprintf('%s=%s', 'module_version_id', $this->idModuleVersion);
     }
 }
