@@ -26,9 +26,9 @@ interface SourceCodeProviderInterface
     public function createPullRequest(StepsExecutionDto $stepsExecutionDto, PullRequestDto $pullRequestDto): StepsExecutionDto;
 
     /**
-     * @throws \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return void
+     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
      */
-    public function validateCredentials(): void;
+    public function validateCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 }

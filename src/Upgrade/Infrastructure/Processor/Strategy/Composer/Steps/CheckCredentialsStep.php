@@ -19,8 +19,6 @@ class CheckCredentialsStep extends AbstractStep implements StepInterface
      */
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        $this->vsc->validateSourceCodeProviderCredentials();
-
-        return $stepsExecutionDto;
+        return $this->vsc->validateSourceCodeProviderCredentials($stepsExecutionDto);
     }
 }

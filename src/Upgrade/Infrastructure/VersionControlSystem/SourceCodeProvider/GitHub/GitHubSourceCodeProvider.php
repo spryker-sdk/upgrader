@@ -14,7 +14,6 @@ use RuntimeException;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Dto\SourceCodeProvider\PullRequestDto;
 use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface;
 
 class GitHubSourceCodeProvider implements SourceCodeProviderInterface
@@ -46,19 +45,22 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
     }
 
     /**
-     * @throws \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return void
+     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
      */
-    public function validateCredentials(): void
+    public function validateCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         if (
             !$this->configurationProvider->getAccessToken() ||
             !$this->configurationProvider->getOrganizationName() ||
             !$this->configurationProvider->getRepositoryName()
         ) {
-            throw new EnvironmentVariableIsNotDefinedException('Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.');
+            $stepsExecutionDto->setIsSuccessful(false);
+            $stepsExecutionDto->setOutputMessage('Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.');
         }
+
+        return $stepsExecutionDto;
     }
 
     /**
@@ -70,7 +72,11 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
     public function createPullRequest(StepsExecutionDto $stepsExecutionDto, PullRequestDto $pullRequestDto): StepsExecutionDto
     {
         try {
-            $this->validateCredentials();
+            $stepsExecutionDto = $this->validateCredentials($stepsExecutionDto);
+            if (!$stepsExecutionDto->getIsSuccessful()) {
+                return $stepsExecutionDto;
+            }
+
             $this->getClient()->pr()->create(
                 $this->configurationProvider->getOrganizationName(),
                 $this->configurationProvider->getRepositoryName(),

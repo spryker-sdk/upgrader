@@ -156,10 +156,12 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @return void
+     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     *
+     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
      */
-    public function validateSourceCodeProviderCredentials(): void
+    public function validateSourceCodeProviderCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        $this->git->validateSourceCodeProviderCredentials();
+        return $this->git->validateSourceCodeProviderCredentials($stepsExecutionDto);
     }
 }

@@ -101,9 +101,9 @@ interface VersionControlSystemAdapterInterface
     public function restore(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 
     /**
-     * @throws \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return void
+     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
      */
-    public function validateSourceCodeProviderCredentials(): void;
+    public function validateSourceCodeProviderCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 }
