@@ -7,7 +7,7 @@
 
 namespace Codebase\Application\Dto;
 
-class CodebaseRequestDto
+class SourceParserRequestDto
 {
     /**
      * @var string
@@ -22,12 +22,12 @@ class CodebaseRequestDto
     /**
      * @var array<string>
      */
-    protected array $projectPath;
+    protected array $projectPaths;
 
     /**
      * @var array<string>
      */
-    protected array $corePath;
+    protected array $corePaths;
 
     /**
      * @var array<string>
@@ -35,9 +35,9 @@ class CodebaseRequestDto
     protected array $coreNamespaces;
 
     /**
-     * @var string
+     * @var array<string>
      */
-    protected string $projectPrefix;
+    protected array $projectPrefixes;
 
     /**
      * @var array<string>
@@ -45,40 +45,40 @@ class CodebaseRequestDto
     protected array $excludeList;
 
     /**
-     * @param array<string> $projectPath
-     * @param array<string> $corePath
+     * @param array<string> $projectPaths
+     * @param array<string> $corePaths
      * @param array<string> $coreNamespaces
-     * @param string $projectPrefix
+     * @param array<string> $projectPrefixes
      * @param array<string> $excludeList
      */
     public function __construct(
-        array $projectPath = [],
-        array $corePath = [],
-        array $coreNamespaces = [],
-        string $projectPrefix = '',
+        array $projectPaths,
+        array $corePaths,
+        array $coreNamespaces,
+        array $projectPrefixes,
         array $excludeList = []
     ) {
-        $this->projectPath = $projectPath;
-        $this->corePath = $corePath;
+        $this->projectPaths = $projectPaths;
+        $this->corePaths = $corePaths;
         $this->coreNamespaces = $coreNamespaces;
-        $this->projectPrefix = $projectPrefix;
+        $this->projectPrefixes = $projectPrefixes;
         $this->excludeList = $excludeList;
     }
 
     /**
      * @return array<string>
      */
-    public function getProjectPath(): array
+    public function getProjectPaths(): array
     {
-        return $this->projectPath;
+        return $this->projectPaths;
     }
 
     /**
      * @return array<string>
      */
-    public function getCorePath(): array
+    public function getCorePaths(): array
     {
-        return $this->corePath;
+        return $this->corePaths;
     }
 
     /**
@@ -90,11 +90,11 @@ class CodebaseRequestDto
     }
 
     /**
-     * @return string
+     * @return array<string>
      */
-    public function getProjectPrefix(): string
+    public function getProjectPrefixes(): array
     {
-        return $this->projectPrefix;
+        return $this->projectPrefixes;
     }
 
     /**
@@ -103,8 +103,8 @@ class CodebaseRequestDto
     public function getPaths(): array
     {
         return [
-            'project' => $this->getProjectPath(),
-            'core' => $this->getCorePath(),
+            static::PROJECT_TYPE => $this->getProjectPaths(),
+            static::CORE_TYPE => $this->getCorePaths(),
         ];
     }
 

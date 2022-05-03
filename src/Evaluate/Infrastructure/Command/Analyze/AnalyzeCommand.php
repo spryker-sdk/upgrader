@@ -7,7 +7,7 @@
 
 namespace Evaluate\Infrastructure\Command\Analyze;
 
-use Codebase\Application\Dto\CodebaseRequestDto;
+use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Infrastructure\Service\CodebaseService;
 use CodeCompliance\Application\Service\CodeComplianceServiceInterface;
 use CodeCompliance\Domain\Entity\Report;
@@ -112,15 +112,15 @@ class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, 
      */
     public function execute(ContextInterface $context): ContextInterface
     {
-        $codebaseRequestDto = new CodebaseRequestDto(
-            $this->configurationProvider->getProjectDirectory(),
-            $this->configurationProvider->getCoreDirectory(),
+        $codebaseRequestDto = new CodeBaseRequestDto(
+            $this->configurationProvider->getToolingConfigurationFilePath(),
+            $this->configurationProvider->getSrcPath(),
+            $this->configurationProvider->getCorePaths(),
             $this->configurationProvider->getCoreNamespaces(),
-            $this->configurationProvider->getProjectPrefix(),
             $this->configurationProvider->getIgnoreSources(),
         );
 
-        $codebaseSourceDto = $this->codebaseService->parseSource($codebaseRequestDto);
+        $codebaseSourceDto = $this->codebaseService->readCodeBase($codebaseRequestDto);
 
         static::$report = $this->codeComplianceService->analyze($codebaseSourceDto);
 
