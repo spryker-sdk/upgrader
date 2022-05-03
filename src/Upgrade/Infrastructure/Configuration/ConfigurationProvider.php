@@ -97,7 +97,7 @@ class ConfigurationProvider
 
     /**
      * Specification:
-     * - Defines automatically applied changes after the upgrade process.
+     * - Defines if pull request auto-merge is enabled. Default value is false.
      *
      * @return bool
      */
