@@ -14,7 +14,9 @@ use ReflectionMethod;
 abstract class AbstractUsedCodeComplianceCheck extends AbstractCodeComplianceCheck
 {
     /**
-     * @param \ReflectionClass $class
+     * @template T of object
+     *
+     * @param \ReflectionClass<T> $class
      *
      * @return string|null
      */

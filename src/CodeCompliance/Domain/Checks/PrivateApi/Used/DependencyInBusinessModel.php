@@ -78,7 +78,9 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @param \ReflectionClass $reflectionClass
+     * @template T of object
+     *
+     * @param \ReflectionClass<T> $reflectionClass
      * @param string $methodName
      *
      * @return \ReflectionMethod|null

@@ -26,9 +26,10 @@ class PluginFilter implements FilterInterface
     }
 
     /**
-     * @param array $sources
+     * @template T \Codebase\Application\Dto\CodebaseInterface
+     * @param array<T> $sources
      *
-     * @return array
+     * @return array<T>
      */
     public function filter(array $sources): array
     {
@@ -38,7 +39,7 @@ class PluginFilter implements FilterInterface
     }
 
     /**
-     * @param \ReflectionClass $class
+     * @param \ReflectionClass<\Codebase\Application\Dto\CodebaseInterface> $class
      *
      * @return bool
      */

@@ -119,13 +119,13 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @param array $classNamespaceList
+     * @param array<string> $classNamespaceList
      *
-     * @return array
+     * @return array<string>
      */
     protected function filterRepositoryAndEntityManager(array $classNamespaceList): array
     {
-        return array_filter($classNamespaceList, function ($classNamespace) {
+        return array_filter($classNamespaceList, function (string $classNamespace) {
             return $this->isRepositoryOrEntityManager($classNamespace);
         });
     }
@@ -179,7 +179,9 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @param \ReflectionClass $class
+     * @template T of object
+     *
+     * @param \ReflectionClass<T> $class
      * @param string $namespace
      *
      * @return \ReflectionProperty|null
@@ -197,7 +199,9 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @param \ReflectionClass $reflectionClass
+     * @template T of object
+     *
+     * @param \ReflectionClass<T> $reflectionClass
      * @param string $methodName
      *
      * @return \ReflectionMethod|null

@@ -95,7 +95,9 @@ class Method extends AbstractCodeComplianceCheck
     }
 
     /**
-     * @param array<\ReflectionClass> $interfaces
+     * @template T of object
+     *
+     * @param array<\ReflectionClass<T>> $interfaces
      *
      * @return array<\ReflectionMethod>
      */
@@ -120,8 +122,10 @@ class Method extends AbstractCodeComplianceCheck
     }
 
     /**
+     * @template T of object
+     *
      * @param string $method
-     * @param \ReflectionClass $class
+     * @param \ReflectionClass<T> $class
      *
      * @return bool
      */
