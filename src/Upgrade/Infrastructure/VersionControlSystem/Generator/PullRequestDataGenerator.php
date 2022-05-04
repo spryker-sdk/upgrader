@@ -5,11 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\VersionControlSystem\Builder;
+namespace Upgrade\Infrastructure\VersionControlSystem\Generator;
 
 use Upgrade\Infrastructure\Dto\Composer\ComposerLockDiffDto;
 
-class PullRequestDataBuilder
+class PullRequestDataGenerator
 {
     /**
      * @param \Upgrade\Infrastructure\Dto\Composer\ComposerLockDiffDto $composerDiffDto

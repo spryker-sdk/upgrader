@@ -5,22 +5,20 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\VersionControlSystem\Provider;
+namespace Upgrade\Infrastructure\Processor\Strategy\Composer\Steps;
 
 use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
+use Upgrade\Infrastructure\Processor\Strategy\StepInterface;
 
-interface ProviderInterface
+class CheckCredentialsStep extends AbstractStep implements StepInterface
 {
     /**
-     * @return string
-     */
-    public function getName(): string;
-
-    /**
      * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
-     * @param array $params
      *
      * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
      */
-    public function createPullRequest(StepsExecutionDto $stepsExecutionDto, array $params): StepsExecutionDto;
+    public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    {
+        return $this->vsc->validateSourceCodeProviderCredentials($stepsExecutionDto);
+    }
 }

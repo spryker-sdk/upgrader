@@ -9,11 +9,11 @@ namespace Upgrade\Infrastructure\VersionControlSystem\Git;
 
 use Symfony\Component\Process\Process;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
+use Upgrade\Infrastructure\Dto\SourceCodeProvider\PullRequestDto;
 use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException;
 use Upgrade\Infrastructure\Process\ProcessRunner;
-use Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder;
-use Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider;
+use Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider;
 
 class Git
 {
@@ -38,14 +38,14 @@ class Git
     protected $configurationProvider;
 
     /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\Provider\ProviderInterface
+     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface
      */
     protected $sourceCodeProvider;
 
     /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder
+     * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator
      */
-    protected $pullRequestDataBuilder;
+    protected $pullRequestDataGenerator;
 
     /**
      * @var array<string>
@@ -55,19 +55,19 @@ class Git
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      * @param \Upgrade\Infrastructure\Process\ProcessRunner $processRunner
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider $sourceCodeProvider
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder $pullRequestDataBuilder
+     * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $sourceCodeProvider
+     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator $pullRequestDataGenerator
      */
     public function __construct(
         ConfigurationProvider $configurationProvider,
         ProcessRunner $processRunner,
         SourceCodeProvider $sourceCodeProvider,
-        PullRequestDataBuilder $pullRequestDataBuilder
+        PullRequestDataGenerator $pullRequestDataGenerator
     ) {
         $this->configurationProvider = $configurationProvider;
         $this->processRunner = $processRunner;
         $this->sourceCodeProvider = $sourceCodeProvider->getSourceCodeProvider();
-        $this->pullRequestDataBuilder = $pullRequestDataBuilder;
+        $this->pullRequestDataGenerator = $pullRequestDataGenerator;
     }
 
     /**
@@ -77,7 +77,7 @@ class Git
      */
     public function isRemoteTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        $command = ['git', 'ls-remote', '--heads', $this->getRemote(), $this->getHeadBranch()];
+        $command = ['git', 'ls-remote', '--heads', 'origin', $this->getHeadBranch()];
         $process = $this->processRunner->run($command);
         if (strlen($process->getOutput()) > 0) {
             $stepsExecutionDto->setIsSuccessful(false);
@@ -170,10 +170,20 @@ class Git
      */
     public function push(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        $command = ['git', 'push', '--set-upstream', $this->getRemote(), $this->getHeadBranch()];
+        $command = ['git', 'push', '--set-upstream', 'origin', $this->getHeadBranch()];
         $process = $this->processRunner->run($command);
 
         return $this->prepareStepsExecutionDto($stepsExecutionDto, $process);
+    }
+
+    /**
+     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     *
+     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     */
+    public function validateSourceCodeProviderCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    {
+        return $this->sourceCodeProvider->validateCredentials($stepsExecutionDto);
     }
 
     /**
@@ -188,15 +198,15 @@ class Git
             return $stepsExecutionDto;
         }
 
-        $params = [
-            'base' => $this->getBaseBranch(),
-            'head' => $this->getHeadBranch(),
-            'title' => 'Updated to the latest Spryker modules up to ' . date('m/d/Y h:i', time()),
-            'body' => $this->pullRequestDataBuilder->buildBody($composerDiffDto),
-            'auto_merge' => $this->configurationProvider->isPullRequestAutoMergeEnabled(),
-        ];
+        $pullRequestDto = new PullRequestDto(
+            $this->getHeadBranch(),
+            $this->getBaseBranch(),
+            'Updated to the latest Spryker modules up to ' . date('m/d/Y h:i', time()),
+            $this->pullRequestDataGenerator->buildBody($composerDiffDto),
+            $this->configurationProvider->isPullRequestAutoMergeEnabled(),
+        );
 
-        return $this->sourceCodeProvider->createPullRequest($stepsExecutionDto, $params);
+        return $this->sourceCodeProvider->createPullRequest($stepsExecutionDto, $pullRequestDto);
     }
 
     /**
@@ -230,7 +240,7 @@ class Git
      */
     public function deleteRemoteBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        $command = ['git', 'push', '--delete', $this->getRemote(), $this->getHeadBranch()];
+        $command = ['git', 'push', '--delete', 'origin', $this->getHeadBranch()];
 
         return $this->process($stepsExecutionDto, $command);
     }
@@ -248,40 +258,6 @@ class Git
         $stepsExecutionDto = $this->process($stepsExecutionDto, $restoreStaged);
 
         return $this->process($stepsExecutionDto, $restore);
-    }
-
-    /**
-     * @return string
-     */
-    protected function getPublicRemote(): string
-    {
-        $remote = $this->getRemote();
-
-        return substr_replace($remote, str_repeat('*', 10), 8, strpos($remote, '@') - 8);
-    }
-
-    /**
-     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
-     * @throws \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
-     *
-     * @return string
-     */
-    protected function getRemote(): string
-    {
-        if (
-            !$this->configurationProvider->getAccessToken() ||
-            !$this->configurationProvider->getOrganizationName() ||
-            !$this->configurationProvider->getRepositoryName()
-        ) {
-            throw new EnvironmentVariableIsNotDefinedException('Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.');
-        }
-
-        return sprintf(
-            'https://%s@github.com/%s/%s.git',
-            $this->configurationProvider->getAccessToken(),
-            $this->configurationProvider->getOrganizationName(),
-            $this->configurationProvider->getRepositoryName(),
-        );
     }
 
     /**

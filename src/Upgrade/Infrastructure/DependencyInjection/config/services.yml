@@ -10,6 +10,8 @@ services:
 
     Upgrade\Infrastructure\:
         resource: '../../../../Upgrade/Infrastructure/*'
+        exclude:
+            - '../../../../Upgrade/Infrastructure/Dto/*'
 
     Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter: ~
     Upgrade\Infrastructure\VersionControlSystem\Adapter\VersionControlSystemAdapterInterface: '@Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter'
@@ -30,6 +32,9 @@ services:
     upgrade.task:
         class: Upgrade\Infrastructure\Task\UpgradeTask
         tags: [ 'sdk.task' ]
+
+    check_credentials.step:
+        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckCredentialsStep
 
     check_is_remote_target_branch_exist.step:
         class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckRemoteTargetBranchExistsStep
@@ -68,17 +73,18 @@ services:
         class: Upgrade\Infrastructure\Processor\Strategy\Composer\ComposerStrategy
         arguments:
             - {
-                param1: '@check_is_remote_target_branch_exist.step',
-                param2: '@check_is_local_target_branch_exist.step',
-                param3: '@check_uncommitted_changes.step',
-                param4: '@composer_update.step',
-                param5: '@composer_lock_diff.step',
-                param6: '@create_branch.step',
-                param7: '@add_changes.step',
-                param8: '@commit_changes.step',
-                param9: '@push_changes.step',
-                param10: '@create_pr.step',
-                param11: '@checkout.step'
+                param1: '@check_credentials.step',
+                param2: '@check_is_remote_target_branch_exist.step',
+                param3: '@check_is_local_target_branch_exist.step',
+                param4: '@check_uncommitted_changes.step',
+                param5: '@composer_update.step',
+                param6: '@composer_lock_diff.step',
+                param7: '@create_branch.step',
+                param8: '@add_changes.step',
+                param9: '@commit_changes.step',
+                param10: '@push_changes.step',
+                param11: '@create_pr.step',
+                param12: '@checkout.step'
              }
 
     release-app.strategy:
@@ -93,17 +99,21 @@ services:
             }
 
     github.provider:
-        class: Upgrade\Infrastructure\VersionControlSystem\Provider\GitHub\GitHubProvider
+        class: Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeProvider
+
+    gitlab.provider:
+        class: Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabSourceCodeProvider
 
     configuration.provider:
         class: Upgrade\Infrastructure\Configuration\ConfigurationProvider
 
-    Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider:
-        class: Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider
+    Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider:
+        class: Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider
         arguments:
             - '@configuration.provider'
             - {
-                param1: '@github.provider'
+                param1: '@github.provider',
+                param2: '@gitlab.provider'
             }
 
 #Third-party dependencies
