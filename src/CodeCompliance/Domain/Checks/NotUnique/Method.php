@@ -95,6 +95,10 @@ class Method extends AbstractCodeComplianceCheck
     }
 
     /**
+     * @phpstan-template T of object
+     *
+     * @phpstan-param array<\ReflectionClass<T>> $interfaces
+     *
      * @param array<\ReflectionClass> $interfaces
      *
      * @return array<\ReflectionMethod>
@@ -120,6 +124,10 @@ class Method extends AbstractCodeComplianceCheck
     }
 
     /**
+     * @phpstan-template T of object
+     *
+     * @phpstan-param \ReflectionClass<T> $class
+     *
      * @param string $method
      * @param \ReflectionClass $class
      *

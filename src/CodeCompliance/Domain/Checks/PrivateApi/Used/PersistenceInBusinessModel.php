@@ -119,13 +119,13 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @param array $classNamespaceList
+     * @param array<string> $classNamespaceList
      *
-     * @return array
+     * @return array<string>
      */
     protected function filterRepositoryAndEntityManager(array $classNamespaceList): array
     {
-        return array_filter($classNamespaceList, function ($classNamespace) {
+        return array_filter($classNamespaceList, function (string $classNamespace) {
             return $this->isRepositoryOrEntityManager($classNamespace);
         });
     }
@@ -179,6 +179,10 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
+     * @phpstan-template T of object
+     *
+     * @phpstan-param \ReflectionClass<T> $class
+     *
      * @param \ReflectionClass $class
      * @param string $namespace
      *
@@ -197,6 +201,10 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
+     * @phpstan-template T of object
+     *
+     * @phpstan-param \ReflectionClass<T> $reflectionClass
+     *
      * @param \ReflectionClass $reflectionClass
      * @param string $methodName
      *
