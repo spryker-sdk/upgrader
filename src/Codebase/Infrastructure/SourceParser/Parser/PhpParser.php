@@ -18,6 +18,7 @@ use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
+
 /**
  * @phpstan-template T of object
  */

@@ -26,10 +26,9 @@ class PluginFilter implements FilterInterface
     }
 
     /**
-     * @template T \Codebase\Application\Dto\CodebaseInterface
-     * @param array<T> $sources
+     * @param array<\Codebase\Application\Dto\CodebaseInterface> $sources
      *
-     * @return array<T>
+     * @return array<\Codebase\Application\Dto\CodebaseInterface>
      */
     public function filter(array $sources): array
     {
@@ -39,7 +38,11 @@ class PluginFilter implements FilterInterface
     }
 
     /**
-     * @param \ReflectionClass<\Codebase\Application\Dto\CodebaseInterface> $class
+     * @phpstan-template T of \Codebase\Application\Dto\CodebaseInterface
+     *
+     * @phpstan-param \ReflectionClass<T> $class
+     *
+     * @param \ReflectionClass $class
      *
      * @return bool
      */

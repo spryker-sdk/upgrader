@@ -179,9 +179,11 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @template T of object
+     * @phpstan-template T of object
      *
-     * @param \ReflectionClass<T> $class
+     * @phpstan-param \ReflectionClass<T> $class
+     *
+     * @param \ReflectionClass $class
      * @param string $namespace
      *
      * @return \ReflectionProperty|null
@@ -199,9 +201,11 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @template T of object
+     * @phpstan-template T of object
      *
-     * @param \ReflectionClass<T> $reflectionClass
+     * @phpstan-param \ReflectionClass<T> $reflectionClass
+     *
+     * @param \ReflectionClass $reflectionClass
      * @param string $methodName
      *
      * @return \ReflectionMethod|null
