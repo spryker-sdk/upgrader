@@ -36,7 +36,7 @@
             "Evaluate\\": "src/Evaluate/",
             "Upgrade\\": "src/Upgrade/",
             "Upgrader\\": "src/Upgrader/",
-            "ReleaseAppClient\\": "src/ReleaseAppClient/",
+            "ReleaseApp\\": "src/ReleaseApp/",
             "PackageManager\\": "src/PackageManager/",
             "ProcessRunner\\": "src/ProcessRunner/"
         }

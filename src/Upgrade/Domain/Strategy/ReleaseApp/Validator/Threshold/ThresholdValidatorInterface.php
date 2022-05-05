@@ -7,12 +7,12 @@
 
 namespace Upgrade\Domain\Strategy\ReleaseApp\Validator\Threshold;
 
-use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
+use ReleaseApp\Infrastructure\Presentation\Entity\Collection\ReleaseGroupDtoCollection;
 
 interface ThresholdValidatorInterface
 {
     /**
-     * @param \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection $releaseReleaseGroup
+     * @param \ReleaseApp\Infrastructure\Presentation\Entity\Collection\ReleaseGroupDtoCollection $releaseReleaseGroup
      *
      * @return void
      */

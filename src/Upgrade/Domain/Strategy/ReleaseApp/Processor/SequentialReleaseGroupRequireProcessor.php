@@ -9,8 +9,8 @@ namespace Upgrade\Domain\Strategy\ReleaseApp\Processor;
 
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
-use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
-use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
+use ReleaseApp\Infrastructure\Presentation\Entity\Collection\ReleaseGroupDtoCollection;
+use ReleaseApp\Infrastructure\Presentation\Entity\ReleaseGroupDto;
 use Upgrade\Domain\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Domain\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
@@ -67,7 +67,7 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     }
 
     /**
-     * @param \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
+     * @param \ReleaseApp\Infrastructure\Presentation\Entity\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
      * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
      * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
@@ -99,7 +99,7 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     }
 
     /**
-     * @param \ReleaseAppClient\Domain\Dto\ReleaseGroupDto $releaseGroup
+     * @param \ReleaseApp\Infrastructure\Presentation\Entity\ReleaseGroupDto $releaseGroup
      *
      * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
      */

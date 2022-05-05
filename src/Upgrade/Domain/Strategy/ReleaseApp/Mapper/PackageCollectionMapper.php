@@ -10,7 +10,7 @@ namespace Upgrade\Domain\Strategy\ReleaseApp\Mapper;
 use PackageManager\Application\Service\PackageManagerServiceInterface;
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\PackageDto;
-use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
+use ReleaseApp\Infrastructure\Presentation\Entity\Collection\ModuleDtoCollection;
 use Upgrade\Domain\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface;
 
 class PackageCollectionMapper implements PackageCollectionMapperInterface
@@ -36,7 +36,7 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     }
 
     /**
-     * @param \ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection $moduleCollection
+     * @param \ReleaseApp\Infrastructure\Presentation\Entity\Collection\ModuleDtoCollection $moduleCollection
      *
      * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
      */

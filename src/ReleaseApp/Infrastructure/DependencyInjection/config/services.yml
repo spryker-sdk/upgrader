@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+# ReleaseAppClient
+    ReleaseAppClient\:
+        resource: '../../../../ReleaseAppClient/*'
+        exclude:
+            - '../../../../ReleaseAppClient/Domain/Dto/*'
+            - '../../../../ReleaseAppClient/Domain/Entities/HttpResponse.php'
+            - '../../../../ReleaseAppClient/Domain/Entities/UpgradeAnalysis/*'
+            - '../../../../ReleaseAppClient/Domain/Entities/UpgradeInstructions/*'
+
+    ReleaseAppClient\Application\Client\ReleaseAppClient: ~
+    ReleaseAppClient\Domain\Client\ReleaseAppClientInterface: '@ReleaseAppClient\Application\Client\ReleaseAppClient'

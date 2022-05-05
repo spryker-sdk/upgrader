@@ -8,7 +8,7 @@
 namespace Upgrade\Domain\Strategy\ReleaseApp\Validator;
 
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
-use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
+use ReleaseApp\Infrastructure\Presentation\Entity\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class ThresholdSoftValidator implements ThresholdSoftValidatorInterface
@@ -27,7 +27,7 @@ class ThresholdSoftValidator implements ThresholdSoftValidatorInterface
     }
 
     /**
-     * @param \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection $groupDtoCollection
+     * @param \ReleaseApp\Infrastructure\Presentation\Entity\Collection\ReleaseGroupDtoCollection $groupDtoCollection
      *
      * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
      */

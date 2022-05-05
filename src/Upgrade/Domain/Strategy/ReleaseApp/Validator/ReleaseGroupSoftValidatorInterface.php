@@ -8,12 +8,12 @@
 namespace Upgrade\Domain\Strategy\ReleaseApp\Validator;
 
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
-use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
+use ReleaseApp\Infrastructure\Presentation\Entity\ReleaseGroupDto;
 
 interface ReleaseGroupSoftValidatorInterface
 {
     /**
-     * @param \ReleaseAppClient\Domain\Dto\ReleaseGroupDto $releaseGroup
+     * @param \ReleaseApp\Infrastructure\Presentation\Entity\ReleaseGroupDto $releaseGroup
      *
      * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
      */

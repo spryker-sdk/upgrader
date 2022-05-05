@@ -8,17 +8,17 @@
 namespace Upgrade\Infrastructure\Adapter;
 
 use PackageManager\Application\Service\PackageManagerServiceInterface;
-use ReleaseAppClient\Domain\Client\ReleaseAppClientInterface;
-use ReleaseAppClient\Domain\Dto\ReleaseAppClientRequestDto;
-use ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto;
+use ReleaseApp\Application\Service\ReleaseAppServiceInterface;
+use ReleaseApp\Infrastructure\Presentation\Entity\ReleaseAppClientRequestDto;
+use ReleaseApp\Infrastructure\Presentation\Entity\ReleaseAppResponse;
 use Upgrade\Domain\Adapter\ReleaseAppClientAdapterInterface;
 
 class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
 {
     /**
-     * @var \ReleaseAppClient\Domain\Client\ReleaseAppClientInterface
+     * @var \ReleaseApp\Application\Service\ReleaseAppServiceInterface
      */
-    protected ReleaseAppClientInterface $releaseAppClient;
+    protected ReleaseAppServiceInterface $releaseAppClient;
 
     /**
      * @var \PackageManager\Application\Service\PackageManagerServiceInterface
@@ -26,19 +26,19 @@ class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
     protected $packageManager;
 
     /**
-     * @param \ReleaseAppClient\Domain\Client\ReleaseAppClientInterface $dataProvider
+     * @param \ReleaseApp\Application\Service\ReleaseAppServiceInterface $dataProvider
      * @param \PackageManager\Application\Service\PackageManagerServiceInterface $packageManager
      */
-    public function __construct(ReleaseAppClientInterface $dataProvider, PackageManagerServiceInterface $packageManager)
+    public function __construct(ReleaseAppServiceInterface $dataProvider, PackageManagerServiceInterface $packageManager)
     {
         $this->releaseAppClient = $dataProvider;
         $this->packageManager = $packageManager;
     }
 
     /**
-     * @return \ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto
+     * @return \ReleaseApp\Infrastructure\Presentation\Entity\ReleaseAppResponse
      */
-    public function getNotInstalledReleaseGroupList(): ReleaseAppClientResponseDto
+    public function getNotInstalledReleaseGroupList(): ReleaseAppResponse
     {
         $request = $this->createDataProviderRequest();
 
@@ -46,7 +46,7 @@ class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
     }
 
     /**
-     * @return \ReleaseAppClient\Domain\Dto\ReleaseAppClientRequestDto
+     * @return \ReleaseApp\Infrastructure\Presentation\Entity\ReleaseAppClientRequestDto
      */
     protected function createDataProviderRequest(): ReleaseAppClientRequestDto
     {

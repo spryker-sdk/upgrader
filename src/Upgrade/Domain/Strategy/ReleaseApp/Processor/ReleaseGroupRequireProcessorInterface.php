@@ -7,7 +7,7 @@
 
 namespace Upgrade\Domain\Strategy\ReleaseApp\Processor;
 
-use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
+use ReleaseApp\Infrastructure\Presentation\Entity\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 
 interface ReleaseGroupRequireProcessorInterface
@@ -18,7 +18,7 @@ interface ReleaseGroupRequireProcessorInterface
     public function getProcessorName(): string;
 
     /**
-     * @param \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
+     * @param \ReleaseApp\Infrastructure\Presentation\Entity\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
      * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
      * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto

@@ -8,12 +8,12 @@
 namespace Upgrade\Domain\Strategy\ReleaseApp\Validator;
 
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
-use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
+use ReleaseApp\Infrastructure\Presentation\Entity\Collection\ReleaseGroupDtoCollection;
 
 interface ThresholdSoftValidatorInterface
 {
     /**
-     * @param \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection $moduleDtoCollection
+     * @param \ReleaseApp\Infrastructure\Presentation\Entity\Collection\ReleaseGroupDtoCollection $moduleDtoCollection
      *
      * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
      */

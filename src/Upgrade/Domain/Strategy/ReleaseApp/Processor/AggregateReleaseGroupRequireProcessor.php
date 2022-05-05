@@ -9,8 +9,8 @@ namespace Upgrade\Domain\Strategy\ReleaseApp\Processor;
 
 use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
-use ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection;
-use ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection;
+use ReleaseApp\Infrastructure\Presentation\Entity\Collection\ModuleDtoCollection;
+use ReleaseApp\Infrastructure\Presentation\Entity\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Domain\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Domain\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
@@ -67,7 +67,7 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
     }
 
     /**
-     * @param \ReleaseAppClient\Domain\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
+     * @param \ReleaseApp\Infrastructure\Presentation\Entity\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
      * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
      * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
@@ -104,7 +104,7 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
     }
 
     /**
-     * @param \ReleaseAppClient\Domain\Dto\Collection\ModuleDtoCollection $moduleCollection
+     * @param \ReleaseApp\Infrastructure\Presentation\Entity\Collection\ModuleDtoCollection $moduleCollection
      *
      * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
      */

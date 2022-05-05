@@ -7,17 +7,17 @@
 
 namespace Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroup;
 
-use ReleaseAppClient\Domain\Dto\ReleaseGroupDto;
+use ReleaseApp\Infrastructure\Presentation\Entity\ReleaseGroupDto;
 use Upgrade\Infrastructure\Exception\UpgraderException;
 
 class MajorVersionValidator implements ReleaseGroupValidatorInterface
 {
     /**
-     * @param \ReleaseAppClient\Domain\Dto\ReleaseGroupDto $releaseGroup
-     *
-     * @throws \Upgrade\Infrastructure\Exception\UpgraderException
+     * @param \ReleaseApp\Infrastructure\Presentation\Entity\ReleaseGroupDto $releaseGroup
      *
      * @return void
+     *@throws \Upgrade\Infrastructure\Exception\UpgraderException
+     *
      */
     public function validate(ReleaseGroupDto $releaseGroup): void
     {

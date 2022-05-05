@@ -7,12 +7,12 @@
 
 namespace Upgrade\Domain\Adapter;
 
-use ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto;
+use ReleaseApp\Infrastructure\Presentation\Entity\ReleaseAppResponse;
 
 interface ReleaseAppClientAdapterInterface
 {
     /**
-     * @return \ReleaseAppClient\Domain\Dto\ReleaseAppClientResponseDto
+     * @return \ReleaseApp\Infrastructure\Presentation\Entity\ReleaseAppResponse
      */
-    public function getNotInstalledReleaseGroupList(): ReleaseAppClientResponseDto;
+    public function getNotInstalledReleaseGroupList(): ReleaseAppResponse;
 }
