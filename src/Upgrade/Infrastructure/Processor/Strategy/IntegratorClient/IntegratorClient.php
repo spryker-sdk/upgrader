@@ -43,12 +43,17 @@ class IntegratorClient implements IntegratorClientInterface
     public function runIntegrator(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $command = sprintf('%s %s', static::BINARY_INTEGRATOR_PATH, static::NO_INTERACTION_COMPOSER_FLAG);
-        $dirname = dirname(__DIR__, 4);
-        $isGlobalExecution = strpos($dirname, '.composer') !== false;
+        $dirname = dirname(__DIR__ );
+        $position = strpos($dirname, '.composer');
+        $isGlobalExecution = $position !== false;
         if ($isGlobalExecution) {
             $command = sprintf(
                 '%s %s',
-                $dirname . DIRECTORY_SEPARATOR . static::BINARY_INTEGRATOR_PATH,
+                substr(
+                    $dirname,
+                    0,
+                    $position
+                ) . DIRECTORY_SEPARATOR . '.composer' . DIRECTORY_SEPARATOR . static::BINARY_INTEGRATOR_PATH,
                 static::NO_INTERACTION_COMPOSER_FLAG,
             );
         }
