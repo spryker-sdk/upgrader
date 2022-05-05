@@ -78,7 +78,6 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
         foreach ($requiteRequestCollection->toArray() as $releaseGroup) {
             $thresholdValidationResult = $this->thresholdValidator->isWithInThreshold($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccess()) {
-                $stepsExecutionDto->setIsSuccessful(false);
                 $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutput());
 
                 break;
@@ -86,7 +85,6 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
 
             $releaseGroupValidateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
             if (!$releaseGroupValidateResult->isSuccess()) {
-                $stepsExecutionDto->setIsSuccessful(false);
                 $stepsExecutionDto->addOutputMessage($releaseGroupValidateResult->getOutput());
 
                 break;
