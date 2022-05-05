@@ -65,7 +65,9 @@ class GitHubProvider implements ProviderInterface
             );
 
             if (isset($response[static::HTML_URL_LEY])) {
-                $stepsExecutionDto->addOutputMessage($response[static::HTML_URL_LEY]);
+                $stepsExecutionDto->addOutputMessage(
+                    sprintf('Pull request was created %s', $response[static::HTML_URL_LEY])
+                );
             }
 
             return $stepsExecutionDto;
