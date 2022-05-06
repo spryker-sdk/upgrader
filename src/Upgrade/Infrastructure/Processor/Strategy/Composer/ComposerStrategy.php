@@ -45,6 +45,7 @@ class ComposerStrategy implements StrategyInterface
 
         foreach ($this->steps as $step) {
             $executedSteps[] = $step;
+
             $stepsExecutionDto = $step->run($stepsExecutionDto);
 
             if (!$stepsExecutionDto->getIsSuccessful()) {

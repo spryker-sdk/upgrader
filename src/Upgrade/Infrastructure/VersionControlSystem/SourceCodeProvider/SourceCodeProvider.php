@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\VersionControlSystem\Provider;
+namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider;
 
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Exception\SourceCodeProviderIsNotDefinedException;
@@ -18,18 +18,18 @@ class SourceCodeProvider
     protected $configurationProvider;
 
     /**
-     * @var array<\Upgrade\Infrastructure\VersionControlSystem\Provider\ProviderInterface>
+     * @var array<\Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface>
      */
-    protected $providers = [];
+    protected $sourceCodeProviders = [];
 
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param array<\Upgrade\Infrastructure\VersionControlSystem\Provider\ProviderInterface> $providers
+     * @param array<\Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface> $providers
      */
     public function __construct(ConfigurationProvider $configurationProvider, array $providers = [])
     {
         $this->configurationProvider = $configurationProvider;
-        $this->providers = $providers;
+        $this->sourceCodeProviders = $providers;
     }
 
     /**
@@ -37,11 +37,11 @@ class SourceCodeProvider
      *
      * @throws \Upgrade\Infrastructure\Exception\SourceCodeProviderIsNotDefinedException
      *
-     * @return \Upgrade\Infrastructure\VersionControlSystem\Provider\ProviderInterface
+     * @return \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface
      */
-    public function getSourceCodeProvider(): ProviderInterface
+    public function getSourceCodeProvider(): SourceCodeProviderInterface
     {
-        foreach ($this->providers as $provider) {
+        foreach ($this->sourceCodeProviders as $provider) {
             if ($provider->getName() === $this->configurationProvider->getSourceCodeProvider()) {
                 return $provider;
             }

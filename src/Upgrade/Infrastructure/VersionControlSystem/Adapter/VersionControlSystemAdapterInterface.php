@@ -99,4 +99,11 @@ interface VersionControlSystemAdapterInterface
      * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
      */
     public function restore(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
+
+    /**
+     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     *
+     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     */
+    public function validateSourceCodeProviderCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 }

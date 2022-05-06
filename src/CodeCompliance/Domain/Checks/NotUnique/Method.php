@@ -28,7 +28,7 @@ class Method extends AbstractCodeComplianceCheck
      */
     public function getGuideline(): string
     {
-        return 'Method name %s::%s() should contains project prefix, like %s%s';
+        return 'Method name %s::%s() should contains project prefix, like %s';
     }
 
     /**
@@ -72,8 +72,7 @@ class Method extends AbstractCodeComplianceCheck
                         $this->getGuideline(),
                         $source->getClassName(),
                         $projectMethod->getName(),
-                        strtolower((string)reset($projectPrefixList)),
-                        ucfirst(implode('', $methodParts)),
+                        lcfirst(implode('', $methodParts)),
                     );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
                 }
@@ -96,6 +95,10 @@ class Method extends AbstractCodeComplianceCheck
     }
 
     /**
+     * @phpstan-template T of object
+     *
+     * @phpstan-param array<\ReflectionClass<T>> $interfaces
+     *
      * @param array<\ReflectionClass> $interfaces
      *
      * @return array<\ReflectionMethod>
@@ -121,6 +124,10 @@ class Method extends AbstractCodeComplianceCheck
     }
 
     /**
+     * @phpstan-template T of object
+     *
+     * @phpstan-param \ReflectionClass<T> $class
+     *
      * @param string $method
      * @param \ReflectionClass $class
      *

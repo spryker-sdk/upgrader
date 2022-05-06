@@ -9,6 +9,9 @@ namespace Codebase\Application\Dto;
 
 use ReflectionClass;
 
+/**
+ * @phpstan-template T of object
+ */
 class ClassCodebaseDto extends AbstractCodebaseDto
 {
     /**
@@ -32,6 +35,8 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     protected array $traits = [];
 
     /**
+     * @phpstan-var \ReflectionClass<T>
+     *
      * @var \ReflectionClass
      */
     protected ReflectionClass $reflection;
@@ -112,6 +117,8 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
+     * @phpstan-return \ReflectionClass<T>
+     *
      * @return \ReflectionClass
      */
     public function getReflection(): ReflectionClass
@@ -120,6 +127,8 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
+     * @phpstan-param \ReflectionClass<T> $reflection
+     *
      * @param \ReflectionClass $reflection
      *
      * @return $this
