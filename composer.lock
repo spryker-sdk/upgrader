@@ -2957,12 +2957,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "95994b4832b3fe6169182df75f6c1fa62b156c28"
+                "reference": "7ff77e542caa8e7db2bc6aeb8deafba3c0ee6515"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/95994b4832b3fe6169182df75f6c1fa62b156c28",
-                "reference": "95994b4832b3fe6169182df75f6c1fa62b156c28",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/7ff77e542caa8e7db2bc6aeb8deafba3c0ee6515",
+                "reference": "7ff77e542caa8e7db2bc6aeb8deafba3c0ee6515",
                 "shasum": ""
             },
             "require": {
@@ -2984,12 +2984,11 @@
             "bin": [
                 "bin/integrator"
             ],
-            "type": "composer-plugin",
+            "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.0.x-dev"
-                },
-                "class": "SprykerSdk\\Integrator\\Plugin\\Composer\\InstallerComposerPlugin"
+                }
             },
             "autoload": {
                 "psr-4": {
@@ -3005,7 +3004,7 @@
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
                 "source": "https://github.com/spryker-sdk/integrator/tree/feature/pplus-510-integrator-as-part-of-upgrader"
             },
-            "time": "2022-05-04T17:14:36+00:00"
+            "time": "2022-05-08T17:28:41+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
