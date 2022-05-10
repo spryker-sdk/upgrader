@@ -5,16 +5,18 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Composer;
+namespace Upgrade\Infrastructure\PackageManager;
 
-use Upgrade\Application\Bridge\ComposerClientBridgeInterface;
+use Upgrade\Application\Bridge\PackageManagerBridgeInterface;
+use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\ExecutionDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
-use Upgrade\Infrastructure\Composer\CommandExecutor\ComposerCommandExecutorInterface;
-use Upgrade\Infrastructure\Composer\Reader\ComposerJsonReaderInterface;
-use Upgrade\Infrastructure\Composer\Reader\ComposerLockReaderInterface;
+use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutorInterface;
+use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutorInterface;
+use Upgrade\Infrastructure\PackageManager\Reader\ComposerJsonReaderInterface;
+use Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReaderInterface;
 
-class ComposerClientBridge implements ComposerClientBridgeInterface
+class PackageManagerBridge implements PackageManagerBridgeInterface
 {
     /**
      * @var string
@@ -32,31 +34,39 @@ class ComposerClientBridge implements ComposerClientBridgeInterface
     protected const VERSION_KEY = 'version';
 
     /**
-     * @var \Upgrade\Infrastructure\Composer\CommandExecutor\ComposerCommandExecutorInterface
+     * @var \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutorInterface
      */
     protected $composerCommandExecutor;
 
     /**
-     * @var \Upgrade\Infrastructure\Composer\Reader\ComposerJsonReaderInterface
+     * @var \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutorInterface
+     */
+    protected ComposerLockComparatorCommandExecutorInterface $composerLockComparator;
+
+    /**
+     * @var \Upgrade\Infrastructure\PackageManager\Reader\ComposerJsonReaderInterface
      */
     protected $composerJsonReader;
 
     /**
-     * @var \Upgrade\Infrastructure\Composer\Reader\ComposerLockReaderInterface
+     * @var \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReaderInterface
      */
     protected $composerLockReader;
 
     /**
-     * @param \Upgrade\Infrastructure\Composer\CommandExecutor\ComposerCommandExecutorInterface $composerCallExecutor
-     * @param \Upgrade\Infrastructure\Composer\Reader\ComposerJsonReaderInterface $composerJsonReader
-     * @param \Upgrade\Infrastructure\Composer\Reader\ComposerLockReaderInterface $composerLockReader
+     * @param \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutorInterface $composerCommandExecutor
+     * @param \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutorInterface $composerLockComparator
+     * @param \Upgrade\Infrastructure\PackageManager\Reader\ComposerJsonReaderInterface $composerJsonReader
+     * @param \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReaderInterface $composerLockReader
      */
     public function __construct(
-        ComposerCommandExecutorInterface $composerCallExecutor,
+        ComposerCommandExecutorInterface $composerCommandExecutor,
+        ComposerLockComparatorCommandExecutorInterface $composerLockComparator,
         ComposerJsonReaderInterface $composerJsonReader,
         ComposerLockReaderInterface $composerLockReader
     ) {
-        $this->composerCommandExecutor = $composerCallExecutor;
+        $this->composerCommandExecutor = $composerCommandExecutor;
+        $this->composerLockComparator = $composerLockComparator;
         $this->composerJsonReader = $composerJsonReader;
         $this->composerLockReader = $composerLockReader;
     }
@@ -147,5 +157,13 @@ class ComposerClientBridge implements ComposerClientBridgeInterface
         }
 
         return false;
+    }
+
+    /**
+     * @return \Upgrade\Application\Dto\ComposerLockDiffDto
+     */
+    public function getComposerLockDiff(): ComposerLockDiffDto
+    {
+        return $this->composerLockComparator->getComposerLockDiff();
     }
 }

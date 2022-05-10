@@ -7,7 +7,7 @@
 
 namespace Upgrade\Application\Strategy\Composer\Step;
 
-use Upgrade\Application\Bridge\ComposerClientBridgeInterface;
+use Upgrade\Application\Bridge\PackageManagerBridgeInterface;
 use Upgrade\Application\Bridge\VersionControlSystemBridgeInterface;
 use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Application\Strategy\Common\Step\AbstractStep;
@@ -16,17 +16,17 @@ use Upgrade\Application\Strategy\RollbackStepInterface;
 class ComposerUpdateStep extends AbstractStep implements RollbackStepInterface
 {
     /**
-     * @var \Upgrade\Application\Bridge\ComposerClientBridgeInterface
+     * @var \Upgrade\Application\Bridge\PackageManagerBridgeInterface
      */
-    protected ComposerClientBridgeInterface $packageManager;
+    protected PackageManagerBridgeInterface $packageManager;
 
     /**
      * @param \Upgrade\Application\Bridge\VersionControlSystemBridgeInterface $versionControlSystem
-     * @param \Upgrade\Application\Bridge\ComposerClientBridgeInterface $packageManager
+     * @param \Upgrade\Application\Bridge\PackageManagerBridgeInterface $packageManager
      */
     public function __construct(
         VersionControlSystemBridgeInterface $versionControlSystem,
-        ComposerClientBridgeInterface $packageManager
+        PackageManagerBridgeInterface $packageManager
     ) {
         parent::__construct($versionControlSystem);
 

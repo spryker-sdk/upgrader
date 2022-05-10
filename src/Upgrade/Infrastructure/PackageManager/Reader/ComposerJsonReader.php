@@ -5,23 +5,23 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Composer\Reader;
+namespace Upgrade\Infrastructure\PackageManager\Reader;
 
 use Upgrade\Application\Exception\UpgraderException;
 
-class ComposerLockReader implements ComposerLockReaderInterface
+class ComposerJsonReader implements ComposerJsonReaderInterface
 {
     /**
      * @var string
      */
-    protected const COMPOSER_LOCK = 'composer.lock';
+    protected const COMPOSER_JSON = 'composer.json';
 
     /**
      * @return array
      */
     public function read(): array
     {
-        return $this->readFromPath(static::COMPOSER_LOCK);
+        return $this->readFromPath(static::COMPOSER_JSON);
     }
 
     /**
@@ -34,7 +34,7 @@ class ComposerLockReader implements ComposerLockReaderInterface
     protected function readFromPath(string $path): array
     {
         if (!file_exists($path)) {
-            throw new UpgraderException('File is not exist: ' . $path);
+            throw new UpgraderException(sprintf('%s file is not exists.', $path));
         }
 
         return json_decode((string)file_get_contents($path), true);

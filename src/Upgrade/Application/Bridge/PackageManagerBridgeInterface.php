@@ -7,10 +7,11 @@
 
 namespace Upgrade\Application\Bridge;
 
+use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\ExecutionDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
-interface ComposerClientBridgeInterface
+interface PackageManagerBridgeInterface
 {
     /**
      * @return string
@@ -59,4 +60,9 @@ interface ComposerClientBridgeInterface
      * @return bool
      */
     public function isDevPackage(string $packageName): bool;
+
+    /**
+     * @return \Upgrade\Application\Dto\ComposerLockDiffDto
+     */
+    public function getComposerLockDiff(): ComposerLockDiffDto;
 }

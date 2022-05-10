@@ -9,7 +9,7 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
-use Upgrade\Application\Bridge\ComposerClientBridgeInterface;
+use Upgrade\Application\Bridge\PackageManagerBridgeInterface;
 use Upgrade\Application\Dto\ExecutionDto;
 use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
@@ -36,21 +36,21 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     protected $packageCollectionMapper;
 
     /**
-     * @var \Upgrade\Application\Bridge\ComposerClientBridgeInterface
+     * @var \Upgrade\Application\Bridge\PackageManagerBridgeInterface
      */
-    protected ComposerClientBridgeInterface $packageManager;
+    protected PackageManagerBridgeInterface $packageManager;
 
     /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
      * @param \Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface $packageCollectionBuilder
-     * @param \Upgrade\Application\Bridge\ComposerClientBridgeInterface $packageManager
+     * @param \Upgrade\Application\Bridge\PackageManagerBridgeInterface $packageManager
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
         ThresholdSoftValidatorInterface $thresholdSoftValidator,
         PackageCollectionMapperInterface $packageCollectionBuilder,
-        ComposerClientBridgeInterface $packageManager
+        PackageManagerBridgeInterface $packageManager
     ) {
         $this->releaseGroupValidator = $releaseGroupValidateManager;
         $this->thresholdValidator = $thresholdSoftValidator;

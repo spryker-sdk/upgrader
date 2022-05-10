@@ -5,9 +5,9 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Composer\Reader;
+namespace Upgrade\Infrastructure\PackageManager\Reader;
 
-interface ComposerJsonReaderInterface
+interface ComposerLockReaderInterface
 {
     /**
      * @return array

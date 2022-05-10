@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Composer\CommandExecutor;
+namespace Upgrade\Infrastructure\PackageManager\CommandExecutor;
 
 use Upgrade\Application\Dto\ExecutionDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;

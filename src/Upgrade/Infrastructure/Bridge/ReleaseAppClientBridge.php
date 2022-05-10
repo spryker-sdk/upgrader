@@ -10,7 +10,7 @@ namespace Upgrade\Infrastructure\Bridge;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
-use Upgrade\Application\Bridge\ComposerClientBridgeInterface;
+use Upgrade\Application\Bridge\PackageManagerBridgeInterface;
 use Upgrade\Application\Bridge\ReleaseAppClientBridgeInterface;
 
 class ReleaseAppClientBridge implements ReleaseAppClientBridgeInterface
@@ -21,15 +21,15 @@ class ReleaseAppClientBridge implements ReleaseAppClientBridgeInterface
     protected ReleaseAppServiceInterface $releaseApp;
 
     /**
-     * @var \Upgrade\Application\Bridge\ComposerClientBridgeInterface
+     * @var \Upgrade\Application\Bridge\PackageManagerBridgeInterface
      */
-    protected ComposerClientBridgeInterface $packageManager;
+    protected PackageManagerBridgeInterface $packageManager;
 
     /**
      * @param \ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface $dataProvider
-     * @param \Upgrade\Application\Bridge\ComposerClientBridgeInterface $packageManager
+     * @param \Upgrade\Application\Bridge\PackageManagerBridgeInterface $packageManager
      */
-    public function __construct(ReleaseAppServiceInterface $dataProvider, ComposerClientBridgeInterface $packageManager)
+    public function __construct(ReleaseAppServiceInterface $dataProvider, PackageManagerBridgeInterface $packageManager)
     {
         $this->releaseApp = $dataProvider;
         $this->packageManager = $packageManager;

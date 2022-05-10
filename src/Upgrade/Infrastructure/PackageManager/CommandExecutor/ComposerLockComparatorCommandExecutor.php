@@ -5,13 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Bridge;
+namespace Upgrade\Infrastructure\PackageManager\CommandExecutor;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
-use Upgrade\Application\Bridge\ComposerLockComparatorBridgeInterface;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 
-class ComposerLockComparatorBridge implements ComposerLockComparatorBridgeInterface
+class ComposerLockComparatorCommandExecutor implements ComposerLockComparatorCommandExecutorInterface
 {
     /**
      * @var string
