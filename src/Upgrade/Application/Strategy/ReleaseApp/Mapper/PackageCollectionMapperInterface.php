@@ -7,7 +7,7 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Mapper;
 
-use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
+use Upgrade\Domain\Entity\Collection\PackageCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 
 interface PackageCollectionMapperInterface
@@ -15,28 +15,28 @@ interface PackageCollectionMapperInterface
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
      *
-     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
+     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
      */
-    public function mapModuleCollectionToPackageCollection(ModuleDtoCollection $moduleCollection): PackageDtoCollection;
+    public function mapModuleCollectionToPackageCollection(ModuleDtoCollection $moduleCollection): PackageCollection;
 
     /**
-     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
+     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
      */
-    public function filterInvalidPackage(PackageDtoCollection $packageCollection): PackageDtoCollection;
+    public function filterInvalidPackage(PackageCollection $packageCollection): PackageCollection;
 
     /**
-     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
+     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
      */
-    public function getRequiredPackages(PackageDtoCollection $packageCollection): PackageDtoCollection;
+    public function getRequiredPackages(PackageCollection $packageCollection): PackageCollection;
 
     /**
-     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
+     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
      */
-    public function getRequiredDevPackages(PackageDtoCollection $packageCollection): PackageDtoCollection;
+    public function getRequiredDevPackages(PackageCollection $packageCollection): PackageCollection;
 }

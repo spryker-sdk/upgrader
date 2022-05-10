@@ -7,8 +7,8 @@
 
 namespace Upgrade\Application\Strategy\Composer\Step;
 
-use Upgrade\Application\Provider\PackageManagerProviderInterface;
-use Upgrade\Domain\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Bridge\ComposerClientBridgeInterface;
+use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Application\Strategy\Common\Step\AbstractStep;
 use Upgrade\Application\Strategy\RollbackStepInterface;
 use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver;
@@ -16,17 +16,17 @@ use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlS
 class ComposerUpdateStep extends AbstractStep implements RollbackStepInterface
 {
     /**
-     * @var \Upgrade\Application\Provider\PackageManagerProviderInterface
+     * @var \Upgrade\Application\Bridge\ComposerClientBridgeInterface
      */
-    protected PackageManagerProviderInterface $packageManager;
+    protected ComposerClientBridgeInterface $packageManager;
 
     /**
      * @param \Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver $vscAdapterResolver
-     * @param \Upgrade\Application\Provider\PackageManagerProviderInterface $packageManager
+     * @param \Upgrade\Application\Bridge\ComposerClientBridgeInterface $packageManager
      */
     public function __construct(
         VersionControlSystemAdapterResolver $vscAdapterResolver,
-        PackageManagerProviderInterface $packageManager
+        ComposerClientBridgeInterface $packageManager
     ) {
         parent::__construct($vscAdapterResolver);
 
@@ -34,22 +34,22 @@ class ComposerUpdateStep extends AbstractStep implements RollbackStepInterface
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $updateResponse = $this->packageManager->update();
-        $stepsExecutionDto->setIsSuccessful($updateResponse->isSuccess());
+        $stepsExecutionDto->setIsSuccessful($updateResponse->isSuccessful());
 
         return $stepsExecutionDto;
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function rollBack(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {

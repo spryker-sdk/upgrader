@@ -8,8 +8,8 @@
 namespace Upgrade\Application\Strategy\ReleaseApp\Mapper;
 
 use PackageManager\Application\Service\PackageManagerServiceInterface;
-use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
-use PackageManager\Domain\Dto\PackageDto;
+use Upgrade\Domain\Entity\Collection\PackageCollection;
+use Upgrade\Domain\Entity\Package;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface;
 
@@ -38,15 +38,15 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
      *
-     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
+     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
      */
-    public function mapModuleCollectionToPackageCollection(ModuleDtoCollection $moduleCollection): PackageDtoCollection
+    public function mapModuleCollectionToPackageCollection(ModuleDtoCollection $moduleCollection): PackageCollection
     {
-        $packageCollection = new PackageDtoCollection();
+        $packageCollection = new PackageCollection();
 
         foreach ($moduleCollection->toArray() as $module) {
             $name = $this->removeTypeFromPackageName($module->getName());
-            $package = new PackageDto($name, $module->getVersion());
+            $package = new Package($name, $module->getVersion());
             $packageCollection->add($package);
         }
 
@@ -54,13 +54,13 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     }
 
     /**
-     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
+     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
      */
-    public function filterInvalidPackage(PackageDtoCollection $packageCollection): PackageDtoCollection
+    public function filterInvalidPackage(PackageCollection $packageCollection): PackageCollection
     {
-        $resultCollection = new PackageDtoCollection();
+        $resultCollection = new PackageCollection();
 
         foreach ($packageCollection->toArray() as $package) {
             $validateResult = $this->packageValidator->isValidPackage($package);
@@ -73,13 +73,13 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     }
 
     /**
-     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
+     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
      */
-    public function getRequiredPackages(PackageDtoCollection $packageCollection): PackageDtoCollection
+    public function getRequiredPackages(PackageCollection $packageCollection): PackageCollection
     {
-        $resultCollection = new PackageDtoCollection();
+        $resultCollection = new PackageCollection();
 
         foreach ($packageCollection->toArray() as $package) {
             if (!$this->packageManager->isDevPackage($package->getName())) {
@@ -91,13 +91,13 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     }
 
     /**
-     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \PackageManager\Domain\Dto\Collection\PackageDtoCollection
+     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
      */
-    public function getRequiredDevPackages(PackageDtoCollection $packageCollection): PackageDtoCollection
+    public function getRequiredDevPackages(PackageCollection $packageCollection): PackageCollection
     {
-        $resultCollection = new PackageDtoCollection();
+        $resultCollection = new PackageCollection();
 
         foreach ($packageCollection->toArray() as $package) {
             if ($this->packageManager->isDevPackage($package->getName())) {

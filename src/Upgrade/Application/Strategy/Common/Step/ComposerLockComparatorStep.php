@@ -7,29 +7,29 @@
 
 namespace Upgrade\Application\Strategy\Common\Step;
 
-use Upgrade\Application\Provider\ComposerLockComparatorProviderInterface;
-use Upgrade\Domain\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Bridge\ComposerLockComparatorBridgeInterface;
+use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Application\Strategy\StepInterface;
 
 class ComposerLockComparatorStep implements StepInterface
 {
     /**
-     * @var \Upgrade\Application\Provider\ComposerLockComparatorProviderInterface
+     * @var \Upgrade\Application\Bridge\ComposerLockComparatorBridgeInterface
      */
-    protected ComposerLockComparatorProviderInterface $composerLockComparator;
+    protected ComposerLockComparatorBridgeInterface $composerLockComparator;
 
     /**
-     * @param \Upgrade\Application\Provider\ComposerLockComparatorProviderInterface $composerLockComparator
+     * @param \Upgrade\Application\Bridge\ComposerLockComparatorBridgeInterface $composerLockComparator
      */
-    public function __construct(ComposerLockComparatorProviderInterface $composerLockComparator)
+    public function __construct(ComposerLockComparatorBridgeInterface $composerLockComparator)
     {
         $this->composerLockComparator = $composerLockComparator;
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {

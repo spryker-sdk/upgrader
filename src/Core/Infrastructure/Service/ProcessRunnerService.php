@@ -30,8 +30,8 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
      *
      * @return \Symfony\Component\Process\Process
      */
-    public function runCommand(array $command): Process
+    public function run(array $command): Process
     {
-        return $this->processRunner->runCommand($command);
+        return $this->processRunner->run($command);
     }
 }

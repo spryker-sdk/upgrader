@@ -7,7 +7,7 @@
 
 namespace Upgrade\Application\Strategy;
 
-use Upgrade\Domain\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsExecutionDto;
 
 abstract class AbstractStrategy implements StrategyInterface
 {
@@ -25,7 +25,7 @@ abstract class AbstractStrategy implements StrategyInterface
     }
 
     /**
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function upgrade(): StepsExecutionDto
     {

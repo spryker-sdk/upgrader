@@ -10,6 +10,7 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Validator;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Exception\UpgraderException;
+use Upgrade\Application\Dto\ExecutionDto;
 
 class ReleaseGroupSoftValidator implements ReleaseGroupSoftValidatorInterface
 {
@@ -27,20 +28,19 @@ class ReleaseGroupSoftValidator implements ReleaseGroupSoftValidatorInterface
     }
 
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     *
-     * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
+     * @param ReleaseGroupDto $releaseGroup
+     * @return \Upgrade\Domain\Entity\\Upgrade\Application\Dto\ExecutionDto
      */
-    public function isValidReleaseGroup(ReleaseGroupDto $releaseGroup): PackageManagerResponseDto
+    public function isValidReleaseGroup(ReleaseGroupDto $releaseGroup): ExecutionDto
     {
         try {
             foreach ($this->validatorList as $validator) {
                 $validator->validate($releaseGroup);
             }
         } catch (UpgraderException $exception) {
-            return new PackageManagerResponseDto(false, $exception->getMessage());
+            return new ExecutionDto(false, $exception->getMessage());
         }
 
-        return new PackageManagerResponseDto(true);
+        return new ExecutionDto(true);
     }
 }

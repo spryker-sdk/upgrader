@@ -8,7 +8,7 @@
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator\Package;
 
 use PackageManager\Application\Service\PackageManagerServiceInterface;
-use PackageManager\Domain\Dto\PackageDto;
+use Upgrade\Domain\Entity\Package;
 use Upgrade\Application\Exception\UpgraderException;
 
 class AlreadyInstalledValidator implements PackageValidatorInterface
@@ -27,13 +27,13 @@ class AlreadyInstalledValidator implements PackageValidatorInterface
     }
 
     /**
-     * @param \PackageManager\Domain\Dto\PackageDto $package
+     * @param \Upgrade\Domain\Entity\Package $package
      *
      * @return void
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
      */
-    public function validate(PackageDto $package): void
+    public function validate(Package $package): void
     {
         $installedVersion = (string)$this->packageManager->getPackageVersion($package->getName());
         if (version_compare($installedVersion, $package->getVersion(), '>=')) {

@@ -7,12 +7,12 @@
 
 namespace UpgradeTest\Infrastructure\VersionControlSystem\Git;
 
-use PackageManager\Domain\Dto\ComposerLockDiffDto;
+use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Core\Infrastructure\Service\ProcessRunnerService;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Process\Process;
-use Upgrade\Domain\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
 use Upgrade\Infrastructure\VersionControlSystem\Provider\GitHub\GitHubProvider;
@@ -227,7 +227,7 @@ class GitTest extends KernelTestCase
         $processMock->method('isSuccessful')->willReturn($isSuccessful);
 
         $processRunnerMock = $this->createMock(ProcessRunnerService::class);
-        $processRunnerMock->method('runCommand')->willReturn($processMock);
+        $processRunnerMock->method('run')->willReturn($processMock);
 
         return $processRunnerMock;
     }

@@ -7,14 +7,14 @@
 
 namespace Upgrade\Application\Service;
 
-use Upgrade\Domain\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsExecutionDto;
 
 interface UpgradeServiceInterface
 {
     /**
-     * @throws \Upgrade\Application\Exception\UpgradeStrategyIsNotDefinedException
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     *@throws \Upgrade\Application\Exception\UpgradeStrategyIsNotDefinedException
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
      */
     public function upgrade(): StepsExecutionDto;
 }

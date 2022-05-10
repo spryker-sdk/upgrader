@@ -7,15 +7,15 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator;
 
-use PackageManager\Domain\Dto\PackageDto;
+use Upgrade\Domain\Entity\Package;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
+use Upgrade\Application\Dto\ExecutionDto;
 
 interface PackageSoftValidatorInterface
 {
     /**
-     * @param \PackageManager\Domain\Dto\PackageDto $package
-     *
-     * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
+     * @param \Upgrade\Domain\Entity\Package $package
+     * @return \Upgrade\Domain\Entity\\Upgrade\Domain\Entity\Step\ExecutionDto
      */
-    public function isValidPackage(PackageDto $package): PackageManagerResponseDto;
+    public function isValidPackage(Package $package): ExecutionDto;
 }

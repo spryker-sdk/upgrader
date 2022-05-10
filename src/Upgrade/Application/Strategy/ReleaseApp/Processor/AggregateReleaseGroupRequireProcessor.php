@@ -7,12 +7,12 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
-use PackageManager\Domain\Dto\Collection\PackageDtoCollection;
-use PackageManager\Domain\Dto\PackageManagerResponseDto;
+use Upgrade\Domain\Entity\Collection\PackageCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
-use Upgrade\Application\Provider\PackageManagerProviderInterface;
-use Upgrade\Domain\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Bridge\ComposerClientBridgeInterface;
+use Upgrade\Application\Dto\ExecutionDto;
+use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
@@ -36,21 +36,21 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
     protected PackageCollectionMapperInterface $packageCollectionMapper;
 
     /**
-     * @var \Upgrade\Application\Provider\PackageManagerProviderInterface
+     * @var \Upgrade\Application\Bridge\ComposerClientBridgeInterface
      */
-    protected PackageManagerProviderInterface $packageManager;
+    protected ComposerClientBridgeInterface $packageManager;
 
     /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
      * @param \Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface $packageCollectionBuilder
-     * @param \Upgrade\Application\Provider\PackageManagerProviderInterface $packageManager
+     * @param \Upgrade\Application\Bridge\ComposerClientBridgeInterface $packageManager
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
         ThresholdSoftValidatorInterface $thresholdSoftValidator,
         PackageCollectionMapperInterface $packageCollectionBuilder,
-        PackageManagerProviderInterface $packageManager
+        ComposerClientBridgeInterface $packageManager
     ) {
         $this->releaseGroupValidator = $releaseGroupValidateManager;
         $this->thresholdValidator = $thresholdSoftValidator;
@@ -68,26 +68,26 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
 
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function requireCollection(ReleaseGroupDtoCollection $requiteRequestCollection, StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
         foreach ($requiteRequestCollection->toArray() as $releaseGroup) {
             $thresholdValidationResult = $this->thresholdValidator->isWithInThreshold($aggregatedReleaseGroupCollection);
-            if (!$thresholdValidationResult->isSuccess()) {
+            if (!$thresholdValidationResult->isSuccessful()) {
                 $stepsExecutionDto->setIsSuccessful(false);
-                $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutput());
+                $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutputMessage());
 
                 break;
             }
 
             $releaseGroupValidateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
-            if (!$releaseGroupValidateResult->isSuccess()) {
+            if (!$releaseGroupValidateResult->isSuccessful()) {
                 $stepsExecutionDto->setIsSuccessful(false);
-                $stepsExecutionDto->addOutputMessage($releaseGroupValidateResult->getOutput());
+                $stepsExecutionDto->addOutputMessage($releaseGroupValidateResult->getOutputMessage());
 
                 break;
             }
@@ -96,19 +96,18 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
         }
 
         $requireResult = $this->require($aggregatedReleaseGroupCollection->getCommonModuleCollection());
-        if (!$requireResult->isSuccess()) {
-            $stepsExecutionDto->addOutputMessage($requireResult->getOutput());
+        if (!$requireResult->isSuccessful()) {
+            $stepsExecutionDto->addOutputMessage($requireResult->getOutputMessage());
         }
 
         return $stepsExecutionDto;
     }
 
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
-     *
-     * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
+     * @param ModuleDtoCollection $moduleCollection
+     * @return \Upgrade\Domain\Entity\\Upgrade\Domain\Entity\Step\ExecutionDto
      */
-    public function require(ModuleDtoCollection $moduleCollection): PackageManagerResponseDto
+    public function require(ModuleDtoCollection $moduleCollection): ExecutionDto
     {
         $packageCollection = $this->packageCollectionMapper->mapModuleCollectionToPackageCollection($moduleCollection);
         $filteredPackageCollection = $this->packageCollectionMapper->filterInvalidPackage($packageCollection);
@@ -116,38 +115,37 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
         if ($filteredPackageCollection->isEmpty()) {
             $packagesNameString = implode(' ', $packageCollection->getNameList());
 
-            return new PackageManagerResponseDto(true, $packagesNameString);
+            return new ExecutionDto(true, $packagesNameString);
         }
 
         return $this->requirePackageCollection($filteredPackageCollection);
     }
 
     /**
-     * @param \PackageManager\Domain\Dto\Collection\PackageDtoCollection $packageCollection
-     *
-     * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     * @return ExecutionDto
      */
-    protected function requirePackageCollection(PackageDtoCollection $packageCollection): PackageManagerResponseDto
+    protected function requirePackageCollection(PackageCollection $packageCollection): ExecutionDto
     {
         $requiredPackages = $this->packageCollectionMapper->getRequiredPackages($packageCollection);
         $requiredDevPackages = $this->packageCollectionMapper->getRequiredDevPackages($packageCollection);
 
         if (!$requiredPackages->isEmpty()) {
             $requireResponse = $this->packageManager->require($requiredPackages);
-            if (!$requireResponse->isSuccess()) {
+            if (!$requireResponse->isSuccessful()) {
                 return $requireResponse;
             }
         }
 
         if (!$requiredDevPackages->isEmpty()) {
             $requireResponse = $this->packageManager->requireDev($requiredDevPackages);
-            if (!$requireResponse->isSuccess()) {
+            if (!$requireResponse->isSuccessful()) {
                 return $requireResponse;
             }
         }
 
         $packagesNameString = implode(' ', $packageCollection->getNameList());
 
-        return new PackageManagerResponseDto(true, $packagesNameString, $packageCollection->getNameList());
+        return new ExecutionDto(true, $packagesNameString,);
     }
 }

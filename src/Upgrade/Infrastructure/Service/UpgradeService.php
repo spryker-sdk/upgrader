@@ -3,7 +3,7 @@
 namespace Upgrade\Infrastructure\Service;
 
 use Upgrade\Application\Service\UpgradeService as ApplicationService;
-use Upgrade\Domain\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsExecutionDto;
 
 class UpgradeService implements UpgradeServiceInterface
 {
@@ -21,7 +21,7 @@ class UpgradeService implements UpgradeServiceInterface
     }
 
     /**
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function upgrade(): StepsExecutionDto
     {

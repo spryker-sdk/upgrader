@@ -7,14 +7,14 @@
 
 namespace Upgrade\Application\Strategy\Common\Step;
 
-use Upgrade\Domain\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Application\Strategy\StepInterface;
 use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver;
 
 class CheckoutStep implements StepInterface
 {
     /**
-     * @var \Upgrade\Application\Provider\VersionControlSystemProviderInterface
+     * @var \Upgrade\Application\Bridge\VersionControlSystemBridgeInterface
      */
     protected $vsc;
 
@@ -27,11 +27,11 @@ class CheckoutStep implements StepInterface
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
-    public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function run(\Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto): \Upgrade\Application\Dto\StepsExecutionDto
     {
         return $this->vsc->checkout($stepsExecutionDto);
     }

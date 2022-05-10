@@ -17,7 +17,7 @@ class ProcessRunner implements ProcessRunnerServiceInterface
      *
      * @return \Symfony\Component\Process\Process
      */
-    public function runCommand(array $command): Process
+    public function run(array $command): Process
     {
         $process = new Process($command, (string)getcwd());
         $process->setTimeout(300);

@@ -7,8 +7,8 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Step;
 
-use Upgrade\Application\Provider\ReleaseAppClientProviderInterface;
-use Upgrade\Domain\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Bridge\ReleaseAppClientBridgeInterface;
+use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver;
 use Upgrade\Application\Strategy\StepInterface;
@@ -16,9 +16,9 @@ use Upgrade\Application\Strategy\StepInterface;
 class ReleaseGroupUpdateStep implements StepInterface
 {
     /**
-     * @var \Upgrade\Application\Provider\ReleaseAppClientProviderInterface
+     * @var \Upgrade\Application\Bridge\ReleaseAppClientBridgeInterface
      */
-    protected ReleaseAppClientProviderInterface $packageManagementSystemBridge;
+    protected ReleaseAppClientBridgeInterface $packageManagementSystemBridge;
 
     /**
      * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface
@@ -26,11 +26,11 @@ class ReleaseGroupUpdateStep implements StepInterface
     protected ReleaseGroupRequireProcessorInterface $releaseGroupRequireProcessor;
 
     /**
-     * @param \Upgrade\Application\Provider\ReleaseAppClientProviderInterface $packageManagementSystemBridge
+     * @param \Upgrade\Application\Bridge\ReleaseAppClientBridgeInterface $packageManagementSystemBridge
      * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver $groupRequireProcessorResolver
      */
     public function __construct(
-        ReleaseAppClientProviderInterface    $packageManagementSystemBridge,
+        ReleaseAppClientBridgeInterface      $packageManagementSystemBridge,
         ReleaseGroupRequireProcessorResolver $groupRequireProcessorResolver
     ) {
         $this->packageManagementSystemBridge = $packageManagementSystemBridge;
@@ -38,11 +38,11 @@ class ReleaseGroupUpdateStep implements StepInterface
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
-    public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function run(\Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto): \Upgrade\Application\Dto\StepsExecutionDto
     {
         $dataProviderResponse = $this->packageManagementSystemBridge->getNotInstalledReleaseGroupList();
 

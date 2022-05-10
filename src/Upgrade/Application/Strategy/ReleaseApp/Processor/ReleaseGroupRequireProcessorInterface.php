@@ -8,7 +8,7 @@
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
-use Upgrade\Domain\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsExecutionDto;
 
 interface ReleaseGroupRequireProcessorInterface
 {
@@ -19,12 +19,12 @@ interface ReleaseGroupRequireProcessorInterface
 
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function requireCollection(
         ReleaseGroupDtoCollection $requiteRequestCollection,
-        StepsExecutionDto $stepsExecutionDto
+        StepsExecutionDto         $stepsExecutionDto
     ): StepsExecutionDto;
 }

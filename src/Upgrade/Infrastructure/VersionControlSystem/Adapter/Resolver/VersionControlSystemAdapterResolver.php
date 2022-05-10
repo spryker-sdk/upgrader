@@ -8,17 +8,17 @@
 namespace Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver;
 
 use Upgrade\Infrastructure\Exception\VersionControlSystemAdapterIsNotDefined;
-use Upgrade\Application\Provider\VersionControlSystemProviderInterface;
+use Upgrade\Application\Bridge\VersionControlSystemBridgeInterface;
 
 class VersionControlSystemAdapterResolver
 {
     /**
-     * @var array<\Upgrade\Application\Provider\VersionControlSystemProviderInterface>
+     * @var array<\Upgrade\Application\Bridge\VersionControlSystemBridgeInterface>
      */
     protected $adapters = [];
 
     /**
-     * @param array<\Upgrade\Application\Provider\VersionControlSystemProviderInterface> $adapters
+     * @param array<\Upgrade\Application\Bridge\VersionControlSystemBridgeInterface> $adapters
      */
     public function __construct(array $adapters = [])
     {
@@ -28,13 +28,13 @@ class VersionControlSystemAdapterResolver
     /**
      * @param string $type
      *
-     * @return \Upgrade\Application\Provider\VersionControlSystemProviderInterface
+     * @return \Upgrade\Application\Bridge\VersionControlSystemBridgeInterface
      *@throws \Upgrade\Infrastructure\Exception\VersionControlSystemAdapterIsNotDefined
      *
      */
-    public function resolve(string $type = 'git'): VersionControlSystemProviderInterface
+    public function resolve(string $type = 'git'): VersionControlSystemBridgeInterface
     {
-        /** @var \Upgrade\Application\Provider\VersionControlSystemProviderInterface $adapter */
+        /** @var \Upgrade\Application\Bridge\VersionControlSystemBridgeInterface $adapter */
         foreach ($this->adapters as $adapter) {
             if ($adapter->getType() === $type) {
                 return $adapter;

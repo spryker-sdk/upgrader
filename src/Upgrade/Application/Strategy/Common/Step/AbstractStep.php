@@ -13,7 +13,7 @@ use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlS
 class AbstractStep
 {
     /**
-     * @var \Upgrade\Application\Provider\VersionControlSystemProviderInterface
+     * @var \Upgrade\Application\Bridge\VersionControlSystemBridgeInterface
      */
     protected $vsc;
 

@@ -10,6 +10,7 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Validator;
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Application\Exception\UpgraderException;
+use Upgrade\Application\Dto\ExecutionDto;
 
 class ThresholdSoftValidator implements ThresholdSoftValidatorInterface
 {
@@ -31,16 +32,16 @@ class ThresholdSoftValidator implements ThresholdSoftValidatorInterface
      *
      * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
      */
-    public function isWithInThreshold(ReleaseGroupDtoCollection $groupDtoCollection): PackageManagerResponseDto
+    public function isWithInThreshold(ReleaseGroupDtoCollection $groupDtoCollection): ExecutionDto
     {
         try {
             foreach ($this->validatorList as $validator) {
                 $validator->validate($groupDtoCollection);
             }
         } catch (UpgraderException $exception) {
-            return new PackageManagerResponseDto(false, $exception->getMessage());
+            return new ExecutionDto(false, $exception->getMessage());
         }
 
-        return new PackageManagerResponseDto(true);
+        return new ExecutionDto(true);
     }
 }

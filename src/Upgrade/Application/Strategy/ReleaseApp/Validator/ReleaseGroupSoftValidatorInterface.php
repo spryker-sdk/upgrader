@@ -9,13 +9,13 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Validator;
 
 use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
+use Upgrade\Application\Dto\ExecutionDto;
 
 interface ReleaseGroupSoftValidatorInterface
 {
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     *
-     * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
+     * @param ReleaseGroupDto $releaseGroup
+     * @return \Upgrade\Domain\Entity\Step\ExecutionDto
      */
-    public function isValidReleaseGroup(ReleaseGroupDto $releaseGroup): PackageManagerResponseDto;
+    public function isValidReleaseGroup(ReleaseGroupDto $releaseGroup): ExecutionDto;
 }

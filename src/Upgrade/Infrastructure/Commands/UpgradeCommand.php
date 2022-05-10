@@ -12,7 +12,7 @@ use SprykerSdk\SdkContracts\Entity\ConverterInterface;
 use SprykerSdk\SdkContracts\Entity\ExecutableCommandInterface;
 use Upgrade\Application\Service\UpgradeService;
 use Upgrade\Application\Service\UpgradeServiceInterface;
-use Upgrade\Domain\Dto\MessageDto;
+use Upgrade\Domain\Entity\Message;
 use Upgrade\Infrastructure\Service\UpgradeServiceInterface;
 
 class UpgradeCommand implements ExecutableCommandInterface
@@ -79,7 +79,7 @@ class UpgradeCommand implements ExecutableCommandInterface
     {
         $stepsExecutionDto = $this->upgradeService->upgrade();
 
-        $message = new MessageDto((string)$stepsExecutionDto->getOutputMessage());
+        $message = new Message((string)$stepsExecutionDto->getOutputMessage());
 
         $context->addMessage(static::class, $message);
 
