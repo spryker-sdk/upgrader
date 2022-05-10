@@ -90,9 +90,9 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
     /**
      * @param \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto
      *
-     * @return int
-     *@throws \RuntimeException
+     * @throws \RuntimeException
      *
+     * @return int
      */
     protected function create(PullRequestDto $pullRequestDto): int
     {

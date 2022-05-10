@@ -23,7 +23,10 @@ interface SourceCodeProviderInterface
      *
      * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
-    public function createPullRequest(StepsExecutionDto $stepsExecutionDto, \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto): StepsExecutionDto;
+    public function createPullRequest(
+        StepsExecutionDto $stepsExecutionDto,
+        PullRequestDto $pullRequestDto
+    ): StepsExecutionDto;
 
     /**
      * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
