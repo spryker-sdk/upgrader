@@ -8,7 +8,7 @@
 
 namespace Upgrade\Application\Strategy\Common\Step;
 
-use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver;
+use Upgrade\Application\Bridge\VersionControlSystemBridgeInterface;
 
 class AbstractStep
 {
@@ -18,10 +18,10 @@ class AbstractStep
     protected $vsc;
 
     /**
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver $vscAdapterResolver
+     * @param \Upgrade\Application\Bridge\VersionControlSystemBridgeInterface $versionControlSystem
      */
-    public function __construct(VersionControlSystemAdapterResolver $vscAdapterResolver)
+    public function __construct(VersionControlSystemBridgeInterface $versionControlSystem)
     {
-        $this->vsc = $vscAdapterResolver->resolve();
+        $this->vsc = $versionControlSystem;
     }
 }

@@ -11,22 +11,27 @@ use Github\AuthMethod;
 use Github\Client;
 use Github\HttpClient\Builder;
 use RuntimeException;
+use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Infrastructure\Dto\SourceCodeProvider\PullRequestDto;
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
+use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface;
 
 class GitHubSourceCodeProvider implements SourceCodeProviderInterface
 {
+    /**
+     * @var string
+     */
+    protected const HTML_URL_KEY = 'html_url';
+
     /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
      */
     protected $configurationProvider;
 
     /**
-     * @var \Github\Client|null
+     * @var \Github\Client
      */
-    protected ?Client $gitHubClient = null;
+    protected $gitHubClient;
 
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
@@ -34,6 +39,7 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
     public function __construct(ConfigurationProvider $configurationProvider)
     {
         $this->configurationProvider = $configurationProvider;
+        $this->gitHubClient = $this->authenticated($configurationProvider->getAccessToken());
     }
 
     /**
@@ -45,9 +51,9 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function validateCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -57,17 +63,17 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
             !$this->configurationProvider->getRepositoryName()
         ) {
             $stepsExecutionDto->setIsSuccessful(false);
-            $stepsExecutionDto->setOutputMessage('Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.');
+            $stepsExecutionDto->addOutputMessage('Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.');
         }
 
         return $stepsExecutionDto;
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
-     * @param \Upgrade\Infrastructure\Dto\SourceCodeProvider\PullRequestDto $pullRequestDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function createPullRequest(StepsExecutionDto $stepsExecutionDto, PullRequestDto $pullRequestDto): StepsExecutionDto
     {
@@ -77,7 +83,7 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
                 return $stepsExecutionDto;
             }
 
-            $this->getClient()->pr()->create(
+            $response = $this->gitHubClient->pr()->create(
                 $this->configurationProvider->getOrganizationName(),
                 $this->configurationProvider->getRepositoryName(),
                 [
@@ -89,28 +95,30 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
                 ],
             );
 
+            if (isset($response[static::HTML_URL_KEY])) {
+                $stepsExecutionDto->addOutputMessage(
+                    sprintf('Pull request was created %s', $response[static::HTML_URL_KEY]),
+                );
+            }
+
             return $stepsExecutionDto;
         } catch (RuntimeException $runtimeException) {
             return $stepsExecutionDto
                 ->setIsSuccessful(false)
-                ->setOutputMessage($runtimeException->getMessage());
+                ->addOutputMessage($runtimeException->getMessage());
         }
     }
 
     /**
+     * @param string $token
+     *
      * @return \Github\Client
      */
-    protected function getClient(): Client
+    protected function authenticated(string $token): Client
     {
-        if (!$this->gitHubClient) {
-            $this->gitHubClient = new Client(new Builder());
-            $this->gitHubClient->authenticate(
-                $this->configurationProvider->getAccessToken(),
-                null,
-                AuthMethod::ACCESS_TOKEN,
-            );
-        }
+        $gitClient = new Client(new Builder());
+        $gitClient->authenticate($token, null, AuthMethod::ACCESS_TOKEN);
 
-        return $this->gitHubClient;
+        return $gitClient;
     }
 }

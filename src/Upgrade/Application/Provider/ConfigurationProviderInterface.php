@@ -30,16 +30,6 @@ interface ConfigurationProviderInterface
     public const AGGREGATE_RELEASE_GROUP_REQUIRE_PROCESSOR = 'aggregate-release-group-require-processor';
 
     /**
-     * @var string
-     */
-    public const GITHUB_SOURCE_CODE_PROVIDER = 'github';
-
-    /**
-     * @var string
-     */
-    public const VCS_TYPE = 'git';
-
-    /**
      * @return string
      */
     public function getUpgradeStrategy(): string;
@@ -48,47 +38,6 @@ interface ConfigurationProviderInterface
      * @return string
      */
     public function getReleaseGroupRequireProcessor(): string;
-
-    /**
-     * @return string
-     */
-    public function getSourceCodeProvider(): string;
-
-    /**
-     * @return string
-     */
-    public function getBranchPattern(): string;
-
-    /**
-     * @return string
-     */
-    public function getCommitMessage(): string;
-
-    /**
-     * @return bool
-     */
-    public function isPullRequestAutoMergeEnabled(): bool;
-
-    /**
-     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
-     *
-     * @return string
-     */
-    public function getAccessToken(): string;
-
-    /**
-     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
-     *
-     * @return string
-     */
-    public function getOrganizationName(): string;
-
-    /**
-     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
-     *
-     * @return string
-     */
-    public function getRepositoryName(): string;
 
     /**
      * @return int

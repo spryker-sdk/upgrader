@@ -5,17 +5,17 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Processor\Strategy\Composer\Steps;
+namespace Upgrade\Application\Strategy\Common\Step;
 
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Processor\Strategy\StepInterface;
+use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Strategy\StepInterface;
 
 class CheckCredentialsStep extends AbstractStep implements StepInterface
 {
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {

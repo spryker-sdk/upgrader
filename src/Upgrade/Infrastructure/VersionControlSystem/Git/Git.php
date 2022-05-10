@@ -7,11 +7,11 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Git;
 
+use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
+use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Infrastructure\Dto\SourceCodeProvider\PullRequestDto;
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Process\ProcessRunner;
+use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
 use Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider;
 
@@ -28,9 +28,9 @@ class Git
     protected $baseBranch = '';
 
     /**
-     * @var \Core\Infrastructure\Service\ProcessRunnerService
+     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
      */
-    protected ProcessRunnerService $processRunner;
+    protected ProcessRunnerServiceInterface $processRunner;
 
     /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
@@ -54,13 +54,13 @@ class Git
 
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Upgrade\Infrastructure\Process\ProcessRunner $processRunner
+     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $sourceCodeProvider
      * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator $pullRequestDataGenerator
      */
     public function __construct(
         ConfigurationProvider $configurationProvider,
-        ProcessRunner $processRunner,
+        ProcessRunnerServiceInterface $processRunner,
         SourceCodeProvider $sourceCodeProvider,
         PullRequestDataGenerator $pullRequestDataGenerator
     ) {
@@ -177,9 +177,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function validateSourceCodeProviderCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {

@@ -14,27 +14,95 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * @var string
      */
+    public const GITHUB_SOURCE_CODE_PROVIDER = 'github';
+
+    /**
+     * @var string
+     */
+    public const GITLAB_SOURCE_CODE_PROVIDER = 'gitlab';
+
+    /**
+     * @var string
+     */
     protected const DEFAULT_BRANCH_PATTERN = 'upgradebot/upgrade-for-%s-%s';
 
     /**
      * @var bool
      */
-    protected const IS_PR_AUTO_MERGE_ENABLED = false;
+    protected const DEFAULT_IS_PR_AUTO_MERGE_ENABLED = false;
+
+    /**
+     * @var int
+     */
+    public const DEFAULT_SOFT_THRESHOLD_BUGFIX = 30;
+
+    /**
+     * @var int
+     */
+    public const DEFAULT_SOFT_THRESHOLD_MINOR = 10;
+
+    /**
+     * @var int
+     */
+    public const DEFAULT_SOFT_THRESHOLD_MAJOR = 0;
+
+    /**
+     * @var int
+     */
+    public const DEFAULT_THRESHOLD_RELEASE_GROUP = 30;
+
+    /**
+     * @var int
+     */
+    public const GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING = 20;
 
     /**
      * @return string
      */
     public function getUpgradeStrategy(): string
     {
-        return (string)getenv('UPGRADE_STRATEGY') ?: static::COMPOSER_STRATEGY;
+        return (string)getenv('UPGRADE_STRATEGY') ?: static::RELEASE_APP_STRATEGY;
     }
 
     /**
      * @return string
      */
-    public function getSourceCodeProvider(): string
+    public function getReleaseGroupRequireProcessor(): string
     {
-        return (string)getenv('SOURCE_CODE_PROVIDER') ?: static::GITHUB_SOURCE_CODE_PROVIDER;
+        return (string)getenv('RELEASE_GROUP_REQUIRE_PROCESSOR') ?: static::AGGREGATE_RELEASE_GROUP_REQUIRE_PROCESSOR;
+    }
+
+    /**
+     * Specification:
+     * - Defines id of your GitLab project.
+     *
+     * @return string
+     */
+    public function getGitLabProjectId(): string
+    {
+        return (string)getenv('GITLAB_PROJECT_ID');
+    }
+
+    /**
+     * Specification:
+     * - Defines delay in seconds between request for PR creation and enable auto merging.
+     *
+     * @return int
+     */
+    public function getGitLabDelayBetweenPrCreatingAndMerging(): int
+    {
+        return (int)getenv('GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING') ?: static::GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING;
+    }
+
+    /**
+     * Specification:
+     * - Returns the link to the source code provider.
+     *
+     * @return string
+     */
+    public function getSourceCodeProviderUrl(): string
+    {
+        return (string)getenv('SOURCE_CODE_PROVIDER_URL');
     }
 
     /**
@@ -81,19 +149,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
-     * Specification:
-     * - Returns the link to the source code provider.
-     *
-     * @return string
-     */
-    public function getSourceCodeProviderUrl(): string
-    {
-        return (string)getenv('SOURCE_CODE_PROVIDER_URL');
-    }
-
-    /**
-     * Specification:
-     * - Defines organisation name for source provider.
+     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
      *
      * @return string
      */
@@ -111,28 +167,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public function getRepositoryName(): string
     {
         return (string)getenv('REPOSITORY_NAME');
-    }
-
-    /**
-     * Specification:
-     * - Defines id of your GitLab project.
-     *
-     * @return string
-     */
-    public function getGitLabProjectId(): string
-    {
-        return (string)getenv('GITLAB_PROJECT_ID');
-    }
-
-    /**
-     * Specification:
-     * - Defines delay in seconds between request for PR creation and enable auto merging.
-     *
-     * @return int
-     */
-    public function getGitLabDelayBetweenPrCreatingAndMerging(): int
-    {
-        return (int)getenv('GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING') ?: static::GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING;
     }
 
     /**

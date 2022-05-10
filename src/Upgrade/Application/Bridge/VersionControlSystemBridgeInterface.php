@@ -12,11 +12,6 @@ use Upgrade\Application\Dto\StepsExecutionDto;
 interface VersionControlSystemBridgeInterface
 {
     /**
-     * @return string
-     */
-    public function getType(): string;
-
-    /**
      * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
      * @return \Upgrade\Application\Dto\StepsExecutionDto
@@ -99,4 +94,11 @@ interface VersionControlSystemBridgeInterface
      * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function restore(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     *
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     */
+    public function validateSourceCodeProviderCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
 }

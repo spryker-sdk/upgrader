@@ -9,7 +9,6 @@ namespace Upgrade\Infrastructure\VersionControlSystem\Git\Bridge;
 
 use Upgrade\Application\Bridge\VersionControlSystemBridgeInterface;
 use Upgrade\Application\Dto\StepsExecutionDto;
-use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
 
 class GitBridge implements VersionControlSystemBridgeInterface
@@ -25,14 +24,6 @@ class GitBridge implements VersionControlSystemBridgeInterface
     public function __construct(Git $git)
     {
         $this->git = $git;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return ConfigurationProvider::VCS_TYPE;
     }
 
     /**
@@ -156,9 +147,9 @@ class GitBridge implements VersionControlSystemBridgeInterface
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function validateSourceCodeProviderCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {

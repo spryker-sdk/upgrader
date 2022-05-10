@@ -9,6 +9,8 @@ services:
         resource: '../../../../Upgrade/*'
         exclude:
             - '../../../../Upgrade/Application/Dto/*'
+            - '../../../../Upgrade/Infrastructure/VersionControlSystem/Dto/*'
+
 #    Upgrade\Application\:
 #        resource: '../../../../Upgrade/Application/*'
 #
@@ -38,7 +40,7 @@ services:
         tags: [ 'sdk.task' ]
 
     check_credentials.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckCredentialsStep
+        class: Upgrade\Application\Strategy\Common\Step\CheckCredentialsStep
 
     check_is_remote_target_branch_exist.step:
         class: Upgrade\Application\Strategy\Common\Step\CheckRemoteTargetBranchExistsStep
@@ -111,8 +113,8 @@ services:
                 param11: '@checkout.step'
             }
 
-    Upgrade\Infrastructure\Processor\Strategy\StrategyResolver:
-        class: Upgrade\Infrastructure\Processor\Strategy\StrategyResolver
+    Upgrade\Application\Strategy\StrategyResolver:
+        class: Upgrade\Application\Strategy\StrategyResolver
         arguments:
             - {
                 param1: '@composer.strategy',
