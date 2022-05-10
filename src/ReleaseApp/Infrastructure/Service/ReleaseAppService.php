@@ -7,38 +7,40 @@
 
 namespace ReleaseApp\Infrastructure\Service;
 
-use ReleaseApp\Infrastructure\Presentation\Entity\ReleaseAppResponse;
-use ReleaseApp\Infrastructure\Presentation\Mapper\ReleaseGroupDtoCollectionMapper;
-use ReleaseApp\Domain\Entities\UpgradeAnalysis\Request\UpgradeAnalysisRequest;
+use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
+use ReleaseApp\Infrastructure\Shared\Mapper\ReleaseGroupDtoCollectionMapper;
+use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
+use ReleaseApp\Application\Service\ReleaseAppService as ApplicationReleaseAppService;
 
 class ReleaseAppService implements ReleaseAppServiceInterface
 {
     /**
      * @var \ReleaseApp\Application\Service\ReleaseAppService
      */
-    protected ReleaseAppService $domainReleaseAppClient;
+    protected ApplicationReleaseAppService $applicationReleaseAppService;
 
     protected ReleaseGroupDtoCollectionMapper $releaseGroupDtoCollectionMapper;
 
     /**
-     * @param ReleaseAppService $domainReleaseAppClient
-     * @param \ReleaseApp\Infrastructure\Presentation\Mapper\ReleaseGroupDtoCollectionMapper $releaseGroupDtoCollectionMapper
+     * @param ApplicationReleaseAppService $domainReleaseAppClient
+     * @param ReleaseGroupDtoCollectionMapper $releaseGroupDtoCollectionMapper
      */
-    public function __construct(ReleaseAppService $domainReleaseAppClient, ReleaseGroupDtoCollectionMapper $releaseGroupDtoCollectionMapper)
-    {
-        $this->domainReleaseAppClient = $domainReleaseAppClient;
+    public function __construct(
+        ApplicationReleaseAppService $domainReleaseAppClient,
+        ReleaseGroupDtoCollectionMapper $releaseGroupDtoCollectionMapper
+    ){
+        $this->applicationReleaseAppService = $domainReleaseAppClient;
         $this->releaseGroupDtoCollectionMapper = $releaseGroupDtoCollectionMapper;
     }
 
-
     /**
-     * @param UpgradeAnalysisRequest $request
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $request
      * @return ReleaseAppResponse
      */
     public function getNotInstalledReleaseGroupList(UpgradeAnalysisRequest $request): ReleaseAppResponse
     {
         $releaseGroupCollection = $this->releaseGroupDtoCollectionMapper->buildReleaseGroupTransferCollection(
-            $this->domainReleaseAppClient->getNotInstalledReleaseGroupList($request)
+            $this->applicationReleaseAppService->getNotInstalledReleaseGroupList($request)
         );
 
         return new ReleaseAppResponse($releaseGroupCollection);

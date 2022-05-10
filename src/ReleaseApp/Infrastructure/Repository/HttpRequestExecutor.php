@@ -12,7 +12,7 @@ use GuzzleHttp\Exception\ServerException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReleaseApp\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Infrastructure\Exception\UpgraderException;
+use Upgrade\Application\Exception\UpgraderException;
 
 class HttpRequestExecutor implements HttpRequestExecutorInterface
 {

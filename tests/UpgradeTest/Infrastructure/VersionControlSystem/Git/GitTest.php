@@ -8,7 +8,7 @@
 namespace UpgradeTest\Infrastructure\VersionControlSystem\Git;
 
 use PackageManager\Domain\Dto\ComposerLockDiffDto;
-use ProcessRunner\Application\Service\ProcessRunnerService;
+use Core\Infrastructure\Service\ProcessRunnerService;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Process\Process;
@@ -193,7 +193,7 @@ class GitTest extends KernelTestCase
     }
 
     /**
-     * @param \ProcessRunner\Application\Service\ProcessRunnerService $processRunner
+     * @param \Core\Infrastructure\Service\ProcessRunnerService $processRunner
      *
      * @return \Upgrade\Infrastructure\VersionControlSystem\Git\Git
      */
@@ -218,7 +218,7 @@ class GitTest extends KernelTestCase
      * @param string $outputMessage
      * @param bool $isSuccessful
      *
-     * @return \ProcessRunner\Application\Service\ProcessRunnerService
+     * @return \Core\Infrastructure\Service\ProcessRunnerService
      */
     protected function mockProcessRunnerWithOutput(string $outputMessage, bool $isSuccessful = true): ProcessRunnerService
     {

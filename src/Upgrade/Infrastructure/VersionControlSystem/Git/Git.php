@@ -7,7 +7,7 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Git;
 
-use ProcessRunner\Application\Service\ProcessRunnerService;
+use Core\Infrastructure\Service\ProcessRunnerService;
 use Symfony\Component\Process\Process;
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
@@ -28,7 +28,7 @@ class Git
     protected $baseBranch = '';
 
     /**
-     * @var \ProcessRunner\Application\Service\ProcessRunnerService
+     * @var \Core\Infrastructure\Service\ProcessRunnerService
      */
     protected ProcessRunnerService $processRunner;
 
@@ -54,7 +54,7 @@ class Git
 
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \ProcessRunner\Application\Service\ProcessRunnerService $processRunner
+     * @param \Core\Infrastructure\Service\ProcessRunnerService $processRunner
      * @param \Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider $sourceCodeProvider
      * @param \Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder $pullRequestDataBuilder
      */

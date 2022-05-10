@@ -7,13 +7,13 @@
 
 namespace ReleaseApp\Application\Service;
 
-use ReleaseApp\Domain\Entities\UpgradeAnalysis\Request\UpgradeAnalysisRequest;
-use ReleaseApp\Domain\Entities\UpgradeInstructions\Response\Collection\UpgradeInstructionsReleaseGroupCollection;
+use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
+use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection;
 
 interface ReleaseAppServiceInterface
 {
     /**
-     * @param \ReleaseApp\Domain\Entities\UpgradeAnalysis\Request\UpgradeAnalysisRequest $request
+     * @param UpgradeAnalysisRequest $request
      * @return UpgradeInstructionsReleaseGroupCollection
      */
     public function getNotInstalledReleaseGroupList(UpgradeAnalysisRequest $request): UpgradeInstructionsReleaseGroupCollection;

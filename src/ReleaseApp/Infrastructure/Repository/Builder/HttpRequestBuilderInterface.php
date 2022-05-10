@@ -8,14 +8,14 @@
 namespace ReleaseApp\Infrastructure\Repository\Builder;
 
 use GuzzleHttp\Psr7\Request;
-use ReleaseApp\Domain\Entities\RequestInterface;
+use ReleaseApp\Domain\Client\Request\RequestInterface;
+use ReleaseApp\Infrastructure\Repository\Request\HttpRequestInterface;
 
 interface HttpRequestBuilderInterface
 {
     /**
-     * @param \ReleaseApp\Domain\Entities\RequestInterface $request
-     *
-     * @return \GuzzleHttp\Psr7\Request
+     * @param HttpRequestInterface $request
+     * @return Request
      */
-    public function createGuzzleRequest(RequestInterface $request): Request;
+    public function createGuzzleRequest(HttpRequestInterface $request): Request;
 }

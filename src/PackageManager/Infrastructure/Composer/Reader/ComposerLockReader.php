@@ -8,7 +8,7 @@
 namespace PackageManager\Infrastructure\Composer\Reader;
 
 use PackageManager\Domain\Composer\Reader\ComposerLockReaderInterface;
-use Upgrade\Infrastructure\Exception\UpgraderException;
+use Upgrade\Application\Exception\UpgraderException;
 
 class ComposerLockReader implements ComposerLockReaderInterface
 {
@@ -28,9 +28,9 @@ class ComposerLockReader implements ComposerLockReaderInterface
     /**
      * @param string $path
      *
-     * @throws \Upgrade\Infrastructure\Exception\UpgraderException
-     *
      * @return array
+     * @throws \Upgrade\Application\Exception\UpgraderException
+     *
      */
     protected function readFromPath(string $path): array
     {

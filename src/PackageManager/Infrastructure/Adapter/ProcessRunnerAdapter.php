@@ -8,18 +8,18 @@
 namespace PackageManager\Infrastructure\Adapter;
 
 use PackageManager\Domain\ProcessRunner\ProcessRunnerInterface;
-use ProcessRunner\Application\Service\ProcessRunnerServiceInterface;
+use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
 
 class ProcessRunnerAdapter implements ProcessRunnerInterface
 {
     /**
-     * @var \ProcessRunner\Application\Service\ProcessRunnerServiceInterface
+     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected $processRunnerService;
 
     /**
-     * @param \ProcessRunner\Application\Service\ProcessRunnerServiceInterface $processRunnerService
+     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
      */
     public function __construct(ProcessRunnerServiceInterface $processRunnerService)
     {

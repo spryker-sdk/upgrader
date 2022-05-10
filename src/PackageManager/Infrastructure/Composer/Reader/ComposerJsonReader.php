@@ -8,7 +8,7 @@
 namespace PackageManager\Infrastructure\Composer\Reader;
 
 use PackageManager\Domain\Composer\Reader\ComposerJsonReaderInterface;
-use Upgrade\Infrastructure\Exception\UpgraderException;
+use Upgrade\Application\Exception\UpgraderException;
 
 class ComposerJsonReader implements ComposerJsonReaderInterface
 {
@@ -28,9 +28,9 @@ class ComposerJsonReader implements ComposerJsonReaderInterface
     /**
      * @param string $path
      *
-     * @throws \Upgrade\Infrastructure\Exception\UpgraderException
-     *
      * @return array
+     * @throws \Upgrade\Application\Exception\UpgraderException
+     *
      */
     protected function readFromPath(string $path): array
     {

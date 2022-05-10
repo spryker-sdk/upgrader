@@ -8,23 +8,22 @@
 namespace ReleaseApp\Infrastructure\Repository\Builder;
 
 use Psr\Http\Message\ResponseInterface;
-use ReleaseApp\Domain\Entities\RequestInterface;
-use ReleaseApp\Domain\Entities\ResponseInterface;
+use ReleaseApp\Domain\Client\Request\RequestInterface;
+use ReleaseApp\Infrastructure\Repository\Request\HttpRequestInterface;
 
 class HttpResponseBuilder implements HttpResponseBuilderInterface
 {
     /**
-     * @param \ReleaseApp\Domain\Entities\RequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface $guzzleResponse
-     *
-     * @return \ReleaseApp\Domain\Entities\ResponseInterface
+     * @param HttpRequestInterface $request
+     * @param ResponseInterface $guzzleResponse
+     * @return ResponseInterface
      */
     public function createHttpResponse(
-        RequestInterface  $request,
+        HttpRequestInterface  $request,
         ResponseInterface $guzzleResponse
     ): ResponseInterface {
-        /** @var \ReleaseApp\Domain\Entities\ResponseInterface $responseClass */
-        $responseClass = $request->getResponseClass();
+        /** @var \ReleaseApp\Domain\Client\Response\ResponseInterface $responseClass */
+        $responseClass = $request->getDomainRequest()->getResponseClass();
         $response = new $responseClass($guzzleResponse->getStatusCode(), $this->getBody($guzzleResponse));
 
         return $response;

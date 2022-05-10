@@ -9,11 +9,11 @@ namespace UpgradeTest\Infrastructure\Processor\Strategy\Composer\Steps;
 
 use PackageManager\Domain\Dto\ComposerLockDiffDto;
 use PHPUnit\Framework\TestCase;
-use ProcessRunner\Application\Service\ProcessRunnerService;
+use Core\Infrastructure\Service\ProcessRunnerService;
 use Symfony\Component\Process\Process;
 use Upgrade\Domain\Dto\Step\StepsExecutionDto;
-use Upgrade\Domain\Strategy\Common\Step\ComposerLockComparatorStep;
-use Upgrade\Domain\Strategy\Comparator\ComposerLockComparator;
+use Upgrade\Application\Strategy\Common\Step\ComposerLockComparatorStep;
+use Upgrade\Application\Strategy\Comparator\ComposerLockComparator;
 
 class ComposerLockComparatorStepTest extends TestCase
 {
@@ -97,7 +97,7 @@ class ComposerLockComparatorStepTest extends TestCase
     /**
      * @param string $outputMessage
      *
-     * @return \ProcessRunner\Application\Service\ProcessRunnerService
+     * @return \Core\Infrastructure\Service\ProcessRunnerService
      */
     protected function mockProcessRunnerWithOutput(string $outputMessage): ProcessRunnerService
     {

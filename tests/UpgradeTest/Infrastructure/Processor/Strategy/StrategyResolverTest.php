@@ -8,11 +8,11 @@
 namespace UpgradeTest\Infrastructure\Processor\Strategy;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Upgrade\Domain\Strategy\Composer\ComposerStrategy;
-use Upgrade\Domain\Strategy\ReleaseApp\ReleaseAppStrategy;
-use Upgrade\Domain\Strategy\StrategyResolver;
+use Upgrade\Application\Strategy\Composer\ComposerStrategy;
+use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy;
+use Upgrade\Application\Strategy\StrategyResolver;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Infrastructure\Exception\UpgradeStrategyIsNotDefinedException;
+use Upgrade\Application\Exception\UpgradeStrategyIsNotDefinedException;
 
 class StrategyResolverTest extends KernelTestCase
 {
@@ -22,7 +22,7 @@ class StrategyResolverTest extends KernelTestCase
     public function testGetStrategyReturnComposerStrategy(): void
     {
         // Arrange
-        /** @var \Upgrade\Domain\Strategy\StrategyResolver $strategyResolver */
+        /** @var \Upgrade\Application\Strategy\StrategyResolver $strategyResolver */
         $strategyResolver = static::bootKernel()->getContainer()->get(StrategyResolver::class);
 
         // Act
@@ -38,7 +38,7 @@ class StrategyResolverTest extends KernelTestCase
     public function testGetStrategyReturnReleaseAppStrategy(): void
     {
         // Arrange
-        /** @var \Upgrade\Domain\Strategy\StrategyResolver $strategyResolver */
+        /** @var \Upgrade\Application\Strategy\StrategyResolver $strategyResolver */
         $strategyResolver = static::bootKernel()->getContainer()->get(StrategyResolver::class);
 
         // Act
@@ -54,7 +54,7 @@ class StrategyResolverTest extends KernelTestCase
     public function testGetStrategyThrowNotDefinedException(): void
     {
         // Arrange
-        /** @var \Upgrade\Domain\Strategy\StrategyResolver $strategyResolver */
+        /** @var \Upgrade\Application\Strategy\StrategyResolver $strategyResolver */
         $strategyResolver = static::bootKernel()->getContainer()->get(StrategyResolver::class);
 
         // Assert

@@ -8,18 +8,18 @@
 namespace ReleaseApp\Application\Service;
 
 use ReleaseApp\Application\Configuration\ConfigurationProviderInterface;
-use ReleaseApp\Domain\Repository\ResponseRepositoryInterface;
-use ReleaseApp\Domain\Entities\UpgradeAnalysis\Response\Collection\UpgradeAnalysisModuleVersionCollection;
-use ReleaseApp\Domain\Entities\UpgradeAnalysis\Request\UpgradeAnalysisRequest;
-use ReleaseApp\Domain\Entities\UpgradeInstructions\Request\UpgradeInstructionsRequest;
-use ReleaseApp\Domain\Entities\UpgradeInstructions\Response\Collection\UpgradeInstructionsReleaseGroupCollection;
+use ReleaseApp\Domain\Client\ClientInterface;
+use ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection;
+use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
+use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
+use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection;
 
 class ReleaseAppService implements ReleaseAppServiceInterface
 {
     /**
-     * @var \ReleaseApp\Domain\Repository\ResponseRepositoryInterface
+     * @var \ReleaseApp\Domain\Client\ClientInterface
      */
-    protected ResponseRepositoryInterface $httpClient;
+    protected ClientInterface $repository;
 
     /**
      * @var \ReleaseApp\Application\Configuration\ConfigurationProviderInterface
@@ -27,17 +27,17 @@ class ReleaseAppService implements ReleaseAppServiceInterface
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
-     * @param \ReleaseApp\Domain\Repository\ResponseRepositoryInterface $httpClient
+     * @param \ReleaseApp\Domain\Client\ClientInterface $httpClient
      * @param \ReleaseApp\Application\Configuration\ConfigurationProviderInterface $configurationProvider
      */
-    public function __construct(ResponseRepositoryInterface $httpClient, ConfigurationProviderInterface $configurationProvider)
+    public function __construct(ClientInterface $httpClient, ConfigurationProviderInterface $configurationProvider)
     {
-        $this->httpClient = $httpClient;
+        $this->repository = $httpClient;
         $this->configurationProvider = $configurationProvider;
     }
 
     /**
-     * @param \ReleaseApp\Domain\Entities\UpgradeAnalysis\Request\UpgradeAnalysisRequest $request
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $request
      * @return UpgradeInstructionsReleaseGroupCollection
      */
     public function getNotInstalledReleaseGroupList(UpgradeAnalysisRequest $request): UpgradeInstructionsReleaseGroupCollection
@@ -50,9 +50,9 @@ class ReleaseAppService implements ReleaseAppServiceInterface
 
 
     /**
-     * @param \ReleaseApp\Domain\Entities\UpgradeAnalysis\Response\Collection\UpgradeAnalysisModuleVersionCollection $moduleVersionCollection
+     * @param \ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection $moduleVersionCollection
      *
-     * @return \ReleaseApp\Domain\Entities\UpgradeInstructions\Response\Collection\UpgradeInstructionsReleaseGroupCollection
+     * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection
      */
     protected function getReleaseGroupCollection(
         UpgradeAnalysisModuleVersionCollection $moduleVersionCollection
@@ -61,10 +61,7 @@ class ReleaseAppService implements ReleaseAppServiceInterface
 
         foreach ($moduleVersionCollection->toArray() as $moduleVersion) {
             $request = $this->createUpgradeInstructionsRequest($moduleVersion->getId());
-
-            /** @var \ReleaseApp\Domain\Entities\UpgradeInstructions\Response\UpgradeInstructionsResponse $response */
-            $response = $this->httpClient->getResponse($request);
-
+            $response = $this->repository->getUpgradeInstructions($request);
             $releaseGroupCollection->add($response->getReleaseGroup());
         }
 
@@ -72,14 +69,13 @@ class ReleaseAppService implements ReleaseAppServiceInterface
     }
 
     /**
-     * @param \ReleaseApp\Domain\Entities\UpgradeAnalysis\Request\UpgradeAnalysisRequest $request
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $request
      * @return UpgradeAnalysisModuleVersionCollection
      */
     protected function getModuleVersionCollection(
         UpgradeAnalysisRequest $request
     ): UpgradeAnalysisModuleVersionCollection {
-        /** @var \ReleaseApp\Domain\Entities\UpgradeAnalysis\Response\UpgradeAnalysisResponse $response */
-        $response = $this->httpClient->getResponse($request);
+        $response = $this->repository->getUpgradeAnalysis($request);
 
         return $response->getModuleCollection()
             ->getModulesThatContainsAtListOneModuleVersion()
@@ -89,7 +85,7 @@ class ReleaseAppService implements ReleaseAppServiceInterface
     /**
      * @param int $moduleVersionId
      *
-     * @return \ReleaseApp\Domain\Entities\UpgradeInstructions\Request\UpgradeInstructionsRequest
+     * @return \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest
      */
     protected function createUpgradeInstructionsRequest(int $moduleVersionId): UpgradeInstructionsRequest
     {
