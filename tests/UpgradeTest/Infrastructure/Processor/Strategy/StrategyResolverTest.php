@@ -8,11 +8,11 @@
 namespace UpgradeTest\Infrastructure\Processor\Strategy;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Upgrade\Application\Exception\UpgradeStrategyIsNotDefinedException;
 use Upgrade\Application\Strategy\Composer\ComposerStrategy;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy;
 use Upgrade\Application\Strategy\StrategyResolver;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Application\Exception\UpgradeStrategyIsNotDefinedException;
 
 class StrategyResolverTest extends KernelTestCase
 {

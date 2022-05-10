@@ -7,10 +7,9 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator;
 
-use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
-use Upgrade\Application\Exception\UpgraderException;
 use Upgrade\Application\Dto\ExecutionDto;
+use Upgrade\Application\Exception\UpgraderException;
 
 class ThresholdSoftValidator implements ThresholdSoftValidatorInterface
 {
@@ -30,7 +29,7 @@ class ThresholdSoftValidator implements ThresholdSoftValidatorInterface
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $groupDtoCollection
      *
-     * @return \PackageManager\Domain\Dto\PackageManagerResponseDto
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function isWithInThreshold(ReleaseGroupDtoCollection $groupDtoCollection): ExecutionDto
     {

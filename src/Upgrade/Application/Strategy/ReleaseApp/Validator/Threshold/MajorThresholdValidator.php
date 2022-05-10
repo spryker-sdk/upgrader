@@ -8,8 +8,8 @@
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
-use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Application\Exception\UpgraderException;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class MajorThresholdValidator implements ThresholdValidatorInterface
 {
@@ -29,9 +29,9 @@ class MajorThresholdValidator implements ThresholdValidatorInterface
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $releaseReleaseGroupDtoCollection
      *
-     * @return void
-     *@throws \Upgrade\Application\Exception\UpgraderException
+     * @throws \Upgrade\Application\Exception\UpgraderException
      *
+     * @return void
      */
     public function validate(ReleaseGroupDtoCollection $releaseReleaseGroupDtoCollection): void
     {

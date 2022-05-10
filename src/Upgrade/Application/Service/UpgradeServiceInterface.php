@@ -13,8 +13,6 @@ interface UpgradeServiceInterface
 {
     /**
      * @return \Upgrade\Application\Dto\StepsExecutionDto
-     *@throws \Upgrade\Application\Exception\UpgradeStrategyIsNotDefinedException
-     *
      */
     public function upgrade(): StepsExecutionDto;
 }

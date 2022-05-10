@@ -42,9 +42,9 @@ class UpgradeAnalysis extends Response
     }
 
     /**
-     * @return array
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
+     * @return array
      */
     protected function getModulesArray(): array
     {

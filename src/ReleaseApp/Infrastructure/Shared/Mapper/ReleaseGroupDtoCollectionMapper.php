@@ -1,17 +1,33 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace ReleaseApp\Infrastructure\Shared\Mapper;
 
+use ReleaseApp\Application\Configuration\ConfigurationProviderInterface;
+use ReleaseApp\Application\Configuration\ReleaseAppConst;
+use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection;
+use ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
-use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection;
-use ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup;
-use ReleaseApp\Application\Configuration\ReleaseAppConst;
 
 class ReleaseGroupDtoCollectionMapper
 {
+    protected ConfigurationProviderInterface $configurationProvider;
+
+    /**
+     * @param \ReleaseApp\Application\Configuration\ConfigurationProviderInterface $configurationProvider
+     */
+    public function __construct(ConfigurationProviderInterface $configurationProvider)
+    {
+        $this->configurationProvider = $configurationProvider;
+    }
+
     /**
      * @param \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection $releaseGroupCollection
      *

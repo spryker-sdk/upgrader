@@ -7,8 +7,8 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Mapper;
 
-use Upgrade\Domain\Entity\Collection\PackageCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
+use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 interface PackageCollectionMapperInterface
 {

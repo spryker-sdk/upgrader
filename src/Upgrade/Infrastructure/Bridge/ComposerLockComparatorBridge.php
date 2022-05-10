@@ -5,12 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Provider;
+namespace Upgrade\Infrastructure\Bridge;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
-use Upgrade\Application\Dto\ComposerLockDiffDto;
-use PackageManager\Domain\ProcessRunner\ProcessRunnerInterface;
 use Upgrade\Application\Bridge\ComposerLockComparatorBridgeInterface;
+use Upgrade\Application\Dto\ComposerLockDiffDto;
 
 class ComposerLockComparatorBridge implements ComposerLockComparatorBridgeInterface
 {
@@ -25,12 +24,12 @@ class ComposerLockComparatorBridge implements ComposerLockComparatorBridgeInterf
     protected const JSON_OUTPUT_FLAG = '--json';
 
     /**
-     * @var ProcessRunnerServiceInterface
+     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunner;
 
     /**
-     * @param ProcessRunnerServiceInterface $processRunner
+     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      */
     public function __construct(ProcessRunnerServiceInterface $processRunner)
     {

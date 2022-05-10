@@ -5,31 +5,31 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Provider;
+namespace Upgrade\Infrastructure\Bridge;
 
-use PackageManager\Application\Service\PackageManagerServiceInterface;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
+use Upgrade\Application\Bridge\ComposerClientBridgeInterface;
 use Upgrade\Application\Bridge\ReleaseAppClientBridgeInterface;
 
 class ReleaseAppClientBridge implements ReleaseAppClientBridgeInterface
 {
     /**
-     * @var \ReleaseApp\Application\Service\ReleaseAppServiceInterface
+     * @var \ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface
      */
     protected ReleaseAppServiceInterface $releaseApp;
 
     /**
-     * @var \PackageManager\Application\Service\PackageManagerServiceInterface
+     * @var \Upgrade\Application\Bridge\ComposerClientBridgeInterface
      */
-    protected $packageManager;
+    protected ComposerClientBridgeInterface $packageManager;
 
     /**
-     * @param \ReleaseApp\Application\Service\ReleaseAppServiceInterface $dataProvider
-     * @param \PackageManager\Application\Service\PackageManagerServiceInterface $packageManager
+     * @param \ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface $dataProvider
+     * @param \Upgrade\Application\Bridge\ComposerClientBridgeInterface $packageManager
      */
-    public function __construct(ReleaseAppServiceInterface $dataProvider, PackageManagerServiceInterface $packageManager)
+    public function __construct(ReleaseAppServiceInterface $dataProvider, ComposerClientBridgeInterface $packageManager)
     {
         $this->releaseApp = $dataProvider;
         $this->packageManager = $packageManager;
@@ -45,9 +45,8 @@ class ReleaseAppClientBridge implements ReleaseAppClientBridgeInterface
         return $this->releaseApp->getNotInstalledReleaseGroupList($request);
     }
 
-
     /**
-     * @return UpgradeAnalysisRequest
+     * @return \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest
      */
     protected function createDataProviderRequest(): UpgradeAnalysisRequest
     {

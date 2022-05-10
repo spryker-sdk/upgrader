@@ -7,10 +7,9 @@
 
 namespace Upgrade\Infrastructure\Composer\Reader;
 
-use Upgrade\Infrastructure\Composer\Reader\ComposerLockReaderInterface;
 use Upgrade\Application\Exception\UpgraderException;
 
-class ComposerLockReader implements \Upgrade\Infrastructure\Composer\Reader\ComposerLockReaderInterface
+class ComposerLockReader implements ComposerLockReaderInterface
 {
     /**
      * @var string
@@ -28,9 +27,9 @@ class ComposerLockReader implements \Upgrade\Infrastructure\Composer\Reader\Comp
     /**
      * @param string $path
      *
-     * @return array
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
+     * @return array
      */
     protected function readFromPath(string $path): array
     {

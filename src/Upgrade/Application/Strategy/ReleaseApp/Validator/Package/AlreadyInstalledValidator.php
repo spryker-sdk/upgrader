@@ -7,35 +7,35 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator\Package;
 
-use PackageManager\Application\Service\PackageManagerServiceInterface;
-use Upgrade\Domain\Entity\Package;
+use Upgrade\Application\Bridge\ComposerClientBridgeInterface;
 use Upgrade\Application\Exception\UpgraderException;
+use Upgrade\Domain\Entity\Package;
 
 class AlreadyInstalledValidator implements PackageValidatorInterface
 {
     /**
-     * @var \PackageManager\Application\Service\PackageManagerServiceInterface
+     * @var \Upgrade\Application\Bridge\ComposerClientBridgeInterface
      */
-    protected $packageManager;
+    protected ComposerClientBridgeInterface $composerClient;
 
     /**
-     * @param \PackageManager\Application\Service\PackageManagerServiceInterface $packageManager
+     * @param \Upgrade\Application\Bridge\ComposerClientBridgeInterface $composerClient
      */
-    public function __construct(PackageManagerServiceInterface $packageManager)
+    public function __construct(ComposerClientBridgeInterface $composerClient)
     {
-        $this->packageManager = $packageManager;
+        $this->composerClient = $composerClient;
     }
 
     /**
      * @param \Upgrade\Domain\Entity\Package $package
      *
-     * @return void
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
+     * @return void
      */
     public function validate(Package $package): void
     {
-        $installedVersion = (string)$this->packageManager->getPackageVersion($package->getName());
+        $installedVersion = (string)$this->composerClient->getPackageVersion($package->getName());
         if (version_compare($installedVersion, $package->getVersion(), '>=')) {
             $message = sprintf(
                 'Package %s:%s already installed.',

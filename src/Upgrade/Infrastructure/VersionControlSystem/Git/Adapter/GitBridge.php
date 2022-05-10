@@ -7,9 +7,9 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Git\Adapter;
 
+use Upgrade\Application\Bridge\VersionControlSystemBridgeInterface;
 use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Application\Bridge\VersionControlSystemBridgeInterface;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
 
 class GitBridge implements VersionControlSystemBridgeInterface

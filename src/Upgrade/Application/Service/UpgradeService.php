@@ -7,8 +7,8 @@
 
 namespace Upgrade\Application\Service;
 
-use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\StrategyResolver;
 
 class UpgradeService implements UpgradeServiceInterface

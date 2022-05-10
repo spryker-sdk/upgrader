@@ -8,7 +8,6 @@
 namespace ReleaseApp\Domain\Entities;
 
 use ReleaseApp\Domain\Client\Response\Response;
-use ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup;
 use Upgrade\Application\Exception\UpgraderException;
 
 class UpgradeInstructions extends Response
@@ -19,9 +18,9 @@ class UpgradeInstructions extends Response
     protected const RELEASE_GROUP_KEY = 'release_group';
 
     /**
-     * @return \ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup
-     *@throws \Upgrade\Application\Exception\UpgraderException
+     * @throws \Upgrade\Application\Exception\UpgraderException
      *
+     * @return \ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup
      */
     public function getReleaseGroup(): UpgradeInstructionsReleaseGroup
     {

@@ -59,9 +59,9 @@ class UpgradeAnalysisModuleVersion
     }
 
     /**
-     * @return \DateTimeInterface
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
+     * @return \DateTimeInterface
      */
     public function getCreated(): DateTimeInterface
     {

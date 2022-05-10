@@ -7,23 +7,24 @@
 
 namespace ReleaseApp\Domain\Client;
 
-use ReleaseApp\Domain\Entities\UpgradeAnalysis;
-use ReleaseApp\Domain\Entities\UpgradeInstructions;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
+use ReleaseApp\Domain\Entities\UpgradeAnalysis;
+use ReleaseApp\Domain\Entities\UpgradeInstructions;
 
 interface ClientInterface
 {
     /**
-     * @param UpgradeAnalysisRequest $upgradeAnalysisRequest
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $upgradeAnalysisRequest
+     *
      * @return \ReleaseApp\Domain\Entities\UpgradeAnalysis
      */
     public function getUpgradeAnalysis(UpgradeAnalysisRequest $upgradeAnalysisRequest): UpgradeAnalysis;
 
     /**
-     * @param UpgradeInstructionsRequest $instructionsRequest
-     * @return UpgradeInstructions
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest $instructionsRequest
+     *
+     * @return \ReleaseApp\Domain\Entities\UpgradeInstructions
      */
     public function getUpgradeInstructions(UpgradeInstructionsRequest $instructionsRequest): UpgradeInstructions;
-
 }

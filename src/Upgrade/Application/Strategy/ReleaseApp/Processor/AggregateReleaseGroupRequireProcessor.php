@@ -7,7 +7,6 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
-use Upgrade\Domain\Entity\Collection\PackageCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Application\Bridge\ComposerClientBridgeInterface;
@@ -16,6 +15,7 @@ use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
+use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProcessorInterface
@@ -104,8 +104,9 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
     }
 
     /**
-     * @param ModuleDtoCollection $moduleCollection
-     * @return \Upgrade\Domain\Entity\\Upgrade\Domain\Entity\Step\ExecutionDto
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function require(ModuleDtoCollection $moduleCollection): ExecutionDto
     {
@@ -123,7 +124,8 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
 
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     * @return ExecutionDto
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     protected function requirePackageCollection(PackageCollection $packageCollection): ExecutionDto
     {
@@ -146,6 +148,6 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
 
         $packagesNameString = implode(' ', $packageCollection->getNameList());
 
-        return new ExecutionDto(true, $packagesNameString,);
+        return new ExecutionDto(true, $packagesNameString);
     }
 }

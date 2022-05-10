@@ -7,12 +7,12 @@
 
 namespace ReleaseApp\Infrastructure\Repository;
 
-use ReleaseApp\Domain\Entities\UpgradeAnalysis;
-use ReleaseApp\Domain\Entities\UpgradeInstructions;
-use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\ClientInterface;
+use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Client\Response\ResponseInterface;
+use ReleaseApp\Domain\Entities\UpgradeAnalysis;
+use ReleaseApp\Domain\Entities\UpgradeInstructions;
 use ReleaseApp\Infrastructure\Repository\Builder\HttpRequestBuilderInterface;
 use ReleaseApp\Infrastructure\Repository\Builder\HttpResponseBuilderInterface;
 use ReleaseApp\Infrastructure\Repository\Request\HttpRequestInterface;
@@ -51,14 +51,24 @@ class HttpClient implements ClientInterface
         $this->requestExecutor = $requestExecutor;
     }
 
+    /**
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest $instructionsRequest
+     *
+     * @return \ReleaseApp\Domain\Entities\UpgradeInstructions
+     */
     public function getUpgradeInstructions(UpgradeInstructionsRequest $instructionsRequest): UpgradeInstructions
     {
-        /** @var UpgradeInstructions $response */
+        /** @var \ReleaseApp\Domain\Entities\UpgradeInstructions $response */
         $response = $this->getResponse(new HttpUpgradeInstructionsRequest($instructionsRequest));
 
         return $response;
     }
 
+    /**
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $upgradeAnalysisRequest
+     *
+     * @return \ReleaseApp\Domain\Entities\UpgradeAnalysis
+     */
     public function getUpgradeAnalysis(UpgradeAnalysisRequest $upgradeAnalysisRequest): UpgradeAnalysis
     {
         /** @var \ReleaseApp\Domain\Entities\UpgradeAnalysis $response */
@@ -68,9 +78,9 @@ class HttpClient implements ClientInterface
     }
 
     /**
-     * @param HttpRequestInterface $request
-     * @return ResponseInterface
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @param \ReleaseApp\Infrastructure\Repository\Request\HttpRequestInterface $request
+     *
+     * @return \ReleaseApp\Domain\Client\Response\ResponseInterface
      */
     protected function getResponse(HttpRequestInterface $request): ResponseInterface
     {

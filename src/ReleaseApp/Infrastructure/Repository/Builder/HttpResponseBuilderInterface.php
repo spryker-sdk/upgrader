@@ -8,15 +8,16 @@
 namespace ReleaseApp\Infrastructure\Repository\Builder;
 
 use Psr\Http\Message\ResponseInterface;
-use \ReleaseApp\Domain\Client\Response\ResponseInterface as DomainResponse;
+use ReleaseApp\Domain\Client\Response\ResponseInterface as DomainResponse;
 use ReleaseApp\Infrastructure\Repository\Request\HttpRequestInterface;
 
 interface HttpResponseBuilderInterface
 {
     /**
-     * @param HttpRequestInterface $request
-     * @param ResponseInterface $guzzleResponse
-     * @return DomainResponse
+     * @param \ReleaseApp\Infrastructure\Repository\Request\HttpRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $guzzleResponse
+     *
+     * @return \ReleaseApp\Domain\Client\Response\ResponseInterface
      */
     public function createHttpResponse(HttpRequestInterface $request, ResponseInterface $guzzleResponse): DomainResponse;
 }

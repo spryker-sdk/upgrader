@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace ReleaseApp\Infrastructure\Repository\Request;
 
 use ReleaseApp\Domain\Client\Request\RequestInterface;
@@ -12,12 +17,12 @@ class HttpUpgradeInstructionsRequest implements HttpRequestInterface
     protected const ENDPOINT = '/upgrade-instructions.json';
 
     /**
-     * @var RequestInterface
+     * @var \ReleaseApp\Domain\Client\Request\RequestInterface
      */
     protected RequestInterface $domainRequest;
 
     /**
-     * @param RequestInterface $domainRequest
+     * @param \ReleaseApp\Domain\Client\Request\RequestInterface $domainRequest
      */
     public function __construct(RequestInterface $domainRequest)
     {
@@ -25,7 +30,7 @@ class HttpUpgradeInstructionsRequest implements HttpRequestInterface
     }
 
     /**
-     * @return RequestInterface
+     * @return \ReleaseApp\Domain\Client\Request\RequestInterface
      */
     public function getDomainRequest(): RequestInterface
     {

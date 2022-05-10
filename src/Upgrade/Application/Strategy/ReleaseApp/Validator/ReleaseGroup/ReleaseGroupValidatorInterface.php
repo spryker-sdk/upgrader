@@ -14,9 +14,9 @@ interface ReleaseGroupValidatorInterface
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
      *
-     * @return void
-     *@throws \Upgrade\Application\Exception\UpgraderException
+     * @throws \Upgrade\Application\Exception\UpgraderException
      *
+     * @return void
      */
     public function validate(ReleaseGroupDto $releaseGroup): void;
 }

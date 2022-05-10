@@ -10,24 +10,22 @@ namespace Upgrade\Infrastructure\Commands;
 use SprykerSdk\SdkContracts\Entity\ContextInterface;
 use SprykerSdk\SdkContracts\Entity\ConverterInterface;
 use SprykerSdk\SdkContracts\Entity\ExecutableCommandInterface;
-use Upgrade\Application\Service\UpgradeService;
 use Upgrade\Application\Service\UpgradeServiceInterface;
 use Upgrade\Domain\Entity\Message;
-use Upgrade\Infrastructure\Service\UpgradeServiceInterface;
 
 class UpgradeCommand implements ExecutableCommandInterface
 {
     /**
-     * @var UpgradeServiceInterface
+     * @var \Upgrade\Application\Service\UpgradeServiceInterface
      */
     protected $upgradeService;
 
     /**
-     * @param UpgradeServiceInterface $upgraderService
+     * @param \Upgrade\Application\Service\UpgradeServiceInterface $upgradeService
      */
-    public function __construct(UpgradeServiceInterface $upgraderService)
+    public function __construct(UpgradeServiceInterface $upgradeService)
     {
-        $this->upgradeService = $upgraderService;
+        $this->upgradeService = $upgradeService;
     }
 
     /**

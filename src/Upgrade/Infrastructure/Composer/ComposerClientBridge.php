@@ -8,11 +8,11 @@
 namespace Upgrade\Infrastructure\Composer;
 
 use Upgrade\Application\Bridge\ComposerClientBridgeInterface;
+use Upgrade\Application\Dto\ExecutionDto;
+use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Infrastructure\Composer\CommandExecutor\ComposerCommandExecutorInterface;
 use Upgrade\Infrastructure\Composer\Reader\ComposerJsonReaderInterface;
 use Upgrade\Infrastructure\Composer\Reader\ComposerLockReaderInterface;
-use Upgrade\Domain\Entity\Collection\PackageCollection;
-use Upgrade\Application\Dto\ExecutionDto;
 
 class ComposerClientBridge implements ComposerClientBridgeInterface
 {
@@ -52,9 +52,9 @@ class ComposerClientBridge implements ComposerClientBridgeInterface
      * @param \Upgrade\Infrastructure\Composer\Reader\ComposerLockReaderInterface $composerLockReader
      */
     public function __construct(
-       ComposerCommandExecutorInterface $composerCallExecutor,
-        ComposerJsonReaderInterface                      $composerJsonReader,
-        ComposerLockReaderInterface                      $composerLockReader
+        ComposerCommandExecutorInterface $composerCallExecutor,
+        ComposerJsonReaderInterface $composerJsonReader,
+        ComposerLockReaderInterface $composerLockReader
     ) {
         $this->composerCommandExecutor = $composerCallExecutor;
         $this->composerJsonReader = $composerJsonReader;
@@ -88,8 +88,9 @@ class ComposerClientBridge implements ComposerClientBridgeInterface
     }
 
     /**
-     * @param PackageCollection $packageCollection
-     * @return ExecutionDto
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function require(PackageCollection $packageCollection): ExecutionDto
     {
@@ -97,8 +98,9 @@ class ComposerClientBridge implements ComposerClientBridgeInterface
     }
 
     /**
-     * @param PackageCollection $packageCollection
-     * @return ExecutionDto
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function requireDev(PackageCollection $packageCollection): ExecutionDto
     {

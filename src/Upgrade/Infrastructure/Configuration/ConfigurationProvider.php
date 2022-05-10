@@ -7,9 +7,7 @@
 
 namespace Upgrade\Infrastructure\Configuration;
 
-use Upgrade\Application\Provider\ConfigurationProviderInterface;
-
-class ConfigurationProvider implements \Upgrade\Application\Provider\ConfigurationProviderInterface
+class ConfigurationProvider implements ConfigurationProviderInterface
 {
     /**
      * @var string

@@ -17,7 +17,7 @@ class PushChangesStep extends AbstractStep implements RollbackStepInterface
      *
      * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
-    public function run(\Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto): \Upgrade\Application\Dto\StepsExecutionDto
+    public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         return $this->vsc->pushChanges($stepsExecutionDto);
     }

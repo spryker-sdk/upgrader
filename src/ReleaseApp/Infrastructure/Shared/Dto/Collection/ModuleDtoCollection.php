@@ -7,8 +7,8 @@
 
 namespace ReleaseApp\Infrastructure\Shared\Dto\Collection;
 
-use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use ReleaseApp\Application\Configuration\ReleaseAppConst;
+use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 
 class ModuleDtoCollection
 {

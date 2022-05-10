@@ -9,8 +9,8 @@ namespace ReleaseApp\Domain\Entities;
 
 use DateTime;
 use DateTimeInterface;
-use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection;
 use ReleaseApp\Application\Configuration\ReleaseAppConst;
+use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection;
 use Upgrade\Application\Exception\UpgraderException;
 
 class UpgradeInstructionsReleaseGroup
@@ -83,9 +83,9 @@ class UpgradeInstructionsReleaseGroup
     }
 
     /**
-     * @return \DateTimeInterface
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
+     * @return \DateTimeInterface
      */
     public function getReleased(): DateTimeInterface
     {

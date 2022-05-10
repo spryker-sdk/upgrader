@@ -25,6 +25,6 @@ interface ReleaseGroupRequireProcessorInterface
      */
     public function requireCollection(
         ReleaseGroupDtoCollection $requiteRequestCollection,
-        StepsExecutionDto         $stepsExecutionDto
+        StepsExecutionDto $stepsExecutionDto
     ): StepsExecutionDto;
 }

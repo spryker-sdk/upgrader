@@ -9,9 +9,9 @@ namespace ReleaseApp\Application\Service;
 
 use ReleaseApp\Application\Configuration\ConfigurationProviderInterface;
 use ReleaseApp\Domain\Client\ClientInterface;
-use ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
+use ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection;
 use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection;
 
 class ReleaseAppService implements ReleaseAppServiceInterface
@@ -38,7 +38,8 @@ class ReleaseAppService implements ReleaseAppServiceInterface
 
     /**
      * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $request
-     * @return UpgradeInstructionsReleaseGroupCollection
+     *
+     * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection
      */
     public function getNotInstalledReleaseGroupList(UpgradeAnalysisRequest $request): UpgradeInstructionsReleaseGroupCollection
     {
@@ -47,7 +48,6 @@ class ReleaseAppService implements ReleaseAppServiceInterface
 
         return $releaseGroupCollection->filterWithoutReleased()->getSortedByReleased();
     }
-
 
     /**
      * @param \ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection $moduleVersionCollection
@@ -70,7 +70,8 @@ class ReleaseAppService implements ReleaseAppServiceInterface
 
     /**
      * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $request
-     * @return UpgradeAnalysisModuleVersionCollection
+     *
+     * @return \ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection
      */
     protected function getModuleVersionCollection(
         UpgradeAnalysisRequest $request

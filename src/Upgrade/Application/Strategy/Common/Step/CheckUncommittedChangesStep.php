@@ -17,7 +17,7 @@ class CheckUncommittedChangesStep extends AbstractStep implements StepInterface
      *
      * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
-    public function run(\Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $stepsExecutionDto = $this->vsc->hasAnyUncommittedChanges($stepsExecutionDto);
         if (!$stepsExecutionDto->getIsSuccessful()) {

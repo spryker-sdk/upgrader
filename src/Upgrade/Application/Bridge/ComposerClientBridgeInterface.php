@@ -7,8 +7,8 @@
 
 namespace Upgrade\Application\Bridge;
 
-use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Application\Dto\ExecutionDto;
+use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 interface ComposerClientBridgeInterface
 {
@@ -28,19 +28,21 @@ interface ComposerClientBridgeInterface
     public function getComposerLockFile(): array;
 
     /**
-     * @param PackageCollection $packageCollection
-     * @return ExecutionDto
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function require(PackageCollection $packageCollection): ExecutionDto;
 
     /**
-     * @param PackageCollection $packageCollection
-     * @return ExecutionDto
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function requireDev(PackageCollection $packageCollection): ExecutionDto;
 
     /**
-     * @return ExecutionDto
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function update(): ExecutionDto;
 

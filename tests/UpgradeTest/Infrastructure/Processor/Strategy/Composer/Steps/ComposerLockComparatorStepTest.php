@@ -7,10 +7,10 @@
 
 namespace UpgradeTest\Infrastructure\Processor\Strategy\Composer\Steps;
 
-use Upgrade\Application\Dto\ComposerLockDiffDto;
-use PHPUnit\Framework\TestCase;
 use Core\Infrastructure\Service\ProcessRunnerService;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
+use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Application\Strategy\Common\Step\ComposerLockComparatorStep;
 use Upgrade\Application\Strategy\Comparator\ComposerLockComparator;

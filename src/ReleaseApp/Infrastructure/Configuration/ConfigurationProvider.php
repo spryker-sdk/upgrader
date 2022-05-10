@@ -7,9 +7,7 @@
 
 namespace ReleaseApp\Infrastructure\Configuration;
 
-use ReleaseApp\Application\Configuration\ConfigurationProviderInterface;
-
-class ConfigurationProvider implements \ReleaseApp\Application\Configuration\ConfigurationProviderInterface
+class ConfigurationProvider implements ConfigurationProviderInterface
 {
     /**
      * @var string

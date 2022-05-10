@@ -7,7 +7,6 @@
 
 namespace ReleaseApp\Domain\Client\Request;
 
-use ReleaseApp\Domain\Client\Request\RequestInterface;
 use ReleaseApp\Domain\Entities\UpgradeInstructions;
 
 class UpgradeInstructionsRequest implements RequestInterface

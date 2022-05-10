@@ -7,29 +7,29 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Mapper;
 
-use PackageManager\Application\Service\PackageManagerServiceInterface;
+use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
+use Upgrade\Application\Bridge\ComposerClientBridgeInterface;
+use Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
-use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
-use Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface;
 
 class PackageCollectionMapper implements PackageCollectionMapperInterface
 {
     /**
      * @var \Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface
      */
-    protected $packageValidator;
+    protected PackageSoftValidatorInterface $packageValidator;
 
     /**
-     * @var \PackageManager\Application\Service\PackageManagerServiceInterface
+     * @var \Upgrade\Application\Bridge\ComposerClientBridgeInterface
      */
-    protected $packageManager;
+    protected ComposerClientBridgeInterface $packageManager;
 
     /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface $packageValidator
-     * @param \PackageManager\Application\Service\PackageManagerServiceInterface $packageManager
+     * @param \Upgrade\Application\Bridge\ComposerClientBridgeInterface $packageManager
      */
-    public function __construct(PackageSoftValidatorInterface $packageValidator, PackageManagerServiceInterface $packageManager)
+    public function __construct(PackageSoftValidatorInterface $packageValidator, ComposerClientBridgeInterface $packageManager)
     {
         $this->packageValidator = $packageValidator;
         $this->packageManager = $packageManager;
@@ -64,7 +64,7 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
 
         foreach ($packageCollection->toArray() as $package) {
             $validateResult = $this->packageValidator->isValidPackage($package);
-            if ($validateResult->isSuccess()) {
+            if ($validateResult->isSuccessful()) {
                 $resultCollection->add($package);
             }
         }

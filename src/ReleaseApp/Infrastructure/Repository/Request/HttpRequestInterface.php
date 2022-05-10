@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace ReleaseApp\Infrastructure\Repository\Request;
 
 use ReleaseApp\Domain\Client\Request\RequestInterface;
@@ -17,7 +22,7 @@ interface HttpRequestInterface
     public const REQUEST_TYPE_GET = 'GET';
 
     /**
-     * @return RequestInterface
+     * @return \ReleaseApp\Domain\Client\Request\RequestInterface
      */
     public function getDomainRequest(): RequestInterface;
 

@@ -7,15 +7,15 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator;
 
-use PackageManager\Domain\Dto\PackageManagerResponseDto;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Application\Dto\ExecutionDto;
 
 interface ThresholdSoftValidatorInterface
 {
     /**
-     * @param ReleaseGroupDtoCollection $moduleDtoCollection
-     * @return ExecutionDto
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $moduleDtoCollection
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function isWithInThreshold(ReleaseGroupDtoCollection $moduleDtoCollection): ExecutionDto;
 }

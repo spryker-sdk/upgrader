@@ -7,11 +7,11 @@
 
 namespace UpgradeTest\Infrastructure\VersionControlSystem\Git;
 
-use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Core\Infrastructure\Service\ProcessRunnerService;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Process\Process;
+use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;

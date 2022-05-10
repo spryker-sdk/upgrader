@@ -7,8 +7,8 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver;
 
-use Upgrade\Infrastructure\Exception\VersionControlSystemAdapterIsNotDefined;
 use Upgrade\Application\Bridge\VersionControlSystemBridgeInterface;
+use Upgrade\Infrastructure\Exception\VersionControlSystemAdapterIsNotDefined;
 
 class VersionControlSystemAdapterResolver
 {
@@ -28,9 +28,9 @@ class VersionControlSystemAdapterResolver
     /**
      * @param string $type
      *
-     * @return \Upgrade\Application\Bridge\VersionControlSystemBridgeInterface
-     *@throws \Upgrade\Infrastructure\Exception\VersionControlSystemAdapterIsNotDefined
+     * @throws \Upgrade\Infrastructure\Exception\VersionControlSystemAdapterIsNotDefined
      *
+     * @return \Upgrade\Application\Bridge\VersionControlSystemBridgeInterface
      */
     public function resolve(string $type = 'git'): VersionControlSystemBridgeInterface
     {

@@ -17,7 +17,7 @@ class CheckLocalTargetBranchExistsStep extends AbstractStep implements StepInter
      *
      * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
-    public function run(\Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $stepsExecutionDto = $this->vsc->isLocalTargetBranchNotExist($stepsExecutionDto);
         if (!$stepsExecutionDto->getIsSuccessful()) {

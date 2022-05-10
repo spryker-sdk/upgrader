@@ -7,10 +7,9 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator;
 
-use Upgrade\Domain\Entity\Package;
-use PackageManager\Domain\Dto\PackageManagerResponseDto;
-use Upgrade\Application\Exception\UpgraderException;
 use Upgrade\Application\Dto\ExecutionDto;
+use Upgrade\Application\Exception\UpgraderException;
+use Upgrade\Domain\Entity\Package;
 
 class PackageSoftValidator implements PackageSoftValidatorInterface
 {
@@ -29,7 +28,8 @@ class PackageSoftValidator implements PackageSoftValidatorInterface
 
     /**
      * @param \Upgrade\Domain\Entity\Package $package
-     * @return \Upgrade\Domain\Entity\\Upgrade\Domain\Entity\Step\\Upgrade\Application\Dto\ExecutionDto
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function isValidPackage(Package $package): ExecutionDto
     {

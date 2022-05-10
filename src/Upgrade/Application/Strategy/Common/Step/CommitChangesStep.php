@@ -17,7 +17,7 @@ class CommitChangesStep extends AbstractStep implements StepInterface
      *
      * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
-    public function run(StepsExecutionDto $stepsExecutionDto): \Upgrade\Application\Dto\StepsExecutionDto
+    public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         return $this->vsc->commitChanges($stepsExecutionDto);
     }

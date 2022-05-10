@@ -8,9 +8,9 @@
 namespace Upgrade\Infrastructure\Composer\CommandExecutor;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
-use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ExecutionDto;
+use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 class ComposerCommandExecutor implements ComposerCommandExecutorInterface
 {
@@ -40,12 +40,12 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     protected const DEV_FLAG = '--dev';
 
     /**
-     * @var ProcessRunnerServiceInterface
+     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunner;
 
     /**
-     * @param ProcessRunnerServiceInterface $processRunner
+     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      */
     public function __construct(ProcessRunnerServiceInterface $processRunner)
     {
@@ -53,8 +53,9 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     }
 
     /**
-     * @param PackageCollection $packageCollection
-     * @return ExecutionDto
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function require(PackageCollection $packageCollection): ExecutionDto
     {
@@ -72,8 +73,9 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     }
 
     /**
-     * @param PackageCollection $packageCollection
-     * @return ExecutionDto
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function requireDev(PackageCollection $packageCollection): ExecutionDto
     {
@@ -92,7 +94,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     }
 
     /**
-     * @return ExecutionDto
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function update(): ExecutionDto
     {
@@ -125,8 +127,9 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     }
 
     /**
-     * @param Process $process
-     * @return ExecutionDto
+     * @param \Symfony\Component\Process\Process $process
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     protected function createResponse(Process $process): ExecutionDto
     {

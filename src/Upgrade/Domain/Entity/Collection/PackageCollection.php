@@ -59,7 +59,8 @@ class PackageCollection
     }
 
     /**
-     * @param PackageCollection $collectionToMerge
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection|self $collectionToMerge
+     *
      * @return void
      */
     public function addCollection(self $collectionToMerge): void

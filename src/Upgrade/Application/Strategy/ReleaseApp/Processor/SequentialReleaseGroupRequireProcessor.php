@@ -7,7 +7,6 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
-use Upgrade\Domain\Entity\Collection\PackageCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Bridge\ComposerClientBridgeInterface;
@@ -16,6 +15,7 @@ use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
+use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProcessorInterface
@@ -98,10 +98,10 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
         return $stepsExecutionDto;
     }
 
-
     /**
-     * @param ReleaseGroupDto $releaseGroup
-     * @return \Upgrade\Domain\Entity\\Upgrade\Application\Dto\ExecutionDto
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     public function require(ReleaseGroupDto $releaseGroup): ExecutionDto
     {
@@ -125,7 +125,8 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
 
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     * @return \Upgrade\Domain\Entity\ExecutionDto
+     *
+     * @return \Upgrade\Application\Dto\ExecutionDto
      */
     protected function requirePackageCollection(PackageCollection $packageCollection): ExecutionDto
     {

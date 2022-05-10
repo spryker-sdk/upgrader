@@ -7,7 +7,6 @@
 
 namespace Upgrade\Application\Dto;
 
-
 class ExecutionDto
 {
     /**

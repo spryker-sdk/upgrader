@@ -7,8 +7,8 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
-use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Application\Exception\ReleaseGroupRequireProcessorIsNotDefinedException;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class ReleaseGroupRequireProcessorResolver
 {
@@ -33,9 +33,9 @@ class ReleaseGroupRequireProcessorResolver
     }
 
     /**
-     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface
-     *@throws \Upgrade\Application\Exception\ReleaseGroupRequireProcessorIsNotDefinedException
+     * @throws \Upgrade\Application\Exception\ReleaseGroupRequireProcessorIsNotDefinedException
      *
+     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface
      */
     public function getProcessor(): ReleaseGroupRequireProcessorInterface
     {

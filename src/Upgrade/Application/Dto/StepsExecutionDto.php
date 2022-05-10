@@ -7,8 +7,6 @@
 
 namespace Upgrade\Application\Dto;
 
-use Upgrade\Application\Dto\ComposerLockDiffDto;
-
 class StepsExecutionDto extends ExecutionDto
 {
     /**
