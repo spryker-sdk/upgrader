@@ -16,7 +16,7 @@ use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparator
 use Upgrade\Infrastructure\PackageManager\Reader\ComposerJsonReaderInterface;
 use Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReaderInterface;
 
-class PackageManagerBridge implements PackageManagerBridgeInterface
+class ComposerBridge implements PackageManagerBridgeInterface
 {
     /**
      * @var string

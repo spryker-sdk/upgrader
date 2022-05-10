@@ -5,35 +5,35 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Processor\Strategy\Composer\Steps;
+namespace Upgrade\Application\Strategy\Common\Step;
 
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Processor\Strategy\IntegratorClient\IntegratorClientInterface;
-use Upgrade\Infrastructure\Processor\Strategy\RollbackStepInterface;
-use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver;
+use Upgrade\Application\Bridge\IntegratorBridgeInterface;
+use Upgrade\Application\Bridge\VersionControlSystemBridgeInterface;
+use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Strategy\RollbackStepInterface;
 
 class IntegratorStep extends AbstractStep implements RollbackStepInterface
 {
     /**
-     * @var \Upgrade\Infrastructure\Processor\Strategy\IntegratorClient\IntegratorClientInterface
+     * @var \Upgrade\Application\Bridge\IntegratorBridgeInterface
      */
-    protected IntegratorClientInterface $integratorClient;
+    protected IntegratorBridgeInterface $integratorClient;
 
     /**
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver $vscAdapterResolver
-     * @param \Upgrade\Infrastructure\Processor\Strategy\IntegratorClient\IntegratorClientInterface $integratorClient
+     * @param \Upgrade\Application\Bridge\VersionControlSystemBridgeInterface $versionControlSystem
+     * @param \Upgrade\Application\Bridge\IntegratorBridgeInterface $integratorClient
      */
-    public function __construct(VersionControlSystemAdapterResolver $vscAdapterResolver, IntegratorClientInterface $integratorClient)
+    public function __construct(VersionControlSystemBridgeInterface $versionControlSystem, IntegratorBridgeInterface $integratorClient)
     {
-        parent::__construct($vscAdapterResolver);
+        parent::__construct($versionControlSystem);
 
         $this->integratorClient = $integratorClient;
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -41,9 +41,9 @@ class IntegratorStep extends AbstractStep implements RollbackStepInterface
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function rollBack(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {

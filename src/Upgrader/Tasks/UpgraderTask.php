@@ -11,7 +11,7 @@ use Codebase\Infrastructure\Service\CodebaseService;
 use CodeCompliance\Application\Service\CodeComplianceServiceInterface;
 use SprykerSdk\SdkContracts\Entity\Lifecycle\LifecycleInterface;
 use SprykerSdk\SdkContracts\Entity\TaskInterface;
-use Upgrade\Application\Services\UpgraderServiceInterface;
+use Upgrade\Application\Service\UpgradeServiceInterface;
 use Upgrader\Commands\Evaluate\Analyze\AnalyzeCommand;
 use Upgrader\Commands\Evaluate\Report\ReportCommand;
 use Upgrader\Commands\Upgrade\UpgradeCommand;
@@ -41,21 +41,21 @@ class UpgraderTask implements TaskInterface
     protected CodebaseService $codebaseService;
 
     /**
-     * @var \Upgrade\Application\Services\UpgraderServiceInterface
+     * @var \Upgrade\Application\Service\UpgradeServiceInterface
      */
-    protected UpgraderServiceInterface $upgraderService;
+    protected UpgradeServiceInterface $upgraderService;
 
     /**
      * @param \CodeCompliance\Application\Service\CodeComplianceServiceInterface $codeComplianceService
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
      * @param \Codebase\Infrastructure\Service\CodebaseService $codebaseService
-     * @param \Upgrade\Application\Services\UpgraderServiceInterface $upgraderService
+     * @param \Upgrade\Application\Service\UpgradeServiceInterface $upgraderService
      */
     public function __construct(
         CodeComplianceServiceInterface $codeComplianceService,
         ConfigurationProvider $configurationProvider,
         CodebaseService $codebaseService,
-        UpgraderServiceInterface $upgraderService
+        UpgradeServiceInterface $upgraderService
     ) {
         $this->codeComplianceService = $codeComplianceService;
         $this->configurationProvider = $configurationProvider;

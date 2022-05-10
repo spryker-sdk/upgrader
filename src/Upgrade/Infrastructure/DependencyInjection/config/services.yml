@@ -44,7 +44,7 @@ services:
         class: Upgrade\Application\Strategy\Common\Step\ComposerLockComparatorStep
 
     integrator.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\IntegratorStep
+        class: Upgrade\Application\Strategy\Common\Step\IntegratorStep
 
     create_branch.step:
         class: Upgrade\Application\Strategy\Common\Step\CreateBranchStep
@@ -95,12 +95,13 @@ services:
                 param3: '@check_uncommitted_changes.step',
                 param4: '@release_group_update.step',
                 param5: '@composer_lock_diff.step',
-                param6: '@create_branch.step',
-                param7: '@add_changes.step',
-                param8: '@commit_changes.step',
-                param9: '@push_changes.step',
-                param10: '@create_pr.step',
-                param11: '@checkout.step'
+                param6: '@integrator.step',
+                param7: '@create_branch.step',
+                param8: '@add_changes.step',
+                param9: '@commit_changes.step',
+                param10: '@push_changes.step',
+                param11: '@create_pr.step',
+                param12: '@checkout.step'
             }
 
     Upgrade\Application\Strategy\StrategyResolver:

@@ -9,7 +9,7 @@ namespace Upgrader\Tasks\Upgrade;
 
 use SprykerSdk\SdkContracts\Entity\Lifecycle\LifecycleInterface;
 use SprykerSdk\SdkContracts\Entity\TaskInterface;
-use Upgrade\Application\Services\UpgraderServiceInterface;
+use Upgrade\Application\Service\UpgradeServiceInterface;
 use Upgrader\Commands\Upgrade\UpgradeCommand;
 use Upgrader\Lifecycle\Lifecycle;
 
