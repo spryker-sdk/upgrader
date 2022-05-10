@@ -38,7 +38,7 @@ class PathThresholdValidator implements ThresholdValidatorInterface
         $softThreshold = $this->configurationProvider->getSoftThresholdBugfix();
         if ($releaseGroupDtoCollection->getCommonModuleCollection()->getPathAmount() > $softThreshold) {
             throw new UpgraderException(
-                sprintf('Soft threshold hit by %s major releases amount', $softThreshold),
+                sprintf('Soft threshold hit by %s major releases', $softThreshold),
             );
         }
     }

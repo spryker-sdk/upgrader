@@ -17,7 +17,7 @@ class UpgradeAnalysisModuleVersionCollection
     protected $elements = [];
 
     /**
-     * @param array $elements
+     * @param array<\ReleaseApp\Domain\Entities\UpgradeAnalysisModuleVersion> $elements
      */
     public function __construct(array $elements = [])
     {
@@ -35,7 +35,7 @@ class UpgradeAnalysisModuleVersionCollection
     }
 
     /**
-     * @return array
+     * @return array<\ReleaseApp\Domain\Entities\UpgradeAnalysisModuleVersion>
      */
     public function toArray(): array
     {

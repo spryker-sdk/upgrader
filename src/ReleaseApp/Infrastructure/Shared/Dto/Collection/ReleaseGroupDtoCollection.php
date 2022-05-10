@@ -17,7 +17,7 @@ class ReleaseGroupDtoCollection
     protected $elements = [];
 
     /**
-     * @param array $elements
+     * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto> $elements
      */
     public function __construct(array $elements = [])
     {
@@ -35,7 +35,7 @@ class ReleaseGroupDtoCollection
     }
 
     /**
-     * @return array
+     * @return array<\ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto>
      */
     public function toArray(): array
     {

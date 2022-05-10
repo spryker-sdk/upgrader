@@ -18,7 +18,7 @@ class UpgradeInstructionsReleaseGroupCollection
     protected $elements = [];
 
     /**
-     * @param array $elements
+     * @param array<\ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup> $elements
      */
     public function __construct(array $elements = [])
     {
@@ -36,7 +36,7 @@ class UpgradeInstructionsReleaseGroupCollection
     }
 
     /**
-     * @return array
+     * @return array<\ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup>
      */
     public function toArray(): array
     {

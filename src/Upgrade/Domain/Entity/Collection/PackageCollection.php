@@ -17,7 +17,7 @@ class PackageCollection
     protected $elements = [];
 
     /**
-     * @param array $elements
+     * @param array<\Upgrade\Domain\Entity\Package> $elements
      */
     public function __construct(array $elements = [])
     {
@@ -35,7 +35,7 @@ class PackageCollection
     }
 
     /**
-     * @return array
+     * @return array<\Upgrade\Domain\Entity\Package>
      */
     public function toArray(): array
     {

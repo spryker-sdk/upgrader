@@ -38,7 +38,7 @@ class MajorThresholdValidator implements ThresholdValidatorInterface
         $softThreshold = $this->configurationProvider->getSoftThresholdMajor();
         if ($releaseReleaseGroupDtoCollection->getCommonModuleCollection()->getMajorAmount() > $softThreshold) {
             throw new UpgraderException(
-                sprintf('Soft threshold hit by %s major releases amount', $softThreshold),
+                sprintf('Soft threshold hit by %s major releases', $softThreshold),
             );
         }
     }

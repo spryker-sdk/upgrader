@@ -17,7 +17,7 @@ class UpgradeAnalysisModuleCollection
     protected $elements = [];
 
     /**
-     * @param array $elements
+     * @param array<\ReleaseApp\Domain\Entities\UpgradeAnalysisModule> $elements
      */
     public function __construct(array $elements = [])
     {

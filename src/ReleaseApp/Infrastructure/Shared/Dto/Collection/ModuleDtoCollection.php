@@ -18,7 +18,7 @@ class ModuleDtoCollection
     protected $elements = [];
 
     /**
-     * @param array $elements
+     * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto> $elements
      */
     public function __construct(array $elements = [])
     {
@@ -36,7 +36,7 @@ class ModuleDtoCollection
     }
 
     /**
-     * @return array
+     * @return array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto>
      */
     public function toArray(): array
     {
