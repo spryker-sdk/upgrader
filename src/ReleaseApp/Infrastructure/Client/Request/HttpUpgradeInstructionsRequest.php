@@ -5,16 +5,16 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace ReleaseApp\Infrastructure\Repository\Request;
+namespace ReleaseApp\Infrastructure\Client\Request;
 
 use ReleaseApp\Domain\Client\Request\RequestInterface;
 
-class HttpUpgradeAnalysisHttpRequest implements HttpRequestInterface
+class HttpUpgradeInstructionsRequest implements HttpRequestInterface
 {
     /**
      * @var string
      */
-    protected const ENDPOINT = '/upgrade-analysis.json';
+    protected const ENDPOINT = '/upgrade-instructions.json';
 
     /**
      * @var \ReleaseApp\Domain\Client\Request\RequestInterface
@@ -42,7 +42,7 @@ class HttpUpgradeAnalysisHttpRequest implements HttpRequestInterface
      */
     public function getEndpoint(): string
     {
-        return static::ENDPOINT;
+        return sprintf('%s?%s', static::ENDPOINT, $this->domainRequest->getParameters());
     }
 
     /**

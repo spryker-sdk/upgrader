@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace ReleaseApp\Infrastructure\Repository;
+namespace ReleaseApp\Infrastructure\Client;
 
 use ReleaseApp\Domain\Client\ClientInterface;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
@@ -13,33 +13,33 @@ use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Client\Response\ResponseInterface;
 use ReleaseApp\Domain\Entities\UpgradeAnalysis;
 use ReleaseApp\Domain\Entities\UpgradeInstructions;
-use ReleaseApp\Infrastructure\Repository\Builder\HttpRequestBuilderInterface;
-use ReleaseApp\Infrastructure\Repository\Builder\HttpResponseBuilderInterface;
-use ReleaseApp\Infrastructure\Repository\Request\HttpRequestInterface;
-use ReleaseApp\Infrastructure\Repository\Request\HttpUpgradeAnalysisHttpRequest;
-use ReleaseApp\Infrastructure\Repository\Request\HttpUpgradeInstructionsRequest;
+use ReleaseApp\Infrastructure\Client\Builder\HttpRequestBuilderInterface;
+use ReleaseApp\Infrastructure\Client\Builder\HttpResponseBuilderInterface;
+use ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface;
+use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeAnalysisHttpRequest;
+use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeInstructionsRequest;
 
 class HttpClient implements ClientInterface
 {
     /**
-     * @var \ReleaseApp\Infrastructure\Repository\Builder\HttpRequestBuilderInterface
+     * @var \ReleaseApp\Infrastructure\Client\Builder\HttpRequestBuilderInterface
      */
     protected $guzzleRequestBuilder;
 
     /**
-     * @var \ReleaseApp\Infrastructure\Repository\Builder\HttpResponseBuilderInterface
+     * @var \ReleaseApp\Infrastructure\Client\Builder\HttpResponseBuilderInterface
      */
     protected $responseBuilder;
 
     /**
-     * @var \ReleaseApp\Infrastructure\Repository\HttpRequestExecutorInterface
+     * @var \ReleaseApp\Infrastructure\Client\HttpRequestExecutorInterface
      */
     protected $requestExecutor;
 
     /**
-     * @param \ReleaseApp\Infrastructure\Repository\Builder\HttpRequestBuilderInterface $guzzleRequestBuilder
-     * @param \ReleaseApp\Infrastructure\Repository\Builder\HttpResponseBuilderInterface $responseBuilder
-     * @param \ReleaseApp\Infrastructure\Repository\HttpRequestExecutorInterface $requestExecutor
+     * @param \ReleaseApp\Infrastructure\Client\Builder\HttpRequestBuilderInterface $guzzleRequestBuilder
+     * @param \ReleaseApp\Infrastructure\Client\Builder\HttpResponseBuilderInterface $responseBuilder
+     * @param \ReleaseApp\Infrastructure\Client\HttpRequestExecutorInterface $requestExecutor
      */
     public function __construct(
         HttpRequestBuilderInterface $guzzleRequestBuilder,
@@ -78,7 +78,7 @@ class HttpClient implements ClientInterface
     }
 
     /**
-     * @param \ReleaseApp\Infrastructure\Repository\Request\HttpRequestInterface $request
+     * @param \ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface $request
      *
      * @return \ReleaseApp\Domain\Client\Response\ResponseInterface
      */

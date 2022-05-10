@@ -5,13 +5,14 @@ services:
         public: true
 
 # ReleaseAppClient
-    ReleaseAppClient\:
-        resource: '../../../../ReleaseAppClient/*'
+    ReleaseApp\:
+        resource: '../../../../ReleaseApp/*'
         exclude:
-            - '../../../../ReleaseAppClient/Domain/Dto/*'
-            - '../../../../ReleaseAppClient/Domain/Entities/HttpResponse.php'
-            - '../../../../ReleaseAppClient/Domain/Entities/UpgradeAnalysis/*'
-            - '../../../../ReleaseAppClient/Domain/Entities/UpgradeInstructions/*'
+            - '../../../../ReleaseApp/Domain/Entities/*'
+            - '../../../../ReleaseApp/Domain/Client/Request/*'
+            - '../../../../ReleaseApp/Domain/Client/Response/*'
+            - '../../../../ReleaseApp/Infrastructure/Client/Request/*'
+            - '../../../../ReleaseApp/Infrastructure/Shared/Dto/*'
 
-    ReleaseAppClient\Application\Client\ReleaseAppClient: ~
-    ReleaseAppClient\Domain\Client\ReleaseAppClientInterface: '@ReleaseAppClient\Application\Client\ReleaseAppClient'
+#    ReleaseAppClient\Application\Client\ReleaseAppClient: ~
+#    ReleaseAppClient\Domain\Client\ReleaseAppClientInterface: '@ReleaseAppClient\Application\Client\ReleaseAppClient'

@@ -8,6 +8,7 @@
 namespace Upgrade\Application\Strategy\ReleaseApp\Step;
 
 use Upgrade\Application\Bridge\ReleaseAppClientBridgeInterface;
+use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver;
 use Upgrade\Application\Strategy\StepInterface;

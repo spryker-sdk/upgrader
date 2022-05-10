@@ -7,24 +7,10 @@
 
 namespace Core\Infrastructure\Service;
 
-use Core\Infrastructure\ProcessRunner\ProcessRunner;
 use Symfony\Component\Process\Process;
 
 class ProcessRunnerService implements ProcessRunnerServiceInterface
 {
-    /**
-     * @var \Core\Infrastructure\ProcessRunner\ProcessRunner
-     */
-    protected ProcessRunner $processRunner;
-
-    /**
-     * @param \Core\Infrastructure\ProcessRunner\ProcessRunner $processRunner
-     */
-    public function __construct(ProcessRunner $processRunner)
-    {
-        $this->processRunner = $processRunner;
-    }
-
     /**
      * @param array $command
      *
@@ -32,6 +18,10 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
      */
     public function run(array $command): Process
     {
-        return $this->processRunner->run($command);
+        $process = new Process($command, (string)getcwd());
+        $process->setTimeout(300);
+        $process->run();
+
+        return $process;
     }
 }

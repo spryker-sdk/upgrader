@@ -5,16 +5,16 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace ReleaseApp\Infrastructure\Repository\Builder;
+namespace ReleaseApp\Infrastructure\Client\Builder;
 
 use Psr\Http\Message\ResponseInterface;
 use ReleaseApp\Domain\Client\Response\ResponseInterface as DomainResponse;
-use ReleaseApp\Infrastructure\Repository\Request\HttpRequestInterface;
+use ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface;
 
 interface HttpResponseBuilderInterface
 {
     /**
-     * @param \ReleaseApp\Infrastructure\Repository\Request\HttpRequestInterface $request
+     * @param \ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface $request
      * @param \Psr\Http\Message\ResponseInterface $guzzleResponse
      *
      * @return \ReleaseApp\Domain\Client\Response\ResponseInterface

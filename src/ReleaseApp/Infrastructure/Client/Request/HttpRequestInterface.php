@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace ReleaseApp\Infrastructure\Repository\Request;
+namespace ReleaseApp\Infrastructure\Client\Request;
 
 use ReleaseApp\Domain\Client\Request\RequestInterface;
 

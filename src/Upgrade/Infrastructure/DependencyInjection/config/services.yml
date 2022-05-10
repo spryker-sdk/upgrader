@@ -8,16 +8,10 @@ services:
     Upgrade\:
         resource: '../../../../Upgrade/*'
         exclude:
-            - '../../../../Upgrade/Domain/Dto/*'
-
-    Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter: ~
-    Upgrade\Infrastructure\VersionControlSystem\Adapter\VersionControlSystemAdapterInterface: '@Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter'
-
-    Upgrade\Infrastructure\Services\UpgraderService: ~
-    Upgrade\Application\Services\UpgraderServiceInterface: '@Upgrade\Application\Service\UpgraderService'
+            - '../../../../Upgrade/Application/Dto/*'
 
     git.adapter:
-        class: Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter
+        class: Upgrade\Infrastructure\VersionControlSystem\Git\Bridge\GitBridge
 
     Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver:
         class: Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver
@@ -100,7 +94,7 @@ services:
                 param11: '@checkout.step'
             }
 
-    Upgrade\Domain\Strategy\StrategyResolver:
+    Upgrade\Application\Strategy\StrategyResolver:
         class: Upgrade\Application\Strategy\StrategyResolver
         arguments:
             - {
@@ -125,7 +119,7 @@ services:
     validator.already_installed:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\Package\AlreadyInstalledValidator
 
-    Upgrade\Domain\Strategy\ReleaseApp\Validator\PackageSoftValidator:
+    Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidator
         arguments:
             - {
@@ -138,11 +132,11 @@ services:
     validator.release_major:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator
 
-    Upgrade\Domain\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
+    Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
         arguments:
             - {
-                param1: '@validator.project_changes',
+#                param1: '@validator.project_changes',
                 param2: '@validator.release_major',
             }
 
@@ -158,7 +152,7 @@ services:
     validator.threshold_release_group:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\ReleaseGroupThresholdValidator
 
-    Upgrade\Domain\Strategy\ReleaseApp\Validator\ThresholdSoftValidator:
+    Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator
         arguments:
             - {
@@ -174,7 +168,7 @@ services:
     processor.sequential_release_group_require:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupRequireProcessor
 
-    Upgrade\Domain\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver:
+    Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver
         arguments:
             - '@configuration.provider'

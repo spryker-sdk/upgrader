@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace ReleaseApp\Infrastructure\Repository;
+namespace ReleaseApp\Infrastructure\Client;
 
 use GuzzleHttp\Client as GuzzleHttp;
 use GuzzleHttp\Exception\ServerException;

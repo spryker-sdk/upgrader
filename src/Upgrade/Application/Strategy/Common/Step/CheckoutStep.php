@@ -7,6 +7,7 @@
 
 namespace Upgrade\Application\Strategy\Common\Step;
 
+use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Application\Strategy\StepInterface;
 use Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver;
 

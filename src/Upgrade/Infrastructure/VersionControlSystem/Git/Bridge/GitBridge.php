@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\VersionControlSystem\Git\Adapter;
+namespace Upgrade\Infrastructure\VersionControlSystem\Git\Bridge;
 
 use Upgrade\Application\Bridge\VersionControlSystemBridgeInterface;
 use Upgrade\Application\Dto\StepsExecutionDto;

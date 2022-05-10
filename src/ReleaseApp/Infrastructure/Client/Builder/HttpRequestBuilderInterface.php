@@ -5,15 +5,15 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace ReleaseApp\Infrastructure\Repository\Builder;
+namespace ReleaseApp\Infrastructure\Client\Builder;
 
 use GuzzleHttp\Psr7\Request;
-use ReleaseApp\Infrastructure\Repository\Request\HttpRequestInterface;
+use ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface;
 
 interface HttpRequestBuilderInterface
 {
     /**
-     * @param \ReleaseApp\Infrastructure\Repository\Request\HttpRequestInterface $request
+     * @param \ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface $request
      *
      * @return \GuzzleHttp\Psr7\Request
      */
