@@ -11,6 +11,7 @@ use Codebase\Application\Dto\ClassCodebaseDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
 use Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface;
 use Codebase\Infrastructure\SourceFinder\SourceFinder;
+use Codebase\Infrastructure\SourceParser\Cache\SourceCache;
 use Error;
 use Exception;
 use PhpParser\NodeTraverser;
@@ -40,15 +41,23 @@ class PhpParser implements ParserInterface
     protected $sourceFinder;
 
     /**
+     * @var \Codebase\Infrastructure\SourceParser\Cache\SourceCache
+     */
+    protected $sourceCache;
+
+    /**
      * @param \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface $parser
      * @param \Codebase\Infrastructure\SourceFinder\SourceFinder $sourceFinder
+     * @param \Codebase\Infrastructure\SourceParser\Cache\SourceCache $sourceCache
      */
     public function __construct(
         CodebaseToParserInterface $parser,
-        SourceFinder $sourceFinder
+        SourceFinder $sourceFinder,
+        SourceCache $sourceCache
     ) {
         $this->parser = $parser;
         $this->sourceFinder = $sourceFinder;
+        $this->sourceCache = $sourceCache;
     }
 
     /**
@@ -70,6 +79,41 @@ class PhpParser implements ParserInterface
         $this->requireAutoload();
         $this->defineEnvironmentVariables();
 
+//        $isCoreType = $codebaseSourceDto->getType() == SourceParserRequestDto::CORE_TYPE;
+//
+//        if ($isCoreType) {
+//            $cachedSources = $this->sourceCache->getSourceCacheType()->readCache(
+//                $this->sourceCache->getCacheIdentifier(),
+//                static::PARSER_EXTENSION
+//            );
+//
+//            if ($cachedSources) {
+//                $codebaseSourceDto->setPhpCodebaseSources($cachedSources, $codebaseSourceDto->getType());
+//
+//                return $codebaseSourceDto;
+//            }
+//        }
+
+        $sources = $this->parsePhpCodebase($finder, $codebaseSourceDto);
+//        if ($isCoreType) {
+//            $this->sourceCache->getSourceCacheType()->writeCache(
+//                $this->sourceCache->getCacheIdentifier(),
+//                static::PARSER_EXTENSION,
+//                $sources
+//            );
+//        }
+
+        return $codebaseSourceDto->setPhpCodebaseSources($sources, $codebaseSourceDto->getType());
+    }
+
+    /**
+     * @param \Symfony\Component\Finder\Finder $finder
+     * @param \Codebase\Application\Dto\CodebaseSourceDto $codebaseSourceDto
+     *
+     * @return array<\Codebase\Application\Dto\CodebaseInterface>
+     */
+    protected function parsePhpCodebase(Finder $finder, CodebaseSourceDto $codebaseSourceDto): array
+    {
         $sources = [];
         /** @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder as $file) {
@@ -100,7 +144,7 @@ class PhpParser implements ParserInterface
             }
         }
 
-        return $codebaseSourceDto->setPhpCodebaseSources($sources, $codebaseSourceDto->getType());
+        return $sources;
     }
 
     /**

@@ -20,16 +20,22 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     protected bool $extendsCore = false;
 
     /**
-     * @var array<string>
+     * @JMS\Type("array")
+     *
+     * @var array<int, string>
      */
     protected array $constants = [];
 
     /**
+     * @JMS\Type("array")
+     *
      * @var array<string>
      */
     protected array $methods = [];
 
     /**
+     * @JMS\Type("array")
+     *
      * @var array<string>
      */
     protected array $traits = [];
@@ -37,27 +43,33 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     /**
      * @phpstan-var \ReflectionClass<T>
      *
-     * @var \ReflectionClass
+     * @var \ReflectionClass|null
      */
-    protected ReflectionClass $reflection;
+    protected ?ReflectionClass $reflection = null;
 
     /**
+     * @JMS\Type("array")
+     *
      * @var array<\ReflectionMethod>
      */
     protected array $projectMethods = [];
 
     /**
+     * @JMS\Type("array")
+     *
      * @var array<\ReflectionMethod>
      */
     protected array $coreMethods = [];
 
     /**
+     * @JMS\Type("array")
+     *
      * @var array<\ReflectionMethod>
      */
     protected array $coreInterfacesMethods = [];
 
     /**
-     * @return array<string>
+     * @return array<int, string>
      */
     public function getConstants(): array
     {
@@ -119,9 +131,9 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     /**
      * @phpstan-return \ReflectionClass<T>
      *
-     * @return \ReflectionClass
+     * @return \ReflectionClass|null
      */
-    public function getReflection(): ReflectionClass
+    public function getReflection(): ?ReflectionClass
     {
         return $this->reflection;
     }
