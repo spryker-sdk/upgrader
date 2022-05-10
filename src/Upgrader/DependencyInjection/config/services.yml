@@ -1,0 +1,33 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+# Evaluate
+    Upgrader\:
+        resource: '../../../Upgrader/*'
+
+    upgrade.task:
+        class: Upgrader\Tasks\Upgrade\UpgradeTask
+        tags: [ 'sdk.task' ]
+
+    analyze.task:
+        class: Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask
+        tags: [ 'sdk.task' ]
+
+    report.task:
+        class: Upgrader\Tasks\Evaluate\Report\ReportTask
+        tags: [ 'sdk.task' ]
+
+    upgrader.task:
+        class: Upgrader\Tasks\UpgraderTask
+        tags: [ 'sdk.task' ]
+
+    report.listener:
+        class: Upgrader\Report\Event\ReportListener
+        tags:
+              - { name: kernel.event_listener, event: console.command, method: onConsoleCommand }
+
+# Third-party
+    Symfony\Component\Yaml\Yaml: ~

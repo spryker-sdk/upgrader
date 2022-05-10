@@ -254,10 +254,12 @@ class Git
     {
         $restore = array_merge(['git', 'restore'], $this->targetFiles);
         $restoreStaged = array_merge(['git', 'restore', '--staged'], $this->targetFiles);
+        $removeUntracked = ['git', 'clean', '-df'];
 
         $stepsExecutionDto = $this->process($stepsExecutionDto, $restoreStaged);
+        $stepsExecutionDto = $this->process($stepsExecutionDto, $restore);
 
-        return $this->process($stepsExecutionDto, $restore);
+        return $this->process($stepsExecutionDto, $removeUntracked);
     }
 
     /**
@@ -321,7 +323,7 @@ class Git
      */
     protected function prepareStepsExecutionDto(StepsExecutionDto $stepsExecutionDto, Process $process): StepsExecutionDto
     {
-        $command = str_replace('\'', '', $process->getCommandLine());
+        $command = str_replace('\'', '', (string)$process->getCommandLine());
         $output = $process->getExitCode() ? $process->getErrorOutput() : '';
         $outputs = array_filter([$command, $output]);
 
