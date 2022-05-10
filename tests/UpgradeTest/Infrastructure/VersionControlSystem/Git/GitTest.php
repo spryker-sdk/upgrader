@@ -15,7 +15,7 @@ use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
-use Upgrade\Infrastructure\VersionControlSystem\Provider\GitHub\GitHubProvider;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeProvider;
 
 class GitTest extends KernelTestCase
 {
@@ -127,7 +127,7 @@ class GitTest extends KernelTestCase
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
-        $gitHubProviderMock = $this->getMockBuilder(GitHubProvider::class)
+        $gitHubProviderMock = $this->getMockBuilder(GitHubSourceCodeProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -163,20 +163,13 @@ class GitTest extends KernelTestCase
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
-        $gitHubProviderMock = $this->getMockBuilder(GitHubProvider::class)
+        $gitHubProviderMock = $this->getMockBuilder(GitHubSourceCodeProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         // Assert
         $gitHubProviderMock->expects($this->exactly(1))
             ->method('createPullRequest')
-            ->with($stepsExecutionDto, $this->callback(function ($subject) {
-                return is_array($subject)
-                    && isset($subject['base'])
-                    && isset($subject['head'])
-                    && isset($subject['body'])
-                    && isset($subject['title']);
-            }))
             ->willReturn($stepsExecutionDto);
 
         // Arrange

@@ -19,6 +19,9 @@ use PhpParser\NodeVisitor\NameResolver;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
+/**
+ * @phpstan-template T of object
+ */
 class PhpParser implements ParserInterface
 {
     /**
@@ -131,6 +134,10 @@ class PhpParser implements ParserInterface
     }
 
     /**
+     * @phpstan-param \Codebase\Application\Dto\ClassCodebaseDto<T>|null $transfer
+     *
+     * @phpstan-return \Codebase\Application\Dto\ClassCodebaseDto<T>|null
+     *
      * @param string $namespace
      * @param array<string> $projectPrefixes
      * @param array<string> $coreNamespaces
@@ -148,6 +155,7 @@ class PhpParser implements ParserInterface
             if (!class_exists($namespace) && !interface_exists($namespace)) {
                 return null;
             }
+            /** @phpstan-var \ReflectionClass<T> $projectClass */
             $projectClass = new ReflectionClass($namespace);
         } catch (Exception $logicException) {
             return null;
@@ -156,6 +164,7 @@ class PhpParser implements ParserInterface
         }
 
         if ($transfer === null) {
+            /** @phpstan-var \Codebase\Application\Dto\ClassCodebaseDto<T> $transfer */
             $transfer = new ClassCodebaseDto($coreNamespaces);
         }
         $transfer->setClassName($namespace);
@@ -211,6 +220,8 @@ class PhpParser implements ParserInterface
     }
 
     /**
+     * @phpstan-param \ReflectionClass<T> $projectClass
+     *
      * @param \ReflectionClass $projectClass
      * @param array<string> $projectPrefix
      * @param array<string> $coreNamespaces

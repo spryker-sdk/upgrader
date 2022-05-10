@@ -14,6 +14,10 @@ use ReflectionMethod;
 abstract class AbstractUsedCodeComplianceCheck extends AbstractCodeComplianceCheck
 {
     /**
+     * @phpstan-template T of object
+     *
+     * @phpstan-param \ReflectionClass<T> $class
+     *
      * @param \ReflectionClass $class
      *
      * @return string|null

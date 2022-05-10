@@ -78,6 +78,10 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
+     * @phpstan-template T of object
+     *
+     * @phpstan-param \ReflectionClass<T> $reflectionClass
+     *
      * @param \ReflectionClass $reflectionClass
      * @param string $methodName
      *

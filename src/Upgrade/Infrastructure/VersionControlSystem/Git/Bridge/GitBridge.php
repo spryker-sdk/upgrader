@@ -154,4 +154,14 @@ class GitBridge implements VersionControlSystemBridgeInterface
     {
         return $this->git->restore($stepsExecutionDto);
     }
+
+    /**
+     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     *
+     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     */
+    public function validateSourceCodeProviderCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    {
+        return $this->git->validateSourceCodeProviderCredentials($stepsExecutionDto);
+    }
 }
