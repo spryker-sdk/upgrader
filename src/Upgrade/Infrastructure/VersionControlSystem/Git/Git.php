@@ -7,9 +7,9 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Git;
 
-use ProcessRunner\Application\Service\ProcessRunnerService;
+use Core\Infrastructure\Service\ProcessRunnerService;
 use Symfony\Component\Process\Process;
-use Upgrade\Domain\Dto\Step\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsExecutionDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException;
 use Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder;
@@ -28,7 +28,7 @@ class Git
     protected $baseBranch = '';
 
     /**
-     * @var \ProcessRunner\Application\Service\ProcessRunnerService
+     * @var \Core\Infrastructure\Service\ProcessRunnerService
      */
     protected ProcessRunnerService $processRunner;
 
@@ -54,7 +54,7 @@ class Git
 
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \ProcessRunner\Application\Service\ProcessRunnerService $processRunner
+     * @param \Core\Infrastructure\Service\ProcessRunnerService $processRunner
      * @param \Upgrade\Infrastructure\VersionControlSystem\Provider\SourceCodeProvider $sourceCodeProvider
      * @param \Upgrade\Infrastructure\VersionControlSystem\Builder\PullRequestDataBuilder $pullRequestDataBuilder
      */
@@ -71,14 +71,14 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function isRemoteTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $command = ['git', 'ls-remote', '--heads', $this->getRemote(), $this->getHeadBranch()];
-        $process = $this->processRunner->runCommand($command);
+        $process = $this->processRunner->run($command);
         if (strlen($process->getOutput()) > 0) {
             $stepsExecutionDto->setIsSuccessful(false);
 
@@ -89,14 +89,14 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function isLocalTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $command = ['git', 'rev-parse', '--verify', $this->getHeadBranch()];
-        $process = $this->processRunner->runCommand($command);
+        $process = $this->processRunner->run($command);
         if ($process->isSuccessful()) {
             $stepsExecutionDto->setIsSuccessful(false);
             $stepsExecutionDto->addOutputMessage(implode(PHP_EOL, $command));
@@ -110,14 +110,14 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function hasAnyUncommittedChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $command = ['git', 'status', '--porcelain'];
-        $process = $this->processRunner->runCommand($command);
+        $process = $this->processRunner->run($command);
         if (strlen($process->getOutput()) > 0) {
             $stepsExecutionDto->setIsSuccessful(false);
 
@@ -128,9 +128,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function createBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -140,9 +140,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function add(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -152,9 +152,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function commit(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -164,22 +164,22 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function push(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
         $command = ['git', 'push', '--set-upstream', $this->getRemote(), $this->getHeadBranch()];
-        $process = $this->processRunner->runCommand($command);
+        $process = $this->processRunner->run($command);
 
         return $this->prepareStepsExecutionDto($stepsExecutionDto, $process);
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function createPullRequest(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -200,9 +200,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function checkout(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -212,9 +212,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function deleteLocalBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -224,9 +224,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function deleteRemoteBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -236,9 +236,9 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function restore(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -303,7 +303,7 @@ class Git
     {
         if ($this->baseBranch === '') {
             $command = ['git', 'rev-parse', '--abbrev-ref', 'HEAD'];
-            $process = $this->processRunner->runCommand($command);
+            $process = $this->processRunner->run($command);
             $this->baseBranch = trim($process->getOutput());
         }
 
@@ -317,7 +317,7 @@ class Git
     {
         if ($this->commitHash === '') {
             $command = ['git', 'rev-parse', 'HEAD'];
-            $process = $this->processRunner->runCommand($command);
+            $process = $this->processRunner->run($command);
             $this->commitHash = trim($process->getOutput());
         }
 
@@ -325,23 +325,23 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      * @param array $command
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function process(StepsExecutionDto $stepsExecutionDto, array $command)
     {
-        $process = $this->processRunner->runCommand($command);
+        $process = $this->processRunner->run($command);
 
         return $this->prepareStepsExecutionDto($stepsExecutionDto, $process);
     }
 
     /**
-     * @param \Upgrade\Domain\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      * @param \Symfony\Component\Process\Process $process
      *
-     * @return \Upgrade\Domain\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     protected function prepareStepsExecutionDto(StepsExecutionDto $stepsExecutionDto, Process $process): StepsExecutionDto
     {
