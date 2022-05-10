@@ -11,20 +11,6 @@ services:
             - '../../../../Upgrade/Application/Dto/*'
             - '../../../../Upgrade/Infrastructure/VersionControlSystem/Dto/*'
 
-#    Upgrade\Application\:
-#        resource: '../../../../Upgrade/Application/*'
-#
-#    Upgrade\Infrastructure\:
-#        resource: '../../../../Upgrade/Infrastructure/*'
-#        exclude:
-#            - '../../../../Upgrade/Infrastructure/Dto/*'
-#
-#    Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter: ~
-#    Upgrade\Infrastructure\VersionControlSystem\Adapter\VersionControlSystemAdapterInterface: '@Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter'
-#
-#    Upgrade\Infrastructure\Services\UpgraderService: ~
-#    Upgrade\Application\Services\UpgraderServiceInterface: '@Upgrade\Infrastructure\Services\UpgraderService'
-
     git.adapter:
         class: Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter
 

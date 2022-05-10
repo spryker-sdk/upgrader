@@ -57,6 +57,8 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public const GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING = 20;
 
     /**
+     * {@inheritDoc}
+     *
      * @return string
      */
     public function getUpgradeStrategy(): string
@@ -65,6 +67,8 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return string
      */
     public function getReleaseGroupRequireProcessor(): string
@@ -106,6 +110,9 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * Specification:
+     * - Defines pattern for branch that will be created during upgrade process.
+     *
      * @return string
      */
     public function getBranchPattern(): string
@@ -114,6 +121,9 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * Specification:
+     * - Defines commit message that will be used during upgrade process.
+     *
      * @return string
      */
     public function getCommitMessage(): string
@@ -122,6 +132,9 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * Specification:
+     * - Defines if pull request auto-merge is enabled. Default value is false.
+     *
      * @return bool
      */
     public function isPullRequestAutoMergeEnabled(): bool
@@ -130,6 +143,9 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * Specification:
+     * - Returns the link to the source code provider.
+     *
      * @return string
      */
     public function getSourceCodeProvider(): string
@@ -149,7 +165,8 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
-     * @throw \Upgrade\Infrastructure\Exception\EnvironmentVariableIsNotDefinedException
+     * Specification:
+     * - Defines organisation name for source provider.
      *
      * @return string
      */
@@ -170,6 +187,8 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return int
      */
     public function getSoftThresholdBugfix(): int
@@ -178,6 +197,8 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return int
      */
     public function getSoftThresholdMinor(): int
@@ -186,6 +207,8 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return int
      */
     public function getSoftThresholdMajor(): int
@@ -194,6 +217,8 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return int
      */
     public function getThresholdReleaseGroup(): int
