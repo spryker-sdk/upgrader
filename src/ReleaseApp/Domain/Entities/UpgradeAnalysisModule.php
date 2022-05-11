@@ -30,7 +30,7 @@ class UpgradeAnalysisModule
     /**
      * @var \ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection|null
      */
-    protected ?UpgradeAnalysisModuleVersionCollection $moduleVersionCollection;
+    protected ?UpgradeAnalysisModuleVersionCollection $moduleVersionCollection = null;
 
     /**
      * @param array $bodyArray

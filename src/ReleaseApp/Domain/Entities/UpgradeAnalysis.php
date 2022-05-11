@@ -21,7 +21,7 @@ class UpgradeAnalysis extends Response
     /**
      * @var \ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleCollection|null
      */
-    protected ?UpgradeAnalysisModuleCollection $moduleCollection;
+    protected ?UpgradeAnalysisModuleCollection $moduleCollection = null;
 
     /**
      * @return \ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleCollection
@@ -48,14 +48,16 @@ class UpgradeAnalysis extends Response
      */
     protected function getModules(): array
     {
-        if (!$this->body) {
+        $body = $this->getBody();
+
+        if (!$body) {
             throw new UpgraderException('Response body not found');
         }
 
-        if (!array_key_exists(static::MODULES_KEY, $this->body)) {
+        if (!array_key_exists(static::MODULES_KEY, $body)) {
             throw new UpgraderException('Key modules not found');
         }
 
-        return $this->body[static::MODULES_KEY];
+        return $body[static::MODULES_KEY];
     }
 }

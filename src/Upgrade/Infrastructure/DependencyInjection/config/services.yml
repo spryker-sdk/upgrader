@@ -90,18 +90,19 @@ services:
         class: Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy
         arguments:
             - {
-                param1: '@check_is_remote_target_branch_exist.step',
-                param2: '@check_is_local_target_branch_exist.step',
-                param3: '@check_uncommitted_changes.step',
-                param4: '@release_group_update.step',
-                param5: '@composer_lock_diff.step',
-                param6: '@integrator.step',
-                param7: '@create_branch.step',
-                param8: '@add_changes.step',
-                param9: '@commit_changes.step',
-                param10: '@push_changes.step',
-                param11: '@create_pr.step',
-                param12: '@checkout.step'
+                param1: '@check_credentials.step',
+                param2: '@check_is_remote_target_branch_exist.step',
+                param3: '@check_is_local_target_branch_exist.step',
+                param4: '@check_uncommitted_changes.step',
+                param5: '@release_group_update.step',
+                param6: '@composer_lock_diff.step',
+                param7: '@integrator.step',
+                param8: '@create_branch.step',
+                param9: '@add_changes.step',
+                param10: '@commit_changes.step',
+                param11: '@push_changes.step',
+                param12: '@create_pr.step',
+                param13: '@checkout.step'
             }
 
     Upgrade\Application\Strategy\StrategyResolver:
