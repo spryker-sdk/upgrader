@@ -53,7 +53,7 @@ class IntegratorClient implements IntegratorClientInterface
                     $dirname,
                     0,
                     $position,
-                ) . DIRECTORY_SEPARATOR . '.composer' . DIRECTORY_SEPARATOR . static::BINARY_INTEGRATOR_PATH,
+                ) . '.composer' . DIRECTORY_SEPARATOR . static::BINARY_INTEGRATOR_PATH,
                 static::NO_INTERACTION_COMPOSER_FLAG,
             );
         }
