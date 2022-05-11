@@ -17,5 +17,5 @@ interface HttpRequestBuilderInterface
      *
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function createGuzzleRequest(HttpRequestInterface $request): Request;
+    public function createRequest(HttpRequestInterface $request): Request;
 }

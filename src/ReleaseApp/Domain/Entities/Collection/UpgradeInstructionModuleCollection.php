@@ -14,7 +14,7 @@ class UpgradeInstructionModuleCollection
     /**
      * @var array<\ReleaseApp\Domain\Entities\UpgradeInstructionModule>
      */
-    protected $elements = [];
+    protected array $elements = [];
 
     /**
      * @param array<\ReleaseApp\Domain\Entities\UpgradeInstructionModule> $elements
@@ -65,8 +65,6 @@ class UpgradeInstructionModuleCollection
      */
     public function addCollection(self $collectionToMerge): void
     {
-        foreach ($collectionToMerge->toArray() as $element) {
-            $this->add($element);
-        }
+        $this->elements = array_merge($this->elements, $collectionToMerge->toArray());
     }
 }

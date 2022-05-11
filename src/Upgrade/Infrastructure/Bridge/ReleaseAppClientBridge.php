@@ -38,11 +38,11 @@ class ReleaseAppClientBridge implements ReleaseAppClientBridgeInterface
     /**
      * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
      */
-    public function getNotInstalledReleaseGroupList(): ReleaseAppResponse
+    public function getNewReleaseGroups(): ReleaseAppResponse
     {
-        $request = $this->createDataProviderRequest();
+        $upgradeAnalysisRequest = $this->createDataProviderRequest();
 
-        return $this->releaseApp->getNotInstalledReleaseGroupList($request);
+        return $this->releaseApp->getNewReleaseGroups($upgradeAnalysisRequest);
     }
 
     /**

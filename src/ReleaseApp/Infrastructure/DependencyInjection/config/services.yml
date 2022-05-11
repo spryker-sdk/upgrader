@@ -13,6 +13,3 @@ services:
             - '../../../../ReleaseApp/Domain/Client/Response/*'
             - '../../../../ReleaseApp/Infrastructure/Client/Request/*'
             - '../../../../ReleaseApp/Infrastructure/Shared/Dto/*'
-
-#    ReleaseAppClient\Application\Client\ReleaseAppClient: ~
-#    ReleaseAppClient\Domain\Client\ReleaseAppClientInterface: '@ReleaseAppClient\Application\Client\ReleaseAppClient'

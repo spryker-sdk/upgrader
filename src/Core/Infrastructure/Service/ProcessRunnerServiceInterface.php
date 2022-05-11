@@ -12,7 +12,7 @@ use Symfony\Component\Process\Process;
 interface ProcessRunnerServiceInterface
 {
     /**
-     * @param array $command
+     * @param array<string> $command
      *
      * @return \Symfony\Component\Process\Process
      */

@@ -7,6 +7,7 @@
 
 namespace ReleaseApp\Infrastructure\Client;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\Client as GuzzleHttp;
 use GuzzleHttp\Exception\ServerException;
 use Psr\Http\Message\RequestInterface;
@@ -19,7 +20,7 @@ class HttpRequestExecutor implements HttpRequestExecutorInterface
     /**
      * @var \GuzzleHttp\Client
      */
-    protected $guzzleClient;
+    protected Client $guzzleClient;
 
     /**
      * @var \ReleaseApp\Infrastructure\Configuration\ConfigurationProvider

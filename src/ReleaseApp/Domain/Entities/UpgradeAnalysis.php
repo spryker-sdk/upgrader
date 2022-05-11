@@ -21,7 +21,7 @@ class UpgradeAnalysis extends Response
     /**
      * @var \ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleCollection|null
      */
-    protected $moduleCollection;
+    protected ?UpgradeAnalysisModuleCollection $moduleCollection;
 
     /**
      * @return \ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleCollection
@@ -33,7 +33,7 @@ class UpgradeAnalysis extends Response
         }
 
         $moduleList = [];
-        foreach ($this->getModulesArray() as $moduleData) {
+        foreach ($this->getModules() as $moduleData) {
             $moduleList[] = new UpgradeAnalysisModule($moduleData);
         }
         $this->moduleCollection = new UpgradeAnalysisModuleCollection($moduleList);
@@ -46,20 +46,16 @@ class UpgradeAnalysis extends Response
      *
      * @return array
      */
-    protected function getModulesArray(): array
+    protected function getModules(): array
     {
-        $bodyArray = $this->getBody();
-
-        if (!$bodyArray) {
+        if (!$this->body) {
             throw new UpgraderException('Response body not found');
         }
 
-        $modulesArray = $bodyArray[static::MODULES_KEY];
-
-        if (!$modulesArray) {
-            throw new UpgraderException('Key module not found');
+        if (!array_key_exists(static::MODULES_KEY, $this->body)) {
+            throw new UpgraderException('Key modules not found');
         }
 
-        return $modulesArray;
+        return $this->body[static::MODULES_KEY];
     }
 }

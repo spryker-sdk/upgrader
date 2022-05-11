@@ -14,7 +14,7 @@ class PackageCollection
     /**
      * @var array<\Upgrade\Domain\Entity\Package>
      */
-    protected $elements = [];
+    protected array $elements = [];
 
     /**
      * @param array<\Upgrade\Domain\Entity\Package> $elements
@@ -65,9 +65,7 @@ class PackageCollection
      */
     public function addCollection(self $collectionToMerge): void
     {
-        foreach ($collectionToMerge->toArray() as $element) {
-            $this->add($element);
-        }
+        $this->elements = array_merge($this->elements, $collectionToMerge->toArray());
     }
 
     /**

@@ -7,6 +7,8 @@
 
 namespace ReleaseApp\Domain\Entities;
 
+use Upgrade\Application\Exception\UpgraderException;
+
 class UpgradeInstructionModule
 {
     /**
@@ -22,12 +24,12 @@ class UpgradeInstructionModule
     /**
      * @var array
      */
-    protected $body;
+    protected array $body;
 
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @param array $body
@@ -48,18 +50,30 @@ class UpgradeInstructionModule
     }
 
     /**
+     * @throws \Upgrade\Application\Exception\UpgraderException
+     *
      * @return string
      */
     public function getVersion(): string
     {
+        if (!array_key_exists(static::VERSION_KEY, $this->body)) {
+            throw new UpgraderException('Key ' . static::VERSION_KEY . ' not found');
+        }
+
         return $this->body[static::VERSION_KEY];
     }
 
     /**
+     * @throws \Upgrade\Application\Exception\UpgraderException
+     *
      * @return string
      */
     public function getType(): string
     {
+        if (!array_key_exists(static::TYPE_KEY, $this->body)) {
+            throw new UpgraderException('Key ' . static::TYPE_KEY . ' not found');
+        }
+
         return $this->body[static::TYPE_KEY];
     }
 }

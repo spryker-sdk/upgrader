@@ -15,7 +15,7 @@ class UpgradeInstructionsReleaseGroupCollection
     /**
      * @var array<\ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup>
      */
-    protected $elements = [];
+    protected array $elements = [];
 
     /**
      * @param array<\ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup> $elements
@@ -66,15 +66,13 @@ class UpgradeInstructionsReleaseGroupCollection
      */
     public function addCollection(self $collectionToMerge): void
     {
-        foreach ($collectionToMerge->toArray() as $element) {
-            $this->add($element);
-        }
+        $this->elements = array_merge($this->elements, $collectionToMerge->toArray());
     }
 
     /**
      * @return self
      */
-    public function getSortedByReleased(): self
+    public function sortByReleasedDate(): self
     {
         $sortData = [];
 
@@ -96,7 +94,7 @@ class UpgradeInstructionsReleaseGroupCollection
     /**
      * @return self
      */
-    public function filterWithoutReleased(): self
+    public function getOnlyWithReleasedDate(): self
     {
         $result = new self();
 

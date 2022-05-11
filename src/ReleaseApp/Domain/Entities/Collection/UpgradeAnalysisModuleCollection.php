@@ -14,7 +14,7 @@ class UpgradeAnalysisModuleCollection
     /**
      * @var array<\ReleaseApp\Domain\Entities\UpgradeAnalysisModule>
      */
-    protected $elements = [];
+    protected array $elements = [];
 
     /**
      * @param array<\ReleaseApp\Domain\Entities\UpgradeAnalysisModule> $elements

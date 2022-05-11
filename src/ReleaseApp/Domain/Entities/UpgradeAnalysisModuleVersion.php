@@ -32,30 +32,42 @@ class UpgradeAnalysisModuleVersion
     /**
      * @var array
      */
-    protected $bodyArray;
+    protected array $body;
 
     /**
      * @param array $bodyArray
      */
     public function __construct(array $bodyArray)
     {
-        $this->bodyArray = $bodyArray;
+        $this->body = $bodyArray;
     }
 
     /**
+     * @throws \Upgrade\Application\Exception\UpgraderException
+     *
      * @return int
      */
     public function getId(): int
     {
-        return $this->bodyArray[static::ID_KEY];
+        if (!array_key_exists(static::ID_KEY, $this->body)) {
+            throw new UpgraderException('Key ' . static::ID_KEY . ' not found');
+        }
+
+        return $this->body[static::ID_KEY];
     }
 
     /**
+     * @throws \Upgrade\Application\Exception\UpgraderException
+     *
      * @return int
      */
     public function getName(): int
     {
-        return $this->bodyArray[static::NAME_KEY];
+        if (!array_key_exists(static::NAME_KEY, $this->body)) {
+            throw new UpgraderException('Key ' . static::NAME_KEY . ' not found');
+        }
+
+        return $this->body[static::NAME_KEY];
     }
 
     /**
@@ -67,11 +79,11 @@ class UpgradeAnalysisModuleVersion
     {
         $dataTime = DateTime::createFromFormat(
             ReleaseAppConst::RESPONSE_DATA_TIME_FORMAT,
-            $this->bodyArray[static::CREATED_KEY],
+            $this->body[static::CREATED_KEY],
         );
 
         if (!$dataTime) {
-            $message = sprintf('%s %s', 'Invalid datatime format:', $this->bodyArray[static::CREATED_KEY]);
+            $message = sprintf('%s %s', 'Invalid datatime format:', $this->body[static::CREATED_KEY]);
 
             throw new UpgraderException($message);
         }

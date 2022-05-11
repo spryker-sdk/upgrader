@@ -14,12 +14,12 @@ interface HttpRequestInterface
     /**
      * @var string
      */
-    public const REQUEST_TYPE_POST = 'POST';
+    public const REQUEST_METHOD_POST = 'POST';
 
     /**
      * @var string
      */
-    public const REQUEST_TYPE_GET = 'GET';
+    public const REQUEST_METHOD_GET = 'GET';
 
     /**
      * @return \ReleaseApp\Domain\Client\Request\RequestInterface

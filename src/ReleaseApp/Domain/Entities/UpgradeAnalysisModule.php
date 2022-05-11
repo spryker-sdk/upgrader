@@ -8,6 +8,7 @@
 namespace ReleaseApp\Domain\Entities;
 
 use ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection;
+use Upgrade\Application\Exception\UpgraderException;
 
 class UpgradeAnalysisModule
 {
@@ -24,19 +25,19 @@ class UpgradeAnalysisModule
     /**
      * @var array
      */
-    protected $bodyArray;
+    protected array $body;
 
     /**
      * @var \ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection|null
      */
-    protected $moduleVersionCollection;
+    protected ?UpgradeAnalysisModuleVersionCollection $moduleVersionCollection;
 
     /**
      * @param array $bodyArray
      */
     public function __construct(array $bodyArray)
     {
-        $this->bodyArray = $bodyArray;
+        $this->body = $bodyArray;
     }
 
     /**
@@ -49,7 +50,7 @@ class UpgradeAnalysisModule
         }
 
         $moduleVersionList = [];
-        foreach ($this->bodyArray[static::MODULE_VERSIONS_KEY] as $moduleVersionData) {
+        foreach ($this->body[static::MODULE_VERSIONS_KEY] as $moduleVersionData) {
             $moduleVersionList[] = new UpgradeAnalysisModuleVersion($moduleVersionData);
         }
         $this->moduleVersionCollection = new UpgradeAnalysisModuleVersionCollection($moduleVersionList);
@@ -58,10 +59,16 @@ class UpgradeAnalysisModule
     }
 
     /**
+     * @throws \Upgrade\Application\Exception\UpgraderException
+     *
      * @return string
      */
     public function getPackage(): string
     {
-        return $this->bodyArray[static::PACKAGE_KEY];
+        if (!array_key_exists(static::PACKAGE_KEY, $this->body)) {
+            throw new UpgraderException('Key ' . static::PACKAGE_KEY . ' not found');
+        }
+
+        return $this->body[static::PACKAGE_KEY];
     }
 }

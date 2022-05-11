@@ -17,31 +17,34 @@ class ReleaseAppService implements ReleaseAppServiceInterface
     /**
      * @var \ReleaseApp\Application\Service\ReleaseAppService
      */
-    protected ApplicationReleaseAppService $applicationReleaseAppService;
+    protected ApplicationReleaseAppService $releaseApp;
 
+    /**
+     * @var \ReleaseApp\Infrastructure\Shared\Mapper\ReleaseGroupDtoCollectionMapper
+     */
     protected ReleaseGroupDtoCollectionMapper $releaseGroupDtoCollectionMapper;
 
     /**
-     * @param \ReleaseApp\Application\Service\ReleaseAppService $domainReleaseAppClient
+     * @param \ReleaseApp\Application\Service\ReleaseAppService $releaseApp
      * @param \ReleaseApp\Infrastructure\Shared\Mapper\ReleaseGroupDtoCollectionMapper $releaseGroupDtoCollectionMapper
      */
     public function __construct(
-        ApplicationReleaseAppService $domainReleaseAppClient,
+        ApplicationReleaseAppService $releaseApp,
         ReleaseGroupDtoCollectionMapper $releaseGroupDtoCollectionMapper
     ) {
-        $this->applicationReleaseAppService = $domainReleaseAppClient;
+        $this->releaseApp = $releaseApp;
         $this->releaseGroupDtoCollectionMapper = $releaseGroupDtoCollectionMapper;
     }
 
     /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $request
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $upgradeAnalysisRequest
      *
      * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
      */
-    public function getNotInstalledReleaseGroupList(UpgradeAnalysisRequest $request): ReleaseAppResponse
+    public function getNewReleaseGroups(UpgradeAnalysisRequest $upgradeAnalysisRequest): ReleaseAppResponse
     {
         $releaseGroupCollection = $this->releaseGroupDtoCollectionMapper->buildReleaseGroupTransferCollection(
-            $this->applicationReleaseAppService->getNotInstalledReleaseGroupList($request),
+            $this->releaseApp->getNewReleaseGroups($upgradeAnalysisRequest),
         );
 
         return new ReleaseAppResponse($releaseGroupCollection);

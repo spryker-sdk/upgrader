@@ -17,12 +17,12 @@ class Response implements ResponseInterface
     /**
      * @var int
      */
-    protected $code;
+    protected int $code;
 
     /**
-     * @var mixed
+     * @var array
      */
-    protected $bodyArray;
+    protected array $body;
 
     /**
      * @param int $code
@@ -31,7 +31,7 @@ class Response implements ResponseInterface
     public function __construct(int $code, string $body)
     {
         $this->code = $code;
-        $this->bodyArray = json_decode($body, true);
+        $this->body = json_decode($body, true);
     }
 
     /**
@@ -39,7 +39,7 @@ class Response implements ResponseInterface
      */
     public function getCode(): int
     {
-        return $this->getCode();
+        return $this->code;
     }
 
     /**
@@ -47,6 +47,6 @@ class Response implements ResponseInterface
      */
     public function getBody(): ?array
     {
-        return $this->bodyArray[static::RESULT_KEY];
+        return $this->body[static::RESULT_KEY];
     }
 }

@@ -13,9 +13,9 @@ use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollect
 interface ReleaseAppServiceInterface
 {
     /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $request
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $upgradeAnalysisRequest
      *
      * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection
      */
-    public function getNotInstalledReleaseGroupList(UpgradeAnalysisRequest $request): UpgradeInstructionsReleaseGroupCollection;
+    public function getNewReleaseGroups(UpgradeAnalysisRequest $upgradeAnalysisRequest): UpgradeInstructionsReleaseGroupCollection;
 }

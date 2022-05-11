@@ -14,5 +14,5 @@ interface ReleaseAppClientBridgeInterface
     /**
      * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
      */
-    public function getNotInstalledReleaseGroupList(): ReleaseAppResponse;
+    public function getNewReleaseGroups(): ReleaseAppResponse;
 }

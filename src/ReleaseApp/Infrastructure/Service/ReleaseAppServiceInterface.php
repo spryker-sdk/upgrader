@@ -13,9 +13,9 @@ use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
 interface ReleaseAppServiceInterface
 {
     /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $request
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $upgradeAnalysisRequest
      *
      * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
      */
-    public function getNotInstalledReleaseGroupList(UpgradeAnalysisRequest $request): ReleaseAppResponse;
+    public function getNewReleaseGroups(UpgradeAnalysisRequest $upgradeAnalysisRequest): ReleaseAppResponse;
 }

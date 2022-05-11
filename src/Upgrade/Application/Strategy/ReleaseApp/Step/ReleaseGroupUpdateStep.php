@@ -44,7 +44,7 @@ class ReleaseGroupUpdateStep implements StepInterface
      */
     public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        $dataProviderResponse = $this->packageManagementSystemBridge->getNotInstalledReleaseGroupList();
+        $dataProviderResponse = $this->packageManagementSystemBridge->getNewReleaseGroups();
 
         return $this->releaseGroupRequireProcessor->requireCollection($dataProviderResponse->getReleaseGroupCollection(), $stepsExecutionDto);
     }

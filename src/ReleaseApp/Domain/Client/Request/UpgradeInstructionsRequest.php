@@ -14,7 +14,7 @@ class UpgradeInstructionsRequest implements RequestInterface
     /**
      * @var int
      */
-    protected $idModuleVersion;
+    protected int $idModuleVersion;
 
     /**
      * @param int $moduleVersionId

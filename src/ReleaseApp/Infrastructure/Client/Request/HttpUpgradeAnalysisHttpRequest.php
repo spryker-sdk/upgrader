@@ -50,6 +50,6 @@ class HttpUpgradeAnalysisHttpRequest implements HttpRequestInterface
      */
     public function getMethod(): string
     {
-        return static::REQUEST_TYPE_POST;
+        return static::REQUEST_METHOD_POST;
     }
 }

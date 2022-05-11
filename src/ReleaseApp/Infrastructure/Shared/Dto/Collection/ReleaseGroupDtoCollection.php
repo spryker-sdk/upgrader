@@ -14,7 +14,7 @@ class ReleaseGroupDtoCollection
     /**
      * @var array<\ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto>
      */
-    protected $elements = [];
+    protected array $elements = [];
 
     /**
      * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto> $elements
@@ -65,9 +65,7 @@ class ReleaseGroupDtoCollection
      */
     public function addCollection(self $collectionToMerge): void
     {
-        foreach ($collectionToMerge->toArray() as $element) {
-            $this->add($element);
-        }
+        $this->elements = array_merge($this->elements, $collectionToMerge->toArray());
     }
 
     /**

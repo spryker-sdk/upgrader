@@ -43,7 +43,7 @@ class UpgradeInstructionsReleaseGroup
     /**
      * @var array
      */
-    protected $bodyArray;
+    protected array $body;
 
     /**
      * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection|null
@@ -55,7 +55,7 @@ class UpgradeInstructionsReleaseGroup
      */
     public function __construct(array $bodyArray)
     {
-        $this->bodyArray = $bodyArray;
+        $this->body = $bodyArray;
     }
 
     /**
@@ -63,7 +63,7 @@ class UpgradeInstructionsReleaseGroup
      */
     public function getName(): string
     {
-        return $this->bodyArray[static::NAME_KEY];
+        return $this->body[static::NAME_KEY];
     }
 
     /**
@@ -71,7 +71,7 @@ class UpgradeInstructionsReleaseGroup
      */
     public function isContainsProjectChanges(): bool
     {
-        return $this->bodyArray[static::PROJECT_CHANGES_KEY];
+        return $this->body[static::PROJECT_CHANGES_KEY];
     }
 
     /**
@@ -79,7 +79,7 @@ class UpgradeInstructionsReleaseGroup
      */
     public function getId(): int
     {
-        return (int)$this->bodyArray[static::ID_KEY];
+        return (int)$this->body[static::ID_KEY];
     }
 
     /**
@@ -89,7 +89,7 @@ class UpgradeInstructionsReleaseGroup
      */
     public function getReleased(): DateTimeInterface
     {
-        if (!isset($this->bodyArray[static::RELEASED_KEY])) {
+        if (!isset($this->body[static::RELEASED_KEY])) {
             $message = sprintf('%s %s', 'Undefined key:', static::RELEASED_KEY);
 
             throw new UpgraderException($message);
@@ -97,11 +97,11 @@ class UpgradeInstructionsReleaseGroup
 
         $dataTime = DateTime::createFromFormat(
             ReleaseAppConst::RESPONSE_DATA_TIME_FORMAT,
-            $this->bodyArray[static::RELEASED_KEY],
+            $this->body[static::RELEASED_KEY],
         );
 
         if (!$dataTime) {
-            $message = sprintf('%s %s', 'API invalid datatime format:', $this->bodyArray[static::RELEASED_KEY]);
+            $message = sprintf('%s %s', 'API invalid datatime format:', $this->body[static::RELEASED_KEY]);
 
             throw new UpgraderException($message);
         }
@@ -119,7 +119,7 @@ class UpgradeInstructionsReleaseGroup
         }
 
         $moduleList = [];
-        foreach ($this->bodyArray[static::MODULES_KEY] as $name => $moduleData) {
+        foreach ($this->body[static::MODULES_KEY] as $name => $moduleData) {
             $moduleList[] = new UpgradeInstructionModule($moduleData, $name);
         }
         $this->moduleCollection = new UpgradeInstructionModuleCollection($moduleList);

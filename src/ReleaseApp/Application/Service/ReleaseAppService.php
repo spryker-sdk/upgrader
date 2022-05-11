@@ -19,7 +19,7 @@ class ReleaseAppService implements ReleaseAppServiceInterface
     /**
      * @var \ReleaseApp\Domain\Client\ClientInterface
      */
-    protected ClientInterface $repository;
+    protected ClientInterface $client;
 
     /**
      * @var \ReleaseApp\Application\Configuration\ConfigurationProviderInterface
@@ -27,26 +27,26 @@ class ReleaseAppService implements ReleaseAppServiceInterface
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
-     * @param \ReleaseApp\Domain\Client\ClientInterface $httpClient
+     * @param \ReleaseApp\Domain\Client\ClientInterface $client
      * @param \ReleaseApp\Application\Configuration\ConfigurationProviderInterface $configurationProvider
      */
-    public function __construct(ClientInterface $httpClient, ConfigurationProviderInterface $configurationProvider)
+    public function __construct(ClientInterface $client, ConfigurationProviderInterface $configurationProvider)
     {
-        $this->repository = $httpClient;
+        $this->client = $client;
         $this->configurationProvider = $configurationProvider;
     }
 
     /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $request
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $upgradeAnalysisRequest
      *
      * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection
      */
-    public function getNotInstalledReleaseGroupList(UpgradeAnalysisRequest $request): UpgradeInstructionsReleaseGroupCollection
+    public function getNewReleaseGroups(UpgradeAnalysisRequest $upgradeAnalysisRequest): UpgradeInstructionsReleaseGroupCollection
     {
-        $moduleVersionCollection = $this->getModuleVersionCollection($request);
+        $moduleVersionCollection = $this->getModuleVersionCollection($upgradeAnalysisRequest);
         $releaseGroupCollection = $this->getReleaseGroupCollection($moduleVersionCollection);
 
-        return $releaseGroupCollection->filterWithoutReleased()->getSortedByReleased();
+        return $releaseGroupCollection->getOnlyWithReleasedDate()->sortByReleasedDate();
     }
 
     /**
@@ -60,8 +60,8 @@ class ReleaseAppService implements ReleaseAppServiceInterface
         $releaseGroupCollection = new UpgradeInstructionsReleaseGroupCollection();
 
         foreach ($moduleVersionCollection->toArray() as $moduleVersion) {
-            $request = $this->createUpgradeInstructionsRequest($moduleVersion->getId());
-            $response = $this->repository->getUpgradeInstructions($request);
+            $request = new UpgradeInstructionsRequest($moduleVersion->getId());
+            $response = $this->client->getUpgradeInstructions($request);
             $releaseGroupCollection->add($response->getReleaseGroup());
         }
 
@@ -76,20 +76,10 @@ class ReleaseAppService implements ReleaseAppServiceInterface
     protected function getModuleVersionCollection(
         UpgradeAnalysisRequest $request
     ): UpgradeAnalysisModuleVersionCollection {
-        $response = $this->repository->getUpgradeAnalysis($request);
+        $response = $this->client->getUpgradeAnalysis($request);
 
         return $response->getModuleCollection()
             ->getModulesThatContainsAtListOneModuleVersion()
             ->getModuleVersionCollection();
-    }
-
-    /**
-     * @param int $moduleVersionId
-     *
-     * @return \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest
-     */
-    protected function createUpgradeInstructionsRequest(int $moduleVersionId): UpgradeInstructionsRequest
-    {
-        return new UpgradeInstructionsRequest($moduleVersionId);
     }
 }

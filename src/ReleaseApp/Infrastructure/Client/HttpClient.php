@@ -24,29 +24,29 @@ class HttpClient implements ClientInterface
     /**
      * @var \ReleaseApp\Infrastructure\Client\Builder\HttpRequestBuilderInterface
      */
-    protected $guzzleRequestBuilder;
+    protected HttpRequestBuilderInterface $requestBuilder;
 
     /**
      * @var \ReleaseApp\Infrastructure\Client\Builder\HttpResponseBuilderInterface
      */
-    protected $responseBuilder;
+    protected HttpResponseBuilderInterface $responseBuilder;
 
     /**
      * @var \ReleaseApp\Infrastructure\Client\HttpRequestExecutorInterface
      */
-    protected $requestExecutor;
+    protected HttpRequestExecutorInterface $requestExecutor;
 
     /**
-     * @param \ReleaseApp\Infrastructure\Client\Builder\HttpRequestBuilderInterface $guzzleRequestBuilder
+     * @param \ReleaseApp\Infrastructure\Client\Builder\HttpRequestBuilderInterface $requestBuilder
      * @param \ReleaseApp\Infrastructure\Client\Builder\HttpResponseBuilderInterface $responseBuilder
      * @param \ReleaseApp\Infrastructure\Client\HttpRequestExecutorInterface $requestExecutor
      */
     public function __construct(
-        HttpRequestBuilderInterface $guzzleRequestBuilder,
+        HttpRequestBuilderInterface $requestBuilder,
         HttpResponseBuilderInterface $responseBuilder,
         HttpRequestExecutorInterface $requestExecutor
     ) {
-        $this->guzzleRequestBuilder = $guzzleRequestBuilder;
+        $this->requestBuilder = $requestBuilder;
         $this->responseBuilder = $responseBuilder;
         $this->requestExecutor = $requestExecutor;
     }
@@ -84,7 +84,7 @@ class HttpClient implements ClientInterface
      */
     protected function getResponse(HttpRequestInterface $request): ResponseInterface
     {
-        $guzzleRequest = $this->guzzleRequestBuilder->createGuzzleRequest($request);
+        $guzzleRequest = $this->requestBuilder->createRequest($request);
         $guzzleResponse = $this->requestExecutor->requestExecute($guzzleRequest);
         $response = $this->responseBuilder->createHttpResponse($request, $guzzleResponse);
 

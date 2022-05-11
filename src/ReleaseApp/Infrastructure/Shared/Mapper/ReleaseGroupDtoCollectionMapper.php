@@ -74,6 +74,6 @@ class ReleaseGroupDtoCollectionMapper
      */
     protected function getReleaseGroupLink(int $id): string
     {
-        return sprintf(ReleaseAppConst::RELEASE_GROUP_LINK_TEMPLATE, $this->configurationProvider->getReleaseAppUrl(), $id);
+        return sprintf(ReleaseAppConst::RELEASE_GROUP_LINK_PATTERN, $this->configurationProvider->getReleaseAppUrl(), $id);
     }
 }

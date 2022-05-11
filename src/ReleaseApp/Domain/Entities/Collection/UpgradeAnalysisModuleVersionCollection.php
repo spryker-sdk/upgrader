@@ -14,7 +14,7 @@ class UpgradeAnalysisModuleVersionCollection
     /**
      * @var array<\ReleaseApp\Domain\Entities\UpgradeAnalysisModuleVersion>
      */
-    protected $elements = [];
+    protected array $elements = [];
 
     /**
      * @param array<\ReleaseApp\Domain\Entities\UpgradeAnalysisModuleVersion> $elements
@@ -56,17 +56,5 @@ class UpgradeAnalysisModuleVersionCollection
     public function isEmpty(): bool
     {
         return !$this->elements;
-    }
-
-    /**
-     * @param \ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection|self $collectionToMerge
-     *
-     * @return void
-     */
-    public function addCollection(self $collectionToMerge): void
-    {
-        foreach ($collectionToMerge->toArray() as $element) {
-            $this->add($element);
-        }
     }
 }
