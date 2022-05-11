@@ -5,12 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Processor\Strategy\IntegratorClient;
+namespace Upgrade\Infrastructure\Bridge;
 
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Process\ProcessRunner;
+use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
+use Upgrade\Application\Bridge\IntegratorBridgeInterface;
+use Upgrade\Application\Dto\StepsExecutionDto;
 
-class IntegratorClient implements IntegratorClientInterface
+class IntegratorBridge implements IntegratorBridgeInterface
 {
     /**
      * @var string
@@ -23,22 +24,22 @@ class IntegratorClient implements IntegratorClientInterface
     protected const NO_INTERACTION_COMPOSER_FLAG = '--no-interaction';
 
     /**
-     * @var \Upgrade\Infrastructure\Process\ProcessRunner
+     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
      */
-    protected ProcessRunner $processRunner;
+    protected ProcessRunnerServiceInterface $processRunner;
 
     /**
-     * @param \Upgrade\Infrastructure\Process\ProcessRunner $processRunner
+     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      */
-    public function __construct(ProcessRunner $processRunner)
+    public function __construct(ProcessRunnerServiceInterface $processRunner)
     {
         $this->processRunner = $processRunner;
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsExecutionDto
      */
     public function runIntegrator(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -61,7 +62,7 @@ class IntegratorClient implements IntegratorClientInterface
 
         $stepsExecutionDto->setIsSuccessful(!$process->getExitCode());
         if (!$stepsExecutionDto->getIsSuccessful()) {
-            $stepsExecutionDto->setOutputMessage(
+            $stepsExecutionDto->addOutputMessage(
                 $command . PHP_EOL . $process->getErrorOutput() . PHP_EOL . 'Error code:' . $process->getExitCode(),
             );
         }
