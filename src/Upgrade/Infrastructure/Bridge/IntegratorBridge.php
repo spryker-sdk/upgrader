@@ -5,13 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Bridge;
+namespace Upgrade\Infrastructure\Processor\Strategy\IntegratorClient;
 
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
-use Upgrade\Application\Bridge\IntegratorBridgeInterface;
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
+use Upgrade\Infrastructure\Process\ProcessRunner;
 
-class IntegratorBridge implements IntegratorBridgeInterface
+class IntegratorClient implements IntegratorClientInterface
 {
     /**
      * @var string
@@ -24,22 +23,22 @@ class IntegratorBridge implements IntegratorBridgeInterface
     protected const NO_INTERACTION_COMPOSER_FLAG = '--no-interaction';
 
     /**
-     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @var \Upgrade\Infrastructure\Process\ProcessRunner
      */
-    protected ProcessRunnerServiceInterface $processRunner;
+    protected ProcessRunner $processRunner;
 
     /**
-     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @param \Upgrade\Infrastructure\Process\ProcessRunner $processRunner
      */
-    public function __construct(ProcessRunnerServiceInterface $processRunner)
+    public function __construct(ProcessRunner $processRunner)
     {
         $this->processRunner = $processRunner;
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
      */
     public function runIntegrator(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
@@ -50,7 +49,11 @@ class IntegratorBridge implements IntegratorBridgeInterface
         if ($isGlobalExecution) {
             $command = sprintf(
                 '%s %s',
-                substr($dirname, 0, $position) . DIRECTORY_SEPARATOR . '.composer' . DIRECTORY_SEPARATOR . static::BINARY_INTEGRATOR_PATH,
+                substr(
+                    $dirname,
+                    0,
+                    $position,
+                ) . '.composer' . DIRECTORY_SEPARATOR . static::BINARY_INTEGRATOR_PATH,
                 static::NO_INTERACTION_COMPOSER_FLAG,
             );
         }
@@ -58,7 +61,7 @@ class IntegratorBridge implements IntegratorBridgeInterface
 
         $stepsExecutionDto->setIsSuccessful(!$process->getExitCode());
         if (!$stepsExecutionDto->getIsSuccessful()) {
-            $stepsExecutionDto->addOutputMessage(
+            $stepsExecutionDto->setOutputMessage(
                 $command . PHP_EOL . $process->getErrorOutput() . PHP_EOL . 'Error code:' . $process->getExitCode(),
             );
         }
