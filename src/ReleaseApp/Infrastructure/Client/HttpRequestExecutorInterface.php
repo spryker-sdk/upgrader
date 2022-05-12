@@ -19,5 +19,5 @@ interface HttpRequestExecutorInterface
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function requestExecute(RequestInterface $request): ResponseInterface;
+    public function send(RequestInterface $request): ResponseInterface;
 }

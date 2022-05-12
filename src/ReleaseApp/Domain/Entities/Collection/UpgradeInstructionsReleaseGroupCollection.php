@@ -83,12 +83,7 @@ class UpgradeInstructionsReleaseGroupCollection
 
         ksort($sortData);
 
-        $collection = new self();
-        foreach ($sortData as $releaseGroup) {
-            $collection->add($releaseGroup);
-        }
-
-        return $collection;
+        return new self(array_values($sortData));
     }
 
     /**

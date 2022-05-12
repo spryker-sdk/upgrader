@@ -79,7 +79,7 @@ class ReleaseAppService implements ReleaseAppServiceInterface
         $response = $this->client->getUpgradeAnalysis($request);
 
         return $response->getModuleCollection()
-            ->getModulesThatContainsAtListOneModuleVersion()
-            ->getModuleVersionCollection();
+            ->getModulesWithVersions()
+            ->getModuleVersions();
     }
 }

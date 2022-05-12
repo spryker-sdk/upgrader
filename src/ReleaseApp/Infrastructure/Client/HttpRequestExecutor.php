@@ -44,7 +44,7 @@ class HttpRequestExecutor implements HttpRequestExecutorInterface
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function requestExecute(RequestInterface $request): ResponseInterface
+    public function send(RequestInterface $request): ResponseInterface
     {
         $attempts = 0;
         $exception = null;

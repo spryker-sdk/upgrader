@@ -37,7 +37,7 @@ class UpgradeAnalysisModuleCollection
     /**
      * @return self
      */
-    public function getModulesThatContainsAtListOneModuleVersion(): self
+    public function getModulesWithVersions(): self
     {
         $collection = new self();
         foreach ($this->elements as $module) {
@@ -52,7 +52,7 @@ class UpgradeAnalysisModuleCollection
     /**
      * @return \ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection
      */
-    public function getModuleVersionCollection(): UpgradeAnalysisModuleVersionCollection
+    public function getModuleVersions(): UpgradeAnalysisModuleVersionCollection
     {
         $collection = new UpgradeAnalysisModuleVersionCollection();
 
