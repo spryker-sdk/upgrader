@@ -70,10 +70,11 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     public function require(PackageCollection $packageCollection): ExecutionDto
     {
         $command = sprintf(
-            '%s%s %s %s',
+            '%s%s %s %s %s',
             static::REQUIRE_COMMAND_NAME,
             $this->getPackageString($packageCollection),
             static::NO_SCRIPTS_FLAG,
+            static::NO_PLUGINS_FLAG,
             static::WITH_ALL_DEPENDENCIES_FLAG,
         );
 
@@ -90,10 +91,11 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     public function requireDev(PackageCollection $packageCollection): ExecutionDto
     {
         $command = sprintf(
-            '%s%s %s %s %s',
+            '%s%s %s %s %s %s',
             static::REQUIRE_COMMAND_NAME,
             $this->getPackageString($packageCollection),
             static::NO_SCRIPTS_FLAG,
+            static::NO_PLUGINS_FLAG,
             static::WITH_ALL_DEPENDENCIES_FLAG,
             static::DEV_FLAG,
         );
