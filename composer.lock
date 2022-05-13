@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c64123d5099a684d2b003f42c2ee1b4b",
+    "content-hash": "6f941250daa3d7b918823e63093a067a",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -2953,7 +2953,7 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "dev-feature/pplus-510-integrator-as-part-of-upgrader",
+            "version": "dev-temp/PPLUS-1265-bugfix",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
@@ -7468,5 +7468,5 @@
         "ext-simplexml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }
