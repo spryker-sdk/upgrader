@@ -42,6 +42,9 @@ class ComposerUpdateStep extends AbstractStep implements RollbackStepInterface
     {
         $updateResponse = $this->packageManager->update();
         $stepsExecutionDto->setIsSuccessful($updateResponse->isSuccessful());
+        if (!$updateResponse->isSuccessful()) {
+            $stepsExecutionDto->addOutputMessage($updateResponse->getOutputMessage());
+        }
 
         return $stepsExecutionDto;
     }
