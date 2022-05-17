@@ -13,10 +13,11 @@ class PullRequestDataGenerator
 {
     /**
      * @param \Upgrade\Application\Dto\ComposerLockDiffDto $composerDiffDto
+     * @param string|null $majorAvailableInfo
      *
      * @return string
      */
-    public function buildBody(ComposerLockDiffDto $composerDiffDto): string
+    public function buildBody(ComposerLockDiffDto $composerDiffDto, ?string $majorAvailableInfo = null): string
     {
         $text = 'Auto created via Upgrader tool.'
             . PHP_EOL
@@ -34,6 +35,11 @@ class PullRequestDataGenerator
             $text .= '**Packages dev upgraded:**' . PHP_EOL;
             $text .= $this->buildPackageDiffTable($composerDiffDto->getRequireDevChanges());
             $text .= PHP_EOL;
+        }
+
+        if ($majorAvailableInfo) {
+            $text .= '​' . PHP_EOL . '**Available majors:**' . PHP_EOL . PHP_EOL;
+            $text .= $majorAvailableInfo;
         }
 
         return $text;

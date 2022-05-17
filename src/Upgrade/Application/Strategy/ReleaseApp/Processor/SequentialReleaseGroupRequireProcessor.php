@@ -79,12 +79,19 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
         foreach ($requiteRequestCollection->toArray() as $releaseGroup) {
             $thresholdValidationResult = $this->thresholdValidator->isWithInThreshold($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccessful()) {
-                $stepsExecutionDto->setIsSuccessful(false);
                 $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutputMessage());
 
                 break;
             }
             $aggregatedReleaseGroupCollection->add($releaseGroup);
+
+            $validateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
+            if (!$validateResult->isSuccessful()) {
+                $stepsExecutionDto->addOutputMessage($validateResult->getOutputMessage());
+                $stepsExecutionDto->setPullRequestWarning($validateResult->getOutputMessage());
+
+                break;
+            }
 
             $requireResult = $this->require($releaseGroup);
             if (!$requireResult->isSuccessful()) {
@@ -105,11 +112,6 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
      */
     public function require(ReleaseGroupDto $releaseGroup): ExecutionDto
     {
-        $validateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
-        if (!$validateResult->isSuccessful()) {
-            return $validateResult;
-        }
-
         $moduleCollection = $releaseGroup->getModuleCollection();
         $packageCollection = $this->packageCollectionMapper->mapModuleCollectionToPackageCollection($moduleCollection);
         $filteredPackageCollection = $this->packageCollectionMapper->filterInvalidPackage($packageCollection);

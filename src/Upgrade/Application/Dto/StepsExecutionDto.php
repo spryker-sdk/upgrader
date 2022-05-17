@@ -22,12 +22,17 @@ class StepsExecutionDto extends ExecutionDto
     /**
      * @var \Upgrade\Application\Dto\ComposerLockDiffDto|null
      */
-    protected $composerLockDiffDto;
+    protected ?ComposerLockDiffDto $composerLockDiffDto = null;
+
+    /**
+     * @var string|null
+     */
+    protected ?string $pullRequestWarning = null;
 
     /**
      * @var int|null
      */
-    protected $pullRequestId;
+    protected ?int $pullRequestId = null;
 
     /**
      * @param bool $isSuccessful
@@ -123,5 +128,23 @@ class StepsExecutionDto extends ExecutionDto
     public function setPullRequestId(?int $pullRequestId): void
     {
         $this->pullRequestId = $pullRequestId;
+    }
+
+    /**
+     * @param string|null $majorAvailableWarning
+     *
+     * @return void
+     */
+    public function setPullRequestWarning(?string $majorAvailableWarning): void
+    {
+        $this->pullRequestWarning = $majorAvailableWarning;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPullRequestWarning(): ?string
+    {
+        return $this->pullRequestWarning;
     }
 }
