@@ -14,7 +14,8 @@ services:
 
     analyze.task:
         class: Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask
-        tags: [ 'sdk.task' ]
+        tags:
+            - { name: 'sdk.task'}
 
     report.task:
         class: Upgrader\Tasks\Evaluate\Report\ReportTask
@@ -27,7 +28,7 @@ services:
     report.listener:
         class: Upgrader\Report\Event\ReportListener
         tags:
-              - { name: kernel.event_listener, event: console.command, method: onConsoleCommand }
+            - { name: kernel.event_listener, event: console.terminate, method: onConsoleCommandTerminate }
 
 # Third-party
     Symfony\Component\Yaml\Yaml: ~

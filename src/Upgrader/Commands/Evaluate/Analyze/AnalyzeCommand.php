@@ -11,7 +11,6 @@ use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Infrastructure\Service\CodebaseService;
 use CodeCompliance\Application\Service\CodeComplianceServiceInterface;
 use CodeCompliance\Domain\Entity\Report;
-use SprykerSdk\SdkContracts\Entity\CommandInterface;
 use SprykerSdk\SdkContracts\Entity\ContextInterface;
 use SprykerSdk\SdkContracts\Entity\ConverterInterface;
 use SprykerSdk\SdkContracts\Entity\ExecutableCommandInterface;
@@ -19,7 +18,7 @@ use SprykerSdk\SdkContracts\Violation\ViolationReportableInterface;
 use SprykerSdk\SdkContracts\Violation\ViolationReportInterface;
 use Upgrader\Configuration\ConfigurationProvider;
 
-class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, ExecutableCommandInterface
+class AnalyzeCommand implements ViolationReportableInterface, ExecutableCommandInterface
 {
     protected static ?Report $report = null;
 
@@ -58,7 +57,7 @@ class AnalyzeCommand implements CommandInterface, ViolationReportableInterface, 
      */
     public function getCommand(): string
     {
-        return '';
+        return static::class;
     }
 
     /**
