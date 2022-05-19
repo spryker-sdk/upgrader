@@ -16,7 +16,7 @@ class IntegratorBridge implements IntegratorBridgeInterface
     /**
      * @var string
      */
-    protected const BINARY_INTEGRATOR_PATH = 'vendor/bin/integrator';
+    protected const RUNNER = '/vendor/bin/integrator';
 
     /**
      * @var string
@@ -43,21 +43,7 @@ class IntegratorBridge implements IntegratorBridgeInterface
      */
     public function runIntegrator(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
     {
-        $command = sprintf('%s %s', static::BINARY_INTEGRATOR_PATH, static::NO_INTERACTION_COMPOSER_FLAG);
-        $dirname = dirname(__DIR__);
-        $position = strpos($dirname, '.composer');
-        $isGlobalExecution = $position !== false;
-        if ($isGlobalExecution) {
-            $command = sprintf(
-                '%s %s',
-                substr(
-                    $dirname,
-                    0,
-                    $position,
-                ) . '.composer' . DIRECTORY_SEPARATOR . static::BINARY_INTEGRATOR_PATH,
-                static::NO_INTERACTION_COMPOSER_FLAG,
-            );
-        }
+        $command = sprintf('%s %s', APPLICATION_ROOT_DIR . static::RUNNER, static::NO_INTERACTION_COMPOSER_FLAG);
         $process = $this->processRunner->run(explode(' ', $command));
 
         $stepsExecutionDto->setIsSuccessful(!$process->getExitCode());
