@@ -78,6 +78,7 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
             if ($pullRequestDto->isAutoMerge()) {
                 $this->mergePullRequest($pullRequestId);
             }
+            $stepsExecutionDto->addOutputMessage('PR successfully created');
 
             return $stepsExecutionDto;
         } catch (Exception $runtimeException) {
