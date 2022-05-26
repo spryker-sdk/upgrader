@@ -17,19 +17,19 @@ class UpgradeAnalysisRequest implements RequestInterface
     protected string $projectName;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected array $composerJson;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected array $composerLock;
 
     /**
      * @param string $projectName
-     * @param array $composerJson
-     * @param array $composerLock
+     * @param array<mixed> $composerJson
+     * @param array<mixed> $composerLock
      */
     public function __construct(string $projectName, array $composerJson, array $composerLock)
     {
@@ -63,7 +63,7 @@ class UpgradeAnalysisRequest implements RequestInterface
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     protected function getBodyArray(): array
     {

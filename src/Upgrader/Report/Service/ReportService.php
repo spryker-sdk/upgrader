@@ -41,7 +41,7 @@ class ReportService
     }
 
     /**
-     * @return array|null
+     * @return array<string>|null
      */
     public function report(): ?array
     {

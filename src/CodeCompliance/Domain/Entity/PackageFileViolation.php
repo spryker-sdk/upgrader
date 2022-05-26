@@ -73,7 +73,7 @@ class PackageFileViolation implements ViolationInterface
     protected ?int $endColumn;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected array $additionalAttributes;
 
@@ -82,7 +82,7 @@ class PackageFileViolation implements ViolationInterface
      * @param string $message
      * @param string $producedBy
      * @param string $severity
-     * @param array $additionalAttributes
+     * @param array<mixed> $additionalAttributes
      * @param bool $isFixable
      * @param string|null $class
      * @param string|null $method
@@ -221,7 +221,7 @@ class PackageFileViolation implements ViolationInterface
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getAdditionalAttributes(): array
     {

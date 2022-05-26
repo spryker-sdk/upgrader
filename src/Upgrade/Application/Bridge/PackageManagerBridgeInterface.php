@@ -19,12 +19,12 @@ interface PackageManagerBridgeInterface
     public function getProjectName(): string;
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getComposerJsonFile(): array;
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getComposerLockFile(): array;
 

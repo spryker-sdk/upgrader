@@ -64,7 +64,7 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
      * @param array<\Codebase\Application\Dto\CodebaseInterface> $sources
      * @param string $pattern
      *
-     * @return array
+     * @return array<\Codebase\Application\Dto\CodebaseInterface>
      */
     public function filterProjectClassesWithExtendedCoreByPattern(array $sources, string $pattern): array
     {
@@ -89,7 +89,7 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
     /**
      * @param \Codebase\Application\Dto\CodebaseInterface $source
      *
-     * @return array
+     * @return array<\Codebase\Application\Dto\CodebaseInterface>
      */
     public function filterNotUniqueMethods(CodebaseInterface $source): array
     {

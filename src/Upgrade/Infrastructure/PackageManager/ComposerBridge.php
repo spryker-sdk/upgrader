@@ -82,7 +82,7 @@ class ComposerBridge implements PackageManagerBridgeInterface
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getComposerJsonFile(): array
     {
@@ -90,7 +90,7 @@ class ComposerBridge implements PackageManagerBridgeInterface
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getComposerLockFile(): array
     {

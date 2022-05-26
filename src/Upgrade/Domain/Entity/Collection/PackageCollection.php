@@ -69,7 +69,7 @@ class PackageCollection
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
     public function getNameList(): array
     {

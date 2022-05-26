@@ -20,7 +20,7 @@ class Response implements ResponseInterface
     protected int $code;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected array $body;
 
@@ -43,7 +43,7 @@ class Response implements ResponseInterface
     }
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getBody(): ?array
     {

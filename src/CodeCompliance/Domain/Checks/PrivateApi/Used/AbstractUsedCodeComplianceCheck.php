@@ -16,9 +16,7 @@ abstract class AbstractUsedCodeComplianceCheck extends AbstractCodeComplianceChe
     /**
      * @phpstan-template T of object
      *
-     * @phpstan-param \ReflectionClass<T> $class
-     *
-     * @param \ReflectionClass $class
+     * @param \ReflectionClass<T> $class
      *
      * @return string|null
      */
@@ -146,9 +144,9 @@ abstract class AbstractUsedCodeComplianceCheck extends AbstractCodeComplianceChe
 
     /**
      * @param array<string> $coreNamespaces
-     * @param array $classNamespaceList
+     * @param array<string> $classNamespaceList
      *
-     * @return array
+     * @return array<string>
      */
     protected function filterCoreClasses(array $coreNamespaces, array $classNamespaceList): array
     {
@@ -160,7 +158,7 @@ abstract class AbstractUsedCodeComplianceCheck extends AbstractCodeComplianceChe
     /**
      * @param string $comment
      *
-     * @return array
+     * @return array<string>
      */
     public function getParamNamespacesFromDocComment(string $comment): array
     {

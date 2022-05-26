@@ -80,9 +80,7 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
     /**
      * @phpstan-template T of object
      *
-     * @phpstan-param \ReflectionClass<T> $reflectionClass
-     *
-     * @param \ReflectionClass $reflectionClass
+     * @param \ReflectionClass<T> $reflectionClass
      * @param string $methodName
      *
      * @return \ReflectionMethod|null
@@ -104,7 +102,7 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
     /**
      * @param array<string> $params
      *
-     * @return array
+     * @return array<string>
      */
     protected function skipBasicTypes(array $params): array
     {
@@ -114,10 +112,10 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @param array $dependencyNamespaces
-     * @param array $sources
+     * @param array<string> $dependencyNamespaces
+     * @param array<mixed> $sources
      *
-     * @return array
+     * @return array<string, \Codebase\Application\Dto\CodebaseInterface>
      */
     protected function getCoreSourcesByNamespaces(array $dependencyNamespaces, array $sources): array
     {

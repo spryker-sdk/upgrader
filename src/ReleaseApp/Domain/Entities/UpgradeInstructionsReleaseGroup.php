@@ -41,7 +41,7 @@ class UpgradeInstructionsReleaseGroup
     protected const ID_KEY = 'id';
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected array $body;
 
@@ -51,7 +51,7 @@ class UpgradeInstructionsReleaseGroup
     protected $moduleCollection;
 
     /**
-     * @param array $bodyArray
+     * @param array<mixed> $bodyArray
      */
     public function __construct(array $bodyArray)
     {

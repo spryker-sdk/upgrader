@@ -17,7 +17,7 @@ class ComposerLockReader implements ComposerLockReaderInterface
     protected const COMPOSER_LOCK = 'composer.lock';
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function read(): array
     {
@@ -29,7 +29,7 @@ class ComposerLockReader implements ComposerLockReaderInterface
      *
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
-     * @return array
+     * @return array<mixed>
      */
     protected function readFromPath(string $path): array
     {

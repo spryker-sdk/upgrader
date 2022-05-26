@@ -15,7 +15,7 @@ interface ResponseInterface
     public function getCode(): int;
 
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getBody(): ?array;
 }

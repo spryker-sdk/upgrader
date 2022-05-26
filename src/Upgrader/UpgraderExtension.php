@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class UpgraderExtension extends Extension
 {
     /**
-     * @param array $configs
+     * @param array<mixed> $configs
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
      * @return void

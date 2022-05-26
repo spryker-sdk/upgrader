@@ -42,7 +42,7 @@ class ConfigurationProvider
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
     public function getCorePaths(): array
     {

@@ -126,10 +126,8 @@ class Method extends AbstractCodeComplianceCheck
     /**
      * @phpstan-template T of object
      *
-     * @phpstan-param \ReflectionClass<T> $class
-     *
      * @param string $method
-     * @param \ReflectionClass $class
+     * @param \ReflectionClass<T> $class
      *
      * @return bool
      */

@@ -73,7 +73,7 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
     /**
      * @param string $fileBody
      *
-     * @return array
+     * @return array<string>
      */
     protected function parseCreatedClassNames(string $fileBody): array
     {
@@ -103,11 +103,11 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @param array $classNames
-     * @param array $useNamespaces
+     * @param array<string> $classNames
+     * @param array<string> $useNamespaces
      * @param string $defaultNamespace
      *
-     * @return array
+     * @return array<string>
      */
     protected function attachNamespaceToClassNames(array $classNames, array $useNamespaces, string $defaultNamespace): array
     {
@@ -135,7 +135,7 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
 
     /**
      * @param string $className
-     * @param array $useNamespaces
+     * @param array<string> $useNamespaces
      *
      * @return string|null
      */
@@ -163,7 +163,7 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
     /**
      * @param string $fileBody
      *
-     * @return array
+     * @return array<string>
      */
     protected function getUseNamespaces(string $fileBody): array
     {

@@ -25,12 +25,12 @@ class ConfigurationResponseDto
     protected const DEFAULT_PREFIXES = ['Pyz'];
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected array $configuration;
 
     /**
-     * @param array $configuration
+     * @param array<mixed> $configuration
      */
     public function __construct(array $configuration = [])
     {

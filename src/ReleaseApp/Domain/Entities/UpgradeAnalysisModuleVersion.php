@@ -30,12 +30,12 @@ class UpgradeAnalysisModuleVersion
     protected const CREATED_KEY = 'created';
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected array $body;
 
     /**
-     * @param array $bodyArray
+     * @param array<mixed> $bodyArray
      */
     public function __construct(array $bodyArray)
     {

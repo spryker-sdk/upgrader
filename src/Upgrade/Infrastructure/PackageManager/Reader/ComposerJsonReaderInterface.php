@@ -10,7 +10,7 @@ namespace Upgrade\Infrastructure\PackageManager\Reader;
 interface ComposerJsonReaderInterface
 {
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function read(): array;
 }

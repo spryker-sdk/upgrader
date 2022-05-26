@@ -113,9 +113,9 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
 
     /**
      * @param array<string> $coreNamespaces
-     * @param array $methods
+     * @param array<\ReflectionMethod> $methods
      *
-     * @return array
+     * @return array<\ReflectionMethod>
      */
     protected function filterMethodDeclaredOnProjectLevel(array $coreNamespaces, array $methods): array
     {
@@ -177,7 +177,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @param array $constants
+     * @param array<string> $constants
      * @param string $searchName
      *
      * @return bool

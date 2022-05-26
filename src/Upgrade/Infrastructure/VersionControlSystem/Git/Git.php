@@ -304,7 +304,7 @@ class Git
 
     /**
      * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
-     * @param array $command
+     * @param array<string> $command
      *
      * @return \Upgrade\Application\Dto\StepsExecutionDto
      */

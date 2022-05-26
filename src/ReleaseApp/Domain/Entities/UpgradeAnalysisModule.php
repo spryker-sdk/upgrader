@@ -23,7 +23,7 @@ class UpgradeAnalysisModule
     protected const MODULE_VERSIONS_KEY = 'module_versions';
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected array $body;
 
@@ -33,7 +33,7 @@ class UpgradeAnalysisModule
     protected ?UpgradeAnalysisModuleVersionCollection $moduleVersionCollection = null;
 
     /**
-     * @param array $bodyArray
+     * @param array<mixed> $bodyArray
      */
     public function __construct(array $bodyArray)
     {

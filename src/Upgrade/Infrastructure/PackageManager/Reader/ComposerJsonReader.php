@@ -17,7 +17,7 @@ class ComposerJsonReader implements ComposerJsonReaderInterface
     protected const COMPOSER_JSON = 'composer.json';
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function read(): array
     {
@@ -29,7 +29,7 @@ class ComposerJsonReader implements ComposerJsonReaderInterface
      *
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
-     * @return array
+     * @return array<mixed>
      */
     protected function readFromPath(string $path): array
     {

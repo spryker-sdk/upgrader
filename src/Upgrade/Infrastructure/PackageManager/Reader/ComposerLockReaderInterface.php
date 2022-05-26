@@ -10,7 +10,7 @@ namespace Upgrade\Infrastructure\PackageManager\Reader;
 interface ComposerLockReaderInterface
 {
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function read(): array;
 }

@@ -220,9 +220,7 @@ class PhpParser implements ParserInterface
     }
 
     /**
-     * @phpstan-param \ReflectionClass<T> $projectClass
-     *
-     * @param \ReflectionClass $projectClass
+     * @param \ReflectionClass<T> $projectClass
      * @param array<string> $projectPrefix
      * @param array<string> $coreNamespaces
      *
@@ -271,10 +269,10 @@ class PhpParser implements ParserInterface
     }
 
     /**
-     * @param array $interfaces
+     * @param array<\ReflectionClass<T>> $interfaces
      * @param array<string> $projectPrefixes
      *
-     * @return array
+     * @return array<\ReflectionMethod>
      */
     protected function getCoreInterfacesMethods(array $interfaces, array $projectPrefixes): array
     {

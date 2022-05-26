@@ -23,10 +23,10 @@ class FilterService
     }
 
     /**
-     * @param array $sources
+     * @param array<\Codebase\Application\Dto\CodebaseInterface> $sources
      * @param array<string> $enabledFilters
      *
-     * @return array
+     * @return array<\Codebase\Application\Dto\CodebaseInterface>
      */
     public function filter(array $sources, array $enabledFilters): array
     {

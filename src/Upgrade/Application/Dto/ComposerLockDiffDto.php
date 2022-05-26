@@ -22,12 +22,12 @@ class ComposerLockDiffDto
     protected const CHANGES_DEV_KEY = 'changes-dev';
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $composerLockDiff = [];
 
     /**
-     * @param array $composerLockDiff
+     * @param array<mixed> $composerLockDiff
      */
     public function __construct(array $composerLockDiff = [])
     {

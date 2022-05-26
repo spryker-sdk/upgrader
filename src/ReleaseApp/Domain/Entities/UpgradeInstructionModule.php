@@ -22,7 +22,7 @@ class UpgradeInstructionModule
     protected const VERSION_KEY = 'version';
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected array $body;
 
@@ -32,7 +32,7 @@ class UpgradeInstructionModule
     protected string $name;
 
     /**
-     * @param array $body
+     * @param array<mixed> $body
      * @param string $name
      */
     public function __construct(array $body, string $name)

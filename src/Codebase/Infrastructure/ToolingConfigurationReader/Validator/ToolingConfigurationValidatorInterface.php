@@ -10,7 +10,7 @@ namespace Codebase\Infrastructure\ToolingConfigurationReader\Validator;
 interface ToolingConfigurationValidatorInterface
 {
     /**
-     * @param array $configuration
+     * @param array<mixed> $configuration
      *
      * @return void
      */
