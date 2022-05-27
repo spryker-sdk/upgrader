@@ -44,44 +44,48 @@ The Upgrader updates projects via one of the following approaches:
 4. Commits the changes in `composer.json` and `composer.lock` files.
 5. Pushes the changes to the remote repository.
 6. Create a PR in the remote repository.
-   ​
-### Adding update approaches configuration
+
+
+### Supported strategies:
+### Composer
 * To enable Composer update strategy:
 ```bash
 export UPGRADE_STRATEGY=composer
 ```
+
+### Release App
 * To enable Release group strategy (default):
 ```bash
 export UPGRADE_STRATEGY=release-app
 ```
-​
 In the strategy, Upgrader contains aggregate (default) release group requiring processor and sequential processor (one by one release group).
-​
+
+##### Sequential release group require processor
 * To enable Sequential release group require processor:
 ```bash
 export RELEASE_GROUP_REQUIRE_PROCESSOR=sequential
 ```
-​
+
 Sequential release group require processor contains threshold, by default 30 release groups for one Upgrader start.
-​
 * To change the threshold:
 ```bash
 export THRESHOLD_RELEASE_GROUP=<number>
 ```
-* To enable AGGREGATE release group require processor:
+
+##### Aggregate release group require processor
+* To enable aggregate release group require processor:
 ```bash
 export RELEASE_GROUP_REQUIRE_PROCESSOR=aggregate
 ```
-​
-AGGREGATE release group require processor contains soft thresholds:
-​
+Aggregate release group require processor contains soft thresholds:
+
 Soft major threshold, by default 0.
 
 * To change soft major threshold:
 ```bash
 export SOFT_THRESHOLD_MAJOR=<number>
 ```
-​
+
 Soft minor threshold, by default 10.
 ​
 * To change soft minor threshold:
