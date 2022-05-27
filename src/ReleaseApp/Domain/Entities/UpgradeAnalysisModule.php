@@ -66,7 +66,7 @@ class UpgradeAnalysisModule
     public function getPackage(): string
     {
         if (!array_key_exists(static::PACKAGE_KEY, $this->body)) {
-            throw new UpgraderException('Key ' . static::PACKAGE_KEY . ' not found');
+            throw new UpgraderException(sprintf('Key %s not found', static::PACKAGE_KEY));
         }
 
         return $this->body[static::PACKAGE_KEY];

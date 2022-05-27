@@ -9,7 +9,7 @@ namespace Upgrade\Infrastructure\Bridge;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Upgrade\Application\Bridge\IntegratorBridgeInterface;
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 
 class IntegratorBridge implements IntegratorBridgeInterface
 {
@@ -37,11 +37,11 @@ class IntegratorBridge implements IntegratorBridgeInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function runIntegrator(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function runIntegrator(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = sprintf('%s %s', APPLICATION_ROOT_DIR . static::RUNNER, static::NO_INTERACTION_COMPOSER_FLAG);
         $process = $this->processRunner->run(explode(' ', $command));

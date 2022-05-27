@@ -14,7 +14,7 @@ class AbstractStep
     /**
      * @var \Upgrade\Application\Bridge\VersionControlSystemBridgeInterface
      */
-    protected $vsc;
+    protected VersionControlSystemBridgeInterface $vsc;
 
     /**
      * @param \Upgrade\Application\Bridge\VersionControlSystemBridgeInterface $versionControlSystem

@@ -7,7 +7,7 @@
 
 namespace Upgrade\Application\Dto;
 
-class StepsExecutionDto extends ExecutionDto
+class StepsResponseDto extends ResponseDto
 {
     /**
      * @var bool

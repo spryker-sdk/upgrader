@@ -7,7 +7,7 @@
 
 namespace ReleaseApp\Application\Configuration;
 
-class ReleaseAppConst
+class ReleaseAppConstant
 {
     /**
      * @var string

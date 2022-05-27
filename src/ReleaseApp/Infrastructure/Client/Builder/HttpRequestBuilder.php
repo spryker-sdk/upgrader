@@ -42,7 +42,7 @@ class HttpRequestBuilder implements HttpRequestBuilderInterface
             $request->getMethod(),
             $this->getBaseUrl() . $request->getEndpoint(),
             static::HTTP_HEADER_LIST,
-            $request->getDomainRequest()->getBody(),
+            $request->getRequest()->getBody(),
         );
     }
 

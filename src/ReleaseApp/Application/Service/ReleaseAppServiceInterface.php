@@ -17,5 +17,5 @@ interface ReleaseAppServiceInterface
      *
      * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection
      */
-    public function getNewReleaseGroups(UpgradeAnalysisRequest $upgradeAnalysisRequest): UpgradeInstructionsReleaseGroupCollection;
+    public function getNewReleaseGroupsSortedByReleaseDate(UpgradeAnalysisRequest $upgradeAnalysisRequest): UpgradeInstructionsReleaseGroupCollection;
 }

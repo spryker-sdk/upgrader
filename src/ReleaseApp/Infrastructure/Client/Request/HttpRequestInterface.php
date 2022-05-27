@@ -24,7 +24,7 @@ interface HttpRequestInterface
     /**
      * @return \ReleaseApp\Domain\Client\Request\RequestInterface
      */
-    public function getDomainRequest(): RequestInterface;
+    public function getRequest(): RequestInterface;
 
     /**
      * @return string

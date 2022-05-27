@@ -10,7 +10,7 @@ namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab;
 use Exception;
 use Gitlab\Client;
 use RuntimeException;
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface;
@@ -44,11 +44,11 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function validateCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function validateCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         if (
             !$this->configurationProvider->getAccessToken() ||
@@ -62,12 +62,12 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      * @param \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function createPullRequest(StepsExecutionDto $stepsExecutionDto, PullRequestDto $pullRequestDto): StepsExecutionDto
+    public function createPullRequest(StepsResponseDto $stepsExecutionDto, PullRequestDto $pullRequestDto): StepsResponseDto
     {
         try {
             $stepsExecutionDto = $this->validateCredentials($stepsExecutionDto);

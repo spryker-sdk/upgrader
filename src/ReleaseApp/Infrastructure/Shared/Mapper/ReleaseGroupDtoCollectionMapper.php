@@ -8,7 +8,7 @@
 namespace ReleaseApp\Infrastructure\Shared\Mapper;
 
 use ReleaseApp\Application\Configuration\ConfigurationProviderInterface;
-use ReleaseApp\Application\Configuration\ReleaseAppConst;
+use ReleaseApp\Application\Configuration\ReleaseAppConstant;
 use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection;
 use ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
@@ -33,7 +33,7 @@ class ReleaseGroupDtoCollectionMapper
      *
      * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection
      */
-    public function buildReleaseGroupTransferCollection(
+    public function mapReleaseGroupTransferCollection(
         UpgradeInstructionsReleaseGroupCollection $releaseGroupCollection
     ): ReleaseGroupDtoCollection {
         $dataProviderReleaseGroupCollection = new ReleaseGroupDtoCollection();
@@ -42,7 +42,7 @@ class ReleaseGroupDtoCollectionMapper
             $dataProviderReleaseGroup = new ReleaseGroupDto(
                 $releaseGroup->getName(),
                 $this->buildModuleTransferCollection($releaseGroup),
-                $releaseGroup->isContainsProjectChanges(),
+                $releaseGroup->hasProjectChanges(),
                 $this->getReleaseGroupLink($releaseGroup->getId()),
             );
             $dataProviderReleaseGroupCollection->add($dataProviderReleaseGroup);
@@ -74,6 +74,6 @@ class ReleaseGroupDtoCollectionMapper
      */
     protected function getReleaseGroupLink(int $id): string
     {
-        return sprintf(ReleaseAppConst::RELEASE_GROUP_LINK_PATTERN, $this->configurationProvider->getReleaseAppUrl(), $id);
+        return sprintf(ReleaseAppConstant::RELEASE_GROUP_LINK_PATTERN, $this->configurationProvider->getReleaseAppUrl(), $id);
     }
 }

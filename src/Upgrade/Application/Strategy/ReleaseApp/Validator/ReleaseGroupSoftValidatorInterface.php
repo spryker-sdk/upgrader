@@ -8,14 +8,14 @@
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator;
 
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
-use Upgrade\Application\Dto\ExecutionDto;
+use Upgrade\Application\Dto\ResponseDto;
 
 interface ReleaseGroupSoftValidatorInterface
 {
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function isValidReleaseGroup(ReleaseGroupDto $releaseGroup): ExecutionDto;
+    public function isValidReleaseGroup(ReleaseGroupDto $releaseGroup): ResponseDto;
 }

@@ -24,7 +24,7 @@ class ComposerLockDiffDto
     /**
      * @var array<mixed>
      */
-    protected $composerLockDiff = [];
+    protected array $composerLockDiff = [];
 
     /**
      * @param array<mixed> $composerLockDiff

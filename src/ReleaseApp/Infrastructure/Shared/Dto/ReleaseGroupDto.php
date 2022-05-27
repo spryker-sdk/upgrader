@@ -14,22 +14,22 @@ class ReleaseGroupDto
     /**
      * @var \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection
      */
-    protected $moduleCollection;
+    protected ModuleDtoCollection $moduleCollection;
 
     /**
      * @var bool
      */
-    protected $containsProjectChanges;
+    protected bool $containsProjectChanges;
 
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var string
      */
-    protected $link;
+    protected string $link;
 
     /**
      * @param string $name
@@ -56,7 +56,7 @@ class ReleaseGroupDto
     /**
      * @return bool
      */
-    public function isContainsProjectChanges(): bool
+    public function hasProjectChanges(): bool
     {
         return $this->containsProjectChanges;
     }

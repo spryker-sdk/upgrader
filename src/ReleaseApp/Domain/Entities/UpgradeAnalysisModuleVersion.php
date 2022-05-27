@@ -9,7 +9,7 @@ namespace ReleaseApp\Domain\Entities;
 
 use DateTime;
 use DateTimeInterface;
-use ReleaseApp\Application\Configuration\ReleaseAppConst;
+use ReleaseApp\Application\Configuration\ReleaseAppConstant;
 use Upgrade\Application\Exception\UpgraderException;
 
 class UpgradeAnalysisModuleVersion
@@ -50,7 +50,7 @@ class UpgradeAnalysisModuleVersion
     public function getId(): int
     {
         if (!array_key_exists(static::ID_KEY, $this->body)) {
-            throw new UpgraderException('Key ' . static::ID_KEY . ' not found');
+            throw new UpgraderException(sprintf('Key %s not found', static::ID_KEY));
         }
 
         return $this->body[static::ID_KEY];
@@ -64,7 +64,7 @@ class UpgradeAnalysisModuleVersion
     public function getName(): int
     {
         if (!array_key_exists(static::NAME_KEY, $this->body)) {
-            throw new UpgraderException('Key ' . static::NAME_KEY . ' not found');
+            throw new UpgraderException(sprintf('Key %s not found', static::NAME_KEY));
         }
 
         return $this->body[static::NAME_KEY];
@@ -78,7 +78,7 @@ class UpgradeAnalysisModuleVersion
     public function getCreated(): DateTimeInterface
     {
         $dataTime = DateTime::createFromFormat(
-            ReleaseAppConst::RESPONSE_DATA_TIME_FORMAT,
+            ReleaseAppConstant::RESPONSE_DATA_TIME_FORMAT,
             $this->body[static::CREATED_KEY],
         );
 

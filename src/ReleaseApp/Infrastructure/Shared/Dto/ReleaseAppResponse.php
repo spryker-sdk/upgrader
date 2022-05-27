@@ -14,7 +14,7 @@ class ReleaseAppResponse
     /**
      * @var \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection
      */
-    protected $releaseGroupCollection;
+    protected ReleaseGroupDtoCollection $releaseGroupCollection;
 
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $releaseGroupCollection

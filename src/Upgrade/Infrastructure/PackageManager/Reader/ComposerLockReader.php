@@ -7,7 +7,7 @@
 
 namespace Upgrade\Infrastructure\PackageManager\Reader;
 
-use Upgrade\Application\Exception\UpgraderException;
+use Upgrade\Infrastructure\Exception\FileNotFoundException;
 
 class ComposerLockReader implements ComposerLockReaderInterface
 {
@@ -27,14 +27,14 @@ class ComposerLockReader implements ComposerLockReaderInterface
     /**
      * @param string $path
      *
-     * @throws \Upgrade\Application\Exception\UpgraderException
+     * @throws \Upgrade\Infrastructure\Exception\FileNotFoundException
      *
      * @return array<mixed>
      */
     protected function readFromPath(string $path): array
     {
         if (!file_exists($path)) {
-            throw new UpgraderException('File is not exist: ' . $path);
+            throw new FileNotFoundException('File is not exist: ' . $path);
         }
 
         return json_decode((string)file_get_contents($path), true);

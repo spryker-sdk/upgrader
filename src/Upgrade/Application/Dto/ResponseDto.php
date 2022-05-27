@@ -7,7 +7,7 @@
 
 namespace Upgrade\Application\Dto;
 
-class ExecutionDto
+class ResponseDto
 {
     /**
      * @var bool

@@ -7,7 +7,7 @@
 
 namespace Upgrade\Infrastructure\PackageManager\CommandExecutor;
 
-use Upgrade\Application\Dto\ExecutionDto;
+use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 interface ComposerCommandExecutorInterface
@@ -15,19 +15,19 @@ interface ComposerCommandExecutorInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function require(PackageCollection $packageCollection): ExecutionDto;
+    public function require(PackageCollection $packageCollection): ResponseDto;
 
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function requireDev(PackageCollection $packageCollection): ExecutionDto;
+    public function requireDev(PackageCollection $packageCollection): ResponseDto;
 
     /**
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function update(): ExecutionDto;
+    public function update(): ResponseDto;
 }

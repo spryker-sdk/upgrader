@@ -9,7 +9,7 @@ namespace Upgrade\Infrastructure\PackageManager\CommandExecutor;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
-use Upgrade\Application\Dto\ExecutionDto;
+use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 class ComposerCommandExecutor implements ComposerCommandExecutorInterface
@@ -65,9 +65,9 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function require(PackageCollection $packageCollection): ExecutionDto
+    public function require(PackageCollection $packageCollection): ResponseDto
     {
         $command = sprintf(
             '%s%s %s %s %s',
@@ -86,9 +86,9 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function requireDev(PackageCollection $packageCollection): ExecutionDto
+    public function requireDev(PackageCollection $packageCollection): ResponseDto
     {
         $command = sprintf(
             '%s%s %s %s %s %s',
@@ -106,9 +106,9 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     }
 
     /**
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function update(): ExecutionDto
+    public function update(): ResponseDto
     {
         $command = sprintf(
             '%s %s %s %s %s',
@@ -143,14 +143,14 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @param \Symfony\Component\Process\Process $process
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    protected function createResponse(Process $process): ExecutionDto
+    protected function createResponse(Process $process): ResponseDto
     {
         $command = str_replace('\'', '', $process->getCommandLine());
         $output = $process->getExitCode() ? $process->getErrorOutput() : '';
         $outputs = array_filter([$command, $output]);
 
-        return new ExecutionDto($process->isSuccessful(), implode(PHP_EOL, $outputs));
+        return new ResponseDto($process->isSuccessful(), implode(PHP_EOL, $outputs));
     }
 }

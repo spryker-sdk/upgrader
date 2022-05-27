@@ -7,7 +7,7 @@
 
 namespace Upgrade\Application\Service;
 
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\StrategyResolver;
 
@@ -34,9 +34,9 @@ class UpgradeService implements UpgradeServiceInterface
     }
 
     /**
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function upgrade(): StepsExecutionDto
+    public function upgrade(): StepsResponseDto
     {
         $strategy = $this->strategyResolver->getStrategy($this->configurationProvider->getUpgradeStrategy());
 

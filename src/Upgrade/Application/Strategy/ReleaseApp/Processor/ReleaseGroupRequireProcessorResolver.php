@@ -15,7 +15,7 @@ class ReleaseGroupRequireProcessorResolver
     /**
      * @var array<\Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface>
      */
-    protected $processorList = [];
+    protected array $processorList = [];
 
     /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider

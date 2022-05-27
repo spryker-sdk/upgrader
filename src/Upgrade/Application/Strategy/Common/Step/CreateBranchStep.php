@@ -7,27 +7,27 @@
 
 namespace Upgrade\Application\Strategy\Common\Step;
 
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\RollbackStepInterface;
 
 class CreateBranchStep extends AbstractStep implements RollbackStepInterface
 {
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->vsc->createBranch($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function rollBack(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function rollBack(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $stepsExecutionDto = $this->vsc->checkout($stepsExecutionDto);
         $stepsExecutionDto = $this->vsc->deleteLocalBranch($stepsExecutionDto);

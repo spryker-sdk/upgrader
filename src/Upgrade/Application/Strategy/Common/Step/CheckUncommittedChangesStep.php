@@ -7,17 +7,17 @@
 
 namespace Upgrade\Application\Strategy\Common\Step;
 
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\StepInterface;
 
 class CheckUncommittedChangesStep extends AbstractStep implements StepInterface
 {
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $stepsExecutionDto = $this->vsc->hasAnyUncommittedChanges($stepsExecutionDto);
         if (!$stepsExecutionDto->getIsSuccessful()) {

@@ -41,8 +41,9 @@ class ReleaseAppService implements ReleaseAppServiceInterface
      *
      * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection
      */
-    public function getNewReleaseGroups(UpgradeAnalysisRequest $upgradeAnalysisRequest): UpgradeInstructionsReleaseGroupCollection
-    {
+    public function getNewReleaseGroupsSortedByReleaseDate(
+        UpgradeAnalysisRequest $upgradeAnalysisRequest
+    ): UpgradeInstructionsReleaseGroupCollection {
         $moduleVersionCollection = $this->getModuleVersionCollection($upgradeAnalysisRequest);
         $releaseGroupCollection = $this->getReleaseGroupCollection($moduleVersionCollection);
 

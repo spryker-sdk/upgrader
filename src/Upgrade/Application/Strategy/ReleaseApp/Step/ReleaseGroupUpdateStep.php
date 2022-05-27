@@ -8,7 +8,7 @@
 namespace Upgrade\Application\Strategy\ReleaseApp\Step;
 
 use Upgrade\Application\Bridge\ReleaseAppClientBridgeInterface;
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver;
 use Upgrade\Application\Strategy\StepInterface;
@@ -38,11 +38,11 @@ class ReleaseGroupUpdateStep implements StepInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $dataProviderResponse = $this->packageManagementSystemBridge->getNewReleaseGroups();
 

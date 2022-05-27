@@ -14,7 +14,7 @@ class HttpUpgradeAnalysisHttpRequest implements HttpRequestInterface
     /**
      * @var string
      */
-    protected const ENDPOINT = '/upgrade-analysis.json';
+    protected const REQUEST_ENDPOINT = '/upgrade-analysis.json';
 
     /**
      * @var \ReleaseApp\Domain\Client\Request\RequestInterface
@@ -32,7 +32,7 @@ class HttpUpgradeAnalysisHttpRequest implements HttpRequestInterface
     /**
      * @return \ReleaseApp\Domain\Client\Request\RequestInterface
      */
-    public function getDomainRequest(): RequestInterface
+    public function getRequest(): RequestInterface
     {
         return $this->domainRequest;
     }
@@ -42,7 +42,7 @@ class HttpUpgradeAnalysisHttpRequest implements HttpRequestInterface
      */
     public function getEndpoint(): string
     {
-        return static::ENDPOINT;
+        return static::REQUEST_ENDPOINT;
     }
 
     /**

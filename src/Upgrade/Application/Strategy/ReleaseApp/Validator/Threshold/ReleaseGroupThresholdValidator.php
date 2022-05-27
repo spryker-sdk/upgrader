@@ -8,7 +8,7 @@
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
-use Upgrade\Application\Exception\UpgraderException;
+use Upgrade\Application\Exception\ReleaseGroupThresholdException;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class ReleaseGroupThresholdValidator implements ThresholdValidatorInterface
@@ -29,7 +29,7 @@ class ReleaseGroupThresholdValidator implements ThresholdValidatorInterface
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $releaseGroupDtoCollection
      *
-     * @throws \Upgrade\Application\Exception\UpgraderException
+     * @throws \Upgrade\Application\Exception\ReleaseGroupThresholdException
      *
      * @return void
      */
@@ -40,7 +40,7 @@ class ReleaseGroupThresholdValidator implements ThresholdValidatorInterface
             &&
             $this->configurationProvider->getReleaseGroupRequireProcessor() == ConfigurationProvider::SEQUENTIAL_RELEASE_GROUP_REQUIRE_PROCESSOR
         ) {
-            throw new UpgraderException('Release group amount limit reached');
+            throw new ReleaseGroupThresholdException('Release group amount limit reached');
         }
     }
 }

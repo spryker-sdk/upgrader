@@ -10,8 +10,8 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Application\Bridge\PackageManagerBridgeInterface;
-use Upgrade\Application\Dto\ExecutionDto;
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\ResponseDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
@@ -68,15 +68,15 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
 
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function requireCollection(ReleaseGroupDtoCollection $requiteRequestCollection, StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function requireCollection(ReleaseGroupDtoCollection $requiteRequestCollection, StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
         foreach ($requiteRequestCollection->toArray() as $releaseGroup) {
-            $thresholdValidationResult = $this->thresholdValidator->isWithInThreshold($aggregatedReleaseGroupCollection);
+            $thresholdValidationResult = $this->thresholdValidator->validate($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccessful()) {
                 $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutputMessage());
 
@@ -106,9 +106,9 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function require(ModuleDtoCollection $moduleCollection): ExecutionDto
+    public function require(ModuleDtoCollection $moduleCollection): ResponseDto
     {
         $packageCollection = $this->packageCollectionMapper->mapModuleCollectionToPackageCollection($moduleCollection);
         $filteredPackageCollection = $this->packageCollectionMapper->filterInvalidPackage($packageCollection);
@@ -116,7 +116,7 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
         if ($filteredPackageCollection->isEmpty()) {
             $packagesNameString = implode(' ', $packageCollection->getNameList());
 
-            return new ExecutionDto(true, $packagesNameString);
+            return new ResponseDto(true, $packagesNameString);
         }
 
         return $this->requirePackageCollection($filteredPackageCollection);
@@ -125,9 +125,9 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    protected function requirePackageCollection(PackageCollection $packageCollection): ExecutionDto
+    protected function requirePackageCollection(PackageCollection $packageCollection): ResponseDto
     {
         $requiredPackages = $this->packageCollectionMapper->getRequiredPackages($packageCollection);
         $requiredDevPackages = $this->packageCollectionMapper->getRequiredDevPackages($packageCollection);
@@ -148,6 +148,6 @@ class AggregateReleaseGroupRequireProcessor implements ReleaseGroupRequireProces
 
         $packagesNameString = implode(' ', $packageCollection->getNameList());
 
-        return new ExecutionDto(true, $packagesNameString);
+        return new ResponseDto(true, $packagesNameString);
     }
 }

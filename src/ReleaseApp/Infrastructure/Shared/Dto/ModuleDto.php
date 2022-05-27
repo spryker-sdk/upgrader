@@ -12,17 +12,17 @@ class ModuleDto
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var string
      */
-    protected $version;
+    protected string $version;
 
     /**
      * @var string
      */
-    protected $versionType;
+    protected string $versionType;
 
     /**
      * @param string $name

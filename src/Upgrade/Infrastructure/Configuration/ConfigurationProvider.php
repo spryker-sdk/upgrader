@@ -22,16 +22,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public const GITLAB_SOURCE_CODE_PROVIDER = 'gitlab';
 
     /**
-     * @var string
-     */
-    protected const DEFAULT_BRANCH_PATTERN = 'upgradebot/upgrade-for-%s-%s';
-
-    /**
-     * @var bool
-     */
-    protected const DEFAULT_IS_PR_AUTO_MERGE_ENABLED = false;
-
-    /**
      * @var int
      */
     public const DEFAULT_SOFT_THRESHOLD_BUGFIX = 30;
@@ -55,6 +45,16 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      * @var int
      */
     public const GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING = 20;
+
+    /**
+     * @var string
+     */
+    protected const DEFAULT_BRANCH_PATTERN = 'upgradebot/upgrade-for-%s-%s';
+
+    /**
+     * @var bool
+     */
+    protected const DEFAULT_IS_PR_AUTO_MERGE_ENABLED = false;
 
     /**
      * {@inheritDoc}

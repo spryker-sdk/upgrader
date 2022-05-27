@@ -11,7 +11,7 @@ use Core\Infrastructure\Service\ProcessRunnerService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\Common\Step\ComposerLockComparatorStep;
 use Upgrade\Application\Strategy\Comparator\ComposerLockComparator;
 
@@ -31,7 +31,7 @@ class ComposerLockComparatorStepTest extends TestCase
         $comparatorStep = new ComposerLockComparatorStep($composerLockComparator);
 
         // Act
-        $stepsExecutionDto = $comparatorStep->run((new StepsExecutionDto(true)));
+        $stepsExecutionDto = $comparatorStep->run((new StepsResponseDto(true)));
 
         // Assert
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
@@ -59,7 +59,7 @@ class ComposerLockComparatorStepTest extends TestCase
         $comparatorStep = new ComposerLockComparatorStep($composerLockComparator);
 
         // Act
-        $stepsExecutionDto = $comparatorStep->run((new StepsExecutionDto(true)));
+        $stepsExecutionDto = $comparatorStep->run((new StepsResponseDto(true)));
 
         // Assert
         $this->assertFalse($stepsExecutionDto->getIsSuccessful());
@@ -83,7 +83,7 @@ class ComposerLockComparatorStepTest extends TestCase
         $comparatorStep = new ComposerLockComparatorStep($composerLockComparator);
 
         // Act
-        $stepsExecutionDto = $comparatorStep->run((new StepsExecutionDto(true)));
+        $stepsExecutionDto = $comparatorStep->run((new StepsResponseDto(true)));
 
         // Assert
         $this->assertFalse($stepsExecutionDto->getIsSuccessful());

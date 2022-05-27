@@ -8,14 +8,14 @@
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup;
 
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
-use Upgrade\Application\Exception\UpgraderException;
+use Upgrade\Application\Exception\ReleaseGroupValidatorException;
 
 class MajorVersionValidator implements ReleaseGroupValidatorInterface
 {
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
      *
-     * @throws \Upgrade\Application\Exception\UpgraderException
+     * @throws \Upgrade\Application\Exception\ReleaseGroupValidatorException
      *
      * @return void
      */
@@ -29,7 +29,7 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
                 PHP_EOL . $releaseGroup->getLink(),
             );
 
-            throw new UpgraderException($message);
+            throw new ReleaseGroupValidatorException($message);
         }
     }
 }

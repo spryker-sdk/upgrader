@@ -10,8 +10,8 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Bridge\PackageManagerBridgeInterface;
-use Upgrade\Application\Dto\ExecutionDto;
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\ResponseDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
@@ -23,7 +23,7 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     /**
      * @var \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface
      */
-    protected $releaseGroupValidator;
+    protected ReleaseGroupSoftValidatorInterface $releaseGroupValidator;
 
     /**
      * @var \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface
@@ -33,7 +33,7 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     /**
      * @var \Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface
      */
-    protected $packageCollectionMapper;
+    protected PackageCollectionMapperInterface $packageCollectionMapper;
 
     /**
      * @var \Upgrade\Application\Bridge\PackageManagerBridgeInterface
@@ -68,16 +68,16 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
 
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function requireCollection(ReleaseGroupDtoCollection $requiteRequestCollection, StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function requireCollection(ReleaseGroupDtoCollection $requiteRequestCollection, StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
 
         foreach ($requiteRequestCollection->toArray() as $releaseGroup) {
-            $thresholdValidationResult = $this->thresholdValidator->isWithInThreshold($aggregatedReleaseGroupCollection);
+            $thresholdValidationResult = $this->thresholdValidator->validate($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccessful()) {
                 $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutputMessage());
 
@@ -108,9 +108,9 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function require(ReleaseGroupDto $releaseGroup): ExecutionDto
+    public function require(ReleaseGroupDto $releaseGroup): ResponseDto
     {
         $moduleCollection = $releaseGroup->getModuleCollection();
         $packageCollection = $this->packageCollectionMapper->mapModuleCollectionToPackageCollection($moduleCollection);
@@ -119,7 +119,7 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
         if ($filteredPackageCollection->isEmpty()) {
             $packagesNameString = implode(' ', $packageCollection->getNameList());
 
-            return new ExecutionDto(true, $packagesNameString);
+            return new ResponseDto(true, $packagesNameString);
         }
 
         return $this->requirePackageCollection($filteredPackageCollection);
@@ -128,9 +128,9 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    protected function requirePackageCollection(PackageCollection $packageCollection): ExecutionDto
+    protected function requirePackageCollection(PackageCollection $packageCollection): ResponseDto
     {
         $requiredPackages = $this->packageCollectionMapper->getRequiredPackages($packageCollection);
         $requiredDevPackages = $this->packageCollectionMapper->getRequiredDevPackages($packageCollection);
@@ -151,6 +151,6 @@ class SequentialReleaseGroupRequireProcessor implements ReleaseGroupRequireProce
 
         $packagesNameString = implode(' ', $packageCollection->getNameList());
 
-        return new ExecutionDto(true, $packagesNameString);
+        return new ResponseDto(true, $packagesNameString);
     }
 }

@@ -33,7 +33,6 @@ class HttpRequestExecutor implements HttpRequestExecutorInterface
     public function __construct(ConfigurationProvider $config)
     {
         $this->guzzleClient = new GuzzleHttp();
-
         $this->config = $config;
     }
 
@@ -44,7 +43,7 @@ class HttpRequestExecutor implements HttpRequestExecutorInterface
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function send(RequestInterface $request): ResponseInterface
+    public function execute(RequestInterface $request): ResponseInterface
     {
         $attempts = 0;
         $exception = null;

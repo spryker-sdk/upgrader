@@ -43,8 +43,8 @@ class ReleaseAppService implements ReleaseAppServiceInterface
      */
     public function getNewReleaseGroups(UpgradeAnalysisRequest $upgradeAnalysisRequest): ReleaseAppResponse
     {
-        $releaseGroupCollection = $this->releaseGroupDtoCollectionMapper->buildReleaseGroupTransferCollection(
-            $this->releaseApp->getNewReleaseGroups($upgradeAnalysisRequest),
+        $releaseGroupCollection = $this->releaseGroupDtoCollectionMapper->mapReleaseGroupTransferCollection(
+            $this->releaseApp->getNewReleaseGroupsSortedByReleaseDate($upgradeAnalysisRequest),
         );
 
         return new ReleaseAppResponse($releaseGroupCollection);

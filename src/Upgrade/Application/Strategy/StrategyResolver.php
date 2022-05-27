@@ -14,7 +14,7 @@ class StrategyResolver
     /**
      * @var array<\Upgrade\Application\Strategy\StrategyInterface>
      */
-    protected $strategies = [];
+    protected array $strategies = [];
 
     /**
      * @param array<\Upgrade\Application\Strategy\StrategyInterface> $strategies

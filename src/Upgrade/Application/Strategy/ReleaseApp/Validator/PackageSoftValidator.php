@@ -7,7 +7,7 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator;
 
-use Upgrade\Application\Dto\ExecutionDto;
+use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Application\Exception\UpgraderException;
 use Upgrade\Domain\Entity\Package;
 
@@ -16,7 +16,7 @@ class PackageSoftValidator implements PackageSoftValidatorInterface
     /**
      * @var array<\Upgrade\Application\Strategy\ReleaseApp\Validator\Package\PackageValidatorInterface>
      */
-    protected $validatorList = [];
+    protected array $validatorList = [];
 
     /**
      * @param array<\Upgrade\Application\Strategy\ReleaseApp\Validator\Package\PackageValidatorInterface> $validatorList
@@ -29,18 +29,18 @@ class PackageSoftValidator implements PackageSoftValidatorInterface
     /**
      * @param \Upgrade\Domain\Entity\Package $package
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function isValidPackage(Package $package): ExecutionDto
+    public function isValidPackage(Package $package): ResponseDto
     {
         try {
             foreach ($this->validatorList as $validator) {
                 $validator->validate($package);
             }
         } catch (UpgraderException $exception) {
-            return new ExecutionDto(false, $exception->getMessage());
+            return new ResponseDto(false, $exception->getMessage());
         }
 
-        return new ExecutionDto(true);
+        return new ResponseDto(true);
     }
 }

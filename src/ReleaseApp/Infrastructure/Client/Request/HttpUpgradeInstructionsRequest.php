@@ -14,27 +14,27 @@ class HttpUpgradeInstructionsRequest implements HttpRequestInterface
     /**
      * @var string
      */
-    protected const ENDPOINT = '/upgrade-instructions.json';
+    protected const REQUEST_ENDPOINT = '/upgrade-instructions.json';
 
     /**
      * @var \ReleaseApp\Domain\Client\Request\RequestInterface
      */
-    protected RequestInterface $domainRequest;
+    protected RequestInterface $request;
 
     /**
      * @param \ReleaseApp\Domain\Client\Request\RequestInterface $domainRequest
      */
     public function __construct(RequestInterface $domainRequest)
     {
-        $this->domainRequest = $domainRequest;
+        $this->request = $domainRequest;
     }
 
     /**
      * @return \ReleaseApp\Domain\Client\Request\RequestInterface
      */
-    public function getDomainRequest(): RequestInterface
+    public function getRequest(): RequestInterface
     {
-        return $this->domainRequest;
+        return $this->request;
     }
 
     /**
@@ -42,7 +42,7 @@ class HttpUpgradeInstructionsRequest implements HttpRequestInterface
      */
     public function getEndpoint(): string
     {
-        return sprintf('%s?%s', static::ENDPOINT, $this->domainRequest->getParameters());
+        return sprintf('%s?%s', static::REQUEST_ENDPOINT, $this->request->getParameters());
     }
 
     /**

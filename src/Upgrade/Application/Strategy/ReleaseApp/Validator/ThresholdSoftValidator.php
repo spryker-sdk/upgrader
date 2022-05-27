@@ -8,7 +8,7 @@
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
-use Upgrade\Application\Dto\ExecutionDto;
+use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Application\Exception\UpgraderException;
 
 class ThresholdSoftValidator implements ThresholdSoftValidatorInterface
@@ -16,7 +16,7 @@ class ThresholdSoftValidator implements ThresholdSoftValidatorInterface
     /**
      * @var array<\Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\ThresholdValidatorInterface>
      */
-    protected $validatorList = [];
+    protected array $validatorList = [];
 
     /**
      * @param array<\Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\ThresholdValidatorInterface> $validatorList
@@ -29,18 +29,18 @@ class ThresholdSoftValidator implements ThresholdSoftValidatorInterface
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $groupDtoCollection
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function isWithInThreshold(ReleaseGroupDtoCollection $groupDtoCollection): ExecutionDto
+    public function validate(ReleaseGroupDtoCollection $groupDtoCollection): ResponseDto
     {
         try {
             foreach ($this->validatorList as $validator) {
                 $validator->validate($groupDtoCollection);
             }
         } catch (UpgraderException $exception) {
-            return new ExecutionDto(false, $exception->getMessage());
+            return new ResponseDto(false, $exception->getMessage());
         }
 
-        return new ExecutionDto(true);
+        return new ResponseDto(true);
     }
 }

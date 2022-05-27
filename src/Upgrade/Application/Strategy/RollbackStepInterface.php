@@ -7,14 +7,14 @@
 
 namespace Upgrade\Application\Strategy;
 
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 
 interface RollbackStepInterface extends StepInterface
 {
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function rollBack(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
+    public function rollBack(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
 }

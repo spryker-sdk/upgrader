@@ -7,7 +7,7 @@
 
 namespace ReleaseApp\Infrastructure\Shared\Dto\Collection;
 
-use ReleaseApp\Application\Configuration\ReleaseAppConst;
+use ReleaseApp\Application\Configuration\ReleaseAppConstant;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 
 class ModuleDtoCollection
@@ -75,7 +75,7 @@ class ModuleDtoCollection
     public function getFirstMajor(): ?ModuleDto
     {
         foreach ($this->elements as $module) {
-            if ($module->getVersionType() === ReleaseAppConst::MODULE_TYPE_MAJOR) {
+            if ($module->getVersionType() === ReleaseAppConstant::MODULE_TYPE_MAJOR) {
                 return $module;
             }
         }
@@ -90,7 +90,7 @@ class ModuleDtoCollection
     {
         $result = 0;
         foreach ($this->elements as $module) {
-            if ($module->getVersionType() === ReleaseAppConst::MODULE_TYPE_MAJOR) {
+            if ($module->getVersionType() === ReleaseAppConstant::MODULE_TYPE_MAJOR) {
                 $result++;
             }
         }
@@ -105,7 +105,7 @@ class ModuleDtoCollection
     {
         $result = 0;
         foreach ($this->elements as $module) {
-            if ($module->getVersionType() === ReleaseAppConst::MODULE_TYPE_MINOR) {
+            if ($module->getVersionType() === ReleaseAppConstant::MODULE_TYPE_MINOR) {
                 $result++;
             }
         }
@@ -120,7 +120,7 @@ class ModuleDtoCollection
     {
         $result = 0;
         foreach ($this->elements as $module) {
-            if ($module->getVersionType() === ReleaseAppConst::MODULE_TYPE_PATCH) {
+            if ($module->getVersionType() === ReleaseAppConstant::MODULE_TYPE_PATCH) {
                 $result++;
             }
         }

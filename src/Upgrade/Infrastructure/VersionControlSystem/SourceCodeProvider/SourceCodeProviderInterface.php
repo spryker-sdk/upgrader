@@ -7,7 +7,7 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider;
 
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
 
 interface SourceCodeProviderInterface
@@ -18,20 +18,20 @@ interface SourceCodeProviderInterface
     public function getName(): string;
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      * @param \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
     public function createPullRequest(
-        StepsExecutionDto $stepsExecutionDto,
+        StepsResponseDto $stepsExecutionDto,
         PullRequestDto $pullRequestDto
-    ): StepsExecutionDto;
+    ): StepsResponseDto;
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function validateCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto;
+    public function validateCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
 }

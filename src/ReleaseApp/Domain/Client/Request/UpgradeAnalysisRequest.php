@@ -14,6 +14,21 @@ class UpgradeAnalysisRequest implements RequestInterface
     /**
      * @var string
      */
+    protected const PROJECT_NAME_KEY = 'projectName';
+
+    /**
+     * @var string
+     */
+    protected const COMPOSER_JSON_KEY = 'composerJson';
+
+    /**
+     * @var string
+     */
+    protected const COMPOSER_LOCK_KEY = 'composerLock';
+
+    /**
+     * @var string
+     */
     protected string $projectName;
 
     /**
@@ -71,9 +86,9 @@ class UpgradeAnalysisRequest implements RequestInterface
         $composerLockContent = json_encode($this->composerLock);
 
         return [
-            'projectName' => $this->projectName,
-            'composerJson' => $composerJsonContent,
-            'composerLock' => $composerLockContent,
+            self::PROJECT_NAME_KEY => $this->projectName,
+            self::COMPOSER_JSON_KEY => $composerJsonContent,
+            self::COMPOSER_LOCK_KEY => $composerLockContent,
         ];
     }
 }

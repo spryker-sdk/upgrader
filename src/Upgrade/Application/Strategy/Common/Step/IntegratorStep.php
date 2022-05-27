@@ -9,7 +9,7 @@ namespace Upgrade\Application\Strategy\Common\Step;
 
 use Upgrade\Application\Bridge\IntegratorBridgeInterface;
 use Upgrade\Application\Bridge\VersionControlSystemBridgeInterface;
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\RollbackStepInterface;
 
 class IntegratorStep extends AbstractStep implements RollbackStepInterface
@@ -31,21 +31,21 @@ class IntegratorStep extends AbstractStep implements RollbackStepInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->integratorClient->runIntegrator($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function rollBack(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function rollBack(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->vsc->restore($stepsExecutionDto);
     }

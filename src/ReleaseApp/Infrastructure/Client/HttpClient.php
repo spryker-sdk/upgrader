@@ -85,7 +85,7 @@ class HttpClient implements ClientInterface
     protected function getResponse(HttpRequestInterface $request): ResponseInterface
     {
         $guzzleRequest = $this->requestBuilder->createRequest($request);
-        $guzzleResponse = $this->requestExecutor->send($guzzleRequest);
+        $guzzleResponse = $this->requestExecutor->execute($guzzleRequest);
         $response = $this->responseBuilder->createHttpResponse($request, $guzzleResponse);
 
         return $response;

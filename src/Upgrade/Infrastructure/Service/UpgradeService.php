@@ -7,7 +7,7 @@
 
 namespace Upgrade\Infrastructure\Service;
 
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Service\UpgradeService as ApplicationService;
 
 class UpgradeService implements UpgradeServiceInterface
@@ -26,9 +26,9 @@ class UpgradeService implements UpgradeServiceInterface
     }
 
     /**
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function upgrade(): StepsExecutionDto
+    public function upgrade(): StepsResponseDto
     {
         return $this->application->upgrade();
     }

@@ -9,7 +9,7 @@ namespace Upgrade\Infrastructure\PackageManager;
 
 use Upgrade\Application\Bridge\PackageManagerBridgeInterface;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
-use Upgrade\Application\Dto\ExecutionDto;
+use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutorInterface;
 use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutorInterface;
@@ -36,7 +36,7 @@ class ComposerBridge implements PackageManagerBridgeInterface
     /**
      * @var \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutorInterface
      */
-    protected $composerCommandExecutor;
+    protected ComposerCommandExecutorInterface $composerCommandExecutor;
 
     /**
      * @var \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutorInterface
@@ -46,12 +46,12 @@ class ComposerBridge implements PackageManagerBridgeInterface
     /**
      * @var \Upgrade\Infrastructure\PackageManager\Reader\ComposerJsonReaderInterface
      */
-    protected $composerJsonReader;
+    protected ComposerJsonReaderInterface $composerJsonReader;
 
     /**
      * @var \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReaderInterface
      */
-    protected $composerLockReader;
+    protected ComposerLockReaderInterface $composerLockReader;
 
     /**
      * @param \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutorInterface $composerCommandExecutor
@@ -100,9 +100,9 @@ class ComposerBridge implements PackageManagerBridgeInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function require(PackageCollection $packageCollection): ExecutionDto
+    public function require(PackageCollection $packageCollection): ResponseDto
     {
         return $this->composerCommandExecutor->require($packageCollection);
     }
@@ -110,17 +110,17 @@ class ComposerBridge implements PackageManagerBridgeInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function requireDev(PackageCollection $packageCollection): ExecutionDto
+    public function requireDev(PackageCollection $packageCollection): ResponseDto
     {
         return $this->composerCommandExecutor->requireDev($packageCollection);
     }
 
     /**
-     * @return \Upgrade\Application\Dto\ExecutionDto
+     * @return \Upgrade\Application\Dto\ResponseDto
      */
-    public function update(): ExecutionDto
+    public function update(): ResponseDto
     {
         return $this->composerCommandExecutor->update();
     }

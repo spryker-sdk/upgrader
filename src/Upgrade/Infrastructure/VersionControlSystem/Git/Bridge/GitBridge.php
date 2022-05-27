@@ -8,7 +8,7 @@
 namespace Upgrade\Infrastructure\VersionControlSystem\Git\Bridge;
 
 use Upgrade\Application\Bridge\VersionControlSystemBridgeInterface;
-use Upgrade\Application\Dto\StepsExecutionDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
 
 class GitBridge implements VersionControlSystemBridgeInterface
@@ -27,131 +27,131 @@ class GitBridge implements VersionControlSystemBridgeInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function isRemoteTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function isRemoteTargetBranchNotExist(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->isRemoteTargetBranchNotExist($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function isLocalTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function isLocalTargetBranchNotExist(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->isLocalTargetBranchNotExist($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function hasAnyUncommittedChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function hasAnyUncommittedChanges(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->hasAnyUncommittedChanges($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function createBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function createBranch(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->createBranch($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function addChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function addChanges(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->add($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function commitChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function commitChanges(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->commit($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function pushChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function pushChanges(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->push($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function createPullRequest(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function createPullRequest(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->createPullRequest($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function checkout(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function checkout(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->checkout($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function deleteLocalBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function deleteLocalBranch(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->deleteLocalBranch($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function deleteRemoteBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function deleteRemoteBranch(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->deleteRemoteBranch($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function restore(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function restore(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->restore($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Application\Dto\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function validateSourceCodeProviderCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function validateSourceCodeProviderCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->validateSourceCodeProviderCredentials($stepsExecutionDto);
     }

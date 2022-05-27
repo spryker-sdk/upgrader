@@ -9,7 +9,7 @@ namespace ReleaseApp\Domain\Entities;
 
 use DateTime;
 use DateTimeInterface;
-use ReleaseApp\Application\Configuration\ReleaseAppConst;
+use ReleaseApp\Application\Configuration\ReleaseAppConstant;
 use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection;
 use Upgrade\Application\Exception\UpgraderException;
 
@@ -48,7 +48,7 @@ class UpgradeInstructionsReleaseGroup
     /**
      * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection|null
      */
-    protected $moduleCollection;
+    protected ?UpgradeInstructionModuleCollection $moduleCollection;
 
     /**
      * @param array<mixed> $bodyArray
@@ -69,7 +69,7 @@ class UpgradeInstructionsReleaseGroup
     /**
      * @return bool
      */
-    public function isContainsProjectChanges(): bool
+    public function hasProjectChanges(): bool
     {
         return $this->body[static::PROJECT_CHANGES_KEY];
     }
@@ -96,7 +96,7 @@ class UpgradeInstructionsReleaseGroup
         }
 
         $dataTime = DateTime::createFromFormat(
-            ReleaseAppConst::RESPONSE_DATA_TIME_FORMAT,
+            ReleaseAppConstant::RESPONSE_DATA_TIME_FORMAT,
             $this->body[static::RELEASED_KEY],
         );
 

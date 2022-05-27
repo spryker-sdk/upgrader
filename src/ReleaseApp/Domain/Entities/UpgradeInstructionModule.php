@@ -57,7 +57,7 @@ class UpgradeInstructionModule
     public function getVersion(): string
     {
         if (!array_key_exists(static::VERSION_KEY, $this->body)) {
-            throw new UpgraderException('Key ' . static::VERSION_KEY . ' not found');
+            throw new UpgraderException(sprintf('Key %s not found', static::VERSION_KEY));
         }
 
         return $this->body[static::VERSION_KEY];
@@ -71,7 +71,7 @@ class UpgradeInstructionModule
     public function getType(): string
     {
         if (!array_key_exists(static::TYPE_KEY, $this->body)) {
-            throw new UpgraderException('Key ' . static::TYPE_KEY . ' not found');
+            throw new UpgraderException(sprintf('Key %s not found', static::TYPE_KEY));
         }
 
         return $this->body[static::TYPE_KEY];
