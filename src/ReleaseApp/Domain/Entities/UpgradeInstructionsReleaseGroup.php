@@ -48,7 +48,7 @@ class UpgradeInstructionsReleaseGroup
     /**
      * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection|null
      */
-    protected ?UpgradeInstructionModuleCollection $moduleCollection;
+    protected ?UpgradeInstructionModuleCollection $moduleCollection = null;
 
     /**
      * @param array<mixed> $bodyArray
