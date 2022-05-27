@@ -21,10 +21,6 @@ services:
                 param1: '@git.adapter'
               }
 
-    upgrade.task:
-        class: Upgrade\Infrastructure\Task\UpgradeTask
-        tags: [ 'sdk.task' ]
-
     check_credentials.step:
         class: Upgrade\Application\Strategy\Common\Step\CheckCredentialsStep
 

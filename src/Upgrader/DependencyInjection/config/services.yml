@@ -21,10 +21,6 @@ services:
         class: Upgrader\Tasks\Evaluate\Report\ReportTask
         tags: [ 'sdk.task' ]
 
-    upgrader.task:
-        class: Upgrader\Tasks\UpgraderTask
-        tags: [ 'sdk.task' ]
-
     report.listener:
         class: Upgrader\Report\Event\ReportListener
         tags:
