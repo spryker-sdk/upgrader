@@ -5,13 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Application\Bridge;
+namespace Upgrade\Application\Adapter;
 
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
-interface PackageManagerBridgeInterface
+interface PackageManagerAdapterInterface
 {
     /**
      * @return string

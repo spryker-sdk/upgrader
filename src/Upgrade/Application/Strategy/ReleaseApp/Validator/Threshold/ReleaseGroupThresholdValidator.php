@@ -38,7 +38,7 @@ class ReleaseGroupThresholdValidator implements ThresholdValidatorInterface
         if (
             $releaseGroupDtoCollection->count() >= $this->configurationProvider->getThresholdReleaseGroup()
             &&
-            $this->configurationProvider->getReleaseGroupRequireProcessor() == ConfigurationProvider::SEQUENTIAL_RELEASE_GROUP_REQUIRE_PROCESSOR
+            $this->configurationProvider->getReleaseGroupProcessor() == ConfigurationProvider::SEQUENTIAL_RELEASE_GROUP_PROCESSOR
         ) {
             throw new ReleaseGroupThresholdException('Release group amount limit reached');
         }

@@ -8,7 +8,7 @@
 namespace Upgrade\Application\Strategy\ReleaseApp\Mapper;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
-use Upgrade\Application\Bridge\PackageManagerBridgeInterface;
+use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
@@ -21,15 +21,15 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
     protected PackageSoftValidatorInterface $packageValidator;
 
     /**
-     * @var \Upgrade\Application\Bridge\PackageManagerBridgeInterface
+     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
-    protected PackageManagerBridgeInterface $packageManager;
+    protected PackageManagerAdapterInterface $packageManager;
 
     /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface $packageValidator
-     * @param \Upgrade\Application\Bridge\PackageManagerBridgeInterface $packageManager
+     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
      */
-    public function __construct(PackageSoftValidatorInterface $packageValidator, PackageManagerBridgeInterface $packageManager)
+    public function __construct(PackageSoftValidatorInterface $packageValidator, PackageManagerAdapterInterface $packageManager)
     {
         $this->packageValidator = $packageValidator;
         $this->packageManager = $packageManager;

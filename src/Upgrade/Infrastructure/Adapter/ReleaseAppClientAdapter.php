@@ -5,15 +5,15 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Bridge;
+namespace Upgrade\Infrastructure\Adapter;
 
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
-use Upgrade\Application\Bridge\PackageManagerBridgeInterface;
-use Upgrade\Application\Bridge\ReleaseAppClientBridgeInterface;
+use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
+use Upgrade\Application\Adapter\ReleaseAppClientAdapterInterface;
 
-class ReleaseAppClientBridge implements ReleaseAppClientBridgeInterface
+class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
 {
     /**
      * @var \ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface
@@ -21,15 +21,15 @@ class ReleaseAppClientBridge implements ReleaseAppClientBridgeInterface
     protected ReleaseAppServiceInterface $releaseApp;
 
     /**
-     * @var \Upgrade\Application\Bridge\PackageManagerBridgeInterface
+     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
-    protected PackageManagerBridgeInterface $packageManager;
+    protected PackageManagerAdapterInterface $packageManager;
 
     /**
      * @param \ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface $dataProvider
-     * @param \Upgrade\Application\Bridge\PackageManagerBridgeInterface $packageManager
+     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
      */
-    public function __construct(ReleaseAppServiceInterface $dataProvider, PackageManagerBridgeInterface $packageManager)
+    public function __construct(ReleaseAppServiceInterface $dataProvider, PackageManagerAdapterInterface $packageManager)
     {
         $this->releaseApp = $dataProvider;
         $this->packageManager = $packageManager;

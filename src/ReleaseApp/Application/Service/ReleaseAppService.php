@@ -8,7 +8,7 @@
 namespace ReleaseApp\Application\Service;
 
 use ReleaseApp\Application\Configuration\ConfigurationProviderInterface;
-use ReleaseApp\Domain\Client\ClientInterface;
+use ReleaseApp\Domain\Client\ReleaseAppClientInterface;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection;
@@ -17,9 +17,9 @@ use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollect
 class ReleaseAppService implements ReleaseAppServiceInterface
 {
     /**
-     * @var \ReleaseApp\Domain\Client\ClientInterface
+     * @var \ReleaseApp\Domain\Client\ReleaseAppClientInterface
      */
-    protected ClientInterface $client;
+    protected ReleaseAppClientInterface $releaseAppClient;
 
     /**
      * @var \ReleaseApp\Application\Configuration\ConfigurationProviderInterface
@@ -27,12 +27,12 @@ class ReleaseAppService implements ReleaseAppServiceInterface
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
-     * @param \ReleaseApp\Domain\Client\ClientInterface $client
+     * @param \ReleaseApp\Domain\Client\ReleaseAppClientInterface $releaseAppClient
      * @param \ReleaseApp\Application\Configuration\ConfigurationProviderInterface $configurationProvider
      */
-    public function __construct(ClientInterface $client, ConfigurationProviderInterface $configurationProvider)
+    public function __construct(ReleaseAppClientInterface $releaseAppClient, ConfigurationProviderInterface $configurationProvider)
     {
-        $this->client = $client;
+        $this->releaseAppClient = $releaseAppClient;
         $this->configurationProvider = $configurationProvider;
     }
 
@@ -62,7 +62,7 @@ class ReleaseAppService implements ReleaseAppServiceInterface
 
         foreach ($moduleVersionCollection->toArray() as $moduleVersion) {
             $request = new UpgradeInstructionsRequest($moduleVersion->getId());
-            $response = $this->client->getUpgradeInstructions($request);
+            $response = $this->releaseAppClient->getUpgradeInstructions($request);
             $releaseGroupCollection->add($response->getReleaseGroup());
         }
 
@@ -77,7 +77,7 @@ class ReleaseAppService implements ReleaseAppServiceInterface
     protected function getModuleVersionCollection(
         UpgradeAnalysisRequest $request
     ): UpgradeAnalysisModuleVersionCollection {
-        $response = $this->client->getUpgradeAnalysis($request);
+        $response = $this->releaseAppClient->getUpgradeAnalysis($request);
 
         return $response->getModuleCollection()
             ->getModulesWithVersions()

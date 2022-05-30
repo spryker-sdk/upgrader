@@ -7,21 +7,21 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator\Package;
 
-use Upgrade\Application\Bridge\PackageManagerBridgeInterface;
+use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Exception\UpgraderException;
 use Upgrade\Domain\Entity\Package;
 
 class AlreadyInstalledValidator implements PackageValidatorInterface
 {
     /**
-     * @var \Upgrade\Application\Bridge\PackageManagerBridgeInterface
+     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
-    protected PackageManagerBridgeInterface $composerClient;
+    protected PackageManagerAdapterInterface $composerClient;
 
     /**
-     * @param \Upgrade\Application\Bridge\PackageManagerBridgeInterface $composerClient
+     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $composerClient
      */
-    public function __construct(PackageManagerBridgeInterface $composerClient)
+    public function __construct(PackageManagerAdapterInterface $composerClient)
     {
         $this->composerClient = $composerClient;
     }

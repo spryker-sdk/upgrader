@@ -7,34 +7,34 @@
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Step;
 
-use Upgrade\Application\Bridge\ReleaseAppClientBridgeInterface;
+use Upgrade\Application\Adapter\ReleaseAppClientAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface;
-use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver;
 use Upgrade\Application\Strategy\StepInterface;
 
 class ReleaseGroupUpdateStep implements StepInterface
 {
     /**
-     * @var \Upgrade\Application\Bridge\ReleaseAppClientBridgeInterface
+     * @var \Upgrade\Application\Adapter\ReleaseAppClientAdapterInterface
      */
-    protected ReleaseAppClientBridgeInterface $packageManagementSystemBridge;
+    protected ReleaseAppClientAdapterInterface $packageManagementSystemBridge;
 
     /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface
+     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface
      */
-    protected ReleaseGroupRequireProcessorInterface $releaseGroupRequireProcessor;
+    protected ReleaseGroupProcessorInterface $releaseGroupProcessor;
 
     /**
-     * @param \Upgrade\Application\Bridge\ReleaseAppClientBridgeInterface $packageManagementSystemBridge
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver $groupRequireProcessorResolver
+     * @param \Upgrade\Application\Adapter\ReleaseAppClientAdapterInterface $packageManagementSystemBridge
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver $groupRequireProcessorResolver
      */
     public function __construct(
-        ReleaseAppClientBridgeInterface $packageManagementSystemBridge,
-        ReleaseGroupRequireProcessorResolver $groupRequireProcessorResolver
+        ReleaseAppClientAdapterInterface $packageManagementSystemBridge,
+        ReleaseGroupProcessorResolver $groupRequireProcessorResolver
     ) {
         $this->packageManagementSystemBridge = $packageManagementSystemBridge;
-        $this->releaseGroupRequireProcessor = $groupRequireProcessorResolver->getProcessor();
+        $this->releaseGroupProcessor = $groupRequireProcessorResolver->getProcessor();
     }
 
     /**
@@ -46,6 +46,6 @@ class ReleaseGroupUpdateStep implements StepInterface
     {
         $dataProviderResponse = $this->packageManagementSystemBridge->getNewReleaseGroups();
 
-        return $this->releaseGroupRequireProcessor->requireCollection($dataProviderResponse->getReleaseGroupCollection(), $stepsExecutionDto);
+        return $this->releaseGroupProcessor->process($dataProviderResponse->getReleaseGroupCollection(), $stepsExecutionDto);
     }
 }

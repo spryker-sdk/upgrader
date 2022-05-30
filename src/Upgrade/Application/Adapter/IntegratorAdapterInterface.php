@@ -5,11 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Application\Bridge;
+namespace Upgrade\Application\Adapter;
 
 use Upgrade\Application\Dto\StepsResponseDto;
 
-interface IntegratorBridgeInterface
+interface IntegratorAdapterInterface
 {
     /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto

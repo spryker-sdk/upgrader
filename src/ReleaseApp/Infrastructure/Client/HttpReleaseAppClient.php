@@ -7,7 +7,7 @@
 
 namespace ReleaseApp\Infrastructure\Client;
 
-use ReleaseApp\Domain\Client\ClientInterface;
+use ReleaseApp\Domain\Client\ReleaseAppClientInterface;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Client\Response\ResponseInterface;
@@ -19,7 +19,7 @@ use ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface;
 use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeAnalysisHttpRequest;
 use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeInstructionsRequest;
 
-class HttpClient implements ClientInterface
+class HttpReleaseAppClient implements ReleaseAppClientInterface
 {
     /**
      * @var \ReleaseApp\Infrastructure\Client\Builder\HttpRequestBuilderInterface

@@ -10,10 +10,10 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 use Upgrade\Application\Exception\ReleaseGroupRequireProcessorIsNotDefinedException;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
-class ReleaseGroupRequireProcessorResolver
+class ReleaseGroupProcessorResolver
 {
     /**
-     * @var array<\Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface>
+     * @var array<\Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface>
      */
     protected array $processorList = [];
 
@@ -24,7 +24,7 @@ class ReleaseGroupRequireProcessorResolver
 
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param array<\Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface> $processorList
+     * @param array<\Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface> $processorList
      */
     public function __construct(ConfigurationProvider $configurationProvider, array $processorList)
     {
@@ -35,11 +35,11 @@ class ReleaseGroupRequireProcessorResolver
     /**
      * @throws \Upgrade\Application\Exception\ReleaseGroupRequireProcessorIsNotDefinedException
      *
-     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorInterface
+     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface
      */
-    public function getProcessor(): ReleaseGroupRequireProcessorInterface
+    public function getProcessor(): ReleaseGroupProcessorInterface
     {
-        $processorName = $this->configurationProvider->getReleaseGroupRequireProcessor();
+        $processorName = $this->configurationProvider->getReleaseGroupProcessor();
         foreach ($this->processorList as $processor) {
             if ($processor->getProcessorName() === $processorName) {
                 return $processor;

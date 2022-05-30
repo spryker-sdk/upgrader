@@ -7,21 +7,21 @@
 
 namespace Upgrade\Application\Strategy\Common\Step;
 
-use Upgrade\Application\Bridge\PackageManagerBridgeInterface;
+use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\StepInterface;
 
 class ComposerLockComparatorStep implements StepInterface
 {
     /**
-     * @var \Upgrade\Application\Bridge\PackageManagerBridgeInterface
+     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
-    protected PackageManagerBridgeInterface $packageManager;
+    protected PackageManagerAdapterInterface $packageManager;
 
     /**
-     * @param \Upgrade\Application\Bridge\PackageManagerBridgeInterface $packageManager
+     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
      */
-    public function __construct(PackageManagerBridgeInterface $packageManager)
+    public function __construct(PackageManagerAdapterInterface $packageManager)
     {
         $this->packageManager = $packageManager;
     }

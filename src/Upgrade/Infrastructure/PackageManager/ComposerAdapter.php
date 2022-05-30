@@ -7,7 +7,7 @@
 
 namespace Upgrade\Infrastructure\PackageManager;
 
-use Upgrade\Application\Bridge\PackageManagerBridgeInterface;
+use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
@@ -16,7 +16,7 @@ use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparator
 use Upgrade\Infrastructure\PackageManager\Reader\ComposerJsonReaderInterface;
 use Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReaderInterface;
 
-class ComposerBridge implements PackageManagerBridgeInterface
+class ComposerAdapter implements PackageManagerAdapterInterface
 {
     /**
      * @var string

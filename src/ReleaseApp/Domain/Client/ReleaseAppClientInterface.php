@@ -12,7 +12,7 @@ use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Entities\UpgradeAnalysis;
 use ReleaseApp\Domain\Entities\UpgradeInstructions;
 
-interface ClientInterface
+interface ReleaseAppClientInterface
 {
     /**
      * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $upgradeAnalysisRequest

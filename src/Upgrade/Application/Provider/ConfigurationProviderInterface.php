@@ -22,12 +22,12 @@ interface ConfigurationProviderInterface
     /**
      * @var string
      */
-    public const SEQUENTIAL_RELEASE_GROUP_REQUIRE_PROCESSOR = 'sequential';
+    public const SEQUENTIAL_RELEASE_GROUP_PROCESSOR = 'sequential';
 
     /**
      * @var string
      */
-    public const AGGREGATE_RELEASE_GROUP_REQUIRE_PROCESSOR = 'aggregate';
+    public const AGGREGATE_RELEASE_GROUP_PROCESSOR = 'aggregate';
 
     /**
      * Specification:
@@ -45,7 +45,7 @@ interface ConfigurationProviderInterface
      *
      * @return string
      */
-    public function getReleaseGroupRequireProcessor(): string;
+    public function getReleaseGroupProcessor(): string;
 
     /**
      * Specification:

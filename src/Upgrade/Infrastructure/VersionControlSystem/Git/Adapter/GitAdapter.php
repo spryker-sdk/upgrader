@@ -5,13 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\VersionControlSystem\Git\Bridge;
+namespace Upgrade\Infrastructure\VersionControlSystem\Git\Adapter;
 
-use Upgrade\Application\Bridge\VersionControlSystemBridgeInterface;
+use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
 
-class GitBridge implements VersionControlSystemBridgeInterface
+class GitAdapter implements VersionControlSystemAdapterInterface
 {
     /**
      * @var \Upgrade\Infrastructure\VersionControlSystem\Git\Git

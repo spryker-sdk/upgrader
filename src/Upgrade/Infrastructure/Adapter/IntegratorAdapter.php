@@ -5,13 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrade\Infrastructure\Bridge;
+namespace Upgrade\Infrastructure\Adapter;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
-use Upgrade\Application\Bridge\IntegratorBridgeInterface;
+use Upgrade\Application\Adapter\IntegratorAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 
-class IntegratorBridge implements IntegratorBridgeInterface
+class IntegratorAdapter implements IntegratorAdapterInterface
 {
     /**
      * @var string
