@@ -173,19 +173,19 @@ services:
                 param4: '@validator.threshold_release_group',
             }
 
-    processor.aggregate_release_group_require:
-        class: Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupRequireProcessor
+    processor.aggregate_release_group_processor:
+        class: Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor
 
-    processor.sequential_release_group_require:
-        class: Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupRequireProcessor
+    processor.sequential_release_group_processor:
+        class: Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
 
-    Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver:
-        class: Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupRequireProcessorResolver
+    Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver:
+        class: Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver
         arguments:
             - '@configuration.provider'
             - {
-                param1: '@processor.aggregate_release_group_require',
-                param2: '@processor.sequential_release_group_require',
+                param1: '@processor.aggregate_release_group_processor',
+                param2: '@processor.sequential_release_group_processor',
             }
 
     #Third-party dependencies
