@@ -7,6 +7,7 @@
 
 namespace Codebase\Application\Dto;
 
+use JMS\Serializer\Annotation\Type;
 use ReflectionClass;
 
 /**
@@ -20,21 +21,21 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     protected bool $extendsCore = false;
 
     /**
-     * @JMS\Type("array")
+     * @Type("array<string>")
      *
      * @var array<int, string>
      */
     protected array $constants = [];
 
     /**
-     * @JMS\Type("array")
+     * @Type("array<string>")
      *
      * @var array<string>
      */
     protected array $methods = [];
 
     /**
-     * @JMS\Type("array")
+     * @Type("array<string>")
      *
      * @var array<string>
      */
@@ -48,21 +49,21 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     protected ?ReflectionClass $reflection = null;
 
     /**
-     * @JMS\Type("array")
+     * @Type("array<string>")
      *
      * @var array<\ReflectionMethod>
      */
     protected array $projectMethods = [];
 
     /**
-     * @JMS\Type("array")
+     * @Type("array<string>")
      *
      * @var array<\ReflectionMethod>
      */
     protected array $coreMethods = [];
 
     /**
-     * @JMS\Type("array")
+     * @Type("array<string>")
      *
      * @var array<\ReflectionMethod>
      */

@@ -9,6 +9,7 @@ namespace Codebase\Infrastructure\SourceParser\Parser;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
+use Codebase\Application\Dto\SourceParserRequestDto;
 use Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface;
 use Codebase\Infrastructure\SourceFinder\SourceFinder;
 use Codebase\Infrastructure\SourceParser\Cache\SourceCache;
@@ -79,29 +80,32 @@ class PhpParser implements ParserInterface
         $this->requireAutoload();
         $this->defineEnvironmentVariables();
 
-//        $isCoreType = $codebaseSourceDto->getType() == SourceParserRequestDto::CORE_TYPE;
-//
-//        if ($isCoreType) {
-//            $cachedSources = $this->sourceCache->getSourceCacheType()->readCache(
-//                $this->sourceCache->getCacheIdentifier(),
-//                static::PARSER_EXTENSION
-//            );
-//
-//            if ($cachedSources) {
-//                $codebaseSourceDto->setPhpCodebaseSources($cachedSources, $codebaseSourceDto->getType());
-//
-//                return $codebaseSourceDto;
-//            }
-//        }
+        $isCoreType = $codebaseSourceDto->getType() == SourceParserRequestDto::CORE_TYPE;
+
+        if ($isCoreType) {
+            $cachedSources = $this->sourceCache->getSourceCacheType()->readCache(
+                $this->sourceCache->getCacheIdentifier(),
+                static::PARSER_EXTENSION
+            );
+
+            if ($cachedSources) {
+                $codebaseSourceDto->setPhpCodebaseSources($cachedSources, $codebaseSourceDto->getType());
+                var_dump('Cache reading done!');
+                return $codebaseSourceDto;
+            }
+        }
 
         $sources = $this->parsePhpCodebase($finder, $codebaseSourceDto);
-//        if ($isCoreType) {
-//            $this->sourceCache->getSourceCacheType()->writeCache(
-//                $this->sourceCache->getCacheIdentifier(),
-//                static::PARSER_EXTENSION,
-//                $sources
-//            );
-//        }
+//        var_dump($sources);
+        if ($isCoreType) {
+            $this->sourceCache->getSourceCacheType()->writeCache(
+                $this->sourceCache->getCacheIdentifier(),
+                static::PARSER_EXTENSION,
+                $sources
+            );
+        }
+
+        var_dump('Reading done!');
 
         return $codebaseSourceDto->setPhpCodebaseSources($sources, $codebaseSourceDto->getType());
     }
@@ -212,30 +216,30 @@ class PhpParser implements ParserInterface
             $transfer = new ClassCodebaseDto($coreNamespaces);
         }
         $transfer->setClassName($namespace);
-        $transfer->setConstants($projectClass->getConstants());
-        $transfer->setMethods($projectClass->getMethods());
-        $transfer->setTraits($projectClass->getTraits());
-        $transfer->setReflection($projectClass);
+//        $transfer->setConstants($projectClass->getConstants());
+//        $transfer->setMethods($projectClass->getMethods());
+//        $transfer->setTraits($projectClass->getTraits());
+//        $transfer->setReflection($projectClass);
         $transfer->setExtendCore($this->isExtendCore($projectClass, $projectPrefixList, $coreNamespaces));
-        $transfer->setCoreInterfacesMethods(
-            $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $projectPrefixList),
-        );
+//        $transfer->setCoreInterfacesMethods(
+//            $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $projectPrefixList),
+//        );
 
         if ($coreNamespaces !== []) {
             $projectMethods = $this->getProjectMethods($projectClass->getName(), $projectClass->getMethods(), $coreNamespaces);
-            $transfer->setProjectMethods($projectMethods);
+//            $transfer->setProjectMethods($projectMethods);
         }
 
         $parentClass = $projectClass->getParentClass();
 
         if ($parentClass) {
             if ($coreNamespaces !== []) {
-                $transfer->setCoreMethods($this->getCoreMethods($parentClass->getMethods(), $coreNamespaces));
+//                $transfer->setCoreMethods($this->getCoreMethods($parentClass->getMethods(), $coreNamespaces));
             }
 
-            $transfer->setParent(
-                $this->parseClass($parentClass->getName(), $projectPrefixList, $coreNamespaces),
-            );
+//            $transfer->setParent(
+//                $this->parseClass($parentClass->getName(), $projectPrefixList, $coreNamespaces),
+//            );
         }
 
         return $transfer;

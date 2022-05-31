@@ -7,6 +7,8 @@
 
 namespace Codebase\Application\Dto;
 
+use JMS\Serializer\Annotation\Type;
+
 class AbstractCodebaseDto implements CodebaseInterface
 {
     /**
@@ -20,14 +22,14 @@ class AbstractCodebaseDto implements CodebaseInterface
     protected ?ClassCodebaseDto $parent = null;
 
     /**
-     * @JMS\Type("array")
+     * @Type("array<string>")
      *
-     * @var array
+     * @var array<string>
      */
     protected array $classTokenTree = [];
 
     /**
-     * @JMS\Type("array")
+     * @Type("array<string>")
      *
      * @var array<int, string>
      */
