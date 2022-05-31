@@ -35,9 +35,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     protected array $traits = [];
 
     /**
-     * @phpstan-var \ReflectionClass<T>
-     *
-     * @var \ReflectionClass
+     * @var \ReflectionClass<T>
      */
     protected ReflectionClass $reflection;
 
@@ -117,9 +115,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @phpstan-return \ReflectionClass<T>
-     *
-     * @return \ReflectionClass
+     * @return \ReflectionClass<T>
      */
     public function getReflection(): ReflectionClass
     {
@@ -127,9 +123,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @phpstan-param \ReflectionClass<T> $reflection
-     *
-     * @param \ReflectionClass $reflection
+     * @param \ReflectionClass<T> $reflection
      *
      * @return $this
      */

@@ -8,8 +8,8 @@
 namespace UpgradeTest\Infrastructure\Processor\Strategy\Composer;
 
 use PHPUnit\Framework\TestCase;
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Processor\Strategy\Composer\ComposerStrategy;
+use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Strategy\Composer\ComposerStrategy;
 use UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps\FooRollbackStep;
 use UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps\FooStep;
 
@@ -39,7 +39,7 @@ class ComposerStrategyTest extends TestCase
     public function testUpgradeSuccessFlow(): void
     {
         // Arrange
-        $stepsExecutionDto = new StepsExecutionDto(true);
+        $stepsExecutionDto = new StepsResponseDto(true);
         $fooStep = $this->createMock(FooRollbackStep::class);
         $fooStep->method('run')->willReturn($stepsExecutionDto);
         $fooStep->expects($this->never())->method('rollBack');
@@ -111,7 +111,7 @@ class ComposerStrategyTest extends TestCase
      */
     protected function mockUnSuccessFooStep(): FooStep
     {
-        $stepsExecutionDto = new StepsExecutionDto(false);
+        $stepsExecutionDto = new StepsResponseDto(false);
 
         $fooStep = $this->createMock(FooStep::class);
         $fooStep->method('run')->willReturn($stepsExecutionDto);

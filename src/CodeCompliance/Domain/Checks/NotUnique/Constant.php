@@ -39,18 +39,18 @@ class Constant extends AbstractCodeComplianceCheck
         foreach ($this->getCodebaseSourceDto()->getPhpCodebaseSources() as $source) {
             $coreParent = $source->getCoreParent();
             $parentConstants = $coreParent ? $coreParent->getConstants() : [];
-            $projectPrefixList = $this->getCodebaseSourceDto()->getProjectPrefixes();
+            $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
             foreach ($source->getConstants() as $nameConstant => $valueConstant) {
                 $isConstantUnique = !$parentConstants || !array_key_exists($nameConstant, $parentConstants);
-                $hasProjectPrefix = $this->hasProjectPrefix($nameConstant, $projectPrefixList);
+                $hasProjectPrefix = $this->hasProjectPrefix($nameConstant, $projectPrefixes);
 
                 if ($coreParent && $isConstantUnique && !$hasProjectPrefix) {
                     $guideline = sprintf(
                         $this->getGuideline(),
                         $source->getClassName(),
                         $nameConstant,
-                        strtoupper((string)reset($projectPrefixList)),
+                        strtoupper((string)reset($projectPrefixes)),
                         $nameConstant,
                     );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());

@@ -7,13 +7,13 @@
 
 namespace UpgradeTest\Infrastructure\VersionControlSystem\Git;
 
+use Core\Infrastructure\Service\ProcessRunnerService;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Process\Process;
+use Upgrade\Application\Dto\ComposerLockDiffDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Infrastructure\Dto\Composer\ComposerLockDiffDto;
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Process\ProcessRunner;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeProvider;
 
@@ -29,7 +29,7 @@ class GitTest extends KernelTestCase
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
         // Act
-        $stepsExecutionDto = $git->isRemoteTargetBranchNotExist((new StepsExecutionDto(true)));
+        $stepsExecutionDto = $git->isRemoteTargetBranchNotExist((new StepsResponseDto(true)));
 
         // Assert
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
@@ -45,7 +45,7 @@ class GitTest extends KernelTestCase
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
         // Act
-        $stepsExecutionDto = $git->isRemoteTargetBranchNotExist((new StepsExecutionDto(true)));
+        $stepsExecutionDto = $git->isRemoteTargetBranchNotExist((new StepsResponseDto(true)));
 
         // Assert
         $this->assertFalse($stepsExecutionDto->getIsSuccessful());
@@ -61,7 +61,7 @@ class GitTest extends KernelTestCase
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
         // Act
-        $stepsExecutionDto = $git->isLocalTargetBranchNotExist((new StepsExecutionDto(true)));
+        $stepsExecutionDto = $git->isLocalTargetBranchNotExist((new StepsResponseDto(true)));
 
         // Assert
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
@@ -77,7 +77,7 @@ class GitTest extends KernelTestCase
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
         // Act
-        $stepsExecutionDto = $git->isLocalTargetBranchNotExist((new StepsExecutionDto(true)));
+        $stepsExecutionDto = $git->isLocalTargetBranchNotExist((new StepsResponseDto(true)));
 
         // Assert
         $this->assertFalse($stepsExecutionDto->getIsSuccessful());
@@ -93,7 +93,7 @@ class GitTest extends KernelTestCase
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
         // Act
-        $stepsExecutionDto = $git->hasAnyUncommittedChanges((new StepsExecutionDto(true)));
+        $stepsExecutionDto = $git->hasAnyUncommittedChanges((new StepsResponseDto(true)));
 
         // Assert
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
@@ -109,7 +109,7 @@ class GitTest extends KernelTestCase
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
         // Act
-        $stepsExecutionDto = $git->hasAnyUncommittedChanges((new StepsExecutionDto(true)));
+        $stepsExecutionDto = $git->hasAnyUncommittedChanges((new StepsResponseDto(true)));
 
         // Assert
         $this->assertFalse($stepsExecutionDto->getIsSuccessful());
@@ -120,7 +120,7 @@ class GitTest extends KernelTestCase
      */
     public function testCreatePullRequestUnSuccessCaseNoRequiredProperty(): void
     {
-        $stepsExecutionDto = new StepsExecutionDto(true);
+        $stepsExecutionDto = new StepsResponseDto(true);
         $composerLockDiffDto = new ComposerLockDiffDto([]);
         $stepsExecutionDto->addComposerLockDiff($composerLockDiffDto);
 
@@ -156,7 +156,7 @@ class GitTest extends KernelTestCase
     {
         // Arrange
         $message = '{"changes":{"spryker\/product-label":["3.2.0","3.3.0","https:\/\/github.com\/spryker\/product-label\/compare\/3.2.0...3.3.0"]},"changes-dev":{"spryker-shop\/web-profiler-widget":["1.4.1","1.4.2","https:\/\/github.com\/spryker-shop\/web-profiler-widget\/compare\/1.4.1...1.4.2"]}}';
-        $stepsExecutionDto = new StepsExecutionDto(true);
+        $stepsExecutionDto = new StepsResponseDto(true);
         $composerLockDiffDto = new ComposerLockDiffDto(json_decode($message, true));
         $stepsExecutionDto->addComposerLockDiff($composerLockDiffDto);
 
@@ -186,11 +186,11 @@ class GitTest extends KernelTestCase
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Process\ProcessRunner $processRunner
+     * @param \Core\Infrastructure\Service\ProcessRunnerService $processRunner
      *
      * @return \Upgrade\Infrastructure\VersionControlSystem\Git\Git
      */
-    protected function getGitWithProcessRunner(ProcessRunner $processRunner): Git
+    protected function getGitWithProcessRunner(ProcessRunnerService $processRunner): Git
     {
         /** @var \Upgrade\Infrastructure\VersionControlSystem\Git\Git $git */
         $git = static::bootKernel()->getContainer()->get(Git::class);
@@ -211,15 +211,15 @@ class GitTest extends KernelTestCase
      * @param string $outputMessage
      * @param bool $isSuccessful
      *
-     * @return \Upgrade\Infrastructure\Process\ProcessRunner
+     * @return \Core\Infrastructure\Service\ProcessRunnerService
      */
-    protected function mockProcessRunnerWithOutput(string $outputMessage, bool $isSuccessful = true): ProcessRunner
+    protected function mockProcessRunnerWithOutput(string $outputMessage, bool $isSuccessful = true): ProcessRunnerService
     {
         $processMock = $this->createMock(Process::class);
         $processMock->method('getOutput')->willReturn($outputMessage);
         $processMock->method('isSuccessful')->willReturn($isSuccessful);
 
-        $processRunnerMock = $this->createMock(ProcessRunner::class);
+        $processRunnerMock = $this->createMock(ProcessRunnerService::class);
         $processRunnerMock->method('run')->willReturn($processMock);
 
         return $processRunnerMock;

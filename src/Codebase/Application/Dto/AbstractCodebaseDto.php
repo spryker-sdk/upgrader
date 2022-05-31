@@ -20,11 +20,6 @@ class AbstractCodebaseDto implements CodebaseInterface
     protected $parent;
 
     /**
-     * @var array
-     */
-    protected $classTokenTree;
-
-    /**
      * @var array<string>
      */
     protected array $coreNamespaces = [];
@@ -89,30 +84,6 @@ class AbstractCodebaseDto implements CodebaseInterface
     public function setParent(?CodebaseInterface $parent): CodebaseInterface
     {
         $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getClassTokenTree(): array
-    {
-        return $this->classTokenTree;
-    }
-
-    /**
-     * @param array|null $classTokenTree
-     *
-     * @return \Codebase\Application\Dto\CodebaseInterface
-     */
-    public function setClassTokenTree(?array $classTokenTree = null): CodebaseInterface
-    {
-        if ($classTokenTree === null) {
-            $classTokenTree = [];
-        }
-
-        $this->classTokenTree = $classTokenTree;
 
         return $this;
     }

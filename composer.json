@@ -15,6 +15,7 @@
         "m4tthumphrey/php-gitlab-api": "^11.5",
         "nikic/php-parser": "^4.13",
         "phpstan/phpstan": "^1.2",
+        "spryker-sdk/integrator": "dev-develop",
         "spryker-sdk/sdk-contracts": "dev-master",
         "spryker/code-sniffer": "^0.17.3",
         "symfony/config": "^5.0",
@@ -37,7 +38,8 @@
             "CodeCompliance\\": "src/CodeCompliance/",
             "Evaluate\\": "src/Evaluate/",
             "Upgrade\\": "src/Upgrade/",
-            "Upgrader\\": "src/Upgrader/"
+            "Upgrader\\": "src/Upgrader/",
+            "ReleaseApp\\": "src/ReleaseApp/"
         }
     },
     "autoload-dev": {

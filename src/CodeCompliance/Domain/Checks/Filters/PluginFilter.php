@@ -40,9 +40,7 @@ class PluginFilter implements FilterInterface
     /**
      * @phpstan-template T of \Codebase\Application\Dto\CodebaseInterface
      *
-     * @phpstan-param \ReflectionClass<T> $class
-     *
-     * @param \ReflectionClass $class
+     * @param \ReflectionClass<T> $class
      *
      * @return bool
      */

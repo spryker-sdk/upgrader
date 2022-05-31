@@ -7,17 +7,17 @@
 
 namespace UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps;
 
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Processor\Strategy\StepInterface;
+use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Strategy\StepInterface;
 
 class FooStep implements StepInterface
 {
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function run(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $stepsExecutionDto;
     }

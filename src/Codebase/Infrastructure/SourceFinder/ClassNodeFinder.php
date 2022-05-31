@@ -15,7 +15,7 @@ use PhpParser\NodeFinder;
 class ClassNodeFinder
 {
     /**
-     * @param array $nodes
+     * @param array<\PhpParser\Node> $nodes
      *
      * @return \PhpParser\Node|null
      */

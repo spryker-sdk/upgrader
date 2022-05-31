@@ -13,7 +13,7 @@ use Symfony\Component\Finder\Finder;
 class SourceFinder
 {
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected static $codebaseCache = [];
 
@@ -60,7 +60,7 @@ class SourceFinder
     }
 
     /**
-     * @param array $nodes
+     * @param array<\PhpParser\Node> $nodes
      *
      * @return mixed
      */

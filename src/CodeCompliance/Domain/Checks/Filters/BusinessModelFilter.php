@@ -23,9 +23,9 @@ class BusinessModelFilter implements FilterInterface
     }
 
     /**
-     * @param array $sources
+     * @param array<\Codebase\Application\Dto\CodebaseInterface> $sources
      *
-     * @return array
+     * @return array<\Codebase\Application\Dto\CodebaseInterface>
      */
     public function filter(array $sources): array
     {

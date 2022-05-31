@@ -13,7 +13,7 @@ use Codebase\Infrastructure\Exception\ProjectConfigurationFileInvalidSyntaxExcep
 class ProjectPrefixesValidator implements ToolingConfigurationValidatorInterface
 {
     /**
-     * @param array $configuration
+     * @param array<mixed> $configuration
      *
      * @throws \Codebase\Infrastructure\Exception\ProjectConfigurationFileInvalidSyntaxException
      *

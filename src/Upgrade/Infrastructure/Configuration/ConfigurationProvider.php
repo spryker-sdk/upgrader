@@ -7,18 +7,10 @@
 
 namespace Upgrade\Infrastructure\Configuration;
 
-class ConfigurationProvider
+use Upgrade\Application\Provider\ConfigurationProviderInterface;
+
+class ConfigurationProvider implements ConfigurationProviderInterface
 {
-    /**
-     * @var string
-     */
-    public const COMPOSER_STRATEGY = 'composer';
-
-    /**
-     * @var string
-     */
-    public const RELEASE_APP_STRATEGY = 'release-app';
-
     /**
      * @var string
      */
@@ -32,45 +24,89 @@ class ConfigurationProvider
     /**
      * @var int
      */
+    public const DEFAULT_SOFT_THRESHOLD_BUGFIX = 30;
+
+    /**
+     * @var int
+     */
+    public const DEFAULT_SOFT_THRESHOLD_MINOR = 10;
+
+    /**
+     * @var int
+     */
+    public const DEFAULT_SOFT_THRESHOLD_MAJOR = 0;
+
+    /**
+     * @var int
+     */
+    public const DEFAULT_THRESHOLD_RELEASE_GROUP = 30;
+
+    /**
+     * @var int
+     */
     public const GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING = 20;
 
     /**
      * @var string
      */
-    public const VCS_TYPE = 'git';
-
-    /**
-     * @var string
-     */
-    protected const BRANCH_PATTERN = 'upgradebot/upgrade-for-%s-%s';
+    protected const DEFAULT_BRANCH_PATTERN = 'upgradebot/upgrade-for-%s-%s';
 
     /**
      * @var bool
      */
-    protected const IS_PR_AUTO_MERGE_ENABLED = false;
+    protected const DEFAULT_IS_PR_AUTO_MERGE_ENABLED = false;
 
     /**
-     * Specification:
-     * - Defines upgrade strategy.
-     * - Possible strategies: composer and release-app (default).
+     * {@inheritDoc}
      *
      * @return string
      */
     public function getUpgradeStrategy(): string
     {
-        return (string)getenv('UPGRADE_STRATEGY') ?: static::COMPOSER_STRATEGY;
+        return (string)getenv('UPGRADE_STRATEGY') ?: static::RELEASE_APP_STRATEGY;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return string
+     */
+    public function getReleaseGroupProcessor(): string
+    {
+        return (string)getenv('RELEASE_GROUP_PROCESSOR') ?: static::AGGREGATE_RELEASE_GROUP_PROCESSOR;
     }
 
     /**
      * Specification:
-     * - Defines the default source code provider.
-     * - Available options: GitHub (default) and GitLab.
+     * - Defines id of your GitLab project.
      *
      * @return string
      */
-    public function getSourceCodeProvider(): string
+    public function getGitLabProjectId(): string
     {
-        return (string)getenv('SOURCE_CODE_PROVIDER') ?: static::GITHUB_SOURCE_CODE_PROVIDER;
+        return (string)getenv('GITLAB_PROJECT_ID');
+    }
+
+    /**
+     * Specification:
+     * - Defines delay in seconds between request for PR creation and enable auto merging.
+     *
+     * @return int
+     */
+    public function getGitLabDelayBetweenPrCreatingAndMerging(): int
+    {
+        return (int)getenv('GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING') ?: static::GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING;
+    }
+
+    /**
+     * Specification:
+     * - Returns the link to the source code provider.
+     *
+     * @return string
+     */
+    public function getSourceCodeProviderUrl(): string
+    {
+        return (string)getenv('SOURCE_CODE_PROVIDER_URL');
     }
 
     /**
@@ -81,7 +117,7 @@ class ConfigurationProvider
      */
     public function getBranchPattern(): string
     {
-        return (string)getenv('BRANCH_PATTERN') ?: static::BRANCH_PATTERN;
+        return (string)getenv('BRANCH_PATTERN') ?: static::DEFAULT_BRANCH_PATTERN;
     }
 
     /**
@@ -103,7 +139,18 @@ class ConfigurationProvider
      */
     public function isPullRequestAutoMergeEnabled(): bool
     {
-        return (bool)getenv('IS_PR_AUTO_MERGE_ENABLED') ?: static::IS_PR_AUTO_MERGE_ENABLED;
+        return (bool)getenv('IS_PR_AUTO_MERGE_ENABLED') ?: static::DEFAULT_IS_PR_AUTO_MERGE_ENABLED;
+    }
+
+    /**
+     * Specification:
+     * - Returns the link to the source code provider.
+     *
+     * @return string
+     */
+    public function getSourceCodeProvider(): string
+    {
+        return (string)getenv('SOURCE_CODE_PROVIDER') ?: static::GITHUB_SOURCE_CODE_PROVIDER;
     }
 
     /**
@@ -115,17 +162,6 @@ class ConfigurationProvider
     public function getAccessToken(): string
     {
         return (string)getenv('ACCESS_TOKEN');
-    }
-
-    /**
-     * Specification:
-     * - Returns the link to the source code provider.
-     *
-     * @return string
-     */
-    public function getSourceCodeProviderUrl(): string
-    {
-        return (string)getenv('SOURCE_CODE_PROVIDER_URL');
     }
 
     /**
@@ -151,24 +187,42 @@ class ConfigurationProvider
     }
 
     /**
-     * Specification:
-     * - Defines id of your GitLab project.
-     *
-     * @return string
-     */
-    public function getGitLabProjectId(): string
-    {
-        return (string)getenv('GITLAB_PROJECT_ID');
-    }
-
-    /**
-     * Specification:
-     * - Defines delay in seconds between request for PR creation and enable auto merging.
+     * {@inheritDoc}
      *
      * @return int
      */
-    public function getGitLabDelayBetweenPrCreatingAndMerging(): int
+    public function getSoftThresholdBugfix(): int
     {
-        return (int)getenv('GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING') ?: static::GITLAB_DELAY_BETWEEN_PR_CREATING_AND_MERGING;
+        return (int)getenv('SOFT_THRESHOLD_BUGFIX') ?: static::DEFAULT_SOFT_THRESHOLD_BUGFIX;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return int
+     */
+    public function getSoftThresholdMinor(): int
+    {
+        return (int)getenv('SOFT_THRESHOLD_MINOR') ?: static::DEFAULT_SOFT_THRESHOLD_MINOR;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return int
+     */
+    public function getSoftThresholdMajor(): int
+    {
+        return (int)getenv('SOFT_THRESHOLD_MAJOR') ?: static::DEFAULT_SOFT_THRESHOLD_MAJOR;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return int
+     */
+    public function getThresholdReleaseGroup(): int
+    {
+        return (int)getenv('THRESHOLD_RELEASE_GROUP') ?: static::DEFAULT_THRESHOLD_RELEASE_GROUP;
     }
 }

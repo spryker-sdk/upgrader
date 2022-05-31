@@ -7,16 +7,17 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Generator;
 
-use Upgrade\Infrastructure\Dto\Composer\ComposerLockDiffDto;
+use Upgrade\Application\Dto\ComposerLockDiffDto;
 
 class PullRequestDataGenerator
 {
     /**
-     * @param \Upgrade\Infrastructure\Dto\Composer\ComposerLockDiffDto $composerDiffDto
+     * @param \Upgrade\Application\Dto\ComposerLockDiffDto $composerDiffDto
+     * @param string|null $majorAvailableInfo
      *
      * @return string
      */
-    public function buildBody(ComposerLockDiffDto $composerDiffDto): string
+    public function buildBody(ComposerLockDiffDto $composerDiffDto, ?string $majorAvailableInfo = null): string
     {
         $text = 'Auto created via Upgrader tool.'
             . PHP_EOL
@@ -36,11 +37,16 @@ class PullRequestDataGenerator
             $text .= PHP_EOL;
         }
 
+        if ($majorAvailableInfo) {
+            $text .= '​' . PHP_EOL . '**Available majors:**' . PHP_EOL . PHP_EOL;
+            $text .= $majorAvailableInfo;
+        }
+
         return $text;
     }
 
     /**
-     * @param array<\Upgrade\Infrastructure\Dto\Composer\PackageDto> $packageDtos
+     * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
      *
      * @return string
      */

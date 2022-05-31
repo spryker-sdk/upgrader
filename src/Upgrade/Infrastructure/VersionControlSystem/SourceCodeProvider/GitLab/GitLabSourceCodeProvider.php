@@ -10,9 +10,9 @@ namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab;
 use Exception;
 use Gitlab\Client;
 use RuntimeException;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Infrastructure\Dto\SourceCodeProvider\PullRequestDto;
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
+use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface;
 
 class GitLabSourceCodeProvider implements SourceCodeProviderInterface
@@ -20,7 +20,7 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
     /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
      */
-    protected $configurationProvider;
+    protected ConfigurationProvider$configurationProvider;
 
     /**
      * @var \Gitlab\Client
@@ -44,30 +44,30 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function validateCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function validateCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         if (
             !$this->configurationProvider->getAccessToken() ||
             !$this->configurationProvider->getGitLabProjectId()
         ) {
             $stepsExecutionDto->setIsSuccessful(false);
-            $stepsExecutionDto->setOutputMessage('Please check defined values of environment variables: ACCESS_TOKEN and GITLAB_PROJECT_ID.');
+            $stepsExecutionDto->addOutputMessage('Please check defined values of environment variables: ACCESS_TOKEN and GITLAB_PROJECT_ID.');
         }
 
         return $stepsExecutionDto;
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
-     * @param \Upgrade\Infrastructure\Dto\SourceCodeProvider\PullRequestDto $pullRequestDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     * @param \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function createPullRequest(StepsExecutionDto $stepsExecutionDto, PullRequestDto $pullRequestDto): StepsExecutionDto
+    public function createPullRequest(StepsResponseDto $stepsExecutionDto, PullRequestDto $pullRequestDto): StepsResponseDto
     {
         try {
             $stepsExecutionDto = $this->validateCredentials($stepsExecutionDto);
@@ -78,17 +78,18 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
             if ($pullRequestDto->isAutoMerge()) {
                 $this->mergePullRequest($pullRequestId);
             }
+            $stepsExecutionDto->addOutputMessage('PR successfully created');
 
             return $stepsExecutionDto;
         } catch (Exception $runtimeException) {
             return $stepsExecutionDto
                 ->setIsSuccessful(false)
-                ->setOutputMessage($runtimeException->getMessage());
+                ->addOutputMessage($runtimeException->getMessage());
         }
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\SourceCodeProvider\PullRequestDto $pullRequestDto
+     * @param \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto
      *
      * @throws \RuntimeException
      *

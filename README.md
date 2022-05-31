@@ -34,8 +34,8 @@ This command returns the content of a previously generated report. Alternatively
 ## Update
 ​
 The Upgrader updates projects via one of the following approaches:
+- Release group(default) — uses release groups.
 - Composer update — uses `composer update` command; this is the default strategy that's describes below.
-- Release group(in development) — uses release groups.
   ​
   At this step, the Upgrader updates the project to the latest version as follows:
 1. Checks if the target branch has been created on the remote repository. If the branch exists, the process stops.
@@ -44,7 +44,61 @@ The Upgrader updates projects via one of the following approaches:
 4. Commits the changes in `composer.json` and `composer.lock` files.
 5. Pushes the changes to the remote repository.
 6. Create a PR in the remote repository.
-   ​
+
+
+### Supported strategies:
+### Composer
+* To enable Composer update strategy:
+```bash
+export UPGRADE_STRATEGY=composer
+```
+
+### Release App
+* To enable Release group strategy (default):
+```bash
+export UPGRADE_STRATEGY=release-app
+```
+In the strategy, Upgrader contains aggregate (default) release group requiring processor and sequential processor (one by one release group).
+
+##### Sequential release group processor
+* To enable Sequential release group processor:
+```bash
+export RELEASE_GROUP_PROCESSOR=sequential
+```
+
+Sequential release group processor contains threshold, by default 30 release groups for one Upgrader start.
+* To change the threshold:
+```bash
+export THRESHOLD_RELEASE_GROUP=<number>
+```
+
+##### Aggregate release group processor
+* To enable aggregate release group processor:
+```bash
+export RELEASE_GROUP_PROCESSOR=aggregate
+```
+Aggregate release group processor contains soft thresholds:
+
+Soft major threshold, by default 0.
+
+* To change soft major threshold:
+```bash
+export SOFT_THRESHOLD_MAJOR=<number>
+```
+
+Soft minor threshold, by default 10.
+​
+* To change soft minor threshold:
+```bash
+export SOFT_THRESHOLD_MINOR=<number>
+```
+​
+Soft bugfix threshold, by default 30.
+​
+* To change soft bugfix threshold:
+```bash
+export SOFT_THRESHOLD_BUGFIX=<number>
+```
 ### Adding GitHub configuration for the update step
 ​
 To enable the Upgrader to execute this step, apply the following configuration:

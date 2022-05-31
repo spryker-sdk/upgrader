@@ -7,60 +7,61 @@
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Git;
 
+use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
+use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Infrastructure\Dto\SourceCodeProvider\PullRequestDto;
-use Upgrade\Infrastructure\Dto\Step\StepsExecutionDto;
-use Upgrade\Infrastructure\Process\ProcessRunner;
+use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
 use Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface;
 
 class Git
 {
     /**
      * @var string
      */
-    protected $commitHash = '';
+    protected string $commitHash = '';
 
     /**
      * @var string
      */
-    protected $baseBranch = '';
+    protected string $baseBranch = '';
 
     /**
-     * @var \Upgrade\Infrastructure\Process\ProcessRunner
+     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
      */
-    protected ProcessRunner $processRunner;
+    protected ProcessRunnerServiceInterface $processRunner;
 
     /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
      */
-    protected $configurationProvider;
+    protected ConfigurationProvider $configurationProvider;
 
     /**
      * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface
      */
-    protected $sourceCodeProvider;
+    protected SourceCodeProviderInterface $sourceCodeProvider;
 
     /**
      * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator
      */
-    protected $pullRequestDataGenerator;
+    protected PullRequestDataGenerator $pullRequestDataGenerator;
 
     /**
      * @var array<string>
      */
-    protected $targetFiles = ['*'];
+    protected array $targetFiles = ['*'];
 
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Upgrade\Infrastructure\Process\ProcessRunner $processRunner
+     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $sourceCodeProvider
      * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator $pullRequestDataGenerator
      */
     public function __construct(
         ConfigurationProvider $configurationProvider,
-        ProcessRunner $processRunner,
+        ProcessRunnerServiceInterface $processRunner,
         SourceCodeProvider $sourceCodeProvider,
         PullRequestDataGenerator $pullRequestDataGenerator
     ) {
@@ -71,11 +72,11 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function isRemoteTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function isRemoteTargetBranchNotExist(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'ls-remote', '--heads', 'origin', $this->getHeadBranch()];
         $process = $this->processRunner->run($command);
@@ -89,32 +90,32 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function isLocalTargetBranchNotExist(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function isLocalTargetBranchNotExist(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'rev-parse', '--verify', $this->getHeadBranch()];
         $process = $this->processRunner->run($command);
         if ($process->isSuccessful()) {
             $stepsExecutionDto->setIsSuccessful(false);
+            $stepsExecutionDto->addOutputMessage(implode(PHP_EOL, $command));
 
             return $stepsExecutionDto;
         }
 
         $stepsExecutionDto->setIsSuccessful(true);
-        $stepsExecutionDto->setOutputMessage(implode(PHP_EOL, $command));
 
         return $stepsExecutionDto;
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function hasAnyUncommittedChanges(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function hasAnyUncommittedChanges(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'status', '--porcelain'];
         $process = $this->processRunner->run($command);
@@ -128,11 +129,11 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function createBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function createBranch(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'checkout', '-b', $this->getHeadBranch()];
 
@@ -140,11 +141,11 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function add(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function add(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = array_merge(['git', 'add'], $this->targetFiles);
 
@@ -152,11 +153,11 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function commit(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function commit(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'commit', '-m', $this->configurationProvider->getCommitMessage()];
 
@@ -164,11 +165,11 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function push(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function push(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'push', '--set-upstream', 'origin', $this->getHeadBranch()];
         $process = $this->processRunner->run($command);
@@ -177,21 +178,21 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function validateSourceCodeProviderCredentials(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function validateSourceCodeProviderCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->sourceCodeProvider->validateCredentials($stepsExecutionDto);
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function createPullRequest(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function createPullRequest(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $composerDiffDto = $stepsExecutionDto->getComposerLockDiff();
         if ($composerDiffDto === null) {
@@ -202,7 +203,7 @@ class Git
             $this->getHeadBranch(),
             $this->getBaseBranch(),
             'Updated to the latest Spryker modules up to ' . date('m/d/Y h:i', time()),
-            $this->pullRequestDataGenerator->buildBody($composerDiffDto),
+            $this->pullRequestDataGenerator->buildBody($composerDiffDto, $stepsExecutionDto->getPullRequestWarning()),
             $this->configurationProvider->isPullRequestAutoMergeEnabled(),
         );
 
@@ -210,11 +211,11 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function checkout(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function checkout(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'checkout', $this->getBaseBranch()];
 
@@ -222,11 +223,11 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function deleteLocalBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function deleteLocalBranch(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'branch', '-D', $this->getHeadBranch()];
 
@@ -234,11 +235,11 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function deleteRemoteBranch(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function deleteRemoteBranch(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'push', '--delete', 'origin', $this->getHeadBranch()];
 
@@ -246,18 +247,20 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function restore(StepsExecutionDto $stepsExecutionDto): StepsExecutionDto
+    public function restore(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $restore = array_merge(['git', 'restore'], $this->targetFiles);
         $restoreStaged = array_merge(['git', 'restore', '--staged'], $this->targetFiles);
+        $removeUntracked = ['git', 'clean', '-df'];
 
         $stepsExecutionDto = $this->process($stepsExecutionDto, $restoreStaged);
+        $stepsExecutionDto = $this->process($stepsExecutionDto, $restore);
 
-        return $this->process($stepsExecutionDto, $restore);
+        return $this->process($stepsExecutionDto, $removeUntracked);
     }
 
     /**
@@ -301,12 +304,12 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
-     * @param array $command
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     * @param array<string> $command
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function process(StepsExecutionDto $stepsExecutionDto, array $command)
+    public function process(StepsResponseDto $stepsExecutionDto, array $command)
     {
         $process = $this->processRunner->run($command);
 
@@ -314,19 +317,22 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto $stepsExecutionDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      * @param \Symfony\Component\Process\Process $process
      *
-     * @return \Upgrade\Infrastructure\Dto\Step\StepsExecutionDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    protected function prepareStepsExecutionDto(StepsExecutionDto $stepsExecutionDto, Process $process): StepsExecutionDto
+    protected function prepareStepsExecutionDto(StepsResponseDto $stepsExecutionDto, Process $process): StepsResponseDto
     {
-        $command = str_replace('\'', '', $process->getCommandLine());
+        $command = str_replace('\'', '', (string)$process->getCommandLine());
         $output = $process->getExitCode() ? $process->getErrorOutput() : '';
         $outputs = array_filter([$command, $output]);
 
-        return $stepsExecutionDto
-            ->setIsSuccessful($process->isSuccessful())
-            ->setOutputMessage(implode(PHP_EOL, $outputs));
+        $stepsExecutionDto->setIsSuccessful($process->isSuccessful());
+        if (!$process->isSuccessful()) {
+            $stepsExecutionDto->addOutputMessage(implode(PHP_EOL, $outputs));
+        }
+
+        return $stepsExecutionDto;
     }
 }

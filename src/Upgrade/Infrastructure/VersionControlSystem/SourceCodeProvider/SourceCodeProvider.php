@@ -15,12 +15,12 @@ class SourceCodeProvider
     /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
      */
-    protected $configurationProvider;
+    protected ConfigurationProvider $configurationProvider;
 
     /**
      * @var array<\Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface>
      */
-    protected $sourceCodeProviders = [];
+    protected array $sourceCodeProviders = [];
 
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider

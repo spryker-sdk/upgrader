@@ -5,19 +5,11 @@ services:
         public: true
 
 # Upgrade
-    Upgrade\Application\:
-        resource: '../../../../Upgrade/Application/*'
-
-    Upgrade\Infrastructure\:
-        resource: '../../../../Upgrade/Infrastructure/*'
+    Upgrade\:
+        resource: '../../../../Upgrade/*'
         exclude:
-            - '../../../../Upgrade/Infrastructure/Dto/*'
-
-    Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter: ~
-    Upgrade\Infrastructure\VersionControlSystem\Adapter\VersionControlSystemAdapterInterface: '@Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter'
-
-    Upgrade\Infrastructure\Services\UpgraderService: ~
-    Upgrade\Application\Services\UpgraderServiceInterface: '@Upgrade\Infrastructure\Services\UpgraderService'
+            - '../../../../Upgrade/Application/Dto/*'
+            - '../../../../Upgrade/Infrastructure/VersionControlSystem/Dto/*'
 
     git.adapter:
         class: Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter
@@ -29,48 +21,50 @@ services:
                 param1: '@git.adapter'
               }
 
-    upgrade.task:
-        class: Upgrade\Infrastructure\Task\UpgradeTask
-        tags: [ 'sdk.task' ]
-
     check_credentials.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckCredentialsStep
+        class: Upgrade\Application\Strategy\Common\Step\CheckCredentialsStep
 
     check_is_remote_target_branch_exist.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckRemoteTargetBranchExistsStep
+        class: Upgrade\Application\Strategy\Common\Step\CheckRemoteTargetBranchExistsStep
 
     check_is_local_target_branch_exist.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckLocalTargetBranchExistsStep
+        class: Upgrade\Application\Strategy\Common\Step\CheckLocalTargetBranchExistsStep
 
     check_uncommitted_changes.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckUncommittedChangesStep
+        class: Upgrade\Application\Strategy\Common\Step\CheckUncommittedChangesStep
 
     composer_update.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\ComposerUpdateStep
+        class: Upgrade\Application\Strategy\Composer\Step\ComposerUpdateStep
 
     composer_lock_diff.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\ComposerLockComparatorStep
+        class: Upgrade\Application\Strategy\Common\Step\ComposerLockComparatorStep
+
+    integrator.step:
+        class: Upgrade\Application\Strategy\Common\Step\IntegratorStep
 
     create_branch.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CreateBranchStep
+        class: Upgrade\Application\Strategy\Common\Step\CreateBranchStep
 
     add_changes.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\AddChangesStep
+        class: Upgrade\Application\Strategy\Common\Step\AddChangesStep
 
     commit_changes.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CommitChangesStep
+        class: Upgrade\Application\Strategy\Common\Step\CommitChangesStep
 
     push_changes.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\PushChangesStep
+        class: Upgrade\Application\Strategy\Common\Step\PushChangesStep
 
     create_pr.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CreatePullRequestStep
+        class: Upgrade\Application\Strategy\Common\Step\CreatePullRequestStep
 
     checkout.step:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\Steps\CheckoutStep
+        class: Upgrade\Application\Strategy\Common\Step\CheckoutStep
+
+    release_group_update.step:
+        class: Upgrade\Application\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep
 
     composer.strategy:
-        class: Upgrade\Infrastructure\Processor\Strategy\Composer\ComposerStrategy
+        class: Upgrade\Application\Strategy\Composer\ComposerStrategy
         arguments:
             - {
                 param1: '@check_credentials.step',
@@ -79,19 +73,36 @@ services:
                 param4: '@check_uncommitted_changes.step',
                 param5: '@composer_update.step',
                 param6: '@composer_lock_diff.step',
-                param7: '@create_branch.step',
-                param8: '@add_changes.step',
-                param9: '@commit_changes.step',
-                param10: '@push_changes.step',
-                param11: '@create_pr.step',
-                param12: '@checkout.step'
+                param7: '@integrator.step',
+                param8: '@create_branch.step',
+                param9: '@add_changes.step',
+                param10: '@commit_changes.step',
+                param11: '@push_changes.step',
+                param12: '@create_pr.step',
+                param13: '@checkout.step'
              }
 
     release-app.strategy:
-        class: Upgrade\Infrastructure\Processor\Strategy\ReleaseApp\ReleaseAppStrategy
+        class: Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy
+        arguments:
+            - {
+                param1: '@check_credentials.step',
+                param2: '@check_is_remote_target_branch_exist.step',
+                param3: '@check_is_local_target_branch_exist.step',
+                param4: '@check_uncommitted_changes.step',
+                param5: '@release_group_update.step',
+                param6: '@composer_lock_diff.step',
+                param7: '@integrator.step',
+                param8: '@create_branch.step',
+                param9: '@add_changes.step',
+                param10: '@commit_changes.step',
+                param11: '@push_changes.step',
+                param12: '@create_pr.step',
+                param13: '@checkout.step'
+            }
 
-    Upgrade\Infrastructure\Processor\Strategy\StrategyResolver:
-        class: Upgrade\Infrastructure\Processor\Strategy\StrategyResolver
+    Upgrade\Application\Strategy\StrategyResolver:
+        class: Upgrade\Application\Strategy\StrategyResolver
         arguments:
             - {
                 param1: '@composer.strategy',
@@ -116,7 +127,68 @@ services:
                 param2: '@gitlab.provider'
             }
 
-#Third-party dependencies
+    validator.already_installed:
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\Package\AlreadyInstalledValidator
+
+    Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidator:
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidator
+        arguments:
+            - {
+                param1: '@validator.already_installed'
+            }
+
+    validator.project_changes:
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ProjectChangesValidator
+
+    validator.release_major:
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator
+
+    Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
+        arguments:
+            - {
+#                param1: '@validator.project_changes',
+                param2: '@validator.release_major',
+            }
+
+    validator.threshold_major:
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\MajorThresholdValidator
+
+    validator.threshold_minor:
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\MinorThresholdValidator
+
+    validator.threshold_path:
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\PathThresholdValidator
+
+    validator.threshold_release_group:
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\ReleaseGroupThresholdValidator
+
+    Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator:
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator
+        arguments:
+            - {
+                param1: '@validator.threshold_major',
+                param2: '@validator.threshold_minor',
+                param3: '@validator.threshold_path',
+                param4: '@validator.threshold_release_group',
+            }
+
+    processor.aggregate_release_group_processor:
+        class: Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor
+
+    processor.sequential_release_group_processor:
+        class: Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
+
+    Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver:
+        class: Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver
+        arguments:
+            - '@configuration.provider'
+            - {
+                param1: '@processor.aggregate_release_group_processor',
+                param2: '@processor.sequential_release_group_processor',
+            }
+
+    #Third-party dependencies
     Ergebnis\Json\Printer\Printer: ~
     Ergebnis\Json\Printer\PrinterInterface: '@Ergebnis\Json\Printer\Printer'
 
