@@ -22,6 +22,8 @@ class AbstractCodebaseDto implements CodebaseInterface
     protected ?ClassCodebaseDto $parent = null;
 
     /**
+     * @Type("array<string>")
+     *
      * @var array<string>
      */
     protected array $coreNamespaces = [];

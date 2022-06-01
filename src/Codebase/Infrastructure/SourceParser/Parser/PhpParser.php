@@ -95,10 +95,7 @@ class PhpParser implements ParserInterface
             }
         }
 
-        var_dump('a');
-
         $sources = $this->parsePhpCodebase($finder, $codebaseSourceDto);
-        var_dump($sources);
         if ($isCoreType) {
             $this->sourceCache->getSourceCacheType()->writeCache(
                 $this->sourceCache->getCacheIdentifier(),
@@ -123,15 +120,12 @@ class PhpParser implements ParserInterface
         $sources = [];
         /** @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder as $file) {
-            var_dump($file);
             if ($file->getExtension() !== static::PARSER_EXTENSION) {
                 continue;
             }
 
             $originalSyntaxTree = $this->parser->parse($file->getContents());
-            var_dump('b');
             if ($originalSyntaxTree) {
-                var_dump('b');
                 $syntaxTree = $this->traverseOriginalSyntaxTree($originalSyntaxTree);
                 $classNode = $this->sourceFinder->findClassNode($syntaxTree);
                 if (!$classNode || !$classNode->namespacedName) {
