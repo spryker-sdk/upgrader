@@ -7,17 +7,19 @@
 
 namespace Codebase\Application\Dto;
 
+use JMS\Serializer\Annotation\Type;
+
 class AbstractCodebaseDto implements CodebaseInterface
 {
     /**
      * @var string|null
      */
-    protected $className;
+    protected ?string $className;
 
     /**
-     * @var \Codebase\Application\Dto\CodebaseInterface|null
+     * @var \Codebase\Application\Dto\ClassCodebaseDto|null
      */
-    protected $parent;
+    protected ?ClassCodebaseDto $parent = null;
 
     /**
      * @var array<string>

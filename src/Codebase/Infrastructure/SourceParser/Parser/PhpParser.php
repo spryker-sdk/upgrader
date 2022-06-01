@@ -9,8 +9,10 @@ namespace Codebase\Infrastructure\SourceParser\Parser;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
+use Codebase\Application\Dto\SourceParserRequestDto;
 use Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface;
 use Codebase\Infrastructure\SourceFinder\SourceFinder;
+use Codebase\Infrastructure\SourceParser\Cache\SourceCache;
 use Error;
 use Exception;
 use PhpParser\NodeTraverser;
@@ -40,15 +42,23 @@ class PhpParser implements ParserInterface
     protected $sourceFinder;
 
     /**
+     * @var \Codebase\Infrastructure\SourceParser\Cache\SourceCache
+     */
+    protected $sourceCache;
+
+    /**
      * @param \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface $parser
      * @param \Codebase\Infrastructure\SourceFinder\SourceFinder $sourceFinder
+     * @param \Codebase\Infrastructure\SourceParser\Cache\SourceCache $sourceCache
      */
     public function __construct(
         CodebaseToParserInterface $parser,
-        SourceFinder $sourceFinder
+        SourceFinder $sourceFinder,
+        SourceCache $sourceCache
     ) {
         $this->parser = $parser;
         $this->sourceFinder = $sourceFinder;
+        $this->sourceCache = $sourceCache;
     }
 
     /**
@@ -70,16 +80,58 @@ class PhpParser implements ParserInterface
         $this->requireAutoload();
         $this->defineEnvironmentVariables();
 
+        $isCoreType = $codebaseSourceDto->getType() == SourceParserRequestDto::CORE_TYPE;
+
+        if ($isCoreType) {
+            $cachedSources = $this->sourceCache->getSourceCacheType()->readCache(
+                $this->sourceCache->getCacheIdentifier(),
+                static::PARSER_EXTENSION
+            );
+
+            if ($cachedSources) {
+                $codebaseSourceDto->setPhpCodebaseSources($cachedSources, $codebaseSourceDto->getType());
+                var_dump('Cache reading done!');
+                return $codebaseSourceDto;
+            }
+        }
+
+        var_dump('a');
+
+        $sources = $this->parsePhpCodebase($finder, $codebaseSourceDto);
+        var_dump($sources);
+        if ($isCoreType) {
+            $this->sourceCache->getSourceCacheType()->writeCache(
+                $this->sourceCache->getCacheIdentifier(),
+                static::PARSER_EXTENSION,
+                $sources
+            );
+        }
+
+        var_dump('Reading done!');
+
+        return $codebaseSourceDto->setPhpCodebaseSources($sources, $codebaseSourceDto->getType());
+    }
+
+    /**
+     * @param \Symfony\Component\Finder\Finder $finder
+     * @param \Codebase\Application\Dto\CodebaseSourceDto $codebaseSourceDto
+     *
+     * @return array<\Codebase\Application\Dto\CodebaseInterface>
+     */
+    protected function parsePhpCodebase(Finder $finder, CodebaseSourceDto $codebaseSourceDto): array
+    {
         $sources = [];
         /** @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder as $file) {
+            var_dump($file);
             if ($file->getExtension() !== static::PARSER_EXTENSION) {
                 continue;
             }
 
             $originalSyntaxTree = $this->parser->parse($file->getContents());
-
+            var_dump('b');
             if ($originalSyntaxTree) {
+                var_dump('b');
                 $syntaxTree = $this->traverseOriginalSyntaxTree($originalSyntaxTree);
                 $classNode = $this->sourceFinder->findClassNode($syntaxTree);
                 if (!$classNode || !$classNode->namespacedName) {
@@ -100,7 +152,7 @@ class PhpParser implements ParserInterface
             }
         }
 
-        return $codebaseSourceDto->setPhpCodebaseSources($sources, $codebaseSourceDto->getType());
+        return $sources;
     }
 
     /**
@@ -168,30 +220,30 @@ class PhpParser implements ParserInterface
             $transfer = new ClassCodebaseDto($coreNamespaces);
         }
         $transfer->setClassName($namespace);
-        $transfer->setConstants($projectClass->getConstants());
-        $transfer->setMethods($projectClass->getMethods());
-        $transfer->setTraits($projectClass->getTraits());
-        $transfer->setReflection($projectClass);
+//        $transfer->setConstants($projectClass->getConstants());
+//        $transfer->setMethods($projectClass->getMethods());
+//        $transfer->setTraits($projectClass->getTraits());
+//        $transfer->setReflection($projectClass);
         $transfer->setExtendCore($this->isExtendCore($projectClass, $projectPrefixes, $coreNamespaces));
-        $transfer->setCoreInterfacesMethods(
-            $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $projectPrefixes),
-        );
+//        $transfer->setCoreInterfacesMethods(
+//            $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $projectPrefixes),
+//        );
 
         if ($coreNamespaces !== []) {
             $projectMethods = $this->getProjectMethods($projectClass->getName(), $projectClass->getMethods(), $coreNamespaces);
-            $transfer->setProjectMethods($projectMethods);
+//            $transfer->setProjectMethods($projectMethods);
         }
 
         $parentClass = $projectClass->getParentClass();
 
         if ($parentClass) {
             if ($coreNamespaces !== []) {
-                $transfer->setCoreMethods($this->getCoreMethods($parentClass->getMethods(), $coreNamespaces));
+//                $transfer->setCoreMethods($this->getCoreMethods($parentClass->getMethods(), $coreNamespaces));
             }
 
-            $transfer->setParent(
-                $this->parseClass($parentClass->getName(), $projectPrefixes, $coreNamespaces),
-            );
+//            $transfer->setParent(
+//                $this->parseClass($parentClass->getName(), $projectPrefixes, $coreNamespaces),
+//            );
         }
 
         return $transfer;

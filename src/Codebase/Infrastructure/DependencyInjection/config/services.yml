@@ -56,8 +56,20 @@ services:
                 param1: '@tooling_configuration_validator.project_prefixes'
             }
 
+    file.source.cache:
+        class: Codebase\Infrastructure\SourceParser\Cache\File\FileSourceCache
+
+    Codebase\Infrastructure\SourceParser\Cache\SourceCache:
+        class: Codebase\Infrastructure\SourceParser\Cache\SourceCache
+        arguments:
+            - '@composer.lock.reader'
+            - {
+               param1: '@file.source.cache'
+            }
+
 # Third-party
     PhpParser\ParserFactory: ~
     Symfony\Component\Finder\Finder: ~
     Symfony\Component\Filesystem\Filesystem: ~
     Symfony\Component\DependencyInjection\Container: ~
+    JMS\Serializer\SerializerBuilder: ~

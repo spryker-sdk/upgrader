@@ -48,8 +48,8 @@ class ConfigurationProvider
     {
         $directories = [
             $this->getVendorPath() . 'spryker' . DIRECTORY_SEPARATOR,
-            $this->getVendorPath() . 'spryker-eco' . DIRECTORY_SEPARATOR,
-            $this->getVendorPath() . 'spryker-shop' . DIRECTORY_SEPARATOR,
+//            $this->getVendorPath() . 'spryker-eco' . DIRECTORY_SEPARATOR,
+//            $this->getVendorPath() . 'spryker-shop' . DIRECTORY_SEPARATOR,
         ];
 
         return array_filter($directories, function ($dir) {

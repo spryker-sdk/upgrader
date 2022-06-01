@@ -7,3 +7,9 @@ services:
 #Core
     Core\Domain\:
         resource: '../../../../Core/Domain/*'
+
+    Core\Infrastructure\:
+        resource: '../../../../Core/Infrastructure/*'
+
+    composer.lock.reader:
+        class: Core\Infrastructure\Services\ComposerLockReader

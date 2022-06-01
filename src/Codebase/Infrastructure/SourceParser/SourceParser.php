@@ -9,6 +9,7 @@ namespace Codebase\Infrastructure\SourceParser;
 
 use Codebase\Application\Dto\CodebaseSourceDto;
 use Codebase\Application\Dto\SourceParserRequestDto;
+use Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface;
 use Codebase\Infrastructure\SourceFinder\SourceFinder;
 
 class SourceParser implements SourceParserInterface
@@ -21,17 +22,17 @@ class SourceParser implements SourceParserInterface
     /**
      * @var \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface
      */
-    protected $parser;
+    protected CodebaseToParserInterface $parser;
 
     /**
      * @var \Codebase\Infrastructure\SourceFinder\SourceFinder
      */
-    protected $sourceFinder;
+    protected SourceFinder $sourceFinder;
 
     /**
      * @var array<\Codebase\Infrastructure\SourceParser\Parser\ParserInterface>
      */
-    protected $sourceParsers;
+    protected array $sourceParsers;
 
     /**
      * @param \Codebase\Infrastructure\SourceFinder\SourceFinder $sourceFinder
