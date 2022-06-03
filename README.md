@@ -1,12 +1,8 @@
-# Upgrader tool
-​
-The Upgrader tool simplifies keeping projects up-to-date with Spryker releases.
-​
-The upgrade flow consists of the following steps:
-- [Evaluation](#evaluation)
-- [Update](#update)
+The repository contains two Upgradability tools:
+- [Evaluator](#evaluator)
+- [Upgrader](#ugrader)
   ​
-## Evaluation
+# Evaluator
 ​
 At this step, the upgrader checks the project against a set of rules. The main goal of this tool is to identify if the following parts of the project are compliant with the rules:
 - Codebase
@@ -31,33 +27,41 @@ bin/console analyze:php:code-compliance-report
 ​
 This command returns the content of a previously generated report. Alternatively, you can view a report via an editor.
 ​
-## Update
+## Upgrader
+
+The Upgrader tool simplifies keeping projects up-to-date with Spryker releases.
+
 ​
 The Upgrader updates projects via one of the following approaches:
-- Release group(default) — uses release groups.
+- Release group(default) — uses Spryker release app as data provider.
 - Composer update — uses `composer update` command; this is the default strategy that's describes below.
   ​
   At this step, the Upgrader updates the project to the latest version as follows:
 1. Checks if the target branch has been created on the remote repository. If the branch exists, the process stops.
 2. Checks if there are no uncommitted changes in the project. If there are uncommitted changes, the process stops.
 3. Updates Spryker modules and dependent libraries, including third-party ones.
-4. Commits the changes in `composer.json` and `composer.lock` files.
-5. Pushes the changes to the remote repository.
-6. Create a PR in the remote repository.
+4. Triggers Integrator for adjust project classes.
+5. Commits the changed files.
+6. Pushes the changes to the remote repository.
+7. Create a PR in the remote repository.
 
 
 ### Supported strategies:
-### Composer
+### Composer strategy
 * To enable Composer update strategy:
 ```bash
 export UPGRADE_STRATEGY=composer
 ```
 
-### Release App
+### Release App strategy
+In the strategy, Upgrader uses Spryker release app as a data provider to fetch data about Major, Minor, and Patch releases.
+Only Minor and Paths could be automatically applied, for now. In case when some major release is available, Upgrader put info about to PR description.
+
 * To enable Release group strategy (default):
 ```bash
 export UPGRADE_STRATEGY=release-app
 ```
+
 In the strategy, Upgrader contains aggregate (default) release group requiring processor and sequential processor (one by one release group).
 
 ##### Sequential release group processor
