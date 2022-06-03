@@ -39,8 +39,9 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
         ]);
         $violations = [];
 
+        /** @var \Codebase\Application\Dto\ClassCodebaseDto $source */
         foreach ($sources as $source) {
-            $classFileBody = $this->getClassFileBody($source->getReflection());
+            $classFileBody = $this->getClassFileBody($source);
             if (!$classFileBody) {
                 continue;
             }
@@ -56,13 +57,13 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
             $createdNamespaces = $this->attachNamespaceToClassNames(
                 $createdClassNames,
                 $useNamespaces,
-                $source->getReflection()->getNamespaceName(),
+                $source->getNamespaceName(),
             );
 
             $createdNamespaces = $this->filterCoreClasses($this->getCodebaseSourceDto()->getCoreNamespaces(), $createdNamespaces);
 
             foreach ($createdNamespaces as $createdNamespace) {
-                $guideline = sprintf($this->getGuideline(), $createdNamespace, $source->getClassName());
+                $guideline = sprintf($this->getGuideline(), $createdNamespace, $source->getName());
                 $violations[] = new Violation(new Id(), $guideline, $this->getName());
             }
         }

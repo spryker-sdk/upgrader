@@ -7,22 +7,20 @@
 
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
+use Codebase\Application\Dto\ClassCodebaseDto;
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
-use ReflectionClass;
 use ReflectionMethod;
 
 abstract class AbstractUsedCodeComplianceCheck extends AbstractCodeComplianceCheck
 {
     /**
-     * @phpstan-template T of object
-     *
-     * @param \ReflectionClass<T> $class
+     * @param \Codebase\Application\Dto\ClassCodebaseDto $classCodebaseDto
      *
      * @return string|null
      */
-    protected function getClassFileBody(ReflectionClass $class): ?string
+    protected function getClassFileBody(ClassCodebaseDto $classCodebaseDto): ?string
     {
-        $filename = $class->getFileName();
+        $filename = $classCodebaseDto->getFileName();
 
         if (!$filename) {
             return null;
@@ -35,7 +33,7 @@ abstract class AbstractUsedCodeComplianceCheck extends AbstractCodeComplianceChe
         }
 
         $startLine = 0;
-        $endLine = $class->getEndLine();
+        $endLine = $classCodebaseDto->getEndLine();
         $length = $endLine - $startLine;
 
         return implode('', array_slice($sourceFile, $startLine, $length));

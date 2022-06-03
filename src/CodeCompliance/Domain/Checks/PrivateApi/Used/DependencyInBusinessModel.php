@@ -7,13 +7,13 @@
 
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
+use Codebase\Application\Dto\ClassCodebaseDto;
+use Codebase\Application\Dto\MethodCodebaseDto;
 use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
 use CodeCompliance\Domain\Checks\Filters\PrivateApiFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 use Exception;
-use ReflectionClass;
-use ReflectionMethod;
 
 class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
 {
@@ -43,9 +43,9 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
         ]);
 
         $violations = [];
-
+        /** @var \Codebase\Application\Dto\ClassCodebaseDto $source */
         foreach ($filteredSources as $source) {
-            $reflectionMethod = $this->getMethodFromCurrentFile($source->getReflection(), '__construct');
+            $reflectionMethod = $this->getMethodFromCurrentFile($source, '__construct');
             if (!$reflectionMethod) {
                 continue;
             }
@@ -68,8 +68,9 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
             if (!count($dependencyCoreSources)) {
                 continue;
             }
+            /** @var \Codebase\Application\Dto\ClassCodebaseDto $class */
             foreach ($dependencyCoreSources as $class) {
-                $guideline = sprintf($this->getGuideline(), $class->getClassName(), $source->getClassName());
+                $guideline = sprintf($this->getGuideline(), $class->getName(), $source->getName());
                 $violations[] = new Violation(new Id(), $guideline, $this->getName());
             }
         }
@@ -78,25 +79,23 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @phpstan-template T of object
-     *
-     * @param \ReflectionClass<T> $reflectionClass
+     * @param \Codebase\Application\Dto\ClassCodebaseDto $classCodebaseDto
      * @param string $methodName
      *
      * @return \ReflectionMethod|null
      */
-    protected function getMethodFromCurrentFile(ReflectionClass $reflectionClass, string $methodName): ?ReflectionMethod
+    protected function getMethodFromCurrentFile(ClassCodebaseDto $classCodebaseDto, string $methodName): ?MethodCodebaseDto
     {
         try {
-            $reflectionMethod = $reflectionClass->getMethod($methodName);
-            if ($reflectionMethod->getDeclaringClass()->getName() != $reflectionClass->getName()) {
-                $reflectionMethod = null;
+            $methodCodebaseDto = $classCodebaseDto->getMethod($methodName);
+            if ($methodCodebaseDto->getDeclaringClass()->getName() != $classCodebaseDto->getName()) {
+                $methodCodebaseDto = null;
             }
         } catch (Exception $exception) {
-            $reflectionMethod = null;
+            $methodCodebaseDto = null;
         }
 
-        return $reflectionMethod ?? null;
+        return $methodCodebaseDto ?? null;
     }
 
     /**

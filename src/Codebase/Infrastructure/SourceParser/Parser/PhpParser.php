@@ -13,6 +13,7 @@ use Codebase\Application\Dto\SourceParserRequestDto;
 use Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface;
 use Codebase\Infrastructure\SourceFinder\SourceFinder;
 use Codebase\Infrastructure\SourceParser\Cache\SourceCache;
+use Codebase\Infrastructure\SourceParser\Mapper\ReflectionClassToClassCodebaseDtoMapperInterface;
 use Error;
 use Exception;
 use PhpParser\NodeTraverser;
@@ -34,7 +35,7 @@ class PhpParser implements ParserInterface
     /**
      * @var \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface
      */
-    protected $parser;
+    protected $sourceParser;
 
     /**
      * @var \Codebase\Infrastructure\SourceFinder\SourceFinder
@@ -42,22 +43,30 @@ class PhpParser implements ParserInterface
     protected $sourceFinder;
 
     /**
+     * @var \Codebase\Infrastructure\SourceParser\Mapper\ReflectionClassToClassCodebaseDtoMapperInterface
+     */
+    protected ReflectionClassToClassCodebaseDtoMapperInterface $sourceToDtoMapper;
+
+    /**
      * @var \Codebase\Infrastructure\SourceParser\Cache\SourceCache
      */
     protected $sourceCache;
 
     /**
-     * @param \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface $parser
+     * @param \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface $sourceParser
      * @param \Codebase\Infrastructure\SourceFinder\SourceFinder $sourceFinder
+     * @param \Codebase\Infrastructure\SourceParser\Mapper\ReflectionClassToClassCodebaseDtoMapperInterface $sourceToDtoMapper
      * @param \Codebase\Infrastructure\SourceParser\Cache\SourceCache $sourceCache
      */
     public function __construct(
-        CodebaseToParserInterface $parser,
+        CodebaseToParserInterface $sourceParser,
         SourceFinder $sourceFinder,
+        ReflectionClassToClassCodebaseDtoMapperInterface $sourceToDtoMapper,
         SourceCache $sourceCache
     ) {
-        $this->parser = $parser;
+        $this->sourceParser = $sourceParser;
         $this->sourceFinder = $sourceFinder;
+        $this->sourceToDtoMapper = $sourceToDtoMapper;
         $this->sourceCache = $sourceCache;
     }
 
@@ -90,21 +99,19 @@ class PhpParser implements ParserInterface
 
             if ($cachedSources) {
                 $codebaseSourceDto->setPhpCodebaseSources($cachedSources, $codebaseSourceDto->getType());
-                var_dump('Cache reading done!');
                 return $codebaseSourceDto;
             }
         }
 
         $sources = $this->parsePhpCodebase($finder, $codebaseSourceDto);
         if ($isCoreType) {
+            $cacheIdentifier = $this->sourceCache->getCacheIdentifier();
             $this->sourceCache->getSourceCacheType()->writeCache(
-                $this->sourceCache->getCacheIdentifier(),
+                $cacheIdentifier,
                 static::PARSER_EXTENSION,
-                $sources
+                $sources,
             );
         }
-
-        var_dump('Reading done!');
 
         return $codebaseSourceDto->setPhpCodebaseSources($sources, $codebaseSourceDto->getType());
     }
@@ -124,7 +131,7 @@ class PhpParser implements ParserInterface
                 continue;
             }
 
-            $originalSyntaxTree = $this->parser->parse($file->getContents());
+            $originalSyntaxTree = $this->sourceParser->parse($file->getContents());
             if ($originalSyntaxTree) {
                 $syntaxTree = $this->traverseOriginalSyntaxTree($originalSyntaxTree);
                 $classNode = $this->sourceFinder->findClassNode($syntaxTree);
@@ -194,8 +201,7 @@ class PhpParser implements ParserInterface
     protected function parseClass(
         string $namespace,
         array $projectPrefixes,
-        array $coreNamespaces = [],
-        ?ClassCodebaseDto $transfer = null
+        array $coreNamespaces = []
     ): ?ClassCodebaseDto {
         try {
             if (!class_exists($namespace) && !interface_exists($namespace)) {
@@ -209,136 +215,7 @@ class PhpParser implements ParserInterface
             return null;
         }
 
-        if ($transfer === null) {
-            /** @phpstan-var \Codebase\Application\Dto\ClassCodebaseDto<T> $transfer */
-            $transfer = new ClassCodebaseDto($coreNamespaces);
-        }
-        $transfer->setClassName($namespace);
-//        $transfer->setConstants($projectClass->getConstants());
-//        $transfer->setMethods($projectClass->getMethods());
-//        $transfer->setTraits($projectClass->getTraits());
-//        $transfer->setReflection($projectClass);
-        $transfer->setExtendCore($this->isExtendCore($projectClass, $projectPrefixes, $coreNamespaces));
-//        $transfer->setCoreInterfacesMethods(
-//            $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $projectPrefixes),
-//        );
-
-        if ($coreNamespaces !== []) {
-            $projectMethods = $this->getProjectMethods($projectClass->getName(), $projectClass->getMethods(), $coreNamespaces);
-//            $transfer->setProjectMethods($projectMethods);
-        }
-
-        $parentClass = $projectClass->getParentClass();
-
-        if ($parentClass) {
-            if ($coreNamespaces !== []) {
-//                $transfer->setCoreMethods($this->getCoreMethods($parentClass->getMethods(), $coreNamespaces));
-            }
-
-//            $transfer->setParent(
-//                $this->parseClass($parentClass->getName(), $projectPrefixes, $coreNamespaces),
-//            );
-        }
-
-        return $transfer;
-    }
-
-    /**
-     * @param string $projectClassName
-     * @param array<\ReflectionMethod> $methods
-     * @param array<string> $coreNamespaces
-     *
-     * @return array<\ReflectionMethod>
-     */
-    protected function getProjectMethods(string $projectClassName, array $methods, array $coreNamespaces): array
-    {
-        return array_filter($methods, function ($method) use ($projectClassName, $coreNamespaces) {
-            foreach ($coreNamespaces as $coreNamespace) {
-                $isProjectClassMethod = $method->getDeclaringClass()->getName() == $projectClassName;
-                $hasNoCoreNamespace = strpos($method->getDeclaringClass()->getNamespaceName(), $coreNamespace) !== 0;
-                if ($isProjectClassMethod && $hasNoCoreNamespace) {
-                    return true;
-                }
-            }
-
-            return false;
-        });
-    }
-
-    /**
-     * @param \ReflectionClass<T> $projectClass
-     * @param array<string> $projectPrefix
-     * @param array<string> $coreNamespaces
-     *
-     * @return bool
-     */
-    protected function isExtendCore(ReflectionClass $projectClass, array $projectPrefix, array $coreNamespaces): bool
-    {
-        if ($coreNamespaces === []) {
-            return false;
-        }
-
-        $parentClass = $projectClass->getParentClass();
-        if ($parentClass) {
-            $parentMethods = $this->getCoreMethods($parentClass->getMethods(), $coreNamespaces);
-            if (count($parentMethods)) {
-                return true;
-            }
-        }
-
-        $interfacesMethods = $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $projectPrefix);
-        $parentMethods = $this->getCoreMethods($interfacesMethods, $coreNamespaces);
-        if (count($parentMethods)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param array<\ReflectionMethod> $methods
-     * @param array<string> $coreNamespaces
-     *
-     * @return array<\ReflectionMethod>
-     */
-    protected function getCoreMethods(array $methods, array $coreNamespaces): array
-    {
-        return array_filter($methods, function ($method) use ($coreNamespaces) {
-            foreach ($coreNamespaces as $coreNamespace) {
-                if (strpos($method->getDeclaringClass()->getNamespaceName(), $coreNamespace) === 0) {
-                    return true;
-                }
-            }
-
-            return false;
-        });
-    }
-
-    /**
-     * @param array<\ReflectionClass<T>> $interfaces
-     * @param array<string> $projectPrefixes
-     *
-     * @return array<\ReflectionMethod>
-     */
-    protected function getCoreInterfacesMethods(array $interfaces, array $projectPrefixes): array
-    {
-        $methods = [];
-
-        $coreInterfaces = array_filter($interfaces, function ($interface) use ($projectPrefixes) {
-            foreach ($projectPrefixes as $projectPrefix) {
-                if (strpos($interface->getNamespaceName(), $projectPrefix) === 0) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
-
-        foreach ($coreInterfaces as $interface) {
-            $methods = array_merge($methods, $interface->getMethods());
-        }
-
-        return $methods;
+        return $this->sourceToDtoMapper->map($projectClass, $projectPrefixes, $coreNamespaces);
     }
 
     /**

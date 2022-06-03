@@ -38,7 +38,7 @@ class BusinessFactoryFilterTest extends BaseFilterTest
         $this->assertCount(1, $filteredSources);
 
         foreach ($filteredSources as $filteredSource) {
-            $this->assertMatchesRegularExpression(BusinessFactoryFilter::PATTERN, $filteredSource->getClassName());
+            $this->assertMatchesRegularExpression(BusinessFactoryFilter::PATTERN, $filteredSource->getName());
         }
     }
 }

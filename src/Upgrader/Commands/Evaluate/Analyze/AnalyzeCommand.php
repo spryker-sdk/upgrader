@@ -111,9 +111,7 @@ class AnalyzeCommand implements ViolationReportableInterface, ExecutableCommandI
      */
     public function execute(ContextInterface $context): ContextInterface
     {
-
         $start = microtime(true);
-
 
         $codebaseRequestDto = new CodeBaseRequestDto(
             $this->configurationProvider->getToolingConfigurationFilePath(),
@@ -133,8 +131,7 @@ class AnalyzeCommand implements ViolationReportableInterface, ExecutableCommandI
 //            $context->setExitCode(ContextInterface::FAILURE_EXIT_CODE);
 //        }
 
-        echo 'Execution time: '.round(microtime(true) - $start, 4).' s.';
-
+        echo 'Execution time: ' . round(microtime(true) - $start, 4) . ' s.';
 
         return $context;
     }

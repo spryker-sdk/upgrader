@@ -51,10 +51,10 @@ class IgnoreListFilterTest extends BaseFilterTest
     protected function createClassCodebaseDtoWithClassName(string $className): ClassCodebaseDto
     {
         $parent = new ClassCodebaseDto(['Core']);
-        $parent->setClassName($className);
+        $parent->setName($className);
 
         $dto = new ClassCodebaseDto(['Core']);
-        $dto->setClassName('Project/Foo/Class');
+        $dto->setName('Project/Foo/Class');
         $dto->setParent($parent);
 
         return $dto;

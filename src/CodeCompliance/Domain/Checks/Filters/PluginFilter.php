@@ -7,8 +7,7 @@
 
 namespace CodeCompliance\Domain\Checks\Filters;
 
-use Codebase\Application\Dto\CodebaseInterface;
-use ReflectionClass;
+use Codebase\Application\Dto\ClassCodebaseDto;
 
 class PluginFilter implements FilterInterface
 {
@@ -26,29 +25,28 @@ class PluginFilter implements FilterInterface
     }
 
     /**
-     * @param array<\Codebase\Application\Dto\CodebaseInterface> $sources
+     * @param array<\Codebase\Application\Dto\ClassCodebaseDto> $sources
      *
-     * @return array<\Codebase\Application\Dto\CodebaseInterface>
+     * @return array<\Codebase\Application\Dto\ClassCodebaseDto>
      */
     public function filter(array $sources): array
     {
-        return array_filter($sources, function (CodebaseInterface $source) {
-            return !$this->isPlugin($source->getReflection());
+        return array_filter($sources, function (ClassCodebaseDto $source) {
+            return !$this->isPlugin($source);
         });
     }
 
     /**
-     * @phpstan-template T of \Codebase\Application\Dto\CodebaseInterface
-     *
-     * @param \ReflectionClass<T> $class
+     * @param \Codebase\Application\Dto\ClassCodebaseDto $classCodebaseDto
      *
      * @return bool
      */
-    protected function isPlugin(ReflectionClass $class): bool
+    protected function isPlugin(ClassCodebaseDto $classCodebaseDto): bool
     {
         $pattern = '/.*Plugin$/';
-        $parent = $class->getParentClass();
-        $className = $class->getShortName();
+
+        $parent = $classCodebaseDto->getParentClass();
+        $className = $classCodebaseDto->getShortName();
         if (!$parent) {
             return false;
         }

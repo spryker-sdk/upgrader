@@ -12,9 +12,9 @@ use JMS\Serializer\Annotation\Type;
 class AbstractCodebaseDto implements CodebaseInterface
 {
     /**
-     * @var string|null
+     * @var string
      */
-    protected ?string $className;
+    protected string $name;
 
     /**
      * @var \Codebase\Application\Dto\ClassCodebaseDto|null
@@ -29,31 +29,20 @@ class AbstractCodebaseDto implements CodebaseInterface
     protected array $coreNamespaces = [];
 
     /**
-     * @param array<string> $coreNamespaces
+     * @param array<string>|string $coreNamespaces
      */
-    public function __construct(array $coreNamespaces = [])
+    public function __construct(string $name, array $coreNamespaces = [])
     {
+        $this->name = $name;
         $this->coreNamespaces = $coreNamespaces;
     }
 
     /**
      * @return string|null
      */
-    public function getClassName(): ?string
+    public function getName(): ?string
     {
-        return $this->className;
-    }
-
-    /**
-     * @param string|null $className
-     *
-     * @return \Codebase\Application\Dto\CodebaseInterface
-     */
-    public function setClassName(?string $className = null): CodebaseInterface
-    {
-        $this->className = $className;
-
-        return $this;
+        return $this->name;
     }
 
     /**
@@ -67,7 +56,7 @@ class AbstractCodebaseDto implements CodebaseInterface
     /**
      * @return \Codebase\Application\Dto\CodebaseInterface|null
      */
-    public function getCoreParent(): ?CodebaseInterface
+    public function getCoreParent(): ?ClassCodebaseDto
     {
         $parent = $this->parent;
         while ($parent && !$parent->hasClassNameCoreNamespace()) {
@@ -98,7 +87,7 @@ class AbstractCodebaseDto implements CodebaseInterface
     public function hasClassNameCoreNamespace(): bool
     {
         foreach ($this->coreNamespaces as $coreNamespace) {
-            if (strpos((string)$this->getClassName(), $coreNamespace) === 0) {
+            if (strpos((string)$this->getName(), $coreNamespace) === 0) {
                 return true;
             }
         }

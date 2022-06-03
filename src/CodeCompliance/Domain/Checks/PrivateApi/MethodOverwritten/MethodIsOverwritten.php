@@ -8,6 +8,7 @@
 namespace CodeCompliance\Domain\Checks\PrivateApi\MethodOverwritten;
 
 use Codebase\Application\Dto\CodebaseInterface;
+use Codebase\Application\Dto\MethodCodebaseDto;
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
@@ -44,14 +45,23 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
         $violations = [];
 
         foreach (static::PATTERNS_TO_FILTER as $pattern) {
-            $filteredSources = $this->filterProjectClassesWithExtendedCoreByPattern($this->getCodebaseSourceDto()->getPhpCodebaseSources(), $pattern);
+            $filteredSources = $this->filterProjectClassesWithExtendedCoreByPattern(
+                $this->getCodebaseSourceDto()->getPhpCodebaseSources(),
+                $pattern,
+            );
 
+            /** @var \Codebase\Application\Dto\ClassCodebaseDto $filteredSource */
             foreach ($filteredSources as $filteredSource) {
                 if ($filteredSource->getCoreParent() === null) {
                     continue;
                 }
                 foreach ($this->filterNotUniqueMethods($filteredSource) as $filteredMethod) {
-                    $guideline = sprintf($this->getGuideline(), $filteredSource->getCoreParent()->getClassName(), $filteredMethod->getName(), $filteredSource->getClassName());
+                    $guideline = sprintf(
+                        $this->getGuideline(),
+                        $filteredSource->getCoreParent()->getName(),
+                        $filteredMethod->getName(),
+                        $filteredSource->getName(),
+                    );
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
                 }
             }
@@ -87,9 +97,9 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
     }
 
     /**
-     * @param \Codebase\Application\Dto\CodebaseInterface $source
+     * @param \Codebase\Application\Dto\ClassCodebaseDto $source
      *
-     * @return array<\Codebase\Application\Dto\CodebaseInterface>
+     * @return array<\Codebase\Application\Dto\MethodCodebaseDto>
      */
     public function filterNotUniqueMethods(CodebaseInterface $source): array
     {
@@ -98,8 +108,7 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
             $coreMethods[$coreMethod->getName()] = $coreMethod;
         }
 
-        return array_filter($source->getProjectMethods(), function ($method) use ($coreMethods, $source) {
-            /** @var \ReflectionMethod $method */
+        return array_filter($source->getProjectMethods(), function (MethodCodebaseDto $method) use ($coreMethods, $source) {
             $isMethodNotUnique = array_key_exists($method->getName(), $coreMethods);
             $isNotPlugin = strpos($method->getName(), 'Plugin') === false;
             $isPluginByDocComment = $this->isPluginReturnInDocComment((string)$method->getDocComment());

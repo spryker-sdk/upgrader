@@ -35,7 +35,7 @@ class Constant extends AbstractCodeComplianceCheck
     public function getViolations(): array
     {
         $violations = [];
-
+        /** @var \Codebase\Application\Dto\ClassCodebaseDto $source */
         foreach ($this->getCodebaseSourceDto()->getPhpCodebaseSources() as $source) {
             $coreParent = $source->getCoreParent();
             $parentConstants = $coreParent ? $coreParent->getConstants() : [];
@@ -48,7 +48,7 @@ class Constant extends AbstractCodeComplianceCheck
                 if ($coreParent && $isConstantUnique && !$hasProjectPrefix) {
                     $guideline = sprintf(
                         $this->getGuideline(),
-                        $source->getClassName(),
+                        $source->getName(),
                         $nameConstant,
                         strtoupper((string)reset($projectPrefixes)),
                         $nameConstant,

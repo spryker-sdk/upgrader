@@ -8,64 +8,159 @@
 namespace Codebase\Application\Dto;
 
 use JMS\Serializer\Annotation\Type;
-use ReflectionClass;
 
-/**
- * @phpstan-template T of object
- */
 class ClassCodebaseDto extends AbstractCodebaseDto
 {
+    /**
+     * @var string
+     */
+    protected string $shortName;
+
+    /**
+     * @var string
+     */
+    protected string $namespaceName;
+
     /**
      * @var bool
      */
     protected bool $extendsCore = false;
 
     /**
-     * @Type("array<string>")
+     * @var string|null
+     */
+    protected ?string $fileName = null;
+
+    /**
+     * @var int|null
+     */
+    protected ?int $endLine = null;
+
+    /**
+     * @var string|null
+     */
+    protected ?string $docComment = null;
+
+    /**
+     * @var \Codebase\Application\Dto\ClassCodebaseDto|null
+     */
+    protected ?ClassCodebaseDto $parentClass = null;
+
+    /**
+     * @Type("array")
      *
-     * @var array<int, string>
+     * @var array<string, string>
      */
     protected array $constants = [];
 
     /**
-     * @Type("array<string>")
+     * @Type("array<Codebase\Application\Dto\MethodCodebaseDto>")
      *
-     * @var array<string>
+     * @var array<\Codebase\Application\Dto\MethodCodebaseDto>
      */
     protected array $methods = [];
+//
+//    /**
+//     * @Type("array<Codebase\Application\Dto\ClassCodebaseDto>")
+//     *
+//     * @var array<self>
+//     */
+//    protected array $traits = [];
+//
+//    /**
+//     * @Type("array<Codebase\Application\Dto\MethodCodebaseDto>")
+//     *
+//     * @var array<\Codebase\Application\Dto\MethodCodebaseDto>
+//     */
+//    protected array $projectMethods = [];
+//
+//    /**
+//     * @Type("array<Codebase\Application\Dto\MethodCodebaseDto>")
+//     *
+//     * @var array<\Codebase\Application\Dto\MethodCodebaseDto>
+//     */
+//    protected array $coreMethods = [];
+//
+//    /**
+//     * @Type("array<Codebase\Application\Dto\MethodCodebaseDto>")
+//     *
+//     * @var array<\Codebase\Application\Dto\MethodCodebaseDto>
+//     */
+//    protected array $coreInterfacesMethods = [];
+//
+//    /**
+//     * @Type("array<Codebase\Application\Dto\PropertyCodebaseDto>")
+//     *
+//     * @var array<\Codebase\Application\Dto\PropertyCodebaseDto>
+//     */
+//    protected array $properties = [];
 
     /**
-     * @Type("array<string>")
+     * @param string $name
+     * @param string $shortName
+     * @param string $namespaceName
+     * @param array $coreNamespaces
+     */
+    public function __construct(
+        string $name,
+        string $shortName,
+        string $namespaceName,
+        array $coreNamespaces = []
+    ) {
+        parent::__construct($name, $coreNamespaces);
+        $this->shortName = $shortName;
+        $this->namespaceName = $namespaceName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExtendsCore(): bool
+    {
+        return $this->extendsCore;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamespaceName(): string
+    {
+        return $this->namespaceName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFileName(): ?string
+    {
+        return $this->fileName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShortName(): string
+    {
+        return $this->shortName;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getEndLine(): ?int
+    {
+        return $this->endLine;
+    }
+
+    /**
+     * @param int|null $endLine
      *
-     * @var array<string>
+     * @return void
      */
-    protected array $traits = [];
-
-    /**
-     * @var \ReflectionClass<T>
-     */
-    protected ?ReflectionClass $reflection = null;
-
-    /**
-     * @Type("array<string>")
-     *
-     * @var array<\ReflectionMethod>
-     */
-    protected array $projectMethods = [];
-
-    /**
-     * @Type("array<string>")
-     *
-     * @var array<\ReflectionMethod>
-     */
-    protected array $coreMethods = [];
-
-    /**
-     * @Type("array<string>")
-     *
-     * @var array<\ReflectionMethod>
-     */
-    protected array $coreInterfacesMethods = [];
+    public function setEndLine(?int $endLine): void
+    {
+        $this->endLine = $endLine;
+    }
 
     /**
      * @return array<int, string>
@@ -88,7 +183,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @return array<string>
+     * @return array<\Codebase\Application\Dto\MethodCodebaseDto>
      */
     public function getMethods(): array
     {
@@ -96,19 +191,17 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @param array<string> $methods
+     * @param array<\Codebase\Application\Dto\MethodCodebaseDto> $method
      *
-     * @return $this
+     * @return void
      */
-    public function setMethods(array $methods)
+    public function setMethods(array $methods): void
     {
         $this->methods = $methods;
-
-        return $this;
     }
 
     /**
-     * @return array<string>
+     * @return array<self>
      */
     public function getTraits(): array
     {
@@ -116,39 +209,17 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @param array<string> $traits
+     * @param self $trait
      *
-     * @return $this
+     * @return void
      */
-    public function setTraits(array $traits)
+    public function addTrait(self $trait): void
     {
-        $this->traits = $traits;
-
-        return $this;
+        $this->traits[] = $trait;
     }
 
     /**
-     * @return \ReflectionClass<T>
-     */
-    public function getReflection(): ReflectionClass
-    {
-        return $this->reflection;
-    }
-
-    /**
-     * @param \ReflectionClass<T> $reflection
-     *
-     * @return $this
-     */
-    public function setReflection(ReflectionClass $reflection)
-    {
-        $this->reflection = $reflection;
-
-        return $this;
-    }
-
-    /**
-     * @return array<\ReflectionMethod>
+     * @return array<\Codebase\Application\Dto\MethodCodebaseDto>
      */
     public function getProjectMethods(): array
     {
@@ -156,7 +227,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @param array<\ReflectionMethod> $projectMethods
+     * @param array<\Codebase\Application\Dto\ClassCodebaseDto> $projectMethods
      *
      * @return void
      */
@@ -166,7 +237,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @return array<\ReflectionMethod>
+     * @return array<\Codebase\Application\Dto\MethodCodebaseDto>
      */
     public function getCoreMethods(): array
     {
@@ -174,7 +245,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @param array<\ReflectionMethod> $coreMethods
+     * @param array<\Codebase\Application\Dto\MethodCodebaseDto> $coreMethods
      *
      * @return void
      */
@@ -184,7 +255,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @return array<\ReflectionMethod>
+     * @return array<\Codebase\Application\Dto\MethodCodebaseDto>
      */
     public function getCoreInterfacesMethods(): array
     {
@@ -192,7 +263,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @param array<\ReflectionMethod> $coreInterfacesMethods
+     * @param array<\Codebase\Application\Dto\MethodCodebaseDto> $coreInterfacesMethod
      *
      * @return void
      */
@@ -217,5 +288,54 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     public function setExtendCore(bool $extendsCore): void
     {
         $this->extendsCore = $extendsCore;
+    }
+
+    /**
+     * @return \Codebase\Application\Dto\ClassCodebaseDto|null
+     */
+    public function getParentClass(): ?ClassCodebaseDto
+    {
+        return $this->parentClass;
+    }
+
+    /**
+     * @param \Codebase\Application\Dto\ClassCodebaseDto|null $parentClass
+     *
+     * @return void
+     */
+    public function setParentClass(?ClassCodebaseDto $parentClass): void
+    {
+        $this->parentClass = $parentClass;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDocComment(): ?string
+    {
+        return $this->docComment;
+    }
+
+    /**
+     * @param string|null $docComment
+     *
+     * @return void
+     */
+    public function setDocComment(?string $docComment): void
+    {
+        $this->docComment = $docComment;
+    }
+
+    /**
+     * @return array<\Codebase\Application\Dto\PropertyCodebaseDto>
+     */
+    public function getProperties(): array
+    {
+        return $this->properties;
+    }
+
+    public function getMethod(string $methodName): ?MethodCodebaseDto
+    {
+        return null;
     }
 }

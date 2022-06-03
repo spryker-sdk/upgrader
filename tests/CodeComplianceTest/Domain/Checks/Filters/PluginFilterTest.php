@@ -48,7 +48,7 @@ class PluginFilterTest extends BaseFilterTest
     protected function createClassCodebaseDtoWithClassName(string $className): ClassCodebaseDto
     {
         $dto = new ClassCodebaseDto(['Core']);
-        $dto->setClassName($className);
+        $dto->setName($className);
         $dto->setReflection(new ReflectionClass($className));
 
         return $dto;

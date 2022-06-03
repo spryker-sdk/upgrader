@@ -7,6 +7,8 @@
 
 namespace CodeCompliance\Domain\Checks\Filters;
 
+use Codebase\Application\Dto\ClassCodebaseDto;
+
 class FacadeFilter implements FilterInterface
 {
     /**
@@ -23,14 +25,14 @@ class FacadeFilter implements FilterInterface
     }
 
     /**
-     * @param array<\Codebase\Application\Dto\CodebaseInterface> $sources
+     * @param array<\Codebase\Application\Dto\ClassCodebaseDto> $sources
      *
-     * @return array<\Codebase\Application\Dto\CodebaseInterface>
+     * @return array<\Codebase\Application\Dto\ClassCodebaseDto>
      */
     public function filter(array $sources): array
     {
-        return array_filter($sources, function ($source) {
-            $className = $source->getClassName();
+        return array_filter($sources, function (ClassCodebaseDto $source) {
+            $className = $source->getName();
 
             return ($className && $this->isFacade($className));
         });

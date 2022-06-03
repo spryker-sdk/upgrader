@@ -51,8 +51,9 @@ class Facade extends AbstractUsedCodeComplianceCheck
         $violations = [];
 
         foreach (static::USED_PRIVATE_API_ANNOTATION as $privateApiAnnotation) {
+            /** @var \Codebase\Application\Dto\ClassCodebaseDto $source */
             foreach ($filteredSources as $source) {
-                $classFileBody = $this->getClassFileBody($source->getReflection());
+                $classFileBody = $this->getClassFileBody($source);
                 if (!$classFileBody) {
                     continue;
                 }
@@ -62,9 +63,9 @@ class Facade extends AbstractUsedCodeComplianceCheck
                     continue;
                 }
 
-                $classDocComment = $source->getReflection()->getDocComment();
+                $classDocComment = $source->getDocComment();
                 if (!$classDocComment) {
-                    $message = sprintf(static::DOC_COMMENT_MESSAGE, $source->getReflection()->getName());
+                    $message = sprintf(static::DOC_COMMENT_MESSAGE, $source->getName());
                     $violations[] = new Violation(new Id(), $message, $this->getName());
 
                     continue;
@@ -76,26 +77,27 @@ class Facade extends AbstractUsedCodeComplianceCheck
                 );
 
                 if (!$namespace) {
-                    $message = sprintf(static::DOC_COMMENT_MESSAGE, '$this->' . $privateApiAnnotation . '() in' . $source->getClassName());
+                    $message = sprintf(static::DOC_COMMENT_MESSAGE, '$this->' . $privateApiAnnotation . '() in' . $source->getName());
                     $violations[] = new Violation(new Id(), $message, $this->getName());
 
                     continue;
                 }
 
                 $codebaseCoreSources = $this->getCodebaseSourceDto()->getPhpCoreCodebaseSources();
+                /** @var \Codebase\Application\Dto\ClassCodebaseDto $codebaseDto */
                 $codebaseDto = $codebaseSources[$namespace] ?? $codebaseCoreSources[$namespace] ?? null;
                 if (!$codebaseDto) {
                     continue;
                 }
 
                 foreach ($usedMethodNames as $usedMethodName) {
-                    $methodReflection = $codebaseDto->getReflection()->getMethod($usedMethodName);
+                    $methodReflection = $codebaseDto->getMethod($usedMethodName);
                     $hasCoreNamespace = $this->hasCoreNamespace(
                         $this->getCodebaseSourceDto()->getCoreNamespaces(),
                         $methodReflection->getDeclaringClass()->getName(),
                     );
                     if ($hasCoreNamespace) {
-                        $guideline = sprintf($this->getGuideline(), $usedMethodName, $source->getClassName());
+                        $guideline = sprintf($this->getGuideline(), $usedMethodName, $source->getName());
                         $violations[] = new Violation(new Id(), $guideline, $this->getName());
                     }
                 }

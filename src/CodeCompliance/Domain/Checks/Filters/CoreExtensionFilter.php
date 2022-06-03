@@ -7,7 +7,7 @@
 
 namespace CodeCompliance\Domain\Checks\Filters;
 
-use Codebase\Application\Dto\CodebaseInterface;
+use Codebase\Application\Dto\ClassCodebaseDto;
 
 class CoreExtensionFilter implements FilterInterface
 {
@@ -25,13 +25,13 @@ class CoreExtensionFilter implements FilterInterface
     }
 
     /**
-     * @param array<\Codebase\Application\Dto\CodebaseInterface> $sources
+     * @param array<\Codebase\Application\Dto\ClassCodebaseDto> $sources
      *
-     * @return array<\Codebase\Application\Dto\CodebaseInterface>
+     * @return array<\Codebase\Application\Dto\ClassCodebaseDto>
      */
     public function filter(array $sources): array
     {
-        return array_filter($sources, function (CodebaseInterface $source) {
+        return array_filter($sources, function (ClassCodebaseDto $source) {
             return (bool)$source->getCoreParent();
         });
     }

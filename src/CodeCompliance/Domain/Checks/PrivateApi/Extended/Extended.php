@@ -46,6 +46,7 @@ class Extended extends AbstractCodeComplianceCheck
 
         $violations = [];
 
+        /** @var \Codebase\Application\Dto\ClassCodebaseDto $source */
         foreach ($filteredSources as $source) {
             $coreParent = $source->getCoreParent();
 
@@ -53,7 +54,7 @@ class Extended extends AbstractCodeComplianceCheck
                 continue;
             }
 
-            $guideline = sprintf($this->getGuideline(), $coreParent->getClassName(), $source->getClassName());
+            $guideline = sprintf($this->getGuideline(), $coreParent->getName(), $source->getName());
             $violations[] = new Violation(new Id(), $guideline, $this->getName());
         }
 

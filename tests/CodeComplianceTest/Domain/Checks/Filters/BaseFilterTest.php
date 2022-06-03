@@ -39,7 +39,7 @@ abstract class BaseFilterTest extends TestCase
     protected function createClassCodebaseDtoWithClassName(string $className): ClassCodebaseDto
     {
         $dto = new ClassCodebaseDto(['Core']);
-        $dto->setClassName($className);
+        $dto->setName($className);
 
         return $dto;
     }

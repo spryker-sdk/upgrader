@@ -7,10 +7,10 @@
 
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
+use Codebase\Application\Dto\MethodCodebaseDto;
 use CodeCompliance\Domain\Checks\Filters\BusinessFactoryFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
-use ReflectionMethod;
 
 class DependencyProvider extends AbstractUsedCodeComplianceCheck
 {
@@ -39,11 +39,14 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
             BusinessFactoryFilter::BUSINESS_FACTORY_FILTER,
         ]);
         $violations = [];
-
+        /** @var \Codebase\Application\Dto\ClassCodebaseDto $source */
         foreach ($filteredSources as $source) {
-            $methods = $this->filterMethodDeclaredOnProjectLevel($this->getCodebaseSourceDto()->getCoreNamespaces(), $source->getMethods());
+            $methods = $this->filterMethodDeclaredOnProjectLevel(
+                $this->getCodebaseSourceDto()->getCoreNamespaces(),
+                $source->getMethods(),
+            );
 
-            /** @var \ReflectionMethod $method */
+           /** @var \Codebase\Application\Dto\MethodCodebaseDto $method */
             foreach ($methods as $method) {
                 $methodBody = $this->getMethodBody($method);
 
@@ -60,7 +63,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
                 $constantName = $this->getConstantNameFromConstantUsage($argumentString);
 
                 if (!$constantName) {
-                    $guideline = sprintf('Please create constant from %s in %s', $argumentString, $source->getClassName());
+                    $guideline = sprintf('Please create constant from %s in %s', $argumentString, $source->getName());
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
 
                     continue;
@@ -69,14 +72,13 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
                 $constantClassName = $this->getClassNameFromConstantUsage($argumentString);
 
                 if (!$constantClassName || $constantClassName === 'static' || $constantClassName === 'self') {
-                    $guideline = sprintf('Please use constant from DependencyProvider instead of %s in %s', $argumentString, $source->getClassName());
+                    $guideline = sprintf('Please use constant from DependencyProvider instead of %s in %s', $argumentString, $source->getName());
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
 
                     continue;
                 }
 
                 $classFileBody = $this->getClassFileBody($method->getDeclaringClass());
-
                 if (!$classFileBody) {
                     continue;
                 }
@@ -88,7 +90,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
                 );
 
                 if ($this->hasCoreNamespace($this->getCodebaseSourceDto()->getCoreNamespaces(), $constantClassNamespace)) {
-                    $guideline = sprintf($this->getGuideline(), $constantClassName, $constantName, $source->getClassName());
+                    $guideline = sprintf($this->getGuideline(), $constantClassName, $constantName, $source->getName());
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
 
                     continue;
@@ -101,7 +103,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
                     $parentConstants = $coreParent ? $coreParent->getReflection()->getConstants() : [];
 
                     if ($this->isContainsConstantByName($parentConstants, $constantName)) {
-                        $guideline = sprintf($this->getGuideline(), $constantClassName, $constantName, $source->getClassName());
+                        $guideline = sprintf($this->getGuideline(), $constantClassName, $constantName, $source->getName());
                         $violations[] = new Violation(new Id(), $guideline, $this->getName());
                     }
                 }
@@ -113,13 +115,13 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
 
     /**
      * @param array<string> $coreNamespaces
-     * @param array<\ReflectionMethod> $methods
+     * @param array<\Codebase\Application\Dto\MethodCodebaseDto> $methods
      *
-     * @return array<\ReflectionMethod>
+     * @return array<\Codebase\Application\Dto\MethodCodebaseDto>
      */
     protected function filterMethodDeclaredOnProjectLevel(array $coreNamespaces, array $methods): array
     {
-        return array_filter($methods, function (ReflectionMethod $method) use ($coreNamespaces) {
+        return array_filter($methods, function (MethodCodebaseDto $method) use ($coreNamespaces) {
             $namespace = $method->getDeclaringClass()->getNamespaceName();
 
             return !$this->hasCoreNamespace($coreNamespaces, $namespace);

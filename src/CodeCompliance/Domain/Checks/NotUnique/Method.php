@@ -7,11 +7,12 @@
 
 namespace CodeCompliance\Domain\Checks\NotUnique;
 
+use Codebase\Application\Dto\ClassCodebaseDto;
+use Codebase\Application\Dto\TraitCodebaseDto;
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
 use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
-use ReflectionClass;
 
 class Method extends AbstractCodeComplianceCheck
 {
@@ -40,13 +41,12 @@ class Method extends AbstractCodeComplianceCheck
         $filteredSources = $this->filterService->filter($sources, [PluginFilter::PLUGIN_FILTER]);
 
         $violations = [];
-
+        /** @var \Codebase\Application\Dto\ClassCodebaseDto $source */
         foreach ($filteredSources as $source) {
             $namesCoreMethods = array_column($source->getCoreMethods(), static::COLUMN_KEY_NAME);
             $nameCoreInterfaceMethods = array_column($source->getCoreInterfacesMethods(), static::COLUMN_KEY_NAME);
             $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
-            /** @var \ReflectionMethod $projectMethod */
             foreach ($source->getProjectMethods() as $projectMethod) {
                 if ($this->isMagicMethod($projectMethod->getName())) {
                     continue;
@@ -54,7 +54,7 @@ class Method extends AbstractCodeComplianceCheck
                 if ($this->isTraitMethod($projectMethod->getName(), $projectMethod->getDeclaringClass())) {
                     continue;
                 }
-                if ($this->isDependencyProviderPluginStack($projectMethod->getName(), $source->getClassName())) {
+                if ($this->isDependencyProviderPluginStack($projectMethod->getName(), $source->getName())) {
                     continue;
                 }
                 if ($this->isPluginReturnInDocComment((string)$projectMethod->getDocComment())) {
@@ -70,7 +70,7 @@ class Method extends AbstractCodeComplianceCheck
                     array_splice($methodParts, 1, 0, [reset($projectPrefixes)]);
                     $guideline = sprintf(
                         $this->getGuideline(),
-                        $source->getClassName(),
+                        $source->getName(),
                         $projectMethod->getName(),
                         lcfirst(implode('', $methodParts)),
                     );
@@ -95,25 +95,6 @@ class Method extends AbstractCodeComplianceCheck
     }
 
     /**
-     * @phpstan-template T of object
-     *
-     * @phpstan-param array<\ReflectionClass<T>> $interfaces
-     *
-     * @param array<\ReflectionClass> $interfaces
-     *
-     * @return array<\ReflectionMethod>
-     */
-    protected function getInterfaceMethods(array $interfaces): array
-    {
-        $methods = [];
-        foreach ($interfaces as $interface) {
-            $methods = array_merge($methods, $interface->getMethods());
-        }
-
-        return $methods;
-    }
-
-    /**
      * @param string $methodName
      *
      * @return bool
@@ -124,16 +105,14 @@ class Method extends AbstractCodeComplianceCheck
     }
 
     /**
-     * @phpstan-template T of object
-     *
      * @param string $method
-     * @param \ReflectionClass<T> $class
+     * @param \Codebase\Application\Dto\ClassCodebaseDto $class
      *
      * @return bool
      */
-    protected function isTraitMethod(string $method, ReflectionClass $class): bool
+    protected function isTraitMethod(string $method, ClassCodebaseDto $class): bool
     {
-        $traits = array_filter($class->getTraits(), function ($trait) use ($method) {
+        $traits = array_filter($class->getTraits(), function (ClassCodebaseDto $trait) use ($method) {
             $traitMethods = array_column($trait->getMethods(), static::COLUMN_KEY_NAME);
 
             return in_array($method, $traitMethods);

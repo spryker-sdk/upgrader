@@ -45,8 +45,9 @@ class CorePersistence extends AbstractUsedCodeComplianceCheck
 
         $violations = [];
 
+        /** @var \Codebase\Application\Dto\ClassCodebaseDto $source */
         foreach ($filteredSources as $source) {
-            $classFileBody = $this->getClassFileBody($source->getReflection());
+            $classFileBody = $this->getClassFileBody($source);
             if (!$classFileBody) {
                 continue;
             }
@@ -56,7 +57,7 @@ class CorePersistence extends AbstractUsedCodeComplianceCheck
                 if (in_array($methodName, static::IGNORE_METHODS_LIST)) {
                     continue;
                 }
-                $methodReflection = $source->getReflection()->getMethod($methodName);
+                $methodReflection = $source->getMethod($methodName);
 
                 if (
                     $this->hasCoreNamespace(
@@ -64,7 +65,7 @@ class CorePersistence extends AbstractUsedCodeComplianceCheck
                         $methodReflection->getDeclaringClass()->getName(),
                     )
                 ) {
-                    $guideline = sprintf($this->getGuideline(), $source->getClassName(), $methodName);
+                    $guideline = sprintf($this->getGuideline(), $source->getName(), $methodName);
                     $violations[] = new Violation(new Id(), $guideline, $this->getName());
                 }
             }

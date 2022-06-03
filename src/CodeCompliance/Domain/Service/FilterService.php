@@ -12,7 +12,7 @@ class FilterService
     /**
      * @var array<\CodeCompliance\Domain\Checks\Filters\FilterInterface>
      */
-    protected $filters = [];
+    protected array $filters = [];
 
     /**
      * @param array<\CodeCompliance\Domain\Checks\Filters\FilterInterface> $filters

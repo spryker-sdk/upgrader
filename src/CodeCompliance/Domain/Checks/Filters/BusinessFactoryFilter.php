@@ -7,7 +7,7 @@
 
 namespace CodeCompliance\Domain\Checks\Filters;
 
-use Codebase\Application\Dto\CodebaseInterface;
+use Codebase\Application\Dto\ClassCodebaseDto;
 
 class BusinessFactoryFilter implements FilterInterface
 {
@@ -36,19 +36,19 @@ class BusinessFactoryFilter implements FilterInterface
      */
     public function filter(array $sources): array
     {
-        return array_filter($sources, function ($source) {
+        return array_filter($sources, function (ClassCodebaseDto $source) {
             return $this->isBusinessFactory($source);
         });
     }
 
     /**
-     * @param \Codebase\Application\Dto\CodebaseInterface $source
+     * @param \Codebase\Application\Dto\ClassCodebaseDto $source
      *
      * @return bool
      */
-    protected function isBusinessFactory(CodebaseInterface $source): bool
+    protected function isBusinessFactory(ClassCodebaseDto $source): bool
     {
-        $className = $source->getClassName();
+        $className = $source->getName();
         if (!$className) {
             return false;
         }

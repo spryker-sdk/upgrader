@@ -7,13 +7,13 @@
 
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
+use Codebase\Application\Dto\ClassCodebaseDto;
+use Codebase\Application\Dto\MethodCodebaseDto;
+use Codebase\Application\Dto\PropertyCodebaseDto;
 use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 use Exception;
-use ReflectionClass;
-use ReflectionMethod;
-use ReflectionProperty;
 
 class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
 {
@@ -44,11 +44,11 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
         $violations = [];
 
         foreach ($sources as $source) {
-            $reflectionMethod = $this->getMethod($source->getReflection(), '__construct');
-            if (!$reflectionMethod) {
+            $methodCodebaseDto = $this->getMethod($source, '__construct');
+            if (!$methodCodebaseDto) {
                 continue;
             }
-            $constructorDoc = $reflectionMethod->getDocComment();
+            $constructorDoc = $methodCodebaseDto->getDocComment();
             if (!$constructorDoc) {
                 continue;
             }
@@ -60,16 +60,17 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
             }
 
             foreach ($repositoryAndEntityManagerNamespaces as $classNamespace) {
-                $property = $this->getPropertyByNamespace($source->getReflection(), $classNamespace);
+                $property = $this->getPropertyByNamespace($source, $classNamespace);
                 if (!$property) {
                     continue;
                 }
-                $classFileBody = $this->getClassFileBody($source->getReflection());
+                $classFileBody = $this->getClassFileBody($source);
                 if (!$classFileBody) {
                     continue;
                 }
                 $methodNames = $this->parseUsedMethodsFromProperty($classFileBody, $property->getName());
                 $classNamespace = ltrim($classNamespace, '\\');
+                /** @var \Codebase\Application\Dto\ClassCodebaseDto $classTransfer */
                 $classTransfer = $this->getCodebaseSourceDto()->getPhpCodebaseSources()[$classNamespace] ??
                     $this->getCodebaseSourceDto()->getPhpCoreCodebaseSources()[$classNamespace] ?? null;
 
@@ -78,14 +79,14 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
                 }
 
                 foreach ($methodNames as $methodName) {
-                    $methodReflection = $classTransfer->getReflection()->getMethod($methodName);
+                    $methodReflection = $classTransfer->getMethod($methodName);
                     if (
                         $this->hasCoreNamespace(
                             $this->getCodebaseSourceDto()->getCoreNamespaces(),
                             ltrim($methodReflection->getDeclaringClass()->getName(), '\\'),
                         )
                     ) {
-                        $guideline = sprintf($this->getGuideline(), $methodReflection->getDeclaringClass()->getName(), $methodName, $source->getClassName());
+                        $guideline = sprintf($this->getGuideline(), $methodReflection->getDeclaringClass()->getName(), $methodName, $source->getName());
                         $violations[] = new Violation(new Id(), $guideline, $this->getName());
                     }
                 }
@@ -179,16 +180,14 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @phpstan-template T of object
-     *
-     * @param \ReflectionClass<T> $class
+     * @param \Codebase\Application\Dto\ClassCodebaseDto $classCodebaseDto
      * @param string $namespace
      *
-     * @return \ReflectionProperty|null
+     * @return \Codebase\Application\Dto\PropertyCodebaseDto|null
      */
-    protected function getPropertyByNamespace(ReflectionClass $class, string $namespace): ?ReflectionProperty
+    protected function getPropertyByNamespace(ClassCodebaseDto $classCodebaseDto, string $namespace): ?PropertyCodebaseDto
     {
-        foreach ($class->getProperties() as $property) {
+        foreach ($classCodebaseDto->getProperties() as $property) {
             $comment = $property->getDocComment();
             if ($comment && $this->getVarNamespaceFromDocComment($comment) === $namespace) {
                 return $property;
@@ -199,21 +198,19 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
-     * @phpstan-template T of object
-     *
-     * @param \ReflectionClass<T> $reflectionClass
+     * @param \Codebase\Application\Dto\ClassCodebaseDto $classCodebaseDto
      * @param string $methodName
      *
-     * @return \ReflectionMethod|null
+     * @return \Codebase\Application\Dto\MethodCodebaseDto|null
      */
-    protected function getMethod(ReflectionClass $reflectionClass, string $methodName): ?ReflectionMethod
+    protected function getMethod(ClassCodebaseDto $classCodebaseDto, string $methodName): ?MethodCodebaseDto
     {
         try {
-            $reflectionMethod = $reflectionClass->getMethod($methodName);
+            $methodCodebaseDto = $classCodebaseDto->getMethod($methodName);
         } catch (Exception $exception) {
-            $reflectionMethod = null;
+            $methodCodebaseDto = null;
         }
 
-        return $reflectionMethod ?? null;
+        return $methodCodebaseDto ?? null;
     }
 }

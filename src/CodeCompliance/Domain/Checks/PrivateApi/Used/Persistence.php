@@ -49,8 +49,9 @@ class Persistence extends AbstractUsedCodeComplianceCheck
         $violations = [];
 
         foreach (static::METHODS_TO_CHECK as $methodToCheck) {
+            /** @var \Codebase\Application\Dto\ClassCodebaseDto $source */
             foreach ($sources as $source) {
-                $classFileBody = $this->getClassFileBody($source->getReflection());
+                $classFileBody = $this->getClassFileBody($source);
                 if (!$classFileBody) {
                     continue;
                 }
@@ -60,9 +61,9 @@ class Persistence extends AbstractUsedCodeComplianceCheck
                     continue;
                 }
 
-                $classDocComment = $source->getReflection()->getDocComment();
+                $classDocComment = $source->getDocComment();
                 if (!$classDocComment) {
-                    $message = sprintf(static::DOC_COMMENT_MESSAGE, $source->getReflection()->getName());
+                    $message = sprintf(static::DOC_COMMENT_MESSAGE, $source->getName());
                     $violations[] = new Violation(new Id(), $message, $this->getName());
 
                     continue;
@@ -70,24 +71,25 @@ class Persistence extends AbstractUsedCodeComplianceCheck
 
                 $factoryNamespace = $this->getReturnNamespaceByMethodFromDocComment($classDocComment, $methodToCheck);
                 if (!$factoryNamespace) {
-                    $message = sprintf(static::DOC_COMMENT_MESSAGE, '$this->getFactory() in ' . $source->getClassName());
+                    $message = sprintf(static::DOC_COMMENT_MESSAGE, '$this->getFactory() in ' . $source->getName());
                     $violations[] = new Violation(new Id(), $message, $this->getName());
 
                     continue;
                 }
 
                 $codebaseCoreSources = $this->getCodebaseSourceDto()->getPhpCoreCodebaseSources();
+                /** @var \Codebase\Application\Dto\ClassCodebaseDto $classTransfer */
                 $classTransfer = $codebaseSources[$factoryNamespace] ?? $codebaseCoreSources[$factoryNamespace] ?? null;
                 if ($classTransfer === null) {
                     continue;
                 }
 
                 foreach ($usedMethodNames as $usedMethodName) {
-                    $methodReflection = $classTransfer->getReflection()->getMethod($usedMethodName);
+                    $methodReflection = $classTransfer->getMethod($usedMethodName);
                     $hasCoreNamespace = $this->hasCoreNamespace($this->getCodebaseSourceDto()->getCoreNamespaces(), $methodReflection->getDeclaringClass()->getName());
 
                     if ($hasCoreNamespace) {
-                        $guideline = sprintf($this->getGuideline(), $usedMethodName, $source->getClassName());
+                        $guideline = sprintf($this->getGuideline(), $usedMethodName, $source->getName());
                         $violations[] = new Violation(new Id(), $guideline, $this->getName());
                     }
                 }
