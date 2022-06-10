@@ -83,7 +83,7 @@ abstract class AbstractUsedCodeComplianceCheck extends AbstractCodeComplianceChe
         if (!$fileBody) {
             return $methodNames;
         }
-        preg_match_all('/\$this[ ]*->(.*)\(.*\)/m', $fileBody, $matchResult);
+        preg_match_all('/\$this[ ]*->([a-zA-Z]*)\(.*\)/m', $fileBody, $matchResult);
         foreach ($matchResult[1] as $row) {
             $pos = strpos($row, '(');
             if ($pos) {
