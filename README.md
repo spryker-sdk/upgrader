@@ -40,7 +40,7 @@ The Upgrader updates projects via one of the following approaches:
 1. Checks if the target branch has been created on the remote repository. If the branch exists, the process stops.
 2. Checks if there are no uncommitted changes in the project. If there are uncommitted changes, the process stops.
 3. Updates Spryker modules and dependent libraries, including third-party ones.
-4. Triggers Integrator for adjust project classes.
+4. Triggers [Integrator](https://github.com/spryker-sdk/integrator) for adjust project classes.
 5. Commits the changed files.
 6. Pushes the changes to the remote repository.
 7. Create a PR in the remote repository.
