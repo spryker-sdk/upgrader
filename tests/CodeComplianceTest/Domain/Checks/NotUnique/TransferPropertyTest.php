@@ -9,6 +9,7 @@ namespace CodeComplianceTest\Domain\Checks\NotUnique;
 
 use CodeCompliance\Domain\Checks\NotUnique\TransferProperty;
 use CodeCompliance\Domain\Service\FilterService;
+use CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
 class TransferPropertyTest extends BaseCodeComplianceCheckTest
@@ -23,7 +24,7 @@ class TransferPropertyTest extends BaseCodeComplianceCheckTest
      */
     public function setUp(): void
     {
-        $this->transferProperty = new TransferProperty(new FilterService());
+        $this->transferProperty = new TransferProperty(new FilterService(), new CodeBaseAdapter());
     }
 
     /**

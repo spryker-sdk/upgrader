@@ -58,15 +58,14 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
 
             $params = $this->getParamNamespacesFromDocComment($constructorDoc);
             $dependencyNamespaces = $this->skipBasicTypes($params);
-            $dependencyCoreSources = $this->getCoreSourcesByNamespaces(
-                $dependencyNamespaces,
-            );
+            $dependencyCoreSources = $this->getCoreSourcesByNamespaces($dependencyNamespaces);
             $dependencyCoreSources = $this->filterService->filter($dependencyCoreSources, [
                 PrivateApiFilter::PRIVATE_API_FILTER,
             ]);
             if (!count($dependencyCoreSources)) {
                 continue;
             }
+
             foreach ($dependencyCoreSources as $class) {
                 $guideline = sprintf($this->getGuideline(), $class->getClassName(), $source->getClassName());
                 $violations[] = new Violation(new Id(), $guideline, $this->getName());
@@ -112,7 +111,6 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
 
     /**
      * @param array<string> $dependencyNamespaces
-     * @param array<mixed> $sources
      *
      * @return array<string, \Codebase\Application\Dto\CodebaseInterface>
      */
@@ -122,16 +120,16 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
 
         foreach ($dependencyNamespaces as $namespace) {
             $namespace = ltrim($namespace, '\\');
-//            $reflection = new ReflectionClass($namespace);
 
-            if (class_exists($namespace)) {
+            if ($this->hasProjectPrefix($namespace, $this->getCodebaseSourceDto()->getProjectPrefixes())) {
+                continue;
+            }
+
+            if (class_exists($namespace) || interface_exists($namespace)) {
                 $classCodebaseDto = new ClassCodebaseDto();
                 $classCodebaseDto->setClassName($namespace);
                 $results[$namespace] = $classCodebaseDto;
             }
-//            if (isset($sources[$namespace])) {
-//                $results[$namespace] = $sources[$namespace];
-//            }
         }
 
         return $results;

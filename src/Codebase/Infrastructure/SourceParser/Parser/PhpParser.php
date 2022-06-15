@@ -27,7 +27,7 @@ class PhpParser implements ParserInterface
     /**
      * @var string
      */
-    protected const PARSER_EXTENSION = 'php';
+    public const PARSER_EXTENSION = 'php';
 
     /**
      * @var \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface

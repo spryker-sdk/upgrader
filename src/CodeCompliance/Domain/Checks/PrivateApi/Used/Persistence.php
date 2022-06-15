@@ -76,7 +76,7 @@ class Persistence extends AbstractUsedCodeComplianceCheck
                     continue;
                 }
 
-                $classTransfer = new \ReflectionClass($factoryNamespace);
+                $classTransfer = $this->codeBaseAdapter->getClassReflectionByClassNamespace($factoryNamespace);
                 if ($classTransfer === null) {
                     continue;
                 }

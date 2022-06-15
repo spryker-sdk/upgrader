@@ -22,11 +22,6 @@ class CodebaseSourceDto
     /**
      * @var array<\Codebase\Application\Dto\CodebaseInterface>
      */
-    protected array $phpCoreCodebaseSources = [];
-
-    /**
-     * @var array<\Codebase\Application\Dto\CodebaseInterface>
-     */
     protected array $xmlDatabaseSchemaCodebaseSources = [];
 
     /**
@@ -78,8 +73,6 @@ class CodebaseSourceDto
             return $this;
         }
 
-        $this->phpCoreCodebaseSources = array_merge($this->phpCoreCodebaseSources, $codebaseSources);
-
         return $this;
     }
 
@@ -128,14 +121,6 @@ class CodebaseSourceDto
     {
         return $this->phpCodebaseSources;
     }
-
-//    /**
-//     * @return array<\Codebase\Application\Dto\CodebaseInterface>
-//     */
-//    public function getPhpCoreCodebaseSources(): array
-//    {
-//        return $this->phpCoreCodebaseSources;
-//    }
 
     /**
      * @return array<\Codebase\Application\Dto\CodebaseInterface>

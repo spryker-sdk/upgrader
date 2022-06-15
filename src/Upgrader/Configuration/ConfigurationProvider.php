@@ -12,7 +12,7 @@ class ConfigurationProvider
     /**
      * @var array<string>
      */
-    protected const CORE_NAMESPACES = ['SprykerShop', 'SprykerEco', 'Spryker', 'SprykerSdk'];
+    protected const CORE_NAMESPACES = ['Spryker'];
 
     /**
      * @return array<string>

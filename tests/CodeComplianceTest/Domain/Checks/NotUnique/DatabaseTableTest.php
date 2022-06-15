@@ -9,6 +9,7 @@ namespace CodeComplianceTest\Domain\Checks\NotUnique;
 
 use CodeCompliance\Domain\Checks\NotUnique\DatabaseTable;
 use CodeCompliance\Domain\Service\FilterService;
+use CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
 class DatabaseTableTest extends BaseCodeComplianceCheckTest
@@ -23,7 +24,7 @@ class DatabaseTableTest extends BaseCodeComplianceCheckTest
      */
     public function setUp(): void
     {
-        $this->databaseTableCheck = new DatabaseTable(new FilterService());
+        $this->databaseTableCheck = new DatabaseTable(new FilterService(), new CodeBaseAdapter());
     }
 
     /**

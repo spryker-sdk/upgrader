@@ -9,6 +9,7 @@ namespace CodeComplianceTest\Domain\Checks\NotUnique;
 
 use CodeCompliance\Domain\Checks\NotUnique\DatabaseColumn;
 use CodeCompliance\Domain\Service\FilterService;
+use CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
 class DatabaseColumnTest extends BaseCodeComplianceCheckTest
@@ -23,7 +24,7 @@ class DatabaseColumnTest extends BaseCodeComplianceCheckTest
      */
     public function setUp(): void
     {
-        $this->databaseColumnCheck = new DatabaseColumn(new FilterService());
+        $this->databaseColumnCheck = new DatabaseColumn(new FilterService(), new CodeBaseAdapter());
     }
 
     /**

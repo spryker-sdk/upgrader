@@ -10,7 +10,6 @@ namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 use CodeCompliance\Domain\Checks\Filters\FacadeFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
-use ReflectionClass;
 
 class Facade extends AbstractUsedCodeComplianceCheck
 {
@@ -83,8 +82,7 @@ class Facade extends AbstractUsedCodeComplianceCheck
                     continue;
                 }
 
-                /** @var ReflectionClass $codebaseDto */
-                $codebaseDto = new ReflectionClass($namespace);
+                $codebaseDto = $this->codeBaseAdapter->getClassReflectionByClassNamespace($namespace);
                 if (!$codebaseDto) {
                     continue;
                 }

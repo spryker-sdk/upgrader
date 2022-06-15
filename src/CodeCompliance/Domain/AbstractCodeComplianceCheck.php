@@ -8,6 +8,7 @@
 namespace CodeCompliance\Domain;
 
 use Codebase\Application\Dto\CodebaseSourceDto;
+use CodeCompliance\Domain\Adapter\CodeBaseAdapterInterface;
 use CodeCompliance\Domain\Service\FilterService;
 
 abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterface
@@ -28,11 +29,18 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
     protected FilterService $filterService;
 
     /**
-     * @param \CodeCompliance\Domain\Service\FilterService $filterService
+     * @var \CodeCompliance\Domain\Adapter\CodeBaseAdapterInterface
      */
-    public function __construct(FilterService $filterService)
+    protected CodeBaseAdapterInterface $codeBaseAdapter;
+
+    /**
+     * @param \CodeCompliance\Domain\Service\FilterService $filterService
+     * @param \CodeCompliance\Domain\Adapter\CodeBaseAdapterInterface $codeBaseAdapter
+     */
+    public function __construct(FilterService $filterService, CodeBaseAdapterInterface $codeBaseAdapter)
     {
         $this->filterService = $filterService;
+        $this->codeBaseAdapter = $codeBaseAdapter;
     }
 
     /**
