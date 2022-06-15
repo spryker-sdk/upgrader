@@ -123,11 +123,12 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
         foreach ($dependencyNamespaces as $namespace) {
             $namespace = ltrim($namespace, '\\');
 //            $reflection = new ReflectionClass($namespace);
-            $classCodebaseDto = new ClassCodebaseDto();
 
-            $classCodebaseDto->setClassName($namespace);
-
-            $results[$namespace] = $classCodebaseDto;
+            if (class_exists($namespace)) {
+                $classCodebaseDto = new ClassCodebaseDto();
+                $classCodebaseDto->setClassName($namespace);
+                $results[$namespace] = $classCodebaseDto;
+            }
 //            if (isset($sources[$namespace])) {
 //                $results[$namespace] = $sources[$namespace];
 //            }
