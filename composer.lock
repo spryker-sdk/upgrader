@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e2b2322b2200f1c4756500467cb1c42a",
+    "content-hash": "d86c15bb9ee62aa7b3f3fdfaf84c7fe2",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -3001,16 +3001,16 @@
         },
         {
             "name": "spryker-sdk/sdk-contracts",
-            "version": "dev-master",
+            "version": "dev-feature/sdk-524/sdk-592-add-report-abstractions",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/sdk-contracts.git",
-                "reference": "50f2eb477d2742b5f550f666a05378f44390d86d"
+                "reference": "64fb3ec8c633add2e0eb9d66c8f9b02135845b11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/50f2eb477d2742b5f550f666a05378f44390d86d",
-                "reference": "50f2eb477d2742b5f550f666a05378f44390d86d",
+                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/64fb3ec8c633add2e0eb9d66c8f9b02135845b11",
+                "reference": "64fb3ec8c633add2e0eb9d66c8f9b02135845b11",
                 "shasum": ""
             },
             "require": {
@@ -3020,7 +3020,6 @@
                 "phpstan/phpstan": "^1.2",
                 "spryker/code-sniffer": "^0.17.1"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -3034,9 +3033,9 @@
             "description": "Contracts to extend the Spryker SDK",
             "support": {
                 "issues": "https://github.com/spryker-sdk/sdk-contracts/issues",
-                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/master"
+                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/feature/sdk-524/sdk-592-add-report-abstractions"
             },
-            "time": "2022-02-11T07:36:31+00:00"
+            "time": "2022-06-15T10:57:25+00:00"
         },
         {
             "name": "spryker/code-sniffer",
