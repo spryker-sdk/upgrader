@@ -129,13 +129,13 @@ class CodebaseSourceDto
         return $this->phpCodebaseSources;
     }
 
-    /**
-     * @return array<\Codebase\Application\Dto\CodebaseInterface>
-     */
-    public function getPhpCoreCodebaseSources(): array
-    {
-        return $this->phpCoreCodebaseSources;
-    }
+//    /**
+//     * @return array<\Codebase\Application\Dto\CodebaseInterface>
+//     */
+//    public function getPhpCoreCodebaseSources(): array
+//    {
+//        return $this->phpCoreCodebaseSources;
+//    }
 
     /**
      * @return array<\Codebase\Application\Dto\CodebaseInterface>

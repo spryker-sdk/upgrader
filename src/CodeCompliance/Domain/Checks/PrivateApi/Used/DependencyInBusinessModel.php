@@ -7,6 +7,7 @@
 
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
+use Codebase\Application\Dto\ClassCodebaseDto;
 use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
 use CodeCompliance\Domain\Checks\Filters\PrivateApiFilter;
 use CodeCompliance\Domain\Entity\Violation;
@@ -59,12 +60,10 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
             $dependencyNamespaces = $this->skipBasicTypes($params);
             $dependencyCoreSources = $this->getCoreSourcesByNamespaces(
                 $dependencyNamespaces,
-                $this->getCodebaseSourceDto()->getPhpCoreCodebaseSources(),
             );
             $dependencyCoreSources = $this->filterService->filter($dependencyCoreSources, [
                 PrivateApiFilter::PRIVATE_API_FILTER,
             ]);
-
             if (!count($dependencyCoreSources)) {
                 continue;
             }
@@ -117,15 +116,21 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
      *
      * @return array<string, \Codebase\Application\Dto\CodebaseInterface>
      */
-    protected function getCoreSourcesByNamespaces(array $dependencyNamespaces, array $sources): array
+    protected function getCoreSourcesByNamespaces(array $dependencyNamespaces): array
     {
         $results = [];
 
         foreach ($dependencyNamespaces as $namespace) {
             $namespace = ltrim($namespace, '\\');
-            if (isset($sources[$namespace])) {
-                $results[$namespace] = $sources[$namespace];
-            }
+//            $reflection = new ReflectionClass($namespace);
+            $classCodebaseDto = new ClassCodebaseDto();
+
+            $classCodebaseDto->setClassName($namespace);
+
+            $results[$namespace] = $classCodebaseDto;
+//            if (isset($sources[$namespace])) {
+//                $results[$namespace] = $sources[$namespace];
+//            }
         }
 
         return $results;

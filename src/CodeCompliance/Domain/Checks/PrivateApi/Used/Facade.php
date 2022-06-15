@@ -10,6 +10,7 @@ namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 use CodeCompliance\Domain\Checks\Filters\FacadeFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
+use ReflectionClass;
 
 class Facade extends AbstractUsedCodeComplianceCheck
 {
@@ -82,14 +83,14 @@ class Facade extends AbstractUsedCodeComplianceCheck
                     continue;
                 }
 
-                $codebaseCoreSources = $this->getCodebaseSourceDto()->getPhpCoreCodebaseSources();
-                $codebaseDto = $codebaseSources[$namespace] ?? $codebaseCoreSources[$namespace] ?? null;
+                /** @var ReflectionClass $codebaseDto */
+                $codebaseDto = new ReflectionClass($namespace);
                 if (!$codebaseDto) {
                     continue;
                 }
 
                 foreach ($usedMethodNames as $usedMethodName) {
-                    $methodReflection = $codebaseDto->getReflection()->getMethod($usedMethodName);
+                    $methodReflection = $codebaseDto->getMethod($usedMethodName);
                     $hasCoreNamespace = $this->hasCoreNamespace(
                         $this->getCodebaseSourceDto()->getCoreNamespaces(),
                         $methodReflection->getDeclaringClass()->getName(),

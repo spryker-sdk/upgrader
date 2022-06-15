@@ -104,7 +104,7 @@ class SourceParserRequestDto
     {
         return [
             static::PROJECT_TYPE => $this->getProjectPaths(),
-            static::CORE_TYPE => $this->getCorePaths(),
+//            static::CORE_TYPE => $this->getCorePaths(),
         ];
     }
 

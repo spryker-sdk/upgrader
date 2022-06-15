@@ -69,6 +69,7 @@ class SourceParser implements SourceParserInterface
             }
         }
 
+        var_dump(count($codebaseSourceDto->getPhpCodebaseSources()));
         return $codebaseSourceDto;
     }
 }

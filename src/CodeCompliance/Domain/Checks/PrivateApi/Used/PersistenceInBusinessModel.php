@@ -70,15 +70,13 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
                 }
                 $methodNames = $this->parseUsedMethodsFromProperty($classFileBody, $property->getName());
                 $classNamespace = ltrim($classNamespace, '\\');
-                $classTransfer = $this->getCodebaseSourceDto()->getPhpCodebaseSources()[$classNamespace] ??
-                    $this->getCodebaseSourceDto()->getPhpCoreCodebaseSources()[$classNamespace] ?? null;
-
+                $classTransfer = new ReflectionClass($classNamespace);
                 if ($classTransfer === null) {
                     continue;
                 }
 
                 foreach ($methodNames as $methodName) {
-                    $methodReflection = $classTransfer->getReflection()->getMethod($methodName);
+                    $methodReflection = $classTransfer->getMethod($methodName);
                     if (
                         $this->hasCoreNamespace(
                             $this->getCodebaseSourceDto()->getCoreNamespaces(),

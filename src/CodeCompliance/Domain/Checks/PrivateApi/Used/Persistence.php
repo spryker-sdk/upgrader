@@ -76,14 +76,13 @@ class Persistence extends AbstractUsedCodeComplianceCheck
                     continue;
                 }
 
-                $codebaseCoreSources = $this->getCodebaseSourceDto()->getPhpCoreCodebaseSources();
-                $classTransfer = $codebaseSources[$factoryNamespace] ?? $codebaseCoreSources[$factoryNamespace] ?? null;
+                $classTransfer = new \ReflectionClass($factoryNamespace);
                 if ($classTransfer === null) {
                     continue;
                 }
 
                 foreach ($usedMethodNames as $usedMethodName) {
-                    $methodReflection = $classTransfer->getReflection()->getMethod($usedMethodName);
+                    $methodReflection = $classTransfer->getMethod($usedMethodName);
                     $hasCoreNamespace = $this->hasCoreNamespace($this->getCodebaseSourceDto()->getCoreNamespaces(), $methodReflection->getDeclaringClass()->getName());
 
                     if ($hasCoreNamespace) {
