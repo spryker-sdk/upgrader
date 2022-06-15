@@ -65,6 +65,9 @@ class SourceParser implements SourceParserInterface
             foreach ($this->sourceParsers as $sourceParser) {
                 $extensions = [static::FINDER_PREFIX . $sourceParser->getExtension()];
                 $finder = $this->sourceFinder->findSourceByExtension($extensions, $paths, $codebaseRequestDto->getExcludeList());
+                if($type == SourceParserRequestDto::CORE_TYPE && $sourceParser->getExtension() == 'php') {
+                    continue;
+                }
                 $codebaseSourceDto = $sourceParser->parse($finder, $codebaseSourceDto);
             }
         }
