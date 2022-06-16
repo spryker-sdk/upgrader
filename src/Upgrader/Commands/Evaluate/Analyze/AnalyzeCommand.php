@@ -111,6 +111,8 @@ class AnalyzeCommand implements ViolationReportableInterface, ExecutableCommandI
      */
     public function execute(ContextInterface $context): ContextInterface
     {
+        $time_start = microtime(true);
+
         $codebaseRequestDto = new CodeBaseRequestDto(
             $this->configurationProvider->getToolingConfigurationFilePath(),
             $this->configurationProvider->getSrcPath(),
@@ -122,6 +124,7 @@ class AnalyzeCommand implements ViolationReportableInterface, ExecutableCommandI
         $codebaseSourceDto = $this->codebaseService->readCodeBase($codebaseRequestDto);
 
         static::$report = $this->codeComplianceService->analyze($codebaseSourceDto);
+        echo 'Total execution time in seconds: ' . (microtime(true) - $time_start);
 
         $context->setExitCode(ContextInterface::SUCCESS_EXIT_CODE);
 

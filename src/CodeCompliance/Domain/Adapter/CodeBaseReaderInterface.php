@@ -9,7 +9,7 @@ namespace CodeCompliance\Domain\Adapter;
 
 use ReflectionClass;
 
-interface CodeBaseAdapterInterface
+interface CodeBaseReaderInterface
 {
     /**
      * @param string $classNamespace

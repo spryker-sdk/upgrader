@@ -9,7 +9,7 @@ namespace CodeComplianceTest\Domain\Checks\NotUnique;
 
 use CodeCompliance\Domain\Checks\NotUnique\TransferName;
 use CodeCompliance\Domain\Service\FilterService;
-use CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter;
+use CodeCompliance\Infrastructure\Adapter\CodeBaseReader;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
 class TransferNameTest extends BaseCodeComplianceCheckTest
@@ -24,7 +24,7 @@ class TransferNameTest extends BaseCodeComplianceCheckTest
      */
     public function setUp(): void
     {
-        $this->transferNameCheck = new TransferName(new FilterService(), new CodeBaseAdapter());
+        $this->transferNameCheck = new TransferName(new FilterService(), new CodeBaseReader());
     }
 
     /**
