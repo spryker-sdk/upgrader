@@ -7,10 +7,10 @@
 
 namespace CodeCompliance\Infrastructure\Adapter;
 
-use CodeCompliance\Domain\Adapter\CodeBaseReaderInterface;
+use CodeCompliance\Domain\Adapter\CodeBaseServiceInterface;
 use ReflectionClass;
 
-class CodeBaseReader implements CodeBaseReaderInterface
+class CodeBaseService implements CodeBaseServiceInterface
 {
     /**
      * @param string $classNamespace

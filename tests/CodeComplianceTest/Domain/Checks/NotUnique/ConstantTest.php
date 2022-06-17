@@ -9,7 +9,7 @@ namespace CodeComplianceTest\Domain\Checks\NotUnique;
 
 use CodeCompliance\Domain\Checks\NotUnique\Constant;
 use CodeCompliance\Domain\Service\FilterService;
-use CodeCompliance\Infrastructure\Adapter\CodeBaseReader;
+use CodeCompliance\Infrastructure\Adapter\CodeBaseService;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
 class ConstantTest extends BaseCodeComplianceCheckTest
@@ -24,7 +24,7 @@ class ConstantTest extends BaseCodeComplianceCheckTest
      */
     public function setUp(): void
     {
-        $this->constant = new Constant(new FilterService(), new CodeBaseReader());
+        $this->constant = new Constant(new FilterService(), new CodeBaseService());
     }
 
     /**
