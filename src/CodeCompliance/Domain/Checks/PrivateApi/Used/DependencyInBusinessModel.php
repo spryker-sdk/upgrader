@@ -9,6 +9,7 @@ namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
 use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
+use CodeCompliance\Domain\Checks\Filters\IgnoreListFilter;
 use CodeCompliance\Domain\Checks\Filters\PrivateApiFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
@@ -61,6 +62,7 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
             $dependencyCoreSources = $this->getCoreSourcesByNamespaces($dependencyNamespaces);
             $dependencyCoreSources = $this->filterService->filter($dependencyCoreSources, [
                 PrivateApiFilter::PRIVATE_API_FILTER,
+                IgnoreListFilter::IGNORE_LIST_FILTER
             ]);
             if (!count($dependencyCoreSources)) {
                 continue;
