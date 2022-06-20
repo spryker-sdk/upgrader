@@ -62,7 +62,7 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
             $dependencyCoreSources = $this->getCoreSourcesByNamespaces($dependencyNamespaces);
             $dependencyCoreSources = $this->filterService->filter($dependencyCoreSources, [
                 PrivateApiFilter::PRIVATE_API_FILTER,
-                IgnoreListFilter::IGNORE_LIST_FILTER
+                IgnoreListFilter::IGNORE_LIST_FILTER,
             ]);
             if (!count($dependencyCoreSources)) {
                 continue;
