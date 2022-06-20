@@ -24,7 +24,9 @@ class DatabaseTableTest extends BaseCodeComplianceCheckTest
      */
     public function setUp(): void
     {
-        $this->databaseTableCheck = new DatabaseTable(new FilterService(), new CodeBaseService());
+        /** @var \CodeCompliance\Infrastructure\Adapter\CodeBaseService $codeBaseService */
+        $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
+        $this->databaseTableCheck = new DatabaseTable(new FilterService(), $codeBaseService);
     }
 
     /**

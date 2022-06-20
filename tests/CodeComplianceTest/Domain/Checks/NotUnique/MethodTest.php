@@ -25,7 +25,9 @@ class MethodTest extends BaseCodeComplianceCheckTest
      */
     public function setUp(): void
     {
-        $this->methodCheck = new Method(new FilterService([new PluginFilter()]), new CodeBaseService());
+        /** @var \CodeCompliance\Infrastructure\Adapter\CodeBaseService $codeBaseService */
+        $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
+        $this->methodCheck = new Method(new FilterService([new PluginFilter()]), $codeBaseService);
     }
 
     /**

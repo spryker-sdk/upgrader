@@ -7,22 +7,34 @@
 
 namespace CodeCompliance\Infrastructure\Adapter;
 
+use Codebase\Application\Dto\ClassCodebaseDto;
+use Codebase\Infrastructure\SourceParser\Parser\PhpParserInterface;
 use CodeCompliance\Domain\Adapter\CodeBaseServiceInterface;
-use ReflectionClass;
 
 class CodeBaseService implements CodeBaseServiceInterface
 {
     /**
-     * @param string $classNamespace
-     *
-     * @return \ReflectionClass|null
+     * @var \Codebase\Infrastructure\SourceParser\Parser\PhpParserInterface
      */
-    public function getClassReflectionByClassNamespace(string $classNamespace): ?ReflectionClass
-    {
-        if (class_exists($classNamespace) || interface_exists($classNamespace)) {
-            return new ReflectionClass($classNamespace);
-        }
+    protected PhpParserInterface $phpParser;
 
-        return null;
+    /**
+     * @param \Codebase\Infrastructure\SourceParser\Parser\PhpParserInterface $phpParser
+     */
+    public function __construct(PhpParserInterface $phpParser)
+    {
+        $this->phpParser = $phpParser;
+    }
+
+    /**
+     * @param string $classNamespace
+     * @param array<string> $projectPrefixes
+     * @param array<string> $coreNamespaces
+     *
+     * @return \Codebase\Application\Dto\ClassCodebaseDto|null
+     */
+    public function parsePhpClass(string $classNamespace, array $projectPrefixes, array $coreNamespaces = []): ?ClassCodebaseDto
+    {
+        return $this->phpParser->parseClass($classNamespace, $projectPrefixes, $coreNamespaces);
     }
 }

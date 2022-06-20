@@ -44,8 +44,8 @@ class Persistence extends AbstractUsedCodeComplianceCheck
      */
     public function getViolations(): array
     {
-        $codebaseSources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
-        $sources = $this->filterService->filter($codebaseSources, [PersistenceFilter::PERSISTENCE_FILTER]);
+        $codebaseSourceDto = $this->getCodebaseSourceDto();
+        $sources = $this->filterService->filter($codebaseSourceDto->getPhpCodebaseSources(), [PersistenceFilter::PERSISTENCE_FILTER]);
         $violations = [];
 
         foreach (static::METHODS_TO_CHECK as $methodToCheck) {
@@ -76,14 +76,18 @@ class Persistence extends AbstractUsedCodeComplianceCheck
                     continue;
                 }
 
-                $classTransfer = $this->codeBaseAdapter->getClassReflectionByClassNamespace($factoryNamespace);
+                $classTransfer = $this->codeBaseAdapter->parsePhpClass(
+                    $factoryNamespace,
+                    $codebaseSourceDto->getProjectPrefixes(),
+                    $codebaseSourceDto->getCoreNamespaces(),
+                );
                 if ($classTransfer === null) {
                     continue;
                 }
 
                 foreach ($usedMethodNames as $usedMethodName) {
-                    $methodReflection = $classTransfer->getMethod($usedMethodName);
-                    $hasCoreNamespace = $this->hasCoreNamespace($this->getCodebaseSourceDto()->getCoreNamespaces(), $methodReflection->getDeclaringClass()->getName());
+                    $methodReflection = $classTransfer->getReflection()->getMethod($usedMethodName);
+                    $hasCoreNamespace = $this->hasCoreNamespace($codebaseSourceDto->getCoreNamespaces(), $methodReflection->getDeclaringClass()->getName());
 
                     if ($hasCoreNamespace) {
                         $guideline = sprintf($this->getGuideline(), $usedMethodName, $source->getClassName());

@@ -5,18 +5,24 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace CodeCompliance\Domain\Adapter;
+namespace Codebase\Infrastructure\SourceParser\Parser;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
 
-interface CodeBaseServiceInterface
+interface PhpParserInterface extends ParserInterface
 {
     /**
-     * @param string $classNamespace
+     * @param string $namespace
      * @param array<string> $projectPrefixes
      * @param array<string> $coreNamespaces
+     * @param \Codebase\Application\Dto\ClassCodebaseDto|null $transfer
      *
      * @return \Codebase\Application\Dto\ClassCodebaseDto|null
      */
-    public function parsePhpClass(string $classNamespace, array $projectPrefixes, array $coreNamespaces = []): ?ClassCodebaseDto;
+    public function parseClass(
+        string $namespace,
+        array $projectPrefixes,
+        array $coreNamespaces = [],
+        ?ClassCodebaseDto $transfer = null
+    ): ?ClassCodebaseDto;
 }

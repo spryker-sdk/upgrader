@@ -24,7 +24,9 @@ class TransferNameTest extends BaseCodeComplianceCheckTest
      */
     public function setUp(): void
     {
-        $this->transferNameCheck = new TransferName(new FilterService(), new CodeBaseService());
+        /** @var \CodeCompliance\Infrastructure\Adapter\CodeBaseService $codeBaseService */
+        $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
+        $this->transferNameCheck = new TransferName(new FilterService(), $codeBaseService);
     }
 
     /**

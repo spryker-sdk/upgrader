@@ -24,7 +24,9 @@ class ConstantTest extends BaseCodeComplianceCheckTest
      */
     public function setUp(): void
     {
-        $this->constant = new Constant(new FilterService(), new CodeBaseService());
+        /** @var \CodeCompliance\Infrastructure\Adapter\CodeBaseService $codeBaseService */
+        $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
+        $this->constant = new Constant(new FilterService(), $codeBaseService);
     }
 
     /**

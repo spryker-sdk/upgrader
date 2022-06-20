@@ -24,7 +24,9 @@ class DatabaseColumnTest extends BaseCodeComplianceCheckTest
      */
     public function setUp(): void
     {
-        $this->databaseColumnCheck = new DatabaseColumn(new FilterService(), new CodeBaseService());
+        /** @var \CodeCompliance\Infrastructure\Adapter\CodeBaseService $codeBaseService */
+        $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
+        $this->databaseColumnCheck = new DatabaseColumn(new FilterService(), $codeBaseService);
     }
 
     /**

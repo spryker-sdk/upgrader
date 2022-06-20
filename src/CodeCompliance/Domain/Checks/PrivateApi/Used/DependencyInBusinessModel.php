@@ -7,7 +7,6 @@
 
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
-use Codebase\Application\Dto\ClassCodebaseDto;
 use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
 use CodeCompliance\Domain\Checks\Filters\IgnoreListFilter;
 use CodeCompliance\Domain\Checks\Filters\PrivateApiFilter;
@@ -62,7 +61,7 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
             $dependencyCoreSources = $this->getCoreSourcesByNamespaces($dependencyNamespaces);
             $dependencyCoreSources = $this->filterService->filter($dependencyCoreSources, [
                 PrivateApiFilter::PRIVATE_API_FILTER,
-                IgnoreListFilter::IGNORE_LIST_FILTER
+                IgnoreListFilter::IGNORE_LIST_FILTER,
             ]);
             if (!count($dependencyCoreSources)) {
                 continue;
@@ -114,7 +113,7 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
     /**
      * @param array<string> $dependencyNamespaces
      *
-     * @return array<string, \Codebase\Application\Dto\CodebaseInterface>
+     * @return array<int, \Codebase\Application\Dto\CodebaseInterface>
      */
     protected function getCoreSourcesByNamespaces(array $dependencyNamespaces): array
     {
@@ -127,10 +126,14 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
                 continue;
             }
 
-            if (class_exists($namespace) || interface_exists($namespace)) {
-                $classCodebaseDto = new ClassCodebaseDto();
-                $classCodebaseDto->setClassName($namespace);
-                $results[$namespace] = $classCodebaseDto;
+            $classTransfer = $this->codeBaseAdapter->parsePhpClass(
+                $namespace,
+                $this->getCodebaseSourceDto()->getProjectPrefixes(),
+                $this->getCodebaseSourceDto()->getCoreNamespaces(),
+            );
+
+            if ($classTransfer) {
+                $results[] = $classTransfer;
             }
         }
 
