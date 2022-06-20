@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace CodeCompliance\Domain\Adapter;
+namespace CodeCompliance\Domain\Service;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
 

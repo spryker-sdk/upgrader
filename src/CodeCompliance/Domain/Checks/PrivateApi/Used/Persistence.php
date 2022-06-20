@@ -76,7 +76,7 @@ class Persistence extends AbstractUsedCodeComplianceCheck
                     continue;
                 }
 
-                $classTransfer = $this->codeBaseAdapter->parsePhpClass(
+                $classTransfer = $this->codeBaseService->parsePhpClass(
                     $factoryNamespace,
                     $codebaseSourceDto->getProjectPrefixes(),
                     $codebaseSourceDto->getCoreNamespaces(),

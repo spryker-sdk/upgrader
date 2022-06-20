@@ -9,7 +9,7 @@ namespace CodeCompliance\Infrastructure\Adapter;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
 use Codebase\Infrastructure\SourceParser\Parser\PhpParserInterface;
-use CodeCompliance\Domain\Adapter\CodeBaseServiceInterface;
+use CodeCompliance\Domain\Service\CodeBaseServiceInterface;
 
 class CodeBaseService implements CodeBaseServiceInterface
 {

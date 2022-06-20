@@ -82,7 +82,7 @@ class Facade extends AbstractUsedCodeComplianceCheck
                     continue;
                 }
 
-                $codebaseDto = $this->codeBaseAdapter->parsePhpClass(
+                $codebaseDto = $this->codeBaseService->parsePhpClass(
                     $namespace,
                     $codebaseSourceDto->getProjectPrefixes(),
                     $codebaseSourceDto->getCoreNamespaces(),
