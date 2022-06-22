@@ -40,8 +40,6 @@ class ReportListener
      */
     public function onConsoleCommandTerminate(ConsoleTerminateEvent $event): void
     {
-        $event->setExitCode(Command::SUCCESS);
-
         if (
             $event->getCommand() &&
             (
