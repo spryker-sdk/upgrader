@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace CodeCompliance\Infrastructure\Adapter;
+namespace CodeCompliance\Infrastructure\Service;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
 use Codebase\Infrastructure\SourceParser\Parser\PhpParserInterface;
