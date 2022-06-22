@@ -60,12 +60,9 @@ class TransferProperty extends AbstractCodeComplianceCheck
             $isTransferUniqueOnTheProjectLevel = !in_array($transfer->getName(), $nameFromCoreTransfers);
 
             if (
-                $propertiesWithoutPrefix !== []
-                &&
-                $propertiesWithoutPrefix !== null
-                &&
-                !$isTransferPrefixExist
-                &&
+                $propertiesWithoutPrefix !== [] &&
+                $propertiesWithoutPrefix !== null &&
+                !$isTransferPrefixExist &&
                 !$isTransferUniqueOnTheProjectLevel
             ) {
                 foreach ($propertiesWithoutPrefix as $propertyWithoutPrefix) {
