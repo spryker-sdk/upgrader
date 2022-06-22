@@ -36,29 +36,38 @@ class TransferProperty extends AbstractCodeComplianceCheck
     {
         $violations = [];
         $coreSchemas = [];
-        $coreSources = $this->getCodebaseSourceDto()->getTransferSchemaCoreCodebaseSources();
 
-        if ($coreSources !== []) {
-            foreach ($coreSources as $coreSource) {
-                $coreSchemas[$coreSource->getName()] = array_merge($coreSchemas[$coreSource->getName()] ?? [], $coreSource->getChildElements());
-            }
+        $coreCodebaseSources = $this->getCodebaseSourceDto()->getTransferSchemaCoreCodebaseSources();
+        $nameFromCoreTransfers = array_column($coreCodebaseSources, static::COLUMN_KEY_NAME);
+
+        foreach ($coreCodebaseSources as $coreSource) {
+            $coreSchemas[$coreSource->getName()] = array_merge($coreSchemas[$coreSource->getName()] ?? [], $coreSource->getChildElements());
         }
-        $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
+        $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();
         foreach ($this->getCodebaseSourceDto()->getTransferSchemaCodebaseSources() as $transfer) {
             if ($transfer->getChildElements() === []) {
                 continue;
             }
-            $sourceName = $transfer->getName();
+            $transferName = $transfer->getName();
             $propertiesWithoutPrefix = array_filter(
                 $transfer->getChildElements(),
-                function (string $property) use ($projectPrefixes, $sourceName, $coreSchemas) {
-                    return !in_array($property, $coreSchemas[$sourceName] ?? []) && !$this->hasProjectPrefix($property, $projectPrefixes);
+                function (string $property) use ($projectPrefixes, $transferName, $coreSchemas) {
+                    return !in_array($property, $coreSchemas[$transferName] ?? []) && !$this->hasProjectPrefix($property, $projectPrefixes);
                 },
             );
             $isTransferPrefixExist = $this->hasProjectPrefix($transfer->getName(), $projectPrefixes);
+            $isTransferUniqueOnTheProjectLevel = !in_array($transfer->getName(), $nameFromCoreTransfers);
 
-            if ($propertiesWithoutPrefix !== [] && $propertiesWithoutPrefix !== null && !$isTransferPrefixExist) {
+            if (
+                $propertiesWithoutPrefix !== []
+                &&
+                $propertiesWithoutPrefix !== null
+                &&
+                !$isTransferPrefixExist
+                &&
+                !$isTransferUniqueOnTheProjectLevel
+            ) {
                 foreach ($propertiesWithoutPrefix as $propertyWithoutPrefix) {
                     $guideline = sprintf(
                         $this->getGuideline(),
