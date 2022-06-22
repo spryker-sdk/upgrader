@@ -32,7 +32,7 @@ class IgnoreListFilter extends AbstractIgnoreListFilter
     public function filter(array $sources): array
     {
         return array_filter($sources, function (CodebaseInterface $source) {
-            return (!$this->isClassFromIgnoreList((string)$source->getClassName()));
+            return !$this->isClassFromIgnoreList((string)$source->getClassName());
         });
     }
 }

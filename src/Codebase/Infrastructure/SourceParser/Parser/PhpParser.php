@@ -109,7 +109,7 @@ class PhpParser implements PhpParserInterface
     protected function requireAutoload(): void
     {
         $autoloadPaths = [
-            getcwd() . '/vendor/autoload_runtime.php',
+            getcwd() . '/vendor/autoload.php',
         ];
 
         foreach ($autoloadPaths as $autoloadPath) {
