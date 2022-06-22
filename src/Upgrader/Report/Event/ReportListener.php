@@ -40,6 +40,8 @@ class ReportListener
      */
     public function onConsoleCommandTerminate(ConsoleTerminateEvent $event): void
     {
+        $event->setExitCode(Command::SUCCESS);
+
         if (
             $event->getCommand() &&
             (
@@ -57,7 +59,5 @@ class ReportListener
             $event->getOutput()->writeln('Total messages: ' . count((array)$messages));
             $event->setExitCode(Command::FAILURE);
         }
-
-        $event->setExitCode(Command::SUCCESS);
     }
 }
