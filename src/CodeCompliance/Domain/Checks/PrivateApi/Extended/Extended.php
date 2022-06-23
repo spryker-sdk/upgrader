@@ -10,7 +10,7 @@ namespace CodeCompliance\Domain\Checks\PrivateApi\Extended;
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
 use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
 use CodeCompliance\Domain\Checks\Filters\CoreExtensionFilter;
-use CodeCompliance\Domain\Checks\Filters\IgnoreListFilter;
+use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 
@@ -41,7 +41,7 @@ class Extended extends AbstractCodeComplianceCheck
         $filteredSources = $this->filterService->filter($sources, [
             BusinessModelFilter::BUSINESS_MODEL_FILTER,
             CoreExtensionFilter::CORE_EXTENSION_FILTER,
-            IgnoreListFilter::IGNORE_LIST_FILTER,
+            IgnoreListParentFilter::IGNORE_LIST_PARENT_FILTER,
         ]);
 
         $violations = [];

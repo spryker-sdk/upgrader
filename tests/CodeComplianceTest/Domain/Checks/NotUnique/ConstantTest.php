@@ -9,7 +9,7 @@ namespace CodeComplianceTest\Domain\Checks\NotUnique;
 
 use CodeCompliance\Domain\Checks\NotUnique\Constant;
 use CodeCompliance\Domain\Service\FilterService;
-use CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter;
+use CodeCompliance\Infrastructure\Service\CodeBaseService;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
 class ConstantTest extends BaseCodeComplianceCheckTest
@@ -24,7 +24,9 @@ class ConstantTest extends BaseCodeComplianceCheckTest
      */
     public function setUp(): void
     {
-        $this->constant = new Constant(new FilterService(), new CodeBaseAdapter());
+        /** @var \CodeCompliance\Infrastructure\Service\CodeBaseService $codeBaseService */
+        $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
+        $this->constant = new Constant(new FilterService(), $codeBaseService);
     }
 
     /**

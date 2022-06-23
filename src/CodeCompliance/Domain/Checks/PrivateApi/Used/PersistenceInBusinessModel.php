@@ -38,7 +38,8 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
      */
     public function getViolations(): array
     {
-        $sources = $this->filterService->filter($this->getCodebaseSourceDto()->getPhpCodebaseSources(), [
+        $codebaseSourceDto = $this->getCodebaseSourceDto();
+        $sources = $this->filterService->filter($codebaseSourceDto->getPhpCodebaseSources(), [
             BusinessModelFilter::BUSINESS_MODEL_FILTER,
         ]);
         $violations = [];
@@ -69,16 +70,20 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
                     continue;
                 }
                 $methodNames = $this->parseUsedMethodsFromProperty($classFileBody, $property->getName());
-                $classTransfer = $this->codeBaseAdapter->getClassReflectionByClassNamespace(ltrim($classNamespace, '\\'));
+                $classTransfer = $this->codeBaseService->parsePhpClass(
+                    ltrim($classNamespace, '\\'),
+                    $codebaseSourceDto->getProjectPrefixes(),
+                    $codebaseSourceDto->getCoreNamespaces(),
+                );
                 if ($classTransfer === null) {
                     continue;
                 }
 
                 foreach ($methodNames as $methodName) {
-                    $methodReflection = $classTransfer->getMethod($methodName);
+                    $methodReflection = $classTransfer->getReflection()->getMethod($methodName);
                     if (
                         $this->hasCoreNamespace(
-                            $this->getCodebaseSourceDto()->getCoreNamespaces(),
+                            $codebaseSourceDto->getCoreNamespaces(),
                             ltrim($methodReflection->getDeclaringClass()->getName(), '\\'),
                         )
                     ) {

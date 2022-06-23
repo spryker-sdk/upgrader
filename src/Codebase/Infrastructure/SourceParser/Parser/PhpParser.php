@@ -22,7 +22,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * @phpstan-template T of object
  */
-class PhpParser implements ParserInterface
+class PhpParser implements PhpParserInterface
 {
     /**
      * @var string
@@ -145,7 +145,7 @@ class PhpParser implements ParserInterface
      *
      * @return \Codebase\Application\Dto\ClassCodebaseDto|null
      */
-    protected function parseClass(
+    public function parseClass(
         string $namespace,
         array $projectPrefixes,
         array $coreNamespaces = [],
