@@ -8,7 +8,7 @@
 namespace CodeComplianceTest\Domain\Checks\Filters;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
-use CodeCompliance\Domain\Checks\Filters\IgnoreListFilter;
+use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
 
 class IgnoreListFilterTest extends BaseFilterTest
 {
@@ -33,7 +33,7 @@ class IgnoreListFilterTest extends BaseFilterTest
     public function testFilter(): void
     {
         // Arrange
-        $businessFactoryFilter = new IgnoreListFilter();
+        $businessFactoryFilter = new IgnoreListParentFilter();
 
         // Act
         $filteredSources = $businessFactoryFilter->filter($this->getCodebaseObjects());
