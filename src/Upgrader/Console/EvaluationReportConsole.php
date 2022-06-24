@@ -17,7 +17,7 @@ class EvaluationReportConsole extends Command
     /**
      * @var string
      */
-    protected const NAME = 'evaluation:report';
+    protected const NAME = 'analyze:php:code-compliance-report';
 
     /**
      * @var string

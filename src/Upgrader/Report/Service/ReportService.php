@@ -7,6 +7,8 @@
 
 namespace Upgrader\Report\Service;
 
+use CodeCompliance\Domain\Entity\Report;
+use SprykerSdk\SdkContracts\Violation\ViolationInterface;
 use Symfony\Component\Yaml\Yaml;
 use Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask;
 
@@ -31,6 +33,11 @@ class ReportService
      * @var string
      */
     protected const KEY_VIOLATIONS = 'violations';
+
+    /**
+     * @var string
+     */
+    protected const REPORTS_DIR = 'reports';
 
     /**
      * @var \Symfony\Component\Yaml\Yaml;
@@ -67,5 +74,72 @@ class ReportService
         }
 
         return $messages;
+    }
+
+    /**
+     * @param \CodeCompliance\Domain\Entity\Report $report
+     *
+     * @return void
+     */
+    public function save(Report $report): void
+    {
+        $violationReportStructure = $this->getViolationReportStructure($report);
+
+        if (!is_dir(static::REPORTS_DIR)) {
+            mkdir(static::REPORTS_DIR, 0777, true);
+        }
+
+        $violationReportData = Yaml::dump($violationReportStructure);
+        $reportPath = sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
+
+        file_put_contents($reportPath, $violationReportData);
+    }
+
+    /**
+     * @param \CodeCompliance\Domain\Entity\Report $report
+     *
+     * @return array<string, mixed>
+     */
+    protected function getViolationReportStructure(Report $report): array
+    {
+        $violationReportStructure[static::KEY_VIOLATIONS] = [];
+
+        foreach ($report->getViolations() as $violation) {
+            $violationReportStructure[static::KEY_VIOLATIONS][] = $this->convertViolationToArray($violation);
+        }
+
+        return $violationReportStructure;
+    }
+
+    /**
+     * @param \SprykerSdk\SdkContracts\Violation\ViolationInterface $violation
+     *
+     * @return array<string, mixed>
+     */
+    protected function convertViolationToArray(ViolationInterface $violation): array
+    {
+        $violationData = [];
+
+        $violationData['id'] = $violation->getId();
+        $violationData['message'] = $violation->getMessage();
+        $violationData['severity'] = $violation->getSeverity();
+        $violationData['priority'] = $violation->priority();
+        $violationData['class'] = $violation->getClass();
+        $violationData['method'] = $violation->getMethod();
+        $violationData['start_line'] = $violation->getStartLine();
+        $violationData['end_line'] = $violation->getEndLine();
+        $violationData['start_column'] = $violation->getStartColumn();
+        $violationData['end_column'] = $violation->getStartColumn();
+        $violationData['additional_attributes'] = $violation->getAdditionalAttributes();
+        $violationData['fixable'] = $violation->isFixable();
+        $violationData['produced_by'] = $violation->producedBy();
+        $violationData['fix'] = $violation->getFix() ?
+            [
+                'type' => $violation->getFix()->getType(),
+                'action' => $violation->getFix()->getAction(),
+            ] :
+            null;
+
+        return $violationData;
     }
 }

@@ -59,6 +59,8 @@ class UpgraderConsole extends Command
     {
         $stepsExecutionDto = $this->upgradeService->upgrade();
 
+        $output->writeln((string)$stepsExecutionDto->getOutputMessage());
+
         return Command::SUCCESS;
     }
 }
