@@ -15,19 +15,21 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Yaml;
 use Upgrader\Configuration\ConfigurationProvider;
+use Upgrader\Report\Service\ReportService;
 
 class EvaluateConsole extends Command
 {
     /**
      * @var string
      */
-    protected const NAME = 'evaluate:codebase';
+    protected const NAME = 'analyze:php:code-compliance';
 
     /**
      * @var string
      */
-    protected const DESCRIPTION = 'Evaluates codebase on Paas+ compatibility.';
+    protected const DESCRIPTION = 'Analyze codebase on Paas+ compatibility.';
 
     /**
      * @var \CodeCompliance\Domain\Entity\Report|null
@@ -99,10 +101,18 @@ class EvaluateConsole extends Command
         static::$report = $this->codeComplianceService->analyze($codebaseSourceDto);
 
         if (static::$report->hasError()) {
+
+            dd(static::$report);
+            if (!is_dir('reports')) {
+                mkdir('reports');
+            }
+
+            $yaml = Yaml::dump(static::$report);
+            file_put_contents(getcwd() . sprintf(ReportService::FILE_PATH_PATTERN, static::NAME), $yaml);
+
             return Command::FAILURE;
         }
 
         return Command::SUCCESS;
-
     }
 }

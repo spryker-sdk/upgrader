@@ -77,6 +77,8 @@ class PhpParser implements PhpParserInterface
                 continue;
             }
 
+            var_dump($file->getPath());
+
             $originalSyntaxTree = $this->parser->parse($file->getContents());
 
             if ($originalSyntaxTree) {

@@ -15,6 +15,11 @@ class ReportService
     /**
      * @var string
      */
+    public const FILE_PATH_PATTERN = '/reports/%s.violations.yaml';
+
+    /**
+     * @var string
+     */
     protected const KEY_PRODUCED_BY = 'produced_by';
 
     /**
@@ -45,7 +50,7 @@ class ReportService
      */
     public function report(): ?array
     {
-        $path = getcwd() . sprintf('/reports/%s.violations.yaml', AnalyzeTask::ID_ANALYZE_TASK);
+        $path = getcwd() . sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
 
         if (!file_exists($path)) {
             return null;

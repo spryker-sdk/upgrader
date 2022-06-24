@@ -2,6 +2,8 @@
 vendor/
 var/
 
+.DS_Store
+
 # tests
 tests/**/_generated/
 tests/_data/src/
