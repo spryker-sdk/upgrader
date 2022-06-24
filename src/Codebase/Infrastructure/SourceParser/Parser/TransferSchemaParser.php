@@ -51,8 +51,6 @@ class TransferSchemaParser extends XmlParser
                 continue;
             }
 
-            var_dump($file->getPath());
-
             $fileContent = (string)file_get_contents((string)$file->getRealPath());
 
             if (trim($fileContent) === '' || !$fileContent) {

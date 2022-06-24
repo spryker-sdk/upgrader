@@ -41,9 +41,9 @@ services:
         arguments:
             - '@Codebase\Infrastructure\SourceFinder\SourceFinder'
             - {
-#                param1: '@php.parser',
-                param2: '@transfer_schema.parser'
-#                param3: '@database_schema.parser'
+                param1: '@php.parser',
+                param2: '@transfer_schema.parser',
+                param3: '@database_schema.parser'
             }
 
     tooling_configuration_validator.project_prefixes:
