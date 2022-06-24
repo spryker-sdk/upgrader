@@ -14,10 +14,11 @@ services:
     command: "/bin/bash"
     volumes:
        - data-volume:/data:nocopy
-#      - ../b2c-demo-shop:/data/project
+       - project-volume:/data/project
 
 volumes:
     data-volume:
+    project-volume:
 
 x-mutagen:
   sync:
@@ -29,6 +30,12 @@ x-mutagen:
           - '/.git*'
           - '.idea'
           - '.DS_Store'
+          - '/data/project'
+
+    project-volume-sync:
+      alpha: "../b2c-demo-shop"
+      beta: "volume://project-volume"
+      mode: one-way-safe
 
     data-volume-sync:
       alpha: "."
