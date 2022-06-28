@@ -101,6 +101,9 @@ services:
     ignore_list.filter:
         class: CodeCompliance\Domain\Checks\Filters\IgnoreListFilter
 
+    ignore_list_parent.filter:
+        class: CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter
+
     persistence.filter:
         class: CodeCompliance\Domain\Checks\Filters\PersistenceFilter
 
@@ -121,5 +124,6 @@ services:
                 param5: '@ignore_list.filter',
                 param6: '@persistence.filter',
                 param7: '@private_api.filter',
-                param8: '@plugin.filter'
+                param8: '@plugin.filter',
+                param9: '@ignore_list_parent.filter'
             }

@@ -44,8 +44,8 @@ class Facade extends AbstractUsedCodeComplianceCheck
      */
     public function getViolations(): array
     {
-        $codebaseSources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
-        $filteredSources = $this->filterService->filter($codebaseSources, [
+        $codebaseSourceDto = $this->getCodebaseSourceDto();
+        $filteredSources = $this->filterService->filter($codebaseSourceDto->getPhpCodebaseSources(), [
             FacadeFilter::FACADE_FILTER,
         ]);
         $violations = [];
@@ -82,8 +82,11 @@ class Facade extends AbstractUsedCodeComplianceCheck
                     continue;
                 }
 
-                $codebaseCoreSources = $this->getCodebaseSourceDto()->getPhpCoreCodebaseSources();
-                $codebaseDto = $codebaseSources[$namespace] ?? $codebaseCoreSources[$namespace] ?? null;
+                $codebaseDto = $this->codeBaseService->parsePhpClass(
+                    $namespace,
+                    $codebaseSourceDto->getProjectPrefixes(),
+                    $codebaseSourceDto->getCoreNamespaces(),
+                );
                 if (!$codebaseDto) {
                     continue;
                 }
@@ -91,7 +94,7 @@ class Facade extends AbstractUsedCodeComplianceCheck
                 foreach ($usedMethodNames as $usedMethodName) {
                     $methodReflection = $codebaseDto->getReflection()->getMethod($usedMethodName);
                     $hasCoreNamespace = $this->hasCoreNamespace(
-                        $this->getCodebaseSourceDto()->getCoreNamespaces(),
+                        $codebaseSourceDto->getCoreNamespaces(),
                         $methodReflection->getDeclaringClass()->getName(),
                     );
                     if ($hasCoreNamespace) {
