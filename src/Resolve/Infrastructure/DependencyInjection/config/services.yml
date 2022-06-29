@@ -1,0 +1,29 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+#Resolve
+    Resolve\Application\:
+        resource: '../../../../Resolve/Application/*'
+        exclude: [ '../../../../Resolve/Application/Service/*Service.php' ]
+
+    Resolve\Infrastructure\:
+        resource: '../../../../Resolve/Infrastructure/*'
+
+    Resolve\Domain\:
+        resource: '../../../../Resolve/Domain/*'
+
+    is_not_unique_constant.task:
+        class: Resolve\Application\Checks\NotUnique\ConstantCheck
+
+    Resolve\Application\Service\ResolveService:
+        class: Resolve\Application\Service\ResolveService
+        arguments:
+            - '@codebase.service'
+            - {
+                param1: '@is_not_unique_constant.task'
+              }
+
+    Resolve\Application\Service\ResolveServiceInterface: '@Resolve\Application\Service\ResolveService'
