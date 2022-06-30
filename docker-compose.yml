@@ -13,32 +13,6 @@ services:
     tty: true
     command: "/bin/bash"
     volumes:
-       - data-volume:/data:nocopy
-       - project-volume:/data/project
-
-volumes:
-    data-volume:
-    project-volume:
-
-x-mutagen:
-  sync:
-    defaults:
-      symlink:
-        mode: posix-raw
-      ignore:
-        paths:
-          - '/.git*'
-          - '.idea'
-          - '.DS_Store'
-          - '/data/project'
-
-    project-volume-sync:
-      alpha: "../b2c-demo-shop"
-      beta: "volume://project-volume"
-      mode: one-way-safe
-
-    data-volume-sync:
-      alpha: "."
-      beta: "volume://data-volume"
-      mode: two-way-resolved
+       - ./:/data
+       - ../b2c-demo-shop:/data/project
 

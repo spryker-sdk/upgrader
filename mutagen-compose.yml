@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  upgrader-sdk:
+    image: spryker-sdk/upgrader-local:latest
+    build:
+      context: ./
+      dockerfile: infrastructure/dev.Dockerfile
+      args:
+          SPRYKER_PARENT_IMAGE: spryker/php:8.0
+    environment:
+        SPRYKER_XDEBUG_HOST_IP: ${SPRYKER_XDEBUG_HOST_IP:-host.docker.internal}
+    tty: true
+    command: "/bin/bash"
+    volumes:
+       - data-volume:/data:nocopy
+       - project-volume:/data/project
+
+volumes:
+    data-volume:
+    project-volume:
+
+x-mutagen:
+  sync:
+    defaults:
+      symlink:
+        mode: posix-raw
+      ignore:
+        paths:
+          - '/.git*'
+          - '.idea'
+          - '.DS_Store'
+          - '/data/project'
+
+    project-volume-sync:
+      alpha: "../b2c-demo-shop"
+      beta: "volume://project-volume"
+      mode: one-way-safe
+
+    data-volume-sync:
+      alpha: "."
+      beta: "volume://data-volume"
+      mode: two-way-resolved
+
