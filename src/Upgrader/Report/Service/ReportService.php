@@ -90,7 +90,7 @@ class ReportService
         }
 
         $violationReportData = Yaml::dump($violationReportStructure);
-        $reportPath = sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
+        $reportPath = getcwd() . sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
 
         file_put_contents($reportPath, $violationReportData);
     }
