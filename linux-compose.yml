@@ -14,5 +14,5 @@ services:
     command: "/bin/bash"
     volumes:
        - ./:/data
-       - ../:/data/project
+       - ../b2c-demo-shop:/data/project
 
