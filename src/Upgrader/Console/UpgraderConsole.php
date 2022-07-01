@@ -17,7 +17,7 @@ class UpgraderConsole extends Command
     /**
      * @var string
      */
-    protected const NAME = 'upgrader:codebase';
+    protected const NAME = 'upgradability:php:upgrade';
 
     /**
      * @var string

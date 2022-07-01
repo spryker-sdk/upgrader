@@ -102,6 +102,7 @@ class ReportService
      */
     protected function getViolationReportStructure(Report $report): array
     {
+        $violationReportStructure = [];
         $violationReportStructure[static::KEY_VIOLATIONS] = [];
 
         foreach ($report->getViolations() as $violation) {
