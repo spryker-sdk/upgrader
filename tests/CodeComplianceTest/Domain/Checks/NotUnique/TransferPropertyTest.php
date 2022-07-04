@@ -42,7 +42,7 @@ class TransferPropertyTest extends BaseCodeComplianceCheckTest
         $violations = $this->transferProperty->getViolations();
 
         // Assert
-        $this->assertCount(2, $violations);
+        $this->assertCount(1, $violations);
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
             $this->assertNotEmpty($violation->getMessage());
