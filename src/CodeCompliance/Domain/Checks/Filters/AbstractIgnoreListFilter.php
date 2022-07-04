@@ -44,7 +44,6 @@ abstract class AbstractIgnoreListFilter implements FilterInterface
     {
         return [
             '/\/Kernel\//',
-            '/^Twig\/Environment$/',
             '/\/\w+Bootstrap$/',
             '/\/\w+ConfigurationProvider$/',
             '/\/Development\//',
