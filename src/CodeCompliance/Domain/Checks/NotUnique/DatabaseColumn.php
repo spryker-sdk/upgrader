@@ -59,12 +59,9 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
             $isDbUniqueOnTheProjectLevel = !in_array($sourceName, $namesFromCoreSchemas);
 
             if (
-                $columnsWithoutPrefix !== []
-                &&
-                $columnsWithoutPrefix !== null
-                &&
-                !$isDbPrefixExist
-                &&
+                $columnsWithoutPrefix !== [] &&
+                $columnsWithoutPrefix !== null &&
+                !$isDbPrefixExist &&
                 !$isDbUniqueOnTheProjectLevel
             ) {
                 foreach ($columnsWithoutPrefix as $columnWithoutPrefix) {
