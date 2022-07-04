@@ -35,11 +35,6 @@ class CodebaseServiceTest extends KernelTestCase
         $this->assertNotEmpty($codebaseSourceDto->getPhpCodebaseSources());
         $this->assertNotNull($projectKey);
         $this->assertInstanceOf('\Codebase\Application\Dto\CodebaseInterface', $projectKey);
-
-        $coreKey = $codebaseSourceDto->getPhpCoreCodebaseSources()['TestCore\TestClassCoreConstant'] ?? null;
-        $this->assertNotEmpty($codebaseSourceDto->getPhpCoreCodebaseSources());
-        $this->assertNotNull($coreKey);
-        $this->assertInstanceOf('\Codebase\Application\Dto\CodebaseInterface', $coreKey);
     }
 
     /**

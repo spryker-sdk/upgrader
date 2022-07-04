@@ -29,7 +29,6 @@ class PhpParserTest extends BaseParser
 
         //Assert
         $codebasePhpSources = $codebaseSourceDto->getPhpCodebaseSources();
-        $codebasePhpCoreSources = $codebaseSourceDto->getPhpCoreCodebaseSources();
         $this->assertNotEmpty($codebasePhpSources);
         $this->assertNotNull($codebasePhpSources['TestProject\TestClassProjectConstant'] ?? null);
         $this->assertNull($codebasePhpSources['TestCore\TestClassCoreConstant'] ?? null);
@@ -37,9 +36,5 @@ class PhpParserTest extends BaseParser
         foreach ($codebaseSourceDto->getPhpCodebaseSources() as $phpCodebaseSource) {
             $this->assertInstanceOf('\Codebase\Application\Dto\ClassCodebaseDto', $phpCodebaseSource);
         }
-
-        $this->assertNotEmpty($codebasePhpCoreSources);
-        $this->assertNotNull($codebasePhpCoreSources['TestCore\TestClassCoreConstant'] ?? null);
-        $this->assertNull($codebasePhpCoreSources['TestProject\TestClassProjectConstant'] ?? null);
     }
 }

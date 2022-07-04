@@ -22,12 +22,12 @@ use Symfony\Component\Finder\Finder;
 /**
  * @phpstan-template T of object
  */
-class PhpParser implements ParserInterface
+class PhpParser implements PhpParserInterface
 {
     /**
      * @var string
      */
-    protected const PARSER_EXTENSION = 'php';
+    public const PARSER_EXTENSION = 'php';
 
     /**
      * @var \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface
@@ -145,7 +145,7 @@ class PhpParser implements ParserInterface
      *
      * @return \Codebase\Application\Dto\ClassCodebaseDto|null
      */
-    protected function parseClass(
+    public function parseClass(
         string $namespace,
         array $projectPrefixes,
         array $coreNamespaces = [],

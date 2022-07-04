@@ -10,6 +10,7 @@ namespace Codebase\Infrastructure\SourceParser;
 use Codebase\Application\Dto\CodebaseSourceDto;
 use Codebase\Application\Dto\SourceParserRequestDto;
 use Codebase\Infrastructure\SourceFinder\SourceFinder;
+use Codebase\Infrastructure\SourceParser\Parser\PhpParser;
 
 class SourceParser implements SourceParserInterface
 {
@@ -63,6 +64,9 @@ class SourceParser implements SourceParserInterface
             }
             $codebaseSourceDto = $codebaseSourceDto->setType($type);
             foreach ($this->sourceParsers as $sourceParser) {
+                if ($type === SourceParserRequestDto::CORE_TYPE && $sourceParser->getExtension() === PhpParser::PARSER_EXTENSION) {
+                    continue;
+                }
                 $extensions = [static::FINDER_PREFIX . $sourceParser->getExtension()];
                 $finder = $this->sourceFinder->findSourceByExtension($extensions, $paths, $codebaseRequestDto->getExcludeList());
                 $codebaseSourceDto = $sourceParser->parse($finder, $codebaseSourceDto);
