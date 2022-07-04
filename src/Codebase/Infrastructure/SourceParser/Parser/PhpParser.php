@@ -71,6 +71,7 @@ class PhpParser implements PhpParserInterface
         $this->defineEnvironmentVariables();
 
         $sources = [];
+        $filePaths = [];
         /** @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder as $file) {
             if ($file->getExtension() !== static::PARSER_EXTENSION) {
@@ -97,10 +98,13 @@ class PhpParser implements PhpParserInterface
                 }
 
                 $sources[$classString] = $classCodebaseDto;
+                $filePaths[] = $file->getRealPath();
             }
         }
 
-        return $codebaseSourceDto->setPhpCodebaseSources($sources, $codebaseSourceDto->getType());
+        $codebaseSourceDto->setPhpFilePaths($filePaths);
+        $codebaseSourceDto->setPhpCodebaseSources($sources, $codebaseSourceDto->getType());
+        return $codebaseSourceDto;
     }
 
     /**

@@ -21,14 +21,14 @@ services:
         class: Upgrader\Tasks\Evaluate\Report\ReportTask
         tags: [ 'sdk.task' ]
 
-    resolve.task:
-        class: Upgrader\Tasks\Resolve\ResolveTask
-        tags: [ 'sdk.task' ]
-
     report.listener:
         class: Upgrader\Report\Event\ReportListener
         tags:
             - { name: kernel.event_listener, event: console.terminate, method: onConsoleCommandTerminate }
+
+    resolve.task:
+        class: Upgrader\Tasks\Resolve\ResolveTask
+        tags: [ 'sdk.task' ]
 
 # Third-party
     Symfony\Component\Yaml\Yaml: ~

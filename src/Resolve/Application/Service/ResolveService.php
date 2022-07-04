@@ -9,7 +9,7 @@ namespace Resolve\Application\Service;
 
 use Codebase\Application\Dto\CodebaseSourceDto;
 use Codebase\Infrastructure\Service\CodebaseService;
-use Resolve\Application\Checks\ResolveCheckInterface;
+use Resolve\Application\Resolves\ResolveInterface;
 use Resolve\Domain\Entity\Message;
 
 class ResolveService implements ResolveServiceInterface
@@ -20,13 +20,13 @@ class ResolveService implements ResolveServiceInterface
     protected CodebaseService $codebaseService;
 
     /**
-     * @var array<ResolveCheckInterface>
+     * @var array<ResolveInterface>
      */
     protected array $resolveChecks;
 
     /**
      * @param CodebaseService $codebaseService
-     * @param array<ResolveCheckInterface> resolveChecks
+     * @param array<ResolveInterface> $resolveChecks
      */
     public function __construct(
         CodebaseService $codebaseService,
@@ -39,17 +39,16 @@ class ResolveService implements ResolveServiceInterface
     /**
      * @param CodebaseSourceDto $codebaseSourceDto
      *
+     *
      * @return Message
      */
     public function resolve(CodebaseSourceDto $codebaseSourceDto): Message
     {
-        return 'test';
-        /*$report = new Report('test', (string)getcwd());
-
-        foreach ($this->codeComplianceChecks as $codeComplianceCheck) {
-            $report = $codeComplianceCheck->run($report, $codebaseSourceDto);
+        $result = new Message('');
+        foreach ($this->resolveChecks as $resolveCheck) {
+            $result = $resolveCheck->run($result, $codebaseSourceDto);
         }
 
-        return $report;*/
+        return $result;
     }
 }

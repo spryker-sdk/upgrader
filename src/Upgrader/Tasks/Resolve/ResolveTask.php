@@ -7,27 +7,47 @@
 
 namespace Upgrader\Tasks\Resolve;
 
+use Codebase\Infrastructure\Service\CodebaseService;
 use SprykerSdk\SdkContracts\Entity\CommandInterface;
 use SprykerSdk\SdkContracts\Entity\Lifecycle\LifecycleInterface;
 use SprykerSdk\SdkContracts\Entity\PlaceholderInterface;
 use SprykerSdk\SdkContracts\Entity\TaskInterface;
 use Resolve\Application\Service\ResolveServiceInterface;
 use Upgrader\Commands\Resolve\ResolveCommand;
+use Upgrader\Configuration\ConfigurationProvider;
 use Upgrader\Lifecycle\Lifecycle;
 
 class ResolveTask implements TaskInterface
 {
+
     /**
      * @var ResolveServiceInterface
      */
     protected ResolveServiceInterface $resolverService;
 
     /**
-     * @param ResolveServiceInterface $resolverService
+     * @var ConfigurationProvider
      */
-    public function __construct(ResolveServiceInterface $resolverService)
-    {
+    protected ConfigurationProvider $configurationProvider;
+
+    /**
+     * @var CodebaseService
+     */
+    protected CodebaseService $codebaseService;
+
+    /**
+     * @param ResolveServiceInterface $resolverService
+     * @param ConfigurationProvider $configurationProvider
+     * @param CodebaseService $codebaseService
+     */
+    public function __construct(
+        ResolveServiceInterface $resolverService,
+        ConfigurationProvider $configurationProvider,
+        CodebaseService $codebaseService
+    ) {
         $this->resolverService = $resolverService;
+        $this->configurationProvider = $configurationProvider;
+        $this->codebaseService = $codebaseService;
     }
 
     /**
@@ -52,7 +72,11 @@ class ResolveTask implements TaskInterface
     public function getCommands(): array
     {
         return [
-            new ResolveCommand($this->resolverService),
+            new ResolveCommand(
+                $this->resolverService,
+                $this->configurationProvider,
+                $this->codebaseService,
+            ),
         ];
     }
 

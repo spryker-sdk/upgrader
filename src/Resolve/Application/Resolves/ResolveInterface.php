@@ -5,18 +5,18 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Resolve\Application\Checks;
+namespace Resolve\Application\Resolves;
 
 use Codebase\Application\Dto\CodebaseSourceDto;
 use Resolve\Domain\Entity\Message;
 
-interface ResolveCheckInterface
+interface ResolveInterface
 {
     /**
      * @param Message $message
      * @param CodebaseSourceDto $codebaseSourceDto
      *
-     * @return Message
+     * @return Message $message
      */
     public function run(Message $message, CodebaseSourceDto $codebaseSourceDto): Message;
 }

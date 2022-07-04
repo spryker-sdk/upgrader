@@ -5,25 +5,26 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace CodeCompliance\Application\Checks\NotUnique;
+namespace Resolve\Application\Resolves\NotUnique;
 
 use Codebase\Application\Dto\CodebaseSourceDto;
-use Resolve\Domain\Checks\NotUnique\Constant;
-use Resolve\Application\Checks\ResolveCheckInterface;
+use Resolve\Domain\Resolves\NotUnique\Constant;
+use Resolve\Application\Resolves\ResolveInterface;
 use Resolve\Domain\Entity\Message;
 
-class ConstantResolve implements ResolveCheckInterface
+class ConstantResolve implements ResolveInterface
 {
     /**
+     * @var Constant
      */
-    protected Constant $constantCheck;
+    protected Constant $constantResolve;
 
     /**
-     * @param Constant $constantCheck
+     * @param Constant $constantResolve
      */
-    public function __construct(Constant $constantCheck)
+    public function __construct(Constant $constantResolve)
     {
-        $this->constantCheck = $constantCheck;
+        $this->constantResolve = $constantResolve;
     }
 
     /**
@@ -34,9 +35,7 @@ class ConstantResolve implements ResolveCheckInterface
      */
     public function run(Message $message, CodebaseSourceDto $codebaseSourceDto): Message
     {
-        return $this->constantCheck
-            ->setCodebaseSourceDto($codebaseSourceDto)
-            ->getResult();
-        $message->getMessage();
+        $message = $this->constantResolve->setCodebaseSourceDto($codebaseSourceDto)->getResult();
+        return new Message($message);
     }
 }

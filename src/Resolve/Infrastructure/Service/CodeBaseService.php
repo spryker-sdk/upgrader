@@ -14,12 +14,12 @@ use Resolve\Domain\Service\CodeBaseServiceInterface;
 class CodeBaseService implements CodeBaseServiceInterface
 {
     /**
-     * @var \Codebase\Infrastructure\SourceParser\Parser\PhpParserInterface
+     * @var PhpParserInterface
      */
     protected PhpParserInterface $phpParser;
 
     /**
-     * @param \Codebase\Infrastructure\SourceParser\Parser\PhpParserInterface $phpParser
+     * @param PhpParserInterface $phpParser
      */
     public function __construct(PhpParserInterface $phpParser)
     {
@@ -31,7 +31,7 @@ class CodeBaseService implements CodeBaseServiceInterface
      * @param array<string> $projectPrefixes
      * @param array<string> $coreNamespaces
      *
-     * @return \Codebase\Application\Dto\ClassCodebaseDto|null
+     * @return ClassCodebaseDto|null
      */
     public function parsePhpClass(string $classNamespace, array $projectPrefixes, array $coreNamespaces = []): ?ClassCodebaseDto
     {

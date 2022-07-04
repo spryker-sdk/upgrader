@@ -7,7 +7,8 @@
 
 namespace Resolve\Domain\Service;
 
-use Resolve\Domain\Checks\Filters\FilterInterface;
+use Codebase\Application\Dto\CodebaseInterface;
+use Resolve\Domain\Resolves\Filters\FilterInterface;
 
 class FilterService
 {
@@ -25,10 +26,10 @@ class FilterService
     }
 
     /**
-     * @param array<\Codebase\Application\Dto\CodebaseInterface> $sources
+     * @param array<CodebaseInterface> $sources
      * @param array<string> $enabledFilters
      *
-     * @return array<\Codebase\Application\Dto\CodebaseInterface>
+     * @return array<CodebaseInterface>
      */
     public function filter(array $sources, array $enabledFilters): array
     {

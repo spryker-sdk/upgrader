@@ -40,6 +40,11 @@ class CodebaseSourceDto
     protected array $xmlTransferSchemaCoreCodebaseSources = [];
 
     /**
+     * @var array<\Codebase\Application\Dto\CodebaseInterface>
+     */
+    protected array $phpFilePaths = [];
+
+    /**
      * @var string
      */
     protected string $type = '';
@@ -188,5 +193,25 @@ class CodebaseSourceDto
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * @param array<\Codebase\Application\Dto\CodebaseInterface> $phpFilePaths
+     *
+     * @return $this
+     */
+    public function setPhpFilePaths(array $phpFilePaths): self
+    {
+        $this->phpFilePaths = $phpFilePaths;
+
+        return $this;
+    }
+
+    /**
+     * @return array<\Codebase\Application\Dto\CodebaseInterface>
+     */
+    public function getPhpFilePaths(): array
+    {
+        return $this->phpFilePaths;
     }
 }

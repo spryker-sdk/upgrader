@@ -7,7 +7,7 @@
 
 namespace Resolve\Domain;
 
-interface ResolveCheckInterface
+interface ResolveInterface
 {
     /**
      * @return string

@@ -11,7 +11,7 @@ use Codebase\Application\Dto\CodebaseSourceDto;
 use Resolve\Domain\Service\CodeBaseServiceInterface;
 use Resolve\Domain\Service\FilterService;
 
-abstract class AbstractResolveCheck implements ResolveCheckInterface
+abstract class AbstractResolveCheck implements ResolveInterface
 {
     /**
      * @var string
