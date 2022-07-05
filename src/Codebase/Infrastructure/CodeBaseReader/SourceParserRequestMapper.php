@@ -46,7 +46,7 @@ class SourceParserRequestMapper implements SourceParserRequestMapperInterface
 
         foreach ($projectPrefixes as $prefix) {
             $path = $srcPath . $prefix . DIRECTORY_SEPARATOR;
-            if(is_dir($path)){
+            if (is_dir($path)) {
                 $projectDirectories[] = $path;
             }
         }
