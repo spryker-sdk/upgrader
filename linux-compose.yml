@@ -15,5 +15,5 @@ services:
     volumes:
        - ~/.ssh:/root/.ssh
        - ./:/data
-       - ../b2c-demo-shop:/data/project
+       - {path_to_project}:/data/project
 

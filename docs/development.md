@@ -2,20 +2,22 @@
 
 ## Docker
 
-We use docker for prepare convenient and close to Spryker CLI development environmetn.
+We use docker to prepare a convenient and close-to Spryker CLI development environment.
 
-Directory mount in cointainer:
+Directory mount in a container:
 - Upgrader source mount to /data
-- Some Spryker project for evaluating or upgradind mount to /data/project
+- Some Spryker projects for evaluating or upgrading mount to /data/project
+  For this purpose, replace {path_to_project} with a real path in `docker-compose.yml` or `linux-compose.yml` depending on your OS
 
 ## MacOS
 
-### Running as docker container
+### Running as a docker container
 
 ```bash
 mutagen-compose up --build -d
 docker exec -it {contaiter_id} bash
-bin/upgrader {command_name}
+cd /data/project
+../bin/upgrader {command_name}
 ```
 
 Note: File synchronization is enabled by the default
@@ -30,5 +32,6 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 
 docker-compose -f linux-compose.yml up -d --build
 docker exec -it {contaiter_id} bash
-bin/upgrader {command_name}
+cd /data/project
+../bin/upgrader {command_name}
 ```

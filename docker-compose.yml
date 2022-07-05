@@ -33,9 +33,9 @@ x-mutagen:
           - '/data/project'
 
     project-volume-sync:
-      alpha: "../b2c-demo-shop"
+      alpha: "{path_to_project}"
       beta: "volume://project-volume"
-      mode: one-way-safe
+      mode: two-way-resolved
 
     data-volume-sync:
       alpha: "."
