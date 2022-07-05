@@ -87,7 +87,7 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
         if (!$fileBody) {
             return $methodNames;
         }
-        preg_match_all('/new\s*((?!Transfer|Exception).)*\(*/m', $fileBody, $matchResult);
+        preg_match_all('/new\s+((?!Transfer|Exception).)*\(*/m', $fileBody, $matchResult);
         foreach ($matchResult[0] as $row) {
             $row = preg_replace(['/new\s*/', '/^\\\\/'], '', $row);
             $pos = strpos($row, '(');
