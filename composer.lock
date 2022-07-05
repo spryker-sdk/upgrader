@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d4d2b975acad0ad7a533b5bf30726913",
+    "content-hash": "ef50b516d0cc802f7ab8aca037f5d32b",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -3001,16 +3001,16 @@
         },
         {
             "name": "spryker-sdk/sdk-contracts",
-            "version": "dev-feature/sdk-524/sdk-592-add-report-abstractions",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/sdk-contracts.git",
-                "reference": "ae5ed90defe0d47bfc88ce88db462cc7ffdc5be4"
+                "reference": "5c121b4e0bd9dfdcbc32a65e91788a2a9af8de0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/ae5ed90defe0d47bfc88ce88db462cc7ffdc5be4",
-                "reference": "ae5ed90defe0d47bfc88ce88db462cc7ffdc5be4",
+                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/5c121b4e0bd9dfdcbc32a65e91788a2a9af8de0f",
+                "reference": "5c121b4e0bd9dfdcbc32a65e91788a2a9af8de0f",
                 "shasum": ""
             },
             "require": {
@@ -3020,6 +3020,7 @@
                 "phpstan/phpstan": "^1.2",
                 "spryker/code-sniffer": "^0.17.1"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -3033,9 +3034,9 @@
             "description": "Contracts to extend the Spryker SDK",
             "support": {
                 "issues": "https://github.com/spryker-sdk/sdk-contracts/issues",
-                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/feature/sdk-524/sdk-592-add-report-abstractions"
+                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/master"
             },
-            "time": "2022-06-20T13:41:09+00:00"
+            "time": "2022-07-05T11:23:00+00:00"
         },
         {
             "name": "spryker/code-sniffer",
