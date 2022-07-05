@@ -7,7 +7,7 @@ services:
       context: ./
       dockerfile: infrastructure/dev.Dockerfile
       args:
-          SPRYKER_PARENT_IMAGE: spryker/php:8.0
+          SPRYKER_PARENT_IMAGE: spryker/php:7.4
     environment:
         SPRYKER_XDEBUG_HOST_IP: ${SPRYKER_XDEBUG_HOST_IP:-host.docker.internal}
     tty: true
