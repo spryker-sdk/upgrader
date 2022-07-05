@@ -27,7 +27,7 @@ class MethodIsOverwrittenTest extends BaseCodeComplianceCheckTest
         $violations = $methodIsOverwrittenCheck->getViolations();
 
         // Assert
-        $this->assertCount(4, $violations);
+        $this->assertCount(1, $violations);
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
             $this->assertNotEmpty($violation->getMessage());
