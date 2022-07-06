@@ -8,6 +8,7 @@
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
 use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
+use CodeCompliance\Domain\Checks\Filters\IgnoreListFilter;
 use CodeCompliance\Domain\Checks\Filters\PrivateApiFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
@@ -57,17 +58,15 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
 
             $params = $this->getParamNamespacesFromDocComment($constructorDoc);
             $dependencyNamespaces = $this->skipBasicTypes($params);
-            $dependencyCoreSources = $this->getCoreSourcesByNamespaces(
-                $dependencyNamespaces,
-                $this->getCodebaseSourceDto()->getPhpCoreCodebaseSources(),
-            );
+            $dependencyCoreSources = $this->getCoreSourcesByNamespaces($dependencyNamespaces);
             $dependencyCoreSources = $this->filterService->filter($dependencyCoreSources, [
                 PrivateApiFilter::PRIVATE_API_FILTER,
+                IgnoreListFilter::IGNORE_LIST_FILTER,
             ]);
-
             if (!count($dependencyCoreSources)) {
                 continue;
             }
+
             foreach ($dependencyCoreSources as $class) {
                 $guideline = sprintf($this->getGuideline(), $class->getClassName(), $source->getClassName());
                 $violations[] = new Violation(new Id(), $guideline, $this->getName());
@@ -113,18 +112,28 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
 
     /**
      * @param array<string> $dependencyNamespaces
-     * @param array<mixed> $sources
      *
-     * @return array<string, \Codebase\Application\Dto\CodebaseInterface>
+     * @return array<int, \Codebase\Application\Dto\CodebaseInterface>
      */
-    protected function getCoreSourcesByNamespaces(array $dependencyNamespaces, array $sources): array
+    protected function getCoreSourcesByNamespaces(array $dependencyNamespaces): array
     {
         $results = [];
 
         foreach ($dependencyNamespaces as $namespace) {
             $namespace = ltrim($namespace, '\\');
-            if (isset($sources[$namespace])) {
-                $results[$namespace] = $sources[$namespace];
+
+            if ($this->hasProjectPrefix($namespace, $this->getCodebaseSourceDto()->getProjectPrefixes())) {
+                continue;
+            }
+
+            $classTransfer = $this->codeBaseService->parsePhpClass(
+                $namespace,
+                $this->getCodebaseSourceDto()->getProjectPrefixes(),
+                $this->getCodebaseSourceDto()->getCoreNamespaces(),
+            );
+
+            if ($classTransfer) {
+                $results[] = $classTransfer;
             }
         }
 

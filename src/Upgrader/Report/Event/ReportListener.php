@@ -57,7 +57,5 @@ class ReportListener
             $event->getOutput()->writeln('Total messages: ' . count((array)$messages));
             $event->setExitCode(Command::FAILURE);
         }
-
-        $event->setExitCode(Command::SUCCESS);
     }
 }
