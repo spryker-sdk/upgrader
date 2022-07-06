@@ -37,26 +37,33 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
         $violations = [];
         $coreSchemas = [];
         $coreSources = $this->getCodebaseSourceDto()->getDatabaseSchemaCoreCodebaseSources();
-
-        if ($coreSources !== []) {
-            foreach ($coreSources as $coreSource) {
-                $coreSchemas[$coreSource->getName()] = array_merge($coreSchemas[$coreSource->getName()] ?? [], $coreSource->getChildElements());
-            }
+        foreach ($coreSources as $coreSource) {
+            $coreSchemas[$coreSource->getName()] = array_merge($coreSchemas[$coreSource->getName()] ?? [], $coreSource->getChildElements());
         }
-        $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
+        $namesFromCoreSchemas = array_column($coreSources, static::COLUMN_KEY_NAME);
+        $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();
         foreach ($this->getCodebaseSourceDto()->getDatabaseSchemaCodebaseSources() as $source) {
             if ($source->getChildElements() === []) {
                 continue;
             }
 
             $sourceName = $source->getName();
-            $columnsWithoutPrefix = array_filter($source->getChildElements(), function (string $column) use ($projectPrefixes, $sourceName, $coreSchemas) {
-                return !in_array($column, $coreSchemas[$sourceName] ?? []) && !$this->hasProjectPrefix($column, $projectPrefixes);
-            });
-            $isDbPrefixExist = $this->hasProjectPrefix($source->getName(), $projectPrefixes);
+            $columnsWithoutPrefix = array_filter(
+                $source->getChildElements(),
+                function (string $column) use ($projectPrefixes, $sourceName, $coreSchemas) {
+                    return !in_array($column, $coreSchemas[$sourceName] ?? []) && !$this->hasProjectPrefix($column, $projectPrefixes);
+                },
+            );
+            $isDbPrefixExist = $this->hasProjectPrefix($sourceName, $projectPrefixes);
+            $isDbUniqueOnTheProjectLevel = !in_array($sourceName, $namesFromCoreSchemas);
 
-            if ($columnsWithoutPrefix !== [] && $columnsWithoutPrefix !== null && !$isDbPrefixExist) {
+            if (
+                $columnsWithoutPrefix !== [] &&
+                $columnsWithoutPrefix !== null &&
+                !$isDbPrefixExist &&
+                !$isDbUniqueOnTheProjectLevel
+            ) {
                 foreach ($columnsWithoutPrefix as $columnWithoutPrefix) {
                     $guideline = sprintf(
                         $this->getGuideline(),
