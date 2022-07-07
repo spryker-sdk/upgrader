@@ -25,13 +25,16 @@ services:
     Codebase\Infrastructure\Dependency\Finder\CodebaseToFinderInterface: '@Codebase\Infrastructure\Dependency\Finder\CodebaseToFinderBridge'
 
     php.parser:
-        class: Codebase\Infrastructure\SourceParser\Parser\PhpParser
+        class: Codebase\Infrastructure\SourceParser\FileParser\PhpParser
 
     transfer_schema.parser:
-        class: Codebase\Infrastructure\SourceParser\Parser\TransferSchemaParser
+        class: Codebase\Infrastructure\SourceParser\FileParser\TransferSchemaParser
 
     database_schema.parser:
-        class: Codebase\Infrastructure\SourceParser\Parser\DatabaseSchemaParser
+        class: Codebase\Infrastructure\SourceParser\FileParser\DatabaseSchemaParser
+
+    module.parser:
+        class: Codebase\Infrastructure\SourceParser\StructureParser\ModuleParser
 
     codebase.service:
         class: Codebase\Infrastructure\Service\CodebaseService
@@ -44,6 +47,9 @@ services:
                 param1: '@php.parser',
                 param2: '@transfer_schema.parser',
                 param3: '@database_schema.parser'
+            }
+            - {
+                param1: '@module.parser'
             }
 
     tooling_configuration_validator.project_prefixes:

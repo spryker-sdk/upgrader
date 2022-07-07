@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Codebase\Infrastructure\SourceParser\Parser;
+namespace Codebase\Infrastructure\SourceParser\FileParser;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
@@ -22,7 +22,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * @phpstan-template T of object
  */
-class PhpParser implements PhpParserInterface
+class PhpParser implements PhpFileParserInterface
 {
     /**
      * @var string

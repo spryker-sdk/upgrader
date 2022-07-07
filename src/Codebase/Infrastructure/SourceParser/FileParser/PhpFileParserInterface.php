@@ -5,11 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Codebase\Infrastructure\SourceParser\Parser;
+namespace Codebase\Infrastructure\SourceParser\FileParser;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
 
-interface PhpParserInterface extends ParserInterface
+interface PhpFileParserInterface extends FileParserInterface
 {
     /**
      * @param string $namespace
