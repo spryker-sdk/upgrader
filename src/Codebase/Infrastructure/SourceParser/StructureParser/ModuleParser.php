@@ -41,7 +41,7 @@ class ModuleParser implements StructureParserInterface
         $projectModules = [];
         foreach ($codebaseRequestDto->getProjectPaths() as $projectPath) {
             foreach ((array)glob(sprintf(static::PROJECT_PATH_FORMAT, $projectPath), GLOB_ONLYDIR) as $dir) {
-                $projectModules[] = basename((string)$dir);
+                $projectModules[] = $this->removeRegionCode(basename((string)$dir));
             }
         }
         $codebaseSourceDto->setProjectModuleNames(array_unique($projectModules, SORT_STRING));
@@ -58,5 +58,20 @@ class ModuleParser implements StructureParserInterface
     protected function snakeCaseToCamelCase(string $input, string $separator = '-'): string
     {
         return str_replace($separator, '', ucwords($input, $separator));
+    }
+
+    /**
+     * @param string $input
+     *
+     * @return string
+     */
+    protected function removeRegionCode(string $input): string
+    {
+        $lastTwoCharacters = substr($input, -2);
+        if (mb_strtoupper($lastTwoCharacters, 'utf-8') === $lastTwoCharacters) {
+            return substr($input, 0, -2);
+        }
+
+        return $input;
     }
 }
