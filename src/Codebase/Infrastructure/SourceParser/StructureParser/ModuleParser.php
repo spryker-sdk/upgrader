@@ -13,6 +13,16 @@ use Codebase\Application\Dto\SourceParserRequestDto;
 class ModuleParser implements StructureParserInterface
 {
     /**
+     * @var string
+     */
+    protected const CORE_PATH_FORMAT = '%s/*';
+
+    /**
+     * @var string
+     */
+    protected const PROJECT_PATH_FORMAT = '%s/*/*';
+
+    /**
      * @param \Codebase\Application\Dto\SourceParserRequestDto $codebaseRequestDto
      * @param \Codebase\Application\Dto\CodebaseSourceDto $codebaseSourceDto
      *
@@ -22,20 +32,31 @@ class ModuleParser implements StructureParserInterface
     {
         $coreModules = [];
         foreach ($codebaseRequestDto->getCorePaths() as $corePath) {
-            foreach ((array)glob(sprintf('%s/*', $corePath), GLOB_ONLYDIR) as $dir) {
-                $coreModules[] = basename((string)$dir);
+            foreach ((array)glob(sprintf(static::CORE_PATH_FORMAT, $corePath), GLOB_ONLYDIR) as $dir) {
+                $coreModules[] = $this->snakeCaseToCamelCase(basename((string)$dir));
             }
         }
         $codebaseSourceDto->setCoreModuleNames(array_unique($coreModules, SORT_STRING));
 
         $projectModules = [];
         foreach ($codebaseRequestDto->getProjectPaths() as $projectPath) {
-            foreach ((array)glob(sprintf('%s/*/*', $projectPath), GLOB_ONLYDIR) as $dir) {
+            foreach ((array)glob(sprintf(static::PROJECT_PATH_FORMAT, $projectPath), GLOB_ONLYDIR) as $dir) {
                 $projectModules[] = basename((string)$dir);
             }
         }
         $codebaseSourceDto->setProjectModuleNames(array_unique($projectModules, SORT_STRING));
 
         return $codebaseSourceDto;
+    }
+
+    /**
+     * @param string $input
+     * @param string $separator
+     *
+     * @return string
+     */
+    protected function snakeCaseToCamelCase(string $input, string $separator = '-'): string
+    {
+        return str_replace($separator, '', ucwords($input, $separator));
     }
 }

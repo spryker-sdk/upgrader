@@ -41,7 +41,7 @@ class ModuleName extends AbstractCodeComplianceCheck
 
         foreach ($projectModuleNames as $projectModuleName) {
             $hasProjectPrefix = $this->hasProjectPrefix($projectModuleName, $projectPrefixes);
-            if (in_array($this->camelCaseToSnakeCase($projectModuleName), $coreModuleNames) || $hasProjectPrefix) {
+            if (in_array($projectModuleName, $coreModuleNames) || $hasProjectPrefix) {
                 continue;
             }
 
@@ -55,15 +55,5 @@ class ModuleName extends AbstractCodeComplianceCheck
         }
 
         return $violations;
-    }
-
-    /**
-     * @param string $input
-     *
-     * @return string
-     */
-    protected function camelCaseToSnakeCase(string $input): string
-    {
-        return strtolower((string)preg_replace('/(?<!^)[A-Z]/', '-$0', $input));
     }
 }
