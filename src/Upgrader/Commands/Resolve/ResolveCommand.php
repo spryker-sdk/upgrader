@@ -95,6 +95,12 @@ class ResolveCommand implements ExecutableCommandInterface
      */
     public function execute(ContextInterface $context): ContextInterface
     {
+        echo 'Continue to Resolve? [y/N] ';
+        if (!in_array(trim(fgets(STDIN)), array('y', 'Y'))) {
+            echo 'Stopped' . "\n";
+            exit;
+        }
+
         $codebaseRequestDto = new CodeBaseRequestDto(
             $this->configurationProvider->getToolingConfigurationFilePath(),
             $this->configurationProvider->getSrcPath(),

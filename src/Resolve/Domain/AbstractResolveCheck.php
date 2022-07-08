@@ -24,7 +24,7 @@ abstract class AbstractResolveCheck implements ResolveInterface
     protected CodebaseSourceDto $codebaseSourceDto;
 
     /**
-     * @var FilterService
+     * @var \Resolve\Domain\Service\FilterService
      */
     protected FilterService $filterService;
 
@@ -34,7 +34,7 @@ abstract class AbstractResolveCheck implements ResolveInterface
     protected CodeBaseServiceInterface $codeBaseService;
 
     /**
-     * @param FilterService $filterService
+     * @param \Resolve\Domain\Service\FilterService $filterService
      * @param CodeBaseServiceInterface $codeBaseService
      */
     public function __construct(FilterService $filterService, CodeBaseServiceInterface $codeBaseService)

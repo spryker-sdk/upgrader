@@ -8,7 +8,6 @@
 namespace Resolve\Domain\Service;
 
 use Codebase\Application\Dto\CodebaseInterface;
-use Resolve\Domain\Resolves\Filters\FilterInterface;
 
 class FilterService
 {
@@ -18,7 +17,7 @@ class FilterService
     protected $filters = [];
 
     /**
-     * @param array<\CodeCompliance\Domain\Checks\Filters\FilterInterface> $filters
+     * @param array<FilterInterface> $filters
      */
     public function __construct(array $filters = [])
     {

@@ -36,6 +36,7 @@
             "Core\\": "src/Core/",
             "Codebase\\": "src/Codebase/",
             "CodeCompliance\\": "src/CodeCompliance/",
+            "Resolve\\": "src/Resolve/",
             "Evaluate\\": "src/Evaluate/",
             "Upgrade\\": "src/Upgrade/",
             "Upgrader\\": "src/Upgrader/",

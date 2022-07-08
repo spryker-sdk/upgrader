@@ -24,17 +24,9 @@ class Constant extends AbstractResolveCheck
      */
     public function getResult(): string
     {
-
-
-        $testFile = '/data/src/Pyz/Yves/HelloWorld/Plugin/Provider/HelloWorldRouteProviderPlugin.php';
-        $file_contents = file_get_contents($testFile);
-        $file_contents = str_replace("MY_CONSTANT","PYZ_MY_CONSTANT",$file_contents);
-        file_put_contents($testFile,$file_contents);
-exit;
-        print_r($this->getCodebaseSourceDto()->getPhpFilePaths());
-
         $violations = [];
 
+        // Re-use the CodeComplinace part here
         foreach ($this->getCodebaseSourceDto()->getPhpCodebaseSources() as $source) {
             $coreParent = $source->getCoreParent();
             $parentConstants = $coreParent ? $coreParent->getConstants() : [];
@@ -45,12 +37,33 @@ exit;
                 $hasProjectPrefix = $this->hasProjectPrefix($nameConstant, $projectPrefixes);
 
                 if ($coreParent && $isConstantUnique && !$hasProjectPrefix) {
-                    $violations[$nameConstant] = strtoupper((string)reset($projectPrefixes)).'_'.$nameConstant;
+                    $constantNameRequired = strtoupper((string)reset($projectPrefixes)) . '_' . $nameConstant;
+
+                    // preparing violation array, added required prefix and post, by that it wont repeatedly change the same
+                    $violations['::' . $nameConstant] = '::' . $constantNameRequired;
+                    $violations[' ' . $nameConstant . ' '] = ' ' . $constantNameRequired . ' ';
+                    //$violations[$nameConstant] = $constantNameRequired;
                 }
             }
         }
 
-        print_r($violations);
+        // if do not find any violations
+        if (count($violations)<=0) {
+            return $this->getName() . ':' . 'Already Resolved';
+        }
+
+        // preparing finder and replacer
+        $finder = array_keys($violations);
+        $replace = array_values($violations);
+
+        //print_r($this->getCodebaseSourceDto()->getPhpFilePaths());
+        foreach ($this->getCodebaseSourceDto()->getPhpFilePaths() as $filePath) {
+            $file_contents = file_get_contents($filePath);
+            if ($file_contents) {
+                $file_contents = str_replace($finder, $replace, $file_contents);
+                file_put_contents($filePath, $file_contents);
+            }
+        }
 
         return $this->getName() . ':' . 'Resolved';
     }
