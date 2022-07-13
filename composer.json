@@ -25,8 +25,8 @@
         "symfony/finder": "^5.3",
         "symfony/framework-bundle": "5.3.*",
         "symfony/http-kernel": "^5.0",
-        "symfony/process": "^5.0",
-        "symfony/runtime": "^5",
+        "symfony/process": "^5.0 || ^6.0",
+        "symfony/runtime": "^5.0 || ^6.0",
         "symfony/yaml": "^5.3"
     },
     "require-dev": {
