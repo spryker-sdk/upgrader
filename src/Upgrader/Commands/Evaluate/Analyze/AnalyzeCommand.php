@@ -91,7 +91,7 @@ class AnalyzeCommand implements ViolationReportableInterface, ExecutableCommandI
     /**
      * @return \SprykerSdk\SdkContracts\Entity\ConverterInterface|null
      */
-    public function getViolationConverter(): ?ConverterInterface
+    public function getConverter(): ?ConverterInterface
     {
         return null;
     }
@@ -99,7 +99,7 @@ class AnalyzeCommand implements ViolationReportableInterface, ExecutableCommandI
     /**
      * @return \SprykerSdk\SdkContracts\Violation\ViolationReportInterface|null
      */
-    public function getViolationReport(): ?ViolationReportInterface
+    public function getReport(): ?ViolationReportInterface
     {
         return static::$report;
     }
