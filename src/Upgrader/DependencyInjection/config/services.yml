@@ -4,18 +4,17 @@ services:
         autoconfigure: true
         public: true
 
-# Evaluate
     Upgrader\:
         resource: '../../../Upgrader/*'
 
+# SDK Task Definitions
     upgrade.task:
         class: Upgrader\Tasks\Upgrade\UpgradeTask
         tags: [ 'sdk.task' ]
 
     analyze.task:
         class: Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask
-        tags:
-            - { name: 'sdk.task'}
+        tags: [ 'sdk.task' ]
 
     report.task:
         class: Upgrader\Tasks\Evaluate\Report\ReportTask
@@ -25,6 +24,19 @@ services:
         class: Upgrader\Report\Event\ReportListener
         tags:
             - { name: kernel.event_listener, event: console.terminate, method: onConsoleCommandTerminate }
+
+# Console commands
+    evaluate.console:
+        class: Upgrader\Console\EvaluateConsole
+        tags: [ "console.command" ]
+
+    evaluation.report.console:
+        class: Upgrader\Console\EvaluationReportConsole
+        tags: [ "console.command" ]
+
+    upgrade.console:
+        class: Upgrader\Console\UpgraderConsole
+        tags: [ "console.command" ]
 
 # Third-party
     Symfony\Component\Yaml\Yaml: ~

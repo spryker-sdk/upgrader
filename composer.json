@@ -4,7 +4,7 @@
     "description": "Code evaluator and upgrader tool",
     "license": "proprietary",
     "require": {
-        "php": ">=8.0",
+        "php": ">=7.4",
         "ext-json": "*",
         "ext-simplexml": "*",
         "davidrjonas/composer-lock-diff": "^1.6",
@@ -26,6 +26,7 @@
         "symfony/framework-bundle": "5.3.*",
         "symfony/http-kernel": "^5.0",
         "symfony/process": "^5.0",
+        "symfony/runtime": "^5",
         "symfony/yaml": "^5.3"
     },
     "require-dev": {
@@ -33,6 +34,7 @@
     },
     "autoload": {
         "psr-4": {
+            "App\\": "app/",
             "Core\\": "src/Core/",
             "Codebase\\": "src/Codebase/",
             "CodeCompliance\\": "src/CodeCompliance/",
@@ -55,7 +57,8 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "symfony/runtime": true
         }
     },
     "scripts": {
