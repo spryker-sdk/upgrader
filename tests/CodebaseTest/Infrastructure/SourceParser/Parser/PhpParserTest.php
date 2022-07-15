@@ -7,7 +7,7 @@
 
 namespace CodebaseTest\Infrastructure\SourceParser\Parser;
 
-use Codebase\Infrastructure\SourceParser\Parser\PhpParser;
+use Codebase\Infrastructure\SourceParser\FileParser\PhpParser;
 
 class PhpParserTest extends BaseParser
 {

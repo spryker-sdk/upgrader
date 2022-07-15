@@ -5,28 +5,28 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Codebase\Infrastructure\SourceParser\Parser;
+namespace Codebase\Infrastructure\SourceParser\FileParser;
 
 use Codebase\Application\Dto\CodebaseSourceDto;
 use SimpleXMLElement;
 use Symfony\Component\Finder\Finder;
 
-class TransferSchemaParser extends XmlParser
+class DatabaseSchemaParser extends XmlFileParser
 {
     /**
      * @var string
      */
-    protected const KEY_CHILD_ELEMENT = 'property';
+    protected const KEY_CHILD_ELEMENT = 'column';
 
     /**
      * @var string
      */
-    protected const PARSER_EXTENSION = 'transfer.xml';
+    protected const PARSER_EXTENSION = 'schema.xml';
 
     /**
      * @var string
      */
-    protected const TRANSFER_NAMESPACE = 'spryker:transfer-01';
+    protected const SCHEMA_NAMESPACE = 'spryker:schema-01';
 
     /**
      * @return string
@@ -45,6 +45,7 @@ class TransferSchemaParser extends XmlParser
     public function parse(Finder $finder, CodebaseSourceDto $codebaseSourceDto): CodebaseSourceDto
     {
         $sources = [];
+
         /** @var \SplFileInfo $file */
         foreach ($finder as $file) {
             if ($file->getExtension() !== static::XML_EXTENSION) {
@@ -63,12 +64,11 @@ class TransferSchemaParser extends XmlParser
                 continue;
             }
 
-            if (!in_array(static::TRANSFER_NAMESPACE, $simpleXmlElement->getNamespaces())) {
+            if (!in_array(static::SCHEMA_NAMESPACE, $simpleXmlElement->getNamespaces())) {
                 continue;
             }
 
-            $simpleXmlElement = $this->getSimpleXmlTransferElements($simpleXmlElement);
-
+            $simpleXmlElement = $this->getSimpleXmlTableElements($simpleXmlElement);
             if (!$simpleXmlElement) {
                 continue;
             }
@@ -77,7 +77,7 @@ class TransferSchemaParser extends XmlParser
             $sources = array_merge($newSources, $sources);
         }
 
-        return $codebaseSourceDto->setTransferSchemaCodebaseSources($sources, $codebaseSourceDto->getType());
+        return $codebaseSourceDto->setDatabaseSchemaCodebaseSources($sources, $codebaseSourceDto->getType());
     }
 
     /**
@@ -85,15 +85,15 @@ class TransferSchemaParser extends XmlParser
      *
      * @return array<\SimpleXMLElement>
      */
-    protected function getSimpleXmlTransferElements(SimpleXMLElement $simpleXmlElement): array
+    protected function getSimpleXmlTableElements(SimpleXMLElement $simpleXmlElement): array
     {
-        $namespace = 'spryker:transfer-01';
+        $namespace = 'spryker:schema-01';
         if ($this->hasNamespaceInXml($simpleXmlElement, $namespace)) {
-            $simpleXmlElement->registerXPathNamespace('t', $namespace);
+            $simpleXmlElement->registerXPathNamespace('s', $namespace);
 
-            return $simpleXmlElement->xpath('//t:transfer') ?: [];
+            return $simpleXmlElement->xpath('//s:table') ?: [];
         }
 
-        return $simpleXmlElement->xpath('//transfer') ?: [];
+        return $simpleXmlElement->xpath('//table') ?: [];
     }
 }

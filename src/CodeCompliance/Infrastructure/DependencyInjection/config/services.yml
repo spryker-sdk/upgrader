@@ -33,6 +33,9 @@ services:
     is_not_unique_transfer_property.task:
         class: CodeCompliance\Application\Checks\NotUnique\TransferPropertyCheck
 
+    is_not_unique_module_name.task:
+        class: CodeCompliance\Application\Checks\NotUnique\ModuleNameCheck
+
 #PrivateApiUsed
     is_private_api_dp_is_used.task:
         class: CodeCompliance\Application\Checks\PrivateApi\Used\DependencyProviderCheck
@@ -73,15 +76,16 @@ services:
                 param4: '@is_not_unique_method.task',
                 param5: '@is_not_unique_transfer.task',
                 param6: '@is_not_unique_transfer_property.task',
-                param7: '@is_private_api_dp_is_used.task',
-                param8: '@is_private_api_extended.task',
-                param9: '@is_private_used_in_facade.task',
-                param10: '@is_private_api_is_used_as_dp_in_business_model.task',
-                param11: '@is_private_api_is_initialized_in_business_model.task',
-                param12: '@is_private_api_is_used_in_persistence.check',
-                param13: '@is_private_api_from_persistence_is_used_in_b_m.check',
-                param14: '@is_private_api_core_is_used_in_persistence.check',
-                param15: '@is_private_api_method_overwritten.check'
+                param7: '@is_not_unique_module_name.task',
+                param8: '@is_private_api_dp_is_used.task',
+                param9: '@is_private_api_extended.task',
+                param10: '@is_private_used_in_facade.task',
+                param11: '@is_private_api_is_used_as_dp_in_business_model.task',
+                param12: '@is_private_api_is_initialized_in_business_model.task',
+                param13: '@is_private_api_is_used_in_persistence.check',
+                param14: '@is_private_api_from_persistence_is_used_in_b_m.check',
+                param15: '@is_private_api_core_is_used_in_persistence.check',
+                param16: '@is_private_api_method_overwritten.check'
               }
 
     CodeCompliance\Application\Service\CodeComplianceServiceInterface: '@CodeCompliance\Application\Service\CodeComplianceService'
