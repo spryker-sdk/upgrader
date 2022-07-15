@@ -32,7 +32,8 @@ class ModuleParser implements StructureParserInterface
     {
         $coreModules = [];
         foreach ($codebaseRequestDto->getCorePaths() as $corePath) {
-            foreach ((array)glob(sprintf(static::CORE_PATH_FORMAT, $corePath), GLOB_ONLYDIR) as $dir) {
+            $directories = glob(sprintf(static::CORE_PATH_FORMAT, $corePath), GLOB_ONLYDIR);
+            foreach ((array)$directories as $dir) {
                 $coreModules[] = $this->snakeCaseToCamelCase(basename((string)$dir));
             }
         }
@@ -40,7 +41,8 @@ class ModuleParser implements StructureParserInterface
 
         $projectModules = [];
         foreach ($codebaseRequestDto->getProjectPaths() as $projectPath) {
-            foreach ((array)glob(sprintf(static::PROJECT_PATH_FORMAT, $projectPath), GLOB_ONLYDIR) as $dir) {
+            $directories = glob(sprintf(static::PROJECT_PATH_FORMAT, $projectPath), GLOB_ONLYDIR);
+            foreach ((array)$directories as $dir) {
                 $projectModules[] = $this->removeRegionCode(basename((string)$dir));
             }
         }
