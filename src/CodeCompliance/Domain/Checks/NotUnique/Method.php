@@ -8,6 +8,7 @@
 namespace CodeCompliance\Domain\Checks\NotUnique;
 
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
+use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
 use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
@@ -37,7 +38,9 @@ class Method extends AbstractCodeComplianceCheck
     public function getViolations(): array
     {
         $sources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
-        $filteredSources = $this->filterService->filter($sources, [PluginFilter::PLUGIN_FILTER]);
+        $filteredSources = $this->filterService->filter($sources, [
+            PluginFilter::PLUGIN_FILTER, IgnoreListParentFilter::IGNORE_LIST_PARENT_FILTER,
+        ]);
 
         $violations = [];
 
@@ -92,25 +95,6 @@ class Method extends AbstractCodeComplianceCheck
     {
         return (preg_match('/.*Factory$/', $className) || preg_match('/.*DependencyProvider$/', $className))
             && preg_match('/.*Plugins$/', $methodName);
-    }
-
-    /**
-     * @phpstan-template T of object
-     *
-     * @phpstan-param array<\ReflectionClass<T>> $interfaces
-     *
-     * @param array<\ReflectionClass> $interfaces
-     *
-     * @return array<\ReflectionMethod>
-     */
-    protected function getInterfaceMethods(array $interfaces): array
-    {
-        $methods = [];
-        foreach ($interfaces as $interface) {
-            $methods = array_merge($methods, $interface->getMethods());
-        }
-
-        return $methods;
     }
 
     /**

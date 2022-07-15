@@ -9,6 +9,8 @@ namespace CodeCompliance\Domain\Checks\PrivateApi\MethodOverwritten;
 
 use Codebase\Application\Dto\CodebaseInterface;
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
+use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
+use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 use ReflectionMethod;
@@ -41,10 +43,15 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
      */
     public function getViolations(): array
     {
+        $sources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
+        $filteredSources = $this->filterService->filter($sources, [
+            PluginFilter::PLUGIN_FILTER, IgnoreListParentFilter::IGNORE_LIST_PARENT_FILTER,
+        ]);
+
         $violations = [];
 
         foreach (static::PATTERNS_TO_FILTER as $pattern) {
-            $filteredSources = $this->filterProjectClassesWithExtendedCoreByPattern($this->getCodebaseSourceDto()->getPhpCodebaseSources(), $pattern);
+            $filteredSources = $this->filterProjectClassesWithExtendedCoreByPattern($filteredSources, $pattern);
 
             foreach ($filteredSources as $filteredSource) {
                 if ($filteredSource->getCoreParent() === null) {
