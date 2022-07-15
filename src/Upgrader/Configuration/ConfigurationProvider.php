@@ -47,6 +47,7 @@ class ConfigurationProvider
     public function getCorePaths(): array
     {
         $directories = (array)glob($this->getVendorPath() . 'spryker*', GLOB_ONLYDIR);
+
         return array_filter($directories, function ($directory) {
             return $directory !== false;
         });
