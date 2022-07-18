@@ -44,11 +44,11 @@ class ResolveService implements ResolveServiceInterface
      */
     public function resolve(CodebaseSourceDto $codebaseSourceDto): Message
     {
-        $result = new Message('');
+        $message = new Message('');
         foreach ($this->resolveChecks as $resolveCheck) {
-            $result = $resolveCheck->run($result, $codebaseSourceDto);
+            $result = $resolveCheck->run($message, $codebaseSourceDto);
         }
 
-        return $result;
+        return $message;
     }
 }

@@ -7,9 +7,10 @@
 
 namespace Resolve\Domain\Resolves\NotUnique;
 
+use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
 use Resolve\Domain\AbstractResolveCheck;
 use Resolve\Domain\Entity\Message;
-use Resolve\Domain\Resolves\Filters\PluginFilter;
+use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use ReflectionClass;
 
 class Method extends AbstractResolveCheck
@@ -36,7 +37,9 @@ class Method extends AbstractResolveCheck
     public function getResult(): string
     {
         $sources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
-        $filteredSources = $this->filterService->filter($sources, [PluginFilter::PLUGIN_FILTER]);
+        $filteredSources = $this->filterService->filter($sources, [
+            PluginFilter::PLUGIN_FILTER, IgnoreListParentFilter::IGNORE_LIST_PARENT_FILTER,
+        ]);
 
         $violations = [];
 
@@ -73,8 +76,11 @@ class Method extends AbstractResolveCheck
                         $projectMethod->getName(),
                         lcfirst(implode('', $methodParts)),
                     );
+                    echo $guideline;
+                    //$projectMethod->
                     //$violations[] = new Violation(new Id(), $guideline, $this->getName());
-                    print_r($guideline);
+                   // print_r($source);
+                   // echo "\n";
                 }
             }
         }

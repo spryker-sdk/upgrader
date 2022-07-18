@@ -5,19 +5,29 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Commands\Resolve;
+namespace Upgrader\Console;
 
 use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Infrastructure\Service\CodebaseService;
-use SprykerSdk\SdkContracts\Entity\ContextInterface;
-use SprykerSdk\SdkContracts\Entity\ConverterInterface;
-use SprykerSdk\SdkContracts\Entity\ExecutableCommandInterface;
-use Resolve\Application\Service\ResolveServiceInterface;
 use Resolve\Domain\Entity\Message;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Resolve\Application\Service\ResolveServiceInterface;
 use Upgrader\Configuration\ConfigurationProvider;
 
-class ResolveCommand implements ExecutableCommandInterface
+class ResolveConsole extends Command
 {
+    /**
+     * @var string
+     */
+    protected const NAME = 'resolve:php:code';
+
+    /**
+     * @var string
+     */
+    protected const DESCRIPTION = 'Automatic resolve project updates.';
+
     /**
      * @var ConfigurationProvider
      */
@@ -43,63 +53,38 @@ class ResolveCommand implements ExecutableCommandInterface
         ConfigurationProvider $configurationProvider,
         CodebaseService $codebaseService
     ) {
+        parent::__construct();
         $this->resolveService = $resolveService;
         $this->configurationProvider = $configurationProvider;
         $this->codebaseService = $codebaseService;
     }
 
+
     /**
-     * @return string
+     * @return void
      */
-    public function getCommand(): string
+    protected function configure()
     {
-        return static::class;
+        parent::configure();
+
+        $this->setName(static::NAME);
+        $this->setDescription(static::DESCRIPTION);
     }
 
     /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return 'php';
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getTags(): array
-    {
-        return [];
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasStopOnError(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @return ConverterInterface|null
-     */
-    public function getConverter(): ?ConverterInterface
-    {
-        return null;
-    }
-
-    /**
-     * @param ContextInterface $context
+     * @param InputInterface $input
+     * @param OutputInterface $output
      *
-     * @return ContextInterface
+     * @return int
      */
-    public function execute(ContextInterface $context): ContextInterface
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
-        echo 'Continue to Resolve? [y/N] ';
+        $output->writeln('Continue to Resolve? [y/N] ');
         if (!in_array(trim(fgets(STDIN)), array('y', 'Y'))) {
-            echo 'Stopped' . "\n";
-            exit;
+            $output->writeln('Stopped');
+            return Command::FAILURE;
         }
+        $output->writeln('Resolving..');
 
         $codebaseRequestDto = new CodeBaseRequestDto(
             $this->configurationProvider->getToolingConfigurationFilePath(),
@@ -113,18 +98,8 @@ class ResolveCommand implements ExecutableCommandInterface
 
         $response = $this->resolveService->resolve($codebaseSourceDto);
 
-        $message = new Message($response->getMessage());
+        $output->writeln($response->getMessage());
 
-        $context->addMessage(static::class, $message);
-
-        return $context;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStage(): string
-    {
-        return ContextInterface::DEFAULT_STAGE;
+        return Command::SUCCESS;
     }
 }

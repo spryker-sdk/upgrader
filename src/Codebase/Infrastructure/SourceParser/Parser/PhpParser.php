@@ -17,7 +17,10 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use ReflectionClass;
+use ReflectionFunction;
+use ReflectionMethod;
 use Symfony\Component\Finder\Finder;
+use voku\SimplePhpParser\Parsers\PhpCodeParser;
 
 /**
  * @phpstan-template T of object
@@ -74,6 +77,7 @@ class PhpParser implements PhpParserInterface
         $filePaths = [];
         /** @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder as $file) {
+
             if ($file->getExtension() !== static::PARSER_EXTENSION) {
                 continue;
             }
@@ -81,6 +85,7 @@ class PhpParser implements PhpParserInterface
             $originalSyntaxTree = $this->parser->parse($file->getContents());
 
             if ($originalSyntaxTree) {
+
                 $syntaxTree = $this->traverseOriginalSyntaxTree($originalSyntaxTree);
                 $classNode = $this->sourceFinder->findClassNode($syntaxTree);
                 if (!$classNode || !$classNode->namespacedName) {
@@ -96,7 +101,6 @@ class PhpParser implements PhpParserInterface
                 if ($classCodebaseDto === null) {
                     continue;
                 }
-
                 $sources[$classString] = $classCodebaseDto;
                 $filePaths[] = $file->getRealPath();
             }
@@ -161,6 +165,7 @@ class PhpParser implements PhpParserInterface
             }
             /** @phpstan-var \ReflectionClass<T> $projectClass */
             $projectClass = new ReflectionClass($namespace);
+
         } catch (Exception $logicException) {
             return null;
         } catch (Error $error) {
@@ -171,6 +176,8 @@ class PhpParser implements PhpParserInterface
             /** @phpstan-var \Codebase\Application\Dto\ClassCodebaseDto<T> $transfer */
             $transfer = new ClassCodebaseDto($coreNamespaces);
         }
+
+
         $transfer->setClassName($namespace);
         $transfer->setConstants($projectClass->getConstants());
         $transfer->setMethods($projectClass->getMethods());
@@ -181,12 +188,28 @@ class PhpParser implements PhpParserInterface
             $this->getCoreInterfacesMethods($projectClass->getInterfaces(), $projectPrefixes),
         );
 
+
         if ($coreNamespaces !== []) {
             $projectMethods = $this->getProjectMethods($projectClass->getName(), $projectClass->getMethods(), $coreNamespaces);
             $transfer->setProjectMethods($projectMethods);
         }
 
         $parentClass = $projectClass->getParentClass();
+        if ($namespace=="Pyz\Yves\HelloWorld\Controller\IndexController") {
+            //print_r($projectClass->getMethods());
+
+            echo $clasName = $projectClass->getName();
+            /*
+            $phpCode = PhpCodeParser::getFromClassName($clasName);
+            $phpClasses = $phpCode->getClasses();
+            var_dump($phpClasses[$clasName]); // "PHPClass"-object
+            var_dump($phpClasses[$clasName]->methods); // "PHPMethod[]"-objects
+            var_dump($phpClasses[$clasName]->methods['withoutPhpDocParam']); // "PHPMethod"-object
+            var_dump($phpClasses[$clasName]->methods['withoutPhpDocParam']->parameters); // "PHPParameter[]"-objects
+            var_dump($phpClasses[$clasName]->methods['withoutPhpDocParam']->parameters['useRandInt']); // "PHPParameter"-object
+            var_dump($phpClasses[$clasName]->methods['withoutPhpDocParam']->parameters['useRandInt']->type); // "bool"
+*/
+        }
 
         if ($parentClass) {
             if ($coreNamespaces !== []) {

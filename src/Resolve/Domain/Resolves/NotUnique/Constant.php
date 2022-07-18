@@ -7,6 +7,7 @@
 
 namespace Resolve\Domain\Resolves\NotUnique;
 
+use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
 use Resolve\Domain\AbstractResolveCheck;
 
 class Constant extends AbstractResolveCheck
@@ -27,7 +28,10 @@ class Constant extends AbstractResolveCheck
         $violations = [];
 
         // Re-use the CodeComplinace part here
-        foreach ($this->getCodebaseSourceDto()->getPhpCodebaseSources() as $source) {
+        $sources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
+        $filteredSources = $this->filterService->filter($sources, [IgnoreListParentFilter::IGNORE_LIST_PARENT_FILTER]);
+
+        foreach ($filteredSources as $source) {
             $coreParent = $source->getCoreParent();
             $parentConstants = $coreParent ? $coreParent->getConstants() : [];
             $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();

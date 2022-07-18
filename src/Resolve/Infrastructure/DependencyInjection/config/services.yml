@@ -16,10 +16,10 @@ services:
         resource: '../../../../Resolve/Domain/*'
 
 #NotUnique
-    is_not_unique_constant.task:
+    is_not_unique_constant_resolve.task:
         class: Resolve\Application\Resolves\NotUnique\ConstantResolve
 
-    is_not_unique_method.task:
+    is_not_unique_method_resolve.task:
         class: Resolve\Application\Resolves\NotUnique\MethodResolve
 
     Resolve\Application\Service\ResolveService:
@@ -27,9 +27,51 @@ services:
         arguments:
             - '@codebase.service'
             - {
-                param1: '@is_not_unique_constant.task',
-                param4: '@is_not_unique_method.task',
+                param1: '@is_not_unique_constant_resolve.task',
+                param4: '@is_not_unique_method_resolve.task',
               }
 
     Resolve\Application\Service\ResolveServiceInterface: '@Resolve\Application\Service\ResolveService'
 
+# Reusing CodeCompliance Filters, as in resolve we are expecting same to resolve
+    business_factory.filter:
+        class: CodeCompliance\Domain\Checks\Filters\BusinessFactoryFilter
+
+    business_model.filter:
+        class: CodeCompliance\Domain\Checks\Filters\BusinessModelFilter
+
+    core_extension.filter:
+        class: CodeCompliance\Domain\Checks\Filters\CoreExtensionFilter
+
+    facade.filter:
+        class: CodeCompliance\Domain\Checks\Filters\FacadeFilter
+
+    ignore_list.filter:
+        class: CodeCompliance\Domain\Checks\Filters\IgnoreListFilter
+
+    ignore_list_parent.filter:
+        class: CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter
+
+    persistence.filter:
+        class: CodeCompliance\Domain\Checks\Filters\PersistenceFilter
+
+    private_api.filter:
+        class: CodeCompliance\Domain\Checks\Filters\PrivateApiFilter
+
+    plugin.filter:
+        class: CodeCompliance\Domain\Checks\Filters\PluginFilter
+
+    CodeCompliance\Domain\Service\FilterService:
+        class: CodeCompliance\Domain\Service\FilterService
+        arguments:
+            - {
+                param1: '@business_factory.filter',
+                param2: '@business_model.filter',
+                param3: '@core_extension.filter',
+                param4: '@facade.filter',
+                param5: '@ignore_list.filter',
+                param6: '@persistence.filter',
+                param7: '@private_api.filter',
+                param8: '@plugin.filter',
+                param9: '@ignore_list_parent.filter'
+            }

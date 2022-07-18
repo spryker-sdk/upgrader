@@ -9,7 +9,7 @@ namespace Resolve\Domain;
 
 use Codebase\Application\Dto\CodebaseSourceDto;
 use Resolve\Domain\Service\CodeBaseServiceInterface;
-use Resolve\Domain\Service\FilterService;
+use CodeCompliance\Domain\Service\FilterService;
 
 abstract class AbstractResolveCheck implements ResolveInterface
 {
@@ -24,7 +24,7 @@ abstract class AbstractResolveCheck implements ResolveInterface
     protected CodebaseSourceDto $codebaseSourceDto;
 
     /**
-     * @var \Resolve\Domain\Service\FilterService
+     * @var FilterService
      */
     protected FilterService $filterService;
 
@@ -34,7 +34,7 @@ abstract class AbstractResolveCheck implements ResolveInterface
     protected CodeBaseServiceInterface $codeBaseService;
 
     /**
-     * @param \Resolve\Domain\Service\FilterService $filterService
+     * @param FilterService $filterService
      * @param CodeBaseServiceInterface $codeBaseService
      */
     public function __construct(FilterService $filterService, CodeBaseServiceInterface $codeBaseService)

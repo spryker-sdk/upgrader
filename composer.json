@@ -4,7 +4,7 @@
     "description": "Code evaluator and upgrader tool",
     "license": "proprietary",
     "require": {
-        "php": ">=8.0",
+        "php": ">=7.4",
         "ext-json": "*",
         "ext-simplexml": "*",
         "davidrjonas/composer-lock-diff": "^1.6",
@@ -15,8 +15,8 @@
         "m4tthumphrey/php-gitlab-api": "^11.5",
         "nikic/php-parser": "4.13.*",
         "phpstan/phpstan": "^1.2",
-        "spryker-sdk/integrator": "dev-develop",
-        "spryker-sdk/sdk-contracts": "dev-master",
+        "spryker-sdk/integrator": "dev-feature/pplus-1399-revert-to-php74",
+        "spryker-sdk/sdk-contracts": "dev-feature/sdk-635/dev-php74-compatibility",
         "spryker/code-sniffer": "^0.17.3",
         "symfony/config": "^5.0",
         "symfony/console": "^5.0",
@@ -26,6 +26,7 @@
         "symfony/framework-bundle": "5.3.*",
         "symfony/http-kernel": "^5.0",
         "symfony/process": "^5.0",
+        "symfony/runtime": "^5",
         "symfony/yaml": "^5.3"
     },
     "require-dev": {
@@ -33,6 +34,7 @@
     },
     "autoload": {
         "psr-4": {
+            "App\\": "app/",
             "Core\\": "src/Core/",
             "Codebase\\": "src/Codebase/",
             "CodeCompliance\\": "src/CodeCompliance/",
@@ -56,7 +58,8 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "symfony/runtime": true
         }
     },
     "scripts": {
