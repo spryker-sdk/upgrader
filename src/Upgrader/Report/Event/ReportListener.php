@@ -49,7 +49,7 @@ class ReportListener
         ) {
             $messages = $this->reportService->report();
 
-            if ($messages === []) {
+            if (!$messages) {
                 return;
             }
 
