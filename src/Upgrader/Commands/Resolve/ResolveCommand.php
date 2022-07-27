@@ -112,10 +112,12 @@ class ResolveCommand implements ExecutableCommandInterface
         $codebaseSourceDto = $this->codebaseService->readCodeBase($codebaseRequestDto);
 
         $response = $this->resolveService->resolve($codebaseSourceDto);
-
         $message = new Message($response->getMessage());
-
         $context->addMessage(static::class, $message);
+
+        // TODO: Need to execute this from upgrader; but at this stage we are inside project directory
+        //$outputCommand = shell_exec('vendor/bin/rector process --dry-run');
+        //print_r($outputCommand);
 
         return $context;
     }

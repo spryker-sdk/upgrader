@@ -84,7 +84,7 @@ class ResolveConsole extends Command
             $output->writeln('Stopped');
             return Command::FAILURE;
         }
-        $output->writeln('Resolving..');
+        $output->writeln('Preparing non-unique indexes..');
 
         $codebaseRequestDto = new CodeBaseRequestDto(
             $this->configurationProvider->getToolingConfigurationFilePath(),
@@ -95,8 +95,11 @@ class ResolveConsole extends Command
         );
 
         $codebaseSourceDto = $this->codebaseService->readCodeBase($codebaseRequestDto);
-
         $response = $this->resolveService->resolve($codebaseSourceDto);
+
+        // TODO: Need to execute this from upgrader; but at this stage we are inside project directory
+        //$outputCommand = shell_exec('vendor/bin/rector process --dry-run');
+        //print_r($outputCommand);
 
         $output->writeln($response->getMessage());
 

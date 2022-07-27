@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
@@ -17,10 +18,11 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use ReflectionClass;
-use ReflectionFunction;
-use ReflectionMethod;
 use Symfony\Component\Finder\Finder;
 use voku\SimplePhpParser\Parsers\PhpCodeParser;
+use Rector\Config\RectorConfig;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
 
 /**
  * @phpstan-template T of object
@@ -177,7 +179,6 @@ class PhpParser implements PhpParserInterface
             $transfer = new ClassCodebaseDto($coreNamespaces);
         }
 
-
         $transfer->setClassName($namespace);
         $transfer->setConstants($projectClass->getConstants());
         $transfer->setMethods($projectClass->getMethods());
@@ -195,21 +196,6 @@ class PhpParser implements PhpParserInterface
         }
 
         $parentClass = $projectClass->getParentClass();
-        if ($namespace=="Pyz\Yves\HelloWorld\Controller\IndexController") {
-            //print_r($projectClass->getMethods());
-
-            echo $clasName = $projectClass->getName();
-            /*
-            $phpCode = PhpCodeParser::getFromClassName($clasName);
-            $phpClasses = $phpCode->getClasses();
-            var_dump($phpClasses[$clasName]); // "PHPClass"-object
-            var_dump($phpClasses[$clasName]->methods); // "PHPMethod[]"-objects
-            var_dump($phpClasses[$clasName]->methods['withoutPhpDocParam']); // "PHPMethod"-object
-            var_dump($phpClasses[$clasName]->methods['withoutPhpDocParam']->parameters); // "PHPParameter[]"-objects
-            var_dump($phpClasses[$clasName]->methods['withoutPhpDocParam']->parameters['useRandInt']); // "PHPParameter"-object
-            var_dump($phpClasses[$clasName]->methods['withoutPhpDocParam']->parameters['useRandInt']->type); // "bool"
-*/
-        }
 
         if ($parentClass) {
             if ($coreNamespaces !== []) {

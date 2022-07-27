@@ -13,6 +13,16 @@ use Resolve\Domain\AbstractResolveCheck;
 class Constant extends AbstractResolveCheck
 {
     /**
+     * @var string
+     */
+    public const RECTOR_FILE_PATH = '/rector/constants_to_replace.json';
+
+    /**
+     * @var string
+     */
+    public const RECTOR_DIR = 'rector';
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -27,7 +37,8 @@ class Constant extends AbstractResolveCheck
     {
         $violations = [];
 
-        // Re-use the CodeComplinace part here
+        // TODO: Re-use the CodeComplinace code partially here to grab all violation with same rules
+
         $sources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
         $filteredSources = $this->filterService->filter($sources, [IgnoreListParentFilter::IGNORE_LIST_PARENT_FILTER]);
 
@@ -43,32 +54,46 @@ class Constant extends AbstractResolveCheck
                 if ($coreParent && $isConstantUnique && !$hasProjectPrefix) {
                     $constantNameRequired = strtoupper((string)reset($projectPrefixes)) . '_' . $nameConstant;
 
+                    /* old approach
                     // preparing violation array, added required prefix and post, by that it wont repeatedly change the same
                     $violations['::' . $nameConstant] = '::' . $constantNameRequired;
                     $violations[' ' . $nameConstant . ' '] = ' ' . $constantNameRequired . ' ';
-                    //$violations[$nameConstant] = $constantNameRequired;
+                    */
+                    $violations[$nameConstant] = $constantNameRequired;
                 }
             }
         }
 
-        // if do not find any violations
+
+        // when do not find any violations
         if (count($violations)<=0) {
             return $this->getName() . ':' . 'Already Resolved';
         }
 
+        /* old approach
         // preparing finder and replacer
         $finder = array_keys($violations);
         $replace = array_values($violations);
 
-        //print_r($this->getCodebaseSourceDto()->getPhpFilePaths());
+        // filter all files one by one to check and replace constant
         foreach ($this->getCodebaseSourceDto()->getPhpFilePaths() as $filePath) {
             $file_contents = file_get_contents($filePath);
             if ($file_contents) {
                 $file_contents = str_replace($finder, $replace, $file_contents);
                 file_put_contents($filePath, $file_contents);
             }
-        }
+        }*/
 
-        return $this->getName() . ':' . 'Resolved';
+
+        if (!is_dir(static::RECTOR_DIR)) {
+            mkdir(static::RECTOR_DIR, 0777, true);
+        }
+        if (!file_exists(getcwd() . static::RECTOR_FILE_PATH)) {
+            touch(getcwd() . static::RECTOR_FILE_PATH);
+        }
+        file_put_contents(getcwd() . static::RECTOR_FILE_PATH, json_encode($violations));
+
+
+        return $this->getName() . ':' . 'Prepared.';
     }
 }

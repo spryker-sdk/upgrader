@@ -8,13 +8,28 @@
 namespace Resolve\Domain\Resolves\NotUnique;
 
 use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
+use CodeCompliance\Domain\Service\FilterService;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
 use Resolve\Domain\AbstractResolveCheck;
 use Resolve\Domain\Entity\Message;
 use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use ReflectionClass;
+use Resolve\Domain\Service\CodeBaseServiceInterface;
 
 class Method extends AbstractResolveCheck
 {
+    /**
+     * @var string
+     */
+    public const RECTOR_FILE_PATH = '/rector/methods_to_replace.json';
+
+    /**
+     * @var string
+     */
+    public const RECTOR_DIR = 'rector';
+
+
     /**
      * @return string
      */
@@ -26,16 +41,11 @@ class Method extends AbstractResolveCheck
     /**
      * @return string
      */
-    public function getGuideline(): string
-    {
-        return 'Method name %s::%s() should contains project prefix, like %s';
-    }
-
-    /**
-     * @return string
-     */
     public function getResult(): string
     {
+
+        // TODO: Re-use the CodeComplinace code partially here to grab all violation with same rules
+
         $sources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
         $filteredSources = $this->filterService->filter($sources, [
             PluginFilter::PLUGIN_FILTER, IgnoreListParentFilter::IGNORE_LIST_PARENT_FILTER,
@@ -70,22 +80,31 @@ class Method extends AbstractResolveCheck
                 if ($source->isExtendCore() && !$isCoreMethod && !$hasProjectPrefix && !$isMethodDeclaredInInterface) {
                     $methodParts = preg_split('/(?=[A-Z])/', $projectMethod->getName()) ?: [];
                     array_splice($methodParts, 1, 0, [reset($projectPrefixes)]);
-                    $guideline = sprintf(
-                        $this->getGuideline(),
-                        $source->getClassName(),
-                        $projectMethod->getName(),
-                        lcfirst(implode('', $methodParts)),
-                    );
-                    echo $guideline;
-                    //$projectMethod->
-                    //$violations[] = new Violation(new Id(), $guideline, $this->getName());
-                   // print_r($source);
-                   // echo "\n";
+
+                    $violations[] = [
+                        'filePath' => $projectMethod->getFileName(),
+                        'className' => $source->getClassName(),
+                        'methodName' => $projectMethod->getName(),
+                        'desiredMethodName' => lcfirst(implode('', $methodParts))
+                    ];
                 }
             }
         }
 
-        return $this->getName() . ':' . 'Resolved';
+        // when do not find any violations
+        if (count($violations)<=0) {
+            return $this->getName() . ':' . 'Already Resolved';
+        }
+
+        if (!is_dir(static::RECTOR_DIR)) {
+            mkdir(static::RECTOR_DIR, 0777, true);
+        }
+        if (!file_exists(getcwd() . static::RECTOR_FILE_PATH)) {
+            touch(getcwd() . static::RECTOR_FILE_PATH);
+        }
+        file_put_contents(getcwd() . static::RECTOR_FILE_PATH, json_encode($violations));
+
+        return $this->getName() . ':' . 'Prepared.';
     }
 
     /**
