@@ -39,10 +39,10 @@ return static function (RectorConfig $rectorConfig): void {
     // Rename Methods
     $fileContents = file_get_contents($PROJECT_DIR_NAME . Method::RECTOR_FILE_PATH);
     $dataMethods = json_decode((string)$fileContents, true);
-    foreach ($dataMethods as $method){
-        $rectorConfig->ruleWithConfiguration(
-            RenameMethodRector::class,
-            [new MethodCallRename($method['className'], $method['methodName'], $method['desiredMethodName'])]
-        );
+    $renameMethods=[];
+    foreach ($dataMethods as $method) {
+        $renameMethods[] = new MethodCallRename($method['className'], $method['methodName'], $method['desiredMethodName']);
     }
+    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class,$renameMethods);
+
 };
