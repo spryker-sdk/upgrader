@@ -5,11 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Tasks\Evaluate\Report;
+namespace Upgrader\Task\Evaluate\Report;
 
 use SprykerSdk\SdkContracts\Entity\Lifecycle\LifecycleInterface;
 use SprykerSdk\SdkContracts\Entity\TaskInterface;
-use Upgrader\Commands\Evaluate\Report\ReportCommand;
+use Upgrader\Command\Evaluate\Report\ReportCommand;
 use Upgrader\Lifecycle\Lifecycle;
 
 class ReportTask implements TaskInterface

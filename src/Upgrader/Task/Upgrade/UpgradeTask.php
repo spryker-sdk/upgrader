@@ -5,12 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Tasks\Upgrade;
+namespace Upgrader\Task\Upgrade;
 
 use SprykerSdk\SdkContracts\Entity\Lifecycle\LifecycleInterface;
 use SprykerSdk\SdkContracts\Entity\TaskInterface;
 use Upgrade\Application\Service\UpgradeServiceInterface;
-use Upgrader\Commands\Upgrade\UpgradeCommand;
+use Upgrader\Command\Upgrade\UpgradeCommand;
 use Upgrader\Lifecycle\Lifecycle;
 
 class UpgradeTask implements TaskInterface
