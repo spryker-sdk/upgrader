@@ -16,7 +16,7 @@
         "nikic/php-parser": "4.13.*",
         "phpstan/phpstan": "^1.2",
         "spryker-sdk/integrator": "dev-develop",
-        "spryker-sdk/sdk-contracts": "dev-master",
+        "spryker-sdk/sdk-contracts": "dev-bugfix/sdk-749-application-namespace-refactoring",
         "spryker/code-sniffer": "^0.17.3",
         "symfony/config": "^5.0",
         "symfony/console": "^5.0",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "18062162bf5b390fb450de53e915765c",
+    "content-hash": "27dc40a637d5877955d976adb02acd6b",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -3098,16 +3098,16 @@
         },
         {
             "name": "spryker-sdk/sdk-contracts",
-            "version": "dev-master",
+            "version": "dev-bugfix/sdk-749-application-namespace-refactoring",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/sdk-contracts.git",
-                "reference": "fe58248bd35dda6ce861c695a46c9fefce1fdc72"
+                "reference": "2d815d48d6235d85724055579959c14193e3d260"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/fe58248bd35dda6ce861c695a46c9fefce1fdc72",
-                "reference": "fe58248bd35dda6ce861c695a46c9fefce1fdc72",
+                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/2d815d48d6235d85724055579959c14193e3d260",
+                "reference": "2d815d48d6235d85724055579959c14193e3d260",
                 "shasum": ""
             },
             "require": {
@@ -3117,7 +3117,6 @@
                 "phpstan/phpstan": "^1.2",
                 "spryker/code-sniffer": "^0.17.1"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -3131,9 +3130,9 @@
             "description": "Contracts to extend the Spryker SDK",
             "support": {
                 "issues": "https://github.com/spryker-sdk/sdk-contracts/issues",
-                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/master"
+                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/bugfix/sdk-749-application-namespace-refactoring"
             },
-            "time": "2022-07-13T15:36:51+00:00"
+            "time": "2022-07-29T08:43:37+00:00"
         },
         {
             "name": "spryker/code-sniffer",
