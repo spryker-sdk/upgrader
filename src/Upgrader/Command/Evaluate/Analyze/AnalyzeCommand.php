@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Commands\Evaluate\Analyze;
+namespace Upgrader\Command\Evaluate\Analyze;
 
 use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Infrastructure\Service\CodebaseService;

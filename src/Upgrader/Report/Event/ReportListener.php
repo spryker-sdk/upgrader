@@ -10,8 +10,8 @@ namespace Upgrader\Report\Event;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Upgrader\Report\Service\ReportService;
-use Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask;
-use Upgrader\Tasks\Evaluate\Report\ReportTask;
+use Upgrader\Task\Evaluate\Analyze\AnalyzeTask;
+use Upgrader\Task\Evaluate\Report\ReportTask;
 
 class ReportListener
 {

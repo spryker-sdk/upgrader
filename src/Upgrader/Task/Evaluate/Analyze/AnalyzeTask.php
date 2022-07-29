@@ -5,13 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Tasks\Evaluate\Analyze;
+namespace Upgrader\Task\Evaluate\Analyze;
 
 use Codebase\Infrastructure\Service\CodebaseService;
 use CodeCompliance\Application\Service\CodeComplianceServiceInterface;
 use SprykerSdk\SdkContracts\Entity\Lifecycle\LifecycleInterface;
 use SprykerSdk\SdkContracts\Entity\TaskInterface;
-use Upgrader\Commands\Evaluate\Analyze\AnalyzeCommand;
+use Upgrader\Command\Evaluate\Analyze\AnalyzeCommand;
 use Upgrader\Configuration\ConfigurationProvider;
 use Upgrader\Lifecycle\Lifecycle;
 

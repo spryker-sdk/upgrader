@@ -8,7 +8,7 @@
 namespace Upgrader\Report\Service;
 
 use Symfony\Component\Yaml\Yaml;
-use Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask;
+use Upgrader\Task\Evaluate\Analyze\AnalyzeTask;
 
 class ReportService
 {

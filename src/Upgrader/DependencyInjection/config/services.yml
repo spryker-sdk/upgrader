@@ -9,16 +9,16 @@ services:
         resource: '../../../Upgrader/*'
 
     upgrade.task:
-        class: Upgrader\Tasks\Upgrade\UpgradeTask
+        class: Upgrader\Task\Upgrade\UpgradeTask
         tags: [ 'sdk.task' ]
 
     analyze.task:
-        class: Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask
+        class: Upgrader\Task\Evaluate\Analyze\AnalyzeTask
         tags:
             - { name: 'sdk.task'}
 
     report.task:
-        class: Upgrader\Tasks\Evaluate\Report\ReportTask
+        class: Upgrader\Task\Evaluate\Report\ReportTask
         tags: [ 'sdk.task' ]
 
     report.listener:
