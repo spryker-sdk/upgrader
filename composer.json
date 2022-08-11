@@ -13,7 +13,7 @@
         "http-interop/http-factory-guzzle": "^1.0",
         "knplabs/github-api": "^3.4",
         "m4tthumphrey/php-gitlab-api": "^11.5",
-        "nikic/php-parser": "4.13.*",
+        "nikic/php-parser": "4.14.*",
         "phpstan/phpstan": "^1.2",
         "spryker-sdk/integrator": "dev-develop",
         "spryker-sdk/sdk-contracts": "^0.2.0",
