@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76b03bae416766a1ce9365ec92b979ff",
+    "content-hash": "0ddd904a7c21b18d3da896aaede42f9b",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -3136,27 +3136,28 @@
         },
         {
             "name": "spryker/code-sniffer",
-            "version": "0.17.7",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/code-sniffer.git",
-                "reference": "ce91e60b909e280c4a90eeeab2a7e8f2f337153c"
+                "reference": "21b2e6f12911e37b9e3c9c7683475b7afc73b025"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/code-sniffer/zipball/ce91e60b909e280c4a90eeeab2a7e8f2f337153c",
-                "reference": "ce91e60b909e280c4a90eeeab2a7e8f2f337153c",
+                "url": "https://api.github.com/repos/spryker/code-sniffer/zipball/21b2e6f12911e37b9e3c9c7683475b7afc73b025",
+                "reference": "21b2e6f12911e37b9e3c9c7683475b7afc73b025",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.3",
-                "slevomat/coding-standard": "^7.0.1",
-                "squizlabs/php_codesniffer": "^3.6.0"
+                "slevomat/coding-standard": "^7.2.0 || ^8.0.1",
+                "squizlabs/php_codesniffer": "^3.6.2"
             },
             "require-dev": {
                 "phpstan/phpstan": "^1.0.0",
                 "phpunit/phpunit": "^9.5"
             },
+            "default-branch": true,
             "bin": [
                 "bin/tokenize"
             ],
@@ -3189,7 +3190,7 @@
                 "issues": "https://github.com/spryker/code-sniffer/issues",
                 "source": "https://github.com/spryker/code-sniffer"
             },
-            "time": "2022-05-04T13:31:06+00:00"
+            "time": "2022-08-09T17:27:11+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -7629,7 +7630,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "spryker-sdk/integrator": 20
+        "spryker-sdk/integrator": 20,
+        "spryker/code-sniffer": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

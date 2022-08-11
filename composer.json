@@ -17,7 +17,7 @@
         "phpstan/phpstan": "^1.2",
         "spryker-sdk/integrator": "dev-develop",
         "spryker-sdk/sdk-contracts": "^0.2.0",
-        "spryker/code-sniffer": "^0.17.3",
+        "spryker/code-sniffer": "dev-master",
         "symfony/config": "^5.0",
         "symfony/console": "^5.0",
         "symfony/dependency-injection": "^5.0",
