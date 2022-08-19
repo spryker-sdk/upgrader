@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76b03bae416766a1ce9365ec92b979ff",
+    "content-hash": "90e4fa98829db23ba1ff8956619d6285",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -3043,22 +3043,22 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "dev-develop",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "24cd3813db4f8c57f3ad6a1ce46dde7d69a7225d"
+                "reference": "321e191af9c62d6db0f729660d269623262a5c39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/24cd3813db4f8c57f3ad6a1ce46dde7d69a7225d",
-                "reference": "24cd3813db4f8c57f3ad6a1ce46dde7d69a7225d",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/321e191af9c62d6db0f729660d269623262a5c39",
+                "reference": "321e191af9c62d6db0f729660d269623262a5c39",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.0.0 || ^2.0.0",
                 "composer/composer": "^2.1.0",
-                "laminas/laminas-filter": "^2.14.0",
+                "laminas/laminas-filter": "^2.11.0",
                 "nikic/php-parser": "^4.3.0",
                 "php": ">=7.4",
                 "sebastian/diff": "^4.0.0",
@@ -3066,11 +3066,12 @@
                 "symfony/finder": "^5.3.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "^1.6.5",
+                "phpstan/phpstan": "^1.0.0",
                 "phpunit/phpunit": "^9.5.0",
                 "spryker/code-sniffer": "@stable",
                 "symfony/filesystem": "^5.3.0"
             },
+            "default-branch": true,
             "bin": [
                 "bin/integrator"
             ],
@@ -3092,9 +3093,9 @@
             "description": "Integrator module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
-                "source": "https://github.com/spryker-sdk/integrator/tree/develop"
+                "source": "https://github.com/spryker-sdk/integrator/tree/master"
             },
-            "time": "2022-07-14T08:16:08+00:00"
+            "time": "2022-08-19T10:53:38+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
