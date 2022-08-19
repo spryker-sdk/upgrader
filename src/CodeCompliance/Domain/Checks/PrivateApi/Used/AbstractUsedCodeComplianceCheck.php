@@ -143,19 +143,6 @@ abstract class AbstractUsedCodeComplianceCheck extends AbstractCodeComplianceChe
     }
 
     /**
-     * @param array<string> $coreNamespaces
-     * @param array<string> $classNamespaceList
-     *
-     * @return array<string>
-     */
-    protected function filterCoreClasses(array $coreNamespaces, array $classNamespaceList): array
-    {
-        return array_filter($classNamespaceList, function ($classNamespace) use ($coreNamespaces) {
-            return $this->hasCoreNamespace($coreNamespaces, $classNamespace);
-        });
-    }
-
-    /**
      * @param string $comment
      *
      * @return array<string>
