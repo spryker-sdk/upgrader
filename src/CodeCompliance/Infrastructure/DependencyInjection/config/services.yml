@@ -92,9 +92,6 @@ services:
     business_model.filter:
         class: CodeCompliance\Domain\Checks\Filters\BusinessModelFilter
 
-    core_class.filter:
-        class: CodeCompliance\Domain\Checks\Filters\CoreClassFilter
-
     core_extension.filter:
         class: CodeCompliance\Domain\Checks\Filters\CoreExtensionFilter
 
@@ -123,11 +120,10 @@ services:
                 param1: '@business_factory.filter',
                 param2: '@business_model.filter',
                 param3: '@core_extension.filter',
-                param4: '@core_class.filter',
-                param5: '@facade.filter',
-                param6: '@ignore_list.filter',
-                param7: '@persistence.filter',
-                param8: '@private_api.filter',
-                param9: '@plugin.filter',
-                param10: '@ignore_list_parent.filter'
+                param4: '@facade.filter',
+                param5: '@ignore_list.filter',
+                param6: '@persistence.filter',
+                param7: '@private_api.filter',
+                param8: '@plugin.filter',
+                param9: '@ignore_list_parent.filter'
             }
