@@ -8,6 +8,8 @@
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
 use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
+use CodeCompliance\Domain\Checks\Filters\CoreClassFilter;
+use CodeCompliance\Domain\Checks\Filters\IgnoreListFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 
@@ -58,16 +60,41 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
                 $useNamespaces,
                 $source->getReflection()->getNamespaceName(),
             );
+            $createdSources = $this->parseSourcesByNamespaces($createdNamespaces);
+            $createdSources = $this->filterService->filter($createdSources, [
+                IgnoreListFilter::IGNORE_LIST_FILTER,
+                CoreClassFilter::CORE_CLASS_FILTER,
+            ]);
 
-            $createdNamespaces = $this->filterCoreClasses($this->getCodebaseSourceDto()->getCoreNamespaces(), $createdNamespaces);
-
-            foreach ($createdNamespaces as $createdNamespace) {
-                $guideline = sprintf($this->getGuideline(), $createdNamespace, $source->getClassName());
+            foreach ($createdSources as $createdNamespace) {
+                $guideline = sprintf($this->getGuideline(), $createdNamespace->getClassName(), $source->getClassName());
                 $violations[] = new Violation(new Id(), $guideline, $this->getName());
             }
         }
 
         return $violations;
+    }
+
+    /**
+     * @param array<string> $namespaces
+     *
+     * @return array<\Codebase\Application\Dto\CodebaseInterface>
+     */
+    protected function parseSourcesByNamespaces(array $namespaces): array
+    {
+        $sources = [];
+        foreach ($namespaces as $namespace) {
+            $source = $this->codeBaseService->parsePhpClass(
+                $namespace,
+                $this->getCodebaseSourceDto()->getProjectPrefixes(),
+                $this->getCodebaseSourceDto()->getCoreNamespaces(),
+            );
+            if ($source) {
+                $sources[] = $source;
+            }
+        }
+
+        return $sources;
     }
 
     /**

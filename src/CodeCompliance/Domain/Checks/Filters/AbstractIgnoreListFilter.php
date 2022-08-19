@@ -50,6 +50,9 @@ abstract class AbstractIgnoreListFilter implements FilterInterface
             '/\/Development\//',
             '/^Spryker\/Zed\/\w+DataImport\//',
             '/^Spryker\/Shared\/Twig\/TwigFunctionProvider$/',
+            '/^Spryker\/Zed\/Gui\/Communication\/Table\/AbstractTable$/',
+            '/^Spryker\/Zed\/Gui\/Communication\/Tabs\/AbstractTabs$/',
+            '/^Spryker\/DecimalObject\//',
         ];
     }
 }
