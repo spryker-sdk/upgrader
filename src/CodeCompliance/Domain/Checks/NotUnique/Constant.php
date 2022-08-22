@@ -8,6 +8,7 @@
 namespace CodeCompliance\Domain\Checks\NotUnique;
 
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
+use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 
@@ -36,7 +37,10 @@ class Constant extends AbstractCodeComplianceCheck
     {
         $violations = [];
 
-        foreach ($this->getCodebaseSourceDto()->getPhpCodebaseSources() as $source) {
+        $sources = $this->getCodebaseSourceDto()->getPhpCodebaseSources();
+        $filteredSources = $this->filterService->filter($sources, [IgnoreListParentFilter::IGNORE_LIST_PARENT_FILTER]);
+
+        foreach ($filteredSources as $source) {
             $coreParent = $source->getCoreParent();
             $parentConstants = $coreParent ? $coreParent->getConstants() : [];
             $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();
