@@ -40,7 +40,7 @@ abstract class AbstractIgnoreListFilter implements FilterInterface
     /**
      * @return array<string>
      */
-    public function getIgnoreSuffixes(): array
+    protected function getIgnoreSuffixes(): array
     {
         return [
             '/\/Kernel\//',
