@@ -8,4 +8,9 @@
         <server name="SHELL_VERBOSITY" value="-1" />
         <server name="KERNEL_CLASS" value="CoreTest\App\Kernel\TestKernel" />
     </php>
+    <coverage>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </coverage>
 </phpunit>
