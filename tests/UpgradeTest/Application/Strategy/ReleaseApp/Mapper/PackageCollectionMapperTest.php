@@ -27,14 +27,14 @@ class PackageCollectionMapperTest extends TestCase
         $mapper = new PackageCollectionMapper(new PackageSoftValidator([]), $this->createMock(ComposerAdapter::class));
 
         $dtoCollection = new ModuleDtoCollection([
-            new ModuleDto('symfony/finder',  '5.3.0', ReleaseAppConstant::MODULE_TYPE_MINOR),
+            new ModuleDto('symfony/finder', '5.3.0', ReleaseAppConstant::MODULE_TYPE_MINOR),
         ]);
 
         $packageCollection = $mapper->mapModuleCollectionToPackageCollection($dtoCollection);
 
         $this->assertEquals(
             new PackageCollection([new Package('symfony/finder', '5.3.0', '', '')]),
-            $packageCollection
+            $packageCollection,
         );
     }
 }

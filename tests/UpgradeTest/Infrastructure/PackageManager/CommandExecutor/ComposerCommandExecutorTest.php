@@ -42,10 +42,10 @@ class ComposerCommandExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function testRequire()
+    public function testRequire(): void
     {
         $packageCollection = new PackageCollection([
-            new Package('spryker-sdk/sdk-contracts', '0.2.1', '0.2.0')
+            new Package('spryker-sdk/sdk-contracts', '0.2.1', '0.2.0'),
         ]);
         $response = $this->cmdExecutor->require($packageCollection);
 
@@ -55,10 +55,10 @@ class ComposerCommandExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function testRequireDev()
+    public function testRequireDev(): void
     {
         $packageCollection = new PackageCollection([
-            new Package('phpspec/prophecy-phpunit', '2.0.1', '2.0.0')
+            new Package('phpspec/prophecy-phpunit', '2.0.1', '2.0.0'),
         ]);
         $response = $this->cmdExecutor->requireDev($packageCollection);
 
@@ -68,7 +68,7 @@ class ComposerCommandExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $response = $this->cmdExecutor->update();
 

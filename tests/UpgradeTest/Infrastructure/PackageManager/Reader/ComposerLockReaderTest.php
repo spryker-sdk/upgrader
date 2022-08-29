@@ -7,6 +7,7 @@
 
 namespace UpgradeTest\Infrastructure\PackageManager\Reader;
 
+use Exception;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Upgrade\Infrastructure\Exception\FileNotFoundException;
@@ -20,15 +21,16 @@ class ComposerLockReaderTest extends TestCase
     protected string $testDataDirectory;
 
     /**
-     * @return void
      * @throws \Exception
+     *
+     * @return void
      */
     public function setUp(): void
     {
         $testDataDirectory = realpath(dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'data');
 
         if ($testDataDirectory === false) {
-            throw new \Exception('Directory with test composer.json file doesn\'t exist');
+            throw new Exception('Directory with test composer.json file doesn\'t exist');
         }
 
         $this->testDataDirectory = $testDataDirectory;
@@ -47,9 +49,9 @@ class ComposerLockReaderTest extends TestCase
 
         $lockReader = new ComposerLockReader();
         $lockReader->setDirectory($fileSystem->url());
+
         $this->assertIsArray($lockReader->read());
     }
-
 
     /**
      * @return void

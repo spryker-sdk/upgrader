@@ -36,12 +36,12 @@ class ComposerLockComparatorCommandExecutorTest extends TestCase
         $diffData = [
             'changes' => [
                 'spryker-sdk/sdk-contracts' => [
-                    '0.2.0', '0.2.1', 'diff-link-here'
+                    '0.2.0', '0.2.1', 'diff-link-here',
                 ],
             ],
             'changes-dev' => [
                 'phpspec/prophecy-phpunit' => [
-                    '2.0.0', '2.0.1', 'diff-link-here'
+                    '2.0.0', '2.0.1', 'diff-link-here',
                 ],
             ],
         ];
@@ -65,14 +65,18 @@ class ComposerLockComparatorCommandExecutorTest extends TestCase
     {
         $response = $this->cmdExecutor->getComposerLockDiff();
 
-        $this->assertEquals([
-            new Package('spryker-sdk/sdk-contracts', '0.2.1', '0.2.0', 'diff-link-here')],
-            $response->getRequireChanges()
+        $this->assertEquals(
+            [
+                new Package('spryker-sdk/sdk-contracts', '0.2.1', '0.2.0', 'diff-link-here'),
+            ],
+            $response->getRequireChanges(),
         );
 
-        $this->assertEquals([
-            new Package('phpspec/prophecy-phpunit', '2.0.1', '2.0.0', 'diff-link-here')],
-            $response->getRequireDevChanges()
+        $this->assertEquals(
+            [
+                new Package('phpspec/prophecy-phpunit', '2.0.1', '2.0.0', 'diff-link-here'),
+            ],
+            $response->getRequireDevChanges(),
         );
     }
 }

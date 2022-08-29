@@ -7,6 +7,7 @@
 
 namespace UpgradeTest\Application\Dto;
 
+use Generator;
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Dto\ResponseDto;
 
@@ -17,6 +18,7 @@ class ResponseDtoTest extends TestCase
      *
      * @param bool $isSuccessful
      * @param string|null $outputMessage
+     *
      * @return void
      */
     public function testGetters(bool $isSuccessful, ?string $outputMessage): void
@@ -30,7 +32,7 @@ class ResponseDtoTest extends TestCase
     /**
      * @return \Generator
      */
-    public function gettersDataProvider(): \Generator
+    public function gettersDataProvider(): Generator
     {
         $dataProvider = [
             [true, null],

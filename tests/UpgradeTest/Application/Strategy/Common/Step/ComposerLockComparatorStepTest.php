@@ -34,7 +34,7 @@ class ComposerLockComparatorStepTest extends TestCase
             new ComposerCommandExecutor($processRunnerMock),
             new ComposerLockComparatorCommandExecutor($processRunnerMock),
             new ComposerJsonReader(),
-            new ComposerLockReader()
+            new ComposerLockReader(),
         );
 
         $comparatorStep = new ComposerLockComparatorStep($composerAdapter);
@@ -67,7 +67,7 @@ class ComposerLockComparatorStepTest extends TestCase
             new ComposerCommandExecutor($processRunnerMock),
             new ComposerLockComparatorCommandExecutor($processRunnerMock),
             new ComposerJsonReader(),
-            new ComposerLockReader()
+            new ComposerLockReader(),
         );
 
         $comparatorStep = new ComposerLockComparatorStep($composerAdapter);
@@ -95,7 +95,7 @@ class ComposerLockComparatorStepTest extends TestCase
             new ComposerCommandExecutor($processRunnerMock),
             new ComposerLockComparatorCommandExecutor($processRunnerMock),
             new ComposerJsonReader(),
-            new ComposerLockReader()
+            new ComposerLockReader(),
         );
 
         $comparatorStep = new ComposerLockComparatorStep($composerAdapter);

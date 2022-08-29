@@ -7,6 +7,7 @@
 
 namespace UpgradeTest\Infrastructure\PackageManager\Reader;
 
+use Exception;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Upgrade\Infrastructure\Exception\FileNotFoundException;
@@ -20,15 +21,16 @@ class ComposerJsonReaderTest extends TestCase
     protected string $testDataDirectory;
 
     /**
-     * @return void
      * @throws \Exception
+     *
+     * @return void
      */
     public function setUp(): void
     {
         $testDataDirectory = realpath(dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'data');
 
         if ($testDataDirectory === false) {
-            throw new \Exception('Directory with test composer.json file doesn\'t exist');
+            throw new Exception('Directory with test composer.json file doesn\'t exist');
         }
 
         $this->testDataDirectory = $testDataDirectory;
@@ -47,6 +49,7 @@ class ComposerJsonReaderTest extends TestCase
 
         $jsonReader = new ComposerJsonReader();
         $jsonReader->setDirectory($fileSystem->url());
+
         $this->assertIsArray($jsonReader->read());
     }
 
