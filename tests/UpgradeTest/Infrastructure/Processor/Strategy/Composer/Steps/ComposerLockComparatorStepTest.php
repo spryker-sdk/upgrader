@@ -13,7 +13,11 @@ use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\Common\Step\ComposerLockComparatorStep;
-use Upgrade\Application\Strategy\Comparator\ComposerLockComparator;
+use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutor;
+use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutor;
+use Upgrade\Infrastructure\PackageManager\ComposerAdapter;
+use Upgrade\Infrastructure\PackageManager\Reader\ComposerJsonReader;
+use Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader;
 
 class ComposerLockComparatorStepTest extends TestCase
 {
@@ -22,13 +26,18 @@ class ComposerLockComparatorStepTest extends TestCase
      */
     public function testRunSuccessCase(): void
     {
-        $this->markTestSkipped('TODO fix the test');
-
         // Arrange
         $processOutput = '{"changes":{"spryker\/product-label":["3.2.0","3.3.0","https:\/\/github.com\/spryker\/product-label\/compare\/3.2.0...3.3.0"]},"changes-dev":{"spryker-shop\/web-profiler-widget":["1.4.1","1.4.2","https:\/\/github.com\/spryker-shop\/web-profiler-widget\/compare\/1.4.1...1.4.2"]}}';
         $processRunnerMock = $this->mockProcessRunnerWithOutput($processOutput);
-        $composerLockComparator = new ComposerLockComparator($processRunnerMock);
-        $comparatorStep = new ComposerLockComparatorStep($composerLockComparator);
+
+        $composerAdapter = new ComposerAdapter(
+            new ComposerCommandExecutor($processRunnerMock),
+            new ComposerLockComparatorCommandExecutor($processRunnerMock),
+            new ComposerJsonReader(),
+            new ComposerLockReader()
+        );
+
+        $comparatorStep = new ComposerLockComparatorStep($composerAdapter);
 
         // Act
         $stepsExecutionDto = $comparatorStep->run((new StepsResponseDto(true)));
@@ -50,13 +59,18 @@ class ComposerLockComparatorStepTest extends TestCase
      */
     public function testRunUpToDate(): void
     {
-        $this->markTestSkipped('TODO fix the test');
-
         // Arrange
         $processOutput = '{"changes":[],"changes-dev":[]}';
         $processRunnerMock = $this->mockProcessRunnerWithOutput($processOutput);
-        $composerLockComparator = new ComposerLockComparator($processRunnerMock);
-        $comparatorStep = new ComposerLockComparatorStep($composerLockComparator);
+
+        $composerAdapter = new ComposerAdapter(
+            new ComposerCommandExecutor($processRunnerMock),
+            new ComposerLockComparatorCommandExecutor($processRunnerMock),
+            new ComposerJsonReader(),
+            new ComposerLockReader()
+        );
+
+        $comparatorStep = new ComposerLockComparatorStep($composerAdapter);
 
         // Act
         $stepsExecutionDto = $comparatorStep->run((new StepsResponseDto(true)));
@@ -75,12 +89,16 @@ class ComposerLockComparatorStepTest extends TestCase
      */
     public function testRunProcessFailed(): void
     {
-        $this->markTestSkipped('TODO fix the test');
-
         // Arrange
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
-        $composerLockComparator = new ComposerLockComparator($processRunnerMock);
-        $comparatorStep = new ComposerLockComparatorStep($composerLockComparator);
+        $composerAdapter = new ComposerAdapter(
+            new ComposerCommandExecutor($processRunnerMock),
+            new ComposerLockComparatorCommandExecutor($processRunnerMock),
+            new ComposerJsonReader(),
+            new ComposerLockReader()
+        );
+
+        $comparatorStep = new ComposerLockComparatorStep($composerAdapter);
 
         // Act
         $stepsExecutionDto = $comparatorStep->run((new StepsResponseDto(true)));
