@@ -20,10 +20,13 @@ class ComposerLockComparatorCommandExecutorTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var ComposerLockComparatorCommandExecutor
+     * @var \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutor
      */
     protected ComposerLockComparatorCommandExecutor $cmdExecutor;
 
+    /**
+     * @return void
+     */
     public function setUp(): void
     {
         $processRunner = $this->prophesize(ProcessRunnerService::class);
@@ -62,7 +65,14 @@ class ComposerLockComparatorCommandExecutorTest extends TestCase
     {
         $response = $this->cmdExecutor->getComposerLockDiff();
 
-        $this->assertEquals([new Package('spryker-sdk/sdk-contracts', '0.2.1', '0.2.0', 'diff-link-here')], $response->getRequireChanges());
-        $this->assertEquals([new Package('phpspec/prophecy-phpunit', '2.0.1', '2.0.0', 'diff-link-here')], $response->getRequireDevChanges());
+        $this->assertEquals([
+            new Package('spryker-sdk/sdk-contracts', '0.2.1', '0.2.0', 'diff-link-here')],
+            $response->getRequireChanges()
+        );
+
+        $this->assertEquals([
+            new Package('phpspec/prophecy-phpunit', '2.0.1', '2.0.0', 'diff-link-here')],
+            $response->getRequireDevChanges()
+        );
     }
 }

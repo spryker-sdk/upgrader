@@ -21,10 +21,13 @@ class ComposerCommandExecutorTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var ComposerCommandExecutor
+     * @var \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutor
      */
     protected ComposerCommandExecutor $cmdExecutor;
 
+    /**
+     * @return void
+     */
     public function setUp(): void
     {
         $processRunner = $this->prophesize(ProcessRunnerService::class);

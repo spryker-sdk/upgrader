@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace UpgradeTest\Infrastructure\Processor\Strategy\Composer\Steps;
+namespace UpgradeTest\Application\Strategy\Common\Step;
 
 use Core\Infrastructure\Service\ProcessRunnerService;
 use PHPUnit\Framework\TestCase;
