@@ -16,6 +16,7 @@ interface ComposerJsonReaderInterface
 
     /**
      * @param string $directory
+     *
      * @return void
      */
     public function setDirectory(string $directory): void;

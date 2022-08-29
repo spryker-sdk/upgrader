@@ -37,6 +37,7 @@ class ComposerLockReader implements ComposerLockReaderInterface
 
     /**
      * @param string $directory
+     *
      * @return void
      */
     public function setDirectory(string $directory): void
