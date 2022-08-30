@@ -27,7 +27,7 @@ class ComposerLockComparatorCommandExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $processRunner = $this->prophesize(ProcessRunnerService::class);
 

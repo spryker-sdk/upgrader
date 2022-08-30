@@ -23,7 +23,7 @@ class MethodTest extends BaseCodeComplianceCheckTest
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         /** @var \CodeCompliance\Infrastructure\Service\CodeBaseService $codeBaseService */
         $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);

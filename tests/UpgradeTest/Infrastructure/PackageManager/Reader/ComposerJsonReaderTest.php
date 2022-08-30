@@ -25,7 +25,7 @@ class ComposerJsonReaderTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $testDataDirectory = realpath(dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'data');
 
