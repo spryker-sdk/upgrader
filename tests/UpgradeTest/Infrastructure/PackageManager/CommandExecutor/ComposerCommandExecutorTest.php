@@ -49,7 +49,7 @@ class ComposerCommandExecutorTest extends TestCase
         ]);
         $response = $this->cmdExecutor->require($packageCollection);
 
-        $this->assertEquals('composer require spryker-sdk/sdk-contracts:0.2.1 --no-scripts --no-plugins --with-all-dependencies', $response->getOutputMessage());
+        $this->assertSame('composer require spryker-sdk/sdk-contracts:0.2.1 --no-scripts --no-plugins --with-all-dependencies', $response->getOutputMessage());
     }
 
     /**
@@ -62,7 +62,7 @@ class ComposerCommandExecutorTest extends TestCase
         ]);
         $response = $this->cmdExecutor->requireDev($packageCollection);
 
-        $this->assertEquals('composer require phpspec/prophecy-phpunit:2.0.1 --no-scripts --no-plugins --with-all-dependencies --dev', $response->getOutputMessage());
+        $this->assertSame('composer require phpspec/prophecy-phpunit:2.0.1 --no-scripts --no-plugins --with-all-dependencies --dev', $response->getOutputMessage());
     }
 
     /**
@@ -72,6 +72,6 @@ class ComposerCommandExecutorTest extends TestCase
     {
         $response = $this->cmdExecutor->update();
 
-        $this->assertEquals('composer update --with-all-dependencies --no-scripts --no-plugins --no-interaction', $response->getOutputMessage());
+        $this->assertSame('composer update --with-all-dependencies --no-scripts --no-plugins --no-interaction', $response->getOutputMessage());
     }
 }

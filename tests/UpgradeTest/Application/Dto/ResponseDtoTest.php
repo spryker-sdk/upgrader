@@ -25,8 +25,8 @@ class ResponseDtoTest extends TestCase
     {
         $dto = new ResponseDto($isSuccessful, $outputMessage);
 
-        $this->assertEquals($isSuccessful, $dto->isSuccessful());
-        $this->assertEquals($outputMessage, $dto->getOutputMessage());
+        $this->assertSame($isSuccessful, $dto->isSuccessful());
+        $this->assertSame($outputMessage, $dto->getOutputMessage());
     }
 
     /**

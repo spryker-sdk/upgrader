@@ -47,7 +47,7 @@ class MethodTest extends BaseCodeComplianceCheckTest
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
             $this->assertNotEmpty($violation->getMessage());
-            $this->assertEquals($violation->producedBy(), $transferNameCheck->getName());
+            $this->assertSame($violation->producedBy(), $transferNameCheck->getName());
         }
     }
 }

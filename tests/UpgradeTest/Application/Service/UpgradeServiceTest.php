@@ -29,6 +29,6 @@ class UpgradeServiceTest extends KernelTestCase
         $res = $service->upgrade();
 
         $this->assertFalse($res->isSuccessful());
-        $this->assertEquals('Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', $res->getOutputMessage());
+        $this->assertSame('Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', $res->getOutputMessage());
     }
 }

@@ -46,7 +46,7 @@ class TransferPropertyTest extends BaseCodeComplianceCheckTest
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
             $this->assertNotEmpty($violation->getMessage());
-            $this->assertEquals($violation->producedBy(), $transferPropertyCheck->getName());
+            $this->assertSame($violation->producedBy(), $transferPropertyCheck->getName());
         }
     }
 }

@@ -50,7 +50,7 @@ class ConstantTest extends BaseCodeComplianceCheckTest
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
             $this->assertNotEmpty($violation->getMessage());
-            $this->assertEquals($violation->producedBy(), $isNotUniqueConstantCheck->getName());
+            $this->assertSame($violation->producedBy(), $isNotUniqueConstantCheck->getName());
         }
     }
 }
