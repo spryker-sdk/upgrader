@@ -23,7 +23,11 @@ class SourceParserRequestMapper implements SourceParserRequestMapperInterface
         CodeBaseRequestDto $codebaseRequestDto,
         ConfigurationResponseDto $configurationResponseDto
     ): SourceParserRequestDto {
-        $projectPaths = $this->getProjectPaths($codebaseRequestDto->getSrcPath(), $configurationResponseDto->getProjectPrefixes());
+        $projectPaths = $this->getProjectPaths(
+            $codebaseRequestDto->getSrcPath(),
+            $configurationResponseDto->getProjectPrefixes(),
+            $codebaseRequestDto->getModules(),
+        );
 
         return new SourceParserRequestDto(
             $projectPaths,
@@ -37,10 +41,26 @@ class SourceParserRequestMapper implements SourceParserRequestMapperInterface
     /**
      * @param string $srcPath
      * @param array<string> $projectPrefixes
+     * @param array<\Codebase\Application\Dto\ModuleDto> $modules
      *
      * @return array<string>
      */
-    protected function getProjectPaths(string $srcPath, array $projectPrefixes): array
+    protected function getProjectPaths(string $srcPath, array $projectPrefixes, array $modules): array
+    {
+        if ($modules) {
+            return $this->getProjectPathsByModules($srcPath, $modules);
+        }
+
+        return $this->getProjectPathsByPrefixes($srcPath, $projectPrefixes);
+    }
+
+    /**
+     * @param string $srcPath
+     * @param array<string> $projectPrefixes
+     *
+     * @return array<string>
+     */
+    protected function getProjectPathsByPrefixes(string $srcPath, array $projectPrefixes): array
     {
         $projectDirectories = [];
 
@@ -49,6 +69,24 @@ class SourceParserRequestMapper implements SourceParserRequestMapperInterface
             if (is_dir($path)) {
                 $projectDirectories[] = $path;
             }
+        }
+
+        return $projectDirectories;
+    }
+
+    /**
+     * @param string $srcPath
+     * @param array<\Codebase\Application\Dto\ModuleDto> $modules
+     *
+     * @return array<string>
+     */
+    protected function getProjectPathsByModules(string $srcPath, array $modules): array
+    {
+        $projectDirectories = [];
+
+        foreach ($modules as $module) {
+            $path = sprintf('%s%s/*/%s', $srcPath, $module->getNamespace(), $module->getName());
+            $projectDirectories[] = $path;
         }
 
         return $projectDirectories;
