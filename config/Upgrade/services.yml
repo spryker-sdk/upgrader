@@ -6,10 +6,10 @@ services:
 
 # Upgrade
     Upgrade\:
-        resource: '../../../../Upgrade/*'
+        resource: '../../src/Upgrade/*'
         exclude:
-            - '../../../../Upgrade/Application/Dto/*'
-            - '../../../../Upgrade/Infrastructure/VersionControlSystem/Dto/*'
+            - '../../src/Upgrade/Application/Dto/*'
+            - '../../src/Upgrade/Infrastructure/VersionControlSystem/Dto/*'
 
     git.adapter:
         class: Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter

@@ -5,7 +5,7 @@ services:
         public: true
 
     Upgrader\:
-        resource: '../../../Upgrader/*'
+        resource: '../../src/Upgrader/*'
 
 # SDK Task Definitions
     upgrade.task:
