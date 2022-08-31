@@ -27,10 +27,6 @@ class TestKernel extends BaseKernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $configurationFiles = glob(APPLICATION_ROOT_DIR . '/src/*/*/DependencyInjection/config/*.yml');
-
-        foreach ($configurationFiles as $configurationFile) {
-            $loader->load($configurationFile);
-        }
+        $loader->load(APPLICATION_ROOT_DIR . '/config/services.yml');
     }
 }

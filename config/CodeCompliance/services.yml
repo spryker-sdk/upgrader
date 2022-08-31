@@ -6,14 +6,14 @@ services:
 
 #CodeCompliance
     CodeCompliance\Application\:
-        resource: '../../../../CodeCompliance/Application/*'
-        exclude: [ '../../../../CodeCompliance/Application/Service/*Service.php' ]
+        resource: '../../src/CodeCompliance/Application/*'
+        exclude: [ '../../src/CodeCompliance/Application/Service/*Service.php' ]
 
     CodeCompliance\Infrastructure\:
-        resource: '../../../../CodeCompliance/Infrastructure/*'
+        resource: '../../src/CodeCompliance/Infrastructure/*'
 
     CodeCompliance\Domain\:
-        resource: '../../../../CodeCompliance/Domain/*'
+        resource: '../../src/CodeCompliance/Domain/*'
 
     is_not_unique_constant.task:
         class: CodeCompliance\Application\Checks\NotUnique\ConstantCheck

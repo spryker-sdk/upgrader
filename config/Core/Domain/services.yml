@@ -6,4 +6,4 @@ services:
 
 #Core
     Core\Domain\:
-        resource: '../../../../Core/Domain/*'
+        resource: '../../../src/Core/Domain/*'

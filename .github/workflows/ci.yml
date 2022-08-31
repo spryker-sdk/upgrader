@@ -54,5 +54,14 @@ jobs:
       - name: CodeStyle checks
         run: composer cs-check
 
-      - name: Codeception tests
-        run: composer tests
+      - name: Run tests
+        run: |
+          if [[ ${{ matrix.php-version }} == '7.4' ]]; then
+           XDEBUG_MODE=coverage vendor/bin/phpunit tests/ --coverage-clover coverage.xml
+          else
+           composer test
+          fi
+
+      - name: Code Coverage Report
+        if: success() && matrix.php-version == '7.4'
+        uses: codecov/codecov-action@v1
