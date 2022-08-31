@@ -1,5 +1,6 @@
 # Upgrader
 [![Build Status](https://github.com/spryker-sdk/upgrader/workflows/CI/badge.svg?branch=master)](https://github.com/spryker-sdk/upgrader/actions?query=workflow%3ACI+branch%3Amaster)
+[![codecov](https://codecov.io/gh/spryker-sdk/upgrader/branch/master/graph/badge.svg?token=AVljwSGALQ)](https://codecov.io/gh/spryker-sdk/upgrader)
 [![Latest Stable Version](https://poser.pugx.org/spryker-sdk/upgrader/v/stable.svg)](https://packagist.org/packages/spryker-sdk/upgrader)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.4-8892BF.svg)](https://php.net/)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat)](https://phpstan.org/)

@@ -6,14 +6,14 @@ services:
 
 # Codebase
     Codebase\Application\:
-        resource: '../../../../Codebase/Application/*'
+        resource: '../../src/Codebase/Application/*'
         exclude:
-            - '../../../../Codebase/Application/Dto/*'
+            - '../../src/Codebase/Application/Dto/*'
 
     Codebase\Infrastructure\:
-        resource: '../../../../Codebase/Infrastructure/*'
+        resource: '../../src/Codebase/Infrastructure/*'
         exclude:
-            - '../../../../Codebase/Infrastructure/Exception/*'
+            - '../../src/Codebase/Infrastructure/Exception/*'
 
     Codebase\Infrastructure\Service\CodebaseService: ~
     Codebase\Application\Service\CodebaseServiceInterface: '@Codebase\Infrastructure\Service\CodebaseService'
