@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace UpgradeTest\Infrastructure\Processor\Strategy\Composer;
+namespace UpgradeTest\Application\Strategy\Composer;
 
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Dto\StepsResponseDto;

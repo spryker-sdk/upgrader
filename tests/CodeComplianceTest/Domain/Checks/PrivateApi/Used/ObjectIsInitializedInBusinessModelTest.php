@@ -31,7 +31,7 @@ class ObjectIsInitializedInBusinessModelTest extends BaseCodeComplianceCheckTest
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
             $this->assertNotEmpty($violation->getMessage());
-            $this->assertEquals($violation->producedBy(), $persistenceInBusinessModelCheck->getName());
+            $this->assertSame($violation->producedBy(), $persistenceInBusinessModelCheck->getName());
         }
     }
 }

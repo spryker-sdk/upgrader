@@ -13,4 +13,11 @@ interface ComposerJsonReaderInterface
      * @return array<mixed>
      */
     public function read(): array;
+
+    /**
+     * @param string $directory
+     *
+     * @return void
+     */
+    public function setDirectory(string $directory): void;
 }

@@ -17,11 +17,32 @@ class ComposerJsonReader implements ComposerJsonReaderInterface
     protected const COMPOSER_JSON = 'composer.json';
 
     /**
+     * @var string
+     */
+    protected string $directory = '';
+
+    /**
      * @return array<mixed>
      */
     public function read(): array
     {
-        return $this->readFromPath(static::COMPOSER_JSON);
+        $path = static::COMPOSER_JSON;
+
+        if ($this->directory !== '') {
+            $path = $this->directory . DIRECTORY_SEPARATOR . $path;
+        }
+
+        return $this->readFromPath($path);
+    }
+
+    /**
+     * @param string $directory
+     *
+     * @return void
+     */
+    public function setDirectory(string $directory): void
+    {
+        $this->directory = $directory;
     }
 
     /**
