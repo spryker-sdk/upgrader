@@ -59,7 +59,7 @@ jobs:
           if [[ ${{ matrix.php-version }} == '7.4' ]]; then
            XDEBUG_MODE=coverage vendor/bin/phpunit tests/ --coverage-clover coverage.xml
           else
-           composer test
+           composer tests
           fi
 
       - name: Code Coverage Report
