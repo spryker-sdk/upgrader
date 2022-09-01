@@ -15,7 +15,7 @@
         "m4tthumphrey/php-gitlab-api": "^11.5",
         "nikic/php-parser": "4.13.*",
         "phpstan/phpstan": "^1.2",
-        "spryker-sdk/integrator": "dev-develop",
+        "spryker-sdk/integrator": "dev-master",
         "spryker-sdk/sdk-contracts": "^0.2.0",
         "spryker/code-sniffer": "^0.17.3",
         "symfony/config": "^5.0",
@@ -30,6 +30,8 @@
         "symfony/yaml": "^5.3"
     },
     "require-dev": {
+        "mikey179/vfsstream": "^1.6",
+        "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {
@@ -62,9 +64,14 @@
         }
     },
     "scripts": {
-        "cs-check": "phpcs --colors -p -s --extensions=php --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml --ignore=/tests/_data/ tests/ src/",
-        "cs-fix": "phpcbf --colors -p --extensions=php --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml --ignore=/tests/_data/ tests/ src/",
-        "stan": "phpstan analyze -l 8 src/",
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "stan": "phpstan analyze src/",
+        "linters": [
+            "@cs-fix",
+            "@cs-check",
+            "@stan"
+        ],
         "tests": "phpunit tests/"
     },
     "minimum-stability": "dev",

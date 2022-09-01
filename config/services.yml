@@ -1,0 +1,8 @@
+imports:
+    - { resource: './Codebase/services.yml' }
+    - { resource: './CodeCompliance/services.yml' }
+    - { resource: './Core/Domain/services.yml' }
+    - { resource: './Core/Infrastructure/services.yml' }
+    - { resource: './ReleaseApp/services.yml' }
+    - { resource: './Upgrade/services.yml' }
+    - { resource: './Upgrader/services.yml' }

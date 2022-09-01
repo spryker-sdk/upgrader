@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76b03bae416766a1ce9365ec92b979ff",
+    "content-hash": "28552a33fbd559019f0e3ad2d3729705",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -3043,22 +3043,22 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "dev-develop",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "24cd3813db4f8c57f3ad6a1ce46dde7d69a7225d"
+                "reference": "321e191af9c62d6db0f729660d269623262a5c39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/24cd3813db4f8c57f3ad6a1ce46dde7d69a7225d",
-                "reference": "24cd3813db4f8c57f3ad6a1ce46dde7d69a7225d",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/321e191af9c62d6db0f729660d269623262a5c39",
+                "reference": "321e191af9c62d6db0f729660d269623262a5c39",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.0.0 || ^2.0.0",
                 "composer/composer": "^2.1.0",
-                "laminas/laminas-filter": "^2.14.0",
+                "laminas/laminas-filter": "^2.11.0",
                 "nikic/php-parser": "^4.3.0",
                 "php": ">=7.4",
                 "sebastian/diff": "^4.0.0",
@@ -3066,11 +3066,12 @@
                 "symfony/finder": "^5.3.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "^1.6.5",
+                "phpstan/phpstan": "^1.0.0",
                 "phpunit/phpunit": "^9.5.0",
                 "spryker/code-sniffer": "@stable",
                 "symfony/filesystem": "^5.3.0"
             },
+            "default-branch": true,
             "bin": [
                 "bin/integrator"
             ],
@@ -3092,9 +3093,9 @@
             "description": "Integrator module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
-                "source": "https://github.com/spryker-sdk/integrator/tree/develop"
+                "source": "https://github.com/spryker-sdk/integrator/tree/master"
             },
-            "time": "2022-07-14T08:16:08+00:00"
+            "time": "2022-08-19T10:53:38+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
@@ -5803,6 +5804,57 @@
             "time": "2022-03-03T08:28:38+00:00"
         },
         {
+            "name": "mikey179/vfsstream",
+            "version": "v1.6.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bovigo/vfsStream.git",
+                "reference": "17d16a85e6c26ce1f3e2fa9ceeacdc2855db1e9f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bovigo/vfsStream/zipball/17d16a85e6c26ce1f3e2fa9ceeacdc2855db1e9f",
+                "reference": "17d16a85e6c26ce1f3e2fa9ceeacdc2855db1e9f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5|^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.6.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "org\\bovigo\\vfs\\": "src/main/php"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Frank Kleine",
+                    "homepage": "http://frankkleine.de/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Virtual file system to mock the real file system in unit tests.",
+            "homepage": "http://vfs.bovigo.org/",
+            "support": {
+                "issues": "https://github.com/bovigo/vfsStream/issues",
+                "source": "https://github.com/bovigo/vfsStream/tree/master",
+                "wiki": "https://github.com/bovigo/vfsStream/wiki"
+            },
+            "time": "2022-02-23T02:02:42+00:00"
+        },
+        {
             "name": "myclabs/deep-copy",
             "version": "1.11.0",
             "source": {
@@ -6198,6 +6250,58 @@
                 "source": "https://github.com/phpspec/prophecy/tree/v1.15.0"
             },
             "time": "2021-12-08T12:19:24+00:00"
+        },
+        {
+            "name": "phpspec/prophecy-phpunit",
+            "version": "v2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpspec/prophecy-phpunit.git",
+                "reference": "2d7a9df55f257d2cba9b1d0c0963a54960657177"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpspec/prophecy-phpunit/zipball/2d7a9df55f257d2cba9b1d0c0963a54960657177",
+                "reference": "2d7a9df55f257d2cba9b1d0c0963a54960657177",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3 || ^8",
+                "phpspec/prophecy": "^1.3",
+                "phpunit/phpunit": "^9.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Prophecy\\PhpUnit\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christophe Coevoet",
+                    "email": "stof@notk.org"
+                }
+            ],
+            "description": "Integrating the Prophecy mocking library in PHPUnit test cases",
+            "homepage": "http://phpspec.net",
+            "keywords": [
+                "phpunit",
+                "prophecy"
+            ],
+            "support": {
+                "issues": "https://github.com/phpspec/prophecy-phpunit/issues",
+                "source": "https://github.com/phpspec/prophecy-phpunit/tree/v2.0.1"
+            },
+            "time": "2020-07-09T08:33:42+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
