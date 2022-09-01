@@ -7,6 +7,7 @@
         All sniffs in ./Sniffs will be auto loaded
     </description>
 
+    <arg name="colors"/>
     <arg name="tab-width" value="4"/>
     <arg value="nps"/>
 
