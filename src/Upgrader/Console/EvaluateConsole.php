@@ -8,15 +8,14 @@
 namespace Upgrader\Console;
 
 use Codebase\Application\Dto\CodeBaseRequestDto;
-use Codebase\Application\Dto\ModuleDto;
 use Codebase\Infrastructure\Service\CodebaseService;
 use CodeCompliance\Application\Service\CodeComplianceServiceInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Upgrade\Application\Exception\UpgraderException;
 use Upgrader\Configuration\ConfigurationProvider;
+use Upgrader\Console\Parser\OptionModuleParserInterface;
 use Upgrader\Report\Service\ReportService;
 
 class EvaluateConsole extends Command
@@ -30,36 +29,6 @@ class EvaluateConsole extends Command
      * @var string
      */
     protected const DESCRIPTION = 'Analyze codebase on Paas+ compatibility.';
-
-    /**
-     * @var string
-     */
-    protected const OPTION_MODULE = 'module';
-
-    /**
-     * @var string
-     */
-    protected const OPTION_MODULES_SHORT = '-m';
-
-    /**
-     * @var int
-     */
-    protected const MODULE_NAMESPACE_INDEX = 0;
-
-    /**
-     * @var int
-     */
-    protected const MODULE_NAME_INDEX = 1;
-
-    /**
-     * @var string
-     */
-    public const MODULE_SEPARATOR = ' ';
-
-    /**
-     * @var string
-     */
-    public const NAMESPACE_NAME_SEPARATOR = '.';
 
     /**
      * @var \CodeCompliance\Application\Service\CodeComplianceServiceInterface
@@ -82,6 +51,11 @@ class EvaluateConsole extends Command
     protected ReportService $reportService;
 
     /**
+     * @var \Upgrader\Console\Parser\OptionModuleParserInterface
+     */
+    protected OptionModuleParserInterface $optionModuleParser;
+
+    /**
      * @param \CodeCompliance\Application\Service\CodeComplianceServiceInterface $codeComplianceService
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
      * @param \Codebase\Infrastructure\Service\CodebaseService $codebaseService
@@ -91,13 +65,15 @@ class EvaluateConsole extends Command
         CodeComplianceServiceInterface $codeComplianceService,
         ConfigurationProvider $configurationProvider,
         CodebaseService $codebaseService,
-        ReportService $reportService
+        ReportService $reportService,
+        OptionModuleParserInterface $optionModuleParser
     ) {
         parent::__construct();
         $this->codeComplianceService = $codeComplianceService;
         $this->configurationProvider = $configurationProvider;
         $this->codebaseService = $codebaseService;
         $this->reportService = $reportService;
+        $this->optionModuleParser = $optionModuleParser;
     }
 
     /**
@@ -109,7 +85,11 @@ class EvaluateConsole extends Command
 
         $this->setName(static::NAME);
         $this->setDescription(static::DESCRIPTION);
-        $this->addOption(static::OPTION_MODULE, static::OPTION_MODULES_SHORT, InputArgument::OPTIONAL);
+        $this->addOption(
+            OptionModuleParserInterface::OPTION_MODULE,
+            OptionModuleParserInterface::OPTION_MODULES_SHORT,
+            InputArgument::OPTIONAL,
+        );
     }
 
     /**
@@ -126,7 +106,7 @@ class EvaluateConsole extends Command
             $this->configurationProvider->getCorePaths(),
             $this->configurationProvider->getCoreNamespaces(),
             $this->configurationProvider->getIgnoreSources(),
-            $this->getModuleList($input),
+            $this->optionModuleParser->getModuleList($input),
         );
 
         $codebaseSourceDto = $this->codebaseService->readCodeBase($codebaseRequestDto);
@@ -140,34 +120,5 @@ class EvaluateConsole extends Command
         }
 
         return Command::SUCCESS;
-    }
-
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     *
-     * @throws \Upgrade\Application\Exception\UpgraderException
-     *
-     * @return array<\Codebase\Application\Dto\ModuleDto>
-     */
-    protected function getModuleList(InputInterface $input): array
-    {
-        $modules = [];
-        $moduleOption = (string)$input->getOption(static::OPTION_MODULE);
-
-        if (!$moduleOption) {
-            return $modules;
-        }
-
-        foreach (explode(self::MODULE_SEPARATOR, $moduleOption) as $namespaceName) {
-            $moduleData = explode(self::NAMESPACE_NAME_SEPARATOR, $namespaceName);
-
-            if (!isset($moduleData[self::MODULE_NAME_INDEX])) {
-                throw new UpgraderException('Please specify module with namespace {Namespace}.{ModuleName}. Example: Pyz.DataImport');
-            }
-
-            $modules[] = new ModuleDto($moduleData[self::MODULE_NAMESPACE_INDEX], $moduleData[self::MODULE_NAME_INDEX]);
-        }
-
-        return $modules;
     }
 }
