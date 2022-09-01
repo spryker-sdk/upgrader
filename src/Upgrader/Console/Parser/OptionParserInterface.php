@@ -9,7 +9,7 @@ namespace Upgrader\Console\Parser;
 
 use Symfony\Component\Console\Input\InputInterface;
 
-interface OptionModuleParserInterface
+interface OptionParserInterface
 {
     /**
      * @var string

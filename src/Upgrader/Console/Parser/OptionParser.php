@@ -11,7 +11,7 @@ use Codebase\Application\Dto\ModuleDto;
 use Symfony\Component\Console\Input\InputInterface;
 use Upgrade\Application\Exception\UpgraderException;
 
-class OptionModuleParser implements OptionModuleParserInterface
+class OptionParser implements OptionParserInterface
 {
     /**
      * @var int

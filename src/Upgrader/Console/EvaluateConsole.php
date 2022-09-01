@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Upgrader\Configuration\ConfigurationProvider;
-use Upgrader\Console\Parser\OptionModuleParserInterface;
+use Upgrader\Console\Parser\OptionParserInterface;
 use Upgrader\Report\Service\ReportService;
 
 class EvaluateConsole extends Command
@@ -51,29 +51,30 @@ class EvaluateConsole extends Command
     protected ReportService $reportService;
 
     /**
-     * @var \Upgrader\Console\Parser\OptionModuleParserInterface
+     * @var \Upgrader\Console\Parser\OptionParserInterface
      */
-    protected OptionModuleParserInterface $optionModuleParser;
+    protected OptionParserInterface $optionParser;
 
     /**
      * @param \CodeCompliance\Application\Service\CodeComplianceServiceInterface $codeComplianceService
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
      * @param \Codebase\Infrastructure\Service\CodebaseService $codebaseService
      * @param \Upgrader\Report\Service\ReportService $reportService
+     * @param \Upgrader\Console\Parser\OptionParserInterface $optionParser
      */
     public function __construct(
         CodeComplianceServiceInterface $codeComplianceService,
         ConfigurationProvider $configurationProvider,
         CodebaseService $codebaseService,
         ReportService $reportService,
-        OptionModuleParserInterface $optionModuleParser
+        OptionParserInterface $optionParser
     ) {
         parent::__construct();
         $this->codeComplianceService = $codeComplianceService;
         $this->configurationProvider = $configurationProvider;
         $this->codebaseService = $codebaseService;
         $this->reportService = $reportService;
-        $this->optionModuleParser = $optionModuleParser;
+        $this->optionParser = $optionParser;
     }
 
     /**
@@ -86,8 +87,8 @@ class EvaluateConsole extends Command
         $this->setName(static::NAME);
         $this->setDescription(static::DESCRIPTION);
         $this->addOption(
-            OptionModuleParserInterface::OPTION_MODULE,
-            OptionModuleParserInterface::OPTION_MODULES_SHORT,
+            OptionParserInterface::OPTION_MODULE,
+            OptionParserInterface::OPTION_MODULES_SHORT,
             InputArgument::OPTIONAL,
         );
     }
@@ -106,7 +107,7 @@ class EvaluateConsole extends Command
             $this->configurationProvider->getCorePaths(),
             $this->configurationProvider->getCoreNamespaces(),
             $this->configurationProvider->getIgnoreSources(),
-            $this->optionModuleParser->getModuleList($input),
+            $this->optionParser->getModuleList($input),
         );
 
         $codebaseSourceDto = $this->codebaseService->readCodeBase($codebaseRequestDto);
