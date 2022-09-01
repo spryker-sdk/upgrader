@@ -4,6 +4,8 @@ var/
 
 .DS_Store
 
+composer.lock
+
 # tests
 tests/**/_generated/
 tests/_data/src/

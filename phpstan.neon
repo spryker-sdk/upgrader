@@ -1,5 +1,8 @@
 parameters:
     level: 8
+    paths:
+        - src/
+
     reportUnmatchedIgnoredErrors: false
     checkGenericClassInNonGenericObjectType: false
 
