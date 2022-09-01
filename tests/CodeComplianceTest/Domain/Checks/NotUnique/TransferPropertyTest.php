@@ -22,7 +22,7 @@ class TransferPropertyTest extends BaseCodeComplianceCheckTest
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         /** @var \CodeCompliance\Infrastructure\Service\CodeBaseService $codeBaseService */
         $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
@@ -46,7 +46,7 @@ class TransferPropertyTest extends BaseCodeComplianceCheckTest
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
             $this->assertNotEmpty($violation->getMessage());
-            $this->assertEquals($violation->producedBy(), $transferPropertyCheck->getName());
+            $this->assertSame($violation->producedBy(), $transferPropertyCheck->getName());
         }
     }
 }

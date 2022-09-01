@@ -31,7 +31,7 @@ class MethodIsOverwrittenTest extends BaseCodeComplianceCheckTest
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
             $this->assertNotEmpty($violation->getMessage());
-            $this->assertEquals($violation->producedBy(), $methodIsOverwrittenCheck->getName());
+            $this->assertSame($violation->producedBy(), $methodIsOverwrittenCheck->getName());
         }
     }
 }
