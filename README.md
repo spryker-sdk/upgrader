@@ -28,7 +28,7 @@ The command generates a YAML report at `{project_directory}/reports/`.
 
 Available options:
 - Module filtration option, use it for specifies which modules should be evaluated.
-  Example `-m 'Pyz.ProductStorage'` where `Pyz` is namespaces and `ProductStorage` is module name.
+  Example `-m 'Pyz.ProductStorage'` where `Pyz` is namespace and `ProductStorage` is module name.
 
 ​
 To view a previously generated report, run the following command:
