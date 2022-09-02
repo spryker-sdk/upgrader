@@ -11,11 +11,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class UpgraderBundle extends Bundle
 {
-    /**
-     * @return \Upgrader\UpgraderExtension
-     */
-    protected function createContainerExtension(): UpgraderExtension
-    {
-        return new UpgraderExtension();
-    }
 }
