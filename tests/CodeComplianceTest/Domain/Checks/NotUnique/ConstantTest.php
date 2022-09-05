@@ -22,7 +22,7 @@ class ConstantTest extends BaseCodeComplianceCheckTest
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         /** @var \CodeCompliance\Infrastructure\Service\CodeBaseService $codeBaseService */
         $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
@@ -50,7 +50,7 @@ class ConstantTest extends BaseCodeComplianceCheckTest
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
             $this->assertNotEmpty($violation->getMessage());
-            $this->assertEquals($violation->producedBy(), $isNotUniqueConstantCheck->getName());
+            $this->assertSame($violation->producedBy(), $isNotUniqueConstantCheck->getName());
         }
     }
 }

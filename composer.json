@@ -30,7 +30,9 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "spryker/code-sniffer": "dev-master"
+        "spryker/code-sniffer": "dev-master",
+        "mikey179/vfsstream": "^1.6",
+        "phpspec/prophecy-phpunit": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -51,7 +53,8 @@
             "CoreTest\\": "tests/Core/",
             "TestProject\\": "tests/data/Evaluate/Project/",
             "TestCore\\": "tests/data/Evaluate/Core/",
-            "UpgradeData\\": "tests/data/Upgrade/"
+            "UpgradeData\\": "tests/data/Upgrade/",
+            "UpgraderTest\\": "tests/UpgraderTest/"
         }
     },
     "config": {
@@ -62,9 +65,14 @@
         }
     },
     "scripts": {
-        "cs-check": "phpcs --colors -p -s --extensions=php --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml --ignore=/tests/_data/ tests/ src/",
-        "cs-fix": "phpcbf --colors -p --extensions=php --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml --ignore=/tests/_data/ tests/ src/",
-        "stan": "phpstan analyze -l 8 src/",
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "stan": "phpstan analyze src/",
+        "linters": [
+            "@cs-fix",
+            "@cs-check",
+            "@stan"
+        ],
         "tests": "phpunit tests/"
     },
     "minimum-stability": "dev",

@@ -309,7 +309,7 @@ class Git
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function process(StepsResponseDto $stepsExecutionDto, array $command)
+    public function process(StepsResponseDto $stepsExecutionDto, array $command): StepsResponseDto
     {
         $process = $this->processRunner->run($command);
 

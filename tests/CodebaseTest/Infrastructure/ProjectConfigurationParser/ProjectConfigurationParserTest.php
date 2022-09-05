@@ -26,7 +26,7 @@ class ProjectConfigurationParserTest extends KernelTestCase
         $configurationResponseDto = $parser->readToolingConfiguration('tests/data/Evaluate/Project/tooling.yml');
 
         //Assert
-        $this->assertEquals(['Pyz', 'Zyp'], $configurationResponseDto->getProjectPrefixes());
+        $this->assertSame(['Pyz', 'Zyp'], $configurationResponseDto->getProjectPrefixes());
     }
 
     /**
@@ -41,7 +41,7 @@ class ProjectConfigurationParserTest extends KernelTestCase
         $configurationResponseDto = $parser->readToolingConfiguration('not-exists-tooling.yml');
 
         //Assert
-        $this->assertEquals(['Pyz'], $configurationResponseDto->getProjectPrefixes());
+        $this->assertSame(['Pyz'], $configurationResponseDto->getProjectPrefixes());
     }
 
     /**
