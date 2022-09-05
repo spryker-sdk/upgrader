@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbcf81b1f169b574740b4287902e9a8a",
+    "content-hash": "eae527b2822c916082a050908cd29296",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -3053,16 +3053,16 @@
         },
         {
             "name": "spryker-sdk/sdk-contracts",
-            "version": "0.2.0",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/sdk-contracts.git",
-                "reference": "ed462706b9c170c1474b1060d42f24375150adf8"
+                "reference": "2f477d3e3edba346387fdb98cc2005a2118676b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/ed462706b9c170c1474b1060d42f24375150adf8",
-                "reference": "ed462706b9c170c1474b1060d42f24375150adf8",
+                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/2f477d3e3edba346387fdb98cc2005a2118676b1",
+                "reference": "2f477d3e3edba346387fdb98cc2005a2118676b1",
                 "shasum": ""
             },
             "require": {
@@ -3085,9 +3085,9 @@
             "description": "Contracts to extend the Spryker SDK",
             "support": {
                 "issues": "https://github.com/spryker-sdk/sdk-contracts/issues",
-                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/0.2.0"
+                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/0.3.0"
             },
-            "time": "2022-08-01T12:05:17+00:00"
+            "time": "2022-09-01T12:22:50+00:00"
         },
         {
             "name": "symfony/cache",
