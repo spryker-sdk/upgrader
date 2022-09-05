@@ -15,23 +15,15 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class UpgraderExtension extends Extension
 {
     /**
-     * @param array $configs
+     * @param array<mixed> $configs
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
      * @return void
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $this->createYamlFileLoader($container)->load('services.yaml');
-    }
+        $configDirPath = __DIR__ . '/../../config/';
 
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @return \Symfony\Component\DependencyInjection\Loader\YamlFileLoader
-     */
-    protected function createYamlFileLoader(ContainerBuilder $container): YamlFileLoader
-    {
-        return new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
+        (new YamlFileLoader($container, new FileLocator($configDirPath)))->load('services.yaml');
     }
 }

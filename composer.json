@@ -53,7 +53,8 @@
             "CoreTest\\": "tests/Core/",
             "TestProject\\": "tests/data/Evaluate/Project/",
             "TestCore\\": "tests/data/Evaluate/Core/",
-            "UpgradeData\\": "tests/data/Upgrade/"
+            "UpgradeData\\": "tests/data/Upgrade/",
+            "UpgraderTest\\": "tests/UpgraderTest/"
         }
     },
     "config": {
