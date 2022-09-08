@@ -124,7 +124,7 @@ export SOURCE_CODE_PROVIDER=github
 * Add a GitHub access token to the project repository with the permissions to push branches and create PRs:
   ​
 ```bash
-export ACCESS_TOKEN=<GITHUB_TOCKEN>
+export ACCESS_TOKEN=<GITHUB_TOKEN>
 ```
 ​
 * Add the organization name owning the repository of the project you want to update:
@@ -149,7 +149,7 @@ export SOURCE_CODE_PROVIDER=gitlab
 * Add a GitLab access token to the project repository with the permissions to push branches and create PRs:
   ​
 ```bash
-export ACCESS_TOKEN=<GITLAB_TOCKEN>
+export ACCESS_TOKEN=<GITLAB_TOKEN>
 ```
 ​
 * Add the project id of the project you want to update:
