@@ -5,13 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Upgrader\Console\Parser;
+namespace Codebase\Infrastructure\CodeBaseReader\Mapper;
 
 use Codebase\Application\Dto\ModuleDto;
-use Symfony\Component\Console\Input\InputInterface;
 use Upgrade\Application\Exception\UpgraderException;
 
-class OptionParser implements OptionParserInterface
+class ModuleOptionMapper implements ModuleOptionMapperInterface
 {
     /**
      * @var int
@@ -34,16 +33,15 @@ class OptionParser implements OptionParserInterface
     public const NAMESPACE_NAME_SEPARATOR = '.';
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param string|null $moduleOption
      *
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
      * @return array<\Codebase\Application\Dto\ModuleDto>
      */
-    public function getModuleList(InputInterface $input): array
+    public function mapToModuleList(?string $moduleOption): array
     {
         $modules = [];
-        $moduleOption = (string)$input->getOption(static::OPTION_MODULE);
 
         if (!$moduleOption) {
             return $modules;

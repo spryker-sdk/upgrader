@@ -10,7 +10,7 @@ namespace CodebaseTest\Infrastructure\CodeBaseReader;
 use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Application\Dto\ConfigurationResponseDto;
 use Codebase\Application\Dto\ModuleDto;
-use Codebase\Infrastructure\CodeBaseReader\SourceParserRequestMapper;
+use Codebase\Infrastructure\CodeBaseReader\Mapper\SourceParserRequestMapper;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class SourceParserRequestMapperTest extends KernelTestCase

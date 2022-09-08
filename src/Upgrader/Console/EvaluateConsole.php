@@ -15,7 +15,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Upgrader\Configuration\ConfigurationProvider;
-use Upgrader\Console\Parser\OptionParserInterface;
 use Upgrader\Report\Service\ReportService;
 
 class EvaluateConsole extends Command
@@ -29,6 +28,16 @@ class EvaluateConsole extends Command
      * @var string
      */
     protected const DESCRIPTION = 'Analyze codebase on Paas+ compatibility.';
+
+    /**
+     * @var string
+     */
+    protected const OPTION_MODULE = 'module';
+
+    /**
+     * @var string
+     */
+    protected const OPTION_MODULE_SHORT = '-m';
 
     /**
      * @var \CodeCompliance\Application\Service\CodeComplianceServiceInterface
@@ -51,30 +60,22 @@ class EvaluateConsole extends Command
     protected ReportService $reportService;
 
     /**
-     * @var \Upgrader\Console\Parser\OptionParserInterface
-     */
-    protected OptionParserInterface $optionParser;
-
-    /**
      * @param \CodeCompliance\Application\Service\CodeComplianceServiceInterface $codeComplianceService
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
      * @param \Codebase\Infrastructure\Service\CodebaseService $codebaseService
      * @param \Upgrader\Report\Service\ReportService $reportService
-     * @param \Upgrader\Console\Parser\OptionParserInterface $optionParser
      */
     public function __construct(
         CodeComplianceServiceInterface $codeComplianceService,
         ConfigurationProvider $configurationProvider,
         CodebaseService $codebaseService,
-        ReportService $reportService,
-        OptionParserInterface $optionParser
+        ReportService $reportService
     ) {
         parent::__construct();
         $this->codeComplianceService = $codeComplianceService;
         $this->configurationProvider = $configurationProvider;
         $this->codebaseService = $codebaseService;
         $this->reportService = $reportService;
-        $this->optionParser = $optionParser;
     }
 
     /**
@@ -87,8 +88,8 @@ class EvaluateConsole extends Command
         $this->setName(static::NAME);
         $this->setDescription(static::DESCRIPTION);
         $this->addOption(
-            OptionParserInterface::OPTION_MODULE,
-            OptionParserInterface::OPTION_MODULES_SHORT,
+            static::OPTION_MODULE,
+            static::OPTION_MODULE_SHORT,
             InputArgument::OPTIONAL,
         );
     }
@@ -107,7 +108,7 @@ class EvaluateConsole extends Command
             $this->configurationProvider->getCorePaths(),
             $this->configurationProvider->getCoreNamespaces(),
             $this->configurationProvider->getIgnoreSources(),
-            $this->optionParser->getModuleList($input),
+            $input->getOption(static::OPTION_MODULE),
         );
 
         $codebaseSourceDto = $this->codebaseService->readCodeBase($codebaseRequestDto);

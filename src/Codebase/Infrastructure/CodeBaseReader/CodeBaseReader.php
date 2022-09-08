@@ -9,6 +9,8 @@ namespace Codebase\Infrastructure\CodeBaseReader;
 
 use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
+use Codebase\Infrastructure\CodeBaseReader\Mapper\CodeBaseReaderInterface;
+use Codebase\Infrastructure\CodeBaseReader\Mapper\ModuleOptionMapperInterface;
 use Codebase\Infrastructure\SourceParser\SourceParserInterface;
 use Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface;
 
@@ -18,6 +20,11 @@ class CodeBaseReader implements CodeBaseReaderInterface
      * @var \Codebase\Infrastructure\SourceParser\SourceParserInterface
      */
     protected SourceParserInterface $sourceParser;
+
+    /**
+     * @var \Codebase\Infrastructure\CodeBaseReader\Mapper\ModuleOptionMapperInterface
+     */
+    protected ModuleOptionMapperInterface $moduleOptionMapper;
 
     /**
      * @var \Codebase\Infrastructure\CodeBaseReader\SourceParserRequestMapperInterface
@@ -36,10 +43,12 @@ class CodeBaseReader implements CodeBaseReaderInterface
      */
     public function __construct(
         SourceParserInterface $sourceParser,
+        ModuleOptionMapperInterface $moduleOptionMapper,
         SourceParserRequestMapperInterface $sourceParserRequestMapper,
         ToolingConfigurationReaderInterface $toolingConfigurationReader
     ) {
         $this->sourceParser = $sourceParser;
+        $this->moduleOptionMapper = $moduleOptionMapper;
         $this->sourceParserRequestMapper = $sourceParserRequestMapper;
         $this->toolingConfigurationReader = $toolingConfigurationReader;
     }
@@ -53,7 +62,13 @@ class CodeBaseReader implements CodeBaseReaderInterface
     {
         $configurationFilePath = $codebaseRequestDto->getToolingConfigurationFilePath();
         $configurationResponseDto = $this->toolingConfigurationReader->readToolingConfiguration($configurationFilePath);
-        $sourceParserRequest = $this->sourceParserRequestMapper->mapToSourceParserRequest($codebaseRequestDto, $configurationResponseDto);
+        $optionModules = $this->moduleOptionMapper->mapToModuleList($codebaseRequestDto->getModuleOption());
+
+        $sourceParserRequest = $this->sourceParserRequestMapper->mapToSourceParserRequest(
+            $codebaseRequestDto,
+            $configurationResponseDto,
+            $optionModules,
+        );
 
         return $this->sourceParser->parseSource($sourceParserRequest);
     }

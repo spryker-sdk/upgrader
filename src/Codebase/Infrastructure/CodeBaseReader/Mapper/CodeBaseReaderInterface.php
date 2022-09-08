@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Codebase\Infrastructure\CodeBaseReader;
+namespace Codebase\Infrastructure\CodeBaseReader\Mapper;
 
 use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Application\Dto\CodebaseSourceDto;

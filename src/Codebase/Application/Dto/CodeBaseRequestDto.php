@@ -35,9 +35,9 @@ class CodeBaseRequestDto
     protected array $excludeList;
 
     /**
-     * @var array<\Codebase\Application\Dto\ModuleDto>
+     * @var string|null
      */
-    protected array $modules;
+    protected ?string $moduleOption;
 
     /**
      * @param string $toolingConfigurationPath
@@ -45,7 +45,7 @@ class CodeBaseRequestDto
      * @param array<string> $corePaths
      * @param array<string> $coreNamespaces
      * @param array<string> $excludeList
-     * @param array<\Codebase\Application\Dto\ModuleDto> $modules
+     * @param string|null $moduleOption
      */
     public function __construct(
         string $toolingConfigurationPath,
@@ -53,14 +53,14 @@ class CodeBaseRequestDto
         array $corePaths,
         array $coreNamespaces,
         array $excludeList = [],
-        array $modules = []
+        ?string $moduleOption = null
     ) {
         $this->toolingConfigurationPath = $toolingConfigurationPath;
         $this->srcPath = $srcPath;
         $this->corePaths = $corePaths;
         $this->coreNamespaces = $coreNamespaces;
         $this->excludeList = $excludeList;
-        $this->modules = $modules;
+        $this->moduleOption = $moduleOption;
     }
 
     /**
@@ -104,10 +104,10 @@ class CodeBaseRequestDto
     }
 
     /**
-     * @return array<\Codebase\Application\Dto\ModuleDto>
+     * @return string|null
      */
-    public function getModules(): array
+    public function getModuleOption(): ?string
     {
-        return $this->modules;
+        return $this->moduleOption;
     }
 }
