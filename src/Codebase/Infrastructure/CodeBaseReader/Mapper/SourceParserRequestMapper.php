@@ -10,7 +10,6 @@ namespace Codebase\Infrastructure\CodeBaseReader\Mapper;
 use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Application\Dto\ConfigurationResponseDto;
 use Codebase\Application\Dto\SourceParserRequestDto;
-use Codebase\Infrastructure\CodeBaseReader\SourceParserRequestMapperInterface;
 
 class SourceParserRequestMapper implements SourceParserRequestMapperInterface
 {

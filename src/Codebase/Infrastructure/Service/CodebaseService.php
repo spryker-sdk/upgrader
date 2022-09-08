@@ -11,13 +11,13 @@ use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
 use Codebase\Application\Dto\ConfigurationResponseDto;
 use Codebase\Application\Service\CodebaseServiceInterface;
-use Codebase\Infrastructure\CodeBaseReader\Mapper\CodeBaseReaderInterface;
+use Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface;
 use Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface;
 
 class CodebaseService implements CodebaseServiceInterface
 {
     /**
-     * @var \Codebase\Infrastructure\CodeBaseReader\Mapper\CodeBaseReaderInterface
+     * @var \Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface
      */
     protected CodeBaseReaderInterface $codeBaseReader;
 
@@ -27,7 +27,7 @@ class CodebaseService implements CodebaseServiceInterface
     protected ToolingConfigurationReaderInterface $toolingConfigurationReader;
 
     /**
-     * @param \Codebase\Infrastructure\CodeBaseReader\Mapper\CodeBaseReaderInterface $codeBaseReader
+     * @param \Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface $codeBaseReader
      * @param \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface $toolingConfigurationReader
      */
     public function __construct(CodeBaseReaderInterface $codeBaseReader, ToolingConfigurationReaderInterface $toolingConfigurationReader)

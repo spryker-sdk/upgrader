@@ -9,8 +9,8 @@ namespace Codebase\Infrastructure\CodeBaseReader;
 
 use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Application\Dto\CodebaseSourceDto;
-use Codebase\Infrastructure\CodeBaseReader\Mapper\CodeBaseReaderInterface;
 use Codebase\Infrastructure\CodeBaseReader\Mapper\ModuleOptionMapperInterface;
+use Codebase\Infrastructure\CodeBaseReader\Mapper\SourceParserRequestMapperInterface;
 use Codebase\Infrastructure\SourceParser\SourceParserInterface;
 use Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface;
 
@@ -27,7 +27,7 @@ class CodeBaseReader implements CodeBaseReaderInterface
     protected ModuleOptionMapperInterface $moduleOptionMapper;
 
     /**
-     * @var \Codebase\Infrastructure\CodeBaseReader\SourceParserRequestMapperInterface
+     * @var \Codebase\Infrastructure\CodeBaseReader\Mapper\SourceParserRequestMapperInterface
      */
     protected SourceParserRequestMapperInterface $sourceParserRequestMapper;
 
@@ -38,7 +38,8 @@ class CodeBaseReader implements CodeBaseReaderInterface
 
     /**
      * @param \Codebase\Infrastructure\SourceParser\SourceParserInterface $sourceParser
-     * @param \Codebase\Infrastructure\CodeBaseReader\SourceParserRequestMapperInterface $sourceParserRequestMapper
+     * @param \Codebase\Infrastructure\CodeBaseReader\Mapper\ModuleOptionMapperInterface $moduleOptionMapper
+     * @param \Codebase\Infrastructure\CodeBaseReader\Mapper\SourceParserRequestMapperInterface $sourceParserRequestMapper
      * @param \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface $toolingConfigurationReader
      */
     public function __construct(
