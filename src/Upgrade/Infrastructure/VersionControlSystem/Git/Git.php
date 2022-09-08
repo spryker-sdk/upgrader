@@ -318,7 +318,7 @@ class Git
 
     /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     * @param \Symfony\Component\Process\Process $process
+     * @param \Symfony\Component\Process\Process<string, string> $process
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
