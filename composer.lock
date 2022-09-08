@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7fd7593b1f6fbd91d754b9da04fb353d",
+    "content-hash": "4d3f076b62a99ac3f9740c0e5dc89b46",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -3099,16 +3099,16 @@
         },
         {
             "name": "spryker-sdk/sdk-contracts",
-            "version": "0.3.0",
+            "version": "dev-feature/sdk-907-contracts-api-doc",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/sdk-contracts.git",
-                "reference": "2f477d3e3edba346387fdb98cc2005a2118676b1"
+                "reference": "fc990addecaab4008ede29c8ab6908445a700f4d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/2f477d3e3edba346387fdb98cc2005a2118676b1",
-                "reference": "2f477d3e3edba346387fdb98cc2005a2118676b1",
+                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/fc990addecaab4008ede29c8ab6908445a700f4d",
+                "reference": "fc990addecaab4008ede29c8ab6908445a700f4d",
                 "shasum": ""
             },
             "require": {
@@ -3121,6 +3121,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
+                    "SprykerSdk\\Sniffs\\": "Sniffs/",
                     "SprykerSdk\\SdkContracts\\": "src/"
                 }
             },
@@ -3131,9 +3132,9 @@
             "description": "Contracts to extend the Spryker SDK",
             "support": {
                 "issues": "https://github.com/spryker-sdk/sdk-contracts/issues",
-                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/0.3.0"
+                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/feature/sdk-907-contracts-api-doc"
             },
-            "time": "2022-09-01T12:22:50+00:00"
+            "time": "2022-09-08T07:36:48+00:00"
         },
         {
             "name": "spryker/code-sniffer",
@@ -7733,7 +7734,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "spryker-sdk/integrator": 20
+        "spryker-sdk/integrator": 20,
+        "spryker-sdk/sdk-contracts": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
@@ -7743,5 +7745,5 @@
         "ext-simplexml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
