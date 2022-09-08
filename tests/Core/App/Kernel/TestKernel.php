@@ -15,7 +15,7 @@ class TestKernel extends BaseKernel
     /**
      * @return array
      */
-    public function registerBundles()
+    public function registerBundles(): array
     {
         return [];
     }
@@ -25,12 +25,8 @@ class TestKernel extends BaseKernel
      *
      * @return void
      */
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $configurationFiles = glob(APPLICATION_ROOT_DIR . '/src/*/*/DependencyInjection/config/*.yml');
-
-        foreach ($configurationFiles as $configurationFile) {
-            $loader->load($configurationFile);
-        }
+        $loader->load(APPLICATION_ROOT_DIR . '/config/services.yaml');
     }
 }

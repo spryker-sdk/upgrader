@@ -17,11 +17,32 @@ class ComposerLockReader implements ComposerLockReaderInterface
     protected const COMPOSER_LOCK = 'composer.lock';
 
     /**
+     * @var string
+     */
+    protected string $directory = '';
+
+    /**
      * @return array<mixed>
      */
     public function read(): array
     {
-        return $this->readFromPath(static::COMPOSER_LOCK);
+        $path = static::COMPOSER_LOCK;
+
+        if ($this->directory !== '') {
+            $path = $this->directory . DIRECTORY_SEPARATOR . $path;
+        }
+
+        return $this->readFromPath($path);
+    }
+
+    /**
+     * @param string $directory
+     *
+     * @return void
+     */
+    public function setDirectory(string $directory): void
+    {
+        $this->directory = $directory;
     }
 
     /**

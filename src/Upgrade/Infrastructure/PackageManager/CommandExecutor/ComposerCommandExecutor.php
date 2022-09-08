@@ -141,7 +141,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     }
 
     /**
-     * @param \Symfony\Component\Process\Process $process
+     * @param \Symfony\Component\Process\Process<string, string> $process
      *
      * @return \Upgrade\Application\Dto\ResponseDto
      */

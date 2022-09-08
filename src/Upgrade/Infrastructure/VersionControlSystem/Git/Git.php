@@ -309,7 +309,7 @@ class Git
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function process(StepsResponseDto $stepsExecutionDto, array $command)
+    public function process(StepsResponseDto $stepsExecutionDto, array $command): StepsResponseDto
     {
         $process = $this->processRunner->run($command);
 
@@ -318,7 +318,7 @@ class Git
 
     /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     * @param \Symfony\Component\Process\Process $process
+     * @param \Symfony\Component\Process\Process<string, string> $process
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */

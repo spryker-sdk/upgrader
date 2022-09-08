@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+# ReleaseAppClient
+    ReleaseApp\:
+        resource: '../../src/ReleaseApp/*'
+        exclude:
+            - '../../src/ReleaseApp/Domain/Entities/*'
+            - '../../src/ReleaseApp/Domain/Client/Request/*'
+            - '../../src/ReleaseApp/Domain/Client/Response/*'
+            - '../../src/ReleaseApp/Infrastructure/Client/Request/*'
+            - '../../src/ReleaseApp/Infrastructure/Shared/Dto/*'
