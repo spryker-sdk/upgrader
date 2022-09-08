@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace ReleaseApp\Infrastructure\Shared\Dto\Collection;
 
 use ReleaseApp\Application\Configuration\ReleaseAppConstant;

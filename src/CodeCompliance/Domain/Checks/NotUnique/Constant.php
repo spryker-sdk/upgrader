@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace CodeCompliance\Domain\Checks\NotUnique;
 
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
@@ -57,7 +59,7 @@ class Constant extends AbstractCodeComplianceCheck
                         strtoupper((string)reset($projectPrefixes)),
                         $nameConstant,
                     );
-                    $violations[] = new Violation(new Id(), $guideline, $this->getName());
+                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
                 }
             }
         }
