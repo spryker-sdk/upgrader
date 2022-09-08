@@ -29,13 +29,16 @@ class SourceParserRequestMapperTest extends KernelTestCase
             ['vendor/spryker'],
             ['Spryker'],
             ['SprykerTest'],
-            $this->getModuleList(),
         );
 
         $configurationResponseDto = new ConfigurationResponseDto();
 
         //Act
-        $sourceParserRequest = $mapper->mapToSourceParserRequest($codeBaseRequestDto, $configurationResponseDto);
+        $sourceParserRequest = $mapper->mapToSourceParserRequest(
+            $codeBaseRequestDto,
+            $configurationResponseDto,
+            $this->getModuleList(),
+        );
 
         //Assert
         $this->assertEquals(
@@ -61,7 +64,6 @@ class SourceParserRequestMapperTest extends KernelTestCase
             ['vendor/spryker'],
             ['Spryker'],
             ['SprykerTest'],
-            [],
         );
 
         $configurationResponseDto = new ConfigurationResponseDto([
@@ -73,7 +75,7 @@ class SourceParserRequestMapperTest extends KernelTestCase
         ]);
 
         //Act
-        $sourceParserRequest = $mapper->mapToSourceParserRequest($codeBaseRequestDto, $configurationResponseDto);
+        $sourceParserRequest = $mapper->mapToSourceParserRequest($codeBaseRequestDto, $configurationResponseDto, []);
 
         //Assert
         $this->assertEquals(
