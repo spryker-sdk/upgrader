@@ -3066,12 +3066,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/sdk-contracts.git",
-                "reference": "fc990addecaab4008ede29c8ab6908445a700f4d"
+                "reference": "ec68dd8a28c7629b8ba05253e250dfe8aaa8da51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/fc990addecaab4008ede29c8ab6908445a700f4d",
-                "reference": "fc990addecaab4008ede29c8ab6908445a700f4d",
+                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/ec68dd8a28c7629b8ba05253e250dfe8aaa8da51",
+                "reference": "ec68dd8a28c7629b8ba05253e250dfe8aaa8da51",
                 "shasum": ""
             },
             "require": {
@@ -3097,7 +3097,7 @@
                 "issues": "https://github.com/spryker-sdk/sdk-contracts/issues",
                 "source": "https://github.com/spryker-sdk/sdk-contracts/tree/feature/sdk-907-contracts-api-doc"
             },
-            "time": "2022-09-08T07:36:48+00:00"
+            "time": "2022-09-08T07:45:41+00:00"
         },
         {
             "name": "symfony/cache",
