@@ -35,24 +35,32 @@ class CodeBaseRequestDto
     protected array $excludeList;
 
     /**
+     * @var string|null
+     */
+    protected ?string $moduleOption;
+
+    /**
      * @param string $toolingConfigurationPath
      * @param string $srcPath
      * @param array<string> $corePaths
      * @param array<string> $coreNamespaces
      * @param array<string> $excludeList
+     * @param string|null $moduleOption
      */
     public function __construct(
         string $toolingConfigurationPath,
         string $srcPath,
         array $corePaths,
         array $coreNamespaces,
-        array $excludeList = []
+        array $excludeList = [],
+        ?string $moduleOption = null
     ) {
         $this->toolingConfigurationPath = $toolingConfigurationPath;
         $this->srcPath = $srcPath;
         $this->corePaths = $corePaths;
         $this->coreNamespaces = $coreNamespaces;
         $this->excludeList = $excludeList;
+        $this->moduleOption = $moduleOption;
     }
 
     /**
@@ -93,5 +101,13 @@ class CodeBaseRequestDto
     public function getExcludeList(): array
     {
         return $this->excludeList;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getModuleOption(): ?string
+    {
+        return $this->moduleOption;
     }
 }

@@ -22,13 +22,17 @@ At this step, the upgrader checks the project against a set of rules. The main g
 
 To evaluate a project, execute the following command from its directory:
 ```bash
-bin/console analyze:php:code-compliance --format=yaml
+bin/console analyze:php:code-compliance
 ```
+The command generates a YAML report at `{project_directory}/reports/`.
+
+Available options:
+- --module (-m) - module filtration option. It is used to specify the modules for evaluation.
+  Example `-m 'Pyz.ProductStorage'` where `Pyz` is namespace and `ProductStorage` is module name.
+
 ​
-- The command generates a YAML report at `{project_directory}/reports/`.
-  ​
-  To view a previously generated report, run the following command:
-  ​
+To view a previously generated report, run the following command:
+​
 ```
 bin/console analyze:php:code-compliance-report
 ```
