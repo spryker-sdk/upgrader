@@ -14,6 +14,24 @@ use ReflectionMethod;
 abstract class AbstractUsedCodeComplianceCheck extends AbstractCodeComplianceCheck
 {
     /**
+     * @param string $comment
+     *
+     * @return array<string>
+     */
+    public function getParamNamespacesFromDocComment(string $comment): array
+    {
+        $matchResult = [];
+        preg_match_all('/\* @param (.*) \$/m', $comment, $matchResult);
+
+        $results = [];
+        foreach ($matchResult[1] as $namespace) {
+            $results[] = $namespace;
+        }
+
+        return $results;
+    }
+
+    /**
      * @phpstan-template T of object
      *
      * @param \ReflectionClass<T> $class
@@ -140,41 +158,5 @@ abstract class AbstractUsedCodeComplianceCheck extends AbstractCodeComplianceChe
         $length = $endLine - $startLine;
 
         return implode('', array_slice($sourceFile, $startLine, $length));
-    }
-
-    /**
-     * @param array<string> $coreNamespaces
-     * @param array<string> $classNamespaceList
-     *
-     * @return array<string>
-     */
-    protected function filterCoreClasses(array $coreNamespaces, array $classNamespaceList): array
-    {
-        return array_filter($classNamespaceList, function ($classNamespace) use ($coreNamespaces) {
-            return $this->hasCoreNamespace($coreNamespaces, $classNamespace);
-        });
-    }
-
-    /**
-     * @param string $comment
-     *
-     * @return array<string>
-     */
-    public function getParamNamespacesFromDocComment(string $comment): array
-    {
-        $matchResult = [];
-        preg_match_all('/\* @param (.*) \$/m', $comment, $matchResult);
-
-        $results = [];
-        foreach ($matchResult[1] as $namespace) {
-//            if (substr($namespace, 0, 1) === '\\') {
-//                $results[] = substr($namespace, 1);
-//
-//                continue;
-//            }
-            $results[] = $namespace;
-        }
-
-        return $results;
     }
 }
