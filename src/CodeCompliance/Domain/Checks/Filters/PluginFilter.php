@@ -18,6 +18,16 @@ class PluginFilter implements FilterInterface
     public const PLUGIN_FILTER = 'PLUGIN_FILTER';
 
     /**
+     * @var string
+     */
+    protected const PLUGIN_CLASS_SUFFIX = '/.*Plugin$/';
+
+    /**
+     * @var string
+     */
+    protected const PLUGIN_DIR_NAME = '/\/Plugin\//';
+
+    /**
      * @return string
      */
     public function getFilterName(): string
@@ -46,13 +56,17 @@ class PluginFilter implements FilterInterface
      */
     protected function isPlugin(ReflectionClass $class): bool
     {
-        $pattern = '/.*Plugin$/';
-        $parent = $class->getParentClass();
-        $className = $class->getShortName();
-        if (!$parent) {
-            return false;
-        }
+        return preg_match(static::PLUGIN_DIR_NAME, $this->reverseSlash($class->getName())) ||
+            preg_match(static::PLUGIN_CLASS_SUFFIX, $class->getShortName());
+    }
 
-        return (preg_match($pattern, $className)) && (preg_match($pattern, $parent->getShortName()));
+    /**
+     * @param string $source
+     *
+     * @return string
+     */
+    protected function reverseSlash(string $source): string
+    {
+        return str_replace('\\', '/', $source);
     }
 }
