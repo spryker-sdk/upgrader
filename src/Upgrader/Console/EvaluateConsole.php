@@ -13,6 +13,7 @@ use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Infrastructure\Service\CodebaseService;
 use CodeCompliance\Application\Service\CodeComplianceServiceInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Upgrader\Configuration\ConfigurationProvider;
@@ -29,6 +30,16 @@ class EvaluateConsole extends Command
      * @var string
      */
     protected const DESCRIPTION = 'Analyze codebase on Paas+ compatibility.';
+
+    /**
+     * @var string
+     */
+    protected const OPTION_MODULE = 'module';
+
+    /**
+     * @var string
+     */
+    protected const OPTION_MODULE_SHORT = '-m';
 
     /**
      * @var \CodeCompliance\Application\Service\CodeComplianceServiceInterface
@@ -78,6 +89,11 @@ class EvaluateConsole extends Command
 
         $this->setName(static::NAME);
         $this->setDescription(static::DESCRIPTION);
+        $this->addOption(
+            static::OPTION_MODULE,
+            static::OPTION_MODULE_SHORT,
+            InputArgument::OPTIONAL,
+        );
     }
 
     /**
@@ -94,6 +110,7 @@ class EvaluateConsole extends Command
             $this->configurationProvider->getCorePaths(),
             $this->configurationProvider->getCoreNamespaces(),
             $this->configurationProvider->getIgnoreSources(),
+            $input->getOption(static::OPTION_MODULE),
         );
 
         $codebaseSourceDto = $this->codebaseService->readCodeBase($codebaseRequestDto);

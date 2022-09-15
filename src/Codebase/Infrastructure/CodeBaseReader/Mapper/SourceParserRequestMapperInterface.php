@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Codebase\Infrastructure\CodeBaseReader;
+namespace Codebase\Infrastructure\CodeBaseReader\Mapper;
 
 use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Application\Dto\ConfigurationResponseDto;
@@ -18,11 +18,13 @@ interface SourceParserRequestMapperInterface
     /**
      * @param \Codebase\Application\Dto\CodeBaseRequestDto $codebaseRequestDto
      * @param \Codebase\Application\Dto\ConfigurationResponseDto $configurationResponseDto
+     * @param array<\Codebase\Application\Dto\ModuleDto> $modules
      *
      * @return \Codebase\Application\Dto\SourceParserRequestDto
      */
     public function mapToSourceParserRequest(
         CodeBaseRequestDto $codebaseRequestDto,
-        ConfigurationResponseDto $configurationResponseDto
+        ConfigurationResponseDto $configurationResponseDto,
+        array $modules
     ): SourceParserRequestDto;
 }

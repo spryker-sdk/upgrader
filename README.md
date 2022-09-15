@@ -22,13 +22,17 @@ At this step, the upgrader checks the project against a set of rules. The main g
 
 To evaluate a project, execute the following command from its directory:
 ```bash
-bin/console analyze:php:code-compliance --format=yaml
+bin/console analyze:php:code-compliance
 ```
+The command generates a YAML report at `{project_directory}/reports/`.
+
+Available options:
+- --module (-m) - module filtration option. It is used to specify the modules for evaluation.
+  Example `-m 'Pyz.ProductStorage'` where `Pyz` is namespace and `ProductStorage` is module name.
+
 ​
-- The command generates a YAML report at `{project_directory}/reports/`.
-  ​
-  To view a previously generated report, run the following command:
-  ​
+To view a previously generated report, run the following command:
+​
 ```
 bin/console analyze:php:code-compliance-report
 ```
@@ -124,7 +128,7 @@ export SOURCE_CODE_PROVIDER=github
 * Add a GitHub access token to the project repository with the permissions to push branches and create PRs:
   ​
 ```bash
-export ACCESS_TOKEN=<GITHUB_TOCKEN>
+export ACCESS_TOKEN=<GITHUB_TOKEN>
 ```
 ​
 * Add the organization name owning the repository of the project you want to update:
@@ -149,7 +153,7 @@ export SOURCE_CODE_PROVIDER=gitlab
 * Add a GitLab access token to the project repository with the permissions to push branches and create PRs:
   ​
 ```bash
-export ACCESS_TOKEN=<GITLAB_TOCKEN>
+export ACCESS_TOKEN=<GITLAB_TOKEN>
 ```
 ​
 * Add the project id of the project you want to update:

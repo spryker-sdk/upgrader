@@ -31,7 +31,7 @@ class Method extends AbstractCodeComplianceCheck
      */
     public function getGuideline(): string
     {
-        return 'Method name %s::%s() should contains project prefix, like %s';
+        return 'Method name %s::%s() should contain project prefix, like %s';
     }
 
     /**

@@ -44,18 +44,14 @@ class ConfigurationProvider
     }
 
     /**
-     * @return array<string>
+     * @return array<int, string>
      */
     public function getCorePaths(): array
     {
-        $directories = [
-            $this->getVendorPath() . 'spryker' . DIRECTORY_SEPARATOR,
-            $this->getVendorPath() . 'spryker-eco' . DIRECTORY_SEPARATOR,
-            $this->getVendorPath() . 'spryker-shop' . DIRECTORY_SEPARATOR,
-        ];
+        $directories = (array)glob($this->getVendorPath() . 'spryker*', GLOB_ONLYDIR);
 
-        return array_filter($directories, function ($dir) {
-            return is_dir($dir);
+        return array_filter($directories, function ($directory) {
+            return $directory !== false;
         });
     }
 

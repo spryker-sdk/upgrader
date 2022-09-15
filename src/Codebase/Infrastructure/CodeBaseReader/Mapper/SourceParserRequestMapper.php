@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Codebase\Infrastructure\CodeBaseReader;
+namespace Codebase\Infrastructure\CodeBaseReader\Mapper;
 
 use Codebase\Application\Dto\CodeBaseRequestDto;
 use Codebase\Application\Dto\ConfigurationResponseDto;
@@ -18,14 +18,20 @@ class SourceParserRequestMapper implements SourceParserRequestMapperInterface
     /**
      * @param \Codebase\Application\Dto\CodeBaseRequestDto $codebaseRequestDto
      * @param \Codebase\Application\Dto\ConfigurationResponseDto $configurationResponseDto
+     * @param array<\Codebase\Application\Dto\ModuleDto> $modules
      *
      * @return \Codebase\Application\Dto\SourceParserRequestDto
      */
     public function mapToSourceParserRequest(
         CodeBaseRequestDto $codebaseRequestDto,
-        ConfigurationResponseDto $configurationResponseDto
+        ConfigurationResponseDto $configurationResponseDto,
+        array $modules
     ): SourceParserRequestDto {
-        $projectPaths = $this->getProjectPaths($codebaseRequestDto->getSrcPath(), $configurationResponseDto->getProjectPrefixes());
+        $projectPaths = $this->getProjectPaths(
+            $codebaseRequestDto->getSrcPath(),
+            $configurationResponseDto->getProjectPrefixes(),
+            $modules,
+        );
 
         return new SourceParserRequestDto(
             $projectPaths,
@@ -39,10 +45,26 @@ class SourceParserRequestMapper implements SourceParserRequestMapperInterface
     /**
      * @param string $srcPath
      * @param array<string> $projectPrefixes
+     * @param array<\Codebase\Application\Dto\ModuleDto> $modules
      *
      * @return array<string>
      */
-    protected function getProjectPaths(string $srcPath, array $projectPrefixes): array
+    protected function getProjectPaths(string $srcPath, array $projectPrefixes, array $modules): array
+    {
+        if ($modules) {
+            return $this->getProjectPathsByModules($srcPath, $modules);
+        }
+
+        return $this->getProjectPathsByPrefixes($srcPath, $projectPrefixes);
+    }
+
+    /**
+     * @param string $srcPath
+     * @param array<string> $projectPrefixes
+     *
+     * @return array<string>
+     */
+    protected function getProjectPathsByPrefixes(string $srcPath, array $projectPrefixes): array
     {
         $projectDirectories = [];
 
@@ -51,6 +73,24 @@ class SourceParserRequestMapper implements SourceParserRequestMapperInterface
             if (is_dir($path)) {
                 $projectDirectories[] = $path;
             }
+        }
+
+        return $projectDirectories;
+    }
+
+    /**
+     * @param string $srcPath
+     * @param array<\Codebase\Application\Dto\ModuleDto> $modules
+     *
+     * @return array<string>
+     */
+    protected function getProjectPathsByModules(string $srcPath, array $modules): array
+    {
+        $projectDirectories = [];
+
+        foreach ($modules as $module) {
+            $path = sprintf('%s%s/*/%s', $srcPath, $module->getNamespace(), $module->getName());
+            $projectDirectories[] = $path;
         }
 
         return $projectDirectories;
