@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ab1d1d8b3fa98211376344edcd1942b",
+    "content-hash": "0cb4b4d16495b691f070ab1ab7ff0541",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -3062,16 +3062,16 @@
         },
         {
             "name": "spryker-sdk/sdk-contracts",
-            "version": "dev-feature/sdk-907-contracts-api-doc",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/sdk-contracts.git",
-                "reference": "0e7ada2dd80dd9c1c8ab3784593edda9d4dff658"
+                "reference": "8c28aeccc9e7af883a6138f7a52356c0132c52c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/0e7ada2dd80dd9c1c8ab3784593edda9d4dff658",
-                "reference": "0e7ada2dd80dd9c1c8ab3784593edda9d4dff658",
+                "url": "https://api.github.com/repos/spryker-sdk/sdk-contracts/zipball/8c28aeccc9e7af883a6138f7a52356c0132c52c8",
+                "reference": "8c28aeccc9e7af883a6138f7a52356c0132c52c8",
                 "shasum": ""
             },
             "require": {
@@ -3095,9 +3095,9 @@
             "description": "Contracts to extend the Spryker SDK",
             "support": {
                 "issues": "https://github.com/spryker-sdk/sdk-contracts/issues",
-                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/feature/sdk-907-contracts-api-doc"
+                "source": "https://github.com/spryker-sdk/sdk-contracts/tree/0.4.0"
             },
-            "time": "2022-09-15T08:47:17+00:00"
+            "time": "2022-09-15T11:05:28+00:00"
         },
         {
             "name": "symfony/cache",
@@ -7880,7 +7880,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "spryker-sdk/integrator": 20,
-        "spryker-sdk/sdk-contracts": 20,
         "spryker/code-sniffer": 20
     },
     "prefer-stable": true,
