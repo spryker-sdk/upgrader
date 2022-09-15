@@ -46,7 +46,7 @@ class PluginFilter implements FilterInterface
      */
     protected function isPlugin(ReflectionClass $class): bool
     {
-        return preg_match('/\/Plugin\//', $this->reverseSlash($class->getName())) ||
+        return preg_match('#/Plugin/#', $this->reverseSlash($class->getName())) ||
             preg_match('/.+Plugin$/', $class->getShortName());
     }
 
