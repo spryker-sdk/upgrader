@@ -17,5 +17,6 @@
     <file>tests/</file>
 
     <rule ref="vendor/spryker/code-sniffer/SprykerStrict/ruleset.xml"/>
+    <rule ref="Generic.PHP.RequireStrictTypes" />
 
 </ruleset>
