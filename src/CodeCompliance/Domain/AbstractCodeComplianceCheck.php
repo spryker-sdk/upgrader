@@ -16,6 +16,11 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
     /**
      * @var string
      */
+    protected const DOCUMENTATION_BASE_URL = 'https://docs.spryker.com/docs/scos/dev/guidelines/keeping-a-project-upgradable/upgradability-guidelines/';
+
+    /**
+     * @var string
+     */
     protected const COLUMN_KEY_NAME = 'name';
 
     /**

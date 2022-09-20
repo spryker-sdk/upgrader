@@ -33,6 +33,14 @@ class Extended extends AbstractCodeComplianceCheck
     }
 
     /**
+     * @return string
+     */
+    public function getDocumentationUrl(): string
+    {
+        return self::DOCUMENTATION_BASE_URL . 'private-api-method-is-overridden-on-the-project-level.html';
+    }
+
+    /**
      * @return array<\CodeCompliance\Domain\Entity\Violation>
      */
     public function getViolations(): array

@@ -30,6 +30,14 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
     }
 
     /**
+     * @return string
+     */
+    public function getDocumentationUrl(): string
+    {
+        return self::DOCUMENTATION_BASE_URL . 'entity-name-is-not-unique.html#name-of-database-table-column-is-not-unique';
+    }
+
+    /**
      * @return array<\CodeCompliance\Domain\Entity\Violation>
      */
     public function getViolations(): array

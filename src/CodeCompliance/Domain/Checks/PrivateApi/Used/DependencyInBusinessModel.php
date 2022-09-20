@@ -35,6 +35,14 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
     }
 
     /**
+     * @return string
+     */
+    public function getDocumentationUrl(): string
+    {
+        return self::DOCUMENTATION_BASE_URL . 'private-api-is-extended.html';
+    }
+
+    /**
      * @return array<\CodeCompliance\Domain\Entity\Violation>
      */
     public function getViolations(): array
