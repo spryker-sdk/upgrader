@@ -14,8 +14,8 @@ use CodeCompliance\Domain\Entity\Report;
 use SprykerSdk\SdkContracts\Entity\ContextInterface;
 use SprykerSdk\SdkContracts\Entity\ConverterInterface;
 use SprykerSdk\SdkContracts\Entity\ExecutableCommandInterface;
-use SprykerSdk\SdkContracts\Violation\ViolationReportableInterface;
-use SprykerSdk\SdkContracts\Violation\ViolationReportInterface;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationReportableInterface;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationReportInterface;
 use Upgrader\Configuration\ConfigurationProvider;
 
 class AnalyzeCommand implements ViolationReportableInterface, ExecutableCommandInterface
@@ -97,7 +97,7 @@ class AnalyzeCommand implements ViolationReportableInterface, ExecutableCommandI
     }
 
     /**
-     * @return \SprykerSdk\SdkContracts\Violation\ViolationReportInterface|null
+     * @return \SprykerSdk\SdkContracts\Report\Violation\ViolationReportInterface|null
      */
     public function getReport(): ?ViolationReportInterface
     {

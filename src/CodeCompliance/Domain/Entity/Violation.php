@@ -7,8 +7,8 @@
 
 namespace CodeCompliance\Domain\Entity;
 
-use SprykerSdk\SdkContracts\Violation\ViolationFixInterface;
-use SprykerSdk\SdkContracts\Violation\ViolationInterface;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationFixInterface;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class Violation implements ViolationInterface
 {
@@ -229,7 +229,7 @@ class Violation implements ViolationInterface
     }
 
     /**
-     * @return \SprykerSdk\SdkContracts\Violation\ViolationFixInterface|null
+     * @return \SprykerSdk\SdkContracts\Report\Violation\ViolationFixInterface|null
      */
     public function getFix(): ?ViolationFixInterface
     {
