@@ -11,6 +11,7 @@ use CodeCompliance\Domain\AbstractCodeComplianceCheck;
 use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
 use CodeCompliance\Domain\Checks\Filters\CoreExtensionFilter;
 use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
+use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 
@@ -47,8 +48,10 @@ class Extended extends AbstractCodeComplianceCheck
         $violations = [];
 
         foreach ($filteredSources as $source) {
-            $coreParent = $source->getCoreParent();
-
+            $coreParent = $this->filterService->filter([$source->getCoreParent()], [
+                PluginFilter::PLUGIN_FILTER,
+            ]);
+            $coreParent = array_shift($coreParent);
             if (!$coreParent) {
                 continue;
             }

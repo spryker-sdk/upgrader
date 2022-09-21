@@ -21,6 +21,7 @@ class PluginFilterTest extends BaseFilterTest
         return [
             'TestProject\Method\ProjectPlugin',
             'TestCore\Method\CoreMethod',
+            'TestCore\Plugin\SomeClass',
         ];
     }
 
