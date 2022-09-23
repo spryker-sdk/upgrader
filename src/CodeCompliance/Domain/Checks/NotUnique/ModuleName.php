@@ -14,6 +14,21 @@ use Core\Domain\ValueObject\Id;
 class ModuleName extends AbstractCodeComplianceCheck
 {
     /**
+     * @var array<string> $ignoreModuleNames
+     *
+     * The list was added for skipping issues in demo shops until they are not updated
+     */
+    protected array $ignoreModuleNames = [
+        'ExampleProductSalePage',
+        'ProductUrlCartConnector',
+        'CustomerFullNameWidget',
+        'ExampleChart',
+        'NavigationWidget',
+        'ExampleStateMachine',
+        'EvaluationModule',
+    ];
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -42,6 +57,9 @@ class ModuleName extends AbstractCodeComplianceCheck
         foreach ($projectModuleNames as $projectModuleName) {
             $hasProjectPrefix = $this->hasProjectPrefix($projectModuleName, $projectPrefixes);
             if (in_array($projectModuleName, $coreModuleNames) || $hasProjectPrefix) {
+                continue;
+            }
+            if (in_array($projectModuleName, $this->ignoreModuleNames)) {
                 continue;
             }
 
