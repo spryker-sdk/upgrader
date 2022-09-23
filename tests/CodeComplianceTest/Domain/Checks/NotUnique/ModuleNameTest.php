@@ -38,8 +38,8 @@ class ModuleNameTest extends BaseCodeComplianceCheckTest
         $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
         $this->moduleName = new ModuleName(new FilterService(), $codeBaseService);
 
-        mkdir(self::CORE_MODULE_PATCH, 0777, true);
-        mkdir(self::PROJECT_MODULE_PATCH, 0777, true);
+        mkdir(static::CORE_MODULE_PATCH, 0777, true);
+        mkdir(static::PROJECT_MODULE_PATCH, 0777, true);
     }
 
     /**
@@ -47,8 +47,8 @@ class ModuleNameTest extends BaseCodeComplianceCheckTest
      */
     protected function tearDown(): void
     {
-        rmdir(self::CORE_MODULE_PATCH);
-        rmdir(self::PROJECT_MODULE_PATCH);
+        rmdir(static::CORE_MODULE_PATCH);
+        rmdir(static::PROJECT_MODULE_PATCH);
     }
 
     /**
