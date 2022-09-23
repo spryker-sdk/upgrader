@@ -44,7 +44,7 @@ class ModuleNameTest extends BaseCodeComplianceCheckTest
         $violations = $isNotUniqueConstantCheck->getViolations();
 
         // Assert
-        $this->assertCount(8, $violations);
+        $this->assertCount(7, $violations);
 
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
