@@ -15,6 +15,16 @@ use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 class ModuleNameTest extends BaseCodeComplianceCheckTest
 {
     /**
+     * @var string
+     */
+    protected const CORE_MODULE_PATCH = APPLICATION_ROOT_DIR . '/tests/data/Evaluate/Core/CustomModule';
+
+    /**
+     * @var string
+     */
+    protected const PROJECT_MODULE_PATCH = APPLICATION_ROOT_DIR . '/tests/data/Evaluate/Project/Unique/CustomModuleEU';
+
+    /**
      * @var \CodeCompliance\Domain\Checks\NotUnique\ModuleName
      */
     protected ModuleName $moduleName;
@@ -27,6 +37,18 @@ class ModuleNameTest extends BaseCodeComplianceCheckTest
         /** @var \CodeCompliance\Infrastructure\Service\CodeBaseService $codeBaseService */
         $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
         $this->moduleName = new ModuleName(new FilterService(), $codeBaseService);
+
+        mkdir(self::CORE_MODULE_PATCH, 0777, true);
+        mkdir(self::PROJECT_MODULE_PATCH, 0777, true);
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        rmdir(self::CORE_MODULE_PATCH);
+        rmdir(self::PROJECT_MODULE_PATCH);
     }
 
     /**
