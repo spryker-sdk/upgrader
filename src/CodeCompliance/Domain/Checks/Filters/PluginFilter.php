@@ -48,13 +48,17 @@ class PluginFilter implements FilterInterface
      */
     protected function isPlugin(ReflectionClass $class): bool
     {
-        $pattern = '/.*Plugin$/';
-        $parent = $class->getParentClass();
-        $className = $class->getShortName();
-        if (!$parent) {
-            return false;
-        }
+        return preg_match('#/Plugin/#', $this->reverseSlash($class->getName())) ||
+            preg_match('#.+Plugin$#', $class->getShortName());
+    }
 
-        return (preg_match($pattern, $className)) && (preg_match($pattern, $parent->getShortName()));
+    /**
+     * @param string $source
+     *
+     * @return string
+     */
+    protected function reverseSlash(string $source): string
+    {
+        return str_replace('\\', '/', $source);
     }
 }

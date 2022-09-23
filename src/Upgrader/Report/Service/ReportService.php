@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Upgrader\Report\Service;
 
 use CodeCompliance\Domain\Entity\Report;
-use SprykerSdk\SdkContracts\Violation\ViolationInterface;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 use Symfony\Component\Yaml\Yaml;
 use Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask;
 
@@ -115,7 +115,7 @@ class ReportService
     }
 
     /**
-     * @param \SprykerSdk\SdkContracts\Violation\ViolationInterface $violation
+     * @param \SprykerSdk\SdkContracts\Report\Violation\ViolationInterface $violation
      *
      * @return array<string, mixed>
      */

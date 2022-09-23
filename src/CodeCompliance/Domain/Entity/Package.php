@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace CodeCompliance\Domain\Entity;
 
-use SprykerSdk\SdkContracts\Violation\PackageViolationReportInterface;
-use SprykerSdk\SdkContracts\Violation\ViolationInterface;
+use SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class Package implements PackageViolationReportInterface
 {
@@ -30,12 +30,12 @@ class Package implements PackageViolationReportInterface
     protected string $path = '';
 
     /**
-     * @var array<\SprykerSdk\SdkContracts\Violation\ViolationInterface>
+     * @var array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface>
      */
     protected array $violations = [];
 
     /**
-     * @var array<string, array<\SprykerSdk\SdkContracts\Violation\ViolationInterface>>
+     * @var array<string, array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface>>
      */
     protected array $fileViolations = [];
 
@@ -68,7 +68,7 @@ class Package implements PackageViolationReportInterface
     }
 
     /**
-     * @return array<\SprykerSdk\SdkContracts\Violation\ViolationInterface>
+     * @return array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface>
      */
     public function getViolations(): array
     {
@@ -76,7 +76,7 @@ class Package implements PackageViolationReportInterface
     }
 
     /**
-     * @return array<string, array<\SprykerSdk\SdkContracts\Violation\ViolationInterface>>>
+     * @return array<string, array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface>>>
      */
     public function getFileViolations(): array
     {
@@ -84,7 +84,7 @@ class Package implements PackageViolationReportInterface
     }
 
     /**
-     * @param \SprykerSdk\SdkContracts\Violation\ViolationInterface $violation
+     * @param \SprykerSdk\SdkContracts\Report\Violation\ViolationInterface $violation
      *
      * @return $this
      */
@@ -97,7 +97,7 @@ class Package implements PackageViolationReportInterface
 
     /**
      * @param string $file
-     * @param \SprykerSdk\SdkContracts\Violation\ViolationInterface $fileViolation
+     * @param \SprykerSdk\SdkContracts\Report\Violation\ViolationInterface $fileViolation
      *
      * @return $this
      */
