@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
 use CodeCompliance\Domain\Checks\Filters\PersistenceFilter;
@@ -63,7 +65,7 @@ class Persistence extends AbstractUsedCodeComplianceCheck
                 $classDocComment = $source->getReflection()->getDocComment();
                 if (!$classDocComment) {
                     $message = sprintf(static::DOC_COMMENT_MESSAGE, $source->getReflection()->getName());
-                    $violations[] = new Violation(new Id(), $message, $this->getName());
+                    $violations[] = new Violation((string)(new Id()), $message, $this->getName());
 
                     continue;
                 }
@@ -71,7 +73,7 @@ class Persistence extends AbstractUsedCodeComplianceCheck
                 $factoryNamespace = $this->getReturnNamespaceByMethodFromDocComment($classDocComment, $methodToCheck);
                 if (!$factoryNamespace) {
                     $message = sprintf(static::DOC_COMMENT_MESSAGE, '$this->getFactory() in ' . $source->getClassName());
-                    $violations[] = new Violation(new Id(), $message, $this->getName());
+                    $violations[] = new Violation((string)(new Id()), $message, $this->getName());
 
                     continue;
                 }
@@ -91,7 +93,7 @@ class Persistence extends AbstractUsedCodeComplianceCheck
 
                     if ($hasCoreNamespace) {
                         $guideline = sprintf($this->getGuideline(), $usedMethodName, $source->getClassName());
-                        $violations[] = new Violation(new Id(), $guideline, $this->getName());
+                        $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
                     }
                 }
             }
