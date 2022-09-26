@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace Codebase\Infrastructure\SourceParser\StructureParser;
 
 use Codebase\Application\Dto\CodebaseSourceDto;
