@@ -82,6 +82,11 @@ class UpgradeCommand implements ExecutableCommandInterface
         $message = new Message((string)$stepsExecutionDto->getOutputMessage());
 
         $context->addMessage(static::class, $message);
+        $context->setExitCode(ContextInterface::SUCCESS_EXIT_CODE);
+
+        if (!$stepsExecutionDto->getIsSuccessful()) {
+            $context->setExitCode(ContextInterface::FAILURE_EXIT_CODE);
+        }
 
         return $context;
     }
