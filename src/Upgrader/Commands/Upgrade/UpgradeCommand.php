@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace Upgrader\Commands\Upgrade;
 
 use SprykerSdk\SdkContracts\Entity\ContextInterface;

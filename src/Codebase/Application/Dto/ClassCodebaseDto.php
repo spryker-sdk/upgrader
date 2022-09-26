@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace Codebase\Application\Dto;
 
 use ReflectionClass;
@@ -25,12 +27,12 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     protected array $constants = [];
 
     /**
-     * @var array<string>
+     * @var array<\ReflectionMethod>
      */
     protected array $methods = [];
 
     /**
-     * @var array<string>
+     * @var array<\ReflectionClass>
      */
     protected array $traits = [];
 
@@ -75,7 +77,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @return array<string>
+     * @return array<\ReflectionMethod>
      */
     public function getMethods(): array
     {
@@ -83,7 +85,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @param array<string> $methods
+     * @param array<\ReflectionMethod> $methods
      *
      * @return $this
      */
@@ -95,7 +97,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @return array<string>
+     * @return array<\ReflectionClass>
      */
     public function getTraits(): array
     {
@@ -103,7 +105,7 @@ class ClassCodebaseDto extends AbstractCodebaseDto
     }
 
     /**
-     * @param array<string> $traits
+     * @param array<\ReflectionClass> $traits
      *
      * @return $this
      */

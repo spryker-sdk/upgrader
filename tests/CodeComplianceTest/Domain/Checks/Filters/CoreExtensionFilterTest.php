@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace CodeComplianceTest\Domain\Checks\Filters;
 
 use CodeCompliance\Domain\Checks\Filters\CoreExtensionFilter;

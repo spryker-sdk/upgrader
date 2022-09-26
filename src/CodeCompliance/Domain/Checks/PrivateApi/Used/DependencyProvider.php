@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
 use CodeCompliance\Domain\Checks\Filters\BusinessFactoryFilter;
@@ -61,7 +63,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
 
                 if (!$constantName) {
                     $guideline = sprintf('Please create constant from %s in %s', $argumentString, $source->getClassName());
-                    $violations[] = new Violation(new Id(), $guideline, $this->getName());
+                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
 
                     continue;
                 }
@@ -70,7 +72,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
 
                 if (!$constantClassName || $constantClassName === 'static' || $constantClassName === 'self') {
                     $guideline = sprintf('Please use constant from DependencyProvider instead of %s in %s', $argumentString, $source->getClassName());
-                    $violations[] = new Violation(new Id(), $guideline, $this->getName());
+                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
 
                     continue;
                 }
@@ -89,7 +91,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
 
                 if ($this->hasCoreNamespace($this->getCodebaseSourceDto()->getCoreNamespaces(), $constantClassNamespace)) {
                     $guideline = sprintf($this->getGuideline(), $constantClassName, $constantName, $source->getClassName());
-                    $violations[] = new Violation(new Id(), $guideline, $this->getName());
+                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
 
                     continue;
                 }
@@ -102,7 +104,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
 
                     if ($this->isContainsConstantByName($parentConstants, $constantName)) {
                         $guideline = sprintf($this->getGuideline(), $constantClassName, $constantName, $source->getClassName());
-                        $violations[] = new Violation(new Id(), $guideline, $this->getName());
+                        $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
                     }
                 }
             }

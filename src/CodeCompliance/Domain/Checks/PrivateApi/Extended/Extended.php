@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace CodeCompliance\Domain\Checks\PrivateApi\Extended;
 
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
@@ -57,7 +59,7 @@ class Extended extends AbstractCodeComplianceCheck
             }
 
             $guideline = sprintf($this->getGuideline(), $coreParent->getClassName(), $source->getClassName());
-            $violations[] = new Violation(new Id(), $guideline, $this->getName());
+            $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
         }
 
         return $violations;
