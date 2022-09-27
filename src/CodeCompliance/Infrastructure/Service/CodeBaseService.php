@@ -10,20 +10,20 @@ declare(strict_types=1);
 namespace CodeCompliance\Infrastructure\Service;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
-use Codebase\Infrastructure\SourceParser\Parser\PhpParserInterface;
+use Codebase\Infrastructure\SourceParser\FileParser\PhpFileParserInterface;
 use CodeCompliance\Domain\Service\CodeBaseServiceInterface;
 
 class CodeBaseService implements CodeBaseServiceInterface
 {
     /**
-     * @var \Codebase\Infrastructure\SourceParser\Parser\PhpParserInterface
+     * @var \Codebase\Infrastructure\SourceParser\FileParser\PhpFileParserInterface
      */
-    protected PhpParserInterface $phpParser;
+    protected PhpFileParserInterface $phpParser;
 
     /**
-     * @param \Codebase\Infrastructure\SourceParser\Parser\PhpParserInterface $phpParser
+     * @param \Codebase\Infrastructure\SourceParser\FileParser\PhpFileParserInterface $phpParser
      */
-    public function __construct(PhpParserInterface $phpParser)
+    public function __construct(PhpFileParserInterface $phpParser)
     {
         $this->phpParser = $phpParser;
     }

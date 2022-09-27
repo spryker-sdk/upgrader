@@ -7,13 +7,13 @@
 
 declare(strict_types=1);
 
-namespace Codebase\Infrastructure\SourceParser\Parser;
+namespace Codebase\Infrastructure\SourceParser\FileParser;
 
 use Codebase\Application\Dto\CodebaseSourceDto;
 use SimpleXMLElement;
 use Symfony\Component\Finder\Finder;
 
-class TransferSchemaParser extends XmlParser
+class TransferSchemaParser extends XmlFileParser
 {
     /**
      * @var string

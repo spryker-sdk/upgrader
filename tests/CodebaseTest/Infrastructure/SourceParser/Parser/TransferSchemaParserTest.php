@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace CodebaseTest\Infrastructure\SourceParser\Parser;
 
-use Codebase\Infrastructure\SourceParser\Parser\TransferSchemaParser;
+use Codebase\Infrastructure\SourceParser\FileParser\TransferSchemaParser;
 
 class TransferSchemaParserTest extends BaseParser
 {

@@ -12,7 +12,7 @@ namespace Codebase\Infrastructure\SourceParser;
 use Codebase\Application\Dto\CodebaseSourceDto;
 use Codebase\Application\Dto\SourceParserRequestDto;
 use Codebase\Infrastructure\SourceFinder\SourceFinder;
-use Codebase\Infrastructure\SourceParser\Parser\PhpParser;
+use Codebase\Infrastructure\SourceParser\FileParser\PhpParser;
 
 class SourceParser implements SourceParserInterface
 {
@@ -22,30 +22,33 @@ class SourceParser implements SourceParserInterface
     protected const FINDER_PREFIX = '*.';
 
     /**
-     * @var \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface
-     */
-    protected $parser;
-
-    /**
      * @var \Codebase\Infrastructure\SourceFinder\SourceFinder
      */
     protected $sourceFinder;
 
     /**
-     * @var array<\Codebase\Infrastructure\SourceParser\Parser\ParserInterface>
+     * @var array<\Codebase\Infrastructure\SourceParser\FileParser\FileParserInterface>
      */
-    protected $sourceParsers;
+    protected array $fileParsers;
+
+    /**
+     * @var array<\Codebase\Infrastructure\SourceParser\StructureParser\StructureParserInterface>
+     */
+    protected array $structureParsers;
 
     /**
      * @param \Codebase\Infrastructure\SourceFinder\SourceFinder $sourceFinder
-     * @param array<\Codebase\Infrastructure\SourceParser\Parser\ParserInterface> $sourceParsers
+     * @param array<\Codebase\Infrastructure\SourceParser\FileParser\FileParserInterface> $sourceParsers
+     * @param array<\Codebase\Infrastructure\SourceParser\StructureParser\StructureParserInterface> $structureParsers
      */
     public function __construct(
         SourceFinder $sourceFinder,
-        array $sourceParsers
+        array $sourceParsers,
+        array $structureParsers
     ) {
         $this->sourceFinder = $sourceFinder;
-        $this->sourceParsers = $sourceParsers;
+        $this->fileParsers = $sourceParsers;
+        $this->structureParsers = $structureParsers;
     }
 
     /**
@@ -60,18 +63,22 @@ class SourceParser implements SourceParserInterface
             $codebaseRequestDto->getProjectPrefixes(),
         );
 
+        foreach ($this->structureParsers as $structureParser) {
+            $codebaseSourceDto = $structureParser->parse($codebaseRequestDto, $codebaseSourceDto);
+        }
+
         foreach ($codebaseRequestDto->getPaths() as $type => $paths) {
             if ($paths === []) {
                 continue;
             }
             $codebaseSourceDto = $codebaseSourceDto->setType($type);
-            foreach ($this->sourceParsers as $sourceParser) {
-                if ($type === SourceParserRequestDto::CORE_TYPE && $sourceParser->getExtension() === PhpParser::PARSER_EXTENSION) {
+            foreach ($this->fileParsers as $fileParser) {
+                if ($type === SourceParserRequestDto::CORE_TYPE && $fileParser->getExtension() === PhpParser::PARSER_EXTENSION) {
                     continue;
                 }
-                $extensions = [static::FINDER_PREFIX . $sourceParser->getExtension()];
+                $extensions = [static::FINDER_PREFIX . $fileParser->getExtension()];
                 $finder = $this->sourceFinder->findSourceByExtension($extensions, $paths, $codebaseRequestDto->getExcludeList());
-                $codebaseSourceDto = $sourceParser->parse($finder, $codebaseSourceDto);
+                $codebaseSourceDto = $fileParser->parse($finder, $codebaseSourceDto);
             }
         }
 

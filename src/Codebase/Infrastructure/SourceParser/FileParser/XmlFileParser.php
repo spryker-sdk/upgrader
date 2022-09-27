@@ -7,14 +7,14 @@
 
 declare(strict_types=1);
 
-namespace Codebase\Infrastructure\SourceParser\Parser;
+namespace Codebase\Infrastructure\SourceParser\FileParser;
 
 use Codebase\Application\Dto\XmlDto;
 use Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface;
 use Codebase\Infrastructure\SourceFinder\SourceFinder;
 use SimpleXMLElement;
 
-abstract class XmlParser implements ParserInterface
+abstract class XmlFileParser implements FileParserInterface
 {
     /**
      * @var string

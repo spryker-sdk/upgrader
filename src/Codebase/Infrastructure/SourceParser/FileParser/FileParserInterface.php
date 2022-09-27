@@ -7,12 +7,12 @@
 
 declare(strict_types=1);
 
-namespace Codebase\Infrastructure\SourceParser\Parser;
+namespace Codebase\Infrastructure\SourceParser\FileParser;
 
 use Codebase\Application\Dto\CodebaseSourceDto;
 use Symfony\Component\Finder\Finder;
 
-interface ParserInterface
+interface FileParserInterface
 {
     /**
      * @return string
