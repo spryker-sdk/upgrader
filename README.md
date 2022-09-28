@@ -27,8 +27,10 @@ bin/console analyze:php:code-compliance
 The command generates a YAML report at `{project_directory}/reports/`.
 
 Available options:
-- --module (-m) - module filtration option. It is used to specify the modules for evaluation.
+- `--module (-m)` - module filtration option. It is used to specify the modules for evaluation.
   Example `-m 'Pyz.ProductStorage'` where `Pyz` is namespace and `ProductStorage` is module name.
+
+- `-v` - by increasing the verbosity level you will get more information about the error.
 
 ​
 To view a previously generated report, run the following command:
