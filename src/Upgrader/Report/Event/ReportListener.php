@@ -49,7 +49,7 @@ class ReportListener
                 $event->getCommand()->getName() === AnalyzeTask::ID_ANALYZE_TASK
             )
         ) {
-            $messages = $this->reportService->report();
+            $messages = $this->reportService->report($event->getOutput()->isVerbose());
 
             if (!$messages) {
                 return;

@@ -12,6 +12,7 @@ namespace CodeCompliance\Domain\Checks\NotUnique;
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class ModuleName extends AbstractCodeComplianceCheck
 {
@@ -79,7 +80,9 @@ class ModuleName extends AbstractCodeComplianceCheck
                 reset($projectPrefixes),
                 $projectModuleName,
             );
-            $violations[] = new Violation((string)new Id(), $guideline, $this->getName());
+            $violations[] = new Violation((string)new Id(), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                'documentation' => $this->getDocumentationUrl(),
+            ]);
         }
 
         return $violations;

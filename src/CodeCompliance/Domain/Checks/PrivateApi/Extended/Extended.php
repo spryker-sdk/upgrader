@@ -16,6 +16,7 @@ use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
 use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class Extended extends AbstractCodeComplianceCheck
 {
@@ -67,7 +68,9 @@ class Extended extends AbstractCodeComplianceCheck
             }
 
             $guideline = sprintf($this->getGuideline(), $coreParent->getClassName(), $source->getClassName());
-            $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
+            $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                'documentation' => $this->getDocumentationUrl(),
+            ]);
         }
 
         return $violations;

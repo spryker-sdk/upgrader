@@ -59,7 +59,7 @@ class EvaluationReportConsole extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $messages = $this->reportService->report();
+        $messages = $this->reportService->report($output->isVerbose());
 
         if ($messages === []) {
             return Command::SUCCESS;

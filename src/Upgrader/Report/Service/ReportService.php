@@ -39,6 +39,16 @@ class ReportService
     /**
      * @var string
      */
+    protected const KEY_ADDITIONAL_ATTRIBUTES = 'additional_attributes';
+
+    /**
+     * @var string
+     */
+    protected const KEY_ATTRIBUTE_DOCUMENTATION = 'documentation';
+
+    /**
+     * @var string
+     */
     protected const REPORTS_DIR = 'reports';
 
     /**
@@ -55,9 +65,11 @@ class ReportService
     }
 
     /**
+     * @param bool $isVerbose
+     *
      * @return array<string>|null
      */
-    public function report(): ?array
+    public function report(bool $isVerbose = false): ?array
     {
         $path = getcwd() . sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
 
@@ -71,8 +83,15 @@ class ReportService
         $messageSeparator = str_pad('', 100, '-');
         foreach ($output[static::KEY_VIOLATIONS] as $violations) {
             $key = $violations[static::KEY_PRODUCED_BY];
-            $keySeparatorLength = str_pad('', strlen($key), '-');
-            $messages[] = $key . ' ' . $violations[static::KEY_MESSAGE] . PHP_EOL . $keySeparatorLength . ' ' . $messageSeparator;
+            $message = $key . ' ' . $violations[static::KEY_MESSAGE] . PHP_EOL;
+
+            if ($isVerbose) {
+                $docUrl = $violations[static::KEY_ADDITIONAL_ATTRIBUTES][static::KEY_ATTRIBUTE_DOCUMENTATION] ?? '';
+                $message .= str_pad('', strlen($key) + 1, ' ') . '💡More information: ' . $docUrl . PHP_EOL;
+            }
+
+            $message .= str_pad('', strlen($key), '-') . ' ' . $messageSeparator;
+            $messages[] = $message;
         }
 
         return $messages;
