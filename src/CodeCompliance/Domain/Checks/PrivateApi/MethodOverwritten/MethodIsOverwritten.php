@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace CodeCompliance\Domain\Checks\PrivateApi\MethodOverwritten;
 
 use Codebase\Application\Dto\CodebaseInterface;
@@ -67,7 +69,7 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
                 }
                 foreach ($this->filterNotUniqueMethods($filteredSource) as $filteredMethod) {
                     $guideline = sprintf($this->getGuideline(), $filteredSource->getCoreParent()->getClassName(), $filteredMethod->getName(), $filteredSource->getClassName());
-                    $violations[] = new Violation(new Id(), $guideline, $this->getName());
+                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
                 }
             }
         }

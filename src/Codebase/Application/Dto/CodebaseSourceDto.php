@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace Codebase\Application\Dto;
 
 class CodebaseSourceDto
@@ -18,6 +20,16 @@ class CodebaseSourceDto
      * @var array<\Codebase\Application\Dto\CodebaseInterface>
      */
     protected array $phpCodebaseSources = [];
+
+    /**
+     * @var array<string>
+     */
+    protected array $coreModuleNames = [];
+
+    /**
+     * @var array<string>
+     */
+    protected array $projectModuleNames = [];
 
     /**
      * @var array<\Codebase\Application\Dto\CodebaseInterface>
@@ -188,5 +200,41 @@ class CodebaseSourceDto
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getCoreModuleNames(): array
+    {
+        return $this->coreModuleNames;
+    }
+
+    /**
+     * @param array<string> $coreModuleNames
+     *
+     * @return void
+     */
+    public function setCoreModuleNames(array $coreModuleNames): void
+    {
+        $this->coreModuleNames = $coreModuleNames;
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getProjectModuleNames(): array
+    {
+        return $this->projectModuleNames;
+    }
+
+    /**
+     * @param array<string> $projectModuleNames
+     *
+     * @return void
+     */
+    public function setProjectModuleNames(array $projectModuleNames): void
+    {
+        $this->projectModuleNames = $projectModuleNames;
     }
 }

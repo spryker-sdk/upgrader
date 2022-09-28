@@ -5,12 +5,15 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace CodeCompliance\Domain\Checks\PrivateApi\Extended;
 
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
 use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
 use CodeCompliance\Domain\Checks\Filters\CoreExtensionFilter;
 use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
+use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 
@@ -55,14 +58,16 @@ class Extended extends AbstractCodeComplianceCheck
         $violations = [];
 
         foreach ($filteredSources as $source) {
-            $coreParent = $source->getCoreParent();
-
+            $coreParent = $this->filterService->filter([$source->getCoreParent()], [
+                PluginFilter::PLUGIN_FILTER,
+            ]);
+            $coreParent = array_shift($coreParent);
             if (!$coreParent) {
                 continue;
             }
 
             $guideline = sprintf($this->getGuideline(), $coreParent->getClassName(), $source->getClassName());
-            $violations[] = new Violation(new Id(), $guideline, $this->getName());
+            $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
         }
 
         return $violations;

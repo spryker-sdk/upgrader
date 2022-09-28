@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace CodeComplianceTest\Domain\Checks\Filters;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
@@ -21,6 +23,7 @@ class PluginFilterTest extends BaseFilterTest
         return [
             'TestProject\Method\ProjectPlugin',
             'TestCore\Method\CoreMethod',
+            'TestCore\Plugin\SomeClass',
         ];
     }
 

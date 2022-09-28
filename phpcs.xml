@@ -18,4 +18,9 @@
 
     <rule ref="vendor/spryker/code-sniffer/SprykerStrict/ruleset.xml"/>
 
+    <rule ref="Spryker.PHP.DeclareStrictTypesAfterFileDoc">
+        <properties>
+            <property name="strictTypesMandatory" value="true"/>
+        </properties>
+    </rule>
 </ruleset>

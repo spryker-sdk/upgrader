@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 
 use CodeCompliance\Domain\Checks\Filters\BusinessModelFilter;
@@ -68,6 +70,7 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
                 $useNamespaces,
                 $source->getReflection()->getNamespaceName(),
             );
+
             $createdSources = $this->parseSourcesByNamespaces($createdNamespaces);
             $createdSources = $this->filterService->filter($createdSources, [
                 IgnoreListFilter::IGNORE_LIST_FILTER,
@@ -76,7 +79,7 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
 
             foreach ($createdSources as $createdNamespace) {
                 $guideline = sprintf($this->getGuideline(), $createdNamespace->getClassName(), $source->getClassName());
-                $violations[] = new Violation(new Id(), $guideline, $this->getName());
+                $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
             }
         }
 

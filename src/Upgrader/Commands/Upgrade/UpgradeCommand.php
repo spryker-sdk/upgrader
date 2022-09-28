@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace Upgrader\Commands\Upgrade;
 
 use SprykerSdk\SdkContracts\Entity\ContextInterface;
@@ -80,6 +82,11 @@ class UpgradeCommand implements ExecutableCommandInterface
         $message = new Message((string)$stepsExecutionDto->getOutputMessage());
 
         $context->addMessage(static::class, $message);
+        $context->setExitCode(ContextInterface::SUCCESS_EXIT_CODE);
+
+        if (!$stepsExecutionDto->getIsSuccessful()) {
+            $context->setExitCode(ContextInterface::FAILURE_EXIT_CODE);
+        }
 
         return $context;
     }

@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace Upgrader\Tasks\Evaluate\Report;
 
 use SprykerSdk\SdkContracts\Entity\Lifecycle\LifecycleInterface;
