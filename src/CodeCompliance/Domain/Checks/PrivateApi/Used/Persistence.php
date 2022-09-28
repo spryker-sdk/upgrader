@@ -47,7 +47,7 @@ class Persistence extends AbstractUsedCodeComplianceCheck
      */
     public function getDocumentationUrl(): string
     {
-        return self::DOCUMENTATION_BASE_URL . 'private-api-is-used-on-the-project-level.html';
+        return static::DOCUMENTATION_BASE_URL . 'private-api-is-used-on-the-project-level.html';
     }
 
     /**

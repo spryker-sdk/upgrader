@@ -40,7 +40,7 @@ class Method extends AbstractCodeComplianceCheck
      */
     public function getDocumentationUrl(): string
     {
-        return self::DOCUMENTATION_BASE_URL . 'entity-name-is-not-unique.html#method-name-is-not-unique';
+        return static::DOCUMENTATION_BASE_URL . 'entity-name-is-not-unique.html#method-name-is-not-unique';
     }
 
     /**

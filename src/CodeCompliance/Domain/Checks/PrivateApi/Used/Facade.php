@@ -47,7 +47,7 @@ class Facade extends AbstractUsedCodeComplianceCheck
      */
     public function getDocumentationUrl(): string
     {
-        return self::DOCUMENTATION_BASE_URL . 'private-api-is-extended.html';
+        return static::DOCUMENTATION_BASE_URL . 'private-api-is-extended.html';
     }
 
     /**

@@ -37,7 +37,7 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
      */
     public function getDocumentationUrl(): string
     {
-        return self::DOCUMENTATION_BASE_URL . 'entity-name-is-not-unique.html#name-of-database-table-column-is-not-unique';
+        return static::DOCUMENTATION_BASE_URL . 'entity-name-is-not-unique.html#name-of-database-table-column-is-not-unique';
     }
 
     /**

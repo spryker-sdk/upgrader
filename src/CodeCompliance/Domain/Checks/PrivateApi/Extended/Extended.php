@@ -41,7 +41,7 @@ class Extended extends AbstractCodeComplianceCheck
      */
     public function getDocumentationUrl(): string
     {
-        return self::DOCUMENTATION_BASE_URL . 'private-api-method-is-overridden-on-the-project-level.html';
+        return static::DOCUMENTATION_BASE_URL . 'private-api-method-is-overridden-on-the-project-level.html';
     }
 
     /**
