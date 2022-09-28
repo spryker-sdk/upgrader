@@ -8,7 +8,7 @@
 
 The repository contains two Upgradability tools:
 - [Evaluator](#evaluator)
-- [Upgrader](#ugrader)
+- [Upgrader](#upgrader)
 
 ## Evaluator
 
