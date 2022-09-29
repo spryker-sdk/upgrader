@@ -73,7 +73,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
                 if (!$constantName) {
                     $guideline = sprintf('Please create constant from %s in %s', $argumentString, $source->getClassName());
                     $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
-                        'documentation' => $this->getDocumentationUrl(),
+                        static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                     ]);
 
                     continue;
@@ -84,7 +84,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
                 if (!$constantClassName || $constantClassName === 'static' || $constantClassName === 'self') {
                     $guideline = sprintf('Please use constant from DependencyProvider instead of %s in %s', $argumentString, $source->getClassName());
                     $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
-                        'documentation' => $this->getDocumentationUrl(),
+                        static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                     ]);
 
                     continue;
@@ -105,7 +105,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
                 if ($this->hasCoreNamespace($this->getCodebaseSourceDto()->getCoreNamespaces(), $constantClassNamespace)) {
                     $guideline = sprintf($this->getGuideline(), $constantClassName, $constantName, $source->getClassName());
                     $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
-                        'documentation' => $this->getDocumentationUrl(),
+                        static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                     ]);
 
                     continue;
@@ -120,7 +120,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
                     if ($this->isContainsConstantByName($parentConstants, $constantName)) {
                         $guideline = sprintf($this->getGuideline(), $constantClassName, $constantName, $source->getClassName());
                         $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
-                            'documentation' => $this->getDocumentationUrl(),
+                            static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                         ]);
                     }
                 }

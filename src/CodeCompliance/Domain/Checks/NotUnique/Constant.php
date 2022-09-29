@@ -69,7 +69,7 @@ class Constant extends AbstractCodeComplianceCheck
                         $nameConstant,
                     );
                     $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
-                        'documentation' => $this->getDocumentationUrl(),
+                        static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                     ]);
                 }
             }

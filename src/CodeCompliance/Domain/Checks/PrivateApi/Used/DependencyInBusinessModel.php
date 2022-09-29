@@ -81,7 +81,7 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
             foreach ($dependencyCoreSources as $class) {
                 $guideline = sprintf($this->getGuideline(), $class->getClassName(), $source->getClassName());
                 $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
-                    'documentation' => $this->getDocumentationUrl(),
+                    static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                 ]);
             }
         }

@@ -69,7 +69,7 @@ class Extended extends AbstractCodeComplianceCheck
 
             $guideline = sprintf($this->getGuideline(), $coreParent->getClassName(), $source->getClassName());
             $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
-                'documentation' => $this->getDocumentationUrl(),
+                static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
             ]);
         }
 

@@ -81,7 +81,7 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
             foreach ($createdSources as $createdNamespace) {
                 $guideline = sprintf($this->getGuideline(), $createdNamespace->getClassName(), $source->getClassName());
                 $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
-                    'documentation' => $this->getDocumentationUrl(),
+                    static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                 ]);
             }
         }

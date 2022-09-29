@@ -23,6 +23,11 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
     /**
      * @var string
      */
+    protected const KEY_ATTRIBUTE_DOCUMENTATION = 'documentation';
+
+    /**
+     * @var string
+     */
     protected const COLUMN_KEY_NAME = 'name';
 
     /**

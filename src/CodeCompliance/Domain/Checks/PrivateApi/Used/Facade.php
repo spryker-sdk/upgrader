@@ -77,7 +77,7 @@ class Facade extends AbstractUsedCodeComplianceCheck
                 if (!$classDocComment) {
                     $message = sprintf(static::DOC_COMMENT_MESSAGE, $source->getReflection()->getName());
                     $violations[] = new Violation((string)(new Id()), $message, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
-                        'documentation' => $this->getDocumentationUrl(),
+                        static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                     ]);
 
                     continue;
@@ -91,7 +91,7 @@ class Facade extends AbstractUsedCodeComplianceCheck
                 if (!$namespace) {
                     $message = sprintf(static::DOC_COMMENT_MESSAGE, '$this->' . $privateApiAnnotation . '() in' . $source->getClassName());
                     $violations[] = new Violation((string)(new Id()), $message, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
-                        'documentation' => $this->getDocumentationUrl(),
+                        static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                     ]);
 
                     continue;
@@ -115,7 +115,7 @@ class Facade extends AbstractUsedCodeComplianceCheck
                     if ($hasCoreNamespace) {
                         $guideline = sprintf($this->getGuideline(), $usedMethodName, $source->getClassName());
                         $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
-                            'documentation' => $this->getDocumentationUrl(),
+                            static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                         ]);
                     }
                 }

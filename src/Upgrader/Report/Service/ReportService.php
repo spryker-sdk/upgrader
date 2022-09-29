@@ -173,7 +173,11 @@ class ReportService
 
         if ($isVerbose) {
             $docUrl = $violation[static::KEY_ADDITIONAL_ATTRIBUTES][static::KEY_ATTRIBUTE_DOCUMENTATION] ?? '';
-            $message .= $this->generateSeparator(strlen($key) + 1, ' ') . '💡More information: ' . $docUrl . PHP_EOL;
+            $message .= sprintf(
+                '%s 💡More information: %s',
+                $this->generateSeparator(strlen($key) + 1, ' '),
+                $docUrl . PHP_EOL,
+            );
         }
 
         $message .= $this->generateSeparator(strlen($key)) . ' ' . $this->generateSeparator(static::LENGTH_MESSAGE_SEPARATOR);
