@@ -38,7 +38,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
      */
     public function getDocumentationUrl(): string
     {
-        return static::DOCUMENTATION_BASE_URL . 'private-api-is-extended.html';
+        return static::DOCUMENTATION_BASE_URL . 'private-api-is-extended.html#example-of-code-that-causes-an-upgradability-error-extending-a-private-api-dependency-provider';
     }
 
     /**
