@@ -63,6 +63,10 @@ class UpgraderConsole extends Command
 
         $output->writeln((string)$stepsExecutionDto->getOutputMessage());
 
+        if (!$stepsExecutionDto->getIsSuccessful()) {
+            return Command::FAILURE;
+        }
+
         return Command::SUCCESS;
     }
 }
