@@ -52,6 +52,11 @@ class ReportService
     protected const REPORTS_DIR = 'reports';
 
     /**
+     * @var int
+     */
+    protected const LENGTH_MESSAGE_SEPARATOR = 100;
+
+    /**
      * @var \Symfony\Component\Yaml\Yaml;
      */
     protected Yaml $yaml;
@@ -80,18 +85,8 @@ class ReportService
         $output = Yaml::parseFile($path);
 
         $messages = [];
-        $messageSeparator = str_pad('', 100, '-');
-        foreach ($output[static::KEY_VIOLATIONS] as $violations) {
-            $key = $violations[static::KEY_PRODUCED_BY];
-            $message = $key . ' ' . $violations[static::KEY_MESSAGE] . PHP_EOL;
-
-            if ($isVerbose) {
-                $docUrl = $violations[static::KEY_ADDITIONAL_ATTRIBUTES][static::KEY_ATTRIBUTE_DOCUMENTATION] ?? '';
-                $message .= str_pad('', strlen($key) + 1, ' ') . '💡More information: ' . $docUrl . PHP_EOL;
-            }
-
-            $message .= str_pad('', strlen($key), '-') . ' ' . $messageSeparator;
-            $messages[] = $message;
+        foreach ($output[static::KEY_VIOLATIONS] as $violation) {
+            $messages[] = $this->generateMessage($violation, $isVerbose);
         }
 
         return $messages;
@@ -163,5 +158,37 @@ class ReportService
             null;
 
         return $violationData;
+    }
+
+    /**
+     * @param array<mixed> $violation
+     * @param bool $isVerbose
+     *
+     * @return string
+     */
+    protected function generateMessage(array $violation, bool $isVerbose = false): string
+    {
+        $key = $violation[static::KEY_PRODUCED_BY];
+        $message = $key . ' ' . $violation[static::KEY_MESSAGE] . PHP_EOL;
+
+        if ($isVerbose) {
+            $docUrl = $violation[static::KEY_ADDITIONAL_ATTRIBUTES][static::KEY_ATTRIBUTE_DOCUMENTATION] ?? '';
+            $message .= $this->generateSeparator(strlen($key) + 1, ' ') . '💡More information: ' . $docUrl . PHP_EOL;
+        }
+
+        $message .= $this->generateSeparator(strlen($key)) . ' ' . $this->generateSeparator(static::LENGTH_MESSAGE_SEPARATOR);
+
+        return $message;
+    }
+
+    /**
+     * @param int $length
+     * @param string $char
+     *
+     * @return string
+     */
+    protected function generateSeparator(int $length, string $char = '-'): string
+    {
+        return str_pad('', $length, $char);
     }
 }
