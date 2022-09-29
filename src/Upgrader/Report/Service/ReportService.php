@@ -175,7 +175,7 @@ class ReportService
             $docUrl = $violation[static::KEY_ADDITIONAL_ATTRIBUTES][static::KEY_ATTRIBUTE_DOCUMENTATION] ?? '';
             $message .= sprintf(
                 '%s 💡More information: %s',
-                $this->generateSeparator(strlen($key) + 1, ' '),
+                $this->generateSeparator(strlen($key), ' '),
                 $docUrl . PHP_EOL,
             );
         }
