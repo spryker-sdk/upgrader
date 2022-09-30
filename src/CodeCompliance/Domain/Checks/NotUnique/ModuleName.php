@@ -17,6 +17,11 @@ use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 class ModuleName extends AbstractCodeComplianceCheck
 {
     /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#module-name-is-not-unique';
+
+    /**
      * @var array<string> $ignoreModuleNames
      *
      * The list was added for skipping issues in demo shops until they are not updated
@@ -45,14 +50,6 @@ class ModuleName extends AbstractCodeComplianceCheck
     public function getGuideline(): string
     {
         return 'Module %s has to have project prefix, like %s%s.';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDocumentationUrl(): string
-    {
-        return static::DOCUMENTATION_BASE_URL . 'entity-name-is-not-unique.html#module-name-is-not-unique';
     }
 
     /**

@@ -17,6 +17,11 @@ use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 class DatabaseTable extends AbstractCodeComplianceCheck
 {
     /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#database-table-name-is-not-unique';
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -30,14 +35,6 @@ class DatabaseTable extends AbstractCodeComplianceCheck
     public function getGuideline(): string
     {
         return 'Database table %s has to have project prefix %s in %s, like %s_%s';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDocumentationUrl(): string
-    {
-        return static::DOCUMENTATION_BASE_URL . 'entity-name-is-not-unique.html#database-table-name-is-not-unique';
     }
 
     /**

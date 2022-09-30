@@ -18,6 +18,11 @@ use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 class Constant extends AbstractCodeComplianceCheck
 {
     /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#constant-name-is-not-unique';
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -31,14 +36,6 @@ class Constant extends AbstractCodeComplianceCheck
     public function getGuideline(): string
     {
         return '%s::%s name has to have project namespace, like %s_%s.';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDocumentationUrl(): string
-    {
-        return static::DOCUMENTATION_BASE_URL . 'entity-name-is-not-unique.html#constant-name-is-not-unique';
     }
 
     /**

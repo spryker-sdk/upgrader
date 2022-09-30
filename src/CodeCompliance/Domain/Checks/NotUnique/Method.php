@@ -20,6 +20,12 @@ use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 class Method extends AbstractCodeComplianceCheck
 {
     /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#method-name-is-not-unique';
+
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -33,14 +39,6 @@ class Method extends AbstractCodeComplianceCheck
     public function getGuideline(): string
     {
         return 'Method name %s::%s() should contain project prefix, like %s';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDocumentationUrl(): string
-    {
-        return static::DOCUMENTATION_BASE_URL . 'entity-name-is-not-unique.html#method-name-is-not-unique';
     }
 
     /**

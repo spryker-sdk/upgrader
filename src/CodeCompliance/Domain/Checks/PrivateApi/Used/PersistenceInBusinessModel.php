@@ -21,6 +21,11 @@ use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
 {
     /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-extended.html';
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -34,14 +39,6 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
     public function getGuideline(): string
     {
         return 'Please avoid usage of PrivateApi %s->%s(...) in %s';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDocumentationUrl(): string
-    {
-        return static::DOCUMENTATION_BASE_URL . 'private-api-is-extended.html';
     }
 
     /**

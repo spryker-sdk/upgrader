@@ -15,6 +15,9 @@ services:
     CodeCompliance\Domain\:
         resource: '../../src/CodeCompliance/Domain/*'
 
+    CodeCompliance\Configuration\:
+        resource: '../../src/CodeCompliance/Configuration/*'
+
     is_not_unique_constant.task:
         class: CodeCompliance\Application\Checks\NotUnique\ConstantCheck
 

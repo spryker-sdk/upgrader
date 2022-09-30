@@ -19,6 +19,11 @@ class Facade extends AbstractUsedCodeComplianceCheck
     /**
      * @var string
      */
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-extended.html';
+
+    /**
+     * @var string
+     */
     protected const DOC_COMMENT_MESSAGE = 'Please add doc comment for %s';
 
     /**
@@ -40,14 +45,6 @@ class Facade extends AbstractUsedCodeComplianceCheck
     public function getGuideline(): string
     {
         return 'Please avoid usage of %s(...) in %s';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDocumentationUrl(): string
-    {
-        return static::DOCUMENTATION_BASE_URL . 'private-api-is-extended.html';
     }
 
     /**

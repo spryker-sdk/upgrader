@@ -19,6 +19,11 @@ use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
 {
     /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-used-on-the-project-level.html#example-of-code-that-causes-an-upgradability-error';
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -32,14 +37,6 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
     public function getGuideline(): string
     {
         return 'Please avoid usage of %s in %s';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDocumentationUrl(): string
-    {
-        return static::DOCUMENTATION_BASE_URL . 'private-api-is-used-on-the-project-level.html#example-of-code-that-causes-an-upgradability-error';
     }
 
     /**

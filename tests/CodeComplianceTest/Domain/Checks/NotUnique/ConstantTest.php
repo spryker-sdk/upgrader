@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace CodeComplianceTest\Domain\Checks\NotUnique;
 
+use CodeCompliance\Configuration\ConfigurationProvider;
 use CodeCompliance\Domain\Checks\NotUnique\Constant;
 use CodeCompliance\Domain\Service\FilterService;
 use CodeCompliance\Infrastructure\Service\CodeBaseService;
@@ -28,7 +29,7 @@ class ConstantTest extends BaseCodeComplianceCheckTest
     {
         /** @var \CodeCompliance\Infrastructure\Service\CodeBaseService $codeBaseService */
         $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
-        $this->constant = new Constant(new FilterService(), $codeBaseService);
+        $this->constant = new Constant(new FilterService(), $codeBaseService, new ConfigurationProvider());
     }
 
     /**

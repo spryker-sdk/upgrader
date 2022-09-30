@@ -21,6 +21,11 @@ use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 class Extended extends AbstractCodeComplianceCheck
 {
     /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'private-api-method-is-overridden-on-the-project-level.html';
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -34,14 +39,6 @@ class Extended extends AbstractCodeComplianceCheck
     public function getGuideline(): string
     {
         return 'Please avoid extension of the PrivateApi %s in %s';
-    }
-
-    /**
-     * @return string
-     */
-    public function getDocumentationUrl(): string
-    {
-        return static::DOCUMENTATION_BASE_URL . 'private-api-method-is-overridden-on-the-project-level.html';
     }
 
     /**
