@@ -24,7 +24,6 @@ class Method extends AbstractCodeComplianceCheck
      */
     protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#method-name-is-not-unique';
 
-
     /**
      * @return string
      */
