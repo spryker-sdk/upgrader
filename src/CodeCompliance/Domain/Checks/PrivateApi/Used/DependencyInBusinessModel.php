@@ -25,7 +25,7 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
      */
     public function getName(): string
     {
-        return 'PrivateApi:PrivateApiDependencyInBusinessModel';
+        return 'PrivateApi:DependencyInBusinessModel';
     }
 
     /**
