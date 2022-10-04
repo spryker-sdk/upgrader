@@ -23,7 +23,7 @@ class Extended extends AbstractCodeComplianceCheck
     /**
      * @var string
      */
-    protected const DOCUMENTATION_URL_PATH = 'private-api-method-is-overridden-on-the-project-level.html';
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-extended.html';
 
     /**
      * @return string

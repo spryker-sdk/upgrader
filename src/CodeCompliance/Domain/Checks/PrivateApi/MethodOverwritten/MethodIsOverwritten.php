@@ -38,7 +38,7 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
      */
     public function getGuideline(): string
     {
-        return 'Please avoid usage of core method %s::%s() in the class %s';
+        return 'Please avoid overriding of core method %s::%s() in the class %s';
     }
 
     /**
