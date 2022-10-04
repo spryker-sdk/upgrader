@@ -114,12 +114,10 @@ class EvaluateConsole extends Command
         );
 
         $codebaseSourceDto = $this->codebaseService->readCodeBase($codebaseRequestDto);
-
         $report = $this->codeComplianceService->analyze($codebaseSourceDto);
+        $this->reportService->save($report);
 
         if ($report->hasError()) {
-            $this->reportService->save($report);
-
             return Command::FAILURE;
         }
 
