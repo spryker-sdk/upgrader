@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace CodeCompliance\Domain;
 
 use Codebase\Application\Dto\CodebaseSourceDto;
+use CodeCompliance\Configuration\ConfigurationProvider;
 use CodeCompliance\Domain\Service\CodeBaseServiceInterface;
 use CodeCompliance\Domain\Service\FilterService;
 
@@ -18,7 +19,17 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
     /**
      * @var string
      */
+    protected const KEY_ATTRIBUTE_DOCUMENTATION = 'documentation';
+
+    /**
+     * @var string
+     */
     protected const COLUMN_KEY_NAME = 'name';
+
+    /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = '';
 
     /**
      * @var \Codebase\Application\Dto\CodebaseSourceDto
@@ -36,13 +47,20 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
     protected CodeBaseServiceInterface $codeBaseService;
 
     /**
+     * @var \CodeCompliance\Configuration\ConfigurationProvider
+     */
+    protected ConfigurationProvider $configProvider;
+
+    /**
      * @param \CodeCompliance\Domain\Service\FilterService $filterService
      * @param \CodeCompliance\Domain\Service\CodeBaseServiceInterface $codeBaseService
+     * @param \CodeCompliance\Configuration\ConfigurationProvider $configProvider
      */
-    public function __construct(FilterService $filterService, CodeBaseServiceInterface $codeBaseService)
+    public function __construct(FilterService $filterService, CodeBaseServiceInterface $codeBaseService, ConfigurationProvider $configProvider)
     {
         $this->filterService = $filterService;
         $this->codeBaseService = $codeBaseService;
+        $this->configProvider = $configProvider;
     }
 
     /**
@@ -80,6 +98,14 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
         }
 
         return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDocumentationUrl(): string
+    {
+        return $this->configProvider->getDocumentationBaseUrl() . static::DOCUMENTATION_URL_PATH;
     }
 
     /**

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace CodeComplianceTest\Domain\Checks\NotUnique;
 
+use CodeCompliance\Configuration\ConfigurationProvider;
 use CodeCompliance\Domain\Checks\NotUnique\ModuleName;
 use CodeCompliance\Domain\Service\FilterService;
 use CodeCompliance\Infrastructure\Service\CodeBaseService;
@@ -38,7 +39,7 @@ class ModuleNameTest extends BaseCodeComplianceCheckTest
     {
         /** @var \CodeCompliance\Infrastructure\Service\CodeBaseService $codeBaseService */
         $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
-        $this->moduleName = new ModuleName(new FilterService(), $codeBaseService);
+        $this->moduleName = new ModuleName(new FilterService(), $codeBaseService, new ConfigurationProvider());
 
         mkdir(static::CORE_MODULE_PATCH, 0777, true);
         mkdir(static::PROJECT_MODULE_PATCH, 0777, true);

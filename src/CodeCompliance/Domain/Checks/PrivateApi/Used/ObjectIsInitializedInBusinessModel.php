@@ -14,9 +14,15 @@ use CodeCompliance\Domain\Checks\Filters\CoreClassFilter;
 use CodeCompliance\Domain\Checks\Filters\IgnoreListFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
 {
+    /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-used-on-the-project-level.html#example-of-code-that-causes-an-upgradability-error';
+
     /**
      * @return string
      */
@@ -71,7 +77,9 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
 
             foreach ($createdSources as $createdNamespace) {
                 $guideline = sprintf($this->getGuideline(), $createdNamespace->getClassName(), $source->getClassName());
-                $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
+                $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                    static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
+                ]);
             }
         }
 

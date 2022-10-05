@@ -22,6 +22,11 @@ interface CodeComplianceCheckInterface
     public function getGuideline(): string;
 
     /**
+     * @return string
+     */
+    public function getDocumentationUrl(): string;
+
+    /**
      * @return array<\CodeCompliance\Domain\Entity\Violation>
      */
     public function getViolations(): array;

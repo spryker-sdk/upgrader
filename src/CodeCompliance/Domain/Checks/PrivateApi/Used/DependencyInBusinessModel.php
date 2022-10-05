@@ -17,9 +17,15 @@ use Core\Domain\ValueObject\Id;
 use Exception;
 use ReflectionClass;
 use ReflectionMethod;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
 {
+    /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-extended.html#example-of-code-that-causes-an-upgradability-error-extending-a-private-api-business-model';
+
     /**
      * @return string
      */
@@ -71,7 +77,9 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
 
             foreach ($dependencyCoreSources as $class) {
                 $guideline = sprintf($this->getGuideline(), $class->getClassName(), $source->getClassName());
-                $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
+                $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                    static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
+                ]);
             }
         }
 

@@ -12,9 +12,15 @@ namespace CodeCompliance\Domain\Checks\NotUnique;
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class ModuleName extends AbstractCodeComplianceCheck
 {
+    /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#module-name-is-not-unique';
+
     /**
      * @var array<string> $ignoreModuleNames
      *
@@ -71,7 +77,9 @@ class ModuleName extends AbstractCodeComplianceCheck
                 reset($projectPrefixes),
                 $projectModuleName,
             );
-            $violations[] = new Violation((string)new Id(), $guideline, $this->getName());
+            $violations[] = new Violation((string)new Id(), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
+            ]);
         }
 
         return $violations;

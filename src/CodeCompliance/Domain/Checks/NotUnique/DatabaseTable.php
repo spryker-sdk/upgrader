@@ -12,9 +12,15 @@ namespace CodeCompliance\Domain\Checks\NotUnique;
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class DatabaseTable extends AbstractCodeComplianceCheck
 {
+    /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#database-table-name-is-not-unique';
+
     /**
      * @return string
      */
@@ -57,7 +63,9 @@ class DatabaseTable extends AbstractCodeComplianceCheck
                     strtolower((string)reset($projectPrefixes)),
                     $schema->getName(),
                 );
-                $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
+                $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                    static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
+                ]);
             }
         }
 

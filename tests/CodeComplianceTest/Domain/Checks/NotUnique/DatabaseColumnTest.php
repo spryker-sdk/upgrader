@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace CodeComplianceTest\Domain\Checks\NotUnique;
 
+use CodeCompliance\Configuration\ConfigurationProvider;
 use CodeCompliance\Domain\Checks\NotUnique\DatabaseColumn;
 use CodeCompliance\Domain\Service\FilterService;
 use CodeCompliance\Infrastructure\Service\CodeBaseService;
@@ -28,7 +29,7 @@ class DatabaseColumnTest extends BaseCodeComplianceCheckTest
     {
         /** @var \CodeCompliance\Infrastructure\Service\CodeBaseService $codeBaseService */
         $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
-        $this->databaseColumnCheck = new DatabaseColumn(new FilterService(), $codeBaseService);
+        $this->databaseColumnCheck = new DatabaseColumn(new FilterService(), $codeBaseService, new ConfigurationProvider());
     }
 
     /**

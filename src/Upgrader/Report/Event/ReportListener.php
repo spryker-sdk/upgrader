@@ -40,7 +40,7 @@ class ReportListener
             return;
         }
 
-        $messages = $this->reportService->report();
+        $messages = $this->reportService->report($event->getOutput()->isVerbose());
         if (!$messages) {
             return;
         }

@@ -16,9 +16,15 @@ use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 use ReflectionMethod;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class MethodIsOverwritten extends AbstractCodeComplianceCheck
 {
+    /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'private-api-method-is-overridden-on-the-project-level.html';
+
     /**
      * @return string
      */
@@ -61,7 +67,9 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
                 }
                 foreach ($this->filterNotUniqueMethods($filteredSource) as $filteredMethod) {
                     $guideline = sprintf($this->getGuideline(), $filteredSource->getCoreParent()->getClassName(), $filteredMethod->getName(), $filteredSource->getClassName());
-                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
+                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                        static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
+                    ]);
                 }
             }
         }

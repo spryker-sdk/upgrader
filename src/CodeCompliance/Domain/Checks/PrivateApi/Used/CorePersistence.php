@@ -13,9 +13,15 @@ use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
 use CodeCompliance\Domain\Checks\Filters\PersistenceFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class CorePersistence extends AbstractUsedCodeComplianceCheck
 {
+    /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-extended.html';
+
     /**
      * @var array<string>
      */
@@ -68,7 +74,9 @@ class CorePersistence extends AbstractUsedCodeComplianceCheck
                     )
                 ) {
                     $guideline = sprintf($this->getGuideline(), $source->getClassName(), $methodName);
-                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
+                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                        static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
+                    ]);
                 }
             }
         }

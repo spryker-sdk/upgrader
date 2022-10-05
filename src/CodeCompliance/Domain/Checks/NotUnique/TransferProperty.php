@@ -12,9 +12,15 @@ namespace CodeCompliance\Domain\Checks\NotUnique;
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class TransferProperty extends AbstractCodeComplianceCheck
 {
+    /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#transfer-property-name-is-not-unique';
+
     /**
      * @return string
      */
@@ -77,7 +83,9 @@ class TransferProperty extends AbstractCodeComplianceCheck
                         strtolower((string)reset($projectPrefixes)),
                         ucfirst($propertyWithoutPrefix),
                     );
-                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
+                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                        static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
+                    ]);
                 }
             }
         }

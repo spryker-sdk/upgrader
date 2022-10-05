@@ -17,6 +17,11 @@ class Violation implements ViolationInterface
     /**
      * @var string
      */
+    public const KEY_ATTRIBUTE_DOCUMENTATION = 'documentation';
+
+    /**
+     * @var string
+     */
     protected string $id = '';
 
     /**

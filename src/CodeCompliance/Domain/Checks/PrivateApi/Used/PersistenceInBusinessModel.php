@@ -16,9 +16,15 @@ use Exception;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
 {
+    /**
+     * @var string
+     */
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-extended.html';
+
     /**
      * @return string
      */
@@ -90,7 +96,9 @@ class PersistenceInBusinessModel extends AbstractUsedCodeComplianceCheck
                         )
                     ) {
                         $guideline = sprintf($this->getGuideline(), $methodReflection->getDeclaringClass()->getName(), $methodName, $source->getClassName());
-                        $violations[] = new Violation((string)(new Id()), $guideline, $this->getName());
+                        $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                            static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
+                        ]);
                     }
                 }
             }

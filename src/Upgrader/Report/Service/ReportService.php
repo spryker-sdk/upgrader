@@ -39,7 +39,22 @@ class ReportService
     /**
      * @var string
      */
+    protected const KEY_ADDITIONAL_ATTRIBUTES = 'additional_attributes';
+
+    /**
+     * @var string
+     */
+    protected const KEY_ATTRIBUTE_DOCUMENTATION = 'documentation';
+
+    /**
+     * @var string
+     */
     protected const REPORTS_DIR = 'reports';
+
+    /**
+     * @var int
+     */
+    protected const LENGTH_MESSAGE_SEPARATOR = 100;
 
     /**
      * @var \Symfony\Component\Yaml\Yaml;
@@ -55,9 +70,11 @@ class ReportService
     }
 
     /**
+     * @param bool $isVerbose
+     *
      * @return array<string>|null
      */
-    public function report(): ?array
+    public function report(bool $isVerbose = false): ?array
     {
         $path = getcwd() . sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
 
@@ -68,11 +85,8 @@ class ReportService
         $output = Yaml::parseFile($path);
 
         $messages = [];
-        $messageSeparator = str_pad('', 100, '-');
-        foreach ($output[static::KEY_VIOLATIONS] as $violations) {
-            $key = $violations[static::KEY_PRODUCED_BY];
-            $keySeparatorLength = str_pad('', strlen($key), '-');
-            $messages[] = $key . ' ' . $violations[static::KEY_MESSAGE] . PHP_EOL . $keySeparatorLength . ' ' . $messageSeparator;
+        foreach ($output[static::KEY_VIOLATIONS] as $violation) {
+            $messages[] = $this->generateMessage($violation, $isVerbose);
         }
 
         return $messages;
@@ -144,5 +158,41 @@ class ReportService
             null;
 
         return $violationData;
+    }
+
+    /**
+     * @param array<mixed> $violation
+     * @param bool $isVerbose
+     *
+     * @return string
+     */
+    protected function generateMessage(array $violation, bool $isVerbose = false): string
+    {
+        $key = $violation[static::KEY_PRODUCED_BY];
+        $message = $key . ' ' . $violation[static::KEY_MESSAGE] . PHP_EOL;
+
+        if ($isVerbose) {
+            $docUrl = $violation[static::KEY_ADDITIONAL_ATTRIBUTES][static::KEY_ATTRIBUTE_DOCUMENTATION] ?? '';
+            $message .= sprintf(
+                '%s 💡More information: %s',
+                $this->generateSeparator(strlen($key), ' '),
+                $docUrl . PHP_EOL,
+            );
+        }
+
+        $message .= $this->generateSeparator(strlen($key)) . ' ' . $this->generateSeparator(static::LENGTH_MESSAGE_SEPARATOR);
+
+        return $message;
+    }
+
+    /**
+     * @param int $length
+     * @param string $char
+     *
+     * @return string
+     */
+    protected function generateSeparator(int $length, string $char = '-'): string
+    {
+        return str_pad('', $length, $char);
     }
 }
