@@ -10,10 +10,16 @@ declare(strict_types=1);
 namespace CodeCompliance\Domain\Entity;
 
 use SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationReportInterface;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
-class Report implements ViolationReportInterface
+class Report implements ReportInterface
 {
+    /**
+     * @var string
+     */
+    protected const KEY_VIOLATIONS = 'violations';
+
+
     /**
      * @var string
      */
@@ -25,7 +31,7 @@ class Report implements ViolationReportInterface
     protected string $path = '';
 
     /**
-     * @var array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface>
+     * @var array<\CodeCompliance\Domain\Entity\ViolationInterface>
      */
     protected array $violations = [];
 
@@ -45,7 +51,7 @@ class Report implements ViolationReportInterface
     }
 
     /**
-     * @param array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface> $violations
+     * @param array<\CodeCompliance\Domain\Entity\ViolationInterface> $violations
      *
      * @return $this
      */
@@ -59,7 +65,7 @@ class Report implements ViolationReportInterface
     }
 
     /**
-     * @return array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface>
+     * @return array<\CodeCompliance\Domain\Entity\ViolationInterface>
      */
     public function getViolations(): array
     {
@@ -107,16 +113,16 @@ class Report implements ViolationReportInterface
      */
     public function hasError(): bool
     {
-        if ($this->getViolations()) {
+        if ($this->hasErrorSeverity($this->getViolations())) {
             return true;
         }
 
         foreach ($this->getPackages() as $package) {
-            if ($package->getViolations()) {
+            if ($this->hasErrorSeverity($package->getViolations())) {
                 return true;
             }
             foreach ($package->getFileViolations() as $violations) {
-                if ($violations) {
+                if ($this->hasErrorSeverity($violations)) {
                     return true;
                 }
             }
@@ -124,4 +130,40 @@ class Report implements ViolationReportInterface
 
         return false;
     }
+
+    /**
+     * @param array<\CodeCompliance\Domain\Entity\ViolationInterface> $violations
+     * @return bool
+     */
+    protected function hasErrorSeverity(array $violations): bool
+    {
+        foreach ($violations as $violation) {
+            if($violation->getSeverity() === ViolationInterface::SEVERITY_ERROR) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $violationReportStructure[static::KEY_VIOLATIONS] = [];
+
+        foreach ($this->getViolations() as $violation) {
+            $violationReportStructure[static::KEY_VIOLATIONS][] = $violation->toArray();
+        }
+
+        return $violationReportStructure;
+    }
+
+    public function fromArray(array $data): ReportInterface
+    {
+        // TODO: Implement fromArray() method.
+    }
+
+
 }

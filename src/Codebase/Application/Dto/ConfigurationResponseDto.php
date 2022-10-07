@@ -12,31 +12,21 @@ namespace Codebase\Application\Dto;
 class ConfigurationResponseDto
 {
     /**
-     * @var string
+     * @var array<string>
      */
-    public const UPGRADER_KEY = 'upgrader';
-
-    /**
-     * @var string
-     */
-    public const PREFIXES_KEY = 'prefixes';
+    protected array $projectPrefixes = ['Pyz'];
 
     /**
      * @var array<string>
      */
-    protected const DEFAULT_PREFIXES = ['Pyz'];
+    protected array $ignoredRules = [];
 
     /**
-     * @var array<mixed>
+     * @param array<string> $projectPrefixes
      */
-    protected array $configuration;
-
-    /**
-     * @param array<mixed> $configuration
-     */
-    public function __construct(array $configuration = [])
+    public function setProjectPrefixes(array $projectPrefixes): void
     {
-        $this->configuration = $configuration;
+        $this->projectPrefixes = $projectPrefixes;
     }
 
     /**
@@ -44,10 +34,22 @@ class ConfigurationResponseDto
      */
     public function getProjectPrefixes(): array
     {
-        if (isset($this->configuration[static::UPGRADER_KEY][static::PREFIXES_KEY])) {
-            return $this->configuration[static::UPGRADER_KEY][static::PREFIXES_KEY];
-        }
+        return $this->projectPrefixes;
+    }
 
-        return static::DEFAULT_PREFIXES;
+    /**
+     * @return array<string>
+     */
+    public function getIgnoredRules(): array
+    {
+        return $this->ignoredRules;
+    }
+
+    /**
+     * @param array<string> $ignoredRules
+     */
+    public function setIgnoredRules(array $ignoredRules): void
+    {
+        $this->ignoredRules = $ignoredRules;
     }
 }

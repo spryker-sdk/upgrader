@@ -12,7 +12,7 @@ namespace CodeComplianceTest\Domain\Checks\NotUnique;
 use CodeCompliance\Configuration\ConfigurationProvider;
 use CodeCompliance\Domain\Checks\NotUnique\DatabaseTable;
 use CodeCompliance\Domain\Service\FilterService;
-use CodeCompliance\Infrastructure\Service\CodeBaseService;
+use CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
 class DatabaseTableTest extends BaseCodeComplianceCheckTest
@@ -27,8 +27,8 @@ class DatabaseTableTest extends BaseCodeComplianceCheckTest
      */
     protected function setUp(): void
     {
-        /** @var \CodeCompliance\Infrastructure\Service\CodeBaseService $codeBaseService */
-        $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
+        /** @var \CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter $codeBaseService */
+        $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseAdapter::class);
         $this->databaseTableCheck = new DatabaseTable(new FilterService(), $codeBaseService, new ConfigurationProvider());
     }
 

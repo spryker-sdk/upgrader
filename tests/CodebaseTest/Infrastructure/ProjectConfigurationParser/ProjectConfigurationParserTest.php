@@ -11,7 +11,7 @@ namespace CodebaseTest\Infrastructure\ProjectConfigurationParser;
 
 use Codebase\Infrastructure\Exception\ProjectConfigurationFileInvalidSyntaxException;
 use Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReader;
-use Codebase\Infrastructure\ToolingConfigurationReader\Validator\ProjectPrefixesValidator;
+use Codebase\Infrastructure\ToolingConfigurationReader\Reader\ProjectPrefixesReader;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ProjectConfigurationParserTest extends KernelTestCase
@@ -22,7 +22,7 @@ class ProjectConfigurationParserTest extends KernelTestCase
     public function testSuccessParse(): void
     {
         //Arrange
-        $parser = new ToolingConfigurationReader([new ProjectPrefixesValidator()]);
+        $parser = new ToolingConfigurationReader([new ProjectPrefixesReader()]);
 
         //Act
         $configurationResponseDto = $parser->readToolingConfiguration('tests/data/Evaluate/Project/tooling.yml');
@@ -37,7 +37,7 @@ class ProjectConfigurationParserTest extends KernelTestCase
     public function testParseDefaultValue(): void
     {
         //Arrange
-        $parser = new ToolingConfigurationReader([new ProjectPrefixesValidator()]);
+        $parser = new ToolingConfigurationReader([new ProjectPrefixesReader()]);
 
         //Act
         $configurationResponseDto = $parser->readToolingConfiguration('not-exists-tooling.yml');
@@ -52,7 +52,7 @@ class ProjectConfigurationParserTest extends KernelTestCase
     public function testInvalidKeyParse(): void
     {
         //Arrange
-        $parser = new ToolingConfigurationReader([new ProjectPrefixesValidator()]);
+        $parser = new ToolingConfigurationReader([new ProjectPrefixesReader()]);
 
         //Assert
         $this->expectException(ProjectConfigurationFileInvalidSyntaxException::class);
@@ -68,7 +68,7 @@ class ProjectConfigurationParserTest extends KernelTestCase
     public function testInvalidTypeOneParse(): void
     {
         //Arrange
-        $parser = new ToolingConfigurationReader([new ProjectPrefixesValidator()]);
+        $parser = new ToolingConfigurationReader([new ProjectPrefixesReader()]);
 
         //Assert
         $this->expectException(ProjectConfigurationFileInvalidSyntaxException::class);
@@ -84,7 +84,7 @@ class ProjectConfigurationParserTest extends KernelTestCase
     public function testInvalidTypeTwoParse(): void
     {
         //Arrange
-        $parser = new ToolingConfigurationReader([new ProjectPrefixesValidator()]);
+        $parser = new ToolingConfigurationReader([new ProjectPrefixesReader()]);
 
         //Assert
         $this->expectException(ProjectConfigurationFileInvalidSyntaxException::class);
@@ -100,7 +100,7 @@ class ProjectConfigurationParserTest extends KernelTestCase
     public function testInvalidTypeThreeParse(): void
     {
         //Arrange
-        $parser = new ToolingConfigurationReader([new ProjectPrefixesValidator()]);
+        $parser = new ToolingConfigurationReader([new ProjectPrefixesReader()]);
 
         //Assert
         $this->expectException(ProjectConfigurationFileInvalidSyntaxException::class);

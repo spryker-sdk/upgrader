@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace CodeCompliance\Domain\Entity;
 
 use SprykerSdk\SdkContracts\Report\Violation\ViolationFixInterface;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class Violation implements ViolationInterface
 {
@@ -241,5 +240,40 @@ class Violation implements ViolationInterface
     public function getFix(): ?ViolationFixInterface
     {
         return null;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        $violationData = [];
+
+        $violationData['id'] = $this->getId();
+        $violationData['message'] = $this->getMessage();
+        $violationData['severity'] = $this->getSeverity();
+        $violationData['priority'] = $this->priority();
+        $violationData['class'] = $this->getClass();
+        $violationData['method'] = $this->getMethod();
+        $violationData['start_line'] = $this->getStartLine();
+        $violationData['end_line'] = $this->getEndLine();
+        $violationData['start_column'] = $this->getStartColumn();
+        $violationData['end_column'] = $this->getStartColumn();
+        $violationData['additional_attributes'] = $this->getAdditionalAttributes();
+        $violationData['fixable'] = $this->isFixable();
+        $violationData['produced_by'] = $this->producedBy();
+        $violationData['fix'] = $this->getFix() ?
+            [
+                'type' => $this->getFix()->getType(),
+                'action' => $this->getFix()->getAction(),
+            ] :
+            null;
+
+        return $violationData;
+    }
+
+    public function fromArray(array $data): ViolationInterface
+    {
+        // TODO: Implement fromArray() method.
     }
 }

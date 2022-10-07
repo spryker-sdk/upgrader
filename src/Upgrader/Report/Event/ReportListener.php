@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Upgrader\Report\Service\ReportService;
 use Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask;
+use Upgrader\Tasks\Evaluate\Report\ReportTask;
 
 class ReportListener
 {
@@ -36,7 +37,10 @@ class ReportListener
      */
     public function onConsoleCommandTerminate(ConsoleTerminateEvent $event): void
     {
-        if ($event->getCommand() && $event->getCommand()->getName() !== AnalyzeTask::ID_ANALYZE_TASK) {
+        if ($event->getCommand() &&
+            $event->getCommand()->getName() !== AnalyzeTask::ID_ANALYZE_TASK &&
+            $event->getCommand()->getName() !== ReportTask::ID_REPORT_TASK
+        ) {
             return;
         }
 

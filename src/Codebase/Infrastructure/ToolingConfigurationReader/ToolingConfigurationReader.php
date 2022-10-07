@@ -15,16 +15,21 @@ use Symfony\Component\Yaml\Yaml;
 class ToolingConfigurationReader implements ToolingConfigurationReaderInterface
 {
     /**
-     * @var array<\Codebase\Infrastructure\ToolingConfigurationReader\Validator\ToolingConfigurationValidatorInterface>
+     * @var string
      */
-    protected array $validators;
+    public const EVALUATOR_KEY = 'evaluator';
 
     /**
-     * @param array<\Codebase\Infrastructure\ToolingConfigurationReader\Validator\ToolingConfigurationValidatorInterface> $validators
+     * @var array<\Codebase\Infrastructure\ToolingConfigurationReader\Reader\ReaderInterface>
      */
-    public function __construct(array $validators)
+    protected array $propertyReaders;
+
+    /**
+     * @param array<\Codebase\Infrastructure\ToolingConfigurationReader\Reader\ReaderInterface> $propertyReaders
+     */
+    public function __construct(array $propertyReaders)
     {
-        $this->validators = $validators;
+        $this->propertyReaders = $propertyReaders;
     }
 
     /**
@@ -34,15 +39,16 @@ class ToolingConfigurationReader implements ToolingConfigurationReaderInterface
      */
     public function readToolingConfiguration(string $configurationFilePath): ConfigurationResponseDto
     {
+        $configurationResponseDto = new ConfigurationResponseDto();
         if (!file_exists($configurationFilePath)) {
-            return new ConfigurationResponseDto();
+            return $configurationResponseDto;
         }
 
         $configuration = Yaml::parseFile($configurationFilePath);
-        foreach ($this->validators as $validator) {
-            $validator->validate($configuration);
+        foreach ($this->propertyReaders as $propertyReader) {
+            $propertyReader->read($configuration, $configurationResponseDto);
         }
 
-        return new ConfigurationResponseDto($configuration);
+        return $configurationResponseDto;
     }
 }

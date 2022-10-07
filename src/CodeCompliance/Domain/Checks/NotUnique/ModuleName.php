@@ -27,13 +27,7 @@ class ModuleName extends AbstractCodeComplianceCheck
      * The list was added for skipping issues in demo shops until they are not updated
      */
     protected array $ignoreModuleNames = [
-        'ExampleProductSalePage',
-        'ProductUrlCartConnector',
-        'CustomerFullNameWidget',
-        'ExampleChart',
-        'NavigationWidget',
-        'ExampleStateMachine',
-        'EvaluationModule',
+
     ];
 
     /**
@@ -62,6 +56,8 @@ class ModuleName extends AbstractCodeComplianceCheck
         $projectModuleNames = $this->getCodebaseSourceDto()->getProjectModuleNames();
         $projectPrefixes = $this->getCodebaseSourceDto()->getProjectPrefixes();
 
+        var_dump($projectPrefixes);
+
         foreach ($projectModuleNames as $projectModuleName) {
             $hasProjectPrefix = $this->hasProjectPrefix($projectModuleName, $projectPrefixes);
             if (in_array($projectModuleName, $coreModuleNames) || $hasProjectPrefix) {
@@ -77,7 +73,7 @@ class ModuleName extends AbstractCodeComplianceCheck
                 reset($projectPrefixes),
                 $projectModuleName,
             );
-            $violations[] = new Violation((string)new Id(), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+            $violations[] = new Violation((string)new Id(), $guideline, $this->getName(), $this->getSeverity(), [
                 static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
             ]);
         }

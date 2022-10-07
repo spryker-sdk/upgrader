@@ -12,6 +12,8 @@ namespace CodeCompliance\Application\Service;
 use Codebase\Application\Dto\CodebaseSourceDto;
 use Codebase\Infrastructure\Service\CodebaseService;
 use CodeCompliance\Domain\Entity\Report;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
+use Upgrader\Configuration\ConfigurationProvider;
 
 class CodeComplianceService implements CodeComplianceServiceInterface
 {
@@ -44,7 +46,7 @@ class CodeComplianceService implements CodeComplianceServiceInterface
      */
     public function analyze(CodebaseSourceDto $codebaseSourceDto): Report
     {
-        $report = new Report('test', (string)getcwd());
+        $report = new Report(basename((string)getcwd()), (string)getcwd());
 
         foreach ($this->codeComplianceChecks as $codeComplianceCheck) {
             $report = $codeComplianceCheck->run($report, $codebaseSourceDto);

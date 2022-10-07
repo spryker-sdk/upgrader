@@ -117,6 +117,11 @@ class EvaluateConsole extends Command
         $report = $this->codeComplianceService->analyze($codebaseSourceDto);
         $this->reportService->save($report);
 
+
+        var_dump('EvaluateConsole');
+        var_dump($report->hasError());
+
+
         if ($report->hasError()) {
             return Command::FAILURE;
         }
