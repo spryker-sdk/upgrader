@@ -31,7 +31,7 @@ Note: File synchronization is enabled by the default
 export COMPOSE_DOCKER_CLI_BUILD=1
 
 docker-compose -f linux-compose.yml up -d --build`
-docker exec -it {contaiter_id} bash
+docker exec -it -u spryker upgrader_upgrader-sdk_1 bash
 cd /data/project
 ../bin/upgrader {command_name}
 ```
