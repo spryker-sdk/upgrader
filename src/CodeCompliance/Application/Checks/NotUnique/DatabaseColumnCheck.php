@@ -30,14 +30,6 @@ class DatabaseColumnCheck implements CodeComplianceCheckInterface
     }
 
     /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->databaseColumnCheck->getName();
-    }
-
-    /**
      * @param \CodeCompliance\Domain\Entity\Report $report
      * @param \Codebase\Application\Dto\CodebaseSourceDto $codebaseSourceDto
      *

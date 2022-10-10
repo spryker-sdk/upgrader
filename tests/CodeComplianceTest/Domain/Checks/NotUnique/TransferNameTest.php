@@ -13,7 +13,6 @@ use CodeCompliance\Configuration\ConfigurationProvider;
 use CodeCompliance\Domain\Checks\NotUnique\TransferName;
 use CodeCompliance\Domain\Service\FilterService;
 use CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter;
-use CodeCompliance\Infrastructure\Service\CodeBaseService;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
 class TransferNameTest extends BaseCodeComplianceCheckTest

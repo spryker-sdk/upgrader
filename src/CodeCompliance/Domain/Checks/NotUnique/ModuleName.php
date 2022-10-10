@@ -21,15 +21,6 @@ class ModuleName extends AbstractCodeComplianceCheck
     protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#module-name-is-not-unique';
 
     /**
-     * @var array<string> $ignoreModuleNames
-     *
-     * The list was added for skipping issues in demo shops until they are not updated
-     */
-    protected array $ignoreModuleNames = [
-
-    ];
-
-    /**
      * @return string
      */
     public function getName(): string
@@ -58,9 +49,6 @@ class ModuleName extends AbstractCodeComplianceCheck
         foreach ($projectModuleNames as $projectModuleName) {
             $hasProjectPrefix = $this->hasProjectPrefix($projectModuleName, $projectPrefixes);
             if (in_array($projectModuleName, $coreModuleNames) || $hasProjectPrefix) {
-                continue;
-            }
-            if (in_array($projectModuleName, $this->ignoreModuleNames)) {
                 continue;
             }
 

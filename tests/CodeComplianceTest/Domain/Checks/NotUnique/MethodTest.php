@@ -14,7 +14,6 @@ use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Checks\NotUnique\Method;
 use CodeCompliance\Domain\Service\FilterService;
 use CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter;
-use CodeCompliance\Infrastructure\Service\CodeBaseService;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
 class MethodTest extends BaseCodeComplianceCheckTest
