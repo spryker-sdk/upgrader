@@ -1,4 +1,4 @@
-upgrader:
+evaluator:
   prefixes:
     pyz:
       value: 2

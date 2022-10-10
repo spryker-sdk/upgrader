@@ -13,6 +13,7 @@ use CodeCompliance\Configuration\ConfigurationProvider;
 use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Checks\NotUnique\Method;
 use CodeCompliance\Domain\Service\FilterService;
+use CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter;
 use CodeCompliance\Infrastructure\Service\CodeBaseService;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
@@ -28,9 +29,9 @@ class MethodTest extends BaseCodeComplianceCheckTest
      */
     protected function setUp(): void
     {
-        /** @var \CodeCompliance\Infrastructure\Service\CodeBaseService $codeBaseService */
-        $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
-        $this->methodCheck = new Method(new FilterService([new PluginFilter()]), $codeBaseService, new ConfigurationProvider());
+        /** @var \CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter $codeBaseAdapter */
+        $codeBaseAdapter = static::bootKernel()->getContainer()->get(CodeBaseAdapter::class);
+        $this->methodCheck = new Method(new FilterService([new PluginFilter()]), $codeBaseAdapter, new ConfigurationProvider());
     }
 
     /**

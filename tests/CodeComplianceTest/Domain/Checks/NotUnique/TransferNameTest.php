@@ -12,6 +12,7 @@ namespace CodeComplianceTest\Domain\Checks\NotUnique;
 use CodeCompliance\Configuration\ConfigurationProvider;
 use CodeCompliance\Domain\Checks\NotUnique\TransferName;
 use CodeCompliance\Domain\Service\FilterService;
+use CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter;
 use CodeCompliance\Infrastructure\Service\CodeBaseService;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
@@ -27,9 +28,9 @@ class TransferNameTest extends BaseCodeComplianceCheckTest
      */
     protected function setUp(): void
     {
-        /** @var \CodeCompliance\Infrastructure\Service\CodeBaseService $codeBaseService */
-        $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
-        $this->transferNameCheck = new TransferName(new FilterService(), $codeBaseService, new ConfigurationProvider());
+        /** @var \CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter $codeBaseAdapter */
+        $codeBaseAdapter = static::bootKernel()->getContainer()->get(CodeBaseAdapter::class);
+        $this->transferNameCheck = new TransferName(new FilterService(), $codeBaseAdapter, new ConfigurationProvider());
     }
 
     /**
