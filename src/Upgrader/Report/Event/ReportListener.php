@@ -46,6 +46,11 @@ class ReportListener
         }
 
         $report = $this->reportService->getReport();
+        if (!$report) {
+            $event->setExitCode(Command::SUCCESS);
+
+            return;
+        }
 
         $messages = [];
         foreach ($report->getViolations() as $violation) {
@@ -54,8 +59,6 @@ class ReportListener
 
         $event->getOutput()->writeln((array)$messages);
         $event->getOutput()->writeln('Total messages: ' . count((array)$messages));
-
-        var_dump($report->hasError());
 
         if ($report->hasError()) {
             $event->setExitCode(Command::FAILURE);

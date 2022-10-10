@@ -13,8 +13,9 @@ use Exception;
 use SprykerSdk\SdkContracts\Report\ReportInterface;
 use SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface;
 use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationReportInterface;
 
-class Report implements ReportInterface
+class Report implements ReportInterface, ViolationReportInterface
 {
     /**
      * @var string
@@ -42,7 +43,7 @@ class Report implements ReportInterface
     protected string $path = '';
 
     /**
-     * @var array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface>
+     * @var array<\CodeCompliance\Domain\Entity\Violation>
      */
     protected array $violations = [];
 
@@ -62,7 +63,7 @@ class Report implements ReportInterface
     }
 
     /**
-     * @param array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface> $violations
+     * @param array<\CodeCompliance\Domain\Entity\Violation> $violations
      *
      * @return $this
      */
@@ -143,7 +144,7 @@ class Report implements ReportInterface
     }
 
     /**
-     * @param array<\CodeCompliance\Domain\Entity\Violation> $violations
+     * @param array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface> $violations
      *
      * @return bool
      */
@@ -159,7 +160,7 @@ class Report implements ReportInterface
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function toArray(): array
     {
@@ -168,20 +169,21 @@ class Report implements ReportInterface
         $data[static::KEY_PROJECT] = $this->getProject();
         $data[static::KEY_PATH] = $this->getPath();
 
-        $data[static::KEY_VIOLATIONS] = [];
+        $violations = [];
         foreach ($this->getViolations() as $violation) {
-            $data[static::KEY_VIOLATIONS][] = $violation->toArray();
+            $violations[] = $violation->toArray();
         }
+        $data[static::KEY_VIOLATIONS] = $violations;
 
         return $data;
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      *
      * @throws \Exception
      *
-     * @return \SprykerSdk\SdkContracts\Report\ReportInterface
+     * @return self
      */
     public static function fromArray(array $data): self
     {
@@ -192,7 +194,7 @@ class Report implements ReportInterface
             throw new Exception(sprintf('Key %s not found', static::KEY_PATH));
         }
 
-        $report = new static($data[static::KEY_PROJECT], $data[static::KEY_PATH]);
+        $report = new self($data[static::KEY_PROJECT], $data[static::KEY_PATH]);
 
         if (!is_array($data[static::KEY_VIOLATIONS])) {
             return $report;

@@ -51,9 +51,7 @@ class ReportService
     }
 
     /**
-     * @param bool $isVerbose
-     *
-     * @return array<string>|null
+     * @return \CodeCompliance\Domain\Entity\Report|null
      */
     public function getReport(): ?Report
     {

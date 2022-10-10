@@ -274,9 +274,9 @@ class Violation implements ViolationInterface
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      *
-     * @return static
+     * @return self
      */
     public static function fromArray(array $data): self
     {

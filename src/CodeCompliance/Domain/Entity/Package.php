@@ -30,12 +30,12 @@ class Package implements PackageViolationReportInterface
     protected string $path = '';
 
     /**
-     * @var array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface>
+     * @var array<\CodeCompliance\Domain\Entity\Violation>
      */
     protected array $violations = [];
 
     /**
-     * @var array<string, array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface>>
+     * @var array<string, array<\CodeCompliance\Domain\Entity\Violation>>
      */
     protected array $fileViolations = [];
 
@@ -68,7 +68,7 @@ class Package implements PackageViolationReportInterface
     }
 
     /**
-     * @return array<\CodeCompliance\Domain\Entity\ViolationInterface>
+     * @return array<\CodeCompliance\Domain\Entity\Violation>
      */
     public function getViolations(): array
     {
@@ -76,7 +76,7 @@ class Package implements PackageViolationReportInterface
     }
 
     /**
-     * @return array<string, array<\ CodeCompliance\Domain\Entity\ViolationInterface>>
+     * @return array<string, array<\CodeCompliance\Domain\Entity\Violation>>
      */
     public function getFileViolations(): array
     {
@@ -84,7 +84,7 @@ class Package implements PackageViolationReportInterface
     }
 
     /**
-     * @param \CodeCompliance\Domain\Entity\ViolationInterface $violation
+     * @param \CodeCompliance\Domain\Entity\Violation $violation
      *
      * @return $this
      */
@@ -97,7 +97,7 @@ class Package implements PackageViolationReportInterface
 
     /**
      * @param string $file
-     * @param \CodeCompliance\Domain\Entity\ViolationInterface $fileViolation
+     * @param \CodeCompliance\Domain\Entity\Violation $fileViolation
      *
      * @return $this
      */

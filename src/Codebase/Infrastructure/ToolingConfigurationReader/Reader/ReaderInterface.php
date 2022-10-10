@@ -14,7 +14,7 @@ use Codebase\Application\Dto\ConfigurationResponseDto;
 interface ReaderInterface
 {
     /**
-     * @param array $configuration
+     * @param array<mixed> $configuration
      * @param \Codebase\Application\Dto\ConfigurationResponseDto $configurationResponseDto
      *
      * @return void
