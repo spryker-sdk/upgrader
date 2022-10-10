@@ -16,14 +16,13 @@ use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
 use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class Extended extends AbstractCodeComplianceCheck
 {
     /**
      * @var string
      */
-    protected const DOCUMENTATION_URL_PATH = 'private-api-method-is-overridden-on-the-project-level.html';
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-extended.html';
 
     /**
      * @return string
@@ -65,7 +64,7 @@ class Extended extends AbstractCodeComplianceCheck
             }
 
             $guideline = sprintf($this->getGuideline(), $coreParent->getClassName(), $source->getClassName());
-            $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+            $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), $this->getSeverity(), [
                 static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
             ]);
         }

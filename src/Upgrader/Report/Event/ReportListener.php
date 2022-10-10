@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Upgrader\Report\Service\ReportService;
 use Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask;
+use Upgrader\Tasks\Evaluate\Report\ReportTask;
 
 class ReportListener
 {
@@ -36,17 +37,32 @@ class ReportListener
      */
     public function onConsoleCommandTerminate(ConsoleTerminateEvent $event): void
     {
-        if ($event->getCommand() && $event->getCommand()->getName() !== AnalyzeTask::ID_ANALYZE_TASK) {
+        if (
+            $event->getCommand() &&
+            $event->getCommand()->getName() !== AnalyzeTask::ID_ANALYZE_TASK &&
+            $event->getCommand()->getName() !== ReportTask::ID_REPORT_TASK
+        ) {
             return;
         }
 
-        $messages = $this->reportService->report($event->getOutput()->isVerbose());
-        if (!$messages) {
-            return;
+        $report = $this->reportService->getReport();
+
+        $messages = [];
+        foreach ($report->getViolations() as $violation) {
+            $messages[] = $this->reportService->generateMessage($violation, $event->getOutput()->isVerbose());
         }
 
         $event->getOutput()->writeln((array)$messages);
         $event->getOutput()->writeln('Total messages: ' . count((array)$messages));
-        $event->setExitCode(Command::FAILURE);
+
+        var_dump($report->hasError());
+
+        if ($report->hasError()) {
+            $event->setExitCode(Command::FAILURE);
+
+            return;
+        }
+
+        $event->setExitCode(Command::SUCCESS);
     }
 }

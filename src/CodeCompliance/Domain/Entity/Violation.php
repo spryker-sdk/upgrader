@@ -242,4 +242,58 @@ class Violation implements ViolationInterface
     {
         return null;
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        $data = [];
+
+        $data['id'] = $this->getId();
+        $data['message'] = $this->getMessage();
+        $data['severity'] = $this->getSeverity();
+        $data['priority'] = $this->priority();
+        $data['class'] = $this->getClass();
+        $data['method'] = $this->getMethod();
+        $data['start_line'] = $this->getStartLine();
+        $data['end_line'] = $this->getEndLine();
+        $data['start_column'] = $this->getStartColumn();
+        $data['end_column'] = $this->getStartColumn();
+        $data['additional_attributes'] = serialize($this->getAdditionalAttributes());
+        $data['is_fixable'] = $this->isFixable();
+        $data['produced_by'] = $this->producedBy();
+        $data['fix'] = $this->getFix() ?
+            [
+                'type' => $this->getFix()->getType(),
+                'action' => $this->getFix()->getAction(),
+            ] :
+            null;
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return static
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['id'],
+            $data['message'],
+            $data['produced_by'],
+            $data['severity'],
+            unserialize($data['additional_attributes']),
+            $data['is_fixable'],
+            $data['class'],
+            $data['method'],
+            $data['priority'],
+            $data['start_line'],
+            $data['end_line'],
+            $data['start_column'],
+            $data['end_column'],
+        );
+    }
 }

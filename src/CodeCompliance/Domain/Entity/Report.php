@@ -9,11 +9,28 @@ declare(strict_types=1);
 
 namespace CodeCompliance\Domain\Entity;
 
+use Exception;
+use SprykerSdk\SdkContracts\Report\ReportInterface;
 use SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationReportInterface;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
-class Report implements ViolationReportInterface
+class Report implements ReportInterface
 {
+    /**
+     * @var string
+     */
+    protected const KEY_VIOLATIONS = 'violations';
+
+    /**
+     * @var string
+     */
+    protected const KEY_PROJECT = 'project';
+
+    /**
+     * @var string
+     */
+    protected const KEY_PATH = 'path';
+
     /**
      * @var string
      */
@@ -59,7 +76,7 @@ class Report implements ViolationReportInterface
     }
 
     /**
-     * @return array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface>
+     * @return array<\CodeCompliance\Domain\Entity\Violation>
      */
     public function getViolations(): array
     {
@@ -107,21 +124,84 @@ class Report implements ViolationReportInterface
      */
     public function hasError(): bool
     {
-        if ($this->getViolations()) {
+        if ($this->hasErrorSeverity($this->getViolations())) {
             return true;
         }
 
         foreach ($this->getPackages() as $package) {
-            if ($package->getViolations()) {
+            if ($this->hasErrorSeverity($package->getViolations())) {
                 return true;
             }
             foreach ($package->getFileViolations() as $violations) {
-                if ($violations) {
+                if ($this->hasErrorSeverity($violations)) {
                     return true;
                 }
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param array<\CodeCompliance\Domain\Entity\Violation> $violations
+     *
+     * @return bool
+     */
+    protected function hasErrorSeverity(array $violations): bool
+    {
+        foreach ($violations as $violation) {
+            if ($violation->getSeverity() === ViolationInterface::SEVERITY_ERROR) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = [];
+
+        $data[static::KEY_PROJECT] = $this->getProject();
+        $data[static::KEY_PATH] = $this->getPath();
+
+        $data[static::KEY_VIOLATIONS] = [];
+        foreach ($this->getViolations() as $violation) {
+            $data[static::KEY_VIOLATIONS][] = $violation->toArray();
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @throws \Exception
+     *
+     * @return \SprykerSdk\SdkContracts\Report\ReportInterface
+     */
+    public static function fromArray(array $data): self
+    {
+        if (!isset($data[static::KEY_PROJECT])) {
+            throw new Exception(sprintf('Key %s not found', static::KEY_PROJECT));
+        }
+        if (!isset($data[static::KEY_PATH])) {
+            throw new Exception(sprintf('Key %s not found', static::KEY_PATH));
+        }
+
+        $report = new static($data[static::KEY_PROJECT], $data[static::KEY_PATH]);
+
+        if (!is_array($data[static::KEY_VIOLATIONS])) {
+            return $report;
+        }
+
+        foreach ($data[static::KEY_VIOLATIONS] as $violationData) {
+            $report->addViolations([Violation::fromArray($violationData)]);
+        }
+
+        return $report;
     }
 }
