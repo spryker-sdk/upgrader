@@ -13,5 +13,4 @@ use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface as SdkContractsV
 
 interface ViolationInterface extends SdkContractsViolationInterface, ArrayableInterface
 {
-
 }
