@@ -11,21 +11,21 @@ namespace Upgrader\Report\Event;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
-use Upgrader\Report\Service\ReportService;
+use Upgrader\Report\Service\ReportServiceInterface;
 use Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask;
 use Upgrader\Tasks\Evaluate\Report\ReportTask;
 
 class ReportListener
 {
     /**
-     * @var \Upgrader\Report\Service\ReportService
+     * @var \Upgrader\Report\Service\ReportServiceInterface
      */
     protected $reportService;
 
     /**
-     * @param \Upgrader\Report\Service\ReportService $reportService
+     * @param \Upgrader\Report\Service\ReportServiceInterface $reportService
      */
-    public function __construct(ReportService $reportService)
+    public function __construct(ReportServiceInterface $reportService)
     {
         $this->reportService = $reportService;
     }

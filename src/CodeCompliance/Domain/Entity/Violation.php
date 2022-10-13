@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace CodeCompliance\Domain\Entity;
 
 use SprykerSdk\SdkContracts\Report\Violation\ViolationFixInterface;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class Violation implements ViolationInterface
 {

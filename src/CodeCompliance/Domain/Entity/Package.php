@@ -9,9 +9,6 @@ declare(strict_types=1);
 
 namespace CodeCompliance\Domain\Entity;
 
-use SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
-
 class Package implements PackageViolationReportInterface
 {
     /**
@@ -30,12 +27,12 @@ class Package implements PackageViolationReportInterface
     protected string $path = '';
 
     /**
-     * @var array<\CodeCompliance\Domain\Entity\Violation>
+     * @var array<\CodeCompliance\Domain\Entity\ViolationInterface>
      */
     protected array $violations = [];
 
     /**
-     * @var array<string, array<\CodeCompliance\Domain\Entity\Violation>>
+     * @var array<string, array<\CodeCompliance\Domain\Entity\ViolationInterface>>
      */
     protected array $fileViolations = [];
 
@@ -68,7 +65,7 @@ class Package implements PackageViolationReportInterface
     }
 
     /**
-     * @return array<\CodeCompliance\Domain\Entity\Violation>
+     * @return array<\CodeCompliance\Domain\Entity\ViolationInterface>
      */
     public function getViolations(): array
     {
@@ -76,7 +73,7 @@ class Package implements PackageViolationReportInterface
     }
 
     /**
-     * @return array<string, array<\CodeCompliance\Domain\Entity\Violation>>
+     * @return array<string, array<\CodeCompliance\Domain\Entity\ViolationInterface>>
      */
     public function getFileViolations(): array
     {
@@ -84,7 +81,7 @@ class Package implements PackageViolationReportInterface
     }
 
     /**
-     * @param \CodeCompliance\Domain\Entity\Violation $violation
+     * @param \CodeCompliance\Domain\Entity\ViolationInterface $violation
      *
      * @return $this
      */
@@ -97,7 +94,7 @@ class Package implements PackageViolationReportInterface
 
     /**
      * @param string $file
-     * @param \CodeCompliance\Domain\Entity\Violation $fileViolation
+     * @param \CodeCompliance\Domain\Entity\ViolationInterface $fileViolation
      *
      * @return $this
      */
