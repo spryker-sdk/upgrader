@@ -45,7 +45,7 @@ This command returns the content of a previously generated report. Alternatively
 
 ### Define custom prefixes for core entity names
 
-When evaluator checks project-level code entities for existing and potential matches with the core ones, it skips the entities that have the `Pyz` prefix in their name. Such are considered unique and will not conflict with core entities in future because there will never be an entity with the `Pyz` prefix in the core.
+When evaluator checks project-level code entities for existing and potential matches with the core ones, it skips the entities that have the `Pyz` prefix in their name. Such entities are considered unique and will not conflict with core entities in the future because there will never be an entity with the `Pyz` prefix in the core.
 
 When solving upgradability issues, you can use the `Pyz` prefix to make your entities unique. To use custom prefixes, do the following:
 

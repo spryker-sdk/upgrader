@@ -5,8 +5,14 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace TestCore\MethodIsOverwritten;
+namespace TestCore\MethodIsOverridden;
 
-class FooPlugin implements FooPluginInterface
+class CoreRepository
 {
+    /**
+     * @return void
+     */
+    public function queryEntityData(): void
+    {
+    }
 }

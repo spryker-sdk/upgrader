@@ -5,14 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace TestCore\MethodIsOverwritten;
+namespace TestProject\MethodIsOverridden\Plugin\Console;
 
-class CoreEntityManager
+class ProjectConsole
 {
-    /**
-     * @return void
-     */
-    public function save(): void
-    {
-    }
 }

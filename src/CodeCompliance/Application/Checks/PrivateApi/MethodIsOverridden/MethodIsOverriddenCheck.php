@@ -7,27 +7,26 @@
 
 declare(strict_types=1);
 
-namespace CodeCompliance\Application\Checks\PrivateApi\MethodOverwritten;
+namespace CodeCompliance\Application\Checks\PrivateApi\MethodIsOverridden;
 
 use Codebase\Application\Dto\CodebaseSourceDto;
 use CodeCompliance\Application\Checks\CodeComplianceCheckInterface;
-use CodeCompliance\Domain\Checks\PrivateApi\MethodOverwritten\MethodIsOverwritten;
+use CodeCompliance\Domain\Checks\PrivateApi\MethodIsOverridden\MethodIsOverridden;
 use CodeCompliance\Domain\Entity\Report;
 
-class MethodIsOverwrittenCheck implements CodeComplianceCheckInterface
+class MethodIsOverriddenCheck implements CodeComplianceCheckInterface
 {
     /**
-     * @var \CodeCompliance\Domain\Checks\PrivateApi\MethodOverwritten\MethodIsOverwritten
+     * @var \CodeCompliance\Domain\Checks\PrivateApi\MethodIsOverridden\MethodIsOverridden
      */
-    protected $methodIsOverwrittenCheck;
+    protected $methodIsOverriddenCheck;
 
     /**
-     * @param \CodeCompliance\Domain\Checks\PrivateApi\MethodOverwritten\MethodIsOverwritten $methodIsOverwrittenCheck
+     * @param \CodeCompliance\Domain\Checks\PrivateApi\MethodIsOverridden\MethodIsOverridden $methodIsOverriddenCheck
      */
-    public function __construct(
-        MethodIsOverwritten $methodIsOverwrittenCheck
-    ) {
-        $this->methodIsOverwrittenCheck = $methodIsOverwrittenCheck;
+    public function __construct(MethodIsOverridden $methodIsOverriddenCheck)
+    {
+        $this->methodIsOverriddenCheck = $methodIsOverriddenCheck;
     }
 
     /**
@@ -38,7 +37,7 @@ class MethodIsOverwrittenCheck implements CodeComplianceCheckInterface
      */
     public function run(Report $report, CodebaseSourceDto $codebaseSourceDto): Report
     {
-        $violations = $this->methodIsOverwrittenCheck
+        $violations = $this->methodIsOverriddenCheck
             ->setCodebaseSourceDto($codebaseSourceDto)
             ->getViolations();
 

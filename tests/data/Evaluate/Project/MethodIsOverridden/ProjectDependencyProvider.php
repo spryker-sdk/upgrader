@@ -5,11 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace TestProject\MethodIsOverwritten;
+namespace TestProject\MethodIsOverridden;
 
-use TestCore\MethodIsOverwritten\CoreDependencyProvider;
-use TestProject\MethodIsOverwritten\Plugin\Console\ProjectConsole;
-use TestProject\MethodIsOverwritten\Plugin\EventSubscriber\ProjectEventSubscriber;
+use TestCore\MethodIsOverridden\CoreDependencyProvider;
+use TestProject\MethodIsOverridden\Plugin\Console\ProjectConsole;
+use TestProject\MethodIsOverridden\Plugin\EventSubscriber\ProjectEventSubscriber;
 
 class ProjectDependencyProvider extends CoreDependencyProvider
 {

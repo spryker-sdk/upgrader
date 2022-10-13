@@ -5,22 +5,24 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace TestCore\MethodIsOverwritten;
+namespace TestProject\MethodIsOverridden;
 
-class CoreFactory
+use TestCore\MethodIsOverridden\CoreEntityManager;
+
+class ProjectEntityManager extends CoreEntityManager
 {
     /**
      * @return void
      */
-    public function createCoreModel(): void
+    public function getTestSave(): void
     {
     }
 
     /**
-     * @return \TestCore\MethodIsOverwritten\FooPluginInterface
+     * @return void
      */
-    protected function getCustomerStepHandler(): FooPluginInterface
+    public function save(): void
     {
-        return new FooPlugin();
+        parent::save();
     }
 }

@@ -7,12 +7,12 @@
 
 declare(strict_types=1);
 
-namespace CodeComplianceTest\Domain\Checks\PrivateApi\MethodIsOverwritten;
+namespace CodeComplianceTest\Domain\Checks\PrivateApi\MethodIsOverridden;
 
-use CodeCompliance\Domain\Checks\PrivateApi\MethodOverwritten\MethodIsOverwritten;
+use CodeCompliance\Domain\Checks\PrivateApi\MethodIsOverridden\MethodIsOverridden;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
-class MethodIsOverwrittenTest extends BaseCodeComplianceCheckTest
+class MethodIsOverriddenTest extends BaseCodeComplianceCheckTest
 {
     /**
      * @return void
@@ -20,20 +20,20 @@ class MethodIsOverwrittenTest extends BaseCodeComplianceCheckTest
     public function testGetViolations(): void
     {
         // Arrange
-        $codebaseSourceDto = $this->readTestCodebase('MethodIsOverwritten/');
+        $codebaseSourceDto = $this->readTestCodebase('MethodIsOverridden/');
 
-        $methodIsOverwrittenCheck = static::bootKernel()->getContainer()->get(MethodIsOverwritten::class)
+        $methodIsOverriddenCheck = static::bootKernel()->getContainer()->get(MethodIsOverridden::class)
             ->setCodebaseSourceDto($codebaseSourceDto);
 
         // Act
-        $violations = $methodIsOverwrittenCheck->getViolations();
+        $violations = $methodIsOverriddenCheck->getViolations();
 
         // Assert
         $this->assertCount(1, $violations);
         foreach ($violations as $violation) {
             $this->assertNotEmpty($violation->getId());
             $this->assertNotEmpty($violation->getMessage());
-            $this->assertSame($violation->producedBy(), $methodIsOverwrittenCheck->getName());
+            $this->assertSame($violation->producedBy(), $methodIsOverriddenCheck->getName());
         }
     }
 }

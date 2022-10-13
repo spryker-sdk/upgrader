@@ -5,8 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace TestProject\MethodIsOverwritten\Plugin\Console;
+namespace TestProject\MethodIsOverridden\Plugin\EventSubscriber;
 
-class ProjectConsole
+class ProjectEventSubscriber
 {
 }

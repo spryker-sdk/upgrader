@@ -5,10 +5,10 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace TestProject\MethodIsOverwritten;
+namespace TestProject\MethodIsOverridden;
 
-use TestCore\MethodIsOverwritten\CoreFactory;
-use TestCore\MethodIsOverwritten\FooPluginInterface;
+use TestCore\MethodIsOverridden\CoreFactory;
+use TestCore\MethodIsOverridden\FooPluginInterface;
 
 class ProjectFactory extends CoreFactory
 {
@@ -28,7 +28,7 @@ class ProjectFactory extends CoreFactory
     }
 
     /**
-     * @return \TestCore\MethodIsOverwritten\FooPluginInterface
+     * @return \TestCore\MethodIsOverridden\FooPluginInterface
      */
     protected function getCustomerStepHandler(): FooPluginInterface
     {

@@ -5,9 +5,9 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace TestProject\MethodIsOverwritten;
+namespace TestProject\MethodIsOverridden;
 
-use TestCore\MethodIsOverwritten\CoreRepository;
+use TestCore\MethodIsOverridden\CoreRepository;
 
 class ProjectRepository extends CoreRepository
 {

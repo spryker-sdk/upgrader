@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace CodeCompliance\Domain\Checks\PrivateApi\MethodOverwritten;
+namespace CodeCompliance\Domain\Checks\PrivateApi\MethodIsOverridden;
 
 use Codebase\Application\Dto\CodebaseInterface;
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
@@ -17,7 +17,7 @@ use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 use ReflectionMethod;
 
-class MethodIsOverwritten extends AbstractCodeComplianceCheck
+class MethodIsOverridden extends AbstractCodeComplianceCheck
 {
     /**
      * @var string
@@ -29,7 +29,7 @@ class MethodIsOverwritten extends AbstractCodeComplianceCheck
      */
     public function getName(): string
     {
-        return 'PrivateApi:MethodIsOverwritten';
+        return 'PrivateApi:MethodIsOverridden';
     }
 
     /**

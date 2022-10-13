@@ -5,8 +5,14 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace TestProject\MethodIsOverwritten\Plugin\EventSubscriber;
+namespace TestCore\MethodIsOverridden;
 
-class ProjectEventSubscriber
+class CoreEntityManager
 {
+    /**
+     * @return void
+     */
+    public function save(): void
+    {
+    }
 }
