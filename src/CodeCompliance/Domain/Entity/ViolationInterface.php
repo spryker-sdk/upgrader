@@ -11,17 +11,7 @@ namespace CodeCompliance\Domain\Entity;
 
 use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface as SdkContractsViolationInterface;
 
-interface ViolationInterface extends SdkContractsViolationInterface
+interface ViolationInterface extends SdkContractsViolationInterface, ArrayableInterface
 {
-    /**
-     * @return array<string, mixed>
-     */
-    public function toArray(): array;
 
-    /**
-     * @param array<mixed> $data
-     *
-     * @return self
-     */
-    public static function fromArray(array $data): self;
 }

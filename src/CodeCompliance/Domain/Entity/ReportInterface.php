@@ -12,7 +12,7 @@ namespace CodeCompliance\Domain\Entity;
 use SprykerSdk\SdkContracts\Report\ReportInterface as SdkContractsReportInterface;
 use SprykerSdk\SdkContracts\Report\Violation\ViolationReportInterface;
 
-interface ReportInterface extends SdkContractsReportInterface, ViolationReportInterface
+interface ReportInterface extends SdkContractsReportInterface, ViolationReportInterface, ArrayableInterface
 {
     /**
      * @return array<\CodeCompliance\Domain\Entity\ViolationInterface>
@@ -23,18 +23,4 @@ interface ReportInterface extends SdkContractsReportInterface, ViolationReportIn
      * @return bool
      */
     public function hasError(): bool;
-
-    /**
-     * @return array<mixed>
-     */
-    public function toArray(): array;
-
-    /**
-     * @param array<mixed> $data
-     *
-     * @throws \Exception
-     *
-     * @return self
-     */
-    public static function fromArray(array $data): self;
 }
