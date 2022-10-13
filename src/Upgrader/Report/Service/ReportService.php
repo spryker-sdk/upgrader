@@ -55,7 +55,7 @@ class ReportService implements ReportServiceInterface
      */
     public function getReport(): ?ReportInterface
     {
-        $path = getcwd() . sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
+        $path = $this->getReportPath();
 
         if (!file_exists($path)) {
             return null;
@@ -69,7 +69,7 @@ class ReportService implements ReportServiceInterface
      *
      * @return void
      */
-    public function save(ReportInterface $report): void
+    public function saveReport(ReportInterface $report): void
     {
         $violationReportStructure = $report->toArray();
 
@@ -78,9 +78,27 @@ class ReportService implements ReportServiceInterface
         }
 
         $violationReportData = Yaml::dump($violationReportStructure);
-        $reportPath = getcwd() . sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
+        $reportPath = $this->getReportPath();
 
         file_put_contents($reportPath, $violationReportData);
+    }
+
+    /**
+     * @param \CodeCompliance\Domain\Entity\ReportInterface $report
+     * @param bool $isVerbose
+     *
+     * @return array<string>
+     */
+    public function generateMessages(ReportInterface $report, bool $isVerbose = false): array
+    {
+        $messages = [];
+        foreach ($report->getViolations() as $violation) {
+            $messages[] = $this->generateViolationMessage($violation, $isVerbose);
+        }
+
+        $messages[] = 'Total messages: ' . count($messages);
+
+        return $messages;
     }
 
     /**
@@ -89,7 +107,7 @@ class ReportService implements ReportServiceInterface
      *
      * @return string
      */
-    public function generateMessage(ViolationInterface $violation, bool $isVerbose = false): string
+    protected function generateViolationMessage(ViolationInterface $violation, bool $isVerbose = false): string
     {
         $key = $violation->producedBy();
         $message = $key . ' ' . $violation->getMessage();
@@ -121,5 +139,13 @@ class ReportService implements ReportServiceInterface
     protected function generateSeparator(int $length, string $char = '-'): string
     {
         return str_pad('', $length, $char);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getReportPath(): string
+    {
+        return getcwd() . sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
     }
 }

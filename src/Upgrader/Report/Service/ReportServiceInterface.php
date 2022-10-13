@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Upgrader\Report\Service;
 
 use CodeCompliance\Domain\Entity\ReportInterface;
-use CodeCompliance\Domain\Entity\ViolationInterface;
 
 interface ReportServiceInterface
 {
@@ -24,13 +23,13 @@ interface ReportServiceInterface
      *
      * @return void
      */
-    public function save(ReportInterface $report): void;
+    public function saveReport(ReportInterface $report): void;
 
     /**
-     * @param \CodeCompliance\Domain\Entity\ViolationInterface $violation
+     * @param \CodeCompliance\Domain\Entity\ReportInterface $report
      * @param bool $isVerbose
      *
-     * @return string
+     * @return array<string>
      */
-    public function generateMessage(ViolationInterface $violation, bool $isVerbose = false): string;
+    public function generateMessages(ReportInterface $report, bool $isVerbose = false): array;
 }

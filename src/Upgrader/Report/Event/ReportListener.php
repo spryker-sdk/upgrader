@@ -52,13 +52,8 @@ class ReportListener
             return;
         }
 
-        $messages = [];
-        foreach ($report->getViolations() as $violation) {
-            $messages[] = $this->reportService->generateMessage($violation, $event->getOutput()->isVerbose());
-        }
-
-        $event->getOutput()->writeln((array)$messages);
-        $event->getOutput()->writeln('Total messages: ' . count((array)$messages));
+        $messages = $this->reportService->generateMessages($report, $event->getOutput()->isVerbose());
+        $event->getOutput()->writeln($messages);
 
         if ($report->hasError()) {
             $event->setExitCode(Command::FAILURE);
