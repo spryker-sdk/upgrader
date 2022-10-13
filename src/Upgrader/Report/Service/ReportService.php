@@ -10,12 +10,12 @@ declare(strict_types=1);
 namespace Upgrader\Report\Service;
 
 use CodeCompliance\Domain\Entity\Report;
-use CodeCompliance\Domain\Entity\Violation;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
+use CodeCompliance\Domain\Entity\ReportInterface;
+use CodeCompliance\Domain\Entity\ViolationInterface;
 use Symfony\Component\Yaml\Yaml;
 use Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask;
 
-class ReportService
+class ReportService implements ReportServiceInterface
 {
     /**
      * @var string
@@ -51,9 +51,9 @@ class ReportService
     }
 
     /**
-     * @return \CodeCompliance\Domain\Entity\Report|null
+     * @return \CodeCompliance\Domain\Entity\ReportInterface|null
      */
-    public function getReport(): ?Report
+    public function getReport(): ?ReportInterface
     {
         $path = getcwd() . sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
 
@@ -65,11 +65,11 @@ class ReportService
     }
 
     /**
-     * @param \CodeCompliance\Domain\Entity\Report $report
+     * @param \CodeCompliance\Domain\Entity\ReportInterface $report
      *
      * @return void
      */
-    public function save(Report $report): void
+    public function save(ReportInterface $report): void
     {
         $violationReportStructure = $report->toArray();
 
@@ -84,12 +84,12 @@ class ReportService
     }
 
     /**
-     * @param \CodeCompliance\Domain\Entity\Violation $violation
+     * @param \CodeCompliance\Domain\Entity\ViolationInterface $violation
      * @param bool $isVerbose
      *
      * @return string
      */
-    public function generateMessage(Violation $violation, bool $isVerbose = false): string
+    public function generateMessage(ViolationInterface $violation, bool $isVerbose = false): string
     {
         $key = $violation->producedBy();
         $message = $key . ' ' . $violation->getMessage();

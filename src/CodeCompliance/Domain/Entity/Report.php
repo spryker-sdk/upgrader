@@ -10,12 +10,8 @@ declare(strict_types=1);
 namespace CodeCompliance\Domain\Entity;
 
 use Exception;
-use SprykerSdk\SdkContracts\Report\ReportInterface;
-use SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationReportInterface;
 
-class Report implements ReportInterface, ViolationReportInterface
+class Report implements ReportInterface
 {
     /**
      * @var string
@@ -43,12 +39,12 @@ class Report implements ReportInterface, ViolationReportInterface
     protected string $path = '';
 
     /**
-     * @var array<\CodeCompliance\Domain\Entity\Violation>
+     * @var array<\CodeCompliance\Domain\Entity\ViolationInterface>
      */
     protected array $violations = [];
 
     /**
-     * @var array<\SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface>
+     * @var array<\CodeCompliance\Domain\Entity\PackageViolationReportInterface>
      */
     protected array $packages = [];
 
@@ -63,7 +59,7 @@ class Report implements ReportInterface, ViolationReportInterface
     }
 
     /**
-     * @param array<\CodeCompliance\Domain\Entity\Violation> $violations
+     * @param array<\CodeCompliance\Domain\Entity\ViolationInterface> $violations
      *
      * @return $this
      */
@@ -77,7 +73,7 @@ class Report implements ReportInterface, ViolationReportInterface
     }
 
     /**
-     * @return array<\CodeCompliance\Domain\Entity\Violation>
+     * @return array<\CodeCompliance\Domain\Entity\ViolationInterface>
      */
     public function getViolations(): array
     {
@@ -93,7 +89,7 @@ class Report implements ReportInterface, ViolationReportInterface
     }
 
     /**
-     * @param \SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface $package
+     * @param \CodeCompliance\Domain\Entity\PackageViolationReportInterface $package
      *
      * @return $this
      */
@@ -105,7 +101,7 @@ class Report implements ReportInterface, ViolationReportInterface
     }
 
     /**
-     * @return array<\SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface>
+     * @return array<\CodeCompliance\Domain\Entity\PackageViolationReportInterface>
      */
     public function getPackages(): array
     {
@@ -144,7 +140,7 @@ class Report implements ReportInterface, ViolationReportInterface
     }
 
     /**
-     * @param array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface> $violations
+     * @param array<\CodeCompliance\Domain\Entity\ViolationInterface> $violations
      *
      * @return bool
      */
