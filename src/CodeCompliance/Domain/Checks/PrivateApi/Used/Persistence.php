@@ -19,7 +19,7 @@ class Persistence extends AbstractUsedCodeComplianceCheck
     /**
      * @var string
      */
-    protected const DOCUMENTATION_URL_PATH = 'private-api-is-used-on-the-project-level.html';
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-used-on-the-project-level.html#privateapi-persistence';
 
     /**
      * @var string

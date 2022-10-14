@@ -21,7 +21,7 @@ class ObjectIsInitializedInBusinessModel extends AbstractUsedCodeComplianceCheck
     /**
      * @var string
      */
-    protected const DOCUMENTATION_URL_PATH = 'private-api-is-used-on-the-project-level.html#example-of-code-that-causes-an-upgradability-error';
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-used-on-the-project-level.html#privateapi-objectinitialization';
 
     /**
      * @return string

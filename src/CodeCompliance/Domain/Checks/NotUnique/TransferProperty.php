@@ -19,7 +19,7 @@ class TransferProperty extends AbstractCodeComplianceCheck
     /**
      * @var string
      */
-    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#transfer-property-name-is-not-unique';
+    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#notunique-transferproperty';
 
     /**
      * @return string

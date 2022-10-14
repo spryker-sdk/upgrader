@@ -20,7 +20,7 @@ class DependencyProvider extends AbstractUsedCodeComplianceCheck
     /**
      * @var string
      */
-    protected const DOCUMENTATION_URL_PATH = 'private-api-is-extended.html#example-of-code-that-causes-an-upgradability-error-extending-a-private-api-dependency-provider';
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-used-on-the-project-level.html#privateapi-dependency';
 
     /**
      * @return string

@@ -20,7 +20,7 @@ class Constant extends AbstractCodeComplianceCheck
     /**
      * @var string
      */
-    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#constant-name-is-not-unique';
+    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#notunique-constant';
 
     /**
      * @return string
