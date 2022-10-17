@@ -17,6 +17,22 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ProjectConfigurationParserTest extends KernelTestCase
 {
+ /**
+  * @return void
+  */
+    public function testEmptyFile(): void
+    {
+        //Arrange
+        $parser = new ToolingConfigurationReader([new IgnoredRulesReader(), new ProjectPrefixesReader()]);
+
+        //Act
+        $configurationResponseDto = $parser->readToolingConfiguration('tests/data/Evaluate/Project/tooling-empty.yml');
+
+        //Assert
+        $this->assertSame(['Pyz'], $configurationResponseDto->getProjectPrefixes());
+        $this->assertSame([], $configurationResponseDto->getIgnoredRules());
+    }
+
     /**
      * @return void
      */
