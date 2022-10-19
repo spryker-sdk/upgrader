@@ -12,7 +12,6 @@ namespace CodeCompliance\Domain\Checks\PrivateApi\Used;
 use CodeCompliance\Domain\Checks\Filters\FacadeFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class Facade extends AbstractUsedCodeComplianceCheck
 {
@@ -73,7 +72,7 @@ class Facade extends AbstractUsedCodeComplianceCheck
                 $classDocComment = $source->getReflection()->getDocComment();
                 if (!$classDocComment) {
                     $message = sprintf(static::DOC_COMMENT_MESSAGE, $source->getReflection()->getName());
-                    $violations[] = new Violation((string)(new Id()), $message, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                    $violations[] = new Violation((string)(new Id()), $message, $this->getName(), $this->getSeverity(), [
                         static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                     ]);
 
@@ -87,7 +86,7 @@ class Facade extends AbstractUsedCodeComplianceCheck
 
                 if (!$namespace) {
                     $message = sprintf(static::DOC_COMMENT_MESSAGE, '$this->' . $privateApiAnnotation . '() in' . $source->getClassName());
-                    $violations[] = new Violation((string)(new Id()), $message, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                    $violations[] = new Violation((string)(new Id()), $message, $this->getName(), $this->getSeverity(), [
                         static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                     ]);
 
@@ -111,7 +110,7 @@ class Facade extends AbstractUsedCodeComplianceCheck
                     );
                     if ($hasCoreNamespace) {
                         $guideline = sprintf($this->getGuideline(), $usedMethodName, $source->getClassName());
-                        $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                        $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), $this->getSeverity(), [
                             static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                         ]);
                     }

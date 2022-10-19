@@ -44,7 +44,7 @@ class CodeComplianceService implements CodeComplianceServiceInterface
      */
     public function analyze(CodebaseSourceDto $codebaseSourceDto): Report
     {
-        $report = new Report('test', (string)getcwd());
+        $report = new Report(basename((string)getcwd()), (string)getcwd());
 
         foreach ($this->codeComplianceChecks as $codeComplianceCheck) {
             $report = $codeComplianceCheck->run($report, $codebaseSourceDto);

@@ -12,7 +12,6 @@ namespace CodeCompliance\Domain\Checks\NotUnique;
 use CodeCompliance\Domain\AbstractCodeComplianceCheck;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class ModuleName extends AbstractCodeComplianceCheck
 {
@@ -20,21 +19,6 @@ class ModuleName extends AbstractCodeComplianceCheck
      * @var string
      */
     protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#module-name-is-not-unique';
-
-    /**
-     * @var array<string> $ignoreModuleNames
-     *
-     * The list was added for skipping issues in demo shops until they are not updated
-     */
-    protected array $ignoreModuleNames = [
-        'ExampleProductSalePage',
-        'ProductUrlCartConnector',
-        'CustomerFullNameWidget',
-        'ExampleChart',
-        'NavigationWidget',
-        'ExampleStateMachine',
-        'EvaluationModule',
-    ];
 
     /**
      * @return string
@@ -67,9 +51,6 @@ class ModuleName extends AbstractCodeComplianceCheck
             if (in_array($projectModuleName, $coreModuleNames) || $hasProjectPrefix) {
                 continue;
             }
-            if (in_array($projectModuleName, $this->ignoreModuleNames)) {
-                continue;
-            }
 
             $guideline = sprintf(
                 $this->getGuideline(),
@@ -77,7 +58,7 @@ class ModuleName extends AbstractCodeComplianceCheck
                 reset($projectPrefixes),
                 $projectModuleName,
             );
-            $violations[] = new Violation((string)new Id(), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+            $violations[] = new Violation((string)new Id(), $guideline, $this->getName(), $this->getSeverity(), [
                 static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
             ]);
         }

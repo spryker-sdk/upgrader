@@ -64,9 +64,9 @@ services:
     is_private_api_core_is_used_in_persistence.check:
         class: CodeCompliance\Application\Checks\PrivateApi\Used\CorePersistenceCheck
 
-#IsPrivateApiIsOverwritten
-    is_private_api_method_overwritten.check:
-        class: CodeCompliance\Application\Checks\PrivateApi\MethodOverwritten\MethodIsOverwrittenCheck
+#IsPrivateApiIsOverridden
+    is_private_api_method_overridden.check:
+        class: CodeCompliance\Application\Checks\PrivateApi\MethodIsOverridden\MethodIsOverriddenCheck
 
     CodeCompliance\Application\Service\CodeComplianceService:
         class: CodeCompliance\Application\Service\CodeComplianceService
@@ -87,7 +87,7 @@ services:
                 param12: '@is_private_api_is_used_in_persistence.check',
                 param13: '@is_private_api_from_persistence_is_used_in_b_m.check',
                 param14: '@is_private_api_core_is_used_in_persistence.check',
-                param15: '@is_private_api_method_overwritten.check',
+                param15: '@is_private_api_method_overridden.check',
                 param16: '@is_not_unique_module_name.task'
               }
 

@@ -1,0 +1,5 @@
+project: TestProject
+path: test/path
+violations:
+    - { id: id1, message: violation1_message, severity: WARNING, priority: null, class: null, method: null, start_line: null, end_line: null, start_column: null, end_column: null, additional_attributes: 'a:1:{s:13:"documentation";s:26:"http://documentation1.html";}', is_fixable: false, produced_by: violation1_producedBy, fix: null }
+    - { id: id2, message: violation2_message, severity: ERROR, priority: null, class: null, method: null, start_line: null, end_line: null, start_column: null, end_column: null, additional_attributes: 'a:1:{s:13:"documentation";s:26:"http://documentation2.html";}', is_fixable: false, produced_by: violation2_producedBy, fix: null }

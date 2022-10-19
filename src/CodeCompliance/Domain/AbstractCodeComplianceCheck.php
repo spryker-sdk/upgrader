@@ -13,6 +13,7 @@ use Codebase\Application\Dto\CodebaseSourceDto;
 use CodeCompliance\Configuration\ConfigurationProvider;
 use CodeCompliance\Domain\Service\CodeBaseServiceInterface;
 use CodeCompliance\Domain\Service\FilterService;
+use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterface
 {
@@ -133,5 +134,17 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
         }
 
         return false;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSeverity(): string
+    {
+        if (in_array($this->getName(), $this->codeBaseService->readToolingConfiguration()->getIgnoredRules())) {
+            return ViolationInterface::SEVERITY_WARNING;
+        }
+
+        return ViolationInterface::SEVERITY_ERROR;
     }
 }

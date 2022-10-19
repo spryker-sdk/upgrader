@@ -1,0 +1,5 @@
+evaluator:
+  rules:
+    ignore:
+      - Rule1
+      - Rule2

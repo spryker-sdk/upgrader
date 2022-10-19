@@ -10,36 +10,17 @@ declare(strict_types=1);
 namespace Upgrader\Report\Service;
 
 use CodeCompliance\Domain\Entity\Report;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
+use CodeCompliance\Domain\Entity\ReportInterface;
+use CodeCompliance\Domain\Entity\ViolationInterface;
 use Symfony\Component\Yaml\Yaml;
 use Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask;
 
-class ReportService
+class ReportService implements ReportServiceInterface
 {
     /**
      * @var string
      */
     public const FILE_PATH_PATTERN = '/reports/%s.violations.yaml';
-
-    /**
-     * @var string
-     */
-    protected const KEY_PRODUCED_BY = 'produced_by';
-
-    /**
-     * @var string
-     */
-    protected const KEY_MESSAGE = 'message';
-
-    /**
-     * @var string
-     */
-    protected const KEY_VIOLATIONS = 'violations';
-
-    /**
-     * @var string
-     */
-    protected const KEY_ADDITIONAL_ATTRIBUTES = 'additional_attributes';
 
     /**
      * @var string
@@ -70,109 +51,73 @@ class ReportService
     }
 
     /**
-     * @param bool $isVerbose
-     *
-     * @return array<string>|null
+     * @return \CodeCompliance\Domain\Entity\ReportInterface|null
      */
-    public function report(bool $isVerbose = false): ?array
+    public function getReport(): ?ReportInterface
     {
-        $path = getcwd() . sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
+        $path = $this->getReportPath();
 
         if (!file_exists($path)) {
             return null;
         }
 
-        $output = Yaml::parseFile($path);
-
-        $messages = [];
-        foreach ($output[static::KEY_VIOLATIONS] as $violation) {
-            $messages[] = $this->generateMessage($violation, $isVerbose);
-        }
-
-        return $messages;
+        return Report::fromArray(Yaml::parseFile($path));
     }
 
     /**
-     * @param \CodeCompliance\Domain\Entity\Report $report
+     * @param \CodeCompliance\Domain\Entity\ReportInterface $report
      *
      * @return void
      */
-    public function save(Report $report): void
+    public function saveReport(ReportInterface $report): void
     {
-        $violationReportStructure = $this->getViolationReportStructure($report);
+        $violationReportStructure = $report->toArray();
 
         if (!is_dir(static::REPORTS_DIR)) {
             mkdir(static::REPORTS_DIR, 0777, true);
         }
 
         $violationReportData = Yaml::dump($violationReportStructure);
-        $reportPath = getcwd() . sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
+        $reportPath = $this->getReportPath();
 
         file_put_contents($reportPath, $violationReportData);
     }
 
     /**
-     * @param \CodeCompliance\Domain\Entity\Report $report
+     * @param \CodeCompliance\Domain\Entity\ReportInterface $report
+     * @param bool $isVerbose
      *
-     * @return array<string, mixed>
+     * @return array<string>
      */
-    protected function getViolationReportStructure(Report $report): array
+    public function generateMessages(ReportInterface $report, bool $isVerbose = false): array
     {
-        $violationReportStructure = [];
-        $violationReportStructure[static::KEY_VIOLATIONS] = [];
-
+        $messages = [];
         foreach ($report->getViolations() as $violation) {
-            $violationReportStructure[static::KEY_VIOLATIONS][] = $this->convertViolationToArray($violation);
+            $messages[] = $this->generateViolationMessage($violation, $isVerbose);
         }
 
-        return $violationReportStructure;
+        $messages[] = 'Total messages: ' . count($messages);
+
+        return $messages;
     }
 
     /**
-     * @param \SprykerSdk\SdkContracts\Report\Violation\ViolationInterface $violation
-     *
-     * @return array<string, mixed>
-     */
-    protected function convertViolationToArray(ViolationInterface $violation): array
-    {
-        $violationData = [];
-
-        $violationData['id'] = $violation->getId();
-        $violationData['message'] = $violation->getMessage();
-        $violationData['severity'] = $violation->getSeverity();
-        $violationData['priority'] = $violation->priority();
-        $violationData['class'] = $violation->getClass();
-        $violationData['method'] = $violation->getMethod();
-        $violationData['start_line'] = $violation->getStartLine();
-        $violationData['end_line'] = $violation->getEndLine();
-        $violationData['start_column'] = $violation->getStartColumn();
-        $violationData['end_column'] = $violation->getStartColumn();
-        $violationData['additional_attributes'] = $violation->getAdditionalAttributes();
-        $violationData['fixable'] = $violation->isFixable();
-        $violationData['produced_by'] = $violation->producedBy();
-        $violationData['fix'] = $violation->getFix() ?
-            [
-                'type' => $violation->getFix()->getType(),
-                'action' => $violation->getFix()->getAction(),
-            ] :
-            null;
-
-        return $violationData;
-    }
-
-    /**
-     * @param array<mixed> $violation
+     * @param \CodeCompliance\Domain\Entity\ViolationInterface $violation
      * @param bool $isVerbose
      *
      * @return string
      */
-    protected function generateMessage(array $violation, bool $isVerbose = false): string
+    protected function generateViolationMessage(ViolationInterface $violation, bool $isVerbose = false): string
     {
-        $key = $violation[static::KEY_PRODUCED_BY];
-        $message = $key . ' ' . $violation[static::KEY_MESSAGE] . PHP_EOL;
+        $key = $violation->producedBy();
+        $message = $key . ' ' . $violation->getMessage();
+        if ($violation->getSeverity() === ViolationInterface::SEVERITY_ERROR) {
+            $message = sprintf('<error>%s</error>', $message);
+        }
+        $message .= PHP_EOL;
 
         if ($isVerbose) {
-            $docUrl = $violation[static::KEY_ADDITIONAL_ATTRIBUTES][static::KEY_ATTRIBUTE_DOCUMENTATION] ?? '';
+            $docUrl = $violation->getAdditionalAttributes()[static::KEY_ATTRIBUTE_DOCUMENTATION] ?? '';
             $message .= sprintf(
                 '%s 💡More information: %s',
                 $this->generateSeparator(strlen($key), ' '),
@@ -194,5 +139,13 @@ class ReportService
     protected function generateSeparator(int $length, string $char = '-'): string
     {
         return str_pad('', $length, $char);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getReportPath(): string
+    {
+        return getcwd() . sprintf(static::FILE_PATH_PATTERN, AnalyzeTask::ID_ANALYZE_TASK);
     }
 }
