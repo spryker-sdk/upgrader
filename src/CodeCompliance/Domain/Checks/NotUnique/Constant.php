@@ -13,7 +13,6 @@ use CodeCompliance\Domain\AbstractCodeComplianceCheck;
 use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class Constant extends AbstractCodeComplianceCheck
 {
@@ -65,7 +64,7 @@ class Constant extends AbstractCodeComplianceCheck
                         strtoupper((string)reset($projectPrefixes)),
                         $nameConstant,
                     );
-                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), $this->getSeverity(), [
                         static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                     ]);
                 }

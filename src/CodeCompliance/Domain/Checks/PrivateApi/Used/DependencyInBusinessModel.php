@@ -17,7 +17,6 @@ use Core\Domain\ValueObject\Id;
 use Exception;
 use ReflectionClass;
 use ReflectionMethod;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
 {
@@ -77,7 +76,7 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
 
             foreach ($dependencyCoreSources as $class) {
                 $guideline = sprintf($this->getGuideline(), $class->getClassName(), $source->getClassName());
-                $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), $this->getSeverity(), [
                     static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                 ]);
             }

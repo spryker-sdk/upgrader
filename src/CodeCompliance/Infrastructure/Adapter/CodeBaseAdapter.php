@@ -24,7 +24,7 @@ class CodeBaseAdapter implements CodeBaseServiceInterface
     protected ConfigurationProvider $configurationProvider;
 
     /**
-     * @var CodebaseService
+     * @var \Codebase\Infrastructure\Service\CodebaseService
      */
     protected CodebaseService $codebaseService;
 
@@ -34,16 +34,15 @@ class CodeBaseAdapter implements CodeBaseServiceInterface
     protected PhpFileParserInterface $phpParser;
 
     /**
-     * @param ConfigurationProvider $configurationProvider
-     * @param PhpFileParserInterface $phpParser
-     * @param CodebaseService $codebaseService
+     * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
+     * @param \Codebase\Infrastructure\SourceParser\FileParser\PhpFileParserInterface $phpParser
+     * @param \Codebase\Infrastructure\Service\CodebaseService $codebaseService
      */
     public function __construct(
         ConfigurationProvider $configurationProvider,
         PhpFileParserInterface $phpParser,
         CodebaseService $codebaseService
-    )
-    {
+    ) {
         $this->configurationProvider = $configurationProvider;
         $this->phpParser = $phpParser;
         $this->codebaseService = $codebaseService;
@@ -62,12 +61,12 @@ class CodeBaseAdapter implements CodeBaseServiceInterface
     }
 
     /**
-     * @return ConfigurationResponseDto
+     * @return \Codebase\Application\Dto\ConfigurationResponseDto
      */
     public function readToolingConfiguration(): ConfigurationResponseDto
     {
         return $this->codebaseService->readToolingConfiguration(
-            $this->configurationProvider->getToolingConfigurationFilePath()
+            $this->configurationProvider->getToolingConfigurationFilePath(),
         );
     }
 }

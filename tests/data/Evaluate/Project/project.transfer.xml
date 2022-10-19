@@ -6,7 +6,7 @@
     </transfer>
 
     <transfer name="Core">
-        <property name="core" type="string"/>
+        <property name="core" type="integer"/>
         <property name="extendedСoreProperty" type="string"/>
     </transfer>
 

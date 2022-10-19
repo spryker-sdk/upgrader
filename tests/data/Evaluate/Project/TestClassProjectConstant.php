@@ -24,5 +24,5 @@ class TestClassProjectConstant extends TestClassCoreConstant
     /**
      * @var string
      */
-    protected const WITHOUT_PREFIX_CONSTANT_NAME_FROM_CORE = 'constant from the core';
+    protected const WITHOUT_PREFIX_CONSTANT_NAME_FROM_CORE = 'overridden constant from the core';
 }

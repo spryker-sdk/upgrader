@@ -9,8 +9,7 @@ declare(strict_types=1);
 
 namespace CodeCompliance\Domain\Entity;
 
-use SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
+use Exception;
 
 class Report implements ReportInterface
 {
@@ -19,6 +18,15 @@ class Report implements ReportInterface
      */
     protected const KEY_VIOLATIONS = 'violations';
 
+    /**
+     * @var string
+     */
+    protected const KEY_PROJECT = 'project';
+
+    /**
+     * @var string
+     */
+    protected const KEY_PATH = 'path';
 
     /**
      * @var string
@@ -36,7 +44,7 @@ class Report implements ReportInterface
     protected array $violations = [];
 
     /**
-     * @var array<\SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface>
+     * @var array<\CodeCompliance\Domain\Entity\PackageViolationReportInterface>
      */
     protected array $packages = [];
 
@@ -81,7 +89,7 @@ class Report implements ReportInterface
     }
 
     /**
-     * @param \SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface $package
+     * @param \CodeCompliance\Domain\Entity\PackageViolationReportInterface $package
      *
      * @return $this
      */
@@ -93,7 +101,7 @@ class Report implements ReportInterface
     }
 
     /**
-     * @return array<\SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface>
+     * @return array<\CodeCompliance\Domain\Entity\PackageViolationReportInterface>
      */
     public function getPackages(): array
     {
@@ -133,12 +141,13 @@ class Report implements ReportInterface
 
     /**
      * @param array<\CodeCompliance\Domain\Entity\ViolationInterface> $violations
+     *
      * @return bool
      */
     protected function hasErrorSeverity(array $violations): bool
     {
         foreach ($violations as $violation) {
-            if($violation->getSeverity() === ViolationInterface::SEVERITY_ERROR) {
+            if ($violation->getSeverity() === ViolationInterface::SEVERITY_ERROR) {
                 return true;
             }
         }
@@ -147,23 +156,50 @@ class Report implements ReportInterface
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function toArray(): array
     {
-        $violationReportStructure[static::KEY_VIOLATIONS] = [];
+        $data = [];
 
+        $data[static::KEY_PROJECT] = $this->getProject();
+        $data[static::KEY_PATH] = $this->getPath();
+
+        $violations = [];
         foreach ($this->getViolations() as $violation) {
-            $violationReportStructure[static::KEY_VIOLATIONS][] = $violation->toArray();
+            $violations[] = $violation->toArray();
+        }
+        $data[static::KEY_VIOLATIONS] = $violations;
+
+        return $data;
+    }
+
+    /**
+     * @param array<mixed> $data
+     *
+     * @throws \Exception
+     *
+     * @return self
+     */
+    public static function fromArray(array $data): self
+    {
+        if (!isset($data[static::KEY_PROJECT])) {
+            throw new Exception(sprintf('Key %s not found', static::KEY_PROJECT));
+        }
+        if (!isset($data[static::KEY_PATH])) {
+            throw new Exception(sprintf('Key %s not found', static::KEY_PATH));
         }
 
-        return $violationReportStructure;
+        $report = new self($data[static::KEY_PROJECT], $data[static::KEY_PATH]);
+
+        if (!is_array($data[static::KEY_VIOLATIONS])) {
+            return $report;
+        }
+
+        foreach ($data[static::KEY_VIOLATIONS] as $violationData) {
+            $report->addViolations([Violation::fromArray($violationData)]);
+        }
+
+        return $report;
     }
-
-    public function fromArray(array $data): ReportInterface
-    {
-        // TODO: Implement fromArray() method.
-    }
-
-
 }

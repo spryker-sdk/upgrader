@@ -141,7 +141,7 @@ abstract class AbstractCodeComplianceCheck implements CodeComplianceCheckInterfa
      */
     protected function getSeverity(): string
     {
-        if (in_array($this->getName(), $this->codeBaseService->readToolingConfiguration()->getIgnoredRules())){
+        if (in_array($this->getName(), $this->codeBaseService->readToolingConfiguration()->getIgnoredRules())) {
             return ViolationInterface::SEVERITY_WARNING;
         }
 

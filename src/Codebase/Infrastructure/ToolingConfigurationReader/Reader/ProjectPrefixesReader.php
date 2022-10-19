@@ -22,6 +22,7 @@ class ProjectPrefixesReader extends AbstractReader
 
     /**
      * @param array<mixed> $configuration
+     * @param \Codebase\Application\Dto\ConfigurationResponseDto $configurationResponseDto
      *
      * @throws \Codebase\Infrastructure\Exception\ProjectConfigurationFileInvalidSyntaxException
      *
@@ -30,15 +31,17 @@ class ProjectPrefixesReader extends AbstractReader
     public function read(array $configuration, ConfigurationResponseDto $configurationResponseDto): void
     {
         if (!isset($configuration[ToolingConfigurationReader::EVALUATOR_KEY][static::PREFIXES_KEY])) {
-           return;
+            return;
         }
 
         $projectPrefixes = $configuration[ToolingConfigurationReader::EVALUATOR_KEY][static::PREFIXES_KEY];
 
         if (!is_array($projectPrefixes) || !$this->isSequentialArrayOfString($projectPrefixes)) {
             throw new ProjectConfigurationFileInvalidSyntaxException(
-                sprintf('Value of %s.%s should be array of string',
-                    ToolingConfigurationReader::EVALUATOR_KEY, static::PREFIXES_KEY
+                sprintf(
+                    'Value of %s.%s should be array of string',
+                    ToolingConfigurationReader::EVALUATOR_KEY,
+                    static::PREFIXES_KEY,
                 ),
             );
         }

@@ -64,9 +64,9 @@ services:
     is_private_api_core_is_used_in_persistence.check:
         class: CodeCompliance\Application\Checks\PrivateApi\Used\CorePersistenceCheck
 
-#IsPrivateApiIsOverwritten
-    is_private_api_method_overwritten.check:
-        class: CodeCompliance\Application\Checks\PrivateApi\MethodOverwritten\MethodIsOverwrittenCheck
+#IsPrivateApiIsOverridden
+    is_private_api_method_overridden.check:
+        class: CodeCompliance\Application\Checks\PrivateApi\MethodIsOverridden\MethodIsOverriddenCheck
 
     CodeCompliance\Application\Service\CodeComplianceService:
         class: CodeCompliance\Application\Service\CodeComplianceService

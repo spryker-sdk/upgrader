@@ -115,7 +115,7 @@ class EvaluateConsole extends Command
 
         $codebaseSourceDto = $this->codebaseService->readCodeBase($codebaseRequestDto);
         $report = $this->codeComplianceService->analyze($codebaseSourceDto);
-        $this->reportService->save($report);
+        $this->reportService->saveReport($report);
 
 
         var_dump('EvaluateConsole');

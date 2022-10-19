@@ -46,7 +46,7 @@ class ToolingConfigurationReader implements ToolingConfigurationReaderInterface
 
         $configuration = Yaml::parseFile($configurationFilePath);
         foreach ($this->propertyReaders as $propertyReader) {
-            $propertyReader->read($configuration, $configurationResponseDto);
+            $propertyReader->read((array)$configuration, $configurationResponseDto);
         }
 
         return $configurationResponseDto;

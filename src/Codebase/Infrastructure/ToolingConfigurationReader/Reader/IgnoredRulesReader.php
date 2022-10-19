@@ -27,6 +27,7 @@ class IgnoredRulesReader extends AbstractReader
 
     /**
      * @param array<mixed> $configuration
+     * @param \Codebase\Application\Dto\ConfigurationResponseDto $configurationResponseDto
      *
      * @throws \Codebase\Infrastructure\Exception\ProjectConfigurationFileInvalidSyntaxException
      *
@@ -35,7 +36,7 @@ class IgnoredRulesReader extends AbstractReader
     public function read(array $configuration, ConfigurationResponseDto $configurationResponseDto): void
     {
         if (!isset($configuration[ToolingConfigurationReader::EVALUATOR_KEY][static::RULES_KEY][static::IGNORE_KEY])) {
-           return;
+            return;
         }
 
         $ignoredRules = $configuration[ToolingConfigurationReader::EVALUATOR_KEY][static::RULES_KEY][static::IGNORE_KEY];
@@ -44,7 +45,9 @@ class IgnoredRulesReader extends AbstractReader
             throw new ProjectConfigurationFileInvalidSyntaxException(
                 sprintf(
                     'Value of %s.%s.%s should be array of string',
-                    ToolingConfigurationReader::EVALUATOR_KEY, static::RULES_KEY, static::IGNORE_KEY
+                    ToolingConfigurationReader::EVALUATOR_KEY,
+                    static::RULES_KEY,
+                    static::IGNORE_KEY,
                 ),
             );
         }

@@ -24,7 +24,7 @@ interface CodeBaseServiceInterface
     public function parsePhpClass(string $classNamespace, array $projectPrefixes, array $coreNamespaces = []): ?ClassCodebaseDto;
 
     /**
-     * @return ConfigurationResponseDto
+     * @return \Codebase\Application\Dto\ConfigurationResponseDto
      */
     public function readToolingConfiguration(): ConfigurationResponseDto;
 }

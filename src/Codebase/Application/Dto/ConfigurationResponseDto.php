@@ -23,6 +23,8 @@ class ConfigurationResponseDto
 
     /**
      * @param array<string> $projectPrefixes
+     *
+     * @return void
      */
     public function setProjectPrefixes(array $projectPrefixes): void
     {
@@ -47,6 +49,8 @@ class ConfigurationResponseDto
 
     /**
      * @param array<string> $ignoredRules
+     *
+     * @return void
      */
     public function setIgnoredRules(array $ignoredRules): void
     {

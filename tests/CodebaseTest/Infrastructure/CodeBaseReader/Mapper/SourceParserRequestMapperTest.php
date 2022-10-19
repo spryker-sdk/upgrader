@@ -68,13 +68,8 @@ class SourceParserRequestMapperTest extends KernelTestCase
             ['SprykerTest'],
         );
 
-        $configurationResponseDto = new ConfigurationResponseDto([
-            'upgrader' => [
-                'prefixes' => [
-                    'Project',
-                ],
-            ],
-        ]);
+        $configurationResponseDto = new ConfigurationResponseDto();
+        $configurationResponseDto->setProjectPrefixes(['Project']);
 
         //Act
         $sourceParserRequest = $mapper->mapToSourceParserRequest($codeBaseRequestDto, $configurationResponseDto, []);

@@ -27,9 +27,9 @@ class TransferPropertyTest extends BaseCodeComplianceCheckTest
      */
     protected function setUp(): void
     {
-        /** @var \CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter $codeBaseService */
-        $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseAdapter::class);
-        $this->transferProperty = new TransferProperty(new FilterService(), $codeBaseService, new ConfigurationProvider());
+        /** @var \CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter $codeBaseAdapter */
+        $codeBaseAdapter = static::bootKernel()->getContainer()->get(CodeBaseAdapter::class);
+        $this->transferProperty = new TransferProperty(new FilterService(), $codeBaseAdapter, new ConfigurationProvider());
     }
 
     /**
