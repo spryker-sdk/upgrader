@@ -11,20 +11,21 @@ namespace Upgrader\Report\Event;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
-use Upgrader\Report\Service\ReportService;
+use Upgrader\Report\Service\ReportServiceInterface;
 use Upgrader\Tasks\Evaluate\Analyze\AnalyzeTask;
+use Upgrader\Tasks\Evaluate\Report\ReportTask;
 
 class ReportListener
 {
     /**
-     * @var \Upgrader\Report\Service\ReportService
+     * @var \Upgrader\Report\Service\ReportServiceInterface
      */
     protected $reportService;
 
     /**
-     * @param \Upgrader\Report\Service\ReportService $reportService
+     * @param \Upgrader\Report\Service\ReportServiceInterface $reportService
      */
-    public function __construct(ReportService $reportService)
+    public function __construct(ReportServiceInterface $reportService)
     {
         $this->reportService = $reportService;
     }
@@ -36,17 +37,30 @@ class ReportListener
      */
     public function onConsoleCommandTerminate(ConsoleTerminateEvent $event): void
     {
-        if ($event->getCommand() && $event->getCommand()->getName() !== AnalyzeTask::ID_ANALYZE_TASK) {
+        if (
+            $event->getCommand() &&
+            $event->getCommand()->getName() !== AnalyzeTask::ID_ANALYZE_TASK &&
+            $event->getCommand()->getName() !== ReportTask::ID_REPORT_TASK
+        ) {
             return;
         }
 
-        $messages = $this->reportService->report($event->getOutput()->isVerbose());
-        if (!$messages) {
+        $report = $this->reportService->getReport();
+        if (!$report) {
+            $event->setExitCode(Command::SUCCESS);
+
             return;
         }
 
-        $event->getOutput()->writeln((array)$messages);
-        $event->getOutput()->writeln('Total messages: ' . count((array)$messages));
-        $event->setExitCode(Command::FAILURE);
+        $messages = $this->reportService->generateMessages($report, $event->getOutput()->isVerbose());
+        $event->getOutput()->writeln($messages);
+
+        if ($report->hasError()) {
+            $event->setExitCode(Command::FAILURE);
+
+            return;
+        }
+
+        $event->setExitCode(Command::SUCCESS);
     }
 }

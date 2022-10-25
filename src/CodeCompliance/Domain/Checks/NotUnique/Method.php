@@ -15,14 +15,13 @@ use CodeCompliance\Domain\Checks\Filters\PluginFilter;
 use CodeCompliance\Domain\Entity\Violation;
 use Core\Domain\ValueObject\Id;
 use ReflectionClass;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationInterface;
 
 class Method extends AbstractCodeComplianceCheck
 {
     /**
      * @var string
      */
-    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#notunique-method';
+    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#notuniquemethod';
 
     /**
      * @return string
@@ -85,7 +84,7 @@ class Method extends AbstractCodeComplianceCheck
                         $projectMethod->getName(),
                         lcfirst(implode('', $methodParts)),
                     );
-                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), ViolationInterface::SEVERITY_ERROR, [
+                    $violations[] = new Violation((string)(new Id()), $guideline, $this->getName(), $this->getSeverity(), [
                         static::KEY_ATTRIBUTE_DOCUMENTATION => $this->getDocumentationUrl(),
                     ]);
                 }

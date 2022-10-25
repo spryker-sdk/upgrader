@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace CodeCompliance\Domain\Service;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
+use Codebase\Application\Dto\ConfigurationResponseDto;
 
 interface CodeBaseServiceInterface
 {
@@ -21,4 +22,9 @@ interface CodeBaseServiceInterface
      * @return \Codebase\Application\Dto\ClassCodebaseDto|null
      */
     public function parsePhpClass(string $classNamespace, array $projectPrefixes, array $coreNamespaces = []): ?ClassCodebaseDto;
+
+    /**
+     * @return \Codebase\Application\Dto\ConfigurationResponseDto
+     */
+    public function readToolingConfiguration(): ConfigurationResponseDto;
 }

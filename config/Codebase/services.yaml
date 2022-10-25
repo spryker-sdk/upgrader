@@ -52,14 +52,18 @@ services:
                 param1: '@module.parser'
             }
 
-    tooling_configuration_validator.project_prefixes:
-        class: Codebase\Infrastructure\ToolingConfigurationReader\Validator\ProjectPrefixesValidator
+    tooling_configuration_reader.project_prefixes:
+        class: Codebase\Infrastructure\ToolingConfigurationReader\Reader\ProjectPrefixesReader
+
+    tooling_configuration_reader.ignored_rules:
+        class: Codebase\Infrastructure\ToolingConfigurationReader\Reader\IgnoredRulesReader
 
     Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReader:
         class: Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReader
         arguments:
             - {
-                param1: '@tooling_configuration_validator.project_prefixes'
+                param1: '@tooling_configuration_reader.project_prefixes',
+                param2: '@tooling_configuration_reader.ignored_rules'
             }
 
 # Third-party

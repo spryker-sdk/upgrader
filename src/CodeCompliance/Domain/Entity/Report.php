@@ -9,11 +9,25 @@ declare(strict_types=1);
 
 namespace CodeCompliance\Domain\Entity;
 
-use SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface;
-use SprykerSdk\SdkContracts\Report\Violation\ViolationReportInterface;
+use Exception;
 
-class Report implements ViolationReportInterface
+class Report implements ReportInterface
 {
+    /**
+     * @var string
+     */
+    protected const KEY_VIOLATIONS = 'violations';
+
+    /**
+     * @var string
+     */
+    protected const KEY_PROJECT = 'project';
+
+    /**
+     * @var string
+     */
+    protected const KEY_PATH = 'path';
+
     /**
      * @var string
      */
@@ -25,12 +39,12 @@ class Report implements ViolationReportInterface
     protected string $path = '';
 
     /**
-     * @var array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface>
+     * @var array<\CodeCompliance\Domain\Entity\ViolationInterface>
      */
     protected array $violations = [];
 
     /**
-     * @var array<\SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface>
+     * @var array<\CodeCompliance\Domain\Entity\PackageViolationReportInterface>
      */
     protected array $packages = [];
 
@@ -45,7 +59,7 @@ class Report implements ViolationReportInterface
     }
 
     /**
-     * @param array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface> $violations
+     * @param array<\CodeCompliance\Domain\Entity\ViolationInterface> $violations
      *
      * @return $this
      */
@@ -59,7 +73,7 @@ class Report implements ViolationReportInterface
     }
 
     /**
-     * @return array<\SprykerSdk\SdkContracts\Report\Violation\ViolationInterface>
+     * @return array<\CodeCompliance\Domain\Entity\ViolationInterface>
      */
     public function getViolations(): array
     {
@@ -75,7 +89,7 @@ class Report implements ViolationReportInterface
     }
 
     /**
-     * @param \SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface $package
+     * @param \CodeCompliance\Domain\Entity\PackageViolationReportInterface $package
      *
      * @return $this
      */
@@ -87,7 +101,7 @@ class Report implements ViolationReportInterface
     }
 
     /**
-     * @return array<\SprykerSdk\SdkContracts\Report\Violation\PackageViolationReportInterface>
+     * @return array<\CodeCompliance\Domain\Entity\PackageViolationReportInterface>
      */
     public function getPackages(): array
     {
@@ -107,21 +121,85 @@ class Report implements ViolationReportInterface
      */
     public function hasError(): bool
     {
-        if ($this->getViolations()) {
+        if ($this->hasErrorSeverity($this->getViolations())) {
             return true;
         }
 
         foreach ($this->getPackages() as $package) {
-            if ($package->getViolations()) {
+            if ($this->hasErrorSeverity($package->getViolations())) {
                 return true;
             }
             foreach ($package->getFileViolations() as $violations) {
-                if ($violations) {
+                if ($this->hasErrorSeverity($violations)) {
                     return true;
                 }
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param array<\CodeCompliance\Domain\Entity\ViolationInterface> $violations
+     *
+     * @return bool
+     */
+    protected function hasErrorSeverity(array $violations): bool
+    {
+        foreach ($violations as $violation) {
+            if ($violation->getSeverity() === ViolationInterface::SEVERITY_ERROR) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function toArray(): array
+    {
+        $data = [];
+
+        $data[static::KEY_PROJECT] = $this->getProject();
+        $data[static::KEY_PATH] = $this->getPath();
+
+        $violations = [];
+        foreach ($this->getViolations() as $violation) {
+            $violations[] = $violation->toArray();
+        }
+        $data[static::KEY_VIOLATIONS] = $violations;
+
+        return $data;
+    }
+
+    /**
+     * @param array<mixed> $data
+     *
+     * @throws \Exception
+     *
+     * @return self
+     */
+    public static function fromArray(array $data): self
+    {
+        if (!isset($data[static::KEY_PROJECT])) {
+            throw new Exception(sprintf('Key %s not found', static::KEY_PROJECT));
+        }
+        if (!isset($data[static::KEY_PATH])) {
+            throw new Exception(sprintf('Key %s not found', static::KEY_PATH));
+        }
+
+        $report = new self($data[static::KEY_PROJECT], $data[static::KEY_PATH]);
+
+        if (!is_array($data[static::KEY_VIOLATIONS])) {
+            return $report;
+        }
+
+        foreach ($data[static::KEY_VIOLATIONS] as $violationData) {
+            $report->addViolations([Violation::fromArray($violationData)]);
+        }
+
+        return $report;
     }
 }

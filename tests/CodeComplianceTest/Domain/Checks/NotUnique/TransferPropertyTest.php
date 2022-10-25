@@ -12,7 +12,7 @@ namespace CodeComplianceTest\Domain\Checks\NotUnique;
 use CodeCompliance\Configuration\ConfigurationProvider;
 use CodeCompliance\Domain\Checks\NotUnique\TransferProperty;
 use CodeCompliance\Domain\Service\FilterService;
-use CodeCompliance\Infrastructure\Service\CodeBaseService;
+use CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter;
 use CodeComplianceTest\Domain\Checks\BaseCodeComplianceCheckTest;
 
 class TransferPropertyTest extends BaseCodeComplianceCheckTest
@@ -27,9 +27,9 @@ class TransferPropertyTest extends BaseCodeComplianceCheckTest
      */
     protected function setUp(): void
     {
-        /** @var \CodeCompliance\Infrastructure\Service\CodeBaseService $codeBaseService */
-        $codeBaseService = static::bootKernel()->getContainer()->get(CodeBaseService::class);
-        $this->transferProperty = new TransferProperty(new FilterService(), $codeBaseService, new ConfigurationProvider());
+        /** @var \CodeCompliance\Infrastructure\Adapter\CodeBaseAdapter $codeBaseAdapter */
+        $codeBaseAdapter = static::bootKernel()->getContainer()->get(CodeBaseAdapter::class);
+        $this->transferProperty = new TransferProperty(new FilterService(), $codeBaseAdapter, new ConfigurationProvider());
     }
 
     /**
