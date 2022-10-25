@@ -18,7 +18,7 @@ class TransferName extends AbstractCodeComplianceCheck
     /**
      * @var string
      */
-    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#transfer-name-is-not-unique';
+    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#notuniquetransfername';
 
     /**
      * @return string

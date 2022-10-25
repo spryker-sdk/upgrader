@@ -18,7 +18,7 @@ class DatabaseColumn extends AbstractCodeComplianceCheck
     /**
      * @var string
      */
-    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#name-of-database-table-column-is-not-unique';
+    protected const DOCUMENTATION_URL_PATH = 'entity-name-is-not-unique.html#notuniquedatabasecolumn';
 
     /**
      * @return string

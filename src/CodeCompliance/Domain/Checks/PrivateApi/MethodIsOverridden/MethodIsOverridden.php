@@ -22,7 +22,7 @@ class MethodIsOverridden extends AbstractCodeComplianceCheck
     /**
      * @var string
      */
-    protected const DOCUMENTATION_URL_PATH = 'private-api-method-is-overridden-on-the-project-level.html';
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-used-on-the-project-level.html#privateapimethodisoverridden';
 
     /**
      * @return string

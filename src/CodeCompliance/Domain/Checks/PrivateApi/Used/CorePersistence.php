@@ -19,7 +19,7 @@ class CorePersistence extends AbstractUsedCodeComplianceCheck
     /**
      * @var string
      */
-    protected const DOCUMENTATION_URL_PATH = 'private-api-is-extended.html';
+    protected const DOCUMENTATION_URL_PATH = 'private-api-is-used-on-the-project-level.html#privateapicorepersistenceusage';
 
     /**
      * @var array<string>
