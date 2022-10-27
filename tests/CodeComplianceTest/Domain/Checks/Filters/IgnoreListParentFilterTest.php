@@ -10,9 +10,9 @@ declare(strict_types=1);
 namespace CodeComplianceTest\Domain\Checks\Filters;
 
 use Codebase\Application\Dto\ClassCodebaseDto;
-use CodeCompliance\Domain\Checks\Filters\IgnoreListFilter;
+use CodeCompliance\Domain\Checks\Filters\IgnoreListParentFilter;
 
-class IgnoreListFilterTest extends BaseFilterTest
+class IgnoreListParentFilterTest extends BaseFilterTest
 {
     /**
      * @return array<string>
@@ -20,13 +20,12 @@ class IgnoreListFilterTest extends BaseFilterTest
     public function provideClassNamesData(): array
     {
         return [
-            'CoreTest/Test/FooClass', #allows
+            'CoreTest/Test/FooClass',
             'CoreTest/Kernel/TestClass',
             'CoreTest/Development/TestClass',
             'CoreTest/Test/TestBootstrap',
             'CoreTest/Test/TestConfigurationProvider',
-            'Spryker/Zed/TestDataImport', #allows
-            'Symfony/Component/Validator/Validator/ValidatorInterface',
+            'Spryker/Zed/TestDataImport',
         ];
     }
 
@@ -36,14 +35,14 @@ class IgnoreListFilterTest extends BaseFilterTest
     public function testFilter(): void
     {
         // Arrange
-        $businessFactoryFilter = new IgnoreListFilter();
+        $businessFactoryFilter = new IgnoreListParentFilter();
 
         // Act
         $filteredSources = $businessFactoryFilter->filter($this->getCodebaseObjects());
 
         // Assert
         $this->assertNotEmpty($filteredSources);
-        $this->assertCount(2, $filteredSources);
+        $this->assertCount(1, $filteredSources);
     }
 
     /**
@@ -54,10 +53,10 @@ class IgnoreListFilterTest extends BaseFilterTest
     protected function createClassCodebaseDtoWithClassName(string $className): ClassCodebaseDto
     {
         $parent = new ClassCodebaseDto(['Core']);
-        $parent->setClassName('Project/Foo/Class');
+        $parent->setClassName($className);
 
         $dto = new ClassCodebaseDto(['Core']);
-        $dto->setClassName($className);
+        $dto->setClassName('Project/Foo/Class');
         $dto->setParent($parent);
 
         return $dto;

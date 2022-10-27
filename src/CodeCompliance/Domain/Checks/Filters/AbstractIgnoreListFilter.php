@@ -55,6 +55,7 @@ abstract class AbstractIgnoreListFilter implements FilterInterface
             '/^Spryker\/Zed\/Gui\/Communication\/Table\/AbstractTable$/',
             '/^Spryker\/Zed\/Gui\/Communication\/Tabs\/AbstractTabs$/',
             '/^Spryker\/DecimalObject\//',
+            '/^Symfony\//',
         ];
     }
 }
