@@ -22,7 +22,7 @@
         "symfony/dependency-injection": "^5.0",
         "symfony/filesystem": "^5.3",
         "symfony/finder": "^5.3",
-        "symfony/framework-bundle": "5.3.*",
+        "symfony/framework-bundle": "^5.3",
         "symfony/http-kernel": "^5.0",
         "symfony/process": "^5.0",
         "symfony/runtime": "^5",
