@@ -7,6 +7,7 @@
 
 namespace TestProject\Used\DependencyInBusinessModel;
 
+use PHPUnit\Framework\TestCase;
 use TestCore\Used\DependencyInBusinessModel\CoreDependencyInBusinessModelFacade;
 use TestCore\Used\DependencyInBusinessModel\CoreDependencyInBusinessModelRepository;
 
@@ -23,14 +24,22 @@ class ProjectDependencyInBusinessModel
     protected CoreDependencyInBusinessModelRepository $coreDependencyInBusinessModelRepository;
 
     /**
+     * @var \PHPUnit\Framework\TestCase $testCase
+     */
+    protected TestCase $testCase;
+
+    /**
      * @param \TestCore\Used\DependencyInBusinessModel\CoreDependencyInBusinessModelFacade $coreDependencyInBusinessModelFacade
      * @param \TestCore\Used\DependencyInBusinessModel\CoreDependencyInBusinessModelRepository $coreDependencyInBusinessModelRepository
+     * @param \PHPUnit\Framework\TestCase $testCase
      */
     public function __construct(
         CoreDependencyInBusinessModelFacade $coreDependencyInBusinessModelFacade,
-        CoreDependencyInBusinessModelRepository $coreDependencyInBusinessModelRepository
+        CoreDependencyInBusinessModelRepository $coreDependencyInBusinessModelRepository,
+        TestCase $testCase
     ) {
         $this->coreDependencyInBusinessModelFacade = $coreDependencyInBusinessModelFacade;
         $this->coreDependencyInBusinessModelRepository = $coreDependencyInBusinessModelRepository;
+        $this->testCase = $testCase;
     }
 }

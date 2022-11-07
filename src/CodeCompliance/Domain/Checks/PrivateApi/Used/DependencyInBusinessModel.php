@@ -131,7 +131,10 @@ class DependencyInBusinessModel extends AbstractUsedCodeComplianceCheck
         foreach ($dependencyNamespaces as $namespace) {
             $namespace = ltrim($namespace, '\\');
 
-            if ($this->hasProjectPrefix($namespace, $this->getCodebaseSourceDto()->getProjectPrefixes())) {
+            if (
+                $this->hasProjectPrefix($namespace, $this->getCodebaseSourceDto()->getProjectPrefixes()) ||
+                !$this->hasCoreNamespace($this->getCodebaseSourceDto()->getCoreNamespaces(), $namespace)
+            ) {
                 continue;
             }
 
