@@ -102,6 +102,8 @@ class AggregateReleaseGroupProcessor implements ReleaseGroupProcessorInterface
             $stepsExecutionDto->addOutputMessage($requireResult->getOutputMessage());
         }
 
+        $stepsExecutionDto->addOutputMessage(sprintf('%s release groups were processed!', $aggregatedReleaseGroupCollection->count()));
+
         return $stepsExecutionDto;
     }
 

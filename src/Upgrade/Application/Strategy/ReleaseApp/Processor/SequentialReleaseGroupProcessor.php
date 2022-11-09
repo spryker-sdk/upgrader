@@ -104,6 +104,8 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
             }
         }
 
+        $stepsExecutionDto->addOutputMessage(sprintf('%s release groups were processed!', $aggregatedReleaseGroupCollection->count()));
+
         return $stepsExecutionDto;
     }
 
