@@ -46,8 +46,12 @@ class ReleaseGroupUpdateStep implements StepInterface
      */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
-        $dataProviderResponse = $this->packageManagementSystemBridge->getNewReleaseGroups();
+        $requireRequestCollection = $this->packageManagementSystemBridge->getNewReleaseGroups()->getReleaseGroupCollection();
 
-        return $this->releaseGroupProcessor->process($dataProviderResponse->getReleaseGroupCollection(), $stepsExecutionDto);
+        $stepsExecutionDto->addOutputMessage(
+            sprintf('Amount of available release groups for the project: %s', $requireRequestCollection->count()),
+        );
+
+        return $this->releaseGroupProcessor->process($requireRequestCollection, $stepsExecutionDto);
     }
 }

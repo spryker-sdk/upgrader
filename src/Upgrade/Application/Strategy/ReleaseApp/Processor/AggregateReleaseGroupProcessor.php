@@ -69,15 +69,15 @@ class AggregateReleaseGroupProcessor implements ReleaseGroupProcessorInterface
     }
 
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $requireRequestCollection
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function process(ReleaseGroupDtoCollection $requiteRequestCollection, StepsResponseDto $stepsExecutionDto): StepsResponseDto
+    public function process(ReleaseGroupDtoCollection $requireRequestCollection, StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
-        foreach ($requiteRequestCollection->toArray() as $releaseGroup) {
+        foreach ($requireRequestCollection->toArray() as $releaseGroup) {
             $thresholdValidationResult = $this->thresholdValidator->validate($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccessful()) {
                 $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutputMessage());
@@ -101,6 +101,10 @@ class AggregateReleaseGroupProcessor implements ReleaseGroupProcessorInterface
             $stepsExecutionDto->setIsSuccessful(false);
             $stepsExecutionDto->addOutputMessage($requireResult->getOutputMessage());
         }
+
+        $stepsExecutionDto->addOutputMessage(
+            sprintf('Amount of applied release groups: %s', $aggregatedReleaseGroupCollection->count()),
+        );
 
         return $stepsExecutionDto;
     }
