@@ -104,9 +104,11 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
             }
         }
 
-        $stepsExecutionDto->addOutputMessage(
-            sprintf('Amount of applied release groups: %s', $aggregatedReleaseGroupCollection->count()),
-        );
+        if ($aggregatedReleaseGroupCollection->count()) {
+            $stepsExecutionDto->addOutputMessage(
+                sprintf('Amount of applied release groups: %s', $aggregatedReleaseGroupCollection->count()),
+            );
+        }
 
         return $stepsExecutionDto;
     }
