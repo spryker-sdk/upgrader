@@ -20,13 +20,13 @@ interface ReleaseGroupProcessorInterface
     public function getProcessorName(): string;
 
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $requiteRequestCollection
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $requireRequestCollection
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
     public function process(
-        ReleaseGroupDtoCollection $requiteRequestCollection,
+        ReleaseGroupDtoCollection $requireRequestCollection,
         StepsResponseDto $stepsExecutionDto
     ): StepsResponseDto;
 }
