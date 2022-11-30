@@ -16,12 +16,12 @@ use Upgrade\Application\Provider\ConfigurationProviderInterface;
 class MajorVersionValidator implements ReleaseGroupValidatorInterface
 {
     /**
-     * @var ConfigurationProviderInterface
+     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
      */
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
-     * @param ConfigurationProviderInterface $configurationProvider
+     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      */
     public function __construct(ConfigurationProviderInterface $configurationProvider)
     {
