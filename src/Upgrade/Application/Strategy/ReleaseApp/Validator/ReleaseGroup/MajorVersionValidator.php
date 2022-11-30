@@ -11,9 +11,23 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup;
 
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Exception\ReleaseGroupValidatorException;
+use Upgrade\Application\Provider\ConfigurationProviderInterface;
 
 class MajorVersionValidator implements ReleaseGroupValidatorInterface
 {
+    /**
+     * @var ConfigurationProviderInterface
+     */
+    protected ConfigurationProviderInterface $configurationProvider;
+
+    /**
+     * @param ConfigurationProviderInterface $configurationProvider
+     */
+    public function __construct(ConfigurationProviderInterface $configurationProvider)
+    {
+        $this->configurationProvider = $configurationProvider;
+    }
+
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
      *
@@ -23,6 +37,10 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
      */
     public function validate(ReleaseGroupDto $releaseGroup): void
     {
+        if ($this->configurationProvider->getSoftThresholdMajor()) {
+            return;
+        }
+
         $moduleWithMajorUpdate = $releaseGroup->getModuleCollection()->getFirstMajor();
         if ($moduleWithMajorUpdate) {
             $message = sprintf(
