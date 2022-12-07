@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "196fb55168e7a4e5797b1e6635773760",
+    "content-hash": "1fdd04fceda569e71ee610a84c449e8c",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -3006,16 +3006,16 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "dev-master",
+            "version": "dev-feature/pplus-1766-fix-single-plugin-registration",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "dde4e8721ba8b1449f6af8602fb507e88cb6981d"
+                "reference": "f9ce49edf1f7e8dac01d231d36797f4d2171ea53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/dde4e8721ba8b1449f6af8602fb507e88cb6981d",
-                "reference": "dde4e8721ba8b1449f6af8602fb507e88cb6981d",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/f9ce49edf1f7e8dac01d231d36797f4d2171ea53",
+                "reference": "f9ce49edf1f7e8dac01d231d36797f4d2171ea53",
                 "shasum": ""
             },
             "require": {
@@ -3034,7 +3034,6 @@
                 "spryker/code-sniffer": "dev-master",
                 "symfony/filesystem": "^5.3.0"
             },
-            "default-branch": true,
             "bin": [
                 "bin/integrator"
             ],
@@ -3056,9 +3055,9 @@
             "description": "Integrator module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
-                "source": "https://github.com/spryker-sdk/integrator/tree/master"
+                "source": "https://github.com/spryker-sdk/integrator/tree/feature/pplus-1766-fix-single-plugin-registration"
             },
-            "time": "2022-11-24T10:49:16+00:00"
+            "time": "2022-12-07T06:55:59+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
