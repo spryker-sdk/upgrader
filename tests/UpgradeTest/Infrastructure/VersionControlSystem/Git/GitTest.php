@@ -120,6 +120,29 @@ class GitTest extends KernelTestCase
     /**
      * @return void
      */
+    public function testFindChangedFiles(): void
+    {
+        // Arrange
+        $processRunnerMock = $this->mockProcessRunnerWithOutput(
+            'src/Pyz/Zed/ProductAlternative/ProductAlternativeDependencyProvider.php' . PHP_EOL
+            . 'src/Pyz/Zed/ProductAlternativeStorage/ProductAlternativeStorageConfig.php' . PHP_EOL
+        );
+        $git = $this->getGitWithProcessRunner($processRunnerMock);
+
+        // Act
+        $stepsExecutionDto = $git->findChangedFiles((new StepsResponseDto(true)));
+
+        // Assert
+        $this->assertTrue($stepsExecutionDto->getIsSuccessful());
+        $this->assertEquals([
+            'src/Pyz/Zed/ProductAlternative/ProductAlternativeDependencyProvider.php',
+            'src/Pyz/Zed/ProductAlternativeStorage/ProductAlternativeStorageConfig.php',
+        ], $stepsExecutionDto->getChangedFiles());
+    }
+
+    /**
+     * @return void
+     */
     public function testCreatePullRequestUnSuccessCaseNoRequiredProperty(): void
     {
         $stepsExecutionDto = new StepsResponseDto(true);
