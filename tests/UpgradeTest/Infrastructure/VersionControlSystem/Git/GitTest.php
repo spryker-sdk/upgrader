@@ -125,7 +125,7 @@ class GitTest extends KernelTestCase
         // Arrange
         $processRunnerMock = $this->mockProcessRunnerWithOutput(
             'src/Pyz/Zed/ProductAlternative/ProductAlternativeDependencyProvider.php' . PHP_EOL
-            . 'src/Pyz/Zed/ProductAlternativeStorage/ProductAlternativeStorageConfig.php' . PHP_EOL
+            . 'src/Pyz/Zed/ProductAlternativeStorage/ProductAlternativeStorageConfig.php' . PHP_EOL,
         );
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 

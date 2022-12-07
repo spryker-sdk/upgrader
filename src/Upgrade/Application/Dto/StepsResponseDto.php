@@ -37,7 +37,7 @@ class StepsResponseDto extends ResponseDto
     protected ?int $pullRequestId = null;
 
     /**
-     * @var array
+     * @var array<string>
      */
     protected array $changedFiles = [];
 
@@ -156,7 +156,7 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
     public function getChangedFiles(): array
     {
@@ -164,7 +164,7 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @param array $changedFiles
+     * @param array<string> $changedFiles
      *
      * @return void
      */
