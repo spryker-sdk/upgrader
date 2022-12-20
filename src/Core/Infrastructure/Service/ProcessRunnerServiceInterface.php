@@ -15,9 +15,9 @@ interface ProcessRunnerServiceInterface
 {
     /**
      * @param array<string> $command
-     * @param array<string, mixed>|null $env
+     * @param array<string, mixed> $env
      *
      * @return \Symfony\Component\Process\Process<string, string>
      */
-    public function run(array $command, ?array $env = null): Process;
+    public function run(array $command, array $env): Process;
 }
