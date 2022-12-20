@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\PackageManager\CommandExecutor;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
+use SprykerSdk\SdkContracts\Entity\ContextInterface;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
@@ -19,12 +20,12 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @var string
      */
-    protected const REQUIRE_COMMAND_NAME = 'composer require';
+    protected const REQUIRE_COMMAND_NAME = 'COMPOSER_PROCESS_TIMEOUT=0 composer require';
 
     /**
      * @var string
      */
-    protected const UPDATE_COMMAND_NAME = 'composer update';
+    protected const UPDATE_COMMAND_NAME = 'COMPOSER_PROCESS_TIMEOUT=0 composer update';
 
     /**
      * @var string
@@ -153,6 +154,6 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
         $output = $process->getExitCode() ? $process->getErrorOutput() : '';
         $outputs = array_filter([$command, $output]);
 
-        return new ResponseDto($process->isSuccessful(), implode(PHP_EOL, $outputs));
+        return new ResponseDto(!$process->getExitCode(), implode(PHP_EOL, $outputs));
     }
 }
