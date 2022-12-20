@@ -17,7 +17,7 @@ use Upgrade\Domain\Entity\Collection\PackageCollection;
 class ComposerCommandExecutor implements ComposerCommandExecutorInterface
 {
     /**
-     * @var array
+     * @var array<string, int>
      */
     protected const ENV = ['COMPOSER_PROCESS_TIMEOUT' => 600];
 
