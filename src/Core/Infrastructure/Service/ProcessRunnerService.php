@@ -14,6 +14,11 @@ use Symfony\Component\Process\Process;
 class ProcessRunnerService implements ProcessRunnerServiceInterface
 {
     /**
+     * @var int
+     */
+    private const PROCESS_TIMEOUT = 0;
+
+    /**
      * @param array<string> $command
      *
      * @return \Symfony\Component\Process\Process<string, string>
@@ -21,7 +26,7 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
     public function run(array $command): Process
     {
         $process = new Process($command, (string)getcwd());
-        $process->setTimeout(300);
+        $process->setTimeout(self::PROCESS_TIMEOUT);
         $process->run();
 
         return $process;
