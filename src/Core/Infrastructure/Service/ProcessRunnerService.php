@@ -16,7 +16,7 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
     /**
      * @var int
      */
-    private const PROCESS_TIMEOUT = 0;
+    private const PROCESS_TIMEOUT = 600;
 
     /**
      * @param array<string> $command
