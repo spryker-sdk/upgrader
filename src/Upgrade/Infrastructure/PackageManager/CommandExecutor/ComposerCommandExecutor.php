@@ -19,7 +19,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @var array<string, int>
      */
-    protected const ENV = ['COMPOSER_PROCESS_TIMEOUT' => 600];
+    protected const ENV = ['COMPOSER_PROCESS_TIMEOUT' => 36000];
 
     /**
      * @var string
