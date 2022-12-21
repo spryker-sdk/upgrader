@@ -34,7 +34,7 @@ class ComposerCommandExecutorTest extends TestCase
     {
         $processRunner = $this->prophesize(ProcessRunnerService::class);
 
-        $processRunner->run(Argument::type('array'))->will(function ($args) {
+        $processRunner->run(Argument::type('array'), Argument::type('array'))->will(function ($args) {
             return new Process($args[0], '');
         });
 
