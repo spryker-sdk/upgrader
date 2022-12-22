@@ -50,8 +50,9 @@ class IntegratorAdapter implements IntegratorAdapterInterface
 
         $stepsExecutionDto->setIsSuccessful($process->isSuccessful());
         if (!$stepsExecutionDto->getIsSuccessful()) {
+            $output = $process->getErrorOutput() ?: $process->getOutput();
             $stepsExecutionDto->addOutputMessage(
-                $command . PHP_EOL . $process->getErrorOutput() ?: $process->getOutput() . PHP_EOL . 'Error code:' . $process->getExitCode(),
+                $command . PHP_EOL . $output. PHP_EOL . 'Error code:' . $process->getExitCode(),
             );
         }
 
