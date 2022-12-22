@@ -48,10 +48,11 @@ class IntegratorAdapter implements IntegratorAdapterInterface
         $command = sprintf('%s %s', APPLICATION_ROOT_DIR . static::RUNNER, static::NO_INTERACTION_COMPOSER_FLAG);
         $process = $this->processRunner->run(explode(' ', $command));
 
-        $stepsExecutionDto->setIsSuccessful(!$process->getExitCode());
+        $stepsExecutionDto->setIsSuccessful($process->isSuccessful());
         if (!$stepsExecutionDto->getIsSuccessful()) {
+            $output = $process->getErrorOutput() ?: $process->getOutput();
             $stepsExecutionDto->addOutputMessage(
-                $command . PHP_EOL . $process->getErrorOutput() . PHP_EOL . 'Error code:' . $process->getExitCode(),
+                $command . PHP_EOL . $output . PHP_EOL . 'Error code:' . $process->getExitCode(),
             );
         }
 

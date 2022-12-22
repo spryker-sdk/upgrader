@@ -155,7 +155,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     protected function createResponse(Process $process): ResponseDto
     {
         $command = str_replace('\'', '', $process->getCommandLine());
-        $output = $process->getExitCode() ? $process->getErrorOutput() : '';
+        $output = $process->isTerminated() && !$process->isSuccessful() ? $process->getErrorOutput() ?: $process->getOutput() : '';
         $outputs = array_filter([$command, $output]);
 
         return new ResponseDto($process->isSuccessful(), implode(PHP_EOL, $outputs));
