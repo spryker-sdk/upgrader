@@ -124,7 +124,7 @@ class GitTest extends KernelTestCase
     {
         $stepsExecutionDto = new StepsResponseDto(true);
         $composerLockDiffDto = new ComposerLockDiffDto([]);
-        $stepsExecutionDto->addComposerLockDiff($composerLockDiffDto);
+        $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
 
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $git = $this->getGitWithProcessRunner($processRunnerMock);
@@ -160,7 +160,7 @@ class GitTest extends KernelTestCase
         $message = '{"changes":{"spryker\/product-label":["3.2.0","3.3.0","https:\/\/github.com\/spryker\/product-label\/compare\/3.2.0...3.3.0"]},"changes-dev":{"spryker-shop\/web-profiler-widget":["1.4.1","1.4.2","https:\/\/github.com\/spryker-shop\/web-profiler-widget\/compare\/1.4.1...1.4.2"]}}';
         $stepsExecutionDto = new StepsResponseDto(true);
         $composerLockDiffDto = new ComposerLockDiffDto(json_decode($message, true));
-        $stepsExecutionDto->addComposerLockDiff($composerLockDiffDto);
+        $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
 
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $git = $this->getGitWithProcessRunner($processRunnerMock);

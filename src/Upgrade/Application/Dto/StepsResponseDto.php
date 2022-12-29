@@ -27,9 +27,14 @@ class StepsResponseDto extends ResponseDto
     protected ?ComposerLockDiffDto $composerLockDiffDto = null;
 
     /**
+     * @var \Upgrade\Application\Dto\IntegratorResponseDto|null
+     */
+    protected ?IntegratorResponseDto $integratorResponseDto = null;
+
+    /**
      * @var string|null
      */
-    protected ?string $pullRequestWarning = null;
+    protected ?string $majorAvailableInfo = null;
 
     /**
      * @var int|null
@@ -99,7 +104,7 @@ class StepsResponseDto extends ResponseDto
      *
      * @return $this
      */
-    public function addComposerLockDiff(?ComposerLockDiffDto $composerLockDiffDto)
+    public function setComposerLockDiff(?ComposerLockDiffDto $composerLockDiffDto)
     {
         $this->composerLockDiffDto = $composerLockDiffDto;
 
@@ -112,6 +117,24 @@ class StepsResponseDto extends ResponseDto
     public function getComposerLockDiff(): ?ComposerLockDiffDto
     {
         return $this->composerLockDiffDto;
+    }
+
+    /**
+     * @return \Upgrade\Application\Dto\IntegratorResponseDto|null
+     */
+    public function getIntegratorResponseDto(): ?IntegratorResponseDto
+    {
+        return $this->integratorResponseDto;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\IntegratorResponseDto|null $integratorResponseDto
+     *
+     * @return void
+     */
+    public function setIntegratorResponseDto(?IntegratorResponseDto $integratorResponseDto): void
+    {
+        $this->integratorResponseDto = $integratorResponseDto;
     }
 
     /**
@@ -137,16 +160,16 @@ class StepsResponseDto extends ResponseDto
      *
      * @return void
      */
-    public function setPullRequestWarning(?string $majorAvailableWarning): void
+    public function setMajorAvailableInfo(?string $majorAvailableWarning): void
     {
-        $this->pullRequestWarning = $majorAvailableWarning;
+        $this->majorAvailableInfo = $majorAvailableWarning;
     }
 
     /**
      * @return string|null
      */
-    public function getPullRequestWarning(): ?string
+    public function getMajorAvailableInfo(): ?string
     {
-        return $this->pullRequestWarning;
+        return $this->majorAvailableInfo;
     }
 }

@@ -10,22 +10,40 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\VersionControlSystem\Generator;
 
 use Upgrade\Application\Dto\ComposerLockDiffDto;
+use Upgrade\Application\Dto\IntegratorResponseDto;
 
 class PullRequestDataGenerator
 {
     /**
      * @param \Upgrade\Application\Dto\ComposerLockDiffDto $composerDiffDto
+     * @param \Upgrade\Application\Dto\IntegratorResponseDto|null $integratorResponseDto
      * @param string|null $majorAvailableInfo
      *
      * @return string
      */
-    public function buildBody(ComposerLockDiffDto $composerDiffDto, ?string $majorAvailableInfo = null): string
-    {
+    public function buildBody(
+        ComposerLockDiffDto $composerDiffDto,
+        ?IntegratorResponseDto $integratorResponseDto,
+        ?string $majorAvailableInfo = null
+    ): string {
         $text = 'Auto created via Upgrader tool.'
             . PHP_EOL
             . PHP_EOL
             . '#### Overview'
             . PHP_EOL;
+
+        if ($majorAvailableInfo) {
+            $text .= '​' . PHP_EOL . '**Available majors:**' . PHP_EOL . PHP_EOL;
+            $text .= $majorAvailableInfo;
+        }
+
+        if ($integratorResponseDto && $integratorResponseDto->getWarnings()) {
+            $text .= '<details>' . PHP_EOL . '<summary>';
+            $text .= 'Warnings that happened during the manifests applying process';
+            $text .= '</summary>' . str_repeat(PHP_EOL, 2);
+            $text .= implode(str_repeat(PHP_EOL, 2), $integratorResponseDto->getWarnings());
+            $text .= PHP_EOL . '</details>' . str_repeat(PHP_EOL, 2);
+        }
 
         if (count($composerDiffDto->getRequireChanges()) > 0) {
             $text .= '**Packages upgraded:**' . PHP_EOL;
@@ -37,11 +55,6 @@ class PullRequestDataGenerator
             $text .= '**Packages dev upgraded:**' . PHP_EOL;
             $text .= $this->buildPackageDiffTable($composerDiffDto->getRequireDevChanges());
             $text .= PHP_EOL;
-        }
-
-        if ($majorAvailableInfo) {
-            $text .= '​' . PHP_EOL . '**Available majors:**' . PHP_EOL . PHP_EOL;
-            $text .= $majorAvailableInfo;
         }
 
         return $text;

@@ -43,6 +43,6 @@ class ComposerLockComparatorStep implements StepInterface
                 ->addOutputMessage('The branch is up to date. No further action is required.');
         }
 
-        return $stepsExecutionDto->addComposerLockDiff($composerLockDiffDto);
+        return $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
     }
 }
