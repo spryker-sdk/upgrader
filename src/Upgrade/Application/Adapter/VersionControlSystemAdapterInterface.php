@@ -103,4 +103,11 @@ interface VersionControlSystemAdapterInterface
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
     public function validateSourceCodeProviderCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     *
+     * @return \Upgrade\Application\Dto\StepsResponseDto
+     */
+    public function findChangedFiles(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
 }

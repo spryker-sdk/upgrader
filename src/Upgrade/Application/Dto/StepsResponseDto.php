@@ -37,6 +37,11 @@ class StepsResponseDto extends ResponseDto
     protected ?int $pullRequestId = null;
 
     /**
+     * @var array<string>
+     */
+    protected array $changedFiles = [];
+
+    /**
      * @param bool $isSuccessful
      * @param string|null $outputMessage
      */
@@ -148,5 +153,23 @@ class StepsResponseDto extends ResponseDto
     public function getPullRequestWarning(): ?string
     {
         return $this->pullRequestWarning;
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getChangedFiles(): array
+    {
+        return $this->changedFiles;
+    }
+
+    /**
+     * @param array<string> $changedFiles
+     *
+     * @return void
+     */
+    public function setChangedFiles(array $changedFiles): void
+    {
+        $this->changedFiles = $changedFiles;
     }
 }

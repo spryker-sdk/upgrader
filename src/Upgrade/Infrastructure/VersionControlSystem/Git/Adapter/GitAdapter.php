@@ -157,4 +157,14 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     {
         return $this->git->validateSourceCodeProviderCredentials($stepsExecutionDto);
     }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     *
+     * @return \Upgrade\Application\Dto\StepsResponseDto
+     */
+    public function findChangedFiles(StepsResponseDto $stepsExecutionDto): StepsResponseDto
+    {
+        return $this->git->findChangedFiles($stepsExecutionDto);
+    }
 }

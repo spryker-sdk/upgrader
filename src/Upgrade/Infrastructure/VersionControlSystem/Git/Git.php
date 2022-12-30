@@ -135,6 +135,34 @@ class Git
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
+    public function findChangedFiles(StepsResponseDto $stepsExecutionDto): StepsResponseDto
+    {
+        $command = ['git', 'ls-files', '-om', '--exclude-standard'];
+        $process = $this->processRunner->run($command);
+
+        if (!$process->isSuccessful()) {
+            $stepsExecutionDto->setIsSuccessful(false);
+            $stepsExecutionDto->addOutputMessage('Can\'t find the changed files in project');
+
+            return $stepsExecutionDto;
+        }
+
+        $stepsExecutionDto->setIsSuccessful(true);
+
+        if (strlen($process->getOutput()) == 0) {
+            return $stepsExecutionDto;
+        }
+
+        $stepsExecutionDto->setChangedFiles(explode(PHP_EOL, trim($process->getOutput())));
+
+        return $stepsExecutionDto;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     *
+     * @return \Upgrade\Application\Dto\StepsResponseDto
+     */
     public function createBranch(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'checkout', '-b', $this->getHeadBranch()];
