@@ -355,7 +355,7 @@ class Git
     protected function prepareStepsExecutionDto(StepsResponseDto $stepsExecutionDto, Process $process): StepsResponseDto
     {
         $command = str_replace('\'', '', (string)$process->getCommandLine());
-        $output = $process->getExitCode() ? $process->getErrorOutput() : '';
+        $output = !$process->isSuccessful() ? $process->getErrorOutput() ?: $process->getOutput() : '';
         $outputs = array_filter([$command, $output]);
 
         $stepsExecutionDto->setIsSuccessful($process->isSuccessful());

@@ -16,16 +16,17 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
     /**
      * @var int
      */
-    private const PROCESS_TIMEOUT = 0;
+    private const PROCESS_TIMEOUT = 600;
 
     /**
      * @param array<string> $command
+     * @param array<string, mixed> $env
      *
      * @return \Symfony\Component\Process\Process<string, string>
      */
-    public function run(array $command): Process
+    public function run(array $command, array $env = []): Process
     {
-        $process = new Process($command, (string)getcwd());
+        $process = new Process($command, (string)getcwd(), $env);
         $process->setTimeout(self::PROCESS_TIMEOUT);
         $process->run();
 

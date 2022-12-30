@@ -17,6 +17,11 @@ use Upgrade\Domain\Entity\Collection\PackageCollection;
 class ComposerCommandExecutor implements ComposerCommandExecutorInterface
 {
     /**
+     * @var array<string, int>
+     */
+    protected const ENV = ['COMPOSER_PROCESS_TIMEOUT' => 36000];
+
+    /**
      * @var string
      */
     protected const REQUIRE_COMMAND_NAME = 'composer require';
@@ -80,7 +85,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             static::WITH_ALL_DEPENDENCIES_FLAG,
         );
 
-        $process = $this->processRunner->run(explode(' ', $command));
+        $process = $this->processRunner->run(explode(' ', $command), static::ENV);
 
         return $this->createResponse($process);
     }
@@ -102,7 +107,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             static::DEV_FLAG,
         );
 
-        $process = $this->processRunner->run(explode(' ', $command));
+        $process = $this->processRunner->run(explode(' ', $command), static::ENV);
 
         return $this->createResponse($process);
     }
@@ -121,7 +126,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             static::NO_INTERACTION_FLAG,
         );
 
-        $process = $this->processRunner->run(explode(' ', $command));
+        $process = $this->processRunner->run(explode(' ', $command), static::ENV);
 
         return $this->createResponse($process);
     }
@@ -150,7 +155,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     protected function createResponse(Process $process): ResponseDto
     {
         $command = str_replace('\'', '', $process->getCommandLine());
-        $output = $process->getExitCode() ? $process->getErrorOutput() : '';
+        $output = $process->isTerminated() && !$process->isSuccessful() ? $process->getErrorOutput() ?: $process->getOutput() : '';
         $outputs = array_filter([$command, $output]);
 
         return new ResponseDto($process->isSuccessful(), implode(PHP_EOL, $outputs));
