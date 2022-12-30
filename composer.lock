@@ -3010,12 +3010,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "619d1604f2b17156cfcfe9bcb19c75aaaaa5713d"
+                "reference": "3e10e4b157511e839a765da36b1eb5a808fea12b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/619d1604f2b17156cfcfe9bcb19c75aaaaa5713d",
-                "reference": "619d1604f2b17156cfcfe9bcb19c75aaaaa5713d",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/3e10e4b157511e839a765da36b1eb5a808fea12b",
+                "reference": "3e10e4b157511e839a765da36b1eb5a808fea12b",
                 "shasum": ""
             },
             "require": {
@@ -3026,7 +3026,8 @@
                 "php": ">=7.4",
                 "sebastian/diff": "^4.0.0",
                 "symfony/console": "^5.3.0",
-                "symfony/finder": "^5.3.0"
+                "symfony/finder": "^5.3.0",
+                "symfony/process": "^5.4"
             },
             "require-dev": {
                 "phpstan/phpstan": "^1.0.0",
@@ -3058,7 +3059,7 @@
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
                 "source": "https://github.com/spryker-sdk/integrator/tree/master"
             },
-            "time": "2022-12-30T11:27:22+00:00"
+            "time": "2022-12-30T12:51:17+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
