@@ -88,7 +88,7 @@ class PullRequestDataGenerator
     }
 
     /**
-     * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
+     * @param array<string> $skippedManifests
      *
      * @return string
      */
