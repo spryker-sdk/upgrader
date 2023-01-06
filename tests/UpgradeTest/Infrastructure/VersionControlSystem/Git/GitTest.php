@@ -14,6 +14,7 @@ use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
+use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
@@ -161,6 +162,12 @@ class GitTest extends KernelTestCase
         $stepsExecutionDto = new StepsResponseDto(true);
         $composerLockDiffDto = new ComposerLockDiffDto(json_decode($message, true));
         $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
+        $stepsExecutionDto->setMajorAvailableInfo('Available major info');
+        $integratorResponseDto = new IntegratorResponseDto([
+            'message-list' => ['Test message'],
+            'warning-list' => ['Manifest for Spryker.AuthenticationOauth:1.0.0 was skipped. Please, update it to use full functionality.'],
+        ]);
+        $stepsExecutionDto->setIntegratorResponseDto($integratorResponseDto);
 
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $git = $this->getGitWithProcessRunner($processRunnerMock);

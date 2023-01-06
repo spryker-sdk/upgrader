@@ -41,7 +41,7 @@ class PullRequestDataGenerator
             $text .= '<details>' . PHP_EOL . '<summary>';
             $text .= 'Warnings that happened during the manifests applying process';
             $text .= '</summary>' . str_repeat(PHP_EOL, 2);
-            $text .= implode(str_repeat(PHP_EOL, 2), $integratorResponseDto->getWarnings());
+            $text .= $this->buildSkippedManifestTable($integratorResponseDto->getWarnings());
             $text .= PHP_EOL . '</details>' . str_repeat(PHP_EOL, 2);
         }
 
@@ -79,6 +79,38 @@ class PullRequestDataGenerator
                 $packageDto->getPreviousVersion(),
                 $packageDto->getVersion(),
                 $packageDto->getDiffLink(),
+                PHP_EOL,
+            ]);
+            $text .= $row;
+        }
+
+        return $text;
+    }
+
+    /**
+     * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
+     *
+     * @return string
+     */
+    protected function buildSkippedManifestTable(array $skippedManifests): string
+    {
+        $text = '| Package | Version | Message | '
+            . PHP_EOL
+            . '|---------|------|--------|'
+            . PHP_EOL;
+
+        foreach ($skippedManifests as $skippedManifest) {
+            preg_match('/[a-zA-Z]*:...../', $skippedManifest, $matches);
+            if (!count($matches)) {
+                continue;
+            }
+            [$moduleName, $version] = explode(':', reset($matches));
+
+            $row = implode(' | ', [
+                '',
+                '**' . $moduleName . '**',
+                $version,
+                $skippedManifest,
                 PHP_EOL,
             ]);
             $text .= $row;
