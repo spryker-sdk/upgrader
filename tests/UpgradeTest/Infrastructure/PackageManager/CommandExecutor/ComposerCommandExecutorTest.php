@@ -87,7 +87,7 @@ class ComposerCommandExecutorTest extends TestCase
     protected function mockConfigurationProvider(bool $noInstall = false): ConfigurationProviderInterface
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
-        $configurationProvider->method('getNoInstallComposerStrategy')
+        $configurationProvider->method('getComposerInstallDependencies')
             ->willReturn($noInstall);
 
         return $configurationProvider;

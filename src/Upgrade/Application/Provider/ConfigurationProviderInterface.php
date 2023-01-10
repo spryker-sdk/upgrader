@@ -47,7 +47,7 @@ interface ConfigurationProviderInterface
      *
      * @return bool
      */
-    public function getNoInstallComposerStrategy(): bool;
+    public function getComposerInstallDependencies(): bool;
 
     /**
      * Specification:

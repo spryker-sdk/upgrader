@@ -61,7 +61,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * @var bool
      */
-    protected const NO_INSTALL_PACKAGES = false;
+    protected const COMPOSER_INSTALL_DEPENDENCIES = true;
 
     /**
      * {@inheritDoc}
@@ -78,9 +78,9 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      *
      * @return bool
      */
-    public function getNoInstallComposerStrategy(): bool
+    public function getComposerInstallDependencies(): bool
     {
-        return (bool)getenv('NO_INSTALL_PACKAGES') ?: static::NO_INSTALL_PACKAGES;
+        return (bool)getenv('COMPOSER_INSTALL_DEPENDENCIES') ?: static::COMPOSER_INSTALL_DEPENDENCIES;
     }
 
     /**
