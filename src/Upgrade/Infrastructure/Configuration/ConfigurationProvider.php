@@ -76,7 +76,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * {@inheritDoc}
      *
-     * @return string
+     * @return bool
      */
     public function getNoInstallComposerStrategy(): bool
     {
