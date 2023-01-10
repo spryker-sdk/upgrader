@@ -14,7 +14,9 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\Common\Step\ComposerLockComparatorStep;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutor;
 use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutor;
 use Upgrade\Infrastructure\PackageManager\ComposerAdapter;
@@ -33,7 +35,7 @@ class ComposerLockComparatorStepTest extends TestCase
         $processRunnerMock = $this->mockProcessRunnerWithOutput($processOutput);
 
         $composerAdapter = new ComposerAdapter(
-            new ComposerCommandExecutor($processRunnerMock),
+            new ComposerCommandExecutor($processRunnerMock, $this->mockConfigurationProvider()),
             new ComposerLockComparatorCommandExecutor($processRunnerMock),
             new ComposerJsonReader(),
             new ComposerLockReader(),
@@ -66,7 +68,7 @@ class ComposerLockComparatorStepTest extends TestCase
         $processRunnerMock = $this->mockProcessRunnerWithOutput($processOutput);
 
         $composerAdapter = new ComposerAdapter(
-            new ComposerCommandExecutor($processRunnerMock),
+            new ComposerCommandExecutor($processRunnerMock, $this->mockConfigurationProvider()),
             new ComposerLockComparatorCommandExecutor($processRunnerMock),
             new ComposerJsonReader(),
             new ComposerLockReader(),
@@ -94,7 +96,7 @@ class ComposerLockComparatorStepTest extends TestCase
         // Arrange
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $composerAdapter = new ComposerAdapter(
-            new ComposerCommandExecutor($processRunnerMock),
+            new ComposerCommandExecutor($processRunnerMock, $this->mockConfigurationProvider()),
             new ComposerLockComparatorCommandExecutor($processRunnerMock),
             new ComposerJsonReader(),
             new ComposerLockReader(),
@@ -128,5 +130,19 @@ class ComposerLockComparatorStepTest extends TestCase
         $processRunnerMock->method('run')->willReturn($processMock);
 
         return $processRunnerMock;
+    }
+
+    /**
+     * @param bool $noInstall
+     *
+     * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
+     */
+    protected function mockConfigurationProvider(bool $noInstall = false): ConfigurationProviderInterface
+    {
+        $configurationProvider = $this->createMock(ConfigurationProvider::class);
+        $configurationProvider->method('getNoInstallComposerStrategy')
+            ->willReturn($noInstall);
+
+        return $configurationProvider;
     }
 }

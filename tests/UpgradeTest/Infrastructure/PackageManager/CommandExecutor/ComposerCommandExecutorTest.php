@@ -14,8 +14,10 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Process\Process;
+use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutor;
 
 class ComposerCommandExecutorTest extends TestCase
@@ -38,7 +40,7 @@ class ComposerCommandExecutorTest extends TestCase
             return new Process($args[0], '');
         });
 
-        $this->cmdExecutor = new ComposerCommandExecutor($processRunner->reveal());
+        $this->cmdExecutor = new ComposerCommandExecutor($processRunner->reveal(), $this->mockConfigurationProvider(true));
     }
 
     /**
@@ -51,7 +53,7 @@ class ComposerCommandExecutorTest extends TestCase
         ]);
         $response = $this->cmdExecutor->require($packageCollection);
 
-        $this->assertSame('composer require spryker-sdk/sdk-contracts:0.2.1 --no-scripts --no-plugins --with-all-dependencies', $response->getOutputMessage());
+        $this->assertSame('composer require spryker-sdk/sdk-contracts:0.2.1 --no-scripts --no-plugins --with-all-dependencies --no-install', $response->getOutputMessage());
     }
 
     /**
@@ -64,7 +66,7 @@ class ComposerCommandExecutorTest extends TestCase
         ]);
         $response = $this->cmdExecutor->requireDev($packageCollection);
 
-        $this->assertSame('composer require phpspec/prophecy-phpunit:2.0.1 --no-scripts --no-plugins --with-all-dependencies --dev', $response->getOutputMessage());
+        $this->assertSame('composer require phpspec/prophecy-phpunit:2.0.1 --no-scripts --no-plugins --with-all-dependencies --dev --no-install', $response->getOutputMessage());
     }
 
     /**
@@ -74,6 +76,20 @@ class ComposerCommandExecutorTest extends TestCase
     {
         $response = $this->cmdExecutor->update();
 
-        $this->assertSame('composer update --with-all-dependencies --no-scripts --no-plugins --no-interaction', $response->getOutputMessage());
+        $this->assertSame('composer update --with-all-dependencies --no-scripts --no-plugins --no-interaction --no-install', $response->getOutputMessage());
+    }
+
+    /**
+     * @param bool $noInstall
+     *
+     * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
+     */
+    protected function mockConfigurationProvider(bool $noInstall = false): ConfigurationProviderInterface
+    {
+        $configurationProvider = $this->createMock(ConfigurationProvider::class);
+        $configurationProvider->method('getNoInstallComposerStrategy')
+            ->willReturn($noInstall);
+
+        return $configurationProvider;
     }
 }
