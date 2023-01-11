@@ -100,7 +100,7 @@ class PullRequestDataGenerator
             . PHP_EOL;
 
         foreach ($skippedManifests as $skippedManifest) {
-            preg_match('/[a-zA-Z]*:...../', $skippedManifest, $matches);
+            preg_match('/[a-zA-Z]*:[0-9]*.[0-9]*.[0-9]*/', $skippedManifest, $matches);
             if (!count($matches)) {
                 continue;
             }
