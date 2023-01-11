@@ -7,14 +7,14 @@
 
 declare(strict_types=1);
 
-namespace Upgrade\Infrastructure\Adapter;
+namespace Upgrade\Infrastructure\Executor;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
-use Upgrade\Application\Adapter\IntegratorAdapterInterface;
+use Upgrade\Application\Adapter\IntegratorExecutorInterface;
 use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 
-class IntegratorAdapter implements IntegratorAdapterInterface
+class IntegratorExecutor implements IntegratorExecutorInterface
 {
     /**
      * @var string

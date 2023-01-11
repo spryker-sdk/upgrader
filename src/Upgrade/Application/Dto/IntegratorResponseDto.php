@@ -52,8 +52,6 @@ class IntegratorResponseDto
     public function getWarnings(): ?array
     {
         if (!is_array($this->data[static::WARNINGS_KEY])) {
-            var_dump($this->data);
-
             return null;
         }
 
