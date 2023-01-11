@@ -88,7 +88,7 @@ class AggregateReleaseGroupProcessor implements ReleaseGroupProcessorInterface
             $releaseGroupValidateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
             if (!$releaseGroupValidateResult->isSuccessful()) {
                 $stepsExecutionDto->addOutputMessage($releaseGroupValidateResult->getOutputMessage());
-                $stepsExecutionDto->setMajorAvailableInfo($releaseGroupValidateResult->getOutputMessage());
+                $stepsExecutionDto->setMajorAvailableInfo((string)$releaseGroupValidateResult->getOutputMessage());
 
                 break;
             }

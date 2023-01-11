@@ -17,14 +17,14 @@ class PullRequestDataGenerator
     /**
      * @param \Upgrade\Application\Dto\ComposerLockDiffDto $composerDiffDto
      * @param \Upgrade\Application\Dto\IntegratorResponseDto|null $integratorResponseDto
-     * @param string|null $majorAvailableInfo
+     * @param string $majorAvailableInfo
      *
      * @return string
      */
     public function buildBody(
         ComposerLockDiffDto $composerDiffDto,
         ?IntegratorResponseDto $integratorResponseDto,
-        ?string $majorAvailableInfo = null
+        string $majorAvailableInfo = ''
     ): string {
         $text = 'Auto created via Upgrader tool.'
             . PHP_EOL

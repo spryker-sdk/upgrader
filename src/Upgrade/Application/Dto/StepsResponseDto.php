@@ -32,9 +32,9 @@ class StepsResponseDto extends ResponseDto
     protected ?IntegratorResponseDto $integratorResponseDto = null;
 
     /**
-     * @var string|null
+     * @var string
      */
-    protected ?string $majorAvailableInfo = null;
+    protected string $majorAvailableInfo = '';
 
     /**
      * @var int|null
@@ -156,19 +156,19 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @param string|null $majorAvailableWarning
+     * @param string $majorAvailableWarning
      *
      * @return void
      */
-    public function setMajorAvailableInfo(?string $majorAvailableWarning): void
+    public function setMajorAvailableInfo(string $majorAvailableWarning): void
     {
         $this->majorAvailableInfo = $majorAvailableWarning;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getMajorAvailableInfo(): ?string
+    public function getMajorAvailableInfo(): string
     {
         return $this->majorAvailableInfo;
     }

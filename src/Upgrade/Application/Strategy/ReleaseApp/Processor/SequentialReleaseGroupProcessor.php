@@ -90,7 +90,7 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
             $validateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
             if (!$validateResult->isSuccessful()) {
                 $stepsExecutionDto->addOutputMessage($validateResult->getOutputMessage());
-                $stepsExecutionDto->setMajorAvailableInfo($validateResult->getOutputMessage());
+                $stepsExecutionDto->setMajorAvailableInfo((string)$validateResult->getOutputMessage());
 
                 break;
             }

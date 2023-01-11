@@ -35,24 +35,24 @@ class IntegratorResponseDto
     }
 
     /**
-     * @return array<string>|null
+     * @return array<string>
      */
-    public function getMessages(): ?array
+    public function getMessages(): array
     {
         if (!is_array($this->data[static::MESSAGES_KEY])) {
-            return null;
+            return [];
         }
 
         return $this->data[static::MESSAGES_KEY];
     }
 
     /**
-     * @return array<string>|null
+     * @return array<string>
      */
-    public function getWarnings(): ?array
+    public function getWarnings(): array
     {
         if (!is_array($this->data[static::WARNINGS_KEY])) {
-            return null;
+            return [];
         }
 
         return $this->data[static::WARNINGS_KEY];
