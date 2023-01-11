@@ -130,11 +130,13 @@ class StepsResponseDto extends ResponseDto
     /**
      * @param \Upgrade\Application\Dto\IntegratorResponseDto|null $integratorResponseDto
      *
-     * @return void
+     * @return $this
      */
-    public function setIntegratorResponseDto(?IntegratorResponseDto $integratorResponseDto): void
+    public function setIntegratorResponseDto(?IntegratorResponseDto $integratorResponseDto)
     {
         $this->integratorResponseDto = $integratorResponseDto;
+
+        return $this;
     }
 
     /**
@@ -148,21 +150,25 @@ class StepsResponseDto extends ResponseDto
     /**
      * @param int|null $pullRequestId
      *
-     * @return void
+     * @return $this
      */
-    public function setPullRequestId(?int $pullRequestId): void
+    public function setPullRequestId(?int $pullRequestId)
     {
         $this->pullRequestId = $pullRequestId;
+
+        return $this;
     }
 
     /**
      * @param string $majorAvailableWarning
      *
-     * @return void
+     * @return $this
      */
-    public function setMajorAvailableInfo(string $majorAvailableWarning): void
+    public function setMajorAvailableInfo(string $majorAvailableWarning)
     {
         $this->majorAvailableInfo = $majorAvailableWarning;
+
+        return $this;
     }
 
     /**
