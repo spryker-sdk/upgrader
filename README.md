@@ -103,6 +103,14 @@ The Upgrader updates projects via one of the following approaches:
 ```bash
 export UPGRADE_STRATEGY=composer
 ```
+#### Composer update strategy
+Composer install|update uses two strategies.
+By default composer updates only lock file.
+
+* To enable update composer with packages:
+```bash
+export COMPOSER_INSTALL_DEPENDENCIES=false
+```
 
 ### Release App strategy
 In the strategy, Upgrader uses Spryker release app as a data provider to fetch data about Major, Minor, and Patch releases.
