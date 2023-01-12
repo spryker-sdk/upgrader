@@ -109,7 +109,7 @@ By default composer updates only lock file.
 
 * To enable update composer with packages:
 ```bash
-export COMPOSER_INSTALL_DEPENDENCIES=false
+export COMPOSER_INSTALL_DEPENDENCIES=true 
 ```
 
 ### Release App strategy

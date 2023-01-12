@@ -61,7 +61,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * @var bool
      */
-    protected const COMPOSER_INSTALL_DEPENDENCIES = true;
+    protected const COMPOSER_INSTALL_DEPENDENCIES = false;
 
     /**
      * {@inheritDoc}

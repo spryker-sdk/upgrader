@@ -137,11 +137,11 @@ class ComposerLockComparatorStepTest extends TestCase
      *
      * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
      */
-    protected function mockConfigurationProvider(bool $noInstall = false): ConfigurationProviderInterface
+    protected function mockConfigurationProvider(bool $withDependencies = false): ConfigurationProviderInterface
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
         $configurationProvider->method('getComposerInstallDependencies')
-            ->willReturn($noInstall);
+            ->willReturn($withDependencies);
 
         return $configurationProvider;
     }
