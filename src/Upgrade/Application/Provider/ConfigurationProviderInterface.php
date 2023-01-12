@@ -42,6 +42,15 @@ interface ConfigurationProviderInterface
 
     /**
      * Specification:
+     * - Defines install composer package strategy.
+     * - Possible strategies: true (update only composer.lock) and false (with package installation by default).
+     *
+     * @return bool
+     */
+    public function getComposerInstallDependencies(): bool;
+
+    /**
+     * Specification:
      * - Defines package require mode.
      * - Possible mode: sequential and aggregate (default).
      *

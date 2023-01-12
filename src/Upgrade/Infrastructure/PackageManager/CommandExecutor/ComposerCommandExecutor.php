@@ -12,6 +12,7 @@ namespace Upgrade\Infrastructure\PackageManager\CommandExecutor;
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ResponseDto;
+use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 class ComposerCommandExecutor implements ComposerCommandExecutorInterface
@@ -57,16 +58,28 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     protected const DEV_FLAG = '--dev';
 
     /**
+     * @var string
+     */
+    protected const NO_INSTALL_FLAG = '--no-install';
+
+    /**
      * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunner;
 
     /**
-     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
      */
-    public function __construct(ProcessRunnerServiceInterface $processRunner)
+    protected ConfigurationProviderInterface $configurationProvider;
+
+    /**
+     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
+     */
+    public function __construct(ProcessRunnerServiceInterface $processRunner, ConfigurationProviderInterface $configurationProvider)
     {
         $this->processRunner = $processRunner;
+        $this->configurationProvider = $configurationProvider;
     }
 
     /**
@@ -76,18 +89,16 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function require(PackageCollection $packageCollection): ResponseDto
     {
-        $command = sprintf(
+        $command = explode(' ', sprintf(
             '%s%s %s %s %s',
             static::REQUIRE_COMMAND_NAME,
             $this->getPackageString($packageCollection),
             static::NO_SCRIPTS_FLAG,
             static::NO_PLUGINS_FLAG,
             static::WITH_ALL_DEPENDENCIES_FLAG,
-        );
+        ));
 
-        $process = $this->processRunner->run(explode(' ', $command), static::ENV);
-
-        return $this->createResponse($process);
+        return $this->createResponse($this->runCommand($command));
     }
 
     /**
@@ -97,7 +108,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function requireDev(PackageCollection $packageCollection): ResponseDto
     {
-        $command = sprintf(
+        $command = explode(' ', sprintf(
             '%s%s %s %s %s %s',
             static::REQUIRE_COMMAND_NAME,
             $this->getPackageString($packageCollection),
@@ -105,11 +116,9 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             static::NO_PLUGINS_FLAG,
             static::WITH_ALL_DEPENDENCIES_FLAG,
             static::DEV_FLAG,
-        );
+        ));
 
-        $process = $this->processRunner->run(explode(' ', $command), static::ENV);
-
-        return $this->createResponse($process);
+        return $this->createResponse($this->runCommand($command));
     }
 
     /**
@@ -117,18 +126,16 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function update(): ResponseDto
     {
-        $command = sprintf(
+        $command = explode(' ', sprintf(
             '%s %s %s %s %s',
             static::UPDATE_COMMAND_NAME,
             static::WITH_ALL_DEPENDENCIES_FLAG,
             static::NO_SCRIPTS_FLAG,
             static::NO_PLUGINS_FLAG,
             static::NO_INTERACTION_FLAG,
-        );
+        ));
 
-        $process = $this->processRunner->run(explode(' ', $command), static::ENV);
-
-        return $this->createResponse($process);
+        return $this->createResponse($this->runCommand($command));
     }
 
     /**
@@ -159,5 +166,19 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
         $outputs = array_filter([$command, $output]);
 
         return new ResponseDto($process->isSuccessful(), implode(PHP_EOL, $outputs));
+    }
+
+    /**
+     * @param array<string> $command
+     *
+     * @return \Symfony\Component\Process\Process
+     */
+    protected function runCommand(array $command): Process
+    {
+        if (!$this->configurationProvider->getComposerInstallDependencies()) {
+            $command[] = static::NO_INSTALL_FLAG;
+        }
+
+        return $this->processRunner->run($command, static::ENV);
     }
 }
