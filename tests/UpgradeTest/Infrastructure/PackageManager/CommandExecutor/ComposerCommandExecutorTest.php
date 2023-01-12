@@ -30,6 +30,11 @@ class ComposerCommandExecutorTest extends TestCase
     protected ComposerCommandExecutor $cmdExecutor;
 
     /**
+     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider|\Upgrade\Application\Provider\ConfigurationProviderInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected ConfigurationProvider $mockConfigurationProvider;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -39,8 +44,25 @@ class ComposerCommandExecutorTest extends TestCase
         $processRunner->run(Argument::type('array'), Argument::type('array'))->will(function ($args) {
             return new Process($args[0], '');
         });
+        $this->mockConfigurationProvider = $this->mockConfigurationProvider();
 
-        $this->cmdExecutor = new ComposerCommandExecutor($processRunner->reveal(), $this->mockConfigurationProvider());
+        $this->cmdExecutor = new ComposerCommandExecutor($processRunner->reveal(), $this->mockConfigurationProvider);
+    }
+
+    /**
+     * @return void
+     */
+    public function testRequireWithDependencies(): void
+    {
+        $packageCollection = new PackageCollection([
+            new Package('spryker-sdk/sdk-contracts', '0.2.1', '0.2.0'),
+        ]);
+        $this->mockConfigurationProvider->method('getComposerInstallDependencies')
+            ->willReturn(true);
+
+        $response = $this->cmdExecutor->require($packageCollection);
+
+        $this->assertSame('composer require spryker-sdk/sdk-contracts:0.2.1 --no-scripts --no-plugins --with-all-dependencies', $response->getOutputMessage());
     }
 
     /**
@@ -52,6 +74,8 @@ class ComposerCommandExecutorTest extends TestCase
             new Package('spryker-sdk/sdk-contracts', '0.2.1', '0.2.0'),
         ]);
         $response = $this->cmdExecutor->require($packageCollection);
+        $this->mockConfigurationProvider->method('getComposerInstallDependencies')
+            ->willReturn(false);
 
         $this->assertSame('composer require spryker-sdk/sdk-contracts:0.2.1 --no-scripts --no-plugins --with-all-dependencies --no-install', $response->getOutputMessage());
     }
@@ -64,6 +88,8 @@ class ComposerCommandExecutorTest extends TestCase
         $packageCollection = new PackageCollection([
             new Package('phpspec/prophecy-phpunit', '2.0.1', '2.0.0'),
         ]);
+        $this->mockConfigurationProvider->method('getComposerInstallDependencies')
+            ->willReturn(false);
         $response = $this->cmdExecutor->requireDev($packageCollection);
 
         $this->assertSame('composer require phpspec/prophecy-phpunit:2.0.1 --no-scripts --no-plugins --with-all-dependencies --dev --no-install', $response->getOutputMessage());
@@ -74,21 +100,19 @@ class ComposerCommandExecutorTest extends TestCase
      */
     public function testUpdate(): void
     {
+        $this->mockConfigurationProvider->method('getComposerInstallDependencies')
+            ->willReturn(false);
         $response = $this->cmdExecutor->update();
 
         $this->assertSame('composer update --with-all-dependencies --no-scripts --no-plugins --no-interaction --no-install', $response->getOutputMessage());
     }
 
     /**
-     * @param bool $noInstall
-     *
      * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
      */
-    protected function mockConfigurationProvider(bool $withDependencies = false): ConfigurationProviderInterface
+    protected function mockConfigurationProvider(): ConfigurationProviderInterface
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
-        $configurationProvider->method('getComposerInstallDependencies')
-            ->willReturn($withDependencies);
 
         return $configurationProvider;
     }
