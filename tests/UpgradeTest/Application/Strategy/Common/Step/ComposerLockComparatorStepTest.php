@@ -133,7 +133,7 @@ class ComposerLockComparatorStepTest extends TestCase
     }
 
     /**
-     * @param bool $noInstall
+     * @param bool $withDependencies
      *
      * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
      */
