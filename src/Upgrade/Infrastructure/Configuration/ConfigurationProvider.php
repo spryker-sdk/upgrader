@@ -59,6 +59,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     protected const DEFAULT_IS_PR_AUTO_MERGE_ENABLED = false;
 
     /**
+     * @var bool
+     */
+    protected const COMPOSER_INSTALL_DEPENDENCIES = false;
+
+    /**
      * {@inheritDoc}
      *
      * @return string
@@ -66,6 +71,16 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public function getUpgradeStrategy(): string
     {
         return (string)getenv('UPGRADE_STRATEGY') ?: static::RELEASE_APP_STRATEGY;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function getComposerInstallDependencies(): bool
+    {
+        return (bool)getenv('COMPOSER_INSTALL_DEPENDENCIES') ?: static::COMPOSER_INSTALL_DEPENDENCIES;
     }
 
     /**
