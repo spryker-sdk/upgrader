@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\Common\Step;
 
-use Upgrade\Application\Adapter\IntegratorAdapterInterface;
+use Upgrade\Application\Adapter\IntegratorExecutorInterface;
 use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\RollbackStepInterface;
@@ -17,15 +17,15 @@ use Upgrade\Application\Strategy\RollbackStepInterface;
 class IntegratorStep extends AbstractStep implements RollbackStepInterface
 {
     /**
-     * @var \Upgrade\Application\Adapter\IntegratorAdapterInterface
+     * @var \Upgrade\Application\Adapter\IntegratorExecutorInterface
      */
-    protected IntegratorAdapterInterface $integratorClient;
+    protected IntegratorExecutorInterface $integratorClient;
 
     /**
      * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
-     * @param \Upgrade\Application\Adapter\IntegratorAdapterInterface $integratorClient
+     * @param \Upgrade\Application\Adapter\IntegratorExecutorInterface $integratorClient
      */
-    public function __construct(VersionControlSystemAdapterInterface $versionControlSystem, IntegratorAdapterInterface $integratorClient)
+    public function __construct(VersionControlSystemAdapterInterface $versionControlSystem, IntegratorExecutorInterface $integratorClient)
     {
         parent::__construct($versionControlSystem);
 

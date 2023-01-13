@@ -11,7 +11,7 @@ namespace Upgrade\Application\Adapter;
 
 use Upgrade\Application\Dto\StepsResponseDto;
 
-interface IntegratorAdapterInterface
+interface IntegratorExecutorInterface
 {
     /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto

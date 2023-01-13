@@ -7,13 +7,14 @@
 
 declare(strict_types=1);
 
-namespace Upgrade\Infrastructure\Adapter;
+namespace Upgrade\Infrastructure\Executor;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
-use Upgrade\Application\Adapter\IntegratorAdapterInterface;
+use Upgrade\Application\Adapter\IntegratorExecutorInterface;
+use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 
-class IntegratorAdapter implements IntegratorAdapterInterface
+class IntegratorExecutor implements IntegratorExecutorInterface
 {
     /**
      * @var string
@@ -24,6 +25,11 @@ class IntegratorAdapter implements IntegratorAdapterInterface
      * @var string
      */
     protected const NO_INTERACTION_COMPOSER_FLAG = '--no-interaction';
+
+    /**
+     * @var string
+     */
+    protected const FROMAT_JSON_OPTION = '--format=json';
 
     /**
      * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
@@ -45,7 +51,11 @@ class IntegratorAdapter implements IntegratorAdapterInterface
      */
     public function runIntegrator(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
-        $command = sprintf('%s %s', APPLICATION_ROOT_DIR . static::RUNNER, static::NO_INTERACTION_COMPOSER_FLAG);
+        $command = implode(' ', [
+            APPLICATION_ROOT_DIR . static::RUNNER,
+            static::NO_INTERACTION_COMPOSER_FLAG,
+            static::FROMAT_JSON_OPTION,
+            ]);
         $process = $this->processRunner->run(explode(' ', $command));
 
         $stepsExecutionDto->setIsSuccessful($process->isSuccessful());
@@ -54,6 +64,11 @@ class IntegratorAdapter implements IntegratorAdapterInterface
             $stepsExecutionDto->addOutputMessage(
                 $command . PHP_EOL . $output . PHP_EOL . 'Error code:' . $process->getExitCode(),
             );
+        }
+
+        $integratorOutput = json_decode($process->getOutput(), true);
+        if (is_array($integratorOutput)) {
+            $stepsExecutionDto->setIntegratorResponseDto(new IntegratorResponseDto($integratorOutput));
         }
 
         return $stepsExecutionDto;
