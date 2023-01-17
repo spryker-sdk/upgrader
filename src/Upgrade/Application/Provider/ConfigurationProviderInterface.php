@@ -51,7 +51,7 @@ interface ConfigurationProviderInterface
 
     /**
      * Specification:
-     * - Defines trigger Integrator command integrator:manifest:run
+     * - Defines trigger Integrator command `integrator:manifest:run`
      *
      * @return bool
      */
