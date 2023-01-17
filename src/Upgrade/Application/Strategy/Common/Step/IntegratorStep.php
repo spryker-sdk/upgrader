@@ -30,6 +30,7 @@ class IntegratorStep extends AbstractStep implements RollbackStepInterface
     /**
      * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
      * @param \Upgrade\Application\Adapter\IntegratorExecutorInterface $integratorClient
+     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      */
     public function __construct(
         VersionControlSystemAdapterInterface $versionControlSystem,
@@ -49,7 +50,7 @@ class IntegratorStep extends AbstractStep implements RollbackStepInterface
      */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
-        if (!$this->configurationProvider->getIntegratorManifestRun()) {
+        if (!$this->configurationProvider->isIntegratorEnabled()) {
             return $stepsExecutionDto;
         }
 

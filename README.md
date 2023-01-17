@@ -224,7 +224,7 @@ bin/console upgradability:php:upgrade
 ​
 * Turn on integrator trigger after package update step
 ```bash
-export INTEGRATOR_MANIFEST_RUN=true
+export INTEGRATOR_ENABLED=true
 ```
 
 ​

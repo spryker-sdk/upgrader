@@ -66,7 +66,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * @var bool
      */
-    protected const INTEGRATOR_MANIFEST_RUN = false;
+    protected const INTEGRATOR_ENABLED = false;
 
     /**
      * {@inheritDoc}
@@ -93,9 +93,9 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      *
      * @return bool
      */
-    public function getIntegratorManifestRun(): bool
+    public function isIntegratorEnabled(): bool
     {
-        return (bool)getenv('INTEGRATOR_MANIFEST_RUN') ?: static::INTEGRATOR_MANIFEST_RUN;
+        return (bool)getenv('INTEGRATOR_ENABLED') ?: static::INTEGRATOR_ENABLED;
     }
 
     /**

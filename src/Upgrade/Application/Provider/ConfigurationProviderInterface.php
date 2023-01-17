@@ -55,7 +55,7 @@ interface ConfigurationProviderInterface
      *
      * @return bool
      */
-    public function getIntegratorManifestRun(): bool;
+    public function isIntegratorEnabled(): bool;
 
     /**
      * Specification:
