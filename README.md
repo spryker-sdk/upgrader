@@ -109,7 +109,7 @@ By default composer updates only lock file.
 
 * To enable update composer with packages:
 ```bash
-export COMPOSER_INSTALL_DEPENDENCIES=true 
+export COMPOSER_INSTALL_DEPENDENCIES=true
 ```
 
 ### Release App strategy
@@ -219,6 +219,14 @@ To update a project, run the following command from its directory:
 ```bash
 bin/console upgradability:php:upgrade
 ```
+
+## Enable project change integration
+​
+* Turn on integrator trigger after package update step
+```bash
+export INTEGRATOR_MANIFEST_RUN=true
+```
+
 ​
 ## Installation
 ​

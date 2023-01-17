@@ -64,6 +64,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     protected const COMPOSER_INSTALL_DEPENDENCIES = false;
 
     /**
+     * @var bool
+     */
+    protected const INTEGRATOR_MANIFEST_RUN = false;
+
+    /**
      * {@inheritDoc}
      *
      * @return string
@@ -81,6 +86,16 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public function getComposerInstallDependencies(): bool
     {
         return (bool)getenv('COMPOSER_INSTALL_DEPENDENCIES') ?: static::COMPOSER_INSTALL_DEPENDENCIES;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function getIntegratorManifestRun(): bool
+    {
+        return (bool)getenv('INTEGRATOR_MANIFEST_RUN') ?: static::INTEGRATOR_MANIFEST_RUN;
     }
 
     /**
