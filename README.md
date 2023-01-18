@@ -222,7 +222,7 @@ bin/console upgradability:php:upgrade
 
 ## Enable project change integration
 ​
-* Added config for enabling integrator (default disabled)
+* Turn on integrator trigger after package update step
 ```bash
 export INTEGRATOR_ENABLED=true
 ```
