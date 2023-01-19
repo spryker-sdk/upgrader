@@ -105,9 +105,9 @@ export UPGRADE_STRATEGY=composer
 ```
 #### Composer update strategy
 Composer install|update uses two strategies.
-By default composer updates only lock file.
+By default composer updates lock file with packages.
 
-* To enable update composer with packages:
+* To enable update composer lock only:
 ```bash
 export COMPOSER_INSTALL_DEPENDENCIES=true 
 ```
