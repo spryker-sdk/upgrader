@@ -78,7 +78,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      *
      * @return bool
      */
-    public function getComposerInstallDependencies(): bool
+    public function getComposerNoInstall(): bool
     {
         return (bool)getenv('COMPOSER_NO_INSTALL') ?: static::COMPOSER_NO_INSTALL;
     }
