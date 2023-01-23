@@ -58,7 +58,7 @@ class ComposerCommandExecutorTest extends TestCase
             new Package('spryker-sdk/sdk-contracts', '0.2.1', '0.2.0'),
         ]);
         $this->mockConfigurationProvider->method('getComposerNoInstall')
-            ->willReturn(true);
+            ->willReturn(false);
 
         $response = $this->cmdExecutor->require($packageCollection);
 
@@ -75,7 +75,7 @@ class ComposerCommandExecutorTest extends TestCase
         ]);
         $response = $this->cmdExecutor->require($packageCollection);
         $this->mockConfigurationProvider->method('getComposerNoInstall')
-            ->willReturn(false);
+            ->willReturn(true);
 
         $this->assertSame('composer require spryker-sdk/sdk-contracts:0.2.1 --no-scripts --no-plugins --with-all-dependencies --no-install', $response->getOutputMessage());
     }
@@ -89,7 +89,7 @@ class ComposerCommandExecutorTest extends TestCase
             new Package('phpspec/prophecy-phpunit', '2.0.1', '2.0.0'),
         ]);
         $this->mockConfigurationProvider->method('getComposerNoInstall')
-            ->willReturn(false);
+            ->willReturn(true);
         $response = $this->cmdExecutor->requireDev($packageCollection);
 
         $this->assertSame('composer require phpspec/prophecy-phpunit:2.0.1 --no-scripts --no-plugins --with-all-dependencies --dev --no-install', $response->getOutputMessage());
@@ -101,7 +101,7 @@ class ComposerCommandExecutorTest extends TestCase
     public function testUpdate(): void
     {
         $this->mockConfigurationProvider->method('getComposerNoInstall')
-            ->willReturn(false);
+            ->willReturn(true);
         $response = $this->cmdExecutor->update();
 
         $this->assertSame('composer update --with-all-dependencies --no-scripts --no-plugins --no-interaction --no-install', $response->getOutputMessage());
