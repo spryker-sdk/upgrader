@@ -175,7 +175,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     protected function runCommand(array $command): Process
     {
-        if (!$this->configurationProvider->getComposerInstallDependencies()) {
+        if ($this->configurationProvider->getComposerNoInstall()) {
             $command[] = static::NO_INSTALL_FLAG;
         }
 
