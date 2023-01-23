@@ -64,6 +64,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     protected const COMPOSER_NO_INSTALL = false;
 
     /**
+     * @var bool
+     */
+    protected const INTEGRATOR_ENABLED = false;
+
+    /**
      * {@inheritDoc}
      *
      * @return string
@@ -81,6 +86,16 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public function getComposerNoInstall(): bool
     {
         return (bool)getenv('COMPOSER_NO_INSTALL') ?: static::COMPOSER_NO_INSTALL;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function isIntegratorEnabled(): bool
+    {
+        return (bool)getenv('INTEGRATOR_ENABLED') ?: static::INTEGRATOR_ENABLED;
     }
 
     /**

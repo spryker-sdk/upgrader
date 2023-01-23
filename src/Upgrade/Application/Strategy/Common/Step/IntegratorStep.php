@@ -12,6 +12,7 @@ namespace Upgrade\Application\Strategy\Common\Step;
 use Upgrade\Application\Adapter\IntegratorExecutorInterface;
 use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\RollbackStepInterface;
 
 class IntegratorStep extends AbstractStep implements RollbackStepInterface
@@ -22,14 +23,24 @@ class IntegratorStep extends AbstractStep implements RollbackStepInterface
     protected IntegratorExecutorInterface $integratorClient;
 
     /**
+     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
+     */
+    protected ConfigurationProviderInterface $configurationProvider;
+
+    /**
      * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
      * @param \Upgrade\Application\Adapter\IntegratorExecutorInterface $integratorClient
+     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      */
-    public function __construct(VersionControlSystemAdapterInterface $versionControlSystem, IntegratorExecutorInterface $integratorClient)
-    {
+    public function __construct(
+        VersionControlSystemAdapterInterface $versionControlSystem,
+        IntegratorExecutorInterface $integratorClient,
+        ConfigurationProviderInterface $configurationProvider
+    ) {
         parent::__construct($versionControlSystem);
 
         $this->integratorClient = $integratorClient;
+        $this->configurationProvider = $configurationProvider;
     }
 
     /**
@@ -39,6 +50,10 @@ class IntegratorStep extends AbstractStep implements RollbackStepInterface
      */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
+        if (!$this->configurationProvider->isIntegratorEnabled()) {
+            return $stepsExecutionDto;
+        }
+
         return $this->integratorClient->runIntegrator($stepsExecutionDto);
     }
 

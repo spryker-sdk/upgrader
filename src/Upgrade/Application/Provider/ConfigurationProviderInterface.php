@@ -51,6 +51,14 @@ interface ConfigurationProviderInterface
 
     /**
      * Specification:
+     * - Defines trigger Integrator command `integrator:manifest:run`
+     *
+     * @return bool
+     */
+    public function isIntegratorEnabled(): bool;
+
+    /**
+     * Specification:
      * - Defines package require mode.
      * - Possible mode: sequential and aggregate (default).
      *

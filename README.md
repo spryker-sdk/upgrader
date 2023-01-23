@@ -219,6 +219,14 @@ To update a project, run the following command from its directory:
 ```bash
 bin/console upgradability:php:upgrade
 ```
+
+## Enable project change integration
+​
+* Turn on integrator trigger after package update step
+```bash
+export INTEGRATOR_ENABLED=true
+```
+
 ​
 ## Installation
 ​
