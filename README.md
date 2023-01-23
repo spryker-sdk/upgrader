@@ -107,9 +107,9 @@ export UPGRADE_STRATEGY=composer
 Composer install|update uses two strategies.
 By default Composer updates lock file with packages being downloaded.
 
-* To disable update composer lock file only:
+* If you don't want to run the install step after updating the `composer.lock` file:
 ```bash
-export COMPOSER_INSTALL_DEPENDENCIES=false
+export COMPOSER_NO_INSTALL=true
 ```
 
 ### Release App strategy
