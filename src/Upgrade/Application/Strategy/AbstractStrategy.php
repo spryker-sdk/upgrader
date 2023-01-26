@@ -19,11 +19,18 @@ abstract class AbstractStrategy implements StrategyInterface
     protected array $steps = [];
 
     /**
-     * @param array<\Upgrade\Application\Strategy\StepInterface> $steps
+     * @var array<\Upgrade\Application\Strategy\FixerStepInterface>
      */
-    public function __construct(array $steps = [])
+    protected array $fixers = [];
+
+    /**
+     * @param array<\Upgrade\Application\Strategy\StepInterface> $steps
+     * @param array<\Upgrade\Application\Strategy\FixerStepInterface> $fixers
+     */
+    public function __construct(array $steps = [], array $fixers = [])
     {
         $this->steps = $steps;
+        $this->fixers = $fixers;
     }
 
     /**
@@ -40,6 +47,9 @@ abstract class AbstractStrategy implements StrategyInterface
             $stepsExecutionDto = $step->run($stepsExecutionDto);
 
             if (!$stepsExecutionDto->getIsSuccessful()) {
+                $stepsExecutionDto = $this->runWithFixer($step, $stepsExecutionDto);
+            }
+            if (!$stepsExecutionDto->getIsSuccessful()) {
                 $rollBackExecutionDto = new StepsResponseDto(true);
                 foreach (array_reverse($executedSteps) as $executedStep) {
                     if ($executedStep instanceof RollbackStepInterface) {
@@ -52,5 +62,29 @@ abstract class AbstractStrategy implements StrategyInterface
         }
 
         return $stepsExecutionDto;
+    }
+
+    /**
+     * @param \Upgrade\Application\Strategy\StepInterface $step
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     *
+     * @return \Upgrade\Application\Dto\StepsResponseDto
+     */
+    protected function runWithFixer(StepInterface $step, StepsResponseDto $stepsResponseDto): StepsResponseDto
+    {
+        foreach ($this->fixers as $fixer) {
+            if (!$fixer->isApplicable($stepsResponseDto)) {
+                continue;
+            }
+            $stepsResponseDto = $fixer->run($stepsResponseDto);
+            if ($stepsResponseDto->getIsSuccessful()) {
+                $stepsResponseDto = $step->run($stepsResponseDto);
+                if ($stepsResponseDto->getIsSuccessful()) {
+                    break;
+                }
+            }
+        }
+
+        return $stepsResponseDto;
     }
 }

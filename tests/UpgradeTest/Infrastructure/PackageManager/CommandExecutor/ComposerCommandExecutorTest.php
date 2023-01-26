@@ -83,6 +83,21 @@ class ComposerCommandExecutorTest extends TestCase
     /**
      * @return void
      */
+    public function testRemove(): void
+    {
+        $packageCollection = new PackageCollection([
+            new Package('spryker-sdk/sdk-contracts'),
+        ]);
+        $response = $this->cmdExecutor->remove($packageCollection);
+        $this->mockConfigurationProvider->method('getComposerInstallDependencies')
+            ->willReturn(false);
+
+        $this->assertSame('composer remove spryker-sdk/sdk-contracts --no-scripts --no-plugins', $response->getOutputMessage());
+    }
+
+    /**
+     * @return void
+     */
     public function testRequireDev(): void
     {
         $packageCollection = new PackageCollection([

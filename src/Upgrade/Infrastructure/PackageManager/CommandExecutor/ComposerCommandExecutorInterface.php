@@ -26,6 +26,13 @@ interface ComposerCommandExecutorInterface
      *
      * @return \Upgrade\Application\Dto\ResponseDto
      */
+    public function remove(PackageCollection $packageCollection): ResponseDto;
+
+    /**
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\ResponseDto
+     */
     public function requireDev(PackageCollection $packageCollection): ResponseDto;
 
     /**
