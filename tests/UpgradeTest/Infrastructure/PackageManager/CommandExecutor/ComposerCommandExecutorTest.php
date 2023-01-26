@@ -89,8 +89,6 @@ class ComposerCommandExecutorTest extends TestCase
             new Package('spryker-sdk/sdk-contracts'),
         ]);
         $response = $this->cmdExecutor->remove($packageCollection);
-        $this->mockConfigurationProvider->method('getComposerInstallDependencies')
-            ->willReturn(false);
 
         $this->assertSame('composer remove spryker-sdk/sdk-contracts --no-scripts --no-plugins', $response->getOutputMessage());
     }
