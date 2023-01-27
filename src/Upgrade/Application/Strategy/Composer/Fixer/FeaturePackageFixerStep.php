@@ -20,7 +20,12 @@ class FeaturePackageFixerStep implements FixerStepInterface
     /**
      * @var string
      */
-    protected const PATTERN = '/(?<features>[-\w]+-feature\/[-\w]+).+conflicts.+/';
+    protected const KEY_FEATURES = 'features';
+
+    /**
+     * @var string
+     */
+    protected const PATTERN = '/(?<features>spryker-feature\/[-\w]+).+conflicts.+/';
 
     /**
      * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
@@ -59,11 +64,11 @@ class FeaturePackageFixerStep implements FixerStepInterface
         $foundMessages = (array)preg_grep(static::PATTERN, $messages);
         preg_match_all(static::PATTERN, (string)$stepsExecutionDto->getOutputMessage(), $matches);
 
-        if (empty($matches['features']) || !is_array($matches['features'])) {
+        if (empty($matches[static::KEY_FEATURES]) || !is_array($matches[static::KEY_FEATURES])) {
             return $stepsExecutionDto;
         }
 
-        $featurePackages = $this->getFeaturePackages($matches['features']);
+        $featurePackages = $this->getPackagesFromFeatures($matches[static::KEY_FEATURES]);
         $responseDto = $this->packageManager->require(new PackageCollection($featurePackages));
 
         $stepsExecutionDto->setIsSuccessful($responseDto->isSuccessful());
@@ -75,20 +80,21 @@ class FeaturePackageFixerStep implements FixerStepInterface
 
         $responseDto = $this->packageManager->remove(new PackageCollection(array_map(
             fn (string $featurePackage): Package => new Package($featurePackage),
-            $matches['features'],
+            $matches[static::KEY_FEATURES],
         )));
         $stepsExecutionDto->setIsSuccessful($responseDto->isSuccessful());
+
         if (!$responseDto->isSuccessful()) {
             $stepsExecutionDto->addOutputMessage($responseDto->getOutputMessage());
+
+            return $stepsExecutionDto;
         }
 
-        if ($responseDto->isSuccessful()) {
-            foreach ($foundMessages as $key => $foundMessage) {
-                unset($messages[$key]);
-            }
-            $stepsExecutionDto->setOutputMessages($messages);
-            $stepsExecutionDto->addOutputMessage(sprintf('Splitted %s feature packages', count($matches['features'])));
+        foreach ($foundMessages as $key => $foundMessage) {
+            unset($messages[$key]);
         }
+        $stepsExecutionDto->setOutputMessages($messages);
+        $stepsExecutionDto->addOutputMessage(sprintf('Splitted %s feature packages', count($matches[static::KEY_FEATURES])));
 
         return $stepsExecutionDto;
     }
@@ -98,7 +104,7 @@ class FeaturePackageFixerStep implements FixerStepInterface
      *
      * @return array<\Upgrade\Domain\Entity\Package>
      */
-    protected function getFeaturePackages(array $featurePackages): array
+    protected function getPackagesFromFeatures(array $featurePackages): array
     {
         $composerLockFile = $this->packageManager->getComposerLockFile();
         $packages = [];
