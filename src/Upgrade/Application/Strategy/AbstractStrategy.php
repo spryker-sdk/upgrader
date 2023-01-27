@@ -77,11 +77,12 @@ abstract class AbstractStrategy implements StrategyInterface
                 continue;
             }
             $stepsResponseDto = $fixer->run($stepsResponseDto);
+            if (!$stepsResponseDto->getIsSuccessful()) {
+                continue;
+            }
+            $stepsResponseDto = $step->run($stepsResponseDto);
             if ($stepsResponseDto->getIsSuccessful()) {
-                $stepsResponseDto = $step->run($stepsResponseDto);
-                if ($stepsResponseDto->getIsSuccessful()) {
-                    break;
-                }
+                break;
             }
         }
 
