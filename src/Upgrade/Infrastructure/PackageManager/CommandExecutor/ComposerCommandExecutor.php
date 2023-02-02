@@ -30,6 +30,11 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @var string
      */
+    protected const REMOVE_COMMAND_NAME = 'composer remove';
+
+    /**
+     * @var string
+     */
     protected const UPDATE_COMMAND_NAME = 'composer update';
 
     /**
@@ -106,6 +111,24 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      *
      * @return \Upgrade\Application\Dto\ResponseDto
      */
+    public function remove(PackageCollection $packageCollection): ResponseDto
+    {
+        $command = explode(' ', sprintf(
+            '%s%s %s %s',
+            static::REMOVE_COMMAND_NAME,
+            $this->getPackageString($packageCollection),
+            static::NO_SCRIPTS_FLAG,
+            static::NO_PLUGINS_FLAG,
+        ));
+
+        return $this->createResponse($this->processRunner->run($command, static::ENV));
+    }
+
+    /**
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\ResponseDto
+     */
     public function requireDev(PackageCollection $packageCollection): ResponseDto
     {
         $command = explode(' ', sprintf(
@@ -147,6 +170,11 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     {
         $result = '';
         foreach ($packageCollection->toArray() as $package) {
+            if ($package->getVersion() === '') {
+                $result = sprintf('%s %s', $result, $package->getName());
+
+                continue;
+            }
             $package = sprintf('%s:%s', $package->getName(), $package->getVersion());
             $result = sprintf('%s %s', $result, $package);
         }

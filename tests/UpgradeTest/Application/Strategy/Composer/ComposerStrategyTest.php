@@ -12,6 +12,7 @@ namespace UpgradeTest\Application\Strategy\Composer;
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\Composer\ComposerStrategy;
+use Upgrade\Application\Strategy\FixerStepInterface;
 use UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps\FooRollbackStep;
 use UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps\FooStep;
 
@@ -51,6 +52,47 @@ class ComposerStrategyTest extends TestCase
             new FooStep(),
             new FooRollbackStep(),
         ]);
+
+        // Act
+        $stepsExecutionDto = $strategy->upgrade();
+
+        // Assert
+        $this->assertTrue($stepsExecutionDto->getIsSuccessful());
+        $this->assertNull($stepsExecutionDto->getOutputMessage());
+        $this->assertNull($stepsExecutionDto->getComposerLockDiff());
+        $this->assertNull($stepsExecutionDto->getPullRequestId());
+    }
+
+    /**
+     * @return void
+     */
+    public function testUpgradeSuccessFlowWithFix(): void
+    {
+        // Arrange
+        $stepsExecutionDto = new StepsResponseDto(false);
+        $fooStep = $this->createMock(FooRollbackStep::class);
+        $fooStep->method('run')->willReturn($stepsExecutionDto, new StepsResponseDto(true));
+        $fooStep->expects($this->never())->method('rollBack');
+
+        $fixerStep = $this->createMock(FixerStepInterface::class);
+        $fixerStep
+            ->method('isApplicable')
+            ->with($stepsExecutionDto)
+            ->willReturn(true);
+        $fixerStep
+            ->method('run')
+            ->willReturn(new StepsResponseDto(true));
+
+        $strategy = new ComposerStrategy(
+            [
+            $fooStep,
+            new FooStep(),
+            new FooRollbackStep(),
+            ],
+            [
+            $fixerStep,
+            ],
+        );
 
         // Act
         $stepsExecutionDto = $strategy->upgrade();

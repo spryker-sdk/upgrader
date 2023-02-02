@@ -63,6 +63,9 @@ services:
     release_group_update.step:
         class: Upgrade\Application\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep
 
+    feature_package.fixer:
+        class: Upgrade\Application\Strategy\Composer\Fixer\FeaturePackageFixerStep
+
     composer.strategy:
         class: Upgrade\Application\Strategy\Composer\ComposerStrategy
         arguments:
@@ -81,6 +84,9 @@ services:
                 param12: '@create_pr.step',
                 param13: '@checkout.step'
              }
+            - {
+                param1: '@feature_package.fixer',
+            }
 
     release-app.strategy:
         class: Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy
@@ -99,6 +105,9 @@ services:
                 param11: '@push_changes.step',
                 param12: '@create_pr.step',
                 param13: '@checkout.step'
+            }
+            - {
+                param1: '@feature_package.fixer',
             }
 
     Upgrade\Application\Strategy\StrategyResolver:

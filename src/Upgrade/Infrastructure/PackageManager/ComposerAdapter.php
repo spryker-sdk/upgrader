@@ -114,6 +114,16 @@ class ComposerAdapter implements PackageManagerAdapterInterface
      *
      * @return \Upgrade\Application\Dto\ResponseDto
      */
+    public function remove(PackageCollection $packageCollection): ResponseDto
+    {
+        return $this->composerCommandExecutor->remove($packageCollection);
+    }
+
+    /**
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\ResponseDto
+     */
     public function requireDev(PackageCollection $packageCollection): ResponseDto
     {
         return $this->composerCommandExecutor->requireDev($packageCollection);
