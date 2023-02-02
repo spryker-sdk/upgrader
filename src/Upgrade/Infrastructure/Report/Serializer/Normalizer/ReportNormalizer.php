@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\Report\Serializer\Normalizer;
 
+use InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Upgrade\Domain\Entity\Package;
 use Upgrade\Infrastructure\Report\Dto\ReportDto;
@@ -18,14 +19,14 @@ use Upgrade\Infrastructure\Report\Dto\ReportPayloadDto;
 class ReportNormalizer implements NormalizerInterface
 {
     /**
-     * @param $data
+     * @param mixed $data
      * @param string|null $format
      *
      * @return bool
      */
-    public function supportsNormalization($data, string $format = null): bool
+    public function supportsNormalization($data, ?string $format = null): bool
     {
-        return $data instanceof  ReportDto;
+        return $data instanceof ReportDto;
     }
 
     /**
@@ -33,15 +34,15 @@ class ReportNormalizer implements NormalizerInterface
      * @param string|null $format
      * @param array<string, mixed> $context
      *
-     * @return array<string, mixed>
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return array<string, mixed>
      */
-    public function normalize($object, string $format = null, array $context = []): array
+    public function normalize($object, ?string $format = null, array $context = []): array
     {
         if (!($object instanceof ReportDto)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid incoming object %s only %s is supported', get_class($object), ReportDto::class)
+            throw new InvalidArgumentException(
+                sprintf('Invalid incoming object %s only %s is supported', get_class($object), ReportDto::class),
             );
         }
 
