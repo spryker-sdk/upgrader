@@ -91,6 +91,26 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
+     * @return array<string>
+     */
+    public function getOutputMessages(): array
+    {
+        return $this->outputMessageList;
+    }
+
+    /**
+     * @param array<string> $outputMessageList
+     *
+     * @return $this
+     */
+    public function setOutputMessages(array $outputMessageList)
+    {
+        $this->outputMessageList = $outputMessageList;
+
+        return $this;
+    }
+
+    /**
      * @param string|null $outputMessage
      *
      * @return $this

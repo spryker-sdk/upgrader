@@ -75,6 +75,9 @@ services:
     send_report.step:
         class: Upgrade\Application\Strategy\Common\Step\SendReportStep
 
+    feature_package.fixer:
+        class: Upgrade\Application\Strategy\Composer\Fixer\FeaturePackageFixerStep
+
     composer.strategy:
         class: Upgrade\Application\Strategy\Composer\ComposerStrategy
         arguments:
@@ -94,6 +97,8 @@ services:
               - '@checkout.step'
               - '@send_report.step'
 
+            - - '@feature_package.fixer'
+
     release-app.strategy:
         class: Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy
         arguments:
@@ -112,6 +117,8 @@ services:
               - '@create_pr.step'
               - '@checkout.step'
               - '@send_report.step'
+
+            - - '@feature_package.fixer'
 
     Upgrade\Application\Strategy\StrategyResolver:
         class: Upgrade\Application\Strategy\StrategyResolver
