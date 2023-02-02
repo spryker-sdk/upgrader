@@ -15,7 +15,7 @@ use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Report\ReportSendProcessorInterface;
 use Upgrade\Infrastructure\Report\Builder\ReportDtoBuilderInterface;
-use Upgrade\Infrastructure\Report\ReportSender\ReportSenderInterface;
+use Upgrade\Infrastructure\Report\Sender\ReportSenderInterface;
 
 class OperationsReportSendProcessor implements ReportSendProcessorInterface
 {
@@ -30,7 +30,7 @@ class OperationsReportSendProcessor implements ReportSendProcessorInterface
     protected ReportDtoBuilderInterface $reportDtoBuilder;
 
     /**
-     * @var \Upgrade\Infrastructure\Report\ReportSender\ReportSenderInterface
+     * @var \Upgrade\Infrastructure\Report\Sender\ReportSenderInterface
      */
     protected ReportSenderInterface $reportSender;
 
@@ -42,7 +42,7 @@ class OperationsReportSendProcessor implements ReportSendProcessorInterface
     /**
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      * @param \Upgrade\Infrastructure\Report\Builder\ReportDtoBuilderInterface $reportDtoBuilder
-     * @param \Upgrade\Infrastructure\Report\ReportSender\ReportSenderInterface $reportSender
+     * @param \Upgrade\Infrastructure\Report\Sender\ReportSenderInterface $reportSender
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(

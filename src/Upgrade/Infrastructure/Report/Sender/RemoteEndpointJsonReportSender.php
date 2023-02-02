@@ -7,14 +7,14 @@
 
 declare(strict_types=1);
 
-namespace Upgrade\Infrastructure\Report\ReportSender;
+namespace Upgrade\Infrastructure\Report\Sender;
 
 use GuzzleHttp\ClientInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Infrastructure\Report\Dto\ReportDto;
-use Upgrade\Infrastructure\Report\ReportFormatter\ReportFormatterInterface;
 
-class RemoteEndpointReportSender implements ReportSenderInterface
+class RemoteEndpointJsonReportSender implements ReportSenderInterface
 {
     /**
      * @var \GuzzleHttp\ClientInterface
@@ -22,9 +22,9 @@ class RemoteEndpointReportSender implements ReportSenderInterface
     protected ClientInterface $httpClient;
 
     /**
-     * @var \Upgrade\Infrastructure\Report\ReportFormatter\ReportFormatterInterface
+     * @var \Symfony\Component\Serializer\SerializerInterface
      */
-    protected ReportFormatterInterface $reportFormatter;
+    protected SerializerInterface $serializer;
 
     /**
      * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
@@ -48,7 +48,7 @@ class RemoteEndpointReportSender implements ReportSenderInterface
 
     /**
      * @param \GuzzleHttp\ClientInterface $httpClient
-     * @param \Upgrade\Infrastructure\Report\ReportFormatter\ReportFormatterInterface $reportFormatter
+     * @param \Symfony\Component\Serializer\SerializerInterface $serializer
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      * @param string $endpointUrl
      * @param int $timeOut
@@ -56,14 +56,14 @@ class RemoteEndpointReportSender implements ReportSenderInterface
      */
     public function __construct(
         ClientInterface $httpClient,
-        ReportFormatterInterface $reportFormatter,
+        SerializerInterface $serializer,
         ConfigurationProviderInterface $configurationProvider,
         string $endpointUrl,
         int $timeOut,
         int $connectionTimeout
     ) {
         $this->httpClient = $httpClient;
-        $this->reportFormatter = $reportFormatter;
+        $this->serializer = $serializer;
         $this->endpointUrl = $endpointUrl;
         $this->timeOut = $timeOut;
         $this->connectionTimeout = $connectionTimeout;
@@ -83,7 +83,7 @@ class RemoteEndpointReportSender implements ReportSenderInterface
             [
                 'query' => ['token' => $this->configurationProvider->getReportSendAuthToken()],
                 'headers' => ['Content-Type' => 'application/json'],
-                'body' => json_encode($this->reportFormatter->format($reportDto), JSON_THROW_ON_ERROR),
+                'body' => $this->serializer->serialize($reportDto, 'json'),
                 'timeout' => $this->timeOut,
                 'connect_timeout' => $this->connectionTimeout,
             ],

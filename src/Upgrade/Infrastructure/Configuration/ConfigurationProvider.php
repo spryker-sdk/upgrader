@@ -69,6 +69,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     protected const INTEGRATOR_ENABLED = false;
 
     /**
+     * @var bool
+     */
+    protected const DEFAULT_REPORTING_ENABLED = false;
+
+    /**
      * {@inheritDoc}
      *
      * @return string
@@ -275,7 +280,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function isReportingEnabled(): bool
     {
-        return (bool)getenv('REPORTING_ENABLED');
+        return (bool)getenv('REPORTING_ENABLED') ?: static::DEFAULT_REPORTING_ENABLED;
     }
 
     /**

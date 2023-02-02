@@ -7,16 +7,16 @@
 
 declare(strict_types=1);
 
-namespace Upgrade\Infrastructure\Report\ReportFormatter;
+namespace Upgrade\Infrastructure\Report\Sender;
 
 use Upgrade\Infrastructure\Report\Dto\ReportDto;
 
-interface ReportFormatterInterface
+interface ReportSenderInterface
 {
     /**
      * @param \Upgrade\Infrastructure\Report\Dto\ReportDto $reportDto
      *
-     * @return array<string, mixed>
+     * @return void
      */
-    public function format(ReportDto $reportDto): array;
+    public function send(ReportDto $reportDto): void;
 }

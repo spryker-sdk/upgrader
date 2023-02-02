@@ -17,7 +17,7 @@ use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Infrastructure\Report\Builder\ReportDtoBuilderInterface;
 use Upgrade\Infrastructure\Report\Dto\ReportDto;
 use Upgrade\Infrastructure\Report\OperationsReportSendProcessor;
-use Upgrade\Infrastructure\Report\ReportSender\ReportSenderInterface;
+use Upgrade\Infrastructure\Report\Sender\ReportSenderInterface;
 
 /**
  * @group UpgradeTest
@@ -113,7 +113,7 @@ class OperationsReportSendProcessorTest extends TestCase
      * @param bool $shouldBeSent
      * @param bool $throwException
      *
-     * @return \Upgrade\Infrastructure\Report\ReportSender\ReportSenderInterface
+     * @return \Upgrade\Infrastructure\Report\Sender\ReportSenderInterface
      */
     protected function createReportSenderMock(bool $shouldBeSent, bool $throwException = false): ReportSenderInterface
     {

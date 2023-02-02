@@ -7,36 +7,53 @@
 
 declare(strict_types=1);
 
-namespace UpgradeTest\Infrastructure\Report\ReportFormatter;
+namespace UpgradeTest\Infrastructure\Report\Serializer\Normalizer;
 
 use DateTimeImmutable;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Upgrade\Domain\Entity\Package;
 use Upgrade\Infrastructure\Report\Dto\ReportDto;
 use Upgrade\Infrastructure\Report\Dto\ReportMetadataDto;
 use Upgrade\Infrastructure\Report\Dto\ReportPayloadDto;
-use Upgrade\Infrastructure\Report\ReportFormatter\ReportJsonFormatter;
+use Upgrade\Infrastructure\Report\Serializer\Normalizer\ReportNormalizer;
 
 /**
  * @group UpgradeTest
  * @group Infrastructure
  * @group Report
- * @group ReportFormatter
- * @group ReportJsonFormatterTest
+ * @group Serializer
+ * @group Normalizer
+ * @group ReportNormalizerTest
  */
-class ReportJsonFormatterTest extends TestCase
+class ReportNormalizerTest extends TestCase
 {
     /**
      * @return void
      */
-    public function testFormatShouldReturnJsonArray(): void
+    public function testNormalizeShouldThrowExceptionWhenDataIsNotReportDto(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        // Arrange
+        $reportDto = new stdClass();
+        $reportJsonFormatter = new ReportNormalizer();
+
+        // Act
+        $reportJsonFormatter->normalize($reportDto);
+    }
+
+    /**
+     * @return void
+     */
+    public function testNormalizeShouldReturnJsonArray(): void
     {
         // Arrange
         $reportDto = $this->createReportDto();
-        $reportJsonFormatter = new ReportJsonFormatter();
+        $reportJsonFormatter = new ReportNormalizer();
 
         // Act
-        $jsonArray = $reportJsonFormatter->format($reportDto);
+        $jsonArray = $reportJsonFormatter->normalize($reportDto);
 
         // Assert
         $this->assertSame([

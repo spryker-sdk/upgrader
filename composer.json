@@ -27,6 +27,7 @@
         "symfony/monolog-bundle": "^3.8",
         "symfony/process": "^5.0",
         "symfony/runtime": "^5",
+        "symfony/serializer": "^5.4",
         "symfony/uid": "^5.4",
         "symfony/yaml": "^5.3"
     },

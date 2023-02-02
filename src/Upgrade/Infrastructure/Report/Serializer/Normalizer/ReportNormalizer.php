@@ -7,29 +7,51 @@
 
 declare(strict_types=1);
 
-namespace Upgrade\Infrastructure\Report\ReportFormatter;
+namespace Upgrade\Infrastructure\Report\Serializer\Normalizer;
 
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Upgrade\Domain\Entity\Package;
 use Upgrade\Infrastructure\Report\Dto\ReportDto;
 use Upgrade\Infrastructure\Report\Dto\ReportMetadataDto;
 use Upgrade\Infrastructure\Report\Dto\ReportPayloadDto;
 
-class ReportJsonFormatter implements ReportFormatterInterface
+class ReportNormalizer implements NormalizerInterface
 {
     /**
-     * @param \Upgrade\Infrastructure\Report\Dto\ReportDto $reportDto
+     * @param $data
+     * @param string|null $format
+     *
+     * @return bool
+     */
+    public function supportsNormalization($data, string $format = null): bool
+    {
+        return $data instanceof  ReportDto;
+    }
+
+    /**
+     * @param mixed $object
+     * @param string|null $format
+     * @param array<string, mixed> $context
      *
      * @return array<string, mixed>
+     *
+     * @throws \InvalidArgumentException
      */
-    public function format(ReportDto $reportDto): array
+    public function normalize($object, string $format = null, array $context = []): array
     {
+        if (!($object instanceof ReportDto)) {
+            throw new \InvalidArgumentException(
+                sprintf('Invalid incoming object %s only %s is supported', get_class($object), ReportDto::class)
+            );
+        }
+
         return [
-            'name' => $reportDto->getName(),
-            'version' => $reportDto->getVersion(),
-            'scope' => $reportDto->getScope(),
-            'createdAt' => $reportDto->getCreatedAt()->getTimestamp(),
-            'payload' => $this->formatPayload($reportDto->getPayload()),
-            'metadata' => $this->formatMetaData($reportDto->getMetadata()),
+            'name' => $object->getName(),
+            'version' => $object->getVersion(),
+            'scope' => $object->getScope(),
+            'createdAt' => $object->getCreatedAt()->getTimestamp(),
+            'payload' => $this->formatPayload($object->getPayload()),
+            'metadata' => $this->formatMetaData($object->getMetadata()),
         ];
     }
 
