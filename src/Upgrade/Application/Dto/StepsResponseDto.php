@@ -42,6 +42,11 @@ class StepsResponseDto extends ResponseDto
     protected ?int $pullRequestId = null;
 
     /**
+     * @var string|null
+     */
+    protected ?string $reportId = null;
+
+    /**
      * @param bool $isSuccessful
      * @param string|null $outputMessage
      */
@@ -177,5 +182,25 @@ class StepsResponseDto extends ResponseDto
     public function getMajorAvailableInfo(): string
     {
         return $this->majorAvailableInfo;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReportId(): ?string
+    {
+        return $this->reportId;
+    }
+
+    /**
+     * @param string|null $reportId
+     *
+     * @return $this
+     */
+    public function setReportId(?string $reportId)
+    {
+        $this->reportId = $reportId;
+
+        return $this;
     }
 }

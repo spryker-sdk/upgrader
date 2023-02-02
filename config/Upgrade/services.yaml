@@ -1,3 +1,8 @@
+parameters:
+    report_send_endpoint_url: https://data.prod.spryker-dwh.net/upgrader
+    report_send_timeout: 10
+    report_send_connection_timeout: 4
+
 services:
     _defaults:
         autowire: true
@@ -10,6 +15,7 @@ services:
         exclude:
             - '../../src/Upgrade/Application/Dto/*'
             - '../../src/Upgrade/Infrastructure/VersionControlSystem/Dto/*'
+            - '../../src/Upgrade/Infrastructure/Report/Dto/*'
 
     git.adapter:
         class: Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter
@@ -63,43 +69,49 @@ services:
     release_group_update.step:
         class: Upgrade\Application\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep
 
+    generate_report_id.step:
+        class: Upgrade\Application\Strategy\Common\Step\GenerateReportIdStep
+
+    send_report.step:
+        class: Upgrade\Application\Strategy\Common\Step\SendReportStep
+
     composer.strategy:
         class: Upgrade\Application\Strategy\Composer\ComposerStrategy
         arguments:
-            - {
-                param1: '@check_credentials.step',
-                param2: '@check_is_remote_target_branch_exist.step',
-                param3: '@check_is_local_target_branch_exist.step',
-                param4: '@check_uncommitted_changes.step',
-                param5: '@composer_update.step',
-                param6: '@composer_lock_diff.step',
-                param7: '@integrator.step',
-                param8: '@create_branch.step',
-                param9: '@add_changes.step',
-                param10: '@commit_changes.step',
-                param11: '@push_changes.step',
-                param12: '@create_pr.step',
-                param13: '@checkout.step'
-             }
+            - - '@check_credentials.step'
+              - '@check_is_remote_target_branch_exist.step'
+              - '@check_is_local_target_branch_exist.step'
+              - '@check_uncommitted_changes.step'
+              - '@composer_update.step'
+              - '@composer_lock_diff.step'
+              - '@integrator.step'
+              - '@create_branch.step'
+              - '@add_changes.step'
+              - '@commit_changes.step'
+              - '@push_changes.step'
+              - '@generate_report_id.step'
+              - '@create_pr.step'
+              - '@checkout.step'
+              - '@send_report.step'
 
     release-app.strategy:
         class: Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy
         arguments:
-            - {
-                param1: '@check_credentials.step',
-                param2: '@check_is_remote_target_branch_exist.step',
-                param3: '@check_is_local_target_branch_exist.step',
-                param4: '@check_uncommitted_changes.step',
-                param5: '@release_group_update.step',
-                param6: '@composer_lock_diff.step',
-                param7: '@integrator.step',
-                param8: '@create_branch.step',
-                param9: '@add_changes.step',
-                param10: '@commit_changes.step',
-                param11: '@push_changes.step',
-                param12: '@create_pr.step',
-                param13: '@checkout.step'
-            }
+            - - '@check_credentials.step'
+              - '@check_is_remote_target_branch_exist.step'
+              - '@check_is_local_target_branch_exist.step'
+              - '@check_uncommitted_changes.step'
+              - '@release_group_update.step'
+              - '@composer_lock_diff.step'
+              - '@integrator.step'
+              - '@create_branch.step'
+              - '@add_changes.step'
+              - '@commit_changes.step'
+              - '@push_changes.step'
+              - '@generate_report_id.step'
+              - '@create_pr.step'
+              - '@checkout.step'
+              - '@send_report.step'
 
     Upgrade\Application\Strategy\StrategyResolver:
         class: Upgrade\Application\Strategy\StrategyResolver
@@ -192,4 +204,15 @@ services:
     Ergebnis\Json\Printer\Printer: ~
     Ergebnis\Json\Printer\PrinterInterface: '@Ergebnis\Json\Printer\Printer'
 
+    #Report
+    GuzzleHttp\Client:
+
+    Upgrade\Infrastructure\Report\ReportSender\RemoteEndpointReportSender:
+        arguments:
+            - '@GuzzleHttp\Client'
+            - '@Upgrade\Infrastructure\Report\ReportFormatter\ReportJsonFormatter'
+            - '@configuration.provider'
+            - '%report_send_endpoint_url%'
+            - '%report_send_timeout%'
+            - '%report_send_connection_timeout%'
 

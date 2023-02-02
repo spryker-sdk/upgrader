@@ -209,6 +209,7 @@ class Git
                 $composerDiffDto,
                 $stepsExecutionDto->getIntegratorResponseDto(),
                 $stepsExecutionDto->getMajorAvailableInfo(),
+                $stepsExecutionDto->getReportId(),
             ),
             $this->configurationProvider->isPullRequestAutoMergeEnabled(),
         );

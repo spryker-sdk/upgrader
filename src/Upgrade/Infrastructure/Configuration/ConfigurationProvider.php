@@ -257,4 +257,34 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     {
         return (int)getenv('THRESHOLD_RELEASE_GROUP') ?: static::DEFAULT_THRESHOLD_RELEASE_GROUP;
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return string
+     */
+    public function getExecutionEnv(): string
+    {
+        return (string)getenv('EXECUTION_ENV');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function isReportingEnabled(): bool
+    {
+        return (bool)getenv('REPORTING_ENABLED');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return string
+     */
+    public function getReportSendAuthToken(): string
+    {
+        return (string)getenv('REPORT_SEND_AUTH_TOKEN');
+    }
 }

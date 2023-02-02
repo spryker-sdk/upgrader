@@ -97,4 +97,28 @@ interface ConfigurationProviderInterface
      * @return int
      */
     public function getThresholdReleaseGroup(): int;
+
+    /**
+     * Specification:
+     * - Defines execution env.
+     *
+     * @return string
+     */
+    public function getExecutionEnv(): string;
+
+    /**
+     * Specification:
+     * - Defines report sending availability.
+     *
+     * @return bool
+     */
+    public function isReportingEnabled(): bool;
+
+    /**
+     * Specification:
+     * - Defines the report request auth token.
+     *
+     * @return string
+     */
+    public function getReportSendAuthToken(): string;
 }
