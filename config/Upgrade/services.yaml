@@ -1,5 +1,5 @@
 parameters:
-    report_send_endpoint_url: http://127.0.0.1:3000/upgrader
+    report_send_endpoint_url: https://data.prod.spryker-dwh.net/upgrader
     report_send_timeout: 10
     report_send_connection_timeout: 4
 
