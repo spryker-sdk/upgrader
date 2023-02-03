@@ -79,6 +79,7 @@ class ReportNormalizerTest extends TestCase
                             'diff_link' => 'https://github.com/spryker/testify/compare/2.0.0...2.0.1',
                         ],
                     ],
+                    'integrator_warnings' => [],
                 ],
             'metadata' => [
                 'organization_name' => 'spryker',

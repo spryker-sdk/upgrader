@@ -59,13 +59,14 @@ class ReportNormalizer implements NormalizerInterface
     /**
      * @param \Upgrade\Infrastructure\Report\Dto\ReportPayloadDto $reportPayloadDto
      *
-     * @return array<mixed, array<array<string, mixed>>>
+     * @return array<string, mixed>
      */
     protected function formatPayload(ReportPayloadDto $reportPayloadDto): array
     {
         return [
             'required_packages' => array_map([$this, 'formatPackage'], $reportPayloadDto->getRequiredPackages()),
             'dev_required_packages' => array_map([$this, 'formatPackage'], $reportPayloadDto->getDevRequiredPackages()),
+            'integrator_warnings' => $reportPayloadDto->getIntegratorWarnings(),
         ];
     }
 

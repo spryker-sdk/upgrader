@@ -22,13 +22,23 @@ class ReportPayloadDto
     protected array $devRequiredPackages;
 
     /**
+     * @var array<string>
+     */
+    protected array $integratorWarnings;
+
+    /**
      * @param array<\Upgrade\Domain\Entity\Package> $requiredPackages
      * @param array<\Upgrade\Domain\Entity\Package> $devRequiredPackages
+     * @param array<string> $integratorWarnings
      */
-    public function __construct(array $requiredPackages = [], array $devRequiredPackages = [])
-    {
+    public function __construct(
+        array $requiredPackages = [],
+        array $devRequiredPackages = [],
+        array $integratorWarnings = []
+    ) {
         $this->requiredPackages = $requiredPackages;
         $this->devRequiredPackages = $devRequiredPackages;
+        $this->integratorWarnings = $integratorWarnings;
     }
 
     /**
@@ -45,5 +55,13 @@ class ReportPayloadDto
     public function getDevRequiredPackages(): array
     {
         return $this->devRequiredPackages;
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getIntegratorWarnings(): array
+    {
+        return $this->integratorWarnings;
     }
 }
