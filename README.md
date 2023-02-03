@@ -213,6 +213,8 @@ export GITLAB_PROJECT_ID=<GITLAB_PROJECT_ID>
 export SOURCE_CODE_PROVIDER_URL=<https://git.yourdomain.com>
 ```
 ​
+### Reporting configuration
+​
 * Optional. Defines execution environment for report statistics:
 ```bash
 export EXECUTION_ENV=buddyCI
