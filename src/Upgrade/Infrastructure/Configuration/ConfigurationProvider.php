@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\Configuration;
 
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
+use Upgrade\Infrastructure\EnvParser\EnvFetcher;
 
 class ConfigurationProvider implements ConfigurationProviderInterface
 {
@@ -90,7 +91,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function getComposerNoInstall(): bool
     {
-        return (bool)getenv('COMPOSER_NO_INSTALL') ?: static::COMPOSER_NO_INSTALL;
+        return EnvFetcher::getBool('COMPOSER_NO_INSTALL', static::COMPOSER_NO_INSTALL);
     }
 
     /**
@@ -100,7 +101,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function isIntegratorEnabled(): bool
     {
-        return (bool)getenv('INTEGRATOR_ENABLED') ?: static::INTEGRATOR_ENABLED;
+        return EnvFetcher::getBool('INTEGRATOR_ENABLED', static::INTEGRATOR_ENABLED);
     }
 
     /**
@@ -176,7 +177,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function isPullRequestAutoMergeEnabled(): bool
     {
-        return (bool)getenv('IS_PR_AUTO_MERGE_ENABLED') ?: static::DEFAULT_IS_PR_AUTO_MERGE_ENABLED;
+        return EnvFetcher::getBool('IS_PR_AUTO_MERGE_ENABLED', static::DEFAULT_IS_PR_AUTO_MERGE_ENABLED);
     }
 
     /**
@@ -280,7 +281,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function isReportingEnabled(): bool
     {
-        return (bool)getenv('REPORTING_ENABLED') ?: static::DEFAULT_REPORTING_ENABLED;
+        return EnvFetcher::getBool('REPORTING_ENABLED', static::DEFAULT_REPORTING_ENABLED);
     }
 
     /**

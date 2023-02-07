@@ -222,7 +222,7 @@ export EXECUTION_ENV=buddyCI
 ​
 * Optional. Enable the report sending functionality. it’s disabled by default.
 ```bash
-export REPORTING_ENABLED=1
+export REPORTING_ENABLED=true
 ```
 ​
 * Optional. Secure token for remote server request authorization in report sending process.
@@ -241,7 +241,7 @@ bin/console upgradability:php:upgrade
 ​
 * Turn on integrator trigger after package update step
 ```bash
-export INTEGRATOR_ENABLED=1
+export INTEGRATOR_ENABLED=true
 ```
 
 ​
