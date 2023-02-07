@@ -39,7 +39,7 @@ class RemoteEndpointJsonReportSender implements ReportSenderInterface
     /**
      * @var int
      */
-    protected int $timeOut;
+    protected int $timeout;
 
     /**
      * @var int
@@ -51,7 +51,7 @@ class RemoteEndpointJsonReportSender implements ReportSenderInterface
      * @param \Symfony\Component\Serializer\SerializerInterface $serializer
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      * @param string $endpointUrl
-     * @param int $timeOut
+     * @param int $timeout
      * @param int $connectionTimeout
      */
     public function __construct(
@@ -59,13 +59,13 @@ class RemoteEndpointJsonReportSender implements ReportSenderInterface
         SerializerInterface $serializer,
         ConfigurationProviderInterface $configurationProvider,
         string $endpointUrl,
-        int $timeOut,
+        int $timeout,
         int $connectionTimeout
     ) {
         $this->httpClient = $httpClient;
         $this->serializer = $serializer;
         $this->endpointUrl = $endpointUrl;
-        $this->timeOut = $timeOut;
+        $this->timeout = $timeout;
         $this->connectionTimeout = $connectionTimeout;
         $this->configurationProvider = $configurationProvider;
     }
@@ -84,7 +84,7 @@ class RemoteEndpointJsonReportSender implements ReportSenderInterface
                 'query' => ['token' => $this->configurationProvider->getReportSendAuthToken()],
                 'headers' => ['Content-Type' => 'application/json'],
                 'body' => $this->serializer->serialize($reportDto, 'json'),
-                'timeout' => $this->timeOut,
+                'timeout' => $this->timeout,
                 'connect_timeout' => $this->connectionTimeout,
             ],
         );
