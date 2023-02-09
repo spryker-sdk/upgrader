@@ -204,7 +204,7 @@ class Git
         $pullRequestDto = new PullRequestDto(
             $this->getHeadBranch(),
             $this->getBaseBranch(),
-            'Updated to the latest Spryker modules up to ' . date('m/d/Y h:i', time()),
+            'Updated to the latest Spryker modules up to ' . date('Y-m-d h:i', time()),
             $this->pullRequestDataGenerator->buildBody(
                 $composerDiffDto,
                 $stepsExecutionDto->getIntegratorResponseDto(),
