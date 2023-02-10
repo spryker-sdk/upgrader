@@ -213,6 +213,23 @@ export GITLAB_PROJECT_ID=<GITLAB_PROJECT_ID>
 export SOURCE_CODE_PROVIDER_URL=<https://git.yourdomain.com>
 ```
 ​
+### Reporting configuration
+​
+* Optional. Defines execution environment for report statistics:
+```bash
+export EXECUTION_ENV=buddyCI
+```
+​
+* Optional. Enable the report sending functionality. it’s disabled by default.
+```bash
+export REPORTING_ENABLED=true
+```
+​
+* Optional. Secure token for remote server request authorization in report sending process.
+```bash
+export REPORT_SEND_AUTH_TOKEN=<TOKEN>
+```
+​
 ### Updating projects via the SDK
 ​
 To update a project, run the following command from its directory:

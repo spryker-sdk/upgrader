@@ -15,11 +15,16 @@ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 class TestKernel extends BaseKernel
 {
     /**
-     * @return array
+     * @return iterable<\Symfony\Component\HttpKernel\Bundle\BundleInterface>
      */
-    public function registerBundles(): array
+    public function registerBundles(): iterable
     {
-        return [];
+        $contents = require $this->getProjectDir() . '/config/bundles.php';
+        foreach ($contents as $class => $envs) {
+            if ($envs[$this->environment] ?? $envs['all'] ?? false) {
+                yield new $class();
+            }
+        }
     }
 
     /**

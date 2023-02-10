@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\Configuration;
 
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
+use Upgrade\Infrastructure\EnvParser\EnvFetcher;
 
 class ConfigurationProvider implements ConfigurationProviderInterface
 {
@@ -69,6 +70,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     protected const INTEGRATOR_ENABLED = false;
 
     /**
+     * @var bool
+     */
+    protected const DEFAULT_REPORTING_ENABLED = false;
+
+    /**
      * {@inheritDoc}
      *
      * @return string
@@ -85,7 +91,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function getComposerNoInstall(): bool
     {
-        return (bool)getenv('COMPOSER_NO_INSTALL') ?: static::COMPOSER_NO_INSTALL;
+        return EnvFetcher::getBool('COMPOSER_NO_INSTALL', static::COMPOSER_NO_INSTALL);
     }
 
     /**
@@ -95,7 +101,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function isIntegratorEnabled(): bool
     {
-        return (bool)getenv('INTEGRATOR_ENABLED') ?: static::INTEGRATOR_ENABLED;
+        return EnvFetcher::getBool('INTEGRATOR_ENABLED', static::INTEGRATOR_ENABLED);
     }
 
     /**
@@ -171,7 +177,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function isPullRequestAutoMergeEnabled(): bool
     {
-        return (bool)getenv('IS_PR_AUTO_MERGE_ENABLED') ?: static::DEFAULT_IS_PR_AUTO_MERGE_ENABLED;
+        return EnvFetcher::getBool('IS_PR_AUTO_MERGE_ENABLED', static::DEFAULT_IS_PR_AUTO_MERGE_ENABLED);
     }
 
     /**
@@ -256,5 +262,35 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public function getThresholdReleaseGroup(): int
     {
         return (int)getenv('THRESHOLD_RELEASE_GROUP') ?: static::DEFAULT_THRESHOLD_RELEASE_GROUP;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return string
+     */
+    public function getExecutionEnv(): string
+    {
+        return (string)getenv('EXECUTION_ENV');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function isReportingEnabled(): bool
+    {
+        return EnvFetcher::getBool('REPORTING_ENABLED', static::DEFAULT_REPORTING_ENABLED);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return string
+     */
+    public function getReportSendAuthToken(): string
+    {
+        return (string)getenv('REPORT_SEND_AUTH_TOKEN');
     }
 }

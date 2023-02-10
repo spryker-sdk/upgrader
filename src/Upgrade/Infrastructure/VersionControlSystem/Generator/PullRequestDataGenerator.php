@@ -18,18 +18,23 @@ class PullRequestDataGenerator
      * @param \Upgrade\Application\Dto\ComposerLockDiffDto $composerDiffDto
      * @param \Upgrade\Application\Dto\IntegratorResponseDto|null $integratorResponseDto
      * @param string $majorAvailableInfo
+     * @param string|null $reportId
      *
      * @return string
      */
     public function buildBody(
         ComposerLockDiffDto $composerDiffDto,
         ?IntegratorResponseDto $integratorResponseDto,
-        string $majorAvailableInfo = ''
+        string $majorAvailableInfo = '',
+        ?string $reportId = null
     ): string {
         $text = 'Auto created via Upgrader tool.'
             . PHP_EOL
             . PHP_EOL
             . '#### Overview'
+            . PHP_EOL
+            . sprintf('Report ID: %s', $reportId ?? 'n/a')
+            . PHP_EOL
             . PHP_EOL;
 
         if ($majorAvailableInfo) {
