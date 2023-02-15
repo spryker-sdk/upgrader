@@ -40,6 +40,7 @@ class PullRequestDataGenerator
         if ($majorAvailableInfo) {
             $text .= '​' . PHP_EOL . '**Available majors:**' . PHP_EOL . PHP_EOL;
             $text .= $majorAvailableInfo;
+            $text .= str_repeat(PHP_EOL, 2);
         }
 
         if ($integratorResponseDto && $integratorResponseDto->getWarnings()) {
