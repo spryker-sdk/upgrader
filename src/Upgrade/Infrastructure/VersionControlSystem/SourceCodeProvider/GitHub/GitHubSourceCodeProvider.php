@@ -9,9 +9,6 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub;
 
-use Github\AuthMethod;
-use Github\Client;
-use Github\HttpClient\Builder;
 use RuntimeException;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
@@ -31,17 +28,18 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
     protected ConfigurationProvider $configurationProvider;
 
     /**
-     * @var \Github\Client
+     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubClientFactory
      */
-    protected Client $gitHubClient;
+    protected GitHubClientFactory $gitHubClientFactory;
 
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
+     * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubClientFactory $gitHubClientFactory
      */
-    public function __construct(ConfigurationProvider $configurationProvider)
+    public function __construct(ConfigurationProvider $configurationProvider, GitHubClientFactory $gitHubClientFactory)
     {
         $this->configurationProvider = $configurationProvider;
-        $this->gitHubClient = $this->authenticated($configurationProvider->getAccessToken());
+        $this->gitHubClientFactory = $gitHubClientFactory;
     }
 
     /**
@@ -85,7 +83,7 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
                 return $stepsExecutionDto;
             }
 
-            $response = $this->gitHubClient->pr()->create(
+            $response = $this->gitHubClientFactory->getClient()->pr()->create(
                 $this->configurationProvider->getOrganizationName(),
                 $this->configurationProvider->getRepositoryName(),
                 [
@@ -109,18 +107,5 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
                 ->setIsSuccessful(false)
                 ->addOutputMessage($runtimeException->getMessage());
         }
-    }
-
-    /**
-     * @param string $token
-     *
-     * @return \Github\Client
-     */
-    protected function authenticated(string $token): Client
-    {
-        $gitClient = new Client(new Builder());
-        $gitClient->authenticate($token, null, AuthMethod::ACCESS_TOKEN);
-
-        return $gitClient;
     }
 }

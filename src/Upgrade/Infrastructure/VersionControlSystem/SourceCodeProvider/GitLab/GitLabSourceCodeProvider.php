@@ -30,11 +30,18 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
     protected ?Client $gitLabClient = null;
 
     /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
+     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabClientFactory
      */
-    public function __construct(ConfigurationProvider $configurationProvider)
+    protected GitLabClientFactory $gitLabClientFactory;
+
+    /**
+     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
+     * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabClientFactory $gitLabClientFactory
+     */
+    public function __construct(ConfigurationProvider $configurationProvider, GitLabClientFactory $gitLabClientFactory)
     {
         $this->configurationProvider = $configurationProvider;
+        $this->gitLabClientFactory = $gitLabClientFactory;
     }
 
     /**
@@ -99,7 +106,7 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
      */
     protected function create(PullRequestDto $pullRequestDto): int
     {
-        $prCreatingResult = $this->getClient()->mergeRequests()->create(
+        $prCreatingResult = $this->gitLabClientFactory->getClient()->mergeRequests()->create(
             $this->configurationProvider->getGitLabProjectId(),
             $pullRequestDto->getSourceBranch(),
             $pullRequestDto->getTargetBranch(),
@@ -123,7 +130,7 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
     protected function mergePullRequest(int $pullRequestId): void
     {
         sleep($this->configurationProvider->getGitLabDelayBetweenPrCreatingAndMerging());
-        $this->getClient()->mergeRequests()->merge(
+        $this->gitLabClientFactory->getClient()->mergeRequests()->merge(
             $this->configurationProvider->getGitLabProjectId(),
             $pullRequestId,
             [
@@ -131,21 +138,5 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
                 'merge_when_pipeline_succeeds' => true,
             ],
         );
-    }
-
-    /**
-     * @return \Gitlab\Client
-     */
-    protected function getClient(): Client
-    {
-        if (!$this->gitLabClient) {
-            $this->gitLabClient = new Client();
-            $this->gitLabClient->authenticate($this->configurationProvider->getAccessToken(), Client::AUTH_HTTP_TOKEN);
-            if ($this->configurationProvider->getSourceCodeProviderUrl()) {
-                $this->gitLabClient->setUrl($this->configurationProvider->getSourceCodeProviderUrl());
-            }
-        }
-
-        return $this->gitLabClient;
     }
 }
