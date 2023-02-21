@@ -13,7 +13,6 @@ use Upgrade\Application\Adapter\IntegratorExecutorInterface;
 use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
-use Upgrade\Application\Strategy\Common\Step\AbstractStep;
 use Upgrade\Application\Strategy\RollbackStepInterface;
 
 class IntegratorLockStep extends AbstractStep implements RollbackStepInterface

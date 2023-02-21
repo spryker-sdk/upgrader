@@ -79,7 +79,7 @@ class IntegratorExecutor implements IntegratorExecutorInterface
             static::FROMAT_JSON_OPTION,
         ]);
 
-        $this->runIntegratorProcess($command, $stepsExecutionDto);
+        return $this->runIntegratorProcess($command, $stepsExecutionDto);
     }
 
     /**

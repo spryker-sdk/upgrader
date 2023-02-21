@@ -27,6 +27,7 @@ class IntegratorLockStepTest extends TestCase
         $gitAdapter = $this->createMock(GitAdapter::class);
 
         $integratorExecutor = $this->createMock(IntegratorExecutor::class);
+
         // Assert
         $integratorExecutor->expects($this->once())->method('runIntegratorLockUpdater');
 
