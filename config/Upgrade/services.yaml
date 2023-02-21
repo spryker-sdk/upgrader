@@ -39,6 +39,9 @@ services:
     check_uncommitted_changes.step:
         class: Upgrade\Application\Strategy\Common\Step\CheckUncommittedChangesStep
 
+    manifest_lock_run.step:
+        class: Upgrade\Application\Strategy\Common\Step\IntegratorLockStep
+
     composer_update.step:
         class: Upgrade\Application\Strategy\Composer\Step\ComposerUpdateStep
 
@@ -85,6 +88,7 @@ services:
               - '@check_is_remote_target_branch_exist.step'
               - '@check_is_local_target_branch_exist.step'
               - '@check_uncommitted_changes.step'
+              - '@manifest_lock_run.step'
               - '@composer_update.step'
               - '@composer_lock_diff.step'
               - '@integrator.step'
@@ -106,6 +110,7 @@ services:
               - '@check_is_remote_target_branch_exist.step'
               - '@check_is_local_target_branch_exist.step'
               - '@check_uncommitted_changes.step'
+              - '@manifest_lock_run.step'
               - '@release_group_update.step'
               - '@composer_lock_diff.step'
               - '@integrator.step'
