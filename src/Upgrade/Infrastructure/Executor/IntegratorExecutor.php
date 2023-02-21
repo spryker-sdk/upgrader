@@ -24,7 +24,7 @@ class IntegratorExecutor implements IntegratorExecutorInterface
     /**
      * @var string
      */
-    protected const MANIFEST_LOCK_RUNNER = 'manifest:lock:run';
+    protected const MANIFEST_LOCK_COMMAND = 'manifest:lock:run';
 
     /**
      * @var string
@@ -74,7 +74,7 @@ class IntegratorExecutor implements IntegratorExecutorInterface
     {
         $command = implode(' ', [
             APPLICATION_ROOT_DIR . static::RUNNER,
-            static::MANIFEST_LOCK_RUNNER,
+            static::MANIFEST_LOCK_COMMAND,
             static::NO_INTERACTION_COMPOSER_FLAG,
             static::FROMAT_JSON_OPTION,
         ]);
