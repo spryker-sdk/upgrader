@@ -21,22 +21,38 @@ class IntegratorLockStepTest extends TestCase
     /**
      * @return void
      */
-    public function testIntegratorEnabled(): void
+    public function testIntegrator(): void
     {
         // Arrange
         $gitAdapter = $this->createMock(GitAdapter::class);
-
+        $configurationProvider = $this->createMock(ConfigurationProvider::class);
         $integratorExecutor = $this->createMock(IntegratorExecutor::class);
 
         // Assert
         $integratorExecutor->expects($this->once())->method('runIntegratorLockUpdater');
-
-        $configurationProvider = $this->createMock(ConfigurationProvider::class);
-        $configurationProvider->method('isIntegratorEnabled')->willReturn(true);
+        $configurationProvider->expects($this->once())->method('isIntegratorEnabled')->willReturn(true);
 
         $integratorStep = new IntegratorLockStep($gitAdapter, $integratorExecutor, $configurationProvider);
 
         // Act
         $integratorStep->run(new StepsResponseDto(true));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRollBack(): void
+    {
+        // Arrange
+        $gitAdapter = $this->createMock(GitAdapter::class);
+        $integratorExecutor = $this->createMock(IntegratorExecutor::class);
+        $configurationProvider = $this->createMock(ConfigurationProvider::class);
+
+        // Assert
+        $gitAdapter->expects($this->once())->method('restore');
+        $integratorStep = new IntegratorLockStep($gitAdapter, $integratorExecutor, $configurationProvider);
+
+        // Act
+        $integratorStep->rollBack(new StepsResponseDto(true));
     }
 }
