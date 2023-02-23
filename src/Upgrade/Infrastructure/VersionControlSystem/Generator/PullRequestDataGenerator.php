@@ -105,7 +105,17 @@ class PullRequestDataGenerator
             . '|---------|------|--------|'
             . PHP_EOL;
 
+        $processedSkippedManifests = [];
+
         foreach ($skippedManifests as $skippedManifest) {
+            $skippedManifestHash = md5($skippedManifest);
+
+            if (in_array($skippedManifestHash, $processedSkippedManifests, true)) {
+                continue;
+            }
+
+            $processedSkippedManifests[] = $skippedManifestHash;
+
             preg_match('/[a-zA-Z]*:[0-9]*.[0-9]*.[0-9]*/', $skippedManifest, $matches);
             if (!count($matches)) {
                 continue;
