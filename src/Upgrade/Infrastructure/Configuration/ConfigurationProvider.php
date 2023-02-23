@@ -37,7 +37,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * @var int
      */
-    public const DEFAULT_SOFT_THRESHOLD_MAJOR = 0;
+    public const DEFAULT_SOFT_THRESHOLD_MAJOR = 10;
 
     /**
      * @var int

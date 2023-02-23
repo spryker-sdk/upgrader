@@ -142,7 +142,7 @@ export RELEASE_GROUP_PROCESSOR=aggregate
 ```
 Aggregate release group processor contains soft thresholds:
 
-Soft major threshold, by default 0.
+Soft major threshold, by default 10.
 
 * To change soft major threshold:
 ```bash
