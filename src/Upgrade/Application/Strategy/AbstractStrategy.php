@@ -41,15 +41,20 @@ abstract class AbstractStrategy implements StrategyInterface
         $executedSteps = [];
         $stepsExecutionDto = new StepsResponseDto(true);
 
-        foreach ($this->steps as $step) {
+        foreach ($this->steps as $index => $step) {
+            $stepName = $this->getStepName($step);
+            $stepsExecutionDto->addOutputMessage(sprintf('%sStart executing "%s" step', $index === 0 ? '' : PHP_EOL, $stepName));
+
             $executedSteps[] = $step;
 
             $stepsExecutionDto = $step->run($stepsExecutionDto);
 
             if (!$stepsExecutionDto->getIsSuccessful()) {
+                $stepsExecutionDto->addOutputMessage('Step is failed. It will be reapplied with a fixer');
                 $stepsExecutionDto = $this->runWithFixer($step, $stepsExecutionDto);
             }
             if (!$stepsExecutionDto->getIsSuccessful()) {
+                $stepsExecutionDto->addOutputMessage('Step is failed');
                 $rollBackExecutionDto = new StepsResponseDto(true);
                 foreach (array_reverse($executedSteps) as $executedStep) {
                     if ($executedStep instanceof RollbackStepInterface) {
@@ -59,6 +64,8 @@ abstract class AbstractStrategy implements StrategyInterface
 
                 return $stepsExecutionDto;
             }
+
+            $stepsExecutionDto->addOutputMessage('Step is successfully executed');
         }
 
         return $stepsExecutionDto;
@@ -87,5 +94,21 @@ abstract class AbstractStrategy implements StrategyInterface
         }
 
         return $stepsResponseDto;
+    }
+
+    /**
+     * @param \Upgrade\Application\Strategy\StepInterface $step
+     *
+     * @return string
+     */
+    protected function getStepName(StepInterface $step): string
+    {
+        $classParts = explode('\\', get_class($step));
+
+        return ucfirst(strtolower(trim((string)preg_replace(
+            '/(?=[A-Z])/',
+            ' $1',
+            (string)preg_replace('/Step$/', '', end($classParts)),
+        ))));
     }
 }
