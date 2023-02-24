@@ -85,7 +85,9 @@ class AggregateReleaseGroupProcessor implements ReleaseGroupProcessorInterface
 
         $response = $this->modulePackageFetcher->require($aggregatedReleaseGroupCollection->getCommonModuleCollection());
 
-        $stepsExecutionDto->setIsSuccessful($response->isSuccessful());
+        if (!$response->isSuccessful()) {
+            $stepsExecutionDto->setIsSuccessful(false);
+        }
 
         if ($response->getOutputMessage() !== null) {
             $stepsExecutionDto->addOutputMessage($response->getOutputMessage());

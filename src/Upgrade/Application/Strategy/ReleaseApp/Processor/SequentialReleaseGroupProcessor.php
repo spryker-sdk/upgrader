@@ -96,7 +96,9 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
             }
         }
 
-        $stepsExecutionDto->setIsSuccessful($response->isSuccessful());
+        if (!$response->isSuccessful()) {
+            $stepsExecutionDto->setIsSuccessful(false);
+        }
 
         if ($response->isSuccessful() && $aggregatedReleaseGroupCollection->count()) {
             $stepsExecutionDto->addOutputMessage(
