@@ -216,8 +216,8 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new PackageCollectionMapper(
                     new PackageSoftValidator([]),
                     $composerAdapterMock,
-                )
-            )
+                ),
+            ),
         );
     }
 
@@ -245,8 +245,8 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new PackageCollectionMapper(
                     new PackageSoftValidator([]),
                     $composerAdapterMock,
-                )
-            )
+                ),
+            ),
         );
     }
 

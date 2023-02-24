@@ -43,7 +43,7 @@ abstract class AbstractStrategy implements StrategyInterface
 
         foreach ($this->steps as $index => $step) {
             $stepsExecutionDto->addOutputMessage(
-                sprintf('%sStart executing "%s" step', $index === 0 ? '' : PHP_EOL, $this->getStepName($step))
+                sprintf('%sStart executing "%s" step', $index === 0 ? '' : PHP_EOL, $this->getStepName($step)),
             );
 
             $executedSteps[] = $step;
