@@ -4,8 +4,152 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2977359663c2698bc08feea2dedb61e5",
+    "content-hash": "a03efc5204688090d94520e4828e4ade",
     "packages": [
+        {
+            "name": "aws/aws-crt-php",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/awslabs/aws-crt-php.git",
+                "reference": "f5c64ee7c5fce196e2519b3d9b7138649efe032d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/awslabs/aws-crt-php/zipball/f5c64ee7c5fce196e2519b3d9b7138649efe032d",
+                "reference": "f5c64ee7c5fce196e2519b3d9b7138649efe032d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35|^5.6.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "AWS SDK Common Runtime Team",
+                    "email": "aws-sdk-common-runtime@amazon.com"
+                }
+            ],
+            "description": "AWS Common Runtime for PHP",
+            "homepage": "http://aws.amazon.com/sdkforphp",
+            "keywords": [
+                "amazon",
+                "aws",
+                "crt",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/awslabs/aws-crt-php/issues",
+                "source": "https://github.com/awslabs/aws-crt-php/tree/v1.0.4"
+            },
+            "time": "2023-01-31T23:08:25+00:00"
+        },
+        {
+            "name": "aws/aws-sdk-php",
+            "version": "3.260.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aws/aws-sdk-php.git",
+                "reference": "547b8047b2f9a551a7100b22e1abe1a3cc1b0ff0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/547b8047b2f9a551a7100b22e1abe1a3cc1b0ff0",
+                "reference": "547b8047b2f9a551a7100b22e1abe1a3cc1b0ff0",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-crt-php": "^1.0.4",
+                "ext-json": "*",
+                "ext-pcre": "*",
+                "ext-simplexml": "*",
+                "guzzlehttp/guzzle": "^6.5.8 || ^7.4.5",
+                "guzzlehttp/promises": "^1.4.0",
+                "guzzlehttp/psr7": "^1.8.5 || ^2.3",
+                "mtdowling/jmespath.php": "^2.6",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "andrewsville/php-token-reflection": "^1.4",
+                "aws/aws-php-sns-message-validator": "~1.0",
+                "behat/behat": "~3.0",
+                "composer/composer": "^1.10.22",
+                "dms/phpunit-arraysubset-asserts": "^0.4.0",
+                "doctrine/cache": "~1.4",
+                "ext-dom": "*",
+                "ext-openssl": "*",
+                "ext-pcntl": "*",
+                "ext-sockets": "*",
+                "nette/neon": "^2.3",
+                "paragonie/random_compat": ">= 2",
+                "phpunit/phpunit": "^4.8.35 || ^5.6.3 || ^9.5",
+                "psr/cache": "^1.0",
+                "psr/simple-cache": "^1.0",
+                "sebastian/comparator": "^1.2.3 || ^4.0",
+                "yoast/phpunit-polyfills": "^1.0"
+            },
+            "suggest": {
+                "aws/aws-php-sns-message-validator": "To validate incoming SNS notifications",
+                "doctrine/cache": "To use the DoctrineCacheAdapter",
+                "ext-curl": "To send requests using cURL",
+                "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages",
+                "ext-sockets": "To use client-side monitoring"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Aws\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Amazon Web Services",
+                    "homepage": "http://aws.amazon.com"
+                }
+            ],
+            "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
+            "homepage": "http://aws.amazon.com/sdkforphp",
+            "keywords": [
+                "amazon",
+                "aws",
+                "cloud",
+                "dynamodb",
+                "ec2",
+                "glacier",
+                "s3",
+                "sdk"
+            ],
+            "support": {
+                "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
+                "issues": "https://github.com/aws/aws-sdk-php/issues",
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.260.3"
+            },
+            "time": "2023-02-24T19:25:34+00:00"
+        },
         {
             "name": "clue/stream-filter",
             "version": "v1.6.0",
@@ -74,16 +218,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.3.3",
+            "version": "1.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "30897edbfb15e784fe55587b4f73ceefd3c4d98c"
+                "reference": "74780ccf8c19d6acb8d65c5f39cd72110e132bbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/30897edbfb15e784fe55587b4f73ceefd3c4d98c",
-                "reference": "30897edbfb15e784fe55587b4f73ceefd3c4d98c",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/74780ccf8c19d6acb8d65c5f39cd72110e132bbd",
+                "reference": "74780ccf8c19d6acb8d65c5f39cd72110e132bbd",
                 "shasum": ""
             },
             "require": {
@@ -130,7 +274,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-                "source": "https://github.com/composer/ca-bundle/tree/1.3.3"
+                "source": "https://github.com/composer/ca-bundle/tree/1.3.5"
             },
             "funding": [
                 {
@@ -146,7 +290,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-20T07:14:26+00:00"
+            "time": "2023-01-11T08:27:00+00:00"
         },
         {
             "name": "composer/class-map-generator",
@@ -223,23 +367,23 @@
         },
         {
             "name": "composer/composer",
-            "version": "2.4.1",
+            "version": "2.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "777d542e3af65f8e7a66a4d98ce7a697da339414"
+                "reference": "6b67eeea4d72051c369ccdbfb2423a56e2ab51a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/777d542e3af65f8e7a66a4d98ce7a697da339414",
-                "reference": "777d542e3af65f8e7a66a4d98ce7a697da339414",
+                "url": "https://api.github.com/repos/composer/composer/zipball/6b67eeea4d72051c369ccdbfb2423a56e2ab51a9",
+                "reference": "6b67eeea4d72051c369ccdbfb2423a56e2ab51a9",
                 "shasum": ""
             },
             "require": {
                 "composer/ca-bundle": "^1.0",
                 "composer/class-map-generator": "^1.0",
                 "composer/metadata-minifier": "^1.0",
-                "composer/pcre": "^2 || ^3",
+                "composer/pcre": "^2.1 || ^3.1",
                 "composer/semver": "^3.0",
                 "composer/spdx-licenses": "^1.5.7",
                 "composer/xdebug-handler": "^2.0.2 || ^3.0.3",
@@ -255,14 +399,15 @@
                 "symfony/finder": "^5.4 || ^6.0",
                 "symfony/polyfill-php73": "^1.24",
                 "symfony/polyfill-php80": "^1.24",
+                "symfony/polyfill-php81": "^1.24",
                 "symfony/process": "^5.4 || ^6.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "^1.4.1",
+                "phpstan/phpstan": "^1.9.3",
                 "phpstan/phpstan-deprecation-rules": "^1",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1",
-                "phpstan/phpstan-symfony": "^1.1",
+                "phpstan/phpstan-symfony": "^1.2.10",
                 "symfony/phpunit-bridge": "^6.0"
             },
             "suggest": {
@@ -276,7 +421,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.4-dev"
+                    "dev-main": "2.5-dev"
                 },
                 "phpstan": {
                     "includes": [
@@ -315,7 +460,7 @@
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/composer/issues",
-                "source": "https://github.com/composer/composer/tree/2.4.1"
+                "source": "https://github.com/composer/composer/tree/2.5.4"
             },
             "funding": [
                 {
@@ -331,7 +476,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-20T09:44:50+00:00"
+            "time": "2023-02-15T12:10:06+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -404,16 +549,16 @@
         },
         {
             "name": "composer/pcre",
-            "version": "3.0.0",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/pcre.git",
-                "reference": "e300eb6c535192decd27a85bc72a9290f0d6b3bd"
+                "reference": "4bff79ddd77851fe3cdd11616ed3f92841ba5bd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/pcre/zipball/e300eb6c535192decd27a85bc72a9290f0d6b3bd",
-                "reference": "e300eb6c535192decd27a85bc72a9290f0d6b3bd",
+                "url": "https://api.github.com/repos/composer/pcre/zipball/4bff79ddd77851fe3cdd11616ed3f92841ba5bd2",
+                "reference": "4bff79ddd77851fe3cdd11616ed3f92841ba5bd2",
                 "shasum": ""
             },
             "require": {
@@ -455,7 +600,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/pcre/issues",
-                "source": "https://github.com/composer/pcre/tree/3.0.0"
+                "source": "https://github.com/composer/pcre/tree/3.1.0"
             },
             "funding": [
                 {
@@ -471,7 +616,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-25T20:21:48+00:00"
+            "time": "2022-11-17T09:50:14+00:00"
         },
         {
             "name": "composer/semver",
@@ -699,6 +844,58 @@
                 }
             ],
             "time": "2022-02-25T21:32:43+00:00"
+        },
+        {
+            "name": "czproject/git-php",
+            "version": "v4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/czproject/git-php.git",
+                "reference": "bb195e30442bc5206b30fa9a304e20ea8e96458f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/czproject/git-php/zipball/bb195e30442bc5206b30fa9a304e20ea8e96458f",
+                "reference": "bb195e30442bc5206b30fa9a304e20ea8e96458f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "nette/tester": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Pecha",
+                    "email": "janpecha@email.cz"
+                }
+            ],
+            "description": "Library for work with Git repository in PHP.",
+            "keywords": [
+                "git"
+            ],
+            "support": {
+                "issues": "https://github.com/czproject/git-php/issues",
+                "source": "https://github.com/czproject/git-php/tree/v4.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://www.paypal.com/donate?hosted_button_id=EPSKR7MGVV7KC",
+                    "type": "custom"
+                }
+            ],
+            "time": "2022-12-10T18:23:32+00:00"
         },
         {
             "name": "davidrjonas/composer-lock-diff",
@@ -1352,37 +1549,37 @@
         },
         {
             "name": "laminas/laminas-filter",
-            "version": "2.17.0",
+            "version": "2.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-filter.git",
-                "reference": "7c78483f22e118fbc98be41dc24b39e8c17cdcae"
+                "reference": "548a6597d357b0b0b139cc7bffea4dfbc50eb5a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-filter/zipball/7c78483f22e118fbc98be41dc24b39e8c17cdcae",
-                "reference": "7c78483f22e118fbc98be41dc24b39e8c17cdcae",
+                "url": "https://api.github.com/repos/laminas/laminas-filter/zipball/548a6597d357b0b0b139cc7bffea4dfbc50eb5a8",
+                "reference": "548a6597d357b0b0b139cc7bffea4dfbc50eb5a8",
                 "shasum": ""
             },
             "require": {
+                "ext-mbstring": "*",
                 "laminas/laminas-servicemanager": "^3.14.0",
-                "laminas/laminas-stdlib": "^3.6.1",
-                "php": "^7.4 || ~8.0.0 || ~8.1.0"
+                "laminas/laminas-stdlib": "^3.13.0",
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
             },
             "conflict": {
                 "laminas/laminas-validator": "<2.10.1",
                 "zendframework/zend-filter": "*"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "^2.3.0",
-                "laminas/laminas-crypt": "^3.5.1",
-                "laminas/laminas-uri": "^2.9.1",
+                "laminas/laminas-coding-standard": "~2.5.0",
+                "laminas/laminas-crypt": "^3.9",
+                "laminas/laminas-uri": "^2.10",
                 "pear/archive_tar": "^1.4.14",
-                "phpspec/prophecy-phpunit": "^2.0.1",
-                "phpunit/phpunit": "^9.5.10",
-                "psalm/plugin-phpunit": "^0.17.0",
+                "phpunit/phpunit": "^9.5.27",
+                "psalm/plugin-phpunit": "^0.18.4",
                 "psr/http-factory": "^1.0.1",
-                "vimeo/psalm": "^4.24.0"
+                "vimeo/psalm": "^5.3"
             },
             "suggest": {
                 "laminas/laminas-crypt": "Laminas\\Crypt component, for encryption filters",
@@ -1426,25 +1623,25 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-07-17T11:58:06+00:00"
+            "time": "2023-01-12T06:17:48+00:00"
         },
         {
             "name": "laminas/laminas-servicemanager",
-            "version": "3.16.0",
+            "version": "3.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-servicemanager.git",
-                "reference": "863c66733740cd36ebf5e700f4258ef2c68a2a24"
+                "reference": "bc2c2cbe2dd90db8b9d16b0618f542692b76ab59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/863c66733740cd36ebf5e700f4258ef2c68a2a24",
-                "reference": "863c66733740cd36ebf5e700f4258ef2c68a2a24",
+                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/bc2c2cbe2dd90db8b9d16b0618f542692b76ab59",
+                "reference": "bc2c2cbe2dd90db8b9d16b0618f542692b76ab59",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-stdlib": "^3.2.1",
-                "php": "~7.4.0 || ~8.0.0 || ~8.1.0",
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
                 "psr/container": "^1.0"
             },
             "conflict": {
@@ -1460,17 +1657,16 @@
                 "container-interop/container-interop": "^1.2.0"
             },
             "require-dev": {
-                "composer/package-versions-deprecated": "^1.0",
-                "laminas/laminas-coding-standard": "~2.3.0",
-                "laminas/laminas-container-config-test": "^0.7",
-                "laminas/laminas-dependency-plugin": "^2.1.2",
-                "mikey179/vfsstream": "^1.6.10@alpha",
-                "ocramius/proxy-manager": "^2.11",
-                "phpbench/phpbench": "^1.1",
-                "phpspec/prophecy-phpunit": "^2.0",
-                "phpunit/phpunit": "^9.5.5",
-                "psalm/plugin-phpunit": "^0.17.0",
-                "vimeo/psalm": "^4.8"
+                "composer/package-versions-deprecated": "^1.11.99.5",
+                "laminas/laminas-coding-standard": "~2.4.0",
+                "laminas/laminas-container-config-test": "^0.8",
+                "laminas/laminas-dependency-plugin": "^2.2",
+                "mikey179/vfsstream": "^1.6.11@alpha",
+                "ocramius/proxy-manager": "^2.14.1",
+                "phpbench/phpbench": "^1.2.7",
+                "phpunit/phpunit": "^9.5.26",
+                "psalm/plugin-phpunit": "^0.18.0",
+                "vimeo/psalm": "^5.0.0"
             },
             "suggest": {
                 "ocramius/proxy-manager": "ProxyManager ^2.1.1 to handle lazy initialization of services"
@@ -1517,35 +1713,34 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-07-27T14:58:17+00:00"
+            "time": "2022-12-01T17:03:38+00:00"
         },
         {
             "name": "laminas/laminas-stdlib",
-            "version": "3.13.0",
+            "version": "3.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-stdlib.git",
-                "reference": "66a6d03c381f6c9f1dd988bf8244f9afb9380d76"
+                "reference": "f4f773641807c7ccee59b758bfe4ac4ba33ecb17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/66a6d03c381f6c9f1dd988bf8244f9afb9380d76",
-                "reference": "66a6d03c381f6c9f1dd988bf8244f9afb9380d76",
+                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/f4f773641807c7ccee59b758bfe4ac4ba33ecb17",
+                "reference": "f4f773641807c7ccee59b758bfe4ac4ba33ecb17",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.4 || ~8.0.0 || ~8.1.0"
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
             },
             "conflict": {
                 "zendframework/zend-stdlib": "*"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~2.3.0",
-                "phpbench/phpbench": "^1.2.6",
-                "phpstan/phpdoc-parser": "^0.5.4",
-                "phpunit/phpunit": "^9.5.23",
-                "psalm/plugin-phpunit": "^0.17.0",
-                "vimeo/psalm": "^4.26"
+                "laminas/laminas-coding-standard": "^2.4.0",
+                "phpbench/phpbench": "^1.2.7",
+                "phpunit/phpunit": "^9.5.26",
+                "psalm/plugin-phpunit": "^0.18.0",
+                "vimeo/psalm": "^5.0.0"
             },
             "type": "library",
             "autoload": {
@@ -1577,7 +1772,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-08-24T13:56:50+00:00"
+            "time": "2022-12-03T18:48:01+00:00"
         },
         {
             "name": "m4tthumphrey/php-gitlab-api",
@@ -1764,6 +1959,67 @@
                 }
             ],
             "time": "2022-07-24T11:55:47+00:00"
+        },
+        {
+            "name": "mtdowling/jmespath.php",
+            "version": "2.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jmespath/jmespath.php.git",
+                "reference": "9b87907a81b87bc76d19a7fb2d61e61486ee9edb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jmespath/jmespath.php/zipball/9b87907a81b87bc76d19a7fb2d61e61486ee9edb",
+                "reference": "9b87907a81b87bc76d19a7fb2d61e61486ee9edb",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4 || ^7.0 || ^8.0",
+                "symfony/polyfill-mbstring": "^1.17"
+            },
+            "require-dev": {
+                "composer/xdebug-handler": "^1.4 || ^2.0",
+                "phpunit/phpunit": "^4.8.36 || ^7.5.15"
+            },
+            "bin": [
+                "bin/jp.php"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/JmesPath.php"
+                ],
+                "psr-4": {
+                    "JmesPath\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Declaratively specify how to extract elements from a JSON document",
+            "keywords": [
+                "json",
+                "jsonpath"
+            ],
+            "support": {
+                "issues": "https://github.com/jmespath/jmespath.php/issues",
+                "source": "https://github.com/jmespath/jmespath.php/tree/2.6.1"
+            },
+            "time": "2021-06-14T00:11:39+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -3108,36 +3364,37 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "dev-master",
+            "version": "dev-bugfix/compatibility-fix",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "eb9cc68c99780aa7974006e0b2996e8c278f3d4c"
+                "reference": "352cda0a851e5e22372213d79b874527fce38faf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/eb9cc68c99780aa7974006e0b2996e8c278f3d4c",
-                "reference": "eb9cc68c99780aa7974006e0b2996e8c278f3d4c",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/352cda0a851e5e22372213d79b874527fce38faf",
+                "reference": "352cda0a851e5e22372213d79b874527fce38faf",
                 "shasum": ""
             },
             "require": {
+                "aws/aws-sdk-php": "^3.257",
                 "composer-plugin-api": "^1.0.0 || ^2.0.0",
                 "composer/composer": "^2.1.0",
+                "czproject/git-php": "^4.1",
                 "laminas/laminas-filter": "^2.11.0",
                 "nikic/php-parser": "^4.3.0",
                 "php": ">=7.4",
                 "sebastian/diff": "^4.0.0",
-                "symfony/console": "^5.3.0",
-                "symfony/finder": "^5.3.0",
-                "symfony/process": "^5.4"
+                "symfony/console": "^5.3.0 || ^6.0",
+                "symfony/finder": "^5.3.0 || ^6.0",
+                "symfony/process": "^5.4 || ^6.0"
             },
             "require-dev": {
                 "phpstan/phpstan": "^1.0.0",
                 "phpunit/phpunit": "^9.5.0",
                 "spryker/code-sniffer": "dev-master",
-                "symfony/filesystem": "^5.3.0"
+                "symfony/filesystem": "^5.3.0 || ^6.0"
             },
-            "default-branch": true,
             "bin": [
                 "bin/integrator"
             ],
@@ -3159,9 +3416,9 @@
             "description": "Integrator module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
-                "source": "https://github.com/spryker-sdk/integrator/tree/master"
+                "source": "https://github.com/spryker-sdk/integrator/tree/bugfix/compatibility-fix"
             },
-            "time": "2023-01-24T12:17:16+00:00"
+            "time": "2023-02-27T12:51:00+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
