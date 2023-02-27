@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a03efc5204688090d94520e4828e4ade",
+    "content-hash": "2977359663c2698bc08feea2dedb61e5",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3364,16 +3364,16 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "dev-bugfix/compatibility-fix",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "352cda0a851e5e22372213d79b874527fce38faf"
+                "reference": "9ba8e4d46f04bb0a0677098c53a6994faef883b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/352cda0a851e5e22372213d79b874527fce38faf",
-                "reference": "352cda0a851e5e22372213d79b874527fce38faf",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/9ba8e4d46f04bb0a0677098c53a6994faef883b3",
+                "reference": "9ba8e4d46f04bb0a0677098c53a6994faef883b3",
                 "shasum": ""
             },
             "require": {
@@ -3395,6 +3395,7 @@
                 "spryker/code-sniffer": "dev-master",
                 "symfony/filesystem": "^5.3.0 || ^6.0"
             },
+            "default-branch": true,
             "bin": [
                 "bin/integrator"
             ],
@@ -3416,9 +3417,9 @@
             "description": "Integrator module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
-                "source": "https://github.com/spryker-sdk/integrator/tree/bugfix/compatibility-fix"
+                "source": "https://github.com/spryker-sdk/integrator/tree/master"
             },
-            "time": "2023-02-27T12:51:00+00:00"
+            "time": "2023-02-27T15:17:00+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
