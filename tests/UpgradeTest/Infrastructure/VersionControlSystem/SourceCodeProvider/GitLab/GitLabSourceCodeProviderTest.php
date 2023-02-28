@@ -36,7 +36,7 @@ class GitLabSourceCodeProviderTest extends TestCase
         string $hasRepositoryName,
         bool $expectedResult
     ): void {
-        // Assert
+        // Arrange
         $configurationMock = $this->createMock(ConfigurationProvider::class);
         $configurationMock->method('getAccessToken')->willReturn($hasAccessToken);
         $configurationMock->method('getProjectId')->willReturn($hasProjectId);
