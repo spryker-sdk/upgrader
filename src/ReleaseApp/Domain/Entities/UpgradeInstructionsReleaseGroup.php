@@ -40,6 +40,11 @@ class UpgradeInstructionsReleaseGroup
     /**
      * @var string
      */
+    protected const META_KEY = 'meta';
+
+    /**
+     * @var string
+     */
     protected const ID_KEY = 'id';
 
     /**
@@ -51,6 +56,11 @@ class UpgradeInstructionsReleaseGroup
      * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection|null
      */
     protected ?UpgradeInstructionModuleCollection $moduleCollection = null;
+
+    /**
+     * @var \ReleaseApp\Domain\Entities\UpgradeInstructionMeta|null
+     */
+    protected ?UpgradeInstructionMeta $meta = null;
 
     /**
      * @param array<mixed> $bodyArray
@@ -127,5 +137,21 @@ class UpgradeInstructionsReleaseGroup
         $this->moduleCollection = new UpgradeInstructionModuleCollection($moduleList);
 
         return $this->moduleCollection;
+    }
+
+    /**
+     * @return \ReleaseApp\Domain\Entities\UpgradeInstructionMeta|null
+     */
+    public function getMeta(): ?UpgradeInstructionMeta
+    {
+        if ($this->meta) {
+            return $this->meta;
+        }
+
+        if (array_key_exists(static::META_KEY, $this->body)) {
+            $this->meta = new UpgradeInstructionMeta($this->body[static::META_KEY]);
+        }
+
+        return $this->meta;
     }
 }

@@ -34,6 +34,11 @@ class ReleaseGroupDto
     protected string $link;
 
     /**
+     * @var bool
+     */
+    protected bool $conflictDetected = false;
+
+    /**
      * @param string $name
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
      * @param bool $containsProjectChanges
@@ -77,5 +82,23 @@ class ReleaseGroupDto
     public function getLink(): string
     {
         return $this->link;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConflictDetected(): bool
+    {
+        return $this->conflictDetected;
+    }
+
+    /**
+     * @param bool $conflictDetected
+     *
+     * @return void
+     */
+    public function setConflictDetected(bool $conflictDetected): void
+    {
+        $this->conflictDetected = $conflictDetected;
     }
 }

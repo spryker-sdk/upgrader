@@ -187,12 +187,16 @@ services:
     validator.release_major:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator
 
+    validator.conflict:
+            class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ConflictValidator
+
     Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
         arguments:
             - {
 #                param1: '@validator.project_changes',
                 param2: '@validator.release_major',
+                param3: '@validator.conflict',
             }
 
     validator.threshold_major:

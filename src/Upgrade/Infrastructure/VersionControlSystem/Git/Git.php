@@ -208,7 +208,7 @@ class Git
             $this->pullRequestDataGenerator->buildBody(
                 $composerDiffDto,
                 $stepsExecutionDto->getIntegratorResponseDto(),
-                $stepsExecutionDto->getMajorAvailableInfo(),
+                $stepsExecutionDto->getBlockerInfo(),
                 $stepsExecutionDto->getReportId(),
             ),
             $this->configurationProvider->isPullRequestAutoMergeEnabled(),
