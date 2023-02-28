@@ -21,7 +21,7 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
     /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
      */
-    protected ConfigurationProvider$configurationProvider;
+    protected ConfigurationProvider $configurationProvider;
 
     /**
      * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabClientFactory
