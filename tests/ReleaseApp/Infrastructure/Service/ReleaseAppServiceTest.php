@@ -46,17 +46,17 @@ class ReleaseAppServiceTest extends KernelTestCase
         $this->assertEquals(
             new ReleaseAppResponse(
                 new ReleaseGroupDtoCollection([
-                        new ReleaseGroupDto(
-                            'FRW-229 Replace Swiftmailer dependency with SymfonyMailer',
-                            new ModuleDtoCollection([
-                                new ModuleDto('spryker/mail-extension', '1.0.0', 'major'),
-                                new ModuleDto('spryker/symfony-mailer', '1.0.2', 'major'),
-                            ]),
-                            true,
-                            'https://api.release.spryker.com/release-groups/view/4395',
-                            true,
-                        ),
-                    ]),
+                    new ReleaseGroupDto(
+                        'FRW-229 Replace Swiftmailer dependency with SymfonyMailer',
+                        new ModuleDtoCollection([
+                            new ModuleDto('spryker/mail-extension', '1.0.0', 'major'),
+                            new ModuleDto('spryker/symfony-mailer', '1.0.2', 'major'),
+                        ]),
+                        true,
+                        'https://api.release.spryker.com/release-groups/view/4395',
+                        true,
+                    ),
+                ]),
             ),
             $releaseGroups,
         );
