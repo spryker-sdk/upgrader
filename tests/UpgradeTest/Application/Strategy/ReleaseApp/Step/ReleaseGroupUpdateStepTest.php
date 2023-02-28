@@ -281,15 +281,15 @@ class ReleaseGroupUpdateStepTest extends TestCase
     protected function buildReleaseGroupDtoCollection(bool $conflictDetected = false): ReleaseGroupDtoCollection
     {
         return new ReleaseGroupDtoCollection([
-             new ReleaseGroupDto(
-                 'RG1',
-                 new ModuleDtoCollection([
+            new ReleaseGroupDto(
+                'RG1',
+                new ModuleDtoCollection([
                     new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
-                 ]),
-                 false,
-                 'https://api.release.spryker.com/release-groups/view/1',
-             ),
-            $releaseGroupDto2 = new ReleaseGroupDto(
+                ]),
+                false,
+                'https://api.release.spryker.com/release-groups/view/1',
+            ),
+            new ReleaseGroupDto(
                 'RG2',
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/oauth-backend-api', '1.1.1', 'path'),
