@@ -27,7 +27,7 @@ class ConflictValidator implements ReleaseGroupValidatorInterface
             $message = sprintf(
                 'Release group "%s" contains module conflicts. Please follow the link below to find addition information about the conflict %s',
                 $releaseGroup->getName(),
-                PHP_EOL . $releaseGroup->getLink(),
+                $releaseGroup->getLink(),
             );
 
             throw new ReleaseGroupValidatorException($message);
