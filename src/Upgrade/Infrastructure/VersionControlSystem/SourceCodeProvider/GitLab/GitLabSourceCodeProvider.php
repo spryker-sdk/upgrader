@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab;
 
 use Exception;
-use Gitlab\Client;
 use RuntimeException;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
@@ -23,11 +22,6 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
      */
     protected ConfigurationProvider$configurationProvider;
-
-    /**
-     * @var \Gitlab\Client
-     */
-    protected ?Client $gitLabClient = null;
 
     /**
      * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabClientFactory
@@ -60,11 +54,14 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
     public function validateCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         if (
-            !$this->configurationProvider->getAccessToken() ||
-            !$this->configurationProvider->getGitLabProjectId()
+            !$this->configurationProvider->getAccessToken()
+            || (!$this->configurationProvider->getProjectId()
+                && (!$this->configurationProvider->getOrganizationName() || !$this->configurationProvider->getRepositoryName()))
         ) {
             $stepsExecutionDto->setIsSuccessful(false);
-            $stepsExecutionDto->addOutputMessage('Please check defined values of environment variables: ACCESS_TOKEN and GITLAB_PROJECT_ID.');
+            $stepsExecutionDto->addOutputMessage(
+                'Please check defined values of environment variables: ACCESS_TOKEN and (PROJECT_ID or (ORGANIZATION_NAME and REPOSITORY_NAME)).',
+            );
         }
 
         return $stepsExecutionDto;
@@ -83,11 +80,10 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
             if (!$stepsExecutionDto->getIsSuccessful()) {
                 return $stepsExecutionDto;
             }
-            $pullRequestId = $this->create($pullRequestDto);
+            $pullRequestId = $this->create($pullRequestDto, $stepsExecutionDto);
             if ($pullRequestDto->isAutoMerge()) {
                 $this->mergePullRequest($pullRequestId);
             }
-            $stepsExecutionDto->addOutputMessage('PR successfully created');
 
             return $stepsExecutionDto;
         } catch (Exception $runtimeException) {
@@ -99,15 +95,16 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
 
     /**
      * @param \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
      * @throws \RuntimeException
      *
      * @return int
      */
-    protected function create(PullRequestDto $pullRequestDto): int
+    protected function create(PullRequestDto $pullRequestDto, StepsResponseDto $stepsExecutionDto): int
     {
         $prCreatingResult = $this->gitLabClientFactory->getClient()->mergeRequests()->create(
-            $this->configurationProvider->getGitLabProjectId(),
+            $this->getProjectId(),
             $pullRequestDto->getSourceBranch(),
             $pullRequestDto->getTargetBranch(),
             $pullRequestDto->getTitle(),
@@ -115,9 +112,12 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
                 'description' => $pullRequestDto->getBody(),
             ],
         );
+
         if (!isset($prCreatingResult['iid'])) {
             throw new RuntimeException('Invalid create PR response.');
         }
+
+        $stepsExecutionDto->addOutputMessage(sprintf('Pull request was created %s', $prCreatingResult['web_url'] ?? ''));
 
         return $prCreatingResult['iid'];
     }
@@ -131,12 +131,30 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
     {
         sleep($this->configurationProvider->getGitLabDelayBetweenPrCreatingAndMerging());
         $this->gitLabClientFactory->getClient()->mergeRequests()->merge(
-            $this->configurationProvider->getGitLabProjectId(),
+            $this->getProjectId(),
             $pullRequestId,
             [
                 'should_remove_source_branch' => true,
                 'merge_when_pipeline_succeeds' => true,
             ],
+        );
+    }
+
+    /**
+     * @return string
+     */
+    protected function getProjectId(): string
+    {
+        $gitLabProjectId = $this->configurationProvider->getProjectId();
+
+        if ($gitLabProjectId !== '') {
+            return $gitLabProjectId;
+        }
+
+        return sprintf(
+            '%s/%s',
+            $this->configurationProvider->getOrganizationName(),
+            $this->configurationProvider->getRepositoryName(),
         );
     }
 }

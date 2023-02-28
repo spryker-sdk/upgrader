@@ -120,9 +120,9 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      *
      * @return string
      */
-    public function getGitLabProjectId(): string
+    public function getProjectId(): string
     {
-        return (string)getenv('GITLAB_PROJECT_ID');
+        return (string)getenv('PROJECT_ID');
     }
 
     /**
