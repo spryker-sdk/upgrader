@@ -30,19 +30,19 @@ class UpgradeInstructionMeta
     protected const CONFLICT_KEY = 'conflict';
 
     /**
-     * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection|null
+     * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection
      */
-    protected ?UpgradeInstructionModuleCollection $includeModuleCollection = null;
+    protected UpgradeInstructionModuleCollection $includeModuleCollection;
 
     /**
-     * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection|null
+     * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection
      */
-    protected ?UpgradeInstructionModuleCollection $excludeModuleCollection = null;
+    protected UpgradeInstructionModuleCollection $excludeModuleCollection;
 
     /**
-     * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection|null
+     * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection
      */
-    protected ?UpgradeInstructionModuleCollection $conflictModuleCollection = null;
+    protected UpgradeInstructionModuleCollection $conflictModuleCollection;
 
     /**
      * @var array<mixed>
@@ -55,6 +55,15 @@ class UpgradeInstructionMeta
     public function __construct(array $body)
     {
         $this->body = $body;
+        $this->includeModuleCollection = new UpgradeInstructionModuleCollection(
+            $this->getModuleListByKey(static::INCLUDE_KEY),
+        );
+        $this->excludeModuleCollection = new UpgradeInstructionModuleCollection(
+            $this->getModuleListByKey(static::EXCLUDE_KEY),
+        );
+        $this->conflictModuleCollection = new UpgradeInstructionModuleCollection(
+            $this->getModuleListByKey(static::CONFLICT_KEY),
+        );
     }
 
     /**
@@ -62,14 +71,6 @@ class UpgradeInstructionMeta
      */
     public function getInclude(): UpgradeInstructionModuleCollection
     {
-        if ($this->includeModuleCollection) {
-            return $this->includeModuleCollection;
-        }
-
-        $this->includeModuleCollection = new UpgradeInstructionModuleCollection(
-            $this->getModuleListByKey(static::INCLUDE_KEY),
-        );
-
         return $this->includeModuleCollection;
     }
 
@@ -78,14 +79,6 @@ class UpgradeInstructionMeta
      */
     public function getExclude(): UpgradeInstructionModuleCollection
     {
-        if ($this->excludeModuleCollection) {
-            return $this->excludeModuleCollection;
-        }
-
-        $this->excludeModuleCollection = new UpgradeInstructionModuleCollection(
-            $this->getModuleListByKey(static::EXCLUDE_KEY),
-        );
-
         return $this->excludeModuleCollection;
     }
 
@@ -94,14 +87,6 @@ class UpgradeInstructionMeta
      */
     public function getConflict(): UpgradeInstructionModuleCollection
     {
-        if ($this->conflictModuleCollection) {
-            return $this->conflictModuleCollection;
-        }
-
-        $this->conflictModuleCollection = new UpgradeInstructionModuleCollection(
-            $this->getModuleListByKey(static::CONFLICT_KEY),
-        );
-
         return $this->conflictModuleCollection;
     }
 
@@ -113,34 +98,17 @@ class UpgradeInstructionMeta
     protected function getModuleListByKey(string $key): array
     {
         $list = [];
-        if (!array_key_exists($key, $this->body)) {
+        if (!isset($this->body[$key])) {
             return $list;
         }
 
         foreach ($this->body[$key] as $name => $version) {
             $list[] = new UpgradeInstructionModule(
                 [UpgradeInstructionModule::VERSION_KEY => $version],
-                $this->convertToPackageFormat($name),
+                TextCaseHelper::packageCamelCaseToDash($name),
             );
         }
 
         return $list;
-    }
-
-    /**
-     * @param string $originName
-     *
-     * @return string
-     *
-     * Spryker.SymfonyMailer => spryker/symfony-mailer
-     */
-    protected function convertToPackageFormat(string $originName): string
-    {
-        [$organization, $package] = explode('.', $originName);
-
-        return implode('/', [
-            TextCaseHelper::camelCaseToDash($organization),
-            TextCaseHelper::camelCaseToDash($package),
-        ]);
     }
 }

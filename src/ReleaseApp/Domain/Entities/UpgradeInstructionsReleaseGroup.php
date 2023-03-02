@@ -68,6 +68,9 @@ class UpgradeInstructionsReleaseGroup
     public function __construct(array $bodyArray)
     {
         $this->body = $bodyArray;
+        if (isset($this->body[static::META_KEY])) {
+            $this->meta = new UpgradeInstructionMeta($this->body[static::META_KEY]);
+        }
     }
 
     /**
@@ -144,14 +147,6 @@ class UpgradeInstructionsReleaseGroup
      */
     public function getMeta(): ?UpgradeInstructionMeta
     {
-        if ($this->meta) {
-            return $this->meta;
-        }
-
-        if (array_key_exists(static::META_KEY, $this->body)) {
-            $this->meta = new UpgradeInstructionMeta($this->body[static::META_KEY]);
-        }
-
         return $this->meta;
     }
 }

@@ -23,14 +23,16 @@ class ConflictValidator implements ReleaseGroupValidatorInterface
      */
     public function validate(ReleaseGroupDto $releaseGroup): void
     {
-        if ($releaseGroup->isConflictDetected()) {
-            $message = sprintf(
-                'Release group "%s" contains module conflicts. Please follow the link below to find addition information about the conflict %s',
-                $releaseGroup->getName(),
-                $releaseGroup->getLink(),
-            );
-
-            throw new ReleaseGroupValidatorException($message);
+        if (!$releaseGroup->hasConflict()) {
+            return;
         }
+
+        $message = sprintf(
+            'Release group "%s" contains module conflicts. Please follow the link below to find addition information about the conflict %s',
+            $releaseGroup->getName(),
+            $releaseGroup->getLink(),
+        );
+
+        throw new ReleaseGroupValidatorException($message);
     }
 }

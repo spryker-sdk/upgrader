@@ -188,7 +188,7 @@ services:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator
 
     validator.conflict:
-            class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ConflictValidator
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ConflictValidator
 
     Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator

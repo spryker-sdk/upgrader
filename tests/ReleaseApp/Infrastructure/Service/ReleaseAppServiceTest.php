@@ -13,8 +13,6 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Infrastructure\Client\HttpRequestExecutor;
-use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeAnalysisHttpRequest;
-use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeInstructionsRequest;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
@@ -68,16 +66,7 @@ class ReleaseAppServiceTest extends KernelTestCase
     protected function createRequestExecutorMock(): HttpRequestExecutor
     {
         $callback = function (Request $request) {
-            $path = $request->getUri()->getPath();
-            if ($path === HttpUpgradeAnalysisHttpRequest::REQUEST_ENDPOINT) {
-                return $this->createHttpResponse(HttpUpgradeAnalysisHttpRequest::REQUEST_ENDPOINT);
-            }
-
-            if ($path === HttpUpgradeInstructionsRequest::REQUEST_ENDPOINT) {
-                return $this->createHttpResponse(HttpUpgradeInstructionsRequest::REQUEST_ENDPOINT);
-            }
-
-            return null;
+            return $this->createHttpResponse($request->getUri()->getPath());
         };
 
         $executorMock = $this->createMock(HttpRequestExecutor::class);

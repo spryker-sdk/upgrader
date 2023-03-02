@@ -66,6 +66,16 @@ class UpgradeInstructionModule
     }
 
     /**
+     * @param string $version
+     *
+     * @return void
+     */
+    public function setVersion(string $version): void
+    {
+        $this->body[static::VERSION_KEY] = $version;
+    }
+
+    /**
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
      * @return string
@@ -77,16 +87,6 @@ class UpgradeInstructionModule
         }
 
         return $this->body[static::TYPE_KEY];
-    }
-
-    /**
-     * @param string $version
-     *
-     * @return void
-     */
-    public function setVersion(string $version): void
-    {
-        $this->body[static::VERSION_KEY] = $version;
     }
 
     /**

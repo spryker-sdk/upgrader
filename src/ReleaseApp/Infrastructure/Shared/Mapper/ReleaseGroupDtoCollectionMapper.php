@@ -49,7 +49,7 @@ class ReleaseGroupDtoCollectionMapper
                 $releaseGroup->hasProjectChanges(),
                 $this->getReleaseGroupLink($releaseGroup->getId()),
             );
-            $dataProviderReleaseGroup->setConflictDetected(
+            $dataProviderReleaseGroup->setHasConflict(
                 $releaseGroup->getMeta() && $releaseGroup->getMeta()->getConflict()->count(),
             );
             $dataProviderReleaseGroupCollection->add($dataProviderReleaseGroup);
@@ -99,24 +99,19 @@ class ReleaseGroupDtoCollectionMapper
         UpgradeInstructionModuleCollection $moduleCollection,
         UpgradeInstructionMeta $meta
     ): UpgradeInstructionModuleCollection {
-        if (!$meta->getInclude()->isEmpty()) {
-            foreach ($meta->getInclude()->toArray() as $moduleInclude) {
-                $module = $moduleCollection->getByName($moduleInclude->getName());
-                if ($module) {
-                    $module->setVersion($moduleInclude->getVersion());
+        foreach ($meta->getInclude()->toArray() as $moduleInclude) {
+            $module = $moduleCollection->getByName($moduleInclude->getName());
+            if ($module) {
+                $module->setVersion($moduleInclude->getVersion());
 
-                    continue;
-                }
-
-                $moduleInclude->setType(ReleaseAppConstant::MODULE_TYPE_PATCH);
-                $moduleCollection->add($moduleInclude);
+                continue;
             }
+
+            $moduleInclude->setType(ReleaseAppConstant::MODULE_TYPE_PATCH);
+            $moduleCollection->add($moduleInclude);
         }
-
-        if (!$meta->getExclude()->isEmpty()) {
-            foreach ($meta->getExclude()->toArray() as $moduleExclude) {
-                $moduleCollection->deleteByName($moduleExclude->getName());
-            }
+        foreach ($meta->getExclude()->toArray() as $moduleExclude) {
+            $moduleCollection->deleteByName($moduleExclude->getName());
         }
 
         return $moduleCollection;
