@@ -73,7 +73,7 @@ class ReportDtoBuilder implements ReportDtoBuilderInterface
         return new ReportMetadataDto(
             $this->configurationProvider->getOrganizationName(),
             $this->configurationProvider->getRepositoryName(),
-            $this->configurationProvider->getGitLabProjectId(),
+            $this->configurationProvider->getProjectId(),
             $this->configurationProvider->getSourceCodeProvider(),
             $this->configurationProvider->getExecutionEnv(),
             (string)$stepsResponseDto->getReportId(),

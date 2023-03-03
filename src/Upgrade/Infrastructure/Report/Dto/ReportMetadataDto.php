@@ -24,7 +24,7 @@ class ReportMetadataDto
     /**
      * @var string
      */
-    protected string $gitLabProjectId;
+    protected string $projectId;
 
     /**
      * @var string
@@ -44,7 +44,7 @@ class ReportMetadataDto
     /**
      * @param string $organizationName
      * @param string $repositoryName
-     * @param string $gitLabProjectId
+     * @param string $projectId
      * @param string $sourceCodeProvider
      * @param string $executionEnv
      * @param string $reportId
@@ -52,14 +52,14 @@ class ReportMetadataDto
     public function __construct(
         string $organizationName,
         string $repositoryName,
-        string $gitLabProjectId,
+        string $projectId,
         string $sourceCodeProvider,
         string $executionEnv,
         string $reportId
     ) {
         $this->organizationName = $organizationName;
         $this->repositoryName = $repositoryName;
-        $this->gitLabProjectId = $gitLabProjectId;
+        $this->projectId = $projectId;
         $this->sourceCodeProvider = $sourceCodeProvider;
         $this->executionEnv = $executionEnv;
         $this->reportId = $reportId;
@@ -84,9 +84,9 @@ class ReportMetadataDto
     /**
      * @return string
      */
-    public function getGitLabProjectId(): string
+    public function getProjectId(): string
     {
-        return $this->gitLabProjectId;
+        return $this->projectId;
     }
 
     /**
