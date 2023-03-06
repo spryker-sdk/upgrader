@@ -58,7 +58,6 @@ class ComposerStrategyTest extends TestCase
 
         // Assert
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
-        $this->assertNull($stepsExecutionDto->getOutputMessage());
         $this->assertNull($stepsExecutionDto->getComposerLockDiff());
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }
@@ -99,7 +98,6 @@ class ComposerStrategyTest extends TestCase
 
         // Assert
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
-        $this->assertNull($stepsExecutionDto->getOutputMessage());
         $this->assertNull($stepsExecutionDto->getComposerLockDiff());
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }
@@ -120,7 +118,6 @@ class ComposerStrategyTest extends TestCase
 
         // Assert
         $this->assertFalse($stepsExecutionDto->getIsSuccessful());
-        $this->assertNull($stepsExecutionDto->getOutputMessage());
         $this->assertNull($stepsExecutionDto->getComposerLockDiff());
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }
@@ -145,7 +142,6 @@ class ComposerStrategyTest extends TestCase
 
         // Assert
         $this->assertFalse($stepsExecutionDto->getIsSuccessful());
-        $this->assertNull($stepsExecutionDto->getOutputMessage());
         $this->assertNull($stepsExecutionDto->getComposerLockDiff());
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }

@@ -3,6 +3,10 @@ parameters:
     report_send_timeout: 10
     report_send_connection_timeout: 4
 
+    http_client.timeout_sec: 30
+    http_client.repeatable.attempts: 3
+    http_client.repeatable.usec_delay: 500000
+
 services:
     _defaults:
         autowire: true
@@ -133,6 +137,27 @@ services:
                 param2: '@release-app.strategy'
             }
 
+    http.client:
+        class: GuzzleHttp\Client
+        arguments:
+            - { timeout: '%http_client.timeout_sec%' }
+
+    Upgrade\Infrastructure\HttpClient\RepeatableHttpClient:
+        arguments:
+            - '@http.client'
+            - '%http_client.repeatable.attempts%'
+            - '%http_client.repeatable.usec_delay%'
+
+    Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubClientFactory:
+        arguments:
+            - '@configuration.provider'
+            - '@Upgrade\Infrastructure\HttpClient\RepeatableHttpClient'
+
+    Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabClientFactory:
+        arguments:
+            - '@configuration.provider'
+            - '@Upgrade\Infrastructure\HttpClient\RepeatableHttpClient'
+
     github.provider:
         class: Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeProvider
 
@@ -167,12 +192,16 @@ services:
     validator.release_major:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator
 
+    validator.conflict:
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ConflictValidator
+
     Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
         arguments:
             - {
 #                param1: '@validator.project_changes',
                 param2: '@validator.release_major',
+                param3: '@validator.conflict',
             }
 
     validator.threshold_major:

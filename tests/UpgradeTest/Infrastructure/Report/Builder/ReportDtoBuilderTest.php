@@ -37,7 +37,7 @@ class ReportDtoBuilderTest extends TestCase
     /**
      * @var string
      */
-    protected const GIT_LAB_PROJECT_ID = 'gitlab_project_id';
+    protected const PROJECT_ID = 'project_id';
 
     /**
      * @var string
@@ -94,7 +94,7 @@ class ReportDtoBuilderTest extends TestCase
         $this->assertSame(static::REPORT_ID, $metadata->getReportId());
         $this->assertSame(static::EXECUTION_ENV, $metadata->getExecutionEnv());
         $this->assertSame(static::SOURCE_CODE_PROVIDER, $metadata->getSourceCodeProvider());
-        $this->assertSame(static::GIT_LAB_PROJECT_ID, $metadata->getGitLabProjectId());
+        $this->assertSame(static::PROJECT_ID, $metadata->getProjectId());
         $this->assertSame(static::ORGANIZATION_NAME, $metadata->getOrganizationName());
         $this->assertSame(static::REPOSITORY_NAME, $metadata->getRepositoryName());
     }
@@ -125,7 +125,7 @@ class ReportDtoBuilderTest extends TestCase
 
         $configurationProvider->method('getOrganizationName')->willReturn(static::ORGANIZATION_NAME);
         $configurationProvider->method('getRepositoryName')->willReturn(static::REPOSITORY_NAME);
-        $configurationProvider->method('getGitLabProjectId')->willReturn(static::GIT_LAB_PROJECT_ID);
+        $configurationProvider->method('getProjectId')->willReturn(static::PROJECT_ID);
         $configurationProvider->method('getSourceCodeProvider')->willReturn(static::SOURCE_CODE_PROVIDER);
         $configurationProvider->method('getExecutionEnv')->willReturn(static::EXECUTION_ENV);
 

@@ -204,11 +204,11 @@ class Git
         $pullRequestDto = new PullRequestDto(
             $this->getHeadBranch(),
             $this->getBaseBranch(),
-            'Updated to the latest Spryker modules up to ' . date('Y-m-d H:i', time()),
+            'The result of auto-updating Spryker modules on ' . date('Y-m-d H:i', time()),
             $this->pullRequestDataGenerator->buildBody(
                 $composerDiffDto,
                 $stepsExecutionDto->getIntegratorResponseDto(),
-                $stepsExecutionDto->getMajorAvailableInfo(),
+                $stepsExecutionDto->getBlockerInfo(),
                 $stepsExecutionDto->getReportId(),
             ),
             $this->configurationProvider->isPullRequestAutoMergeEnabled(),

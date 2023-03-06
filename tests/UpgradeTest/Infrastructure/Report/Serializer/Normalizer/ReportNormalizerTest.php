@@ -84,7 +84,7 @@ class ReportNormalizerTest extends TestCase
             'metadata' => [
                 'organization_name' => 'spryker',
                 'repository_name' => 'suite',
-                'gitlab_project_id' => '',
+                'project_id' => '',
                 'source_code_provider' => 'github',
                 'execution_env' => 'CI',
                 'report_id' => '902072d8-a2cc-11ed-a8fc-0242ac120002',

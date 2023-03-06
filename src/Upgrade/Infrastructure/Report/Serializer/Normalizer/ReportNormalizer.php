@@ -80,7 +80,7 @@ class ReportNormalizer implements NormalizerInterface
         return [
             'organization_name' => $metadataDto->getOrganizationName(),
             'repository_name' => $metadataDto->getRepositoryName(),
-            'gitlab_project_id' => $metadataDto->getGitLabProjectId(),
+            'project_id' => $metadataDto->getProjectId(),
             'source_code_provider' => $metadataDto->getSourceCodeProvider(),
             'execution_env' => $metadataDto->getExecutionEnv(),
             'report_id' => $metadataDto->getReportId(),
