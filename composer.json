@@ -64,8 +64,7 @@
         "sort-packages": true,
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "symfony/runtime": true,
-            "php-http/discovery": false
+            "symfony/runtime": true
         }
     },
     "scripts": {
