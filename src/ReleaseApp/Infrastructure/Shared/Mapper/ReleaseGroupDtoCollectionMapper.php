@@ -11,7 +11,9 @@ namespace ReleaseApp\Infrastructure\Shared\Mapper;
 
 use ReleaseApp\Application\Configuration\ConfigurationProviderInterface;
 use ReleaseApp\Application\Configuration\ReleaseAppConstant;
+use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection;
 use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection;
+use ReleaseApp\Domain\Entities\UpgradeInstructionMeta;
 use ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
@@ -47,6 +49,9 @@ class ReleaseGroupDtoCollectionMapper
                 $releaseGroup->hasProjectChanges(),
                 $this->getReleaseGroupLink($releaseGroup->getId()),
             );
+            $dataProviderReleaseGroup->setHasConflict(
+                $releaseGroup->getMeta() && $releaseGroup->getMeta()->getConflict()->count(),
+            );
             $dataProviderReleaseGroupCollection->add($dataProviderReleaseGroup);
         }
 
@@ -60,8 +65,13 @@ class ReleaseGroupDtoCollectionMapper
      */
     protected function buildModuleTransferCollection(UpgradeInstructionsReleaseGroup $releaseGroup): ModuleDtoCollection
     {
+        $releaseGroupModuleCollection = $releaseGroup->getModuleCollection();
+        if ($releaseGroup->getMeta()) {
+            $releaseGroupModuleCollection = $this->applyMeta($releaseGroupModuleCollection, $releaseGroup->getMeta());
+        }
+
         $dataProviderModuleCollection = new ModuleDtoCollection();
-        foreach ($releaseGroup->getModuleCollection()->toArray() as $module) {
+        foreach ($releaseGroupModuleCollection->toArray() as $module) {
             $dataProviderModule = new ModuleDto($module->getName(), $module->getVersion(), $module->getType());
             $dataProviderModuleCollection->add($dataProviderModule);
         }
@@ -77,5 +87,33 @@ class ReleaseGroupDtoCollectionMapper
     protected function getReleaseGroupLink(int $id): string
     {
         return sprintf(ReleaseAppConstant::RELEASE_GROUP_LINK_PATTERN, $this->configurationProvider->getReleaseAppUrl(), $id);
+    }
+
+    /**
+     * @param \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection $moduleCollection
+     * @param \ReleaseApp\Domain\Entities\UpgradeInstructionMeta $meta
+     *
+     * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection
+     */
+    protected function applyMeta(
+        UpgradeInstructionModuleCollection $moduleCollection,
+        UpgradeInstructionMeta $meta
+    ): UpgradeInstructionModuleCollection {
+        foreach ($meta->getInclude()->toArray() as $moduleInclude) {
+            $module = $moduleCollection->getByName($moduleInclude->getName());
+            if ($module) {
+                $module->setVersion($moduleInclude->getVersion());
+
+                continue;
+            }
+
+            $moduleInclude->setType(ReleaseAppConstant::MODULE_TYPE_PATCH);
+            $moduleCollection->add($moduleInclude);
+        }
+        foreach ($meta->getExclude()->toArray() as $moduleExclude) {
+            $moduleCollection->deleteByName($moduleExclude->getName());
+        }
+
+        return $moduleCollection;
     }
 }

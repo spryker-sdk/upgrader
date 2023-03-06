@@ -205,7 +205,7 @@ export ACCESS_TOKEN=<GITLAB_TOKEN>
 ​
 * Add the project id of the project you want to update:
 ```bash
-export GITLAB_PROJECT_ID=<GITLAB_PROJECT_ID>
+export PROJECT_ID=<PROJECT_ID>
 ```
 ​
 * Optional. For self-hosted source provider add url of your provider:

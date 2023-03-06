@@ -34,17 +34,29 @@ class ReleaseGroupDto
     protected string $link;
 
     /**
+     * @var bool
+     */
+    protected bool $hasConflict = false;
+
+    /**
      * @param string $name
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
      * @param bool $containsProjectChanges
      * @param string $link
+     * @param bool $hasConflict
      */
-    public function __construct(string $name, ModuleDtoCollection $moduleCollection, bool $containsProjectChanges, string $link)
-    {
+    public function __construct(
+        string $name,
+        ModuleDtoCollection $moduleCollection,
+        bool $containsProjectChanges,
+        string $link,
+        bool $hasConflict = false
+    ) {
         $this->name = $name;
         $this->link = $link;
         $this->moduleCollection = $moduleCollection;
         $this->containsProjectChanges = $containsProjectChanges;
+        $this->hasConflict = $hasConflict;
     }
 
     /**
@@ -77,5 +89,23 @@ class ReleaseGroupDto
     public function getLink(): string
     {
         return $this->link;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasConflict(): bool
+    {
+        return $this->hasConflict;
+    }
+
+    /**
+     * @param bool $hasConflict
+     *
+     * @return void
+     */
+    public function setHasConflict(bool $hasConflict): void
+    {
+        $this->hasConflict = $hasConflict;
     }
 }
