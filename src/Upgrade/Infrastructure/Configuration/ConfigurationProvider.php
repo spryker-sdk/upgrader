@@ -25,6 +25,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public const GITLAB_SOURCE_CODE_PROVIDER = 'gitlab';
 
     /**
+     * @var string
+     */
+    public const AZURE_SOURCE_CODE_PROVIDER = 'azure';
+
+    /**
      * @var int
      */
     public const DEFAULT_SOFT_THRESHOLD_BUGFIX = 30;
@@ -116,13 +121,24 @@ class ConfigurationProvider implements ConfigurationProviderInterface
 
     /**
      * Specification:
-     * - Defines id of your GitLab project.
+     * - Defines id of your project.
      *
      * @return string
      */
     public function getProjectId(): string
     {
         return (string)getenv('PROJECT_ID');
+    }
+
+    /**
+     * Specification:
+     * - Defines name of your project.
+     *
+     * @return string
+     */
+    public function getProjectName(): string
+    {
+        return (string)getenv('PROJECT_NAME');
     }
 
     /**
@@ -211,6 +227,17 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public function getOrganizationName(): string
     {
         return (string)getenv('ORGANIZATION_NAME');
+    }
+
+    /**
+     * Specification:
+     * - Defines repository id for your project.
+     *
+     * @return string
+     */
+    public function getRepositoryId(): string
+    {
+        return (string)getenv('REPOSITORY_ID');
     }
 
     /**

@@ -143,6 +143,11 @@ services:
             - '%http_client.repeatable.attempts%'
             - '%http_client.repeatable.usec_delay%'
 
+    Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureClientFactory:
+        arguments:
+            - '@configuration.provider'
+            - '@Upgrade\Infrastructure\HttpClient\RepeatableHttpClient'
+
     Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubClientFactory:
         arguments:
             - '@configuration.provider'
@@ -159,6 +164,9 @@ services:
     gitlab.provider:
         class: Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabSourceCodeProvider
 
+    azure.provider:
+        class: Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureSourceCodeProvider
+
     configuration.provider:
         class: Upgrade\Infrastructure\Configuration\ConfigurationProvider
 
@@ -166,10 +174,9 @@ services:
         class: Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider
         arguments:
             - '@configuration.provider'
-            - {
-                param1: '@github.provider',
-                param2: '@gitlab.provider'
-            }
+            - - '@github.provider'
+              - '@gitlab.provider'
+              - '@azure.provider'
 
     validator.already_installed:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\Package\AlreadyInstalledValidator
