@@ -15,7 +15,7 @@
         "m4tthumphrey/php-gitlab-api": "^11.5",
         "nikic/php-parser": "4.15.*",
         "phpstan/phpstan": "^1.2",
-        "spryker-sdk/integrator": "dev-feature/sdk-1964-pre-check-integration-lock",
+        "spryker-sdk/integrator": "dev-master",
         "spryker-sdk/sdk-contracts": "^0.4.6",
         "symfony/config": "^5.0",
         "symfony/console": "^5.0",
@@ -64,7 +64,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "php-http/discovery": true
         }
     },
     "scripts": {
