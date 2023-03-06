@@ -9,15 +9,10 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
-use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
-use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
-use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class AggregateReleaseGroupProcessor implements ReleaseGroupProcessorInterface
@@ -33,31 +28,23 @@ class AggregateReleaseGroupProcessor implements ReleaseGroupProcessorInterface
     protected ThresholdSoftValidatorInterface $thresholdValidator;
 
     /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface
+     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher
      */
-    protected PackageCollectionMapperInterface $packageCollectionMapper;
-
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
-    protected PackageManagerAdapterInterface $packageManager;
+    protected ModulePackageFetcher $modulePackageFetcher;
 
     /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface $packageCollectionBuilder
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher $modulePackageFetcher
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
         ThresholdSoftValidatorInterface $thresholdSoftValidator,
-        PackageCollectionMapperInterface $packageCollectionBuilder,
-        PackageManagerAdapterInterface $packageManager
+        ModulePackageFetcher $modulePackageFetcher
     ) {
         $this->releaseGroupValidator = $releaseGroupValidateManager;
         $this->thresholdValidator = $thresholdSoftValidator;
-        $this->packageCollectionMapper = $packageCollectionBuilder;
-        $this->packageManager = $packageManager;
+        $this->modulePackageFetcher = $modulePackageFetcher;
     }
 
     /**
@@ -96,66 +83,22 @@ class AggregateReleaseGroupProcessor implements ReleaseGroupProcessorInterface
             $aggregatedReleaseGroupCollection->add($releaseGroup);
         }
 
-        $requireResult = $this->require($aggregatedReleaseGroupCollection->getCommonModuleCollection());
-        if (!$requireResult->isSuccessful()) {
+        $response = $this->modulePackageFetcher->require($aggregatedReleaseGroupCollection->getCommonModuleCollection());
+
+        if (!$response->isSuccessful()) {
             $stepsExecutionDto->setIsSuccessful(false);
-            $stepsExecutionDto->addOutputMessage($requireResult->getOutputMessage());
         }
 
-        if ($aggregatedReleaseGroupCollection->count()) {
+        if ($response->getOutputMessage() !== null) {
+            $stepsExecutionDto->addOutputMessage($response->getOutputMessage());
+        }
+
+        if ($response->isSuccessful() && $aggregatedReleaseGroupCollection->count()) {
             $stepsExecutionDto->addOutputMessage(
                 sprintf('Amount of applied release groups: %s', $aggregatedReleaseGroupCollection->count()),
             );
         }
 
         return $stepsExecutionDto;
-    }
-
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
-     *
-     * @return \Upgrade\Application\Dto\ResponseDto
-     */
-    public function require(ModuleDtoCollection $moduleCollection): ResponseDto
-    {
-        $packageCollection = $this->packageCollectionMapper->mapModuleCollectionToPackageCollection($moduleCollection);
-        $filteredPackageCollection = $this->packageCollectionMapper->filterInvalidPackage($packageCollection);
-
-        if ($filteredPackageCollection->isEmpty()) {
-            $packagesNameString = implode(' ', $packageCollection->getNameList());
-
-            return new ResponseDto(true, $packagesNameString);
-        }
-
-        return $this->requirePackageCollection($filteredPackageCollection);
-    }
-
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\ResponseDto
-     */
-    protected function requirePackageCollection(PackageCollection $packageCollection): ResponseDto
-    {
-        $requiredPackages = $this->packageCollectionMapper->getRequiredPackages($packageCollection);
-        $requiredDevPackages = $this->packageCollectionMapper->getRequiredDevPackages($packageCollection);
-
-        if (!$requiredPackages->isEmpty()) {
-            $requireResponse = $this->packageManager->require($requiredPackages);
-            if (!$requireResponse->isSuccessful()) {
-                return $requireResponse;
-            }
-        }
-
-        if (!$requiredDevPackages->isEmpty()) {
-            $requireResponse = $this->packageManager->requireDev($requiredDevPackages);
-            if (!$requireResponse->isSuccessful()) {
-                return $requireResponse;
-            }
-        }
-
-        $packagesNameString = implode(' ', $packageCollection->getNameList());
-
-        return new ResponseDto(true, $packagesNameString);
     }
 }
