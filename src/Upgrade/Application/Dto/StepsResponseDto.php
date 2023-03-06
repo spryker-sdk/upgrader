@@ -34,7 +34,7 @@ class StepsResponseDto extends ResponseDto
     /**
      * @var string
      */
-    protected string $majorAvailableInfo = '';
+    protected string $blockerInfo = '';
 
     /**
      * @var int|null
@@ -185,13 +185,13 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @param string $majorAvailableWarning
+     * @param string $blockerInfo
      *
      * @return $this
      */
-    public function setMajorAvailableInfo(string $majorAvailableWarning)
+    public function setBlockerInfo(string $blockerInfo)
     {
-        $this->majorAvailableInfo = $majorAvailableWarning;
+        $this->blockerInfo = $blockerInfo;
 
         return $this;
     }
@@ -199,9 +199,9 @@ class StepsResponseDto extends ResponseDto
     /**
      * @return string
      */
-    public function getMajorAvailableInfo(): string
+    public function getBlockerInfo(): string
     {
-        return $this->majorAvailableInfo;
+        return $this->blockerInfo;
     }
 
     /**

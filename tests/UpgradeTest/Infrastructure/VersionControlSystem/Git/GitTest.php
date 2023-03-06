@@ -162,7 +162,7 @@ class GitTest extends KernelTestCase
         $stepsExecutionDto = new StepsResponseDto(true);
         $composerLockDiffDto = new ComposerLockDiffDto(json_decode($message, true));
         $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
-        $stepsExecutionDto->setMajorAvailableInfo('Available major info');
+        $stepsExecutionDto->setBlockerInfo('Available major info');
         $integratorResponseDto = new IntegratorResponseDto([
             'message-list' => ['Test message'],
             'warning-list' => ['Manifest for Spryker.AuthenticationOauth:1.0.0 was skipped. Please, update it to use full functionality.'],

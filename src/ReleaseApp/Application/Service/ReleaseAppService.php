@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Application\Service;
 
-use ReleaseApp\Application\Configuration\ConfigurationProviderInterface;
 use ReleaseApp\Domain\Client\ReleaseAppClientInterface;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
@@ -24,18 +23,11 @@ class ReleaseAppService implements ReleaseAppServiceInterface
     protected ReleaseAppClientInterface $releaseAppClient;
 
     /**
-     * @var \ReleaseApp\Application\Configuration\ConfigurationProviderInterface
-     */
-    protected ConfigurationProviderInterface $configurationProvider;
-
-    /**
      * @param \ReleaseApp\Domain\Client\ReleaseAppClientInterface $releaseAppClient
-     * @param \ReleaseApp\Application\Configuration\ConfigurationProviderInterface $configurationProvider
      */
-    public function __construct(ReleaseAppClientInterface $releaseAppClient, ConfigurationProviderInterface $configurationProvider)
+    public function __construct(ReleaseAppClientInterface $releaseAppClient)
     {
         $this->releaseAppClient = $releaseAppClient;
-        $this->configurationProvider = $configurationProvider;
     }
 
     /**
