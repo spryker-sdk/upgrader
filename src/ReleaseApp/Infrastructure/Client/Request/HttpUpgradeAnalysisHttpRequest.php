@@ -16,7 +16,7 @@ class HttpUpgradeAnalysisHttpRequest implements HttpRequestInterface
     /**
      * @var string
      */
-    protected const REQUEST_ENDPOINT = '/upgrade-analysis.json';
+    public const REQUEST_ENDPOINT = '/upgrade-analysis.json';
 
     /**
      * @var \ReleaseApp\Domain\Client\Request\RequestInterface

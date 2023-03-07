@@ -69,4 +69,34 @@ class UpgradeInstructionModuleCollection
     {
         $this->elements = array_merge($this->elements, $collectionToMerge->toArray());
     }
+
+    /**
+     * @param string $name
+     *
+     * @return \ReleaseApp\Domain\Entities\UpgradeInstructionModule|null
+     */
+    public function getByName(string $name): ?UpgradeInstructionModule
+    {
+        foreach ($this->elements as $module) {
+            if ($module->getName() === $name) {
+                return $module;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return void
+     */
+    public function deleteByName(string $name): void
+    {
+        foreach ($this->elements as $key => $module) {
+            if ($module->getName() === $name) {
+                unset($this->elements[$key]);
+            }
+        }
+    }
 }

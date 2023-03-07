@@ -24,6 +24,11 @@ class IntegratorExecutor implements IntegratorExecutorInterface
     /**
      * @var string
      */
+    protected const MANIFEST_LOCK_COMMAND = 'manifest:lock:run';
+
+    /**
+     * @var string
+     */
     protected const NO_INTERACTION_COMPOSER_FLAG = '--no-interaction';
 
     /**
@@ -56,6 +61,35 @@ class IntegratorExecutor implements IntegratorExecutorInterface
             static::NO_INTERACTION_COMPOSER_FLAG,
             static::FROMAT_JSON_OPTION,
             ]);
+
+        return $this->runIntegratorProcess($command, $stepsExecutionDto);
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     *
+     * @return \Upgrade\Application\Dto\StepsResponseDto
+     */
+    public function runIntegratorLockUpdater(StepsResponseDto $stepsExecutionDto): StepsResponseDto
+    {
+        $command = implode(' ', [
+            APPLICATION_ROOT_DIR . static::RUNNER,
+            static::MANIFEST_LOCK_COMMAND,
+            static::NO_INTERACTION_COMPOSER_FLAG,
+            static::FROMAT_JSON_OPTION,
+        ]);
+
+        return $this->runIntegratorProcess($command, $stepsExecutionDto);
+    }
+
+    /**
+     * @param string $command
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     *
+     * @return \Upgrade\Application\Dto\StepsResponseDto
+     */
+    protected function runIntegratorProcess(string $command, StepsResponseDto $stepsExecutionDto): StepsResponseDto
+    {
         $process = $this->processRunner->run(explode(' ', $command));
 
         $stepsExecutionDto->setIsSuccessful($process->isSuccessful());

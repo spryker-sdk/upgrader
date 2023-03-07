@@ -19,4 +19,11 @@ interface IntegratorExecutorInterface
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
     public function runIntegrator(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     *
+     * @return \Upgrade\Application\Dto\StepsResponseDto
+     */
+    public function runIntegratorLockUpdater(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
 }

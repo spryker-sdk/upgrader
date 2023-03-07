@@ -16,12 +16,12 @@ class UpgradeInstructionModule
     /**
      * @var string
      */
-    protected const TYPE_KEY = 'type';
+    public const VERSION_KEY = 'version';
 
     /**
      * @var string
      */
-    protected const VERSION_KEY = 'version';
+    protected const TYPE_KEY = 'type';
 
     /**
      * @var array<mixed>
@@ -66,6 +66,16 @@ class UpgradeInstructionModule
     }
 
     /**
+     * @param string $version
+     *
+     * @return void
+     */
+    public function setVersion(string $version): void
+    {
+        $this->body[static::VERSION_KEY] = $version;
+    }
+
+    /**
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
      * @return string
@@ -77,5 +87,15 @@ class UpgradeInstructionModule
         }
 
         return $this->body[static::TYPE_KEY];
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return void
+     */
+    public function setType(string $type): void
+    {
+        $this->body[static::TYPE_KEY] = $type;
     }
 }

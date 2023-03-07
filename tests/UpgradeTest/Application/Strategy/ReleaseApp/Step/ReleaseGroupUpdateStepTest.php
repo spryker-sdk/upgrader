@@ -19,11 +19,13 @@ use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapper;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor;
 use Upgrade\Application\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidator;
+use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ConflictValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator;
 use Upgrade\Infrastructure\Adapter\ReleaseAppClientAdapter;
@@ -55,8 +57,10 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             implode(PHP_EOL, [
-            'Amount of available release groups for the project: 2',
-            'Amount of applied release groups: 2',
+                'Amount of available release groups for the project: 2',
+                'Applied required packages count: 2',
+                'No new required-dev packages',
+                'Amount of applied release groups: 2',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
@@ -84,7 +88,42 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             implode(PHP_EOL, [
-            'Amount of available release groups for the project: 0',
+                'Amount of available release groups for the project: 0',
+                'No valid packages found',
+            ]),
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testAggregateReleaseGroupProcessorFailedByConflicts(): void
+    {
+        // Arrange
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock(
+                $this->buildReleaseGroupDtoCollection(true),
+            ),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createAggregateReleaseGroupProcessor(),
+            ),
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertTrue($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            implode(PHP_EOL, [
+                'Amount of available release groups for the project: 2',
+                'Release group "RG2" contains module conflicts. Please follow the link below to find addition information about the conflict https://api.release.spryker.com/release-groups/view/2',
+                'Applied required packages count: 1',
+                'No new required-dev packages',
+                'Amount of applied release groups: 1',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
@@ -114,8 +153,12 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             implode(PHP_EOL, [
-            'Amount of available release groups for the project: 2',
-            'Amount of applied release groups: 2',
+                'Amount of available release groups for the project: 2',
+                'Applied required packages count: 1',
+                'No new required-dev packages',
+                'Applied required packages count: 1',
+                'No new required-dev packages',
+                'Amount of applied release groups: 2',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
@@ -143,7 +186,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             implode(PHP_EOL, [
-            'Amount of available release groups for the project: 0',
+                'Amount of available release groups for the project: 0',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
@@ -201,13 +244,17 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $composerAdapterMock->method('isDevPackage')->willReturn(false);
 
         return new AggregateReleaseGroupProcessor(
-            new ReleaseGroupSoftValidator([]),
+            new ReleaseGroupSoftValidator([
+                new ConflictValidator(),
+            ]),
             new ThresholdSoftValidator([]),
-            new PackageCollectionMapper(
-                new PackageSoftValidator([]),
+            new ModulePackageFetcher(
                 $composerAdapterMock,
+                new PackageCollectionMapper(
+                    new PackageSoftValidator([]),
+                    $composerAdapterMock,
+                ),
             ),
-            $composerAdapterMock,
         );
     }
 
@@ -230,18 +277,22 @@ class ReleaseGroupUpdateStepTest extends TestCase
         return new SequentialReleaseGroupProcessor(
             new ReleaseGroupSoftValidator([]),
             new ThresholdSoftValidator([]),
-            new PackageCollectionMapper(
-                new PackageSoftValidator([]),
+            new ModulePackageFetcher(
                 $composerAdapterMock,
+                new PackageCollectionMapper(
+                    new PackageSoftValidator([]),
+                    $composerAdapterMock,
+                ),
             ),
-            $composerAdapterMock,
         );
     }
 
     /**
+     * @param bool $conflictDetected
+     *
      * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection
      */
-    protected function buildReleaseGroupDtoCollection(): ReleaseGroupDtoCollection
+    protected function buildReleaseGroupDtoCollection(bool $conflictDetected = false): ReleaseGroupDtoCollection
     {
         return new ReleaseGroupDtoCollection([
             new ReleaseGroupDto(
@@ -259,6 +310,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 ]),
                 true,
                 'https://api.release.spryker.com/release-groups/view/2',
+                $conflictDetected,
             ),
         ]);
     }

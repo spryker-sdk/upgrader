@@ -17,7 +17,7 @@ class PullRequestDataGenerator
     /**
      * @param \Upgrade\Application\Dto\ComposerLockDiffDto $composerDiffDto
      * @param \Upgrade\Application\Dto\IntegratorResponseDto|null $integratorResponseDto
-     * @param string $majorAvailableInfo
+     * @param string $blockerInfo
      * @param string|null $reportId
      *
      * @return string
@@ -25,7 +25,7 @@ class PullRequestDataGenerator
     public function buildBody(
         ComposerLockDiffDto $composerDiffDto,
         ?IntegratorResponseDto $integratorResponseDto,
-        string $majorAvailableInfo = '',
+        string $blockerInfo = '',
         ?string $reportId = null
     ): string {
         $text = 'Auto created via Upgrader tool.'
@@ -37,9 +37,9 @@ class PullRequestDataGenerator
             . PHP_EOL
             . PHP_EOL;
 
-        if ($majorAvailableInfo) {
-            $text .= '​' . PHP_EOL . '**Available majors:**' . PHP_EOL . PHP_EOL;
-            $text .= $majorAvailableInfo;
+        if ($blockerInfo) {
+            $text .= '​' . PHP_EOL . '**The process was faced with the blocker:**' . PHP_EOL . PHP_EOL;
+            $text .= $blockerInfo;
             $text .= str_repeat(PHP_EOL, 2);
         }
 
