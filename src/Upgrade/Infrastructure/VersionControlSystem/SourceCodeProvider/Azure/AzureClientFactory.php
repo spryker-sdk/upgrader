@@ -10,9 +10,9 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure;
 
 use Psr\Http\Client\ClientInterface;
-use SprykerAzure\Client\Builder\Plugin\PersonalAccessTokenAuthPlugin;
-use SprykerAzure\Client\ClientFactory;
+use SprykerAzure\Client\ClientBuilder;
 use SprykerAzure\Client\ClientInterface as AzureClientInterface;
+use SprykerAzure\Client\Plugin\Request\PersonalAccessTokenAuthPlugin;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class AzureClientFactory
@@ -59,10 +59,10 @@ class AzureClientFactory
      */
     protected function createClient(): AzureClientInterface
     {
-        $clientFactory = new ClientFactory();
-        $requestBuilder = $clientFactory->getDefaultRequestBuilder();
-        $requestBuilder->addRequestPlugin(new PersonalAccessTokenAuthPlugin($this->configurationProvider->getAccessToken()));
+        $clientBuilder = new ClientBuilder();
+        $clientBuilder->setHttpClient($this->httpClient);
+        $clientBuilder->addRequestPlugin(new PersonalAccessTokenAuthPlugin($this->configurationProvider->getAccessToken()));
 
-        return $clientFactory->createClient($requestBuilder, null, $this->httpClient);
+        return $clientBuilder->getClient();
     }
 }

@@ -115,15 +115,7 @@ class AzureSourceCodeProvider implements SourceCodeProviderInterface
                 ),
             );
 
-            $stepsExecutionDto->addOutputMessage(
-                sprintf(
-                    'https://dev.azure.com/%s/%s/_git/%s/pullrequest/%s',
-                    $this->configurationProvider->getOrganizationName(),
-                    $projectName,
-                    $repositoryId,
-                    $response['pullRequestId'],
-                ),
-            );
+            $stepsExecutionDto->addOutputMessage(sprintf('Pull request was created %s', $response['webUrl'] ?? ''));
         } catch (Throwable $e) {
             $stepsExecutionDto->setIsSuccessful(false);
             $stepsExecutionDto->addOutputMessage($e->getMessage());
