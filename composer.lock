@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "578c6afc2796409cf5b1727717eb10bf",
+    "content-hash": "7fce4e10a39be9d340b68093c0c35ab9",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3365,16 +3365,16 @@
         },
         {
             "name": "spryker-sdk/azure-php-client",
-            "version": "dev-feature/sdk-1932-azure-client",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/azure-php-client.git",
-                "reference": "e72610634f1c2e82c8513affe34226cfcbd7fbd6"
+                "reference": "09727a0bde9aa3303348c351a8a45b55b95eb447"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/azure-php-client/zipball/e72610634f1c2e82c8513affe34226cfcbd7fbd6",
-                "reference": "e72610634f1c2e82c8513affe34226cfcbd7fbd6",
+                "url": "https://api.github.com/repos/spryker-sdk/azure-php-client/zipball/09727a0bde9aa3303348c351a8a45b55b95eb447",
+                "reference": "09727a0bde9aa3303348c351a8a45b55b95eb447",
                 "shasum": ""
             },
             "require": {
@@ -3390,6 +3390,7 @@
                 "phpunit/phpunit": "^9.5",
                 "spryker/code-sniffer": "dev-master"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3408,9 +3409,9 @@
             "description": "Azure Repos client for PHP",
             "support": {
                 "issues": "https://github.com/spryker-sdk/azure-php-client/issues",
-                "source": "https://github.com/spryker-sdk/azure-php-client/tree/feature/sdk-1932-azure-client"
+                "source": "https://github.com/spryker-sdk/azure-php-client/tree/master"
             },
-            "time": "2023-03-07T16:56:45+00:00"
+            "time": "2023-03-09T12:59:02+00:00"
         },
         {
             "name": "spryker-sdk/integrator",
