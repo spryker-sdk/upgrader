@@ -84,7 +84,7 @@ abstract class AbstractStrategy implements StrategyInterface
                 continue;
             }
             $stepsResponseDto->addOutputMessage('Step is failed. It will be reapplied with a fixer');
-            
+
             $stepsResponseDto = $fixer->run($stepsResponseDto);
             if (!$stepsResponseDto->getIsSuccessful()) {
                 continue;
