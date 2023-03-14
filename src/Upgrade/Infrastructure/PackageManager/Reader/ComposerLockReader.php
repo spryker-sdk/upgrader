@@ -14,6 +14,16 @@ use Upgrade\Infrastructure\Exception\FileNotFoundException;
 class ComposerLockReader implements ComposerLockReaderInterface
 {
     /**
+     * @var int
+     */
+    protected int $modifyTime = 0;
+
+    /**
+     * @var string|null
+     */
+    protected ?array $composerLockData = null;
+
+    /**
      * @var string
      */
     protected const COMPOSER_LOCK = 'composer.lock';
@@ -60,6 +70,10 @@ class ComposerLockReader implements ComposerLockReaderInterface
             throw new FileNotFoundException('File is not exist: ' . $path);
         }
 
-        return json_decode((string)file_get_contents($path), true);
+        if (!$this->composerLockData || filemtime($path) > $this->modifyTime) {
+            $this->composerLockData = json_decode((string)file_get_contents($path), true);
+        }
+
+        return $this->composerLockData;
     }
 }
