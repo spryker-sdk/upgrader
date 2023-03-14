@@ -110,10 +110,22 @@ services:
     release-app.strategy:
         class: Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy
         arguments:
-            - - '@integrator_lock_run.step'
+            - - '@check_credentials.step'
+              - '@check_is_remote_target_branch_exist.step'
+              - '@check_is_local_target_branch_exist.step'
+              - '@check_uncommitted_changes.step'
+              - '@integrator_lock_run.step'
               - '@release_group_update.step'
               - '@composer_lock_diff.step'
               - '@integrator.step'
+              - '@create_branch.step'
+              - '@add_changes.step'
+              - '@commit_changes.step'
+              - '@push_changes.step'
+              - '@generate_report_id.step'
+              - '@create_pr.step'
+              - '@checkout.step'
+              - '@send_report.step'
 
             - - '@feature_package.fixer'
 
