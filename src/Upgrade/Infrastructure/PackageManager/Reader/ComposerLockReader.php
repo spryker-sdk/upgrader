@@ -19,7 +19,7 @@ class ComposerLockReader implements ComposerLockReaderInterface
     protected int $modifyTime = 0;
 
     /**
-     * @var string|null
+     * @var array|null
      */
     protected ?array $composerLockData = null;
 
