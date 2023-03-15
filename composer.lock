@@ -3369,12 +3369,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/azure-php-client.git",
-                "reference": "e72610634f1c2e82c8513affe34226cfcbd7fbd6"
+                "reference": "2b45bf37465cfbe2caf4e6f6fc754f2e41539211"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/azure-php-client/zipball/e72610634f1c2e82c8513affe34226cfcbd7fbd6",
-                "reference": "e72610634f1c2e82c8513affe34226cfcbd7fbd6",
+                "url": "https://api.github.com/repos/spryker-sdk/azure-php-client/zipball/2b45bf37465cfbe2caf4e6f6fc754f2e41539211",
+                "reference": "2b45bf37465cfbe2caf4e6f6fc754f2e41539211",
                 "shasum": ""
             },
             "require": {
@@ -3410,7 +3410,7 @@
                 "issues": "https://github.com/spryker-sdk/azure-php-client/issues",
                 "source": "https://github.com/spryker-sdk/azure-php-client/tree/feature/sdk-1932-azure-client"
             },
-            "time": "2023-03-07T16:56:45+00:00"
+            "time": "2023-03-15T11:06:47+00:00"
         },
         {
             "name": "spryker-sdk/integrator",
