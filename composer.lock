@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7fce4e10a39be9d340b68093c0c35ab9",
+    "content-hash": "578c6afc2796409cf5b1727717eb10bf",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3365,7 +3365,7 @@
         },
         {
             "name": "spryker-sdk/azure-php-client",
-            "version": "dev-master",
+            "version": "dev-feature/sdk-1932-azure-client",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/azure-php-client.git",
@@ -3390,7 +3390,6 @@
                 "phpunit/phpunit": "^9.5",
                 "spryker/code-sniffer": "dev-master"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3409,7 +3408,7 @@
             "description": "Azure Repos client for PHP",
             "support": {
                 "issues": "https://github.com/spryker-sdk/azure-php-client/issues",
-                "source": "https://github.com/spryker-sdk/azure-php-client/tree/master"
+                "source": "https://github.com/spryker-sdk/azure-php-client/tree/feature/sdk-1932-azure-client"
             },
             "time": "2023-03-15T11:06:47+00:00"
         },
