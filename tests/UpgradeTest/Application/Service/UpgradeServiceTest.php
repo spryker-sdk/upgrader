@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Application\Service;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Upgrade\Application\Service\UpgradeService;
 use Upgrade\Application\Strategy\StrategyResolver;
@@ -27,7 +28,9 @@ class UpgradeServiceTest extends KernelTestCase
         /** @var \Upgrade\Application\Strategy\StrategyResolver $strategyResolver */
         $strategyResolver = static::bootKernel()->getContainer()->get(StrategyResolver::class);
 
-        $service = new UpgradeService($configurationProviderMock, $strategyResolver);
+        $logger = $this->createMock(LoggerInterface::class);
+
+        $service = new UpgradeService($configurationProviderMock, $strategyResolver, $logger);
         $res = $service->upgrade();
 
         $this->assertFalse($res->isSuccessful());
