@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "578c6afc2796409cf5b1727717eb10bf",
+    "content-hash": "7fce4e10a39be9d340b68093c0c35ab9",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3365,7 +3365,7 @@
         },
         {
             "name": "spryker-sdk/azure-php-client",
-            "version": "dev-feature/sdk-1932-azure-client",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/azure-php-client.git",
@@ -3390,6 +3390,7 @@
                 "phpunit/phpunit": "^9.5",
                 "spryker/code-sniffer": "dev-master"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3408,7 +3409,7 @@
             "description": "Azure Repos client for PHP",
             "support": {
                 "issues": "https://github.com/spryker-sdk/azure-php-client/issues",
-                "source": "https://github.com/spryker-sdk/azure-php-client/tree/feature/sdk-1932-azure-client"
+                "source": "https://github.com/spryker-sdk/azure-php-client/tree/master"
             },
             "time": "2023-03-15T11:06:47+00:00"
         },
@@ -3418,12 +3419,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "ff36abe3f1dc9acbad5fd2b2ecb65c6353436ae7"
+                "reference": "8635ce736de9419fa0b42a4fb5154b9beeef051c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/ff36abe3f1dc9acbad5fd2b2ecb65c6353436ae7",
-                "reference": "ff36abe3f1dc9acbad5fd2b2ecb65c6353436ae7",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/8635ce736de9419fa0b42a4fb5154b9beeef051c",
+                "reference": "8635ce736de9419fa0b42a4fb5154b9beeef051c",
                 "shasum": ""
             },
             "require": {
@@ -3469,7 +3470,7 @@
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
                 "source": "https://github.com/spryker-sdk/integrator/tree/master"
             },
-            "time": "2023-03-06T14:18:02+00:00"
+            "time": "2023-03-08T10:00:39+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
