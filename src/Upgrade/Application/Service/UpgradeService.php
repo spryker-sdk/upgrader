@@ -50,10 +50,10 @@ class UpgradeService implements UpgradeServiceInterface
     {
         $strategy = $this->strategyResolver->getStrategy($this->configurationProvider->getUpgradeStrategy());
 
-        $stepsResponse =  $strategy->upgrade();
+        $stepsResponse = $strategy->upgrade();
 
         if (!$stepsResponse->isSuccessful()) {
-            $this->logger->error((string) $stepsResponse->getOutputMessage());
+            $this->logger->error((string)$stepsResponse->getOutputMessage());
         }
 
         return $stepsResponse;
