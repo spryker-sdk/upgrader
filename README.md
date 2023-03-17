@@ -171,7 +171,11 @@ bin/console upgradability:php:upgrade
 export INTEGRATOR_ENABLED=true
 ```
 
-​
+## Evaluator
+
+[Evaluator documentation](https://github.com/spryker-sdk/upgrader/blob/master/docs/evaluator.md)
+
+
 ## Installation
 ​
 For Spryker SDK installation instructions, see [Spryker SDK](https://github.com/spryker-sdk/sdk#installation)
