@@ -19,6 +19,8 @@ class TextCaseHelperTest extends TestCase
      * @param string $expectedResult
      * @param string $value
      * @param bool $separateAbbreviation
+     *
+     * @return void
      */
     public function testCamelCaseToDash(string $expectedResult, string $value, bool $separateAbbreviation): void
     {
@@ -46,6 +48,8 @@ class TextCaseHelperTest extends TestCase
      * @param string $expectedResult
      * @param string $value
      * @param bool $upperCaseFirst
+     *
+     * @return void
      */
     public function testDashToCamelCase(string $expectedResult, string $value, bool $upperCaseFirst): void
     {
@@ -70,6 +74,8 @@ class TextCaseHelperTest extends TestCase
      *
      * @param string $expectedResult
      * @param string $originName
+     *
+     * @return void
      */
     public function testPackageCamelCaseToDash(string $expectedResult, string $originName): void
     {
