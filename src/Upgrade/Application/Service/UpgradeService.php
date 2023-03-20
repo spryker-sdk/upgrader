@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Service;
 
+use Psr\Log\LoggerInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\StrategyResolver;
@@ -26,13 +27,20 @@ class UpgradeService implements UpgradeServiceInterface
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected LoggerInterface $logger;
+
+    /**
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      * @param \Upgrade\Application\Strategy\StrategyResolver $strategyResolver
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(ConfigurationProviderInterface $configurationProvider, StrategyResolver $strategyResolver)
+    public function __construct(ConfigurationProviderInterface $configurationProvider, StrategyResolver $strategyResolver, LoggerInterface $logger)
     {
         $this->configurationProvider = $configurationProvider;
         $this->strategyResolver = $strategyResolver;
+        $this->logger = $logger;
     }
 
     /**
@@ -42,6 +50,12 @@ class UpgradeService implements UpgradeServiceInterface
     {
         $strategy = $this->strategyResolver->getStrategy($this->configurationProvider->getUpgradeStrategy());
 
-        return $strategy->upgrade();
+        $stepsResponse = $strategy->upgrade();
+
+        if (!$stepsResponse->isSuccessful()) {
+            $this->logger->error((string)$stepsResponse->getOutputMessage());
+        }
+
+        return $stepsResponse;
     }
 }
