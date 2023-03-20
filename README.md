@@ -212,6 +212,43 @@ export PROJECT_ID=<PROJECT_ID>
 ```bash
 export SOURCE_CODE_PROVIDER_URL=<https://git.yourdomain.com>
 ```
+### Adding Azure configuration for the update step
+​
+To enable the Upgrader to execute this step, apply the following configuration:
+​
+* Enable Azure source code provider:
+  ​
+```bash
+export SOURCE_CODE_PROVIDER=azure
+```
+​
+* Add a Azure access token to the project repository with the permissions to push branches and create PRs:
+  ​
+```bash
+export ACCESS_TOKEN=<AZURE_TOKEN>
+```
+​
+* Add the organization name owning the repository of the project you want to update::
+  ​
+```bash
+export ORGANIZATION_NAME=<ORGANIZATION_NAME>
+```
+​
+* Add a project name or project id you want to update:
+  ​
+```bash
+export PROJECT_NAME=<PROJECT_NAME>
+# OR
+export PROJECT_ID=<PROJECT_ID>
+```
+​
+* Add a project's repository name or repository id:
+  ​
+```bash
+export REPOSITORY_NAME=<REPOSITORY_NAME>
+# OR
+export REPOSITORY_ID=<REPOSITORY_ID>
+```
 ​
 ### Reporting configuration
 ​
