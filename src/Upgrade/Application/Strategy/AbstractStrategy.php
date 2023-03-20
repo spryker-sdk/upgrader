@@ -39,23 +39,22 @@ abstract class AbstractStrategy implements StrategyInterface
     public function upgrade(): StepsResponseDto
     {
         $executedSteps = [];
-        $stepsExecutionDto = new StepsResponseDto(true);
+        $stepsResponseDto = new StepsResponseDto(true);
 
         foreach ($this->steps as $index => $step) {
-            $stepsExecutionDto->addOutputMessage(
+            $stepsResponseDto->addOutputMessage(
                 sprintf('%sStart executing "%s" step', $index === 0 ? '' : PHP_EOL, $this->getStepName($step)),
             );
 
             $executedSteps[] = $step;
 
-            $stepsExecutionDto = $step->run($stepsExecutionDto);
+            $stepsResponseDto = $step->run($stepsResponseDto);
 
-            if (!$stepsExecutionDto->getIsSuccessful()) {
-                $stepsExecutionDto->addOutputMessage('Step is failed. It will be reapplied with a fixer');
-                $stepsExecutionDto = $this->runWithFixer($step, $stepsExecutionDto);
+            if (!$stepsResponseDto->getIsSuccessful()) {
+                $stepsResponseDto = $this->runWithFixer($step, $stepsResponseDto);
             }
-            if (!$stepsExecutionDto->getIsSuccessful()) {
-                $stepsExecutionDto->addOutputMessage('Step is failed');
+            if (!$stepsResponseDto->getIsSuccessful()) {
+                $stepsResponseDto->addOutputMessage('Step is failed');
                 $rollBackExecutionDto = new StepsResponseDto(true);
                 foreach (array_reverse($executedSteps) as $executedStep) {
                     if ($executedStep instanceof RollbackStepInterface) {
@@ -63,13 +62,13 @@ abstract class AbstractStrategy implements StrategyInterface
                     }
                 }
 
-                return $stepsExecutionDto;
+                return $stepsResponseDto;
             }
 
-            $stepsExecutionDto->addOutputMessage('Step is successfully executed');
+            $stepsResponseDto->addOutputMessage('Step is successfully executed');
         }
 
-        return $stepsExecutionDto;
+        return $stepsResponseDto;
     }
 
     /**
@@ -84,6 +83,8 @@ abstract class AbstractStrategy implements StrategyInterface
             if (!$fixer->isApplicable($stepsResponseDto)) {
                 continue;
             }
+            $stepsResponseDto->addOutputMessage('Step is failed. It will be reapplied with a fixer');
+
             $stepsResponseDto = $fixer->run($stepsResponseDto);
             if (!$stepsResponseDto->getIsSuccessful()) {
                 continue;

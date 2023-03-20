@@ -28,6 +28,11 @@ class ComposerAdapter implements PackageManagerAdapterInterface
     /**
      * @var string
      */
+    protected const PACKAGES_DEV_KEY = 'packages-dev';
+
+    /**
+     * @var string
+     */
     protected const NAME_KEY = 'name';
 
     /**
@@ -147,6 +152,12 @@ class ComposerAdapter implements PackageManagerAdapterInterface
         $composerLock = $this->composerLockReader->read();
 
         foreach ($composerLock[self::PACKAGES_KEY] as $package) {
+            if ($package[self::NAME_KEY] == $packageName) {
+                return $package[self::VERSION_KEY];
+            }
+        }
+
+        foreach ($composerLock[self::PACKAGES_DEV_KEY] as $package) {
             if ($package[self::NAME_KEY] == $packageName) {
                 return $package[self::VERSION_KEY];
             }
