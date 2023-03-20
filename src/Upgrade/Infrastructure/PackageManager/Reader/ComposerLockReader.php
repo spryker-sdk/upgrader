@@ -69,8 +69,9 @@ class ComposerLockReader implements ComposerLockReaderInterface
         if (!file_exists($path)) {
             throw new FileNotFoundException('File is not exist: ' . $path);
         }
-
-        if (!$this->composerLockData || filemtime($path) > $this->modifyTime) {
+        $fileTime = filemtime($path);
+        if (!$this->composerLockData || $fileTime > $this->modifyTime) {
+            $this->modifyTime = $fileTime;
             $this->composerLockData = json_decode((string)file_get_contents($path), true);
         }
 
