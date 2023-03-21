@@ -4,6 +4,6 @@ coverage:
     precision: 2
 
 ignore:
-    - "*.md"
-    - "*.yml"
-    - "*.yaml"
+    - "**/*.md"
+    - "**/*.yml"
+    - "**/*.yaml"
