@@ -2,3 +2,8 @@ coverage:
     range: 95..100
     round: nearest
     precision: 2
+
+ignore:
+    - "*.md"
+    - "*.yml"
+    - "*.yaml"
