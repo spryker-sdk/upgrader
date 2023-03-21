@@ -173,7 +173,7 @@ export INTEGRATOR_ENABLED=true
 
 ## Evaluator
 
-[Evaluator documentation](https://github.com/spryker-sdk/upgrader/blob/master/docs/evaluator.md)
+[Evaluator documentation](docs/evaluator.md)
 
 
 ## Installation
