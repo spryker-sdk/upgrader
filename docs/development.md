@@ -27,10 +27,10 @@ Note: File synchronization is enabled by the default
 ### Running as docker container
 
 ```bash
-`export DOCKER_BUILDKIT=1 # or configure in daemon.json
+export DOCKER_BUILDKIT=1 # or configure in daemon.json
 export COMPOSE_DOCKER_CLI_BUILD=1
 
-docker-compose -f linux-compose.yml up -d --build`
+docker-compose -f linux-compose.yml up -d --build
 docker exec -it -u spryker upgrader_upgrader-sdk_1 bash
 cd /data/project
 ../bin/upgrader {command_name}
