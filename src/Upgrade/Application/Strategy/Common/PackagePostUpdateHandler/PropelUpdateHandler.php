@@ -75,11 +75,7 @@ class PropelUpdateHandler implements HandlerInterface
             return false;
         }
 
-        if ($this->hasPropel($composerLockDiffDto->getRequireChanges())) {
-            return true;
-        }
-
-        return false;
+        return $this->hasPropel($composerLockDiffDto->getRequireChanges());
     }
 
     /**
@@ -100,7 +96,6 @@ class PropelUpdateHandler implements HandlerInterface
             $response = $this->processRunner->run(explode(' ', $command));
             if ($response->getExitCode()) {
                 $stepsExecutionDto->addOutputMessage($response->getErrorOutput());
-                var_dump($response->getErrorOutput());
             }
         }
 
