@@ -11,6 +11,7 @@ namespace UpgradeTest\Application\Strategy\Common\PropelUpdateHandler;
 
 use Core\Infrastructure\Service\ProcessRunnerService;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\Common\PackagePostUpdateHandler\PropelUpdateHandler;
@@ -27,7 +28,7 @@ class PropelUpdateHandlerTest extends TestCase
         $stepsExecutionDto->setComposerLockDiff($this->createComposerLockDiffDto());
 
         $mockProcessRunner = $this->createMock(ProcessRunnerService::class);
-        $handler = new PropelUpdateHandler($mockProcessRunner);
+        $handler = new PropelUpdateHandler($mockProcessRunner, new Filesystem());
 
         // Act
         $isApplicable = $handler->isApplicable($stepsExecutionDto);
@@ -51,7 +52,7 @@ class PropelUpdateHandlerTest extends TestCase
         $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
 
         $mockProcessRunner = $this->createMock(ProcessRunnerService::class);
-        $handler = new PropelUpdateHandler($mockProcessRunner);
+        $handler = new PropelUpdateHandler($mockProcessRunner, new Filesystem());
 
         // Act
         $isApplicable = $handler->isApplicable($stepsExecutionDto);
@@ -70,7 +71,7 @@ class PropelUpdateHandlerTest extends TestCase
         $stepsExecutionDto->setComposerLockDiff($this->createComposerLockDiffDto());
         $mockProcessRunnerMock = $this->createMock(ProcessRunnerService::class);
         $mockProcessRunnerMock->expects($this->atLeastOnce())->method('run');
-        $handler = new PropelUpdateHandler($mockProcessRunnerMock);
+        $handler = new PropelUpdateHandler($mockProcessRunnerMock, new Filesystem());
 
         // Act
         $result = $handler->handle($stepsExecutionDto);

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Application\Strategy\Common\PackagePostUpdateHandler;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Upgrade\Application\Dto\StepsResponseDto;
 
 class PropelUpdateHandler implements HandlerInterface
@@ -23,11 +24,6 @@ class PropelUpdateHandler implements HandlerInterface
      * @var string
      */
     protected const PROJECT_CONSOLE_PATH = 'vendor/bin/console';
-
-    /**
-     * @var string
-     */
-    protected const TRANSFER_GENERATE_COMMAND = 'transfer:generate';
 
     /**
      * @var string
@@ -46,7 +42,6 @@ class PropelUpdateHandler implements HandlerInterface
         'data/cache/propel',
         'src/Orm/Zed/**/Persistence/Base/',
         'src/Orm/Zed/**/Persistence/Map/',
-        'src/Generated/',
         'src/Orm/Propel/*',
     ];
 
@@ -56,11 +51,18 @@ class PropelUpdateHandler implements HandlerInterface
     protected ProcessRunnerServiceInterface $processRunner;
 
     /**
-     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @var \Symfony\Component\Filesystem\Filesystem
      */
-    public function __construct(ProcessRunnerServiceInterface $processRunner)
+    protected Filesystem $filesystem;
+
+    /**
+     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @param \Symfony\Component\Filesystem\Filesystem $filesystem
+     */
+    public function __construct(ProcessRunnerServiceInterface $processRunner, Filesystem $filesystem)
     {
         $this->processRunner = $processRunner;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -85,15 +87,17 @@ class PropelUpdateHandler implements HandlerInterface
      */
     public function handle(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
+        foreach (static::GENERATED_MODEL_PATH_LIST as $path) {
+            $this->filesystem->remove((array)glob($path));
+        }
+
         $commandList = [
-            sprintf('rm -rf %s', implode(' ', self::GENERATED_MODEL_PATH_LIST)),
-            sprintf('%s %s', static::PROJECT_CONSOLE_PATH, static::TRANSFER_GENERATE_COMMAND),
             sprintf('%s %s', static::PROJECT_CONSOLE_PATH, static::PROPEL_SCHEMA_COPY_COMMAND),
             sprintf('%s %s', static::PROJECT_CONSOLE_PATH, static::PROPEL_MODEL_BUILD_COMMAND),
         ];
 
         foreach ($commandList as $command) {
-            $response = $this->processRunner->run(explode(' ', $command));
+            $response = $this->processRunner->run(explode(' ', $command), ['APPLICATION_ENV' => 'development']);
             if ($response->getExitCode()) {
                 $stepsExecutionDto->addOutputMessage($response->getErrorOutput());
             }
