@@ -52,6 +52,14 @@ services:
     composer_lock_diff.step:
         class: Upgrade\Application\Strategy\Common\Step\ComposerLockComparatorStep
 
+    proper_update.handler:
+        class: Upgrade\Application\Strategy\Common\PackagePostUpdateHandler\PropelUpdateHandler
+
+    package_post_update.step:
+        class: Upgrade\Application\Strategy\Common\Step\PackagePostUpdateStep
+        arguments:
+            - - '@proper_update.handler'
+
     integrator.step:
         class: Upgrade\Application\Strategy\Common\Step\IntegratorStep
 
@@ -95,6 +103,7 @@ services:
               - '@integrator_lock_run.step'
               - '@composer_update.step'
               - '@composer_lock_diff.step'
+              - '@package_post_update.step'
               - '@integrator.step'
               - '@create_branch.step'
               - '@add_changes.step'
@@ -117,6 +126,7 @@ services:
               - '@integrator_lock_run.step'
               - '@release_group_update.step'
               - '@composer_lock_diff.step'
+              - '@package_post_update.step'
               - '@integrator.step'
               - '@create_branch.step'
               - '@add_changes.step'
