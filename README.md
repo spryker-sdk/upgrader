@@ -181,7 +181,7 @@ export REPOSITORY_ID=<REPOSITORY_ID>
 ​
 * Optional. Defines execution environment for report statistics:
 ```bash
-export APP_ENV=buddyCI
+export APP_ENV=sprykerci
 ```
 ​
 * Optional. Enable the report sending functionality. it’s disabled by default.
