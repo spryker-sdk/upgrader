@@ -82,7 +82,7 @@ class ReportNormalizer implements NormalizerInterface
             'repository_name' => $metadataDto->getRepositoryName(),
             'project_id' => $metadataDto->getProjectId(),
             'source_code_provider' => $metadataDto->getSourceCodeProvider(),
-            'execution_env' => $metadataDto->getExecutionEnv(),
+            'application_env' => $metadataDto->getAppEnv(),
             'report_id' => $metadataDto->getReportId(),
         ];
     }

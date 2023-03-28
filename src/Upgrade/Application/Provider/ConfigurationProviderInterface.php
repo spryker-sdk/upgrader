@@ -100,11 +100,11 @@ interface ConfigurationProviderInterface
 
     /**
      * Specification:
-     * - Defines execution env.
+     * - Defines application env.
      *
      * @return string
      */
-    public function getExecutionEnv(): string;
+    public function getAppEnv(): string;
 
     /**
      * Specification:
