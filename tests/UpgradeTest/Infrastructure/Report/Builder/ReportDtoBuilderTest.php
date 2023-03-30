@@ -47,7 +47,7 @@ class ReportDtoBuilderTest extends TestCase
     /**
      * @var string
      */
-    protected const EXECUTION_ENV = 'CI';
+    protected const APP_ENV = 'CI';
 
     /**
      * @var string
@@ -92,7 +92,7 @@ class ReportDtoBuilderTest extends TestCase
 
         $metadata = $reportDto->getMetadata();
         $this->assertSame(static::REPORT_ID, $metadata->getReportId());
-        $this->assertSame(static::EXECUTION_ENV, $metadata->getExecutionEnv());
+        $this->assertSame(static::APP_ENV, $metadata->getAppEnv());
         $this->assertSame(static::SOURCE_CODE_PROVIDER, $metadata->getSourceCodeProvider());
         $this->assertSame(static::PROJECT_ID, $metadata->getProjectId());
         $this->assertSame(static::ORGANIZATION_NAME, $metadata->getOrganizationName());
@@ -127,7 +127,7 @@ class ReportDtoBuilderTest extends TestCase
         $configurationProvider->method('getRepositoryName')->willReturn(static::REPOSITORY_NAME);
         $configurationProvider->method('getProjectId')->willReturn(static::PROJECT_ID);
         $configurationProvider->method('getSourceCodeProvider')->willReturn(static::SOURCE_CODE_PROVIDER);
-        $configurationProvider->method('getExecutionEnv')->willReturn(static::EXECUTION_ENV);
+        $configurationProvider->method('getAppEnv')->willReturn(static::APP_ENV);
 
         return $configurationProvider;
     }

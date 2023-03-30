@@ -86,7 +86,7 @@ class ReportNormalizerTest extends TestCase
                 'repository_name' => 'suite',
                 'project_id' => '',
                 'source_code_provider' => 'github',
-                'execution_env' => 'CI',
+                'application_env' => 'CI',
                 'report_id' => '902072d8-a2cc-11ed-a8fc-0242ac120002',
             ],
         ], $jsonArray);

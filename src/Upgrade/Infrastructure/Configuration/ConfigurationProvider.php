@@ -296,9 +296,9 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      *
      * @return string
      */
-    public function getExecutionEnv(): string
+    public function getAppEnv(): string
     {
-        return (string)getenv('EXECUTION_ENV');
+        return (string)getenv('APP_ENV');
     }
 
     /**

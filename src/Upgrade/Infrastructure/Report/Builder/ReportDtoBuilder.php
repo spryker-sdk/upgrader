@@ -75,7 +75,7 @@ class ReportDtoBuilder implements ReportDtoBuilderInterface
             $this->configurationProvider->getRepositoryName(),
             $this->configurationProvider->getProjectId(),
             $this->configurationProvider->getSourceCodeProvider(),
-            $this->configurationProvider->getExecutionEnv(),
+            $this->configurationProvider->getAppEnv(),
             (string)$stepsResponseDto->getReportId(),
         );
     }

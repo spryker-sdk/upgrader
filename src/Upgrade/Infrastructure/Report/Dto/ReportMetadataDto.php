@@ -34,7 +34,7 @@ class ReportMetadataDto
     /**
      * @var string
      */
-    protected string $executionEnv;
+    protected string $appEnv;
 
     /**
      * @var string
@@ -46,7 +46,7 @@ class ReportMetadataDto
      * @param string $repositoryName
      * @param string $projectId
      * @param string $sourceCodeProvider
-     * @param string $executionEnv
+     * @param string $appEnv
      * @param string $reportId
      */
     public function __construct(
@@ -54,14 +54,14 @@ class ReportMetadataDto
         string $repositoryName,
         string $projectId,
         string $sourceCodeProvider,
-        string $executionEnv,
+        string $appEnv,
         string $reportId
     ) {
         $this->organizationName = $organizationName;
         $this->repositoryName = $repositoryName;
         $this->projectId = $projectId;
         $this->sourceCodeProvider = $sourceCodeProvider;
-        $this->executionEnv = $executionEnv;
+        $this->appEnv = $appEnv;
         $this->reportId = $reportId;
     }
 
@@ -100,9 +100,9 @@ class ReportMetadataDto
     /**
      * @return string
      */
-    public function getExecutionEnv(): string
+    public function getAppEnv(): string
     {
-        return $this->executionEnv;
+        return $this->appEnv;
     }
 
     /**
