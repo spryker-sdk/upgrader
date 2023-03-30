@@ -34,5 +34,5 @@ class ReleaseAppConstant
     /**
      * @var string
      */
-    public const RELEASE_GROUP_LINK_PATTERN = '%s/release-groups/view/%s';
+    public const RELEASE_GROUP_LINK_PATTERN = '%s/release-groups/%s';
 }
