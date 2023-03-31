@@ -51,7 +51,7 @@ class ReleaseAppServiceTest extends KernelTestCase
                             new ModuleDto('spryker/symfony-mailer', '1.0.2', 'major'),
                         ]),
                         true,
-                        'https://api.release.spryker.com/release-groups/4395',
+                        'https://api.release.spryker.com/release-group/4395',
                         true,
                     ),
                 ]),
