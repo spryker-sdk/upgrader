@@ -23,6 +23,7 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor;
+use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter;
 use Upgrade\Application\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ConflictValidator;
@@ -255,6 +256,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                     $composerAdapterMock,
                 ),
             ),
+            new ReleaseGroupFilter([]),
         );
     }
 
@@ -284,6 +286,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                     $composerAdapterMock,
                 ),
             ),
+            new ReleaseGroupFilter([]),
         );
     }
 
