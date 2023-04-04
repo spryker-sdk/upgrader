@@ -12,6 +12,7 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
@@ -34,18 +35,26 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
     protected ModulePackageFetcher $modulePackageFetcher;
 
     /**
+     * @var \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface
+     */
+    protected ReleaseGroupFilterInterface $releaseGroupFilter;
+
+    /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
      * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher $modulePackageFetcher
+     * @param \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface $releaseGroupFilter
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
         ThresholdSoftValidatorInterface $thresholdSoftValidator,
-        ModulePackageFetcher $modulePackageFetcher
+        ModulePackageFetcher $modulePackageFetcher,
+        ReleaseGroupFilterInterface $releaseGroupFilter
     ) {
         $this->releaseGroupValidator = $releaseGroupValidateManager;
         $this->thresholdValidator = $thresholdSoftValidator;
         $this->modulePackageFetcher = $modulePackageFetcher;
+        $this->releaseGroupFilter = $releaseGroupFilter;
     }
 
     /**
@@ -69,6 +78,7 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
         $response = new ResponseDto(true);
 
         foreach ($requireRequestCollection->toArray() as $releaseGroup) {
+            $releaseGroup = $this->releaseGroupFilter->filter($releaseGroup);
             $thresholdValidationResult = $this->thresholdValidator->validate($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccessful()) {
                 $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutputMessage());

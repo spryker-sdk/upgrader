@@ -60,6 +60,22 @@ class ReleaseGroupDto
     }
 
     /**
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
+     *
+     * @return self
+     */
+    public function withModuleCollection(ModuleDtoCollection $moduleCollection): self
+    {
+        return new self(
+            $this->getName(),
+            $moduleCollection,
+            $this->hasProjectChanges(),
+            $this->getLink(),
+            $this->hasConflict(),
+        );
+    }
+
+    /**
      * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection
      */
     public function getModuleCollection(): ModuleDtoCollection
