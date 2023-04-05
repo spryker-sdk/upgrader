@@ -66,7 +66,9 @@ class ReleaseGroupDto
      */
     public function withModuleCollection(ModuleDtoCollection $moduleCollection): self
     {
-        return new self(
+        $this->moduleCollection = $moduleCollection;
+        
+        return $this;
             $this->getName(),
             $moduleCollection,
             $this->hasProjectChanges(),
