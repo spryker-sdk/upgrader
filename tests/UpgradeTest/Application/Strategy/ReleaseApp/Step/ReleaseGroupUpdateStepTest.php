@@ -15,6 +15,7 @@ use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
+use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapper;
@@ -23,6 +24,7 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor;
+use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DevMasterPackageFilterItem;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter;
 use Upgrade\Application\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidator;
@@ -194,6 +196,44 @@ class ReleaseGroupUpdateStepTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testDevMasterFilterShouldFilterReleaseAppPackages(): void
+    {
+        // Arrange
+        $releaseGroupFilters = [
+            new DevMasterPackageFilterItem($this->createPackageManagerAdapterMock(['require' => ['spryker/product-category' => 'dev-master']])),
+        ];
+
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock(
+                $this->buildReleaseGroupDtoCollection(),
+            ),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createSequentialReleaseGroupProcessor($releaseGroupFilters),
+            ),
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertTrue($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            implode(PHP_EOL, [
+                'Amount of available release groups for the project: 2',
+                'No valid packages found',
+                'Applied required packages count: 1',
+                'No new required-dev packages',
+                'Amount of applied release groups: 2',
+            ]),
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface $processor
      *
      * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver
@@ -261,9 +301,11 @@ class ReleaseGroupUpdateStepTest extends TestCase
     }
 
     /**
+     * @param array<\Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterItemInterface> $releaseGroupFilters
+     *
      * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
      */
-    protected function createSequentialReleaseGroupProcessor(): SequentialReleaseGroupProcessor
+    protected function createSequentialReleaseGroupProcessor(array $releaseGroupFilters = []): SequentialReleaseGroupProcessor
     {
         $responseDto = new ResponseDto(true);
 
@@ -286,7 +328,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                     $composerAdapterMock,
                 ),
             ),
-            new ReleaseGroupFilter([]),
+            new ReleaseGroupFilter($releaseGroupFilters),
         );
     }
 
@@ -316,5 +358,18 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 $conflictDetected,
             ),
         ]);
+    }
+
+    /**
+     * @param array<string, mixed> $composerJson
+     *
+     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
+     */
+    protected function createPackageManagerAdapterMock(array $composerJson = []): PackageManagerAdapterInterface
+    {
+        $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
+        $packageManagerAdapter->method('getComposerJsonFile')->willReturn($composerJson);
+
+        return $packageManagerAdapter;
     }
 }
