@@ -57,7 +57,9 @@ class DevMasterPackageFilterItem implements ReleaseGroupFilterItemInterface
             $filteredModuleCollection->add($module);
         }
 
-        return $releaseGroupDto->withModuleCollection($filteredModuleCollection);
+        $releaseGroupDto->setModuleCollection($filteredModuleCollection);
+
+        return $releaseGroupDto;
     }
 
     /**
