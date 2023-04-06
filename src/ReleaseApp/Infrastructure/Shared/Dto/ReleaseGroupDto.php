@@ -69,6 +69,8 @@ class ReleaseGroupDto
 
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
+     *
+     * @return void
      */
     public function setModuleCollection(ModuleDtoCollection $moduleCollection): void
     {
