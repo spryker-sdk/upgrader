@@ -42,7 +42,9 @@ class PropelUpdateHandler implements HandlerInterface
         'data/cache/propel',
         'src/Orm/Zed/**/Persistence/Base/',
         'src/Orm/Zed/**/Persistence/Map/',
-        'src/Orm/Propel/*',
+        'src/Orm/Propel/Schema/*',
+        'src/Orm/Propel/Sql/*',
+        'src/Orm/Propel/generated-conf/*',
     ];
 
     /**
