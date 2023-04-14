@@ -39,7 +39,7 @@ class ComposerLockComparatorStep implements StepInterface
 
         if ($composerLockDiffDto->isEmpty()) {
             return $stepsExecutionDto
-                ->setIsSuccessful(false)
+                ->setIsStopPropagation(true)
                 ->addOutputMessage('The branch is up to date. No further action is required.');
         }
 

@@ -53,6 +53,11 @@ abstract class AbstractStrategy implements StrategyInterface
             if (!$stepsResponseDto->getIsSuccessful()) {
                 $stepsResponseDto = $this->runWithFixer($step, $stepsResponseDto);
             }
+
+            if ($stepsResponseDto->isSuccessful() && $stepsResponseDto->getIsStopPropagation()) {
+                return $stepsResponseDto;
+            }
+
             if (!$stepsResponseDto->getIsSuccessful()) {
                 $stepsResponseDto->addOutputMessage('Step is failed');
                 $rollBackExecutionDto = new StepsResponseDto(true);
