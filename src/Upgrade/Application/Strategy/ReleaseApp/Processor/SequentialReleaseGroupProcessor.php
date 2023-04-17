@@ -104,7 +104,7 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
                 break;
             }
 
-            $this->preRequireProcessor->process($aggregatedReleaseGroupCollection);
+            $aggregatedReleaseGroupCollection = $this->preRequireProcessor->process($aggregatedReleaseGroupCollection);
 
             $response = $this->modulePackageFetcher->require($releaseGroup->getModuleCollection());
 

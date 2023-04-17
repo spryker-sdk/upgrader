@@ -21,6 +21,8 @@ use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapper;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessor;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PropelProcessorStrategy;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor;
@@ -233,6 +235,94 @@ class ReleaseGroupUpdateStepTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testPropelAddedWhenPropelHasSpecificVersion(): void
+    {
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock(
+                $this->buildReleaseGroupDtoCollection(),
+            ),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createSequentialReleaseGroupProcessor(
+                    [],
+                    [new PropelProcessorStrategy(
+                        $this->createPackageManagerPackageVersionAdapterMock(
+                            PropelProcessorStrategy::PACKAGE_NAME,
+                            PropelProcessorStrategy::LOCK_PACKAGE_VERSION,
+                            ['require' => []],
+                        ),
+                    ),
+                    ],
+                ),
+            ),
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertTrue($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            implode(PHP_EOL, [
+                'Amount of available release groups for the project: 2',
+                'Applied required packages count: 1',
+                'No new required-dev packages',
+                'Applied required packages count: 1',
+                'No new required-dev packages',
+                'Amount of applied release groups: 4',
+            ]),
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testPropelAddedWhenPropelAlreadyInstalled(): void
+    {
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock(
+                $this->buildReleaseGroupDtoCollection(),
+            ),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createSequentialReleaseGroupProcessor(
+                    [],
+                    [new PropelProcessorStrategy(
+                        $this->createPackageManagerPackageVersionAdapterMock(
+                            PropelProcessorStrategy::PACKAGE_NAME,
+                            PropelProcessorStrategy::LOCK_PACKAGE_VERSION,
+                            ['require' => [PropelProcessorStrategy::PACKAGE_NAME => '1.0.0']],
+                        ),
+                    ),
+                    ],
+                ),
+            ),
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertTrue($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            implode(PHP_EOL, [
+                'Amount of available release groups for the project: 2',
+                'Applied required packages count: 1',
+                'No new required-dev packages',
+                'Applied required packages count: 1',
+                'No new required-dev packages',
+                'Amount of applied release groups: 2',
+            ]),
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface $processor
      *
      * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver
@@ -295,16 +385,20 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 ),
             ),
             new ReleaseGroupFilter([]),
+            new PreRequireProcessor([]),
         );
     }
 
     /**
      * @param array<\Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterItemInterface> $releaseGroupFilters
+     * @param array<\Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorStrategyInterface> $preRequireProcessorStrategies
      *
      * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
      */
-    protected function createSequentialReleaseGroupProcessor(array $releaseGroupFilters = []): SequentialReleaseGroupProcessor
-    {
+    protected function createSequentialReleaseGroupProcessor(
+        array $releaseGroupFilters = [],
+        array $preRequireProcessorStrategies = []
+    ): SequentialReleaseGroupProcessor {
         $responseDto = new ResponseDto(true);
 
         $composerAdapterMock = $this->getMockBuilder(ComposerAdapter::class)
@@ -326,6 +420,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 ),
             ),
             new ReleaseGroupFilter($releaseGroupFilters),
+            new PreRequireProcessor($preRequireProcessorStrategies),
         );
     }
 
@@ -366,6 +461,26 @@ class ReleaseGroupUpdateStepTest extends TestCase
     {
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter->method('getComposerJsonFile')->willReturn($composerJson);
+
+        return $packageManagerAdapter;
+    }
+
+    /**
+     * @param string $package
+     * @param string $version
+     * @param array<string, mixed> $composerJson
+     *
+     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
+     */
+    protected function createPackageManagerPackageVersionAdapterMock(string $package, string $version, array $composerJson = []): PackageManagerAdapterInterface
+    {
+        $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
+        $packageManagerAdapter
+            ->method('getPackageVersion')
+            ->with($package)->willReturn($version);
+        $packageManagerAdapter
+            ->method('getComposerJsonFile')
+            ->willReturn($composerJson);
 
         return $packageManagerAdapter;
     }

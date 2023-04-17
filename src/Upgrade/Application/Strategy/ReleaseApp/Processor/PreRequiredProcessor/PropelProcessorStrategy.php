@@ -58,6 +58,10 @@ class PropelProcessorStrategy implements PreRequireProcessorStrategyInterface
             return $requireCollection;
         }
 
+        if ($this->alreadyHasRequiredPropelPackage()) {
+            return $requireCollection;
+        }
+
         $requireCollection->add(
             new ReleaseGroupDto(
                 static::RELEASE_GROUP__NAME,
@@ -70,5 +74,17 @@ class PropelProcessorStrategy implements PreRequireProcessorStrategyInterface
         );
 
         return $requireCollection;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function alreadyHasRequiredPropelPackage(): bool
+    {
+        $composerJson = $this->packageManager->getComposerJsonFile();
+
+        $packages = array_merge($composerJson['require'], $composerJson['require-dev'] ?? []);
+
+        return array_key_exists(static::PACKAGE_NAME, $packages);
     }
 }

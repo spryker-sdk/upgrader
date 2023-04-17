@@ -28,6 +28,7 @@ class PropelProcessorStrategyTest extends TestCase
         $packageManagerAdapterMock = $this->createPackageManagerAdapterMock(
             PropelProcessorStrategy::PACKAGE_NAME,
             PropelProcessorStrategy::LOCK_PACKAGE_VERSION,
+            ['require' => []],
         );
 
         $releaseGroupDtoCollection = new ReleaseGroupDtoCollection([$this->createReleaseGroupDto([
@@ -49,18 +50,53 @@ class PropelProcessorStrategyTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testProcessShouldSkipAddingPropelPackageWhenPackageInComposerRequire(): void
+    {
+        // Arrange
+        $packageManagerAdapterMock = $this->createPackageManagerAdapterMock(
+            PropelProcessorStrategy::PACKAGE_NAME,
+            PropelProcessorStrategy::LOCK_PACKAGE_VERSION,
+            ['require' => [PropelProcessorStrategy::PACKAGE_NAME => '1.0.0']],
+        );
+
+        $releaseGroupDtoCollection = new ReleaseGroupDtoCollection([$this->createReleaseGroupDto([
+            new ModuleDto('spryker/package-one', '4.17.0', 'minor'),
+        ])]);
+
+        $propelProcessorStrategy = new PropelProcessorStrategy($packageManagerAdapterMock);
+
+        // Act
+        $releaseGroupDtoCollection = $propelProcessorStrategy->process($releaseGroupDtoCollection);
+
+        // Assert
+        $this->assertSame(1, $releaseGroupDtoCollection->count());
+
+        $propelModule = $releaseGroupDtoCollection->toArray()[0]->getModuleCollection()->toArray()[0];
+
+        $this->assertSame('spryker/package-one', $propelModule->getName());
+        $this->assertSame('4.17.0', $propelModule->getVersion());
+    }
+
+    /**
      * @param string $package
      * @param string $version
+     * @param array<string, mixed> $composerJson
      *
      * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
-    protected function createPackageManagerAdapterMock(string $package, string $version): PackageManagerAdapterInterface
+    protected function createPackageManagerAdapterMock(string $package, string $version, array $composerJson): PackageManagerAdapterInterface
     {
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter
             ->expects($this->once())
             ->method('getPackageVersion')
             ->with($package)->willReturn($version);
+
+        $packageManagerAdapter
+            ->method('getComposerJsonFile')
+            ->willReturn($composerJson);
 
         return $packageManagerAdapter;
     }

@@ -102,7 +102,7 @@ class AggregateReleaseGroupProcessor implements ReleaseGroupProcessorInterface
             $aggregatedReleaseGroupCollection->add($releaseGroup);
         }
 
-        $this->preRequireProcessor->process($aggregatedReleaseGroupCollection);
+        $aggregatedReleaseGroupCollection = $this->preRequireProcessor->process($aggregatedReleaseGroupCollection);
 
         $response = $this->modulePackageFetcher->require($aggregatedReleaseGroupCollection->getCommonModuleCollection());
 
