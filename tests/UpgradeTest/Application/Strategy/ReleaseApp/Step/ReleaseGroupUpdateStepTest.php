@@ -27,7 +27,6 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProc
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DevMasterPackageFilterItem;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter;
 use Upgrade\Application\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep;
-use Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ConflictValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator;
@@ -292,7 +291,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
             new ModulePackageFetcher(
                 $composerAdapterMock,
                 new PackageCollectionMapper(
-                    new PackageSoftValidator([]),
                     $composerAdapterMock,
                 ),
             ),
@@ -324,7 +322,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
             new ModulePackageFetcher(
                 $composerAdapterMock,
                 new PackageCollectionMapper(
-                    new PackageSoftValidator([]),
                     $composerAdapterMock,
                 ),
             ),

@@ -193,16 +193,6 @@ services:
               - '@gitlab.provider'
               - '@azure.provider'
 
-    validator.already_installed:
-        class: Upgrade\Application\Strategy\ReleaseApp\Validator\Package\AlreadyInstalledValidator
-
-    Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidator:
-        class: Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidator
-        arguments:
-            - {
-                param1: '@validator.already_installed'
-            }
-
     validator.project_changes:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ProjectChangesValidator
 
@@ -212,9 +202,14 @@ services:
     validator.conflict:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ConflictValidator
 
+    Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessor:
+        arguments:
+            - - '@Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PropelProcessorStrategy'
+
     Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter:
         arguments:
             - - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DevMasterPackageFilterItem'
+              - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\AlreadyInstalledPackageFilterItem'
 
     Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
