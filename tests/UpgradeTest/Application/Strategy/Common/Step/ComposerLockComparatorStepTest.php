@@ -80,7 +80,8 @@ class ComposerLockComparatorStepTest extends TestCase
         $stepsExecutionDto = $comparatorStep->run((new StepsResponseDto(true)));
 
         // Assert
-        $this->assertFalse($stepsExecutionDto->getIsSuccessful());
+        $this->assertTrue($stepsExecutionDto->getIsSuccessful());
+        $this->assertTrue($stepsExecutionDto->getIsStopPropagation());
         $this->assertSame(
             'The branch is up to date. No further action is required.',
             $stepsExecutionDto->getOutputMessage(),
@@ -108,7 +109,8 @@ class ComposerLockComparatorStepTest extends TestCase
         $stepsExecutionDto = $comparatorStep->run((new StepsResponseDto(true)));
 
         // Assert
-        $this->assertFalse($stepsExecutionDto->getIsSuccessful());
+        $this->assertTrue($stepsExecutionDto->getIsSuccessful());
+        $this->assertTrue($stepsExecutionDto->getIsStopPropagation());
         $this->assertSame(
             'The branch is up to date. No further action is required.',
             $stepsExecutionDto->getOutputMessage(),

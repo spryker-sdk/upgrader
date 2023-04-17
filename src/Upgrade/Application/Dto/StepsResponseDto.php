@@ -47,6 +47,11 @@ class StepsResponseDto extends ResponseDto
     protected ?string $reportId = null;
 
     /**
+     * @var bool
+     */
+    protected bool $isStopPropagation = false;
+
+    /**
      * @param bool $isSuccessful
      * @param string|null $outputMessage
      */
@@ -220,6 +225,26 @@ class StepsResponseDto extends ResponseDto
     public function setReportId(?string $reportId)
     {
         $this->reportId = $reportId;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsStopPropagation(): bool
+    {
+        return $this->isStopPropagation;
+    }
+
+    /**
+     * @param bool $isStopPropagation
+     *
+     * @return $this
+     */
+    public function setIsStopPropagation(bool $isStopPropagation)
+    {
+        $this->isStopPropagation = $isStopPropagation;
 
         return $this;
     }
