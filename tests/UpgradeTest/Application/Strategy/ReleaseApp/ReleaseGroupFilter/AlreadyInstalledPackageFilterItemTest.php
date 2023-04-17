@@ -50,7 +50,7 @@ class AlreadyInstalledPackageFilterItemTest extends TestCase
         $this->assertSame('4.17.0', $modules[0]->getVersion());
 
         $this->assertSame('spryker/package-three', $modules[1]->getName());
-        $this->assertSame('2.17.0', $modules[0]->getVersion());
+        $this->assertSame('2.17.0', $modules[1]->getVersion());
     }
 
     /**
