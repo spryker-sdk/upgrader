@@ -78,12 +78,12 @@ class DevMasterPackageFilterItem implements ReleaseGroupFilterItemInterface
 
         $this->devMasterModules = [];
 
-        foreach ($packages as $packaged => $version) {
+        foreach ($packages as $package => $version) {
             if (strpos($version, static::DEV_MASTER_PREFIX) !== 0) {
                 continue;
             }
 
-            $this->devMasterModules[] = $packaged;
+            $this->devMasterModules[] = $package;
         }
 
         return $this->devMasterModules;
