@@ -30,7 +30,7 @@ class PropelProcessorStrategy implements PreRequireProcessorStrategyInterface
     /**
      * @var string
      */
-    protected const RELEASE_GROUP__NAME = 'updater-rg';
+    protected const RELEASE_GROUP_NAME = 'updater-rg';
 
     /**
      * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
@@ -64,7 +64,7 @@ class PropelProcessorStrategy implements PreRequireProcessorStrategyInterface
 
         $requireCollection->add(
             new ReleaseGroupDto(
-                static::RELEASE_GROUP__NAME,
+                static::RELEASE_GROUP_NAME,
                 new ModuleDtoCollection(
                     [new ModuleDto(static::PACKAGE_NAME, static::LOCK_PACKAGE_VERSION, 'minor')],
                 ),
