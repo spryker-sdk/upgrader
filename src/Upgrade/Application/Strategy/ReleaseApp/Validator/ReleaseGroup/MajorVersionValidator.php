@@ -50,7 +50,7 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
 
         $message = sprintf(
             'There is a major release available for module %s. Please follow the link below to find all documentation needed to help you upgrade to the latest release %s',
-            implode(',', array_map(static fn (ModuleDto $module): string => $module->getName(), $moduleWithMajorUpdates)),
+            implode(', ', array_map(static fn (ModuleDto $module): string => $module->getName(), $moduleWithMajorUpdates)),
             PHP_EOL . $releaseGroup->getLink(),
         );
 
