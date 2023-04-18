@@ -65,6 +65,37 @@ class ComposerStrategyTest extends TestCase
     /**
      * @return void
      */
+    public function testUpgradeSuccessFlowWithStoppedPropagation(): void
+    {
+        // Arrange
+        $stepsExecutionDto = new StepsResponseDto(true);
+        $stepsExecutionDto->setIsStopPropagation(true);
+
+        $fooStep = $this->createMock(FooRollbackStep::class);
+        $fooStep->method('run')->willReturn($stepsExecutionDto);
+        $fooStep->expects($this->never())->method('rollBack');
+
+        $barStep = $this->createMock(FooRollbackStep::class);
+        $barStep->expects($this->never())->method('run');
+        $barStep->expects($this->never())->method('rollBack');
+
+        $strategy = new ComposerStrategy([
+            $fooStep,
+            $barStep,
+        ]);
+
+        // Act
+        $stepsExecutionDto = $strategy->upgrade();
+
+        // Assert
+        $this->assertTrue($stepsExecutionDto->getIsSuccessful());
+        $this->assertNull($stepsExecutionDto->getComposerLockDiff());
+        $this->assertNull($stepsExecutionDto->getPullRequestId());
+    }
+
+    /**
+     * @return void
+     */
     public function testUpgradeSuccessFlowWithFix(): void
     {
         // Arrange
