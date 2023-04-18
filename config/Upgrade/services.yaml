@@ -215,6 +215,7 @@ services:
     Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter:
         arguments:
             - - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DevMasterPackageFilterItem'
+              - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DummyPackageFilterItem'
 
     Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
