@@ -35,18 +35,14 @@ class ReleaseGroupSoftValidator implements ReleaseGroupSoftValidatorInterface
      */
     public function isValidReleaseGroup(ReleaseGroupDto $releaseGroup): ResponseDto
     {
-        $violations = [];
-
-        foreach ($this->validatorList as $validator) {
-            try {
+        try {
+            foreach ($this->validatorList as $validator) {
                 $validator->validate($releaseGroup);
-            } catch (UpgraderException $exception) {
-                $violations[] = $exception->getMessage();
             }
+        } catch (UpgraderException $exception) {
+            return new ResponseDto(false, $exception->getMessage());
         }
 
-        return count($violations) > 0
-            ? new ResponseDto(false, implode(PHP_EOL, $violations))
-            : new ResponseDto(true);
+        return new ResponseDto(true);
     }
 }
