@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup;
 
+use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Exception\ReleaseGroupValidatorException;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
@@ -41,15 +42,18 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
             return;
         }
 
-        $moduleWithMajorUpdate = $releaseGroup->getModuleCollection()->getFirstMajor();
-        if ($moduleWithMajorUpdate) {
-            $message = sprintf(
-                'There is a major release available for module %s. Please follow the link below to find all documentation needed to help you upgrade to the latest release %s',
-                $moduleWithMajorUpdate->getName(),
-                PHP_EOL . $releaseGroup->getLink(),
-            );
+        $moduleWithMajorUpdates = $releaseGroup->getModuleCollection()->getMajors();
 
-            throw new ReleaseGroupValidatorException($message);
+        if (count($moduleWithMajorUpdates) === 0) {
+            return;
         }
+
+        $message = sprintf(
+            'There is a major release available for module %s. Please follow the link below to find all documentation needed to help you upgrade to the latest release %s',
+            implode(', ', array_map(static fn (ModuleDto $module): string => $module->getName(), $moduleWithMajorUpdates)),
+            PHP_EOL . $releaseGroup->getLink(),
+        );
+
+        throw new ReleaseGroupValidatorException($message);
     }
 }

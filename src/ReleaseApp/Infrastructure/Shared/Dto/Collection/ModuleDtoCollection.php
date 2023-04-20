@@ -72,17 +72,14 @@ class ModuleDtoCollection
     }
 
     /**
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ModuleDto|null
+     * @return array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto>
      */
-    public function getFirstMajor(): ?ModuleDto
+    public function getMajors(): array
     {
-        foreach ($this->elements as $module) {
-            if ($module->getVersionType() === ReleaseAppConstant::MODULE_TYPE_MAJOR) {
-                return $module;
-            }
-        }
-
-        return null;
+        return array_filter(
+            $this->elements,
+            static fn (ModuleDto $module): bool => $module->getVersionType() === ReleaseAppConstant::MODULE_TYPE_MAJOR,
+        );
     }
 
     /**
