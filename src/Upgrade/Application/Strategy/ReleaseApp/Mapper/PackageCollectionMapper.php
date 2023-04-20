@@ -11,29 +11,22 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Mapper;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface;
+use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppPackageHelper;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
 
 class PackageCollectionMapper implements PackageCollectionMapperInterface
 {
     /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface
-     */
-    protected PackageSoftValidatorInterface $packageValidator;
-
-    /**
      * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
     protected PackageManagerAdapterInterface $packageManager;
 
     /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\PackageSoftValidatorInterface $packageValidator
      * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
      */
-    public function __construct(PackageSoftValidatorInterface $packageValidator, PackageManagerAdapterInterface $packageManager)
+    public function __construct(PackageManagerAdapterInterface $packageManager)
     {
-        $this->packageValidator = $packageValidator;
         $this->packageManager = $packageManager;
     }
 
@@ -47,31 +40,12 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
         $packageCollection = new PackageCollection();
 
         foreach ($moduleCollection->toArray() as $module) {
-            $name = $this->removeTypeFromPackageName($module->getName());
+            $name = ReleaseAppPackageHelper::normalizePackageName($module->getName());
             $package = new Package($name, $module->getVersion());
             $packageCollection->add($package);
         }
 
         return $packageCollection;
-    }
-
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
-    public function filterInvalidPackage(PackageCollection $packageCollection): PackageCollection
-    {
-        $resultCollection = new PackageCollection();
-
-        foreach ($packageCollection->toArray() as $package) {
-            $validateResult = $this->packageValidator->isValidPackage($package);
-            if ($validateResult->isSuccessful()) {
-                $resultCollection->add($package);
-            }
-        }
-
-        return $resultCollection;
     }
 
     /**
@@ -108,17 +82,5 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
         }
 
         return $resultCollection;
-    }
-
-    /**
-     * @param string $moduleName
-     *
-     * @return string
-     *
-     * spryker-shop/shop.shop-ui -> spryker-shop/shop-ui
-     */
-    protected function removeTypeFromPackageName(string $moduleName): string
-    {
-        return (string)preg_replace('/\/[a-z]*\./m', '/', $moduleName);
     }
 }

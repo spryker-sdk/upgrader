@@ -12,6 +12,7 @@ namespace Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
+use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppPackageHelper;
 
 class DevMasterPackageFilterItem implements ReleaseGroupFilterItemInterface
 {
@@ -50,7 +51,7 @@ class DevMasterPackageFilterItem implements ReleaseGroupFilterItemInterface
         $filteredModuleCollection = new ModuleDtoCollection();
 
         foreach ($releaseGroupDto->getModuleCollection()->toArray() as $module) {
-            if (in_array($module->getName(), $devMasterModules, true)) {
+            if (in_array(ReleaseAppPackageHelper::normalizePackageName($module->getName()), $devMasterModules, true)) {
                 continue;
             }
 
@@ -77,12 +78,12 @@ class DevMasterPackageFilterItem implements ReleaseGroupFilterItemInterface
 
         $this->devMasterModules = [];
 
-        foreach ($packages as $packaged => $version) {
+        foreach ($packages as $package => $version) {
             if (strpos($version, static::DEV_MASTER_PREFIX) !== 0) {
                 continue;
             }
 
-            $this->devMasterModules[] = $packaged;
+            $this->devMasterModules[] = $package;
         }
 
         return $this->devMasterModules;

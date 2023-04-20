@@ -12,6 +12,7 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
@@ -40,21 +41,29 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
     protected ReleaseGroupFilterInterface $releaseGroupFilter;
 
     /**
+     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface
+     */
+    protected PreRequireProcessorInterface $preRequireProcessor;
+
+    /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
      * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher $modulePackageFetcher
      * @param \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface $releaseGroupFilter
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface $preRequireProcessor
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
         ThresholdSoftValidatorInterface $thresholdSoftValidator,
         ModulePackageFetcher $modulePackageFetcher,
-        ReleaseGroupFilterInterface $releaseGroupFilter
+        ReleaseGroupFilterInterface $releaseGroupFilter,
+        PreRequireProcessorInterface $preRequireProcessor
     ) {
         $this->releaseGroupValidator = $releaseGroupValidateManager;
         $this->thresholdValidator = $thresholdSoftValidator;
         $this->modulePackageFetcher = $modulePackageFetcher;
         $this->releaseGroupFilter = $releaseGroupFilter;
+        $this->preRequireProcessor = $preRequireProcessor;
     }
 
     /**
@@ -94,6 +103,8 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
 
                 break;
             }
+
+            $aggregatedReleaseGroupCollection = $this->preRequireProcessor->process($aggregatedReleaseGroupCollection);
 
             $response = $this->modulePackageFetcher->require($releaseGroup->getModuleCollection());
 

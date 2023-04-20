@@ -57,13 +57,12 @@ class ModulePackageFetcher
     public function require(ModuleDtoCollection $moduleCollection): ResponseDto
     {
         $packageCollection = $this->packageCollectionMapper->mapModuleCollectionToPackageCollection($moduleCollection);
-        $filteredPackageCollection = $this->packageCollectionMapper->filterInvalidPackage($packageCollection);
 
-        if ($filteredPackageCollection->isEmpty()) {
+        if ($packageCollection->isEmpty()) {
             return new ResponseDto(true, 'No valid packages found');
         }
 
-        return $this->requirePackageCollection($filteredPackageCollection);
+        return $this->requirePackageCollection($packageCollection);
     }
 
     /**
