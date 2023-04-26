@@ -32,7 +32,7 @@ class FeaturePackageFixerStepTest extends TestCase
         // Arrange
         $fixer = new FeaturePackageFixerStep(
             $this->createMock(PackageManagerAdapterInterface::class),
-            $this->createPreRequireProcessorMock()
+            $this->createPreRequireProcessorMock(),
         );
         $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);
 
@@ -51,7 +51,7 @@ class FeaturePackageFixerStepTest extends TestCase
         // Arrange
         $fixer = new FeaturePackageFixerStep(
             $this->createMock(PackageManagerAdapterInterface::class),
-            $this->createPreRequireProcessorMock()
+            $this->createPreRequireProcessorMock(),
         );
         $stepsResponseDto = new StepsResponseDto(false, 'spryker-feature1/spryker-core');
 
@@ -138,6 +138,9 @@ class FeaturePackageFixerStepTest extends TestCase
         $this->assertSame($stepsResponseDto, $stepsResponse);
     }
 
+    /**
+     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface
+     */
     protected function createPreRequireProcessorMock(): PreRequireProcessorInterface
     {
         $preRequireProcessor = $this->createMock(PreRequireProcessorInterface::class);
