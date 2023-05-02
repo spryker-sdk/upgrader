@@ -9,9 +9,11 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\Composer\Fixer;
 
+use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\FixerStepInterface;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
 
@@ -33,12 +35,20 @@ class FeaturePackageFixerStep implements FixerStepInterface
     protected PackageManagerAdapterInterface $packageManager;
 
     /**
+     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface
+     */
+    protected PreRequireProcessorInterface $preRequireProcessor;
+
+    /**
      * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface $preRequireProcessor
      */
     public function __construct(
-        PackageManagerAdapterInterface $packageManager
+        PackageManagerAdapterInterface $packageManager,
+        PreRequireProcessorInterface $preRequireProcessor
     ) {
         $this->packageManager = $packageManager;
+        $this->preRequireProcessor = $preRequireProcessor;
     }
 
     /**
@@ -69,7 +79,11 @@ class FeaturePackageFixerStep implements FixerStepInterface
         }
 
         $featurePackages = $this->getPackagesFromFeatures($matches[static::KEY_FEATURES]);
-        $responseDto = $this->packageManager->require(new PackageCollection($featurePackages));
+
+        $packageCollection = new PackageCollection($featurePackages);
+        $packageCollection->addCollection($this->getPreRequireModuleCollection());
+
+        $responseDto = $this->packageManager->require($packageCollection);
 
         $stepsExecutionDto->setIsSuccessful($responseDto->isSuccessful());
         if (!$responseDto->isSuccessful()) {
@@ -129,5 +143,24 @@ class FeaturePackageFixerStep implements FixerStepInterface
             array_keys($packages),
             array_values($packages),
         );
+    }
+
+    /**
+     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
+     */
+    protected function getPreRequireModuleCollection(): PackageCollection
+    {
+        $releaseGroupCollection = new ReleaseGroupDtoCollection();
+        $releaseGroupCollection = $this->preRequireProcessor->process($releaseGroupCollection);
+
+        $moduleCollection = $releaseGroupCollection->getCommonModuleCollection();
+
+        $packageCollection = new PackageCollection();
+
+        foreach ($moduleCollection->toArray() as $moduleDto) {
+            $packageCollection->add(new Package($moduleDto->getName(), $moduleDto->getVersion()));
+        }
+
+        return $packageCollection;
     }
 }
