@@ -13,7 +13,7 @@ use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Application\Exception\ReleaseGroupThresholdException;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
-class PathThresholdValidator implements ThresholdValidatorInterface
+class PatchThresholdValidator implements ThresholdValidatorInterface
 {
     /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
@@ -38,8 +38,8 @@ class PathThresholdValidator implements ThresholdValidatorInterface
     public function validate(ReleaseGroupDtoCollection $releaseGroupDtoCollection): void
     {
         $softThreshold = $this->configurationProvider->getSoftThresholdBugfix();
-        $pathAmount = $releaseGroupDtoCollection->getCommonModuleCollection()->getPathAmount();
-        if ($pathAmount && $pathAmount > $softThreshold) {
+        $patchAmount = $releaseGroupDtoCollection->getCommonModuleCollection()->getPatchAmount();
+        if ($patchAmount && $patchAmount > $softThreshold) {
             throw new ReleaseGroupThresholdException(
                 sprintf('Soft threshold hit by %s major releases', $softThreshold),
             );

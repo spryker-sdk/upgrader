@@ -33,7 +33,7 @@ use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ConflictValid
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\MajorThresholdValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\MinorThresholdValidator;
-use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\PathThresholdValidator;
+use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\PatchThresholdValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\ReleaseGroupThresholdValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator;
 use Upgrade\Infrastructure\Adapter\ReleaseAppClientAdapter;
@@ -191,7 +191,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                     [
                         new MajorThresholdValidator($configurationProvider),
                         new MinorThresholdValidator($configurationProvider),
-                        new PathThresholdValidator($configurationProvider),
+                        new PatchThresholdValidator($configurationProvider),
                         new ReleaseGroupThresholdValidator($configurationProvider),
                     ],
                 ),

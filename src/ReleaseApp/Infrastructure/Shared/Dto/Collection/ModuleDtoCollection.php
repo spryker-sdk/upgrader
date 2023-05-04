@@ -115,7 +115,7 @@ class ModuleDtoCollection
     /**
      * @return int
      */
-    public function getPathAmount(): int
+    public function getPatchAmount(): int
     {
         $result = 0;
         foreach ($this->elements as $module) {
