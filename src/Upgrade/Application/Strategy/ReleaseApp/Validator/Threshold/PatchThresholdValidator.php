@@ -39,7 +39,7 @@ class PatchThresholdValidator implements ThresholdValidatorInterface
     {
         $softThreshold = $this->configurationProvider->getSoftThresholdBugfix();
         $patchAmount = $releaseGroupDtoCollection->getCommonModuleCollection()->getPatchAmount();
-        if ($patchAmount && $patchAmount > $softThreshold) {
+        if ($patchAmount && $patchAmount >= $softThreshold) {
             throw new ReleaseGroupThresholdException(
                 sprintf('Soft threshold hit by %s major releases', $softThreshold),
             );
