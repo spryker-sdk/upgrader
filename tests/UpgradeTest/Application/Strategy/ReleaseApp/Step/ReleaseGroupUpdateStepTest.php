@@ -31,8 +31,13 @@ use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilte
 use Upgrade\Application\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ConflictValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator;
+use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\MajorThresholdValidator;
+use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\MinorThresholdValidator;
+use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\PathThresholdValidator;
+use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\ReleaseGroupThresholdValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator;
 use Upgrade\Infrastructure\Adapter\ReleaseAppClientAdapter;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\PackageManager\ComposerAdapter;
 
 class ReleaseGroupUpdateStepTest extends TestCase
@@ -163,6 +168,50 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 'Applied required packages count: 1',
                 'No new required-dev packages',
                 'Amount of applied release groups: 2',
+            ]),
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunWithSequentialReleaseGroupProcessorApplySoftThreshold(): void
+    {
+        // Arrange
+        $configurationProvider = $this->createConfigurationProviderMock();
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock(
+                $this->buildReleaseGroupDtoCollection(),
+            ),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createSequentialReleaseGroupProcessor(
+                    [],
+                    [],
+                    [
+                        new MajorThresholdValidator($configurationProvider),
+                        new MinorThresholdValidator($configurationProvider),
+                        new PathThresholdValidator($configurationProvider),
+                        new ReleaseGroupThresholdValidator($configurationProvider),
+                    ],
+                ),
+            ),
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertTrue($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            implode(PHP_EOL, [
+                'Amount of available release groups for the project: 2',
+                'Applied required packages count: 1',
+                'No new required-dev packages',
+                'Soft threshold hit by 1 minor releases',
+                'Amount of applied release groups: 1',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
@@ -390,14 +439,16 @@ class ReleaseGroupUpdateStepTest extends TestCase
     }
 
     /**
-     * @param array<\Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterItemInterface> $releaseGroupFilters
-     * @param array<\Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorStrategyInterface> $preRequireProcessorStrategies
+     * @param array $releaseGroupFilters
+     * @param array $preRequireProcessorStrategies
+     * @param array $thresholdSoftValidators
      *
      * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
      */
     protected function createSequentialReleaseGroupProcessor(
         array $releaseGroupFilters = [],
-        array $preRequireProcessorStrategies = []
+        array $preRequireProcessorStrategies = [],
+        array $thresholdSoftValidators = []
     ): SequentialReleaseGroupProcessor {
         $responseDto = new ResponseDto(true);
 
@@ -412,7 +463,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
 
         return new SequentialReleaseGroupProcessor(
             new ReleaseGroupSoftValidator([]),
-            new ThresholdSoftValidator([]),
+            new ThresholdSoftValidator($thresholdSoftValidators),
             new ModulePackageFetcher(
                 $composerAdapterMock,
                 new PackageCollectionMapper(
@@ -483,5 +534,20 @@ class ReleaseGroupUpdateStepTest extends TestCase
             ->willReturn($composerJson);
 
         return $packageManagerAdapter;
+    }
+
+    /**
+     * @return \Upgrade\Infrastructure\Configuration\ConfigurationProvider
+     */
+    protected function createConfigurationProviderMock(): ConfigurationProvider
+    {
+        $configurationProvider = $this->createMock(ConfigurationProvider::class);
+
+        $configurationProvider->method('getSoftThresholdMajor')->willReturn(0);
+        $configurationProvider->method('getSoftThresholdMinor')->willReturn(1);
+        $configurationProvider->method('getSoftThresholdBugfix')->willReturn(1);
+        $configurationProvider->method('getThresholdReleaseGroup')->willReturn(1);
+
+        return $configurationProvider;
     }
 }

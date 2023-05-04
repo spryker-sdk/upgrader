@@ -38,7 +38,8 @@ class PathThresholdValidator implements ThresholdValidatorInterface
     public function validate(ReleaseGroupDtoCollection $releaseGroupDtoCollection): void
     {
         $softThreshold = $this->configurationProvider->getSoftThresholdBugfix();
-        if ($releaseGroupDtoCollection->getCommonModuleCollection()->getPathAmount() > $softThreshold) {
+        $pathAmount = $releaseGroupDtoCollection->getCommonModuleCollection()->getPathAmount();
+        if ($pathAmount && $pathAmount > $softThreshold) {
             throw new ReleaseGroupThresholdException(
                 sprintf('Soft threshold hit by %s major releases', $softThreshold),
             );

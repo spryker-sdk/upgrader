@@ -50,7 +50,7 @@ export UPGRADE_STRATEGY=release-app
 
 In the strategy, Upgrader contains aggregate (default) release group requiring processor and sequential processor (one by one release group).
 
-##### Sequential release group processor
+#### Sequential release group processor
 * To enable Sequential release group processor:
 ```bash
 export RELEASE_GROUP_PROCESSOR=sequential
@@ -62,12 +62,13 @@ Sequential release group processor contains threshold, by default 30 release gro
 export THRESHOLD_RELEASE_GROUP=<number>
 ```
 
-##### Aggregate release group processor
+#### Aggregate release group processor
 * To enable aggregate release group processor:
 ```bash
 export RELEASE_GROUP_PROCESSOR=aggregate
 ```
-Aggregate release group processor contains soft thresholds:
+
+#### Soft thresholds:
 
 Soft major threshold, by default 0.
 
