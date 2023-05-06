@@ -11,20 +11,9 @@ namespace Upgrade\Infrastructure\PackageManager\CommandExecutor;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
-use Upgrade\Domain\Entity\Package;
 
 class ComposerLockComparatorCommandExecutor implements ComposerLockComparatorCommandExecutorInterface
 {
-    /**
-     * @var string
-     */
-    protected const CHANGES_KEY = 'changes';
-
-    /**
-     * @var string
-     */
-    protected const CHANGES_DEV_KEY = 'changes-dev';
-
     /**
      * @var string
      */
@@ -57,34 +46,6 @@ class ComposerLockComparatorCommandExecutor implements ComposerLockComparatorCom
         $process = $this->processRunner->run(explode(' ', $command));
         $composerLockDiff = json_decode((string)$process->getOutput(), true) ?? [];
 
-        return new ComposerLockDiffDto(
-            $this->getChangesByKey($composerLockDiff, static::CHANGES_KEY),
-            $this->getChangesByKey($composerLockDiff, static::CHANGES_DEV_KEY),
-        );
-    }
-
-    /**
-     * @param array<mixed> $composerLockDiff
-     * @param string $key
-     *
-     * @return array<\Upgrade\Domain\Entity\Package>
-     */
-    protected function getChangesByKey(array $composerLockDiff, string $key): array
-    {
-        $packages = [];
-
-        if (!isset($composerLockDiff[$key])) {
-            return $packages;
-        }
-
-        foreach ($composerLockDiff[$key] as $packageName => $packageData) {
-            $version = $packageData[1] ?? '';
-            $previousVersion = $packageData[0] ?? '';
-            $diffLink = $packageData[2] ?? '';
-
-            $packages[] = new Package($packageName, $version, $previousVersion, $diffLink);
-        }
-
-        return $packages;
+        return new ComposerLockDiffDto($composerLockDiff);
     }
 }

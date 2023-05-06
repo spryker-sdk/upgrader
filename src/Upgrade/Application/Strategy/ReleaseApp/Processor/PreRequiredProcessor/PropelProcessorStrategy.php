@@ -7,16 +7,15 @@
 
 declare(strict_types=1);
 
-namespace Upgrade\Application\Strategy\Common\Step;
+namespace Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor;
 
+use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
+use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
+use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
+use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
-use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Strategy\StepInterface;
-use Upgrade\Domain\Entity\Collection\PackageCollection;
-use Upgrade\Domain\Entity\Package;
 
-class PropelFixStep extends AbstractStep implements StepInterface
+class PropelProcessorStrategy implements PreRequireProcessorStrategyInterface
 {
     /**
      * @var string
@@ -29,50 +28,52 @@ class PropelFixStep extends AbstractStep implements StepInterface
     public const LOCK_PACKAGE_VERSION = '2.0.0-beta2';
 
     /**
+     * @var string
+     */
+    protected const RELEASE_GROUP_NAME = 'updater-rg';
+
+    /**
      * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
     protected PackageManagerAdapterInterface $packageManager;
 
     /**
-     * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
      * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
      */
-    public function __construct(
-        VersionControlSystemAdapterInterface $versionControlSystem,
-        PackageManagerAdapterInterface $packageManager
-    ) {
-        parent::__construct($versionControlSystem);
+    public function __construct(PackageManagerAdapterInterface $packageManager)
+    {
         $this->packageManager = $packageManager;
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $requireCollection
      *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
+     * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection
      */
-    public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
+    public function process(ReleaseGroupDtoCollection $requireCollection): ReleaseGroupDtoCollection
     {
         $packageVersion = $this->packageManager->getPackageVersion(static::PACKAGE_NAME);
 
         if ($packageVersion !== static::LOCK_PACKAGE_VERSION) {
-            return $stepsExecutionDto;
+            return $requireCollection;
         }
 
         if ($this->alreadyHasRequiredPropelPackage()) {
-            return $stepsExecutionDto;
+            return $requireCollection;
         }
 
-        $response = $this->packageManager->require(
-            new PackageCollection([
-                new Package(static::PACKAGE_NAME, static::LOCK_PACKAGE_VERSION),
-            ]),
+        $requireCollection->add(
+            new ReleaseGroupDto(
+                static::RELEASE_GROUP_NAME,
+                new ModuleDtoCollection(
+                    [new ModuleDto(static::PACKAGE_NAME, static::LOCK_PACKAGE_VERSION, 'minor')],
+                ),
+                false,
+                '',
+            ),
         );
 
-        if (!$response->isSuccessful()) {
-            $stepsExecutionDto->addOutputMessage('Could not require propel package');
-        }
-
-        return $stepsExecutionDto;
+        return $requireCollection;
     }
 
     /**

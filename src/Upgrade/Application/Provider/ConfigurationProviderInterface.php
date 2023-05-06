@@ -58,11 +58,6 @@ interface ConfigurationProviderInterface
     public function isIntegratorEnabled(): bool;
 
     /**
-     * @return bool
-     */
-    public function isEvaluatorEnabled(): bool;
-
-    /**
      * Specification:
      * - Defines package require mode.
      * - Possible mode: sequential and aggregate (default).

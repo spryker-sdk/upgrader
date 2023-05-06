@@ -46,12 +46,6 @@ services:
     integrator_lock_run.step:
         class: Upgrade\Application\Strategy\Common\Step\IntegratorLockStep
 
-    propel_fix.step:
-        class: Upgrade\Application\Strategy\Common\Step\PropelFixStep
-
-    code_compliance.step:
-        class: Upgrade\Application\Strategy\Common\Step\CodeComplianceStep
-
     composer_update.step:
         class: Upgrade\Application\Strategy\Composer\Step\ComposerUpdateStep
 
@@ -99,8 +93,8 @@ services:
     feature_package.fixer:
         class: Upgrade\Application\Strategy\Composer\Fixer\FeaturePackageFixerStep
 
-    composer.step_executor:
-        class: Upgrade\Application\Executor\StepExecutor
+    composer.strategy:
+        class: Upgrade\Application\Strategy\Composer\ComposerStrategy
         arguments:
             - - '@check_credentials.step'
               - '@check_is_remote_target_branch_exist.step'
@@ -119,22 +113,24 @@ services:
               - '@create_pr.step'
               - '@checkout.step'
               - '@send_report.step'
+
             - - '@feature_package.fixer'
 
-    composer.strategy:
-        class: Upgrade\Application\Strategy\Composer\ComposerStrategy
-        arguments:
-            - '@composer.step_executor'
-
-    release_app.step_executor:
-        class: Upgrade\Application\Executor\StepExecutor
+    release-app.strategy:
+        class: Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy
         arguments:
             - - '@check_credentials.step'
               - '@check_is_remote_target_branch_exist.step'
               - '@check_is_local_target_branch_exist.step'
               - '@check_uncommitted_changes.step'
-              - '@create_branch.step'
+              - '@integrator_lock_run.step'
               - '@release_group_update.step'
+              - '@composer_lock_diff.step'
+              - '@package_post_update.step'
+              - '@integrator.step'
+              - '@create_branch.step'
+              - '@add_changes.step'
+              - '@commit_changes.step'
               - '@push_changes.step'
               - '@generate_report_id.step'
               - '@create_pr.step'
@@ -143,17 +139,12 @@ services:
 
             - - '@feature_package.fixer'
 
-    release_app.strategy:
-        class: Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy
-        arguments:
-            -  '@release_app.step_executor'
-
     Upgrade\Application\Strategy\StrategyResolver:
         class: Upgrade\Application\Strategy\StrategyResolver
         arguments:
             - {
                 param1: '@composer.strategy',
-                param2: '@release_app.strategy'
+                param2: '@release-app.strategy'
             }
 
     http.client:
@@ -211,6 +202,10 @@ services:
     validator.conflict:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ConflictValidator
 
+    Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessor:
+        arguments:
+            - - '@Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PropelProcessorStrategy'
+
     Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter:
         arguments:
             - - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DevMasterPackageFilterItem'
@@ -248,41 +243,11 @@ services:
                 param4: '@validator.threshold_release_group',
             }
 
-    processor.pre_require_step_executor:
-        class: Upgrade\Application\Executor\StepExecutor
-        arguments:
-            - - '@integrator_lock_run.step'
-              - '@propel_fix.step'
-
-    processor.post_require_step_executor:
-        class: Upgrade\Application\Executor\StepExecutor
-        arguments:
-            - - '@composer_lock_diff.step'
-              - '@package_post_update.step'
-              - '@integrator.step'
-              - '@add_changes.step'
-              - '@commit_changes.step'
-              - '@code_compliance.step'
-
     processor.aggregate_release_group_processor:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor
-        arguments:
-            - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator'
-            - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator'
-            - '@Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher'
-            - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter'
-            - '@processor.pre_require_step_executor'
-            - '@processor.post_require_step_executor'
 
     processor.sequential_release_group_processor:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
-        arguments:
-            - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator'
-            - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator'
-            - '@Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher'
-            - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter'
-            - '@processor.pre_require_step_executor'
-            - '@processor.post_require_step_executor'
 
     Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver

@@ -10,21 +10,27 @@ declare(strict_types=1);
 namespace Upgrade\Application\Strategy;
 
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Executor\StepExecutorInterface;
 
 abstract class AbstractStrategy implements StrategyInterface
 {
     /**
-     * @var \Upgrade\Application\Executor\StepExecutorInterface
+     * @var array<\Upgrade\Application\Strategy\StepInterface>
      */
-    protected StepExecutorInterface $stepExecutor;
+    protected array $steps = [];
 
     /**
-     * @param \Upgrade\Application\Executor\StepExecutorInterface $stepExecutor
+     * @var array<\Upgrade\Application\Strategy\FixerStepInterface>
      */
-    public function __construct(StepExecutorInterface $stepExecutor)
+    protected array $fixers = [];
+
+    /**
+     * @param array<\Upgrade\Application\Strategy\StepInterface> $steps
+     * @param array<\Upgrade\Application\Strategy\FixerStepInterface> $fixers
+     */
+    public function __construct(array $steps = [], array $fixers = [])
     {
-        $this->stepExecutor = $stepExecutor;
+        $this->steps = $steps;
+        $this->fixers = $fixers;
     }
 
     /**
@@ -32,8 +38,84 @@ abstract class AbstractStrategy implements StrategyInterface
      */
     public function upgrade(): StepsResponseDto
     {
+        $executedSteps = [];
         $stepsResponseDto = new StepsResponseDto(true);
 
-        return $this->stepExecutor->execute($stepsResponseDto);
+        foreach ($this->steps as $index => $step) {
+            $stepsResponseDto->addOutputMessage(
+                sprintf('%sStart executing "%s" step', $index === 0 ? '' : PHP_EOL, $this->getStepName($step)),
+            );
+
+            $executedSteps[] = $step;
+
+            $stepsResponseDto = $step->run($stepsResponseDto);
+
+            if (!$stepsResponseDto->getIsSuccessful()) {
+                $stepsResponseDto = $this->runWithFixer($step, $stepsResponseDto);
+            }
+
+            if ($stepsResponseDto->isSuccessful() && $stepsResponseDto->getIsStopPropagation()) {
+                return $stepsResponseDto;
+            }
+
+            if (!$stepsResponseDto->getIsSuccessful()) {
+                $stepsResponseDto->addOutputMessage('Step is failed');
+                $rollBackExecutionDto = new StepsResponseDto(true);
+                foreach (array_reverse($executedSteps) as $executedStep) {
+                    if ($executedStep instanceof RollbackStepInterface) {
+                        $rollBackExecutionDto = $executedStep->rollBack($rollBackExecutionDto);
+                    }
+                }
+
+                return $stepsResponseDto;
+            }
+
+            $stepsResponseDto->addOutputMessage('Step is successfully executed');
+        }
+
+        return $stepsResponseDto;
+    }
+
+    /**
+     * @param \Upgrade\Application\Strategy\StepInterface $step
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     *
+     * @return \Upgrade\Application\Dto\StepsResponseDto
+     */
+    protected function runWithFixer(StepInterface $step, StepsResponseDto $stepsResponseDto): StepsResponseDto
+    {
+        foreach ($this->fixers as $fixer) {
+            if (!$fixer->isApplicable($stepsResponseDto)) {
+                continue;
+            }
+            $stepsResponseDto->addOutputMessage('Step is failed. It will be reapplied with a fixer');
+
+            $stepsResponseDto = $fixer->run($stepsResponseDto);
+            if (!$stepsResponseDto->getIsSuccessful()) {
+                continue;
+            }
+            $stepsResponseDto = $step->run($stepsResponseDto);
+            if ($stepsResponseDto->getIsSuccessful()) {
+                break;
+            }
+        }
+
+        return $stepsResponseDto;
+    }
+
+    /**
+     * @param \Upgrade\Application\Strategy\StepInterface $step
+     *
+     * @return string
+     */
+    protected function getStepName(StepInterface $step): string
+    {
+        $classParts = explode('\\', get_class($step));
+
+        return ucfirst(strtolower(trim((string)preg_replace(
+            '/(?=[A-Z])/',
+            ' $1',
+            (string)preg_replace('/Step$/', '', end($classParts)),
+        ))));
     }
 }

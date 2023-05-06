@@ -9,9 +9,6 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Dto;
 
-use CodeCompliance\Domain\Entity\Report;
-use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
-
 class StepsResponseDto extends ResponseDto
 {
     /**
@@ -23,16 +20,6 @@ class StepsResponseDto extends ResponseDto
      * @var array<string>
      */
     protected array $outputMessageList = [];
-
-    /**
-     * @var \CodeCompliance\Domain\Entity\Report|null
-     */
-    protected ?Report $codeComplianceReport = null;
-
-    /**
-     * @var \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto|null
-     */
-    protected ?ReleaseGroupDto $lastAppliedReleaseGroup = null;
 
     /**
      * @var \Upgrade\Application\Dto\ComposerLockDiffDto|null
@@ -260,41 +247,5 @@ class StepsResponseDto extends ResponseDto
         $this->isStopPropagation = $isStopPropagation;
 
         return $this;
-    }
-
-    /**
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto|null
-     */
-    public function getLastAppliedReleaseGroup(): ?ReleaseGroupDto
-    {
-        return $this->lastAppliedReleaseGroup;
-    }
-
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto|null $lastAppliedReleaseGroup
-     *
-     * @return void
-     */
-    public function setLastAppliedReleaseGroup(?ReleaseGroupDto $lastAppliedReleaseGroup): void
-    {
-        $this->lastAppliedReleaseGroup = $lastAppliedReleaseGroup;
-    }
-
-    /**
-     * @return \CodeCompliance\Domain\Entity\Report|null
-     */
-    public function getCodeComplianceReport(): ?Report
-    {
-        return $this->codeComplianceReport;
-    }
-
-    /**
-     * @param \CodeCompliance\Domain\Entity\Report|null $codeComplianceReport
-     *
-     * @return void
-     */
-    public function setCodeComplianceReport(?Report $codeComplianceReport): void
-    {
-        $this->codeComplianceReport = $codeComplianceReport;
     }
 }

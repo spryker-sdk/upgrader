@@ -96,8 +96,8 @@ class ReportDtoBuilder implements ReportDtoBuilderInterface
         $integratorResponse = $stepsResponseDto->getIntegratorResponseDto();
 
         return new ReportPayloadDto(
-            $composerLockDiff->getRequiredPackages(),
-            $composerLockDiff->getRequiredDevPackages(),
+            $composerLockDiff->getRequireChanges(),
+            $composerLockDiff->getRequireDevChanges(),
             $integratorResponse !== null ? $integratorResponse->getWarnings() : [],
         );
     }

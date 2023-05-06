@@ -15,7 +15,7 @@ use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
-class ModuleFetcher
+class ModulePackageFetcher
 {
     /**
      * @var string
