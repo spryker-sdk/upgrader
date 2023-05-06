@@ -26,6 +26,7 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
      */
     public function run(array $command, array $env = []): Process
     {
+        var_dump(implode(' ', $command));
         $process = new Process($command, (string)getcwd(), $env);
         $process->setTimeout(self::PROCESS_TIMEOUT);
         $process->run();

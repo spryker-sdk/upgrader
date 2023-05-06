@@ -209,6 +209,13 @@ bin/console upgradability:php:upgrade
 export INTEGRATOR_ENABLED=true
 ```
 
+## Enable project code compliance after update
+​
+* Turn on code compliance trigger after package update step
+```bash
+export EVALUATOR_ENABLED=true
+```
+
 ## Evaluator
 
 [Evaluator documentation](docs/evaluator.md)

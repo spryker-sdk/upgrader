@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Application\Strategy\Common\Step;
 
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
+use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\StepInterface;
 
@@ -37,12 +38,16 @@ class ComposerLockComparatorStep implements StepInterface
     {
         $composerLockDiffDto = $this->packageManager->getComposerLockDiff();
 
-        if ($composerLockDiffDto->isEmpty()) {
-            return $stepsExecutionDto
-                ->setIsStopPropagation(true)
-                ->addOutputMessage('The branch is up to date. No further action is required.');
+        $existedDiffDto = $stepsExecutionDto->getComposerLockDiff();
+        if (!$existedDiffDto) {
+            return $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
         }
 
-        return $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
+        return $stepsExecutionDto->setComposerLockDiff(
+            new ComposerLockDiffDto(
+                [...$existedDiffDto->getRequiredPackages(), ...$composerLockDiffDto->getRequiredPackages()],
+                [...$existedDiffDto->getRequiredDevPackages(), ...$composerLockDiffDto->getRequiredDevPackages()],
+            ),
+        );
     }
 }

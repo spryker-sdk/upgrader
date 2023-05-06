@@ -10,9 +10,8 @@ declare(strict_types=1);
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
-use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface;
+use Upgrade\Application\Executor\StepExecutorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
@@ -31,39 +30,47 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
     protected ThresholdSoftValidatorInterface $thresholdValidator;
 
     /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher
+     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher
      */
-    protected ModulePackageFetcher $modulePackageFetcher;
+    protected ModuleFetcher $moduleFetcher;
 
     /**
      * @var \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface
      */
-    protected ReleaseGroupFilterInterface $releaseGroupFilter;
+    protected ReleaseGroupFilterInterface $releaseGroupPackageFilter;
 
     /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface
+     * @var \Upgrade\Application\Executor\StepExecutorInterface
      */
-    protected PreRequireProcessorInterface $preRequireProcessor;
+    protected StepExecutorInterface $preRequireHookExecutor;
+
+    /**
+     * @var \Upgrade\Application\Executor\StepExecutorInterface
+     */
+    protected StepExecutorInterface $postRequireHookExecutor;
 
     /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher $modulePackageFetcher
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher $moduleFetcher
      * @param \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface $releaseGroupFilter
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface $preRequireProcessor
+     * @param \Upgrade\Application\Executor\StepExecutorInterface $preRequireHookExecutor
+     * @param \Upgrade\Application\Executor\StepExecutorInterface $postRequireHookExecutor
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
         ThresholdSoftValidatorInterface $thresholdSoftValidator,
-        ModulePackageFetcher $modulePackageFetcher,
+        ModuleFetcher $moduleFetcher,
         ReleaseGroupFilterInterface $releaseGroupFilter,
-        PreRequireProcessorInterface $preRequireProcessor
+        StepExecutorInterface $preRequireHookExecutor,
+        StepExecutorInterface $postRequireHookExecutor
     ) {
         $this->releaseGroupValidator = $releaseGroupValidateManager;
         $this->thresholdValidator = $thresholdSoftValidator;
-        $this->modulePackageFetcher = $modulePackageFetcher;
-        $this->releaseGroupFilter = $releaseGroupFilter;
-        $this->preRequireProcessor = $preRequireProcessor;
+        $this->moduleFetcher = $moduleFetcher;
+        $this->releaseGroupPackageFilter = $releaseGroupFilter;
+        $this->preRequireHookExecutor = $preRequireHookExecutor;
+        $this->postRequireHookExecutor = $postRequireHookExecutor;
     }
 
     /**
@@ -82,19 +89,21 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
      */
     public function process(ReleaseGroupDtoCollection $requireRequestCollection, StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
+        if ($requireRequestCollection->isEmpty()) {
+            return $stepsExecutionDto
+                ->setIsStopPropagation(true)
+                ->addOutputMessage('The branch is up to date. No further action is required.');
+        }
+
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
-
-        $response = new ResponseDto(true);
-
         foreach ($requireRequestCollection->toArray() as $releaseGroup) {
-            $releaseGroup = $this->releaseGroupFilter->filter($releaseGroup);
+            $releaseGroup = $this->releaseGroupPackageFilter->filter($releaseGroup);
             $thresholdValidationResult = $this->thresholdValidator->validate($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccessful()) {
                 $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutputMessage());
 
                 break;
             }
-            $aggregatedReleaseGroupCollection->add($releaseGroup);
 
             $validateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
             if (!$validateResult->isSuccessful()) {
@@ -104,27 +113,38 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
                 break;
             }
 
-            $aggregatedReleaseGroupCollection = $this->preRequireProcessor->process($aggregatedReleaseGroupCollection);
+            $stepsExecutionDto = $this->preRequireHookExecutor->execute($stepsExecutionDto);
+            if (!$stepsExecutionDto->isSuccessful() || $stepsExecutionDto->getIsStopPropagation()) {
+                break;
+            }
 
-            $response = $this->modulePackageFetcher->require($releaseGroup->getModuleCollection());
-
+            $response = $this->moduleFetcher->require($releaseGroup->getModuleCollection());
             if ($response->getOutputMessage() !== null) {
                 $stepsExecutionDto->addOutputMessage($response->getOutputMessage());
             }
-
             if (!$response->isSuccessful()) {
+                $stepsExecutionDto->setIsSuccessful(false);
+
+                break;
+            }
+            $stepsExecutionDto->setLastAppliedReleaseGroup($releaseGroup);
+            $aggregatedReleaseGroupCollection->add($releaseGroup);
+
+            $stepsExecutionDto = $this->postRequireHookExecutor->execute($stepsExecutionDto);
+            if (!$stepsExecutionDto->isSuccessful() || $stepsExecutionDto->getIsStopPropagation()) {
                 break;
             }
         }
 
-        if (!$response->isSuccessful()) {
-            $stepsExecutionDto->setIsSuccessful(false);
-        }
-
-        if ($response->isSuccessful() && $aggregatedReleaseGroupCollection->count()) {
+        if ($aggregatedReleaseGroupCollection->count()) {
             $stepsExecutionDto->addOutputMessage(
                 sprintf('Amount of applied release groups: %s', $aggregatedReleaseGroupCollection->count()),
             );
+        }
+        if (!$stepsExecutionDto->getComposerLockDiff() || $stepsExecutionDto->getComposerLockDiff()->isEmpty()) {
+            return $stepsExecutionDto
+                ->setIsStopPropagation(true)
+                ->addOutputMessage('The branch is up to date. No further action is required.');
         }
 
         return $stepsExecutionDto;

@@ -51,15 +51,15 @@ class PullRequestDataGenerator
             $text .= PHP_EOL . '</details>' . str_repeat(PHP_EOL, 2);
         }
 
-        if (count($composerDiffDto->getRequireChanges()) > 0) {
+        if (count($composerDiffDto->getRequiredPackages()) > 0) {
             $text .= '**Packages upgraded:**' . PHP_EOL;
-            $text .= $this->buildPackageDiffTable($composerDiffDto->getRequireChanges());
+            $text .= $this->buildPackageDiffTable($composerDiffDto->getRequiredPackages());
             $text .= PHP_EOL;
         }
 
-        if (count($composerDiffDto->getRequireDevChanges()) > 0) {
+        if (count($composerDiffDto->getRequiredDevPackages()) > 0) {
             $text .= '**Packages dev upgraded:**' . PHP_EOL;
-            $text .= $this->buildPackageDiffTable($composerDiffDto->getRequireDevChanges());
+            $text .= $this->buildPackageDiffTable($composerDiffDto->getRequiredDevPackages());
             $text .= PHP_EOL;
         }
 
