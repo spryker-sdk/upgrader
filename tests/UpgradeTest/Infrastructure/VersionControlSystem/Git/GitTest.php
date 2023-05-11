@@ -17,6 +17,7 @@ use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
+use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutor;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeProvider;
 
@@ -124,7 +125,7 @@ class GitTest extends KernelTestCase
     public function testCreatePullRequestUnSuccessCaseNoRequiredProperty(): void
     {
         $stepsExecutionDto = new StepsResponseDto(true);
-        $composerLockDiffDto = new ComposerLockDiffDto([]);
+        $composerLockDiffDto = new ComposerLockDiffDto();
         $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
 
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
@@ -158,10 +159,9 @@ class GitTest extends KernelTestCase
     public function testCreatePullRequestSuccessCase(): void
     {
         // Arrange
-        $message = '{"changes":{"spryker\/product-label":["3.2.0","3.3.0","https:\/\/github.com\/spryker\/product-label\/compare\/3.2.0...3.3.0"]},"changes-dev":{"spryker-shop\/web-profiler-widget":["1.4.1","1.4.2","https:\/\/github.com\/spryker-shop\/web-profiler-widget\/compare\/1.4.1...1.4.2"]}}';
         $stepsExecutionDto = new StepsResponseDto(true);
-        $composerLockDiffDto = new ComposerLockDiffDto(json_decode($message, true));
-        $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
+
+        $stepsExecutionDto->setComposerLockDiff($this->getComposerLockDiffDto());
         $stepsExecutionDto->setBlockerInfo('Available major info');
         $integratorResponseDto = new IntegratorResponseDto([
             'message-list' => ['Test message'],
@@ -245,5 +245,22 @@ class GitTest extends KernelTestCase
         $configurationProviderMock->method('getOrganizationName')->willReturn('-');
 
         return $configurationProviderMock;
+    }
+
+    /**
+     * @return \Upgrade\Application\Dto\ComposerLockDiffDto
+     */
+    protected function getComposerLockDiffDto(): ComposerLockDiffDto
+    {
+        $message = '{"changes":{"spryker\/product-label":["3.2.0","3.3.0","https:\/\/github.com\/spryker\/product-label\/compare\/3.2.0...3.3.0"]},"changes-dev":{"spryker-shop\/web-profiler-widget":["1.4.1","1.4.2","https:\/\/github.com\/spryker-shop\/web-profiler-widget\/compare\/1.4.1...1.4.2"]}}';
+        $processMock = $this->createMock(Process::class);
+        $processMock->method('getOutput')->willReturn($message);
+
+        $processRunnerMockMock = $this->createMock(ProcessRunnerService::class);
+        $processRunnerMockMock->method('run')->willReturn($processMock);
+
+        $composerLockComparatorCommandExecutor = new ComposerLockComparatorCommandExecutor($processRunnerMockMock);
+
+        return $composerLockComparatorCommandExecutor->getComposerLockDiff();
     }
 }

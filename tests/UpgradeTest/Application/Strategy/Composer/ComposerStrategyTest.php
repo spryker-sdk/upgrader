@@ -11,6 +11,7 @@ namespace UpgradeTest\Application\Strategy\Composer;
 
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Executor\StepExecutor;
 use Upgrade\Application\Strategy\Composer\ComposerStrategy;
 use Upgrade\Application\Strategy\FixerStepInterface;
 use UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps\FooRollbackStep;
@@ -24,7 +25,7 @@ class ComposerStrategyTest extends TestCase
     public function testUpgradeWithoutSteps(): void
     {
         // Arrange
-        $strategy = new ComposerStrategy([]);
+        $strategy = new ComposerStrategy(new StepExecutor());
 
         // Act
         $stepsExecutionDto = $strategy->upgrade();
@@ -47,11 +48,13 @@ class ComposerStrategyTest extends TestCase
         $fooStep->method('run')->willReturn($stepsExecutionDto);
         $fooStep->expects($this->never())->method('rollBack');
 
-        $strategy = new ComposerStrategy([
-            $fooStep,
-            new FooStep(),
-            new FooRollbackStep(),
-        ]);
+        $strategy = new ComposerStrategy(
+            new StepExecutor([
+                $fooStep,
+                new FooStep(),
+                new FooRollbackStep(),
+            ]),
+        );
 
         // Act
         $stepsExecutionDto = $strategy->upgrade();
@@ -79,10 +82,12 @@ class ComposerStrategyTest extends TestCase
         $barStep->expects($this->never())->method('run');
         $barStep->expects($this->never())->method('rollBack');
 
-        $strategy = new ComposerStrategy([
-            $fooStep,
-            $barStep,
-        ]);
+        $strategy = new ComposerStrategy(
+            new StepExecutor([
+                $fooStep,
+                $barStep,
+            ]),
+        );
 
         // Act
         $stepsExecutionDto = $strategy->upgrade();
@@ -114,14 +119,16 @@ class ComposerStrategyTest extends TestCase
             ->willReturn(new StepsResponseDto(true));
 
         $strategy = new ComposerStrategy(
-            [
-            $fooStep,
-            new FooStep(),
-            new FooRollbackStep(),
-            ],
-            [
-            $fixerStep,
-            ],
+            new StepExecutor(
+                [
+                    $fooStep,
+                    new FooStep(),
+                    new FooRollbackStep(),
+                ],
+                [
+                    $fixerStep,
+                ],
+            ),
         );
 
         // Act
@@ -139,10 +146,12 @@ class ComposerStrategyTest extends TestCase
     public function testUpgradeUnSuccessFlow(): void
     {
         // Arrange
-        $strategy = new ComposerStrategy([
-            new FooStep(),
-            $this->mockUnSuccessFooStep(),
-        ]);
+        $strategy = new ComposerStrategy(
+            new StepExecutor([
+                new FooStep(),
+                $this->mockUnSuccessFooStep(),
+            ]),
+        );
 
         // Act
         $stepsExecutionDto = $strategy->upgrade();
@@ -162,11 +171,15 @@ class ComposerStrategyTest extends TestCase
         $fooRollbackStep = $this->createMock(FooRollbackStep::class);
         $fooRollbackStep->expects($this->any())->method('rollBack');
 
-        $strategy = new ComposerStrategy([
-            new FooStep(),
-            $fooRollbackStep,
-            $this->mockUnSuccessFooStep(),
-        ]);
+        $strategy = new ComposerStrategy(
+            new StepExecutor(
+                [
+                    new FooStep(),
+                    $fooRollbackStep,
+                    $this->mockUnSuccessFooStep(),
+                ],
+            ),
+        );
 
         // Act
         $stepsExecutionDto = $strategy->upgrade();

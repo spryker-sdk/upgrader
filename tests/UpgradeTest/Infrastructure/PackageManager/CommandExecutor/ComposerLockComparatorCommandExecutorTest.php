@@ -71,14 +71,14 @@ class ComposerLockComparatorCommandExecutorTest extends TestCase
             [
                 new Package('spryker-sdk/sdk-contracts', '0.2.1', '0.2.0', 'diff-link-here'),
             ],
-            $response->getRequireChanges(),
+            $response->getRequiredPackages(),
         );
 
         $this->assertEquals(
             [
                 new Package('phpspec/prophecy-phpunit', '2.0.1', '2.0.0', 'diff-link-here'),
             ],
-            $response->getRequireDevChanges(),
+            $response->getRequiredDevPackages(),
         );
     }
 }

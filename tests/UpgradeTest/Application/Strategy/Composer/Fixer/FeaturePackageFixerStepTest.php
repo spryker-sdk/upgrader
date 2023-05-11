@@ -10,12 +10,10 @@ declare(strict_types=1);
 namespace UpgradeTest\Application\Strategy\Composer\Fixer;
 
 use PHPUnit\Framework\TestCase;
-use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\Composer\Fixer\FeaturePackageFixerStep;
-use Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface;
 
 class FeaturePackageFixerStepTest extends TestCase
 {
@@ -32,7 +30,6 @@ class FeaturePackageFixerStepTest extends TestCase
         // Arrange
         $fixer = new FeaturePackageFixerStep(
             $this->createMock(PackageManagerAdapterInterface::class),
-            $this->createPreRequireProcessorMock(),
         );
         $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);
 
@@ -51,7 +48,6 @@ class FeaturePackageFixerStepTest extends TestCase
         // Arrange
         $fixer = new FeaturePackageFixerStep(
             $this->createMock(PackageManagerAdapterInterface::class),
-            $this->createPreRequireProcessorMock(),
         );
         $stepsResponseDto = new StepsResponseDto(false, 'spryker-feature1/spryker-core');
 
@@ -80,7 +76,7 @@ class FeaturePackageFixerStepTest extends TestCase
             ->method('getComposerLockFile')
             ->willReturn(['packages' => [['name' => 'name']]]);
 
-        $fixer = new FeaturePackageFixerStep($packageManagerAdapter, $this->createPreRequireProcessorMock());
+        $fixer = new FeaturePackageFixerStep($packageManagerAdapter);
         $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);
 
         // Act
@@ -103,7 +99,7 @@ class FeaturePackageFixerStepTest extends TestCase
             ->method('require')
             ->willReturn($responseDto);
 
-        $fixer = new FeaturePackageFixerStep($packageManagerAdapter, $this->createPreRequireProcessorMock());
+        $fixer = new FeaturePackageFixerStep($packageManagerAdapter);
         $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);
 
         // Act
@@ -128,7 +124,7 @@ class FeaturePackageFixerStepTest extends TestCase
             ->method('require')
             ->willReturn(new ResponseDto(true));
 
-        $fixer = new FeaturePackageFixerStep($packageManagerAdapter, $this->createPreRequireProcessorMock());
+        $fixer = new FeaturePackageFixerStep($packageManagerAdapter);
         $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);
 
         // Act
@@ -136,16 +132,5 @@ class FeaturePackageFixerStepTest extends TestCase
 
         // Assert
         $this->assertSame($stepsResponseDto, $stepsResponse);
-    }
-
-    /**
-     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface
-     */
-    protected function createPreRequireProcessorMock(): PreRequireProcessorInterface
-    {
-        $preRequireProcessor = $this->createMock(PreRequireProcessorInterface::class);
-        $preRequireProcessor->method('process')->willReturn(new ReleaseGroupDtoCollection());
-
-        return $preRequireProcessor;
     }
 }

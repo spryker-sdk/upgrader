@@ -10,13 +10,12 @@ declare(strict_types=1);
 namespace Upgrade\Application\Strategy\Common\Step;
 
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\StepInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
 
-class PropelFixStep extends AbstractStep implements StepInterface
+class PropelFixStep implements StepInterface
 {
     /**
      * @var string
@@ -34,14 +33,10 @@ class PropelFixStep extends AbstractStep implements StepInterface
     protected PackageManagerAdapterInterface $packageManager;
 
     /**
-     * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
      * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
      */
-    public function __construct(
-        VersionControlSystemAdapterInterface $versionControlSystem,
-        PackageManagerAdapterInterface $packageManager
-    ) {
-        parent::__construct($versionControlSystem);
+    public function __construct(PackageManagerAdapterInterface $packageManager)
+    {
         $this->packageManager = $packageManager;
     }
 

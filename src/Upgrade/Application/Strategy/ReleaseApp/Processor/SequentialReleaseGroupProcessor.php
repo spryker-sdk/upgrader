@@ -141,11 +141,6 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
                 sprintf('Amount of applied release groups: %s', $aggregatedReleaseGroupCollection->count()),
             );
         }
-        if (!$stepsExecutionDto->getComposerLockDiff() || $stepsExecutionDto->getComposerLockDiff()->isEmpty()) {
-            return $stepsExecutionDto
-                ->setIsStopPropagation(true)
-                ->addOutputMessage('The branch is up to date. No further action is required.');
-        }
 
         return $stepsExecutionDto;
     }
