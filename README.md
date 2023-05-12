@@ -86,9 +86,9 @@ export SOFT_THRESHOLD_MINOR=<number>
 ​
 Soft bugfix threshold, by default 30.
 ​
-* To change soft bugfix threshold:
+* To change soft patch threshold:
 ```bash
-export SOFT_THRESHOLD_BUGFIX=<number>
+export SOFT_THRESHOLD_PATCH=<number>
 ```
 ### Adding GitHub configuration for the update step
 ​

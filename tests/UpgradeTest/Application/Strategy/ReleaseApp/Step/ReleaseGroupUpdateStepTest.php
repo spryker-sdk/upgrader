@@ -545,7 +545,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
 
         $configurationProvider->method('getSoftThresholdMajor')->willReturn(0);
         $configurationProvider->method('getSoftThresholdMinor')->willReturn(1);
-        $configurationProvider->method('getSoftThresholdBugfix')->willReturn(1);
+        $configurationProvider->method('getSoftThresholdPatch')->willReturn(1);
         $configurationProvider->method('getThresholdReleaseGroup')->willReturn(1);
 
         return $configurationProvider;
