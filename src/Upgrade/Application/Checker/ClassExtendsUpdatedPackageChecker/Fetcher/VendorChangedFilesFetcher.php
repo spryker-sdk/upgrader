@@ -9,12 +9,9 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher;
 
-use Symfony\Component\Process\Process;
 use Upgrade\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface;
+use Upgrade\Infrastructure\IO\ProcessFactory;
 
-/**
- * @codeCoverageIgnore
- */
 class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
 {
     /**
@@ -23,11 +20,18 @@ class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
     protected PackagesDirProviderInterface $packagesDirProvider;
 
     /**
-     * @param \Upgrade\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface $packagesDirProvider
+     * @var \Upgrade\Infrastructure\IO\ProcessFactory
      */
-    public function __construct(PackagesDirProviderInterface $packagesDirProvider)
+    protected ProcessFactory $processFactory;
+
+    /**
+     * @param \Upgrade\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface $packagesDirProvider
+     * @param \Upgrade\Infrastructure\IO\ProcessFactory $processFactory
+     */
+    public function __construct(PackagesDirProviderInterface $packagesDirProvider, ProcessFactory $processFactory)
     {
         $this->packagesDirProvider = $packagesDirProvider;
+        $this->processFactory = $processFactory;
     }
 
     /**
@@ -54,7 +58,7 @@ class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
         $fromDir = $this->packagesDirProvider->getFromDir() . $dir;
         $toDir = $this->packagesDirProvider->getToDir() . $dir;
 
-        $process = Process::fromShellCommandline($this->getCommand($fromDir, $toDir));
+        $process = $this->processFactory->createFromShellCommandline($this->getCommand($fromDir, $toDir));
 
         $process->mustRun();
 

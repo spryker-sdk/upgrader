@@ -9,15 +9,10 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer;
 
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
+use Upgrade\Infrastructure\IO\Filesystem;
+use Upgrade\Infrastructure\IO\ProcessFactory;
 
-/**
- * @codeCoverageIgnore
- *
- * Service for calling rsync command
- */
 class PackagesSynchronizer implements PackagesSynchronizerInterface
 {
     /**
@@ -31,18 +26,25 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
     protected PackagesDirProviderInterface $packagesDirProvider;
 
     /**
-     * @var \Symfony\Component\Filesystem\Filesystem
+     * @var \Upgrade\Infrastructure\IO\Filesystem
      */
     protected Filesystem $filesystem;
 
     /**
-     * @param \Upgrade\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface $packagesDirProvider
-     * @param \Symfony\Component\Filesystem\Filesystem $filesystem
+     * @var \Upgrade\Infrastructure\IO\ProcessFactory
      */
-    public function __construct(PackagesDirProviderInterface $packagesDirProvider, Filesystem $filesystem)
+    protected ProcessFactory $processFactory;
+
+    /**
+     * @param \Upgrade\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface $packagesDirProvider
+     * @param \Upgrade\Infrastructure\IO\Filesystem $filesystem
+     * @param \Upgrade\Infrastructure\IO\ProcessFactory $processFactory
+     */
+    public function __construct(PackagesDirProviderInterface $packagesDirProvider, Filesystem $filesystem, ProcessFactory $processFactory)
     {
         $this->packagesDirProvider = $packagesDirProvider;
         $this->filesystem = $filesystem;
+        $this->processFactory = $processFactory;
     }
 
     /**
@@ -61,7 +63,7 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
 
         try {
             foreach ($this->packagesDirProvider->getSprykerPackageDirs() as $dir) {
-                $process = Process::fromShellCommandline(
+                $process = $this->processFactory->createFromShellCommandline(
                     sprintf(static::COMMAND, $fromDir . $dir, $toDir),
                 );
                 $process->mustRun();
