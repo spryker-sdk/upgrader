@@ -14,7 +14,7 @@ use Upgrade\Application\Dto\ViolationDto;
 /**
  * @codeCoverageIgnore
  *
- * Temp class a bit latter be moved into the commit comments
+ * Temp class latter will be moved into the commit comments
  */
 class ViolationBodyMessageBuilder
 {
