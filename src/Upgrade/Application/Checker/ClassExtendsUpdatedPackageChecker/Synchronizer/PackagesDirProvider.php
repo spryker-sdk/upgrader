@@ -17,12 +17,12 @@ class PackagesDirProvider implements PackagesDirProviderInterface
     /**
      * @var string
      */
-    protected const FROM_DIR = 'vendor';
+    public const FROM_DIR = 'vendor' . DIRECTORY_SEPARATOR;
 
     /**
      * @var string
      */
-    protected const TO_DIR = 'data' . DIRECTORY_SEPARATOR . 'upgrader' . DIRECTORY_SEPARATOR . 'vendor_prev';
+    public const TO_DIR = 'data' . DIRECTORY_SEPARATOR . 'upgrader' . DIRECTORY_SEPARATOR . 'vendor_prev' . DIRECTORY_SEPARATOR;
 
     /**
      * @var string
@@ -69,7 +69,7 @@ class PackagesDirProvider implements PackagesDirProviderInterface
      */
     public function getFromDir(): string
     {
-        return $this->configurationProvider->getRootPath() . static::FROM_DIR . DIRECTORY_SEPARATOR;
+        return $this->configurationProvider->getRootPath() . static::FROM_DIR;
     }
 
     /**
@@ -77,6 +77,6 @@ class PackagesDirProvider implements PackagesDirProviderInterface
      */
     public function getToDir(): string
     {
-        return $this->configurationProvider->getRootPath() . static::TO_DIR . DIRECTORY_SEPARATOR;
+        return $this->configurationProvider->getRootPath() . static::TO_DIR;
     }
 }

@@ -137,6 +137,61 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testFetchPackageNameShouldReturnNullWithInvalidPath(): void
+    {
+        // Arrange
+
+        $fileName = '/data/project/test/Spryker/Zed/Acl/Business/Model/GroupInterface.php';
+
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->method('exists')->willReturn(true);
+        $filesystem->method('readFile')
+            ->with($this->equalTo('/data/project/composer.json'))
+            ->willReturn(
+                <<<JSOM
+                {
+                    "name": "spryker/acl",
+                    "type": "library",
+                    "description": "Acl module",
+                    "license": "proprietary",
+                    "require": {}
+                }
+                JSOM,
+            );
+
+        $classMetaDataFromFileFetcher = new ClassMetaDataFromFileFetcher($filesystem);
+
+        // Act
+        $packageName = $classMetaDataFromFileFetcher->fetchPackageName($fileName);
+
+        // Assert
+        $this->assertSame(null, $packageName);
+    }
+
+    /**
+     * @return void
+     */
+    public function testFetchPackageNameShouldReturnNullWhenComposerFileDoesNotExist(): void
+    {
+        // Arrange
+
+        $fileName = '/data/project/test/Spryker/Zed/Acl/Business/Model/GroupInterface.php';
+
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->method('exists')->willReturn(false);
+
+        $classMetaDataFromFileFetcher = new ClassMetaDataFromFileFetcher($filesystem);
+
+        // Act
+        $packageName = $classMetaDataFromFileFetcher->fetchPackageName($fileName);
+
+        // Assert
+        $this->assertSame(null, $packageName);
+    }
+
+    /**
      * @param string $fileContent
      *
      * @return \Upgrade\Infrastructure\IO\Filesystem

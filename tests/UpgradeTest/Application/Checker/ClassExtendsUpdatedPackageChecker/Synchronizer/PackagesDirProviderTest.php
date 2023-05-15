@@ -34,6 +34,40 @@ class PackagesDirProviderTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testGetFromDirShouldReturnFromDirPath(): void
+    {
+        // Arrange
+        $filesystemMock = $this->createFilesystemMock(['.', '..', 'spryker-sdk', 'spryker-shop', 'spryker', 'symfony']);
+        $configurationProviderMock = $this->createConfigurationProviderMock('/data/');
+        $packagesDirProvider = new PackagesDirProvider($configurationProviderMock, $filesystemMock);
+
+        // Act
+        $dir = $packagesDirProvider->getFromDir();
+
+        // Assert
+        $this->assertSame($dir, '/data/' . PackagesDirProvider::FROM_DIR);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetToDirShouldReturnToDirPath(): void
+    {
+        // Arrange
+        $filesystemMock = $this->createFilesystemMock(['.', '..', 'spryker-sdk', 'spryker-shop', 'spryker', 'symfony']);
+        $configurationProviderMock = $this->createConfigurationProviderMock('/data/');
+        $packagesDirProvider = new PackagesDirProvider($configurationProviderMock, $filesystemMock);
+
+        // Act
+        $dir = $packagesDirProvider->getToDir();
+
+        // Assert
+        $this->assertSame($dir, '/data/' . PackagesDirProvider::TO_DIR);
+    }
+
+    /**
      * @param array<string> $dirFiles
      *
      * @return \Upgrade\Infrastructure\IO\Filesystem
