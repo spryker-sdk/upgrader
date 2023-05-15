@@ -12,6 +12,9 @@ namespace Upgrade\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
 {
     /**
