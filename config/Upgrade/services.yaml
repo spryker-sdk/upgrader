@@ -13,6 +13,10 @@ services:
         autoconfigure: true
         public: true
 
+    _instanceof:
+        Upgrade\Application\Checker\CheckerInterface:
+            tags: [ 'evaluator.checker' ]
+
 # Upgrade
     Upgrade\:
         resource: '../../src/Upgrade/*'
@@ -20,6 +24,7 @@ services:
             - '../../src/Upgrade/Application/Dto/*'
             - '../../src/Upgrade/Infrastructure/VersionControlSystem/Dto/*'
             - '../../src/Upgrade/Infrastructure/Report/Dto/*'
+            - '../../src/Upgrade/Application/Strategy/ReleaseApp/Processor/Event/*'
 
     git.adapter:
         class: Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter
@@ -271,8 +276,7 @@ services:
             - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator'
             - '@Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher'
             - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter'
-            - '@processor.pre_require_step_executor'
-            - '@processor.post_require_step_executor'
+            - '@event_dispatcher'
 
     processor.sequential_release_group_processor:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
@@ -281,8 +285,17 @@ services:
             - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator'
             - '@Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher'
             - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter'
+            - '@event_dispatcher'
+
+    Upgrade\Application\Strategy\ReleaseApp\Processor\EventSubscriber\HookEventSubscriber:
+        arguments:
             - '@processor.pre_require_step_executor'
             - '@processor.post_require_step_executor'
+
+    Upgrade\Application\Strategy\ReleaseApp\Processor\EventSubscriber\CheckerExecutorEventSubscriber:
+        arguments:
+            - !tagged_iterator evaluator.checker
+            - '@Upgrade\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesSynchronizer'
 
     Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver

@@ -65,6 +65,11 @@ class StepsResponseDto extends ResponseDto
     protected bool $isStopPropagation = false;
 
     /**
+     * @var array<\Upgrade\Application\Dto\ViolationDto>
+     */
+    protected array $violations = [];
+
+    /**
      * @param bool $isSuccessful
      * @param string|null $outputMessage
      */
@@ -296,5 +301,23 @@ class StepsResponseDto extends ResponseDto
     public function setCodeComplianceReport(?Report $codeComplianceReport): void
     {
         $this->codeComplianceReport = $codeComplianceReport;
+    }
+
+    /**
+     * @return array<\Upgrade\Application\Dto\ViolationDto>
+     */
+    public function getViolations(): array
+    {
+        return $this->violations;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\ViolationDto $violation
+     *
+     * @return void
+     */
+    public function addViolation(ViolationDto $violation): void
+    {
+        $this->violations[] = $violation;
     }
 }

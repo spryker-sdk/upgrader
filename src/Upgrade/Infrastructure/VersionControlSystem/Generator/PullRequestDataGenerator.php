@@ -15,10 +15,24 @@ use Upgrade\Application\Dto\IntegratorResponseDto;
 class PullRequestDataGenerator
 {
     /**
+     * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder
+     */
+    protected ViolationBodyMessageBuilder $violationBodyMessageBuilder;
+
+    /**
+     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder $violationBodyMessageBuilder
+     */
+    public function __construct(ViolationBodyMessageBuilder $violationBodyMessageBuilder)
+    {
+        $this->violationBodyMessageBuilder = $violationBodyMessageBuilder;
+    }
+
+    /**
      * @param \Upgrade\Application\Dto\ComposerLockDiffDto $composerDiffDto
      * @param \Upgrade\Application\Dto\IntegratorResponseDto|null $integratorResponseDto
      * @param string $blockerInfo
      * @param string|null $reportId
+     * @param array<\Upgrade\Application\Dto\ViolationDto> $violations
      *
      * @return string
      */
@@ -26,7 +40,8 @@ class PullRequestDataGenerator
         ComposerLockDiffDto $composerDiffDto,
         ?IntegratorResponseDto $integratorResponseDto,
         string $blockerInfo = '',
-        ?string $reportId = null
+        ?string $reportId = null,
+        array $violations = []
     ): string {
         $text = 'Auto created via Upgrader tool.'
             . PHP_EOL
@@ -49,6 +64,15 @@ class PullRequestDataGenerator
             $text .= '</summary>' . str_repeat(PHP_EOL, 2);
             $text .= $this->buildSkippedManifestTable($integratorResponseDto->getWarnings());
             $text .= PHP_EOL . '</details>' . str_repeat(PHP_EOL, 2);
+        }
+
+        if (count($violations) > 0) {
+            $text .= '**Possible issues:**' . PHP_EOL;
+            $text .= $this->violationBodyMessageBuilder->buildViolationsTable(
+                $violations,
+                array_merge($composerDiffDto->getRequiredPackages(), $composerDiffDto->getRequiredDevPackages()),
+            );
+            $text .= PHP_EOL;
         }
 
         if (count($composerDiffDto->getRequiredPackages()) > 0) {

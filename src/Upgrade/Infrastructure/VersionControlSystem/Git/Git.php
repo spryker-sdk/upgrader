@@ -221,6 +221,7 @@ class Git
                 $stepsExecutionDto->getIntegratorResponseDto(),
                 $stepsExecutionDto->getBlockerInfo(),
                 $stepsExecutionDto->getReportId(),
+                $stepsExecutionDto->getViolations(),
             ),
             $this->configurationProvider->isPullRequestAutoMergeEnabled(),
         );
