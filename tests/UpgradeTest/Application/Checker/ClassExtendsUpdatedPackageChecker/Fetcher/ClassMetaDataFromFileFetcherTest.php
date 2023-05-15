@@ -167,7 +167,7 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
         $packageName = $classMetaDataFromFileFetcher->fetchPackageName($fileName);
 
         // Assert
-        $this->assertSame(null, $packageName);
+        $this->assertNull($packageName);
     }
 
     /**
@@ -188,7 +188,7 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
         $packageName = $classMetaDataFromFileFetcher->fetchPackageName($fileName);
 
         // Assert
-        $this->assertSame(null, $packageName);
+        $this->assertNull($packageName);
     }
 
     /**
