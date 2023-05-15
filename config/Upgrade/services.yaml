@@ -227,8 +227,8 @@ services:
     validator.threshold_minor:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\MinorThresholdValidator
 
-    validator.threshold_path:
-        class: Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\PathThresholdValidator
+    validator.threshold_patch:
+        class: Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\PatchThresholdValidator
 
     validator.threshold_release_group:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\ReleaseGroupThresholdValidator
@@ -239,7 +239,7 @@ services:
             - {
                 param1: '@validator.threshold_major',
                 param2: '@validator.threshold_minor',
-                param3: '@validator.threshold_path',
+                param3: '@validator.threshold_patch',
                 param4: '@validator.threshold_release_group',
             }
 

@@ -38,7 +38,8 @@ class MinorThresholdValidator implements ThresholdValidatorInterface
     public function validate(ReleaseGroupDtoCollection $releaseGroupDtoCollection): void
     {
         $softThreshold = $this->configurationProvider->getSoftThresholdMinor();
-        if ($releaseGroupDtoCollection->getCommonModuleCollection()->getMinorAmount() > $softThreshold) {
+        $minorAmount = $releaseGroupDtoCollection->getCommonModuleCollection()->getMinorAmount();
+        if ($minorAmount && $minorAmount >= $softThreshold) {
             throw new ReleaseGroupThresholdException(
                 sprintf('Soft threshold hit by %s minor releases', $softThreshold),
             );
