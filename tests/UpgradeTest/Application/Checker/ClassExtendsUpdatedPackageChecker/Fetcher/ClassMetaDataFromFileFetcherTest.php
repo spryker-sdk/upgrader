@@ -173,11 +173,32 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
     /**
      * @return void
      */
-    public function testFetchPackageNameShouldReturnNullWhenComposerFileDoesNotExist(): void
+    public function testFetchPackageNameShouldReturnNullWhenComposerFileDoesNotMatchPattern(): void
     {
         // Arrange
 
         $fileName = '/data/project/test/Spryker/Zed/Acl/Business/Model/GroupInterface.php';
+
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->method('exists')->willReturn(true);
+
+        $classMetaDataFromFileFetcher = new ClassMetaDataFromFileFetcher($filesystem);
+
+        // Act
+        $packageName = $classMetaDataFromFileFetcher->fetchPackageName($fileName);
+
+        // Assert
+        $this->assertNull($packageName);
+    }
+
+    /**
+     * @return void
+     */
+    public function testFetchPackageNameShouldReturnNullWhenComposerFileDoesNotExist(): void
+    {
+        // Arrange
+
+        $fileName = '/data/project/src/Spryker/Zed/Acl/Business/Model/GroupInterface.php';
 
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->method('exists')->willReturn(false);
