@@ -4,6 +4,7 @@ coverage:
     precision: 2
 
 ignore:
+    - "**/Dto/*.php"
     - "**/*.md"
     - "**/*.yml"
     - "**/*.yaml"
