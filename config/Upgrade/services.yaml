@@ -13,10 +13,6 @@ services:
         autoconfigure: true
         public: true
 
-    _instanceof:
-        Upgrade\Application\Checker\CheckerInterface:
-            tags: [ 'evaluator.checker' ]
-
 # Upgrade
     Upgrade\:
         resource: '../../src/Upgrade/*'
@@ -291,11 +287,6 @@ services:
         arguments:
             - '@processor.pre_require_step_executor'
             - '@processor.post_require_step_executor'
-
-    Upgrade\Application\Strategy\ReleaseApp\Processor\EventSubscriber\CheckerExecutorEventSubscriber:
-        arguments:
-            - !tagged_iterator evaluator.checker
-            - '@Upgrade\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesSynchronizer'
 
     Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver

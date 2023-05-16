@@ -14,11 +14,6 @@ use Symfony\Component\Process\Process;
 class ProcessRunnerService implements ProcessRunnerServiceInterface
 {
     /**
-     * @var int
-     */
-    private const PROCESS_TIMEOUT = 600;
-
-    /**
      * @param array<string> $command
      * @param array<string, mixed> $env
      *
@@ -27,8 +22,30 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
     public function run(array $command, array $env = []): Process
     {
         $process = new Process($command, (string)getcwd(), $env);
-        $process->setTimeout(self::PROCESS_TIMEOUT);
+        $process->setTimeout(static::DEFAULT_PROCESS_TIMEOUT);
         $process->run();
+
+        return $process;
+    }
+
+    /**
+     * @param string $command
+     * @param string|null $cwd
+     * @param array<mixed>|null $env
+     * @param mixed $input
+     * @param float|null $timeout
+     *
+     * @return \Symfony\Component\Process\Process
+     */
+    public function mustRunFromCommandLine(
+        string $command,
+        ?string $cwd = null,
+        ?array $env = null,
+        $input = null,
+        ?float $timeout = self::DEFAULT_PROCESS_TIMEOUT
+    ): Process {
+        $process = Process::fromShellCommandline($command, $cwd, $env, $input, $timeout);
+        $process->mustRun();
 
         return $process;
     }
