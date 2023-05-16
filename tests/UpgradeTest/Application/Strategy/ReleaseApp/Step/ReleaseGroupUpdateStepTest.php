@@ -18,11 +18,10 @@ use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Executor\StepExecutor;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapper;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor;
-use Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher;
-use Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessor;
-use Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PropelProcessorStrategy;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor;
@@ -187,7 +186,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
             $this->creteReleaseGroupProcessorResolverMock(
                 $this->createSequentialReleaseGroupProcessor(
                     [],
-                    [],
                     [
                         new MajorThresholdValidator($configurationProvider),
                         new MinorThresholdValidator($configurationProvider),
@@ -240,6 +238,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertSame(
             implode(PHP_EOL, [
                 'Amount of available release groups for the project: 0',
+                'The branch is up to date. No further action is required.',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
@@ -275,94 +274,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
             implode(PHP_EOL, [
                 'Amount of available release groups for the project: 2',
                 'No valid packages found',
-                'Applied required packages count: 1',
-                'No new required-dev packages',
-                'Amount of applied release groups: 2',
-            ]),
-            $stepsResponseDto->getOutputMessage(),
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testPropelAddedWhenPropelHasSpecificVersion(): void
-    {
-        $step = new ReleaseGroupUpdateStep(
-            $this->creteReleaseAppClientAdapterMock(
-                $this->buildReleaseGroupDtoCollection(),
-            ),
-            $this->creteReleaseGroupProcessorResolverMock(
-                $this->createSequentialReleaseGroupProcessor(
-                    [],
-                    [new PropelProcessorStrategy(
-                        $this->createPackageManagerPackageVersionAdapterMock(
-                            PropelProcessorStrategy::PACKAGE_NAME,
-                            PropelProcessorStrategy::LOCK_PACKAGE_VERSION,
-                            ['require' => []],
-                        ),
-                    ),
-                    ],
-                ),
-            ),
-        );
-
-        $stepsResponseDto = new StepsResponseDto();
-
-        // Act
-        $stepsResponseDto = $step->run($stepsResponseDto);
-
-        // Assert
-        $this->assertTrue($stepsResponseDto->isSuccessful());
-        $this->assertSame(
-            implode(PHP_EOL, [
-                'Amount of available release groups for the project: 2',
-                'Applied required packages count: 1',
-                'No new required-dev packages',
-                'Applied required packages count: 1',
-                'No new required-dev packages',
-                'Amount of applied release groups: 4',
-            ]),
-            $stepsResponseDto->getOutputMessage(),
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testPropelAddedWhenPropelAlreadyInstalled(): void
-    {
-        $step = new ReleaseGroupUpdateStep(
-            $this->creteReleaseAppClientAdapterMock(
-                $this->buildReleaseGroupDtoCollection(),
-            ),
-            $this->creteReleaseGroupProcessorResolverMock(
-                $this->createSequentialReleaseGroupProcessor(
-                    [],
-                    [new PropelProcessorStrategy(
-                        $this->createPackageManagerPackageVersionAdapterMock(
-                            PropelProcessorStrategy::PACKAGE_NAME,
-                            PropelProcessorStrategy::LOCK_PACKAGE_VERSION,
-                            ['require' => [PropelProcessorStrategy::PACKAGE_NAME => '1.0.0']],
-                        ),
-                    ),
-                    ],
-                ),
-            ),
-        );
-
-        $stepsResponseDto = new StepsResponseDto();
-
-        // Act
-        $stepsResponseDto = $step->run($stepsResponseDto);
-
-        // Assert
-        $this->assertTrue($stepsResponseDto->isSuccessful());
-        $this->assertSame(
-            implode(PHP_EOL, [
-                'Amount of available release groups for the project: 2',
-                'Applied required packages count: 1',
-                'No new required-dev packages',
                 'Applied required packages count: 1',
                 'No new required-dev packages',
                 'Amount of applied release groups: 2',
@@ -427,27 +338,26 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new ConflictValidator(),
             ]),
             new ThresholdSoftValidator([]),
-            new ModulePackageFetcher(
+            new ModuleFetcher(
                 $composerAdapterMock,
                 new PackageCollectionMapper(
                     $composerAdapterMock,
                 ),
             ),
             new ReleaseGroupFilter([]),
-            new PreRequireProcessor([]),
+            new StepExecutor(),
+            new StepExecutor(),
         );
     }
 
     /**
      * @param array $releaseGroupFilters
-     * @param array $preRequireProcessorStrategies
      * @param array $thresholdSoftValidators
      *
      * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
      */
     protected function createSequentialReleaseGroupProcessor(
         array $releaseGroupFilters = [],
-        array $preRequireProcessorStrategies = [],
         array $thresholdSoftValidators = []
     ): SequentialReleaseGroupProcessor {
         $responseDto = new ResponseDto(true);
@@ -464,14 +374,15 @@ class ReleaseGroupUpdateStepTest extends TestCase
         return new SequentialReleaseGroupProcessor(
             new ReleaseGroupSoftValidator([]),
             new ThresholdSoftValidator($thresholdSoftValidators),
-            new ModulePackageFetcher(
+            new ModuleFetcher(
                 $composerAdapterMock,
                 new PackageCollectionMapper(
                     $composerAdapterMock,
                 ),
             ),
             new ReleaseGroupFilter($releaseGroupFilters),
-            new PreRequireProcessor($preRequireProcessorStrategies),
+            new StepExecutor(),
+            new StepExecutor(),
         );
     }
 

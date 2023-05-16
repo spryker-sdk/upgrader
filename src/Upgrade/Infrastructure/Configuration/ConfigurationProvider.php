@@ -110,6 +110,14 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isEvaluatorEnabled(): bool
+    {
+        return EnvFetcher::getBool('EVALUATOR_ENABLED', false);
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @return string

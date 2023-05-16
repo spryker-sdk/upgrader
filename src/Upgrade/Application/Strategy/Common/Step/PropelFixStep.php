@@ -7,15 +7,15 @@
 
 declare(strict_types=1);
 
-namespace Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor;
+namespace Upgrade\Application\Strategy\Common\Step;
 
-use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
-use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
-use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
-use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
+use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Strategy\StepInterface;
+use Upgrade\Domain\Entity\Collection\PackageCollection;
+use Upgrade\Domain\Entity\Package;
 
-class PropelProcessorStrategy implements PreRequireProcessorStrategyInterface
+class PropelFixStep implements StepInterface
 {
     /**
      * @var string
@@ -26,11 +26,6 @@ class PropelProcessorStrategy implements PreRequireProcessorStrategyInterface
      * @var string
      */
     public const LOCK_PACKAGE_VERSION = '2.0.0-beta2';
-
-    /**
-     * @var string
-     */
-    protected const RELEASE_GROUP_NAME = 'updater-rg';
 
     /**
      * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
@@ -46,34 +41,33 @@ class PropelProcessorStrategy implements PreRequireProcessorStrategyInterface
     }
 
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $requireCollection
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function process(ReleaseGroupDtoCollection $requireCollection): ReleaseGroupDtoCollection
+    public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $packageVersion = $this->packageManager->getPackageVersion(static::PACKAGE_NAME);
 
         if ($packageVersion !== static::LOCK_PACKAGE_VERSION) {
-            return $requireCollection;
+            return $stepsExecutionDto;
         }
 
         if ($this->alreadyHasRequiredPropelPackage()) {
-            return $requireCollection;
+            return $stepsExecutionDto;
         }
 
-        $requireCollection->add(
-            new ReleaseGroupDto(
-                static::RELEASE_GROUP_NAME,
-                new ModuleDtoCollection(
-                    [new ModuleDto(static::PACKAGE_NAME, static::LOCK_PACKAGE_VERSION, 'minor')],
-                ),
-                false,
-                '',
-            ),
+        $response = $this->packageManager->require(
+            new PackageCollection([
+                new Package(static::PACKAGE_NAME, static::LOCK_PACKAGE_VERSION),
+            ]),
         );
 
-        return $requireCollection;
+        if (!$response->isSuccessful()) {
+            $stepsExecutionDto->addOutputMessage('Could not require propel package');
+        }
+
+        return $stepsExecutionDto;
     }
 
     /**

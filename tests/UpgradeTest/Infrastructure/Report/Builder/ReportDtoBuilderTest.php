@@ -12,6 +12,7 @@ namespace UpgradeTest\Infrastructure\Report\Builder;
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Domain\Entity\Package;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Report\Builder\ReportDtoBuilder;
 
@@ -155,13 +156,13 @@ class ReportDtoBuilderTest extends TestCase
      */
     protected function createComposerLockDiffDto(): ComposerLockDiffDto
     {
-        return new ComposerLockDiffDto([
-            'changes' => [
-                'spryker/category' => ['1.0.0', '1.0.1', 'https://github.com/spryker/category/compare/1.0.0...1.0.1'],
+        return new ComposerLockDiffDto(
+            [
+                new Package('spryker/category', '1.0.1', '1.0.0', 'https://github.com/spryker/category/compare/1.0.0...1.0.1'),
             ],
-            'changes-dev' => [
-                'spryker/testify' => ['2.0.0', '2.0.1', 'https://github.com/spryker/testify/compare/2.0.0...2.0.1'],
+            [
+                new Package('spryker/testify', '2.0.1', '2.0.0', 'https://github.com/spryker/testify/compare/2.0.0...2.0.1'),
             ],
-        ]);
+        );
     }
 }

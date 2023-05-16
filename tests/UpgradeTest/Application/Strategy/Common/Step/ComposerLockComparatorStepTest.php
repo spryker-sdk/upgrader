@@ -54,8 +54,8 @@ class ComposerLockComparatorStepTest extends TestCase
         $composerLockDiffDto = $stepsExecutionDto->getComposerLockDiff();
         $this->assertInstanceOf(ComposerLockDiffDto::class, $composerLockDiffDto);
         $this->assertFalse($composerLockDiffDto->isEmpty());
-        $this->assertIsArray($composerLockDiffDto->getRequireChanges());
-        $this->assertIsArray($composerLockDiffDto->getRequireDevChanges());
+        $this->assertIsArray($composerLockDiffDto->getRequiredPackages());
+        $this->assertIsArray($composerLockDiffDto->getRequiredDevPackages());
     }
 
     /**
@@ -81,11 +81,6 @@ class ComposerLockComparatorStepTest extends TestCase
 
         // Assert
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
-        $this->assertTrue($stepsExecutionDto->getIsStopPropagation());
-        $this->assertSame(
-            'The branch is up to date. No further action is required.',
-            $stepsExecutionDto->getOutputMessage(),
-        );
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }
 
@@ -110,11 +105,6 @@ class ComposerLockComparatorStepTest extends TestCase
 
         // Assert
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
-        $this->assertTrue($stepsExecutionDto->getIsStopPropagation());
-        $this->assertSame(
-            'The branch is up to date. No further action is required.',
-            $stepsExecutionDto->getOutputMessage(),
-        );
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }
 

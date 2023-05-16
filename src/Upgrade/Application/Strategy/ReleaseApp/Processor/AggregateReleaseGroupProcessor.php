@@ -11,7 +11,7 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface;
+use Upgrade\Application\Executor\StepExecutorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
@@ -30,9 +30,9 @@ class AggregateReleaseGroupProcessor implements ReleaseGroupProcessorInterface
     protected ThresholdSoftValidatorInterface $thresholdValidator;
 
     /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher
+     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher
      */
-    protected ModulePackageFetcher $modulePackageFetcher;
+    protected ModuleFetcher $modulePackageFetcher;
 
     /**
      * @var \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface
@@ -40,29 +40,37 @@ class AggregateReleaseGroupProcessor implements ReleaseGroupProcessorInterface
     protected ReleaseGroupFilterInterface $releaseGroupFilter;
 
     /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface
+     * @var \Upgrade\Application\Executor\StepExecutorInterface
      */
-    protected PreRequireProcessorInterface $preRequireProcessor;
+    protected StepExecutorInterface $preRequireHookExecutor;
 
     /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ModulePackageFetcher $modulePackageFetcher
+     * @var \Upgrade\Application\Executor\StepExecutorInterface
+     */
+    protected StepExecutorInterface $postRequireHookExecutor;
+
+    /**
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidator
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdValidator
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher $modulePackageFetcher
      * @param \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface $releaseGroupFilter
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\PreRequiredProcessor\PreRequireProcessorInterface $preRequireProcessor
+     * @param \Upgrade\Application\Executor\StepExecutorInterface $preRequireHookExecutor
+     * @param \Upgrade\Application\Executor\StepExecutorInterface $postRequireHookExecutor
      */
     public function __construct(
-        ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
-        ThresholdSoftValidatorInterface $thresholdSoftValidator,
-        ModulePackageFetcher $modulePackageFetcher,
+        ReleaseGroupSoftValidatorInterface $releaseGroupValidator,
+        ThresholdSoftValidatorInterface $thresholdValidator,
+        ModuleFetcher $modulePackageFetcher,
         ReleaseGroupFilterInterface $releaseGroupFilter,
-        PreRequireProcessorInterface $preRequireProcessor
+        StepExecutorInterface $preRequireHookExecutor,
+        StepExecutorInterface $postRequireHookExecutor
     ) {
-        $this->releaseGroupValidator = $releaseGroupValidateManager;
-        $this->thresholdValidator = $thresholdSoftValidator;
+        $this->releaseGroupValidator = $releaseGroupValidator;
+        $this->thresholdValidator = $thresholdValidator;
         $this->modulePackageFetcher = $modulePackageFetcher;
         $this->releaseGroupFilter = $releaseGroupFilter;
-        $this->preRequireProcessor = $preRequireProcessor;
+        $this->preRequireHookExecutor = $preRequireHookExecutor;
+        $this->postRequireHookExecutor = $postRequireHookExecutor;
     }
 
     /**
@@ -102,24 +110,22 @@ class AggregateReleaseGroupProcessor implements ReleaseGroupProcessorInterface
             $aggregatedReleaseGroupCollection->add($releaseGroup);
         }
 
-        $aggregatedReleaseGroupCollection = $this->preRequireProcessor->process($aggregatedReleaseGroupCollection);
-
-        $response = $this->modulePackageFetcher->require($aggregatedReleaseGroupCollection->getCommonModuleCollection());
-
-        if (!$response->isSuccessful()) {
-            $stepsExecutionDto->setIsSuccessful(false);
+        $stepsExecutionDto = $this->preRequireHookExecutor->execute($stepsExecutionDto);
+        if (!$stepsExecutionDto->isSuccessful() || $stepsExecutionDto->getIsStopPropagation()) {
+            return $stepsExecutionDto;
         }
 
+        $response = $this->modulePackageFetcher->require($aggregatedReleaseGroupCollection->getCommonModuleCollection());
+        $stepsExecutionDto->setIsSuccessful($response->isSuccessful());
         if ($response->getOutputMessage() !== null) {
             $stepsExecutionDto->addOutputMessage($response->getOutputMessage());
         }
-
         if ($response->isSuccessful() && $aggregatedReleaseGroupCollection->count()) {
             $stepsExecutionDto->addOutputMessage(
                 sprintf('Amount of applied release groups: %s', $aggregatedReleaseGroupCollection->count()),
             );
         }
 
-        return $stepsExecutionDto;
+        return $this->postRequireHookExecutor->execute($stepsExecutionDto);
     }
 }

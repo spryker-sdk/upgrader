@@ -161,7 +161,18 @@ class Git
      */
     public function commit(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
-        $command = ['git', 'commit', '-m', $this->configurationProvider->getCommitMessage()];
+        $commitMessage = $this->configurationProvider->getCommitMessage();
+
+        $releaseGroup = $stepsExecutionDto->getLastAppliedReleaseGroup();
+        if ($releaseGroup) {
+            $commitMessage = sprintf(
+                'Applied release group `%s`, RG link %s',
+                $releaseGroup->getName(),
+                $releaseGroup->getLink(),
+            );
+        }
+
+        $command = ['git', 'commit', '-m', $commitMessage];
 
         return $this->process($stepsExecutionDto, $command);
     }

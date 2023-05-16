@@ -79,7 +79,7 @@ class PropelUpdateHandler implements HandlerInterface
             return false;
         }
 
-        return $this->hasPropel($composerLockDiffDto->getRequireChanges());
+        return $this->hasPropel($composerLockDiffDto->getRequiredPackages());
     }
 
     /**

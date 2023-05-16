@@ -15,6 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\Common\PackagePostUpdateHandler\PropelUpdateHandler;
+use Upgrade\Domain\Entity\Package;
 
 class PropelUpdateHandlerTest extends TestCase
 {
@@ -44,9 +45,7 @@ class PropelUpdateHandlerTest extends TestCase
     {
         // Arrange
         $composerLockDiffDto = new ComposerLockDiffDto([
-            'changes' => [
-                'spryker/package' => ['1.0.0', '1.0.1', 'https://github.com/...'],
-            ],
+            new Package('spryker/package', '1.0.1', '1.0.0', 'https://github.com/...'),
         ]);
         $stepsExecutionDto = new StepsResponseDto(true);
         $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
@@ -85,12 +84,8 @@ class PropelUpdateHandlerTest extends TestCase
      */
     public function createComposerLockDiffDto(): ComposerLockDiffDto
     {
-        $composerLockDiffDto = new ComposerLockDiffDto([
-            'changes' => [
-                'propel/propel' => ['1.0.0', '1.0.1', 'https://github.com/...'],
-            ],
+        return new ComposerLockDiffDto([
+            new Package('propel/propel', '1.0.1', '1.0.0', 'https://github.com/...'),
         ]);
-
-        return $composerLockDiffDto;
     }
 }

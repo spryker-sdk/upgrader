@@ -9,39 +9,42 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Dto;
 
-use Upgrade\Domain\Entity\Package;
-
 class ComposerLockDiffDto
 {
     /**
-     * @var string
+     * @var array<\Upgrade\Domain\Entity\Package>
      */
-    protected const CHANGES_KEY = 'changes';
+    protected array $requiredPackages;
 
     /**
-     * @var string
+     * @var array<\Upgrade\Domain\Entity\Package>
      */
-    protected const CHANGES_DEV_KEY = 'changes-dev';
+    protected array $requiredDevPackages;
 
     /**
-     * @var array<mixed>
+     * @param array<\Upgrade\Domain\Entity\Package> $requiredPackages
+     * @param array<\Upgrade\Domain\Entity\Package> $requiredDevPackages
      */
-    protected array $composerLockDiff = [];
-
-    /**
-     * @param array<mixed> $composerLockDiff
-     */
-    public function __construct(array $composerLockDiff = [])
+    public function __construct(array $requiredPackages = [], array $requiredDevPackages = [])
     {
-        $this->composerLockDiff = $composerLockDiff;
+        $this->requiredPackages = $requiredPackages;
+        $this->requiredDevPackages = $requiredDevPackages;
     }
 
     /**
      * @return array<\Upgrade\Domain\Entity\Package>
      */
-    public function getRequireChanges(): array
+    public function getRequiredPackages(): array
     {
-        return $this->getChangesByKey(static::CHANGES_KEY);
+        return $this->requiredPackages;
+    }
+
+    /**
+     * @return array<\Upgrade\Domain\Entity\Package>
+     */
+    public function getRequiredDevPackages(): array
+    {
+        return $this->requiredDevPackages;
     }
 
     /**
@@ -49,38 +52,6 @@ class ComposerLockDiffDto
      */
     public function isEmpty(): bool
     {
-        return count($this->getRequireChanges() + $this->getRequireDevChanges()) === 0;
-    }
-
-    /**
-     * @return array<\Upgrade\Domain\Entity\Package>
-     */
-    public function getRequireDevChanges(): array
-    {
-        return $this->getChangesByKey(static::CHANGES_DEV_KEY);
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return array<\Upgrade\Domain\Entity\Package>
-     */
-    protected function getChangesByKey(string $key): array
-    {
-        $packages = [];
-
-        if (!isset($this->composerLockDiff[$key])) {
-            return $packages;
-        }
-
-        foreach ($this->composerLockDiff[$key] as $packageName => $packageData) {
-            $version = $packageData[1] ?? '';
-            $previousVersion = $packageData[0] ?? '';
-            $diffLink = $packageData[2] ?? '';
-
-            $packages[] = new Package($packageName, $version, $previousVersion, $diffLink);
-        }
-
-        return $packages;
+        return (count($this->requiredPackages) + count($this->requiredDevPackages)) === 0;
     }
 }
