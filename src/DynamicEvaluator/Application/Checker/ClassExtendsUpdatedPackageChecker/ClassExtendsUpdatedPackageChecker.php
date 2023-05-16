@@ -57,7 +57,7 @@ class ClassExtendsUpdatedPackageChecker implements CheckerInterface
      */
     public function check(): array
     {
-        $vendorChangedClasses = $this->vendorChangedClassesFetcher->fetchVendorChangedClasses();
+        $vendorChangedClasses = $this->vendorChangedClassesFetcher->fetchVendorChangedClassesWithPackage();
 
         $projectExtendedClasses = $this->projectExtendedClassesFetcher->fetchExtendedClasses();
 

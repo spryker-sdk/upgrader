@@ -14,5 +14,5 @@ interface VendorChangedClassesFetcherInterface
     /**
      * @return array<string, string> Key - className. Value - packageName
      */
-    public function fetchVendorChangedClasses(): array;
+    public function fetchVendorChangedClassesWithPackage(): array;
 }

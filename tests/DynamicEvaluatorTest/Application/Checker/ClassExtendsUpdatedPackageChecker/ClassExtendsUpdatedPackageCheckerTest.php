@@ -73,7 +73,7 @@ class ClassExtendsUpdatedPackageCheckerTest extends TestCase
     public function createVendorChangedClassesFetcher(array $vendorChangedClasses): VendorChangedClassesFetcherInterface
     {
         $vendorChangedClassesFetcher = $this->createMock(VendorChangedClassesFetcherInterface::class);
-        $vendorChangedClassesFetcher->method('fetchVendorChangedClasses')->willReturn($vendorChangedClasses);
+        $vendorChangedClassesFetcher->method('fetchVendorChangedClassesWithPackage')->willReturn($vendorChangedClasses);
 
         return $vendorChangedClassesFetcher;
     }

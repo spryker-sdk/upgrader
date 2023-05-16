@@ -30,7 +30,7 @@ class VendorChangedClassesFetcherTest extends TestCase
         );
 
         // Act
-        $changedClasses = $vendorChangedClassesFetcher->fetchVendorChangedClasses();
+        $changedClasses = $vendorChangedClassesFetcher->fetchVendorChangedClassesWithPackage();
 
         // Assert
         $this->assertEmpty($changedClasses);
@@ -50,7 +50,7 @@ class VendorChangedClassesFetcherTest extends TestCase
         );
 
         // Act
-        $changedClasses = $vendorChangedClassesFetcher->fetchVendorChangedClasses();
+        $changedClasses = $vendorChangedClassesFetcher->fetchVendorChangedClassesWithPackage();
 
         // Assert
         $this->assertSame(['Spryker\Zed\Acl\Business\Model\Group' => 'spryker/acl'], $changedClasses);
@@ -70,7 +70,7 @@ class VendorChangedClassesFetcherTest extends TestCase
         );
 
         // Act
-        $changedClasses = $vendorChangedClassesFetcher->fetchVendorChangedClasses();
+        $changedClasses = $vendorChangedClassesFetcher->fetchVendorChangedClassesWithPackage();
 
         // Assert
         $this->assertSame(['Spryker\Zed\Acl\Business\Model\Group' => '-'], $changedClasses);
