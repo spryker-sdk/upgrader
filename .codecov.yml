@@ -4,6 +4,11 @@ coverage:
     precision: 2
 
 ignore:
+    - "src/Codebase/Application/Dto/*.php"
+    - "src/Update/Application/Dto/*.php"
+    - "src/ReleaseApp/Infrastructure/Shared/Dto/*.php"
+    - "src/Upgrade/Infrastructure/Report/Dto/*.php"
+    - "src/Upgrade/Infrastructure/VersionControlSystem/Dto/*.php"
     - "**/*.md"
     - "**/*.yml"
     - "**/*.yaml"
