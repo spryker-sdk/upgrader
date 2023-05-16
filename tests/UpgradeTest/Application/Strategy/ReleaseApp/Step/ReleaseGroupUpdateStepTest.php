@@ -186,6 +186,50 @@ class ReleaseGroupUpdateStepTest extends TestCase
             $this->creteReleaseGroupProcessorResolverMock(
                 $this->createSequentialReleaseGroupProcessor(
                     [],
+                    [],
+                    [
+                        new MajorThresholdValidator($configurationProvider),
+                        new MinorThresholdValidator($configurationProvider),
+                        new PatchThresholdValidator($configurationProvider),
+                        new ReleaseGroupThresholdValidator($configurationProvider),
+                    ],
+                ),
+            ),
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertTrue($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            implode(PHP_EOL, [
+                'Amount of available release groups for the project: 2',
+                'Applied required packages count: 1',
+                'No new required-dev packages',
+                'Soft threshold hit by 1 minor releases',
+                'Amount of applied release groups: 1',
+            ]),
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunWithSequentialReleaseGroupProcessorApplySoftThreshold(): void
+    {
+        // Arrange
+        $configurationProvider = $this->createConfigurationProviderMock();
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock(
+                $this->buildReleaseGroupDtoCollection(),
+            ),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createSequentialReleaseGroupProcessor(
+                    [],
                     [
                         new MajorThresholdValidator($configurationProvider),
                         new MinorThresholdValidator($configurationProvider),
@@ -352,12 +396,14 @@ class ReleaseGroupUpdateStepTest extends TestCase
 
     /**
      * @param array $releaseGroupFilters
+     * @param array $preRequireProcessorStrategies
      * @param array $thresholdSoftValidators
      *
      * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
      */
     protected function createSequentialReleaseGroupProcessor(
         array $releaseGroupFilters = [],
+        array $preRequireProcessorStrategies = [],
         array $thresholdSoftValidators = []
     ): SequentialReleaseGroupProcessor {
         $responseDto = new ResponseDto(true);
@@ -374,7 +420,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
         return new SequentialReleaseGroupProcessor(
             new ReleaseGroupSoftValidator([]),
             new ThresholdSoftValidator($thresholdSoftValidators),
-            new ModuleFetcher(
+            new ModulePackageFetcher(
                 $composerAdapterMock,
                 new PackageCollectionMapper(
                     $composerAdapterMock,
@@ -456,7 +502,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
 
         $configurationProvider->method('getSoftThresholdMajor')->willReturn(0);
         $configurationProvider->method('getSoftThresholdMinor')->willReturn(1);
-        $configurationProvider->method('getSoftThresholdBugfix')->willReturn(1);
+        $configurationProvider->method('getSoftThresholdPatch')->willReturn(1);
         $configurationProvider->method('getThresholdReleaseGroup')->willReturn(1);
 
         return $configurationProvider;

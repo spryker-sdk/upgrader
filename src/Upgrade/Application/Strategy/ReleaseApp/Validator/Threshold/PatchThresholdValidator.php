@@ -37,11 +37,11 @@ class PatchThresholdValidator implements ThresholdValidatorInterface
      */
     public function validate(ReleaseGroupDtoCollection $releaseGroupDtoCollection): void
     {
-        $softThreshold = $this->configurationProvider->getSoftThresholdBugfix();
+        $softThreshold = $this->configurationProvider->getSoftThresholdPatch();
         $patchAmount = $releaseGroupDtoCollection->getCommonModuleCollection()->getPatchAmount();
         if ($patchAmount && $patchAmount >= $softThreshold) {
             throw new ReleaseGroupThresholdException(
-                sprintf('Soft threshold hit by %s major releases', $softThreshold),
+                sprintf('Soft threshold hit by %s patch releases', $softThreshold),
             );
         }
     }

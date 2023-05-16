@@ -77,7 +77,7 @@ interface ConfigurationProviderInterface
      *
      * @return int
      */
-    public function getSoftThresholdBugfix(): int;
+    public function getSoftThresholdPatch(): int;
 
     /**
      * Specification:

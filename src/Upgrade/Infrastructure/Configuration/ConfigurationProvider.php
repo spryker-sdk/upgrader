@@ -32,7 +32,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * @var int
      */
-    public const DEFAULT_SOFT_THRESHOLD_BUGFIX = 30;
+    public const DEFAULT_SOFT_THRESHOLD_PATCH = 30;
 
     /**
      * @var int
@@ -264,9 +264,9 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      *
      * @return int
      */
-    public function getSoftThresholdBugfix(): int
+    public function getSoftThresholdPatch(): int
     {
-        return (int)getenv('SOFT_THRESHOLD_BUGFIX') ?: static::DEFAULT_SOFT_THRESHOLD_BUGFIX;
+        return (int)getenv('SOFT_THRESHOLD_PATCH') ?: static::DEFAULT_SOFT_THRESHOLD_PATCH;
     }
 
     /**
