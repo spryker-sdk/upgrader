@@ -50,9 +50,6 @@ services:
     propel_fix.step:
         class: Upgrade\Application\Strategy\Common\Step\PropelFixStep
 
-    code_compliance.step:
-        class: Upgrade\Application\Strategy\Common\Step\CodeComplianceStep
-
     composer_update.step:
         class: Upgrade\Application\Strategy\Composer\Step\ComposerUpdateStep
 
@@ -263,7 +260,6 @@ services:
               - '@integrator.step'
               - '@add_changes.step'
               - '@commit_changes.step'
-              - '@code_compliance.step'
 
     processor.aggregate_release_group_processor:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor
