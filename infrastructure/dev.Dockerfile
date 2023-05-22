@@ -7,7 +7,8 @@ RUN apk update \
     && apk add --no-cache \
     curl \
     bash \
-    git
+    git \
+    rsync
 
 COPY --chown=spryker:spryker composer.json composer.lock ${srcRoot}/
 
