@@ -10,11 +10,16 @@ declare(strict_types=1);
 namespace Upgrade\Application\Adapter;
 
 use Upgrade\Application\Dto\ComposerLockDiffDto;
-use Upgrade\Application\Dto\ResponseDto;
+use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 interface PackageManagerAdapterInterface
 {
+    /**
+     * @var string
+     */
+    public const COMMAND_META_DATA_KEY = 'command';
+
     /**
      * @return string
      */
@@ -33,28 +38,28 @@ interface PackageManagerAdapterInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function require(PackageCollection $packageCollection): ResponseDto;
+    public function require(PackageCollection $packageCollection): PackageManagerResponseDto;
 
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function requireDev(PackageCollection $packageCollection): ResponseDto;
+    public function requireDev(PackageCollection $packageCollection): PackageManagerResponseDto;
 
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function remove(PackageCollection $packageCollection): ResponseDto;
+    public function remove(PackageCollection $packageCollection): PackageManagerResponseDto;
 
     /**
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function update(): ResponseDto;
+    public function update(): PackageManagerResponseDto;
 
     /**
      * @param string $packageName

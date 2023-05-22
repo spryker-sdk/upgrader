@@ -65,7 +65,7 @@ class StepsResponseDto extends ResponseDto
     protected bool $isStopPropagation = false;
 
     /**
-     * @var array<\Upgrade\Application\Dto\ViolationDto>
+     * @var array<\Upgrade\Application\Dto\ViolationDtoInterface>
      */
     protected array $violations = [];
 
@@ -304,7 +304,7 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @return array<\Upgrade\Application\Dto\ViolationDto>
+     * @return array<\Upgrade\Application\Dto\ViolationDtoInterface>
      */
     public function getViolations(): array
     {
@@ -312,12 +312,18 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @param \Upgrade\Application\Dto\ViolationDto $violation
+     * @param \Upgrade\Application\Dto\ViolationDtoInterface $violation
      *
      * @return void
      */
-    public function addViolation(ViolationDto $violation): void
+    public function addViolation(ViolationDtoInterface $violation): void
     {
+        foreach ($this->getViolations() as $storedViolation) {
+            if ($storedViolation->equals($violation)) {
+                return;
+            }
+        }
+
         $this->violations[] = $violation;
     }
 }

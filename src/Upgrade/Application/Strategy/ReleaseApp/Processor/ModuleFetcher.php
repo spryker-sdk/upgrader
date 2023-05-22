@@ -11,7 +11,7 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Application\Dto\ResponseDto;
+use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
@@ -52,14 +52,14 @@ class ModuleFetcher
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function require(ModuleDtoCollection $moduleCollection): ResponseDto
+    public function require(ModuleDtoCollection $moduleCollection): PackageManagerResponseDto
     {
         $packageCollection = $this->packageCollectionMapper->mapModuleCollectionToPackageCollection($moduleCollection);
 
         if ($packageCollection->isEmpty()) {
-            return new ResponseDto(true, 'No valid packages found');
+            return new PackageManagerResponseDto(true, 'No valid packages found');
         }
 
         return $this->requirePackageCollection($packageCollection);
@@ -68,9 +68,9 @@ class ModuleFetcher
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    protected function requirePackageCollection(PackageCollection $packageCollection): ResponseDto
+    protected function requirePackageCollection(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         $requiredPackages = $this->packageCollectionMapper->getRequiredPackages($packageCollection);
         $requiredDevPackages = $this->packageCollectionMapper->getRequiredDevPackages($packageCollection);
@@ -83,9 +83,10 @@ class ModuleFetcher
 
         $responseDev = $this->requirePackages($requiredDevPackages, static::REQUIRED_DEV_TYPE);
 
-        return new ResponseDto(
+        return new PackageManagerResponseDto(
             $responseDev->isSuccessful(),
             implode(PHP_EOL, [$response->getOutputMessage(), $responseDev->getOutputMessage()]),
+            array_merge($response->getExecutedCommands(), $responseDev->getExecutedCommands()),
         );
     }
 
@@ -93,14 +94,14 @@ class ModuleFetcher
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $requiredPackages
      * @param string $requiredPackageType
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
     protected function requirePackages(
         PackageCollection $requiredPackages,
         string $requiredPackageType
-    ): ResponseDto {
+    ): PackageManagerResponseDto {
         if ($requiredPackages->isEmpty()) {
-            return new ResponseDto(true, sprintf('No new %s packages', $requiredPackageType));
+            return new PackageManagerResponseDto(true, sprintf('No new %s packages', $requiredPackageType));
         }
 
         $requireResponse = $requiredPackageType === static::REQUIRED_TYPE
@@ -111,6 +112,6 @@ class ModuleFetcher
             return $requireResponse;
         }
 
-        return new ResponseDto(true, sprintf('Applied %s packages count: %s', $requiredPackageType, $requiredPackages->count()));
+        return new PackageManagerResponseDto(true, sprintf('Applied %s packages count: %s', $requiredPackageType, $requiredPackages->count()), $requireResponse->getExecutedCommands());
     }
 }

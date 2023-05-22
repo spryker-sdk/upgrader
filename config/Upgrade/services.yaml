@@ -263,7 +263,7 @@ services:
               - '@integrator.step'
               - '@add_changes.step'
               - '@commit_changes.step'
-              - '@code_compliance.step'
+#              - '@code_compliance.step'
 
     processor.aggregate_release_group_processor:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor
@@ -296,6 +296,10 @@ services:
                 param1: '@processor.aggregate_release_group_processor',
                 param2: '@processor.sequential_release_group_processor',
             }
+
+    Upgrade\Infrastructure\VersionControlSystem\Generator\CheckerViolationMessageBuilderRegistry:
+        arguments:
+            - !tagged_iterator violation.message_builder
 
     #Third-party dependencies
     Ergebnis\Json\Printer\Printer: ~

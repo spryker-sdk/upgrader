@@ -11,7 +11,7 @@ namespace UpgradeTest\Application\Strategy\Composer\Fixer;
 
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Application\Dto\ResponseDto;
+use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\Composer\Fixer\FeaturePackageFixerStep;
 
@@ -64,7 +64,7 @@ class FeaturePackageFixerStepTest extends TestCase
     public function testRunFix(): void
     {
         // Arrange
-        $responseDto = new ResponseDto(true);
+        $responseDto = new PackageManagerResponseDto(true);
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter->expects($this->once())
             ->method('remove')
@@ -93,7 +93,7 @@ class FeaturePackageFixerStepTest extends TestCase
     public function testRunCanNotRequirePackages(): void
     {
         // Arrange
-        $responseDto = new ResponseDto(false);
+        $responseDto = new PackageManagerResponseDto(false);
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter->expects($this->once())
             ->method('require')
@@ -115,14 +115,14 @@ class FeaturePackageFixerStepTest extends TestCase
     public function testRunCanNotRemoveFeature(): void
     {
         // Arrange
-        $responseDto = new ResponseDto(false);
+        $responseDto = new PackageManagerResponseDto(false);
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter->expects($this->once())
             ->method('remove')
             ->willReturn($responseDto);
         $packageManagerAdapter->expects($this->once())
             ->method('require')
-            ->willReturn(new ResponseDto(true));
+            ->willReturn(new PackageManagerResponseDto(true));
 
         $fixer = new FeaturePackageFixerStep($packageManagerAdapter);
         $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);

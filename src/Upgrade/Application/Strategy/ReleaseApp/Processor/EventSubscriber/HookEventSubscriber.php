@@ -12,6 +12,7 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Processor\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Upgrade\Application\Executor\StepExecutorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorPostRequireEvent;
 
 class HookEventSubscriber implements EventSubscriberInterface
 {
@@ -49,7 +50,7 @@ class HookEventSubscriber implements EventSubscriberInterface
     {
         return [
             ReleaseGroupProcessorEvent::PRE_REQUIRE => ['onPreRequire', static::HIGH_PRIORITY],
-            ReleaseGroupProcessorEvent::POST_REQUIRE => ['onPostRequire', static::HIGH_PRIORITY],
+            ReleaseGroupProcessorPostRequireEvent::POST_REQUIRE => ['onPostRequire', static::HIGH_PRIORITY],
         ];
     }
 

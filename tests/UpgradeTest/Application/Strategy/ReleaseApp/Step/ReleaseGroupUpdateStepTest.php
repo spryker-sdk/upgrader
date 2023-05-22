@@ -17,7 +17,7 @@ use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Application\Dto\ResponseDto;
+use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapper;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor;
@@ -321,7 +321,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
      */
     protected function createAggregateReleaseGroupProcessor(): AggregateReleaseGroupProcessor
     {
-        $responseDto = new ResponseDto(true);
+        $responseDto = new PackageManagerResponseDto(true);
 
         $composerAdapterMock = $this->getMockBuilder(ComposerAdapter::class)
             ->disableOriginalConstructor()
@@ -358,7 +358,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
         array $releaseGroupFilters = [],
         array $thresholdSoftValidators = []
     ): SequentialReleaseGroupProcessor {
-        $responseDto = new ResponseDto(true);
+        $responseDto = new PackageManagerResponseDto(true);
 
         $composerAdapterMock = $this->getMockBuilder(ComposerAdapter::class)
             ->disableOriginalConstructor()

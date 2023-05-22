@@ -29,11 +29,6 @@ class ReleaseGroupProcessorEvent
     public const PRE_REQUIRE = 'PRE_REQUIRE';
 
     /**
-     * @var string
-     */
-    public const POST_REQUIRE = 'POST_REQUIRE';
-
-    /**
      * @var \Upgrade\Application\Dto\StepsResponseDto
      */
     protected StepsResponseDto $stepsExecutionDto;

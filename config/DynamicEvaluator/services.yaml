@@ -1,3 +1,7 @@
+parameters:
+    checker_broken_php_files_executable_path: '%kernel.project_dir%/vendor/bin/phpstan'
+    checker_broken_php_files_config_executable_path: '%kernel.project_dir%/config/DynamicEvaluator/checker_phpstan.neon'
+
 services:
     _defaults:
         autowire: true
@@ -7,11 +11,11 @@ services:
         resource: '../../src/DynamicEvaluator/*'
 
     _instanceof:
-        DynamicEvaluator\Application\Checker\CheckerInterface:
-            tags: [ 'evaluator.checker' ]
+        Upgrade\Infrastructure\VersionControlSystem\Generator\CheckerViolationMessageBuilderInterface:
+            tags: [ 'violation.message_builder' ]
 
-    DynamicEvaluator\Application\EventSubscriber\ReleaseGroupProcessorEventsSubscriber:
+    DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher\FileErrorsFetcher:
         arguments:
-            - !tagged_iterator evaluator.checker
-            - '@DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesSynchronizer'
-            - '@configuration.provider'
+            - '%checker_broken_php_files_config_executable_path%'
+            - '%checker_broken_php_files_executable_path%'
+            - '@Core\Infrastructure\Service\ProcessRunnerService'
