@@ -15,7 +15,7 @@ use Upgrade\Infrastructure\VersionControlSystem\Generator\CheckerViolationMessag
 /**
  * @codeCoverageIgnore
  *
- * Temp class latter will be moved into the commit comments
+ * Class latter will be moved into the commit comments
  */
 class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInterface
 {

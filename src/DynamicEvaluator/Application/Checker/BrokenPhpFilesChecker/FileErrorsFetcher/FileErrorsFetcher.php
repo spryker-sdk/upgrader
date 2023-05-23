@@ -57,7 +57,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     /**
      * @return array<\DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto>
      */
-    public function fetchNewProjectFileErrors(): array
+    public function fetchProjectFileErrorsAndSaveInBaseLine(): array
     {
         $fileErrors = [];
 

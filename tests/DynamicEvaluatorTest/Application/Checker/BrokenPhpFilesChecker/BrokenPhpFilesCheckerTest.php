@@ -60,7 +60,7 @@ class BrokenPhpFilesCheckerTest extends TestCase
     public function createFileErrorsFetcherMock(array $fileErrors): FileErrorsFetcherInterface
     {
         $fileErrorsFetcher = $this->createMock(FileErrorsFetcherInterface::class);
-        $fileErrorsFetcher->method('fetchNewProjectFileErrors')->willReturn($fileErrors);
+        $fileErrorsFetcher->method('fetchProjectFileErrorsAndSaveInBaseLine')->willReturn($fileErrors);
 
         return $fileErrorsFetcher;
     }

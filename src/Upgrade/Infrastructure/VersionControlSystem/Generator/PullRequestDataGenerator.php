@@ -68,7 +68,7 @@ class PullRequestDataGenerator
 
         if (count($violations) > 0) {
             $text .= '**Needs attention**' . PHP_EOL . PHP_EOL;
-            $text .= 'Please review the warnings shown below coz they might affect your upgrade' . PHP_EOL;
+            $text .= 'Please review the warnings shown below because they might affect your upgrade' . PHP_EOL;
             $text .= $this->violationBodyMessageBuilder->buildViolationsMessage(
                 $violations,
                 array_merge($composerDiffDto->getRequiredPackages(), $composerDiffDto->getRequiredDevPackages()),

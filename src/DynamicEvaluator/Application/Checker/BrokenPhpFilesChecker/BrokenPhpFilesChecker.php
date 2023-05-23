@@ -34,7 +34,7 @@ class BrokenPhpFilesChecker
      */
     public function check(array $composerCommands): array
     {
-        $fileErrors = $this->fileErrorsFetcher->fetchNewProjectFileErrors();
+        $fileErrors = $this->fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
 
         if (count($fileErrors) === 0) {
             return [];

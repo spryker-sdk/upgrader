@@ -31,7 +31,7 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
         // Arrange
         $fileErrorsFetcherMock = $this->createMock(FileErrorsFetcherInterface::class);
         $fileErrorsFetcherMock->expects($this->once())->method('reset');
-        $fileErrorsFetcherMock->expects($this->once())->method('fetchNewProjectFileErrors');
+        $fileErrorsFetcherMock->expects($this->once())->method('fetchProjectFileErrorsAndSaveInBaseLine');
 
         $event = new ReleaseGroupProcessorEvent(new StepsResponseDto());
 
@@ -53,7 +53,7 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
         // Arrange
         $fileErrorsFetcherMock = $this->createMock(FileErrorsFetcherInterface::class);
         $fileErrorsFetcherMock->expects($this->never())->method('reset');
-        $fileErrorsFetcherMock->expects($this->never())->method('fetchNewProjectFileErrors');
+        $fileErrorsFetcherMock->expects($this->never())->method('fetchProjectFileErrorsAndSaveInBaseLine');
 
         $event = new ReleaseGroupProcessorEvent(new StepsResponseDto());
 

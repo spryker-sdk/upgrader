@@ -31,21 +31,21 @@ class BrokenPhpFilesCheckerEventSubscriber implements EventSubscriberInterface
     /**
      * @var \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\BrokenPhpFilesChecker
      */
-    protected BrokenPhpFilesChecker $checker;
+    protected BrokenPhpFilesChecker $brokenPhpFilesChecker;
 
     /**
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher\FileErrorsFetcherInterface $fileErrorsFetcher
-     * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\BrokenPhpFilesChecker $checker
+     * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\BrokenPhpFilesChecker $brokenPhpFilesChecker
      */
     public function __construct(
         ConfigurationProviderInterface $configurationProvider,
         FileErrorsFetcherInterface $fileErrorsFetcher,
-        BrokenPhpFilesChecker $checker
+        BrokenPhpFilesChecker $brokenPhpFilesChecker
     ) {
         $this->configurationProvider = $configurationProvider;
         $this->fileErrorsFetcher = $fileErrorsFetcher;
-        $this->checker = $checker;
+        $this->brokenPhpFilesChecker = $brokenPhpFilesChecker;
     }
 
     /**
@@ -71,7 +71,7 @@ class BrokenPhpFilesCheckerEventSubscriber implements EventSubscriberInterface
         }
 
         $this->fileErrorsFetcher->reset();
-        $this->fileErrorsFetcher->fetchNewProjectFileErrors();
+        $this->fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
     }
 
     /**
@@ -87,7 +87,7 @@ class BrokenPhpFilesCheckerEventSubscriber implements EventSubscriberInterface
 
         $stepsExecutorDto = $event->getStepsExecutionDto();
 
-        $violations = $this->checker->check($event->getPackageManagerResponseDto()->getExecutedCommands());
+        $violations = $this->brokenPhpFilesChecker->check($event->getPackageManagerResponseDto()->getExecutedCommands());
 
         foreach ($violations as $violation) {
             $stepsExecutorDto->addViolation($violation);

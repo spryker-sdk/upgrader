@@ -1,5 +1,5 @@
 parameters:
-    level: 3
+    level: 3 # for performance reasons
     paths:
         - %currentWorkingDirectory%/src
     excludePaths:

@@ -21,7 +21,7 @@ class ClassExtendsUpdatedPackageCheckerEventSubscriber implements EventSubscribe
     /**
      * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker
      */
-    protected ClassExtendsUpdatedPackageChecker $checker;
+    protected ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker;
 
     /**
      * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesSynchronizerInterface
@@ -34,18 +34,18 @@ class ClassExtendsUpdatedPackageCheckerEventSubscriber implements EventSubscribe
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
-     * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker $checker
+     * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker
      * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesSynchronizerInterface $packagesSynchronizer
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      */
     public function __construct(
-        ClassExtendsUpdatedPackageChecker $checker,
-        PackagesSynchronizerInterface $packagesSynchronizer,
-        ConfigurationProviderInterface $configurationProvider
+        ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker,
+        PackagesSynchronizerInterface     $packagesSynchronizer,
+        ConfigurationProviderInterface    $configurationProvider
     ) {
         $this->packagesSynchronizer = $packagesSynchronizer;
         $this->configurationProvider = $configurationProvider;
-        $this->checker = $checker;
+        $this->classExtendsUpdatedPackageChecker = $classExtendsUpdatedPackageChecker;
     }
 
     /**
@@ -102,7 +102,7 @@ class ClassExtendsUpdatedPackageCheckerEventSubscriber implements EventSubscribe
 
         $stepsExecutorDto = $event->getStepsExecutionDto();
 
-        $violations = $this->checker->check();
+        $violations = $this->classExtendsUpdatedPackageChecker->check();
 
         foreach ($violations as $violation) {
             $stepsExecutorDto->addViolation($violation);

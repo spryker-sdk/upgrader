@@ -14,6 +14,13 @@ use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\ViolationDto;
 use Upgrade\Infrastructure\VersionControlSystem\Generator\CheckerViolationMessageBuilderInterface;
 use Upgrader\Configuration\ConfigurationProvider;
 
+/**
+ * @codeCoverageIgnore
+ *
+ * Class latter will be moved into the commit comments
+ *
+ * @see https://spryker.atlassian.net/browse/SDK-2176
+ */
 class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInterface
 {
     /**

@@ -26,7 +26,7 @@ class FileErrorsFetcherTest extends TestCase
      *
      * @return void
      */
-    public function testFetchNewProjectFileErrorsShouldValidate(array $toolOutput): void
+    public function testFetchProjectFileErrorsAndSaveInBaseLineShouldValidate(array $toolOutput): void
     {
         // Arrange
         $this->expectException(InvalidArgumentException::class);
@@ -34,7 +34,7 @@ class FileErrorsFetcherTest extends TestCase
         $fileErrorsFetcher = new FileErrorsFetcher('', '', $this->createProcessRunnerServiceMock($toolOutput), new BaselineStorage());
 
         // Act
-        $fileErrorsFetcher->fetchNewProjectFileErrors();
+        $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
     }
 
     /**
@@ -53,7 +53,7 @@ class FileErrorsFetcherTest extends TestCase
     /**
      * @return void
      */
-    public function testFetchNewProjectFileErrorsShouldReturnEmptyWhenThisErrorInBaseLineStorage(): void
+    public function testFetchProjectFileErrorsAndSaveInBaseLineShouldReturnEmptyWhenThisErrorInBaseLineStorage(): void
     {
         // Arrange
         $toolOutput = ['files' => ['src/someClass.php' => ['messages' => [['line' => 1, 'message' => 'test message']]]]];
@@ -64,7 +64,7 @@ class FileErrorsFetcherTest extends TestCase
         $fileErrorsFetcher = new FileErrorsFetcher('', '', $this->createProcessRunnerServiceMock($toolOutput), $baseLineStorage);
 
         // Act
-        $fileErrors = $fileErrorsFetcher->fetchNewProjectFileErrors();
+        $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
 
         // Assert
         $this->assertEmpty($fileErrors);
@@ -73,7 +73,7 @@ class FileErrorsFetcherTest extends TestCase
     /**
      * @return void
      */
-    public function testFetchNewProjectFileErrorsShouldFetchFileErrors(): void
+    public function testFetchProjectFileErrorsAndSaveInBaseLineShouldFetchFileErrors(): void
     {
         // Arrange
         $toolOutput = ['files' => ['src/someClass.php' => ['messages' => [['line' => 1, 'message' => 'test message']]]]];
@@ -82,7 +82,7 @@ class FileErrorsFetcherTest extends TestCase
         $fileErrorsFetcher = new FileErrorsFetcher('', '', $this->createProcessRunnerServiceMock($toolOutput), $baseLineStorage);
 
         // Act
-        $fileErrors = $fileErrorsFetcher->fetchNewProjectFileErrors();
+        $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
 
         // Assert
         $this->assertCount(1, $fileErrors);
