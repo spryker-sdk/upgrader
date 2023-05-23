@@ -40,8 +40,8 @@ class ClassExtendsUpdatedPackageCheckerEventSubscriber implements EventSubscribe
      */
     public function __construct(
         ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker,
-        PackagesSynchronizerInterface     $packagesSynchronizer,
-        ConfigurationProviderInterface    $configurationProvider
+        PackagesSynchronizerInterface $packagesSynchronizer,
+        ConfigurationProviderInterface $configurationProvider
     ) {
         $this->packagesSynchronizer = $packagesSynchronizer;
         $this->configurationProvider = $configurationProvider;
