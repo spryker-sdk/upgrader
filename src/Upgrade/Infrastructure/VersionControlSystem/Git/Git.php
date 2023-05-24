@@ -288,7 +288,7 @@ class Git
     {
         return sprintf(
             $this->configurationProvider->getBranchPattern(),
-            $this->getBaseBranch()
+            $this->getBaseBranch(),
         );
     }
 
