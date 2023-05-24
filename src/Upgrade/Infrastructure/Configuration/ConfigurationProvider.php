@@ -57,7 +57,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * @var string
      */
-    protected const DEFAULT_BRANCH_PATTERN = 'upgradebot/upgrade-for-%s-%s';
+    protected const DEFAULT_BRANCH_PATTERN = 'upgradebot/upgrade-for-%s';
 
     /**
      * @var bool
