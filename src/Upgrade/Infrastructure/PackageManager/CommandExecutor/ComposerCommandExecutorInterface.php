@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\PackageManager\CommandExecutor;
 
-use Upgrade\Application\Dto\ResponseDto;
+use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 interface ComposerCommandExecutorInterface
@@ -17,26 +17,26 @@ interface ComposerCommandExecutorInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function require(PackageCollection $packageCollection): ResponseDto;
+    public function require(PackageCollection $packageCollection): PackageManagerResponseDto;
 
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function remove(PackageCollection $packageCollection): ResponseDto;
+    public function remove(PackageCollection $packageCollection): PackageManagerResponseDto;
 
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function requireDev(PackageCollection $packageCollection): ResponseDto;
+    public function requireDev(PackageCollection $packageCollection): PackageManagerResponseDto;
 
     /**
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function update(): ResponseDto;
+    public function update(): PackageManagerResponseDto;
 }

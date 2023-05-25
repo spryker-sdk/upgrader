@@ -293,6 +293,10 @@ services:
                 param2: '@processor.sequential_release_group_processor',
             }
 
+    Upgrade\Infrastructure\VersionControlSystem\Generator\CheckerViolationMessageBuilderRegistry:
+        arguments:
+            - !tagged_iterator violation.message_builder
+
     #Third-party dependencies
     Ergebnis\Json\Printer\Printer: ~
     Ergebnis\Json\Printer\PrinterInterface: '@Ergebnis\Json\Printer\Printer'

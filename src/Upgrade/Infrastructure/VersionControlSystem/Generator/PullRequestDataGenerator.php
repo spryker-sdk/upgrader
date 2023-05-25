@@ -32,7 +32,7 @@ class PullRequestDataGenerator
      * @param \Upgrade\Application\Dto\IntegratorResponseDto|null $integratorResponseDto
      * @param string $blockerInfo
      * @param string|null $reportId
-     * @param array<\Upgrade\Application\Dto\ViolationDto> $violations
+     * @param array<\Upgrade\Application\Dto\ViolationDtoInterface> $violations
      *
      * @return string
      */
@@ -67,8 +67,9 @@ class PullRequestDataGenerator
         }
 
         if (count($violations) > 0) {
-            $text .= '**Possible issues:**' . PHP_EOL;
-            $text .= $this->violationBodyMessageBuilder->buildViolationsTable(
+            $text .= '**Needs attention**' . PHP_EOL . PHP_EOL;
+            $text .= 'Please review the warnings shown below because they might affect your upgrade' . PHP_EOL;
+            $text .= $this->violationBodyMessageBuilder->buildViolationsMessage(
                 $violations,
                 array_merge($composerDiffDto->getRequiredPackages(), $composerDiffDto->getRequiredDevPackages()),
             );

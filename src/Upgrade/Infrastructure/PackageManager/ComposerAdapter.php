@@ -11,7 +11,7 @@ namespace Upgrade\Infrastructure\PackageManager;
 
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
-use Upgrade\Application\Dto\ResponseDto;
+use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutorInterface;
 use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutorInterface;
@@ -107,9 +107,9 @@ class ComposerAdapter implements PackageManagerAdapterInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function require(PackageCollection $packageCollection): ResponseDto
+    public function require(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->composerCommandExecutor->require($packageCollection);
     }
@@ -117,9 +117,9 @@ class ComposerAdapter implements PackageManagerAdapterInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function remove(PackageCollection $packageCollection): ResponseDto
+    public function remove(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->composerCommandExecutor->remove($packageCollection);
     }
@@ -127,17 +127,17 @@ class ComposerAdapter implements PackageManagerAdapterInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function requireDev(PackageCollection $packageCollection): ResponseDto
+    public function requireDev(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->composerCommandExecutor->requireDev($packageCollection);
     }
 
     /**
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function update(): ResponseDto
+    public function update(): PackageManagerResponseDto
     {
         return $this->composerCommandExecutor->update();
     }

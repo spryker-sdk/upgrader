@@ -11,7 +11,7 @@ namespace Upgrade\Infrastructure\PackageManager\CommandExecutor;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
-use Upgrade\Application\Dto\ResponseDto;
+use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
@@ -90,9 +90,9 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function require(PackageCollection $packageCollection): ResponseDto
+    public function require(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         $command = explode(' ', sprintf(
             '%s%s %s %s %s',
@@ -109,9 +109,9 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function remove(PackageCollection $packageCollection): ResponseDto
+    public function remove(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         $command = explode(' ', sprintf(
             '%s%s %s %s',
@@ -127,9 +127,9 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function requireDev(PackageCollection $packageCollection): ResponseDto
+    public function requireDev(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         $command = explode(' ', sprintf(
             '%s%s %s %s %s %s',
@@ -145,9 +145,9 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     }
 
     /**
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function update(): ResponseDto
+    public function update(): PackageManagerResponseDto
     {
         $command = explode(' ', sprintf(
             '%s %s %s %s %s',
@@ -185,15 +185,15 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @param \Symfony\Component\Process\Process<string, string> $process
      *
-     * @return \Upgrade\Application\Dto\ResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    protected function createResponse(Process $process): ResponseDto
+    protected function createResponse(Process $process): PackageManagerResponseDto
     {
         $command = str_replace('\'', '', $process->getCommandLine());
         $output = $process->isTerminated() && !$process->isSuccessful() ? $process->getErrorOutput() ?: $process->getOutput() : '';
         $outputs = array_filter([$command, $output]);
 
-        return new ResponseDto($process->isSuccessful(), implode(PHP_EOL, $outputs));
+        return new PackageManagerResponseDto($process->isSuccessful(), implode(PHP_EOL, $outputs), [$process->getCommandLine()]);
     }
 
     /**

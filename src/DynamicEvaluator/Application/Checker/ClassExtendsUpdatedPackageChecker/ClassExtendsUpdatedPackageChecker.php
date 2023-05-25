@@ -9,13 +9,12 @@ declare(strict_types=1);
 
 namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker;
 
-use DynamicEvaluator\Application\Checker\CheckerInterface;
+use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Dto\ViolationDto;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\ProjectExtendedClassesFetcherInterface;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\VendorChangedClassesFetcherInterface;
-use Upgrade\Application\Dto\ViolationDto;
 use Upgrader\Configuration\ConfigurationProvider;
 
-class ClassExtendsUpdatedPackageChecker implements CheckerInterface
+class ClassExtendsUpdatedPackageChecker
 {
     /**
      * @var string
@@ -53,7 +52,7 @@ class ClassExtendsUpdatedPackageChecker implements CheckerInterface
     }
 
     /**
-     * @return array<\Upgrade\Application\Dto\ViolationDto>
+     * @return array<\DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Dto\ViolationDto>
      */
     public function check(): array
     {

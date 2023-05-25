@@ -7,9 +7,11 @@
 
 declare(strict_types=1);
 
-namespace Upgrade\Application\Dto;
+namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Dto;
 
-class ViolationDto
+use Upgrade\Application\Dto\ViolationDtoInterface;
+
+class ViolationDto implements ViolationDtoInterface
 {
     /**
      * @var string
@@ -32,6 +34,11 @@ class ViolationDto
     protected array $additionalData;
 
     /**
+     * @var string
+     */
+    protected string $hash;
+
+    /**
      * @param string $message
      * @param string $target
      * @param string $package
@@ -43,6 +50,7 @@ class ViolationDto
         $this->target = $target;
         $this->additionalData = $additionalData;
         $this->package = $package;
+        $this->hash = sha1($message . $target . $package);
     }
 
     /**
@@ -70,10 +78,20 @@ class ViolationDto
     }
 
     /**
-     * @return array<mixed>
+     * @return string
      */
-    public function getAdditionalData(): array
+    public function getHash(): string
     {
-        return $this->additionalData;
+        return $this->hash;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\ViolationDtoInterface $violationDto
+     *
+     * @return bool
+     */
+    public function equals(ViolationDtoInterface $violationDto): bool
+    {
+        return $violationDto instanceof ViolationDto && $this->getHash() === $violationDto->getHash();
     }
 }

@@ -7,18 +7,20 @@
 
 declare(strict_types=1);
 
-namespace DynamicEvaluatorTest\Application\EventSubscriber;
+namespace DynamicEvaluatorTest\Application\Checker\ClassExtendsUpdatedPackageChecker\EventSubscriber;
 
-use DynamicEvaluator\Application\Checker\CheckerInterface;
+use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker;
+use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Dto\ViolationDto;
+use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\EventSubscriber\ClassExtendsUpdatedPackageCheckerEventSubscriber;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesSynchronizerInterface;
-use DynamicEvaluator\Application\EventSubscriber\ReleaseGroupProcessorEventsSubscriber;
 use PHPUnit\Framework\TestCase;
+use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Dto\ViolationDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorPostRequireEvent;
 
-class ReleaseGroupProcessorEventsSubscriberTest extends TestCase
+class ClassExtendsUpdatedPackageCheckerEventSubscriberTest extends TestCase
 {
     /**
      * @return void
@@ -28,25 +30,21 @@ class ReleaseGroupProcessorEventsSubscriberTest extends TestCase
         // Arrange
         $packagesSynchronizer = $this->createMock(PackagesSynchronizerInterface::class);
 
-        $checkerExecutorEventSubscriber = new ReleaseGroupProcessorEventsSubscriber(
-            [
-                $this->createCheckerMock(new ViolationDto('violation one')),
-                $this->createCheckerMock(new ViolationDto('violation two')),
-            ],
+        $checkerExecutorEventSubscriber = new ClassExtendsUpdatedPackageCheckerEventSubscriber(
+            $this->createCheckerMock(new ViolationDto('violation one')),
             $packagesSynchronizer,
             $this->createConfigurationProviderMock(),
         );
 
-        $event = new ReleaseGroupProcessorEvent(new StepsResponseDto());
+        $event = new ReleaseGroupProcessorPostRequireEvent(new StepsResponseDto(), new PackageManagerResponseDto(true));
 
         // Act
         $checkerExecutorEventSubscriber->onPostRequire($event);
 
         // Assert
         $violations = $event->getStepsExecutionDto()->getViolations();
-        $this->assertCount(2, $violations);
+        $this->assertCount(1, $violations);
         $this->assertSame('violation one', $violations[0]->getMessage());
-        $this->assertSame('violation two', $violations[1]->getMessage());
     }
 
     /**
@@ -57,16 +55,13 @@ class ReleaseGroupProcessorEventsSubscriberTest extends TestCase
         // Arrange
         $packagesSynchronizer = $this->createMock(PackagesSynchronizerInterface::class);
 
-        $checkerExecutorEventSubscriber = new ReleaseGroupProcessorEventsSubscriber(
-            [
-                $this->createCheckerMock(new ViolationDto('violation one')),
-                $this->createCheckerMock(new ViolationDto('violation two')),
-            ],
+        $checkerExecutorEventSubscriber = new ClassExtendsUpdatedPackageCheckerEventSubscriber(
+            $this->createCheckerMock(new ViolationDto('violation one')),
             $packagesSynchronizer,
             $this->createConfigurationProviderMock(false),
         );
 
-        $event = new ReleaseGroupProcessorEvent(new StepsResponseDto());
+        $event = new ReleaseGroupProcessorPostRequireEvent(new StepsResponseDto(), new PackageManagerResponseDto(true));
 
         // Act
         $checkerExecutorEventSubscriber->onPostRequire($event);
@@ -85,10 +80,8 @@ class ReleaseGroupProcessorEventsSubscriberTest extends TestCase
         $packagesSynchronizer = $this->createMock(PackagesSynchronizerInterface::class);
         $packagesSynchronizer->expects($this->once())->method('clear');
 
-        $checkerExecutorEventSubscriber = new ReleaseGroupProcessorEventsSubscriber(
-            [
-                $this->createCheckerMock(new ViolationDto('violation two')),
-            ],
+        $checkerExecutorEventSubscriber = new ClassExtendsUpdatedPackageCheckerEventSubscriber(
+            $this->createCheckerMock(new ViolationDto('violation two')),
             $packagesSynchronizer,
             $this->createConfigurationProviderMock(),
         );
@@ -108,10 +101,8 @@ class ReleaseGroupProcessorEventsSubscriberTest extends TestCase
         $packagesSynchronizer = $this->createMock(PackagesSynchronizerInterface::class);
         $packagesSynchronizer->expects($this->never())->method('clear');
 
-        $checkerExecutorEventSubscriber = new ReleaseGroupProcessorEventsSubscriber(
-            [
-                $this->createCheckerMock(new ViolationDto('violation two')),
-            ],
+        $checkerExecutorEventSubscriber = new ClassExtendsUpdatedPackageCheckerEventSubscriber(
+            $this->createCheckerMock(new ViolationDto('violation two')),
             $packagesSynchronizer,
             $this->createConfigurationProviderMock(false),
         );
@@ -131,10 +122,8 @@ class ReleaseGroupProcessorEventsSubscriberTest extends TestCase
         $packagesSynchronizer = $this->createMock(PackagesSynchronizerInterface::class);
         $packagesSynchronizer->expects($this->once())->method('sync');
 
-        $checkerExecutorEventSubscriber = new ReleaseGroupProcessorEventsSubscriber(
-            [
-                $this->createCheckerMock(new ViolationDto('violation two')),
-            ],
+        $checkerExecutorEventSubscriber = new ClassExtendsUpdatedPackageCheckerEventSubscriber(
+            $this->createCheckerMock(new ViolationDto('violation two')),
             $packagesSynchronizer,
             $this->createConfigurationProviderMock(),
         );
@@ -154,10 +143,8 @@ class ReleaseGroupProcessorEventsSubscriberTest extends TestCase
         $packagesSynchronizer = $this->createMock(PackagesSynchronizerInterface::class);
         $packagesSynchronizer->expects($this->never())->method('sync');
 
-        $checkerExecutorEventSubscriber = new ReleaseGroupProcessorEventsSubscriber(
-            [
-                $this->createCheckerMock(new ViolationDto('violation two')),
-            ],
+        $checkerExecutorEventSubscriber = new ClassExtendsUpdatedPackageCheckerEventSubscriber(
+            $this->createCheckerMock(new ViolationDto('violation two')),
             $packagesSynchronizer,
             $this->createConfigurationProviderMock(false),
         );
@@ -177,10 +164,8 @@ class ReleaseGroupProcessorEventsSubscriberTest extends TestCase
         $packagesSynchronizer = $this->createMock(PackagesSynchronizerInterface::class);
         $packagesSynchronizer->expects($this->once())->method('clear');
 
-        $checkerExecutorEventSubscriber = new ReleaseGroupProcessorEventsSubscriber(
-            [
-                $this->createCheckerMock(new ViolationDto('violation two')),
-            ],
+        $checkerExecutorEventSubscriber = new ClassExtendsUpdatedPackageCheckerEventSubscriber(
+            $this->createCheckerMock(new ViolationDto('violation two')),
             $packagesSynchronizer,
             $this->createConfigurationProviderMock(),
         );
@@ -200,10 +185,8 @@ class ReleaseGroupProcessorEventsSubscriberTest extends TestCase
         $packagesSynchronizer = $this->createMock(PackagesSynchronizerInterface::class);
         $packagesSynchronizer->expects($this->never())->method('clear');
 
-        $checkerExecutorEventSubscriber = new ReleaseGroupProcessorEventsSubscriber(
-            [
-                $this->createCheckerMock(new ViolationDto('violation two')),
-            ],
+        $checkerExecutorEventSubscriber = new ClassExtendsUpdatedPackageCheckerEventSubscriber(
+            $this->createCheckerMock(new ViolationDto('violation two')),
             $packagesSynchronizer,
             $this->createConfigurationProviderMock(false),
         );
@@ -228,13 +211,13 @@ class ReleaseGroupProcessorEventsSubscriberTest extends TestCase
     }
 
     /**
-     * @param \Upgrade\Application\Dto\ViolationDto $violationDto
+     * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Dto\ViolationDto $violationDto
      *
-     * @return \DynamicEvaluator\Application\Checker\CheckerInterface
+     * @return \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker
      */
-    public function createCheckerMock(ViolationDto $violationDto): CheckerInterface
+    public function createCheckerMock(ViolationDto $violationDto): ClassExtendsUpdatedPackageChecker
     {
-        $checker = $this->createMock(CheckerInterface::class);
+        $checker = $this->createMock(ClassExtendsUpdatedPackageChecker::class);
         $checker->method('check')->willReturn([$violationDto]);
 
         return $checker;

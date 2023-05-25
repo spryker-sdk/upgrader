@@ -7,19 +7,21 @@
 
 declare(strict_types=1);
 
-namespace DynamicEvaluator\Application\EventSubscriber;
+namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\EventSubscriber;
 
+use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesSynchronizerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorPostRequireEvent;
 
-class ReleaseGroupProcessorEventsSubscriber implements EventSubscriberInterface
+class ClassExtendsUpdatedPackageCheckerEventSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var iterable<\DynamicEvaluator\Application\Checker\CheckerInterface>
+     * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker
      */
-    protected iterable $checkers;
+    protected ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker;
 
     /**
      * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesSynchronizerInterface
@@ -32,18 +34,18 @@ class ReleaseGroupProcessorEventsSubscriber implements EventSubscriberInterface
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
-     * @param iterable<\DynamicEvaluator\Application\Checker\CheckerInterface> $checkers
+     * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker
      * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesSynchronizerInterface $packagesSynchronizer
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      */
     public function __construct(
-        iterable $checkers,
+        ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker,
         PackagesSynchronizerInterface $packagesSynchronizer,
         ConfigurationProviderInterface $configurationProvider
     ) {
-        $this->checkers = $checkers;
         $this->packagesSynchronizer = $packagesSynchronizer;
         $this->configurationProvider = $configurationProvider;
+        $this->classExtendsUpdatedPackageChecker = $classExtendsUpdatedPackageChecker;
     }
 
     /**
@@ -54,7 +56,7 @@ class ReleaseGroupProcessorEventsSubscriber implements EventSubscriberInterface
         return [
             ReleaseGroupProcessorEvent::PRE_PROCESSOR => 'onPreProcessor',
             ReleaseGroupProcessorEvent::PRE_REQUIRE => 'onPreRequire',
-            ReleaseGroupProcessorEvent::POST_REQUIRE => 'onPostRequire',
+            ReleaseGroupProcessorPostRequireEvent::POST_REQUIRE => 'onPostRequire',
             ReleaseGroupProcessorEvent::POST_PROCESSOR => 'onPostProcessor',
         ];
     }
@@ -88,11 +90,11 @@ class ReleaseGroupProcessorEventsSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $event
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorPostRequireEvent $event
      *
      * @return void
      */
-    public function onPostRequire(ReleaseGroupProcessorEvent $event): void
+    public function onPostRequire(ReleaseGroupProcessorPostRequireEvent $event): void
     {
         if (!$this->configurationProvider->isEvaluatorEnabled()) {
             return;
@@ -100,12 +102,10 @@ class ReleaseGroupProcessorEventsSubscriber implements EventSubscriberInterface
 
         $stepsExecutorDto = $event->getStepsExecutionDto();
 
-        foreach ($this->checkers as $checker) {
-            $violations = $checker->check();
+        $violations = $this->classExtendsUpdatedPackageChecker->check();
 
-            foreach ($violations as $violation) {
-                $stepsExecutorDto->addViolation($violation);
-            }
+        foreach ($violations as $violation) {
+            $stepsExecutorDto->addViolation($violation);
         }
     }
 
