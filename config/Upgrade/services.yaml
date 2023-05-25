@@ -20,6 +20,7 @@ services:
             - '../../src/Upgrade/Application/Dto/*'
             - '../../src/Upgrade/Infrastructure/VersionControlSystem/Dto/*'
             - '../../src/Upgrade/Infrastructure/Report/Dto/*'
+            - '../../src/Upgrade/Application/Strategy/ReleaseApp/Processor/Event/*'
 
     git.adapter:
         class: Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter
@@ -48,9 +49,6 @@ services:
 
     propel_fix.step:
         class: Upgrade\Application\Strategy\Common\Step\PropelFixStep
-
-    code_compliance.step:
-        class: Upgrade\Application\Strategy\Common\Step\CodeComplianceStep
 
     composer_update.step:
         class: Upgrade\Application\Strategy\Composer\Step\ComposerUpdateStep
@@ -262,7 +260,6 @@ services:
               - '@integrator.step'
               - '@add_changes.step'
               - '@commit_changes.step'
-              - '@code_compliance.step'
 
     processor.aggregate_release_group_processor:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor
@@ -271,8 +268,7 @@ services:
             - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator'
             - '@Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher'
             - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter'
-            - '@processor.pre_require_step_executor'
-            - '@processor.post_require_step_executor'
+            - '@event_dispatcher'
 
     processor.sequential_release_group_processor:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
@@ -281,6 +277,10 @@ services:
             - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator'
             - '@Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher'
             - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter'
+            - '@event_dispatcher'
+
+    Upgrade\Application\Strategy\ReleaseApp\Processor\EventSubscriber\HookEventSubscriber:
+        arguments:
             - '@processor.pre_require_step_executor'
             - '@processor.post_require_step_executor'
 

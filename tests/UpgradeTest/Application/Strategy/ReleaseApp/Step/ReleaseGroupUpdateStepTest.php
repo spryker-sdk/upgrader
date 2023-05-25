@@ -15,10 +15,10 @@ use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\ResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Executor\StepExecutor;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapper;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher;
@@ -273,10 +273,9 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertSame(
             implode(PHP_EOL, [
                 'Amount of available release groups for the project: 2',
-                'No valid packages found',
                 'Applied required packages count: 1',
                 'No new required-dev packages',
-                'Amount of applied release groups: 2',
+                'Amount of applied release groups: 1',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
@@ -345,8 +344,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 ),
             ),
             new ReleaseGroupFilter([]),
-            new StepExecutor(),
-            new StepExecutor(),
+            $this->createEventDispatcherMock(),
         );
     }
 
@@ -381,8 +379,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 ),
             ),
             new ReleaseGroupFilter($releaseGroupFilters),
-            new StepExecutor(),
-            new StepExecutor(),
+            $this->createEventDispatcherMock(),
         );
     }
 
@@ -460,5 +457,13 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $configurationProvider->method('getThresholdReleaseGroup')->willReturn(1);
 
         return $configurationProvider;
+    }
+
+    /**
+     * @return \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
+     */
+    protected function createEventDispatcherMock(): EventDispatcherInterface
+    {
+        return $this->createMock(EventDispatcherInterface::class);
     }
 }

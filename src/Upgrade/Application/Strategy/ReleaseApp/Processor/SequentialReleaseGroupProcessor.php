@@ -10,14 +10,15 @@ declare(strict_types=1);
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Executor\StepExecutorInterface;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
-class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
+class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
 {
     /**
      * @var \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface
@@ -40,37 +41,25 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
     protected ReleaseGroupFilterInterface $releaseGroupPackageFilter;
 
     /**
-     * @var \Upgrade\Application\Executor\StepExecutorInterface
-     */
-    protected StepExecutorInterface $preRequireHookExecutor;
-
-    /**
-     * @var \Upgrade\Application\Executor\StepExecutorInterface
-     */
-    protected StepExecutorInterface $postRequireHookExecutor;
-
-    /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
      * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher $moduleFetcher
      * @param \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface $releaseGroupFilter
-     * @param \Upgrade\Application\Executor\StepExecutorInterface $preRequireHookExecutor
-     * @param \Upgrade\Application\Executor\StepExecutorInterface $postRequireHookExecutor
+     * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
         ThresholdSoftValidatorInterface $thresholdSoftValidator,
         ModuleFetcher $moduleFetcher,
         ReleaseGroupFilterInterface $releaseGroupFilter,
-        StepExecutorInterface $preRequireHookExecutor,
-        StepExecutorInterface $postRequireHookExecutor
+        EventDispatcherInterface $eventDispatcher
     ) {
+        parent::__construct($eventDispatcher);
+
         $this->releaseGroupValidator = $releaseGroupValidateManager;
         $this->thresholdValidator = $thresholdSoftValidator;
         $this->moduleFetcher = $moduleFetcher;
         $this->releaseGroupPackageFilter = $releaseGroupFilter;
-        $this->preRequireHookExecutor = $preRequireHookExecutor;
-        $this->postRequireHookExecutor = $postRequireHookExecutor;
     }
 
     /**
@@ -95,9 +84,18 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
                 ->addOutputMessage('The branch is up to date. No further action is required.');
         }
 
+        if (!$this->dispatchEvent(new ReleaseGroupProcessorEvent($stepsExecutionDto), ReleaseGroupProcessorEvent::PRE_PROCESSOR)) {
+            return $stepsExecutionDto;
+        }
+
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
         foreach ($requireRequestCollection->toArray() as $releaseGroup) {
             $releaseGroup = $this->releaseGroupPackageFilter->filter($releaseGroup);
+
+            if ($releaseGroup->getModuleCollection()->isEmpty()) {
+                continue;
+            }
+
             $thresholdValidationResult = $this->thresholdValidator->validate($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccessful()) {
                 $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutputMessage());
@@ -113,8 +111,7 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
                 break;
             }
 
-            $stepsExecutionDto = $this->preRequireHookExecutor->execute($stepsExecutionDto);
-            if (!$stepsExecutionDto->isSuccessful() || $stepsExecutionDto->getIsStopPropagation()) {
+            if (!$this->dispatchEvent(new ReleaseGroupProcessorEvent($stepsExecutionDto), ReleaseGroupProcessorEvent::PRE_REQUIRE)) {
                 break;
             }
 
@@ -130,10 +127,13 @@ class SequentialReleaseGroupProcessor implements ReleaseGroupProcessorInterface
             $stepsExecutionDto->setLastAppliedReleaseGroup($releaseGroup);
             $aggregatedReleaseGroupCollection->add($releaseGroup);
 
-            $stepsExecutionDto = $this->postRequireHookExecutor->execute($stepsExecutionDto);
-            if (!$stepsExecutionDto->isSuccessful() || $stepsExecutionDto->getIsStopPropagation()) {
+            if (!$this->dispatchEvent(new ReleaseGroupProcessorEvent($stepsExecutionDto), ReleaseGroupProcessorEvent::POST_REQUIRE)) {
                 break;
             }
+        }
+
+        if (!$this->dispatchEvent(new ReleaseGroupProcessorEvent($stepsExecutionDto), ReleaseGroupProcessorEvent::POST_PROCESSOR)) {
+            return $stepsExecutionDto;
         }
 
         if ($aggregatedReleaseGroupCollection->count()) {

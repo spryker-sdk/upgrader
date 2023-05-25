@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    DynamicEvaluator\:
+        resource: '../../src/DynamicEvaluator/*'
+
+    _instanceof:
+        DynamicEvaluator\Application\Checker\CheckerInterface:
+            tags: [ 'evaluator.checker' ]
+
+    DynamicEvaluator\Application\EventSubscriber\ReleaseGroupProcessorEventsSubscriber:
+        arguments:
+            - !tagged_iterator evaluator.checker
+            - '@DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesSynchronizer'
+            - '@configuration.provider'

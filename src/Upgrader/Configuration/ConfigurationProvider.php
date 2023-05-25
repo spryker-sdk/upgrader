@@ -66,7 +66,7 @@ class ConfigurationProvider
     /**
      * @return string
      */
-    protected function getVendorPath(): string
+    public function getVendorPath(): string
     {
         return $this->getRootPath() . 'vendor' . DIRECTORY_SEPARATOR;
     }
@@ -74,7 +74,7 @@ class ConfigurationProvider
     /**
      * @return string
      */
-    protected function getRootPath(): string
+    public function getRootPath(): string
     {
         return getcwd() . DIRECTORY_SEPARATOR;
     }

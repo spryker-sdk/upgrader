@@ -14,10 +14,32 @@ use Symfony\Component\Process\Process;
 interface ProcessRunnerServiceInterface
 {
     /**
+     * @var int
+     */
+    public const DEFAULT_PROCESS_TIMEOUT = 600;
+
+    /**
      * @param array<string> $command
      * @param array<string, mixed> $env
      *
      * @return \Symfony\Component\Process\Process<string, string>
      */
     public function run(array $command, array $env = []): Process;
+
+    /**
+     * @param string $command
+     * @param string|null $cwd
+     * @param array<mixed>|null $env
+     * @param mixed $input
+     * @param float|null $timeout
+     *
+     * @return \Symfony\Component\Process\Process
+     */
+    public function mustRunFromCommandLine(
+        string $command,
+        ?string $cwd = null,
+        ?array $env = null,
+        $input = null,
+        ?float $timeout = self::DEFAULT_PROCESS_TIMEOUT
+    ): Process;
 }

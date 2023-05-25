@@ -42,4 +42,20 @@ class ProcessRunnerServiceTest extends TestCase
             [['git', 'log']],
         ];
     }
+
+    /**
+     * @dataProvider commandDataProvider
+     *
+     * @param array<string> $command
+     *
+     * @return void
+     */
+    public function testMustRunFromCommandLineShouldReturnProcessObject(array $command): void
+    {
+        $service = new ProcessRunnerService();
+
+        $process = $service->mustRunFromCommandLine('ls');
+
+        $this->assertInstanceOf(Process::class, $process);
+    }
 }
