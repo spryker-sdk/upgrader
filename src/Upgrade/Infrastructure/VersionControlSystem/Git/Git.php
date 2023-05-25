@@ -290,7 +290,6 @@ class Git
         return sprintf(
             $this->configurationProvider->getBranchPattern(),
             $this->getBaseBranch(),
-            $this->getCommitHash(),
         );
     }
 
@@ -306,20 +305,6 @@ class Git
         }
 
         return $this->baseBranch;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCommitHash(): string
-    {
-        if ($this->commitHash === '') {
-            $command = ['git', 'rev-parse', 'HEAD'];
-            $process = $this->processRunner->run($command);
-            $this->commitHash = trim($process->getOutput());
-        }
-
-        return $this->commitHash;
     }
 
     /**
