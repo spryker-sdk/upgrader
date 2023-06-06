@@ -147,7 +147,8 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     {
         if (!isset($data[$key]) || ($isArray && !is_array($data[$key]))) {
             throw new InvalidArgumentException(sprintf(
-                'Unable to find "files" key or it\'s not an array in %s. Tooling export format is changes.',
+                'Unable to find %s key or it\'s not an array in %s. Tooling export format is changes.',
+                $key,
                 substr(json_encode($data, \JSON_THROW_ON_ERROR), 0, 100),
             ));
         }
