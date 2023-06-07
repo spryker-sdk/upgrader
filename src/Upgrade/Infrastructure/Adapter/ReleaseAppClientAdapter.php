@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\Adapter;
 
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
+use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
 use ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
@@ -45,6 +46,16 @@ class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
         $upgradeAnalysisRequest = $this->createDataProviderRequest();
 
         return $this->releaseApp->getNewReleaseGroups($upgradeAnalysisRequest);
+    }
+
+    /**
+     * @param int $releaseGroupId
+     *
+     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
+     */
+    public function getReleaseGroup(int $releaseGroupId): ReleaseAppResponse
+    {
+        return $this->releaseApp->getReleaseGroup(new UpgradeReleaseGroupInstructionsRequest($releaseGroupId));
     }
 
     /**

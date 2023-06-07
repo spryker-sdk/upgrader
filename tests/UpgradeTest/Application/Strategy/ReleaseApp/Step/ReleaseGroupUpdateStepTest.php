@@ -54,6 +54,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             $this->creteReleaseGroupProcessorResolverMock(
                 $this->createAggregateReleaseGroupProcessor(),
             ),
+            $this->createConfigurationProviderMock(),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -86,6 +87,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             $this->creteReleaseGroupProcessorResolverMock(
                 $this->createAggregateReleaseGroupProcessor(),
             ),
+            $this->createConfigurationProviderMock(),
         );
         $stepsResponseDto = new StepsResponseDto();
 
@@ -116,6 +118,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             $this->creteReleaseGroupProcessorResolverMock(
                 $this->createAggregateReleaseGroupProcessor(),
             ),
+            $this->createConfigurationProviderMock(),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -150,6 +153,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             $this->creteReleaseGroupProcessorResolverMock(
                 $this->createSequentialReleaseGroupProcessor(),
             ),
+            $this->createConfigurationProviderMock(),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -194,6 +198,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                     ],
                 ),
             ),
+            $this->createConfigurationProviderMock(),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -227,6 +232,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             $this->creteReleaseGroupProcessorResolverMock(
                 $this->createSequentialReleaseGroupProcessor(),
             ),
+            $this->createConfigurationProviderMock(),
         );
         $stepsResponseDto = new StepsResponseDto();
 
@@ -261,6 +267,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             $this->creteReleaseGroupProcessorResolverMock(
                 $this->createSequentialReleaseGroupProcessor($releaseGroupFilters),
             ),
+            $this->createConfigurationProviderMock(),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -273,6 +280,52 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertSame(
             implode(PHP_EOL, [
                 'Amount of available release groups for the project: 2',
+                'Applied required packages count: 1',
+                'No new required-dev packages',
+                'Amount of applied release groups: 1',
+            ]),
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunShouldProcessReleaseGroupWithSpecificId(): void
+    {
+        // Arrange
+        $releaseGroupCollection = new ReleaseGroupDtoCollection([
+            new ReleaseGroupDto(
+                'RG1',
+                new ModuleDtoCollection([
+                    new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
+                ]),
+                false,
+                'https://api.release.spryker.com/release-groups/view/1',
+            ),
+        ]);
+
+        $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
+        $configurationProviderMock->method('getReleaseGroupId')->willReturn(1);
+
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock($releaseGroupCollection),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createAggregateReleaseGroupProcessor(),
+            ),
+            $configurationProviderMock,
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertTrue($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            implode(PHP_EOL, [
+                'Amount of available release groups for the project: 1',
                 'Applied required packages count: 1',
                 'No new required-dev packages',
                 'Amount of applied release groups: 1',
@@ -312,6 +365,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             ->disallowMockingUnknownTypes()
             ->getMock();
         $composerAdapterMock->method('getNewReleaseGroups')->willReturn($releaseAppResponse);
+        $composerAdapterMock->method('getReleaseGroup')->willReturn($releaseAppResponse);
 
         return $composerAdapterMock;
     }

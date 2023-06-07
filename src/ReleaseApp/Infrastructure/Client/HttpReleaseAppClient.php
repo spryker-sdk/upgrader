@@ -12,6 +12,7 @@ namespace ReleaseApp\Infrastructure\Client;
 use ReleaseApp\Domain\Client\ReleaseAppClientInterface;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
+use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
 use ReleaseApp\Domain\Client\Response\ResponseInterface;
 use ReleaseApp\Domain\Entities\UpgradeAnalysis;
 use ReleaseApp\Domain\Entities\UpgradeInstructions;
@@ -20,6 +21,7 @@ use ReleaseApp\Infrastructure\Client\Builder\HttpResponseBuilderInterface;
 use ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface;
 use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeAnalysisHttpRequest;
 use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeInstructionsRequest;
+use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeReleaseGroupInstructionsRequest;
 
 class HttpReleaseAppClient implements ReleaseAppClientInterface
 {
@@ -62,6 +64,19 @@ class HttpReleaseAppClient implements ReleaseAppClientInterface
     {
         /** @var \ReleaseApp\Domain\Entities\UpgradeInstructions $response */
         $response = $this->getResponse(new HttpUpgradeInstructionsRequest($instructionsRequest));
+
+        return $response;
+    }
+
+    /**
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest $releaseGroupRequest
+     *
+     * @return \ReleaseApp\Domain\Entities\UpgradeInstructions
+     */
+    public function getUpgradeReleaseGroupInstructions(UpgradeReleaseGroupInstructionsRequest $releaseGroupRequest): UpgradeInstructions
+    {
+        /** @var \ReleaseApp\Domain\Entities\UpgradeInstructions $response */
+        $response = $this->getResponse(new HttpUpgradeReleaseGroupInstructionsRequest($releaseGroupRequest));
 
         return $response;
     }

@@ -60,6 +60,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     protected const DEFAULT_BRANCH_PATTERN = 'upgradebot/upgrade-for-%s';
 
     /**
+     * @var string
+     */
+    protected const DEFAULT_RELEASE_GROUP_BRANCH_PATTERN = 'upgradebot/upgrade-for-%s-release-group-%s';
+
+    /**
      * @var bool
      */
     protected const DEFAULT_IS_PR_AUTO_MERGE_ENABLED = false;
@@ -184,6 +189,17 @@ class ConfigurationProvider implements ConfigurationProviderInterface
 
     /**
      * Specification:
+     * - Defines single release group pattern for branch that will be created during upgrade process.
+     *
+     * @return string
+     */
+    public function getReleaseGroupBranchPattern(): string
+    {
+        return (string)getenv('DEFAULT_RELEASE_GROUP_BRANCH_PATTERN') ?: static::DEFAULT_RELEASE_GROUP_BRANCH_PATTERN;
+    }
+
+    /**
+     * Specification:
      * - Defines commit message that will be used during upgrade process.
      *
      * @return string
@@ -257,6 +273,17 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public function getRepositoryName(): string
     {
         return (string)getenv('REPOSITORY_NAME');
+    }
+
+    /**
+     * Specification:
+     *  - Defines the specific release group id.
+     *
+     * @return int|null
+     */
+    public function getReleaseGroupId(): ?int
+    {
+        return (int)getenv('RELEASE_GROUP_ID') ?: null;
     }
 
     /**

@@ -17,4 +17,11 @@ interface ReleaseAppClientAdapterInterface
      * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
      */
     public function getNewReleaseGroups(): ReleaseAppResponse;
+
+    /**
+     * @param int $releaseGroupId
+     *
+     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
+     */
+    public function getReleaseGroup(int $releaseGroupId): ReleaseAppResponse;
 }

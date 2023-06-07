@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Generator;
 
+use ReleaseApp\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\IntegratorResponseDto;
 
@@ -20,11 +21,18 @@ class PullRequestDataGenerator
     protected ViolationBodyMessageBuilder $violationBodyMessageBuilder;
 
     /**
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder $violationBodyMessageBuilder
+     * @var \ReleaseApp\Infrastructure\Configuration\ConfigurationProvider
      */
-    public function __construct(ViolationBodyMessageBuilder $violationBodyMessageBuilder)
+    private ConfigurationProvider $configurationProvider;
+
+    /**
+     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder $violationBodyMessageBuilder
+     * @param \ReleaseApp\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
+     */
+    public function __construct(ViolationBodyMessageBuilder $violationBodyMessageBuilder, ConfigurationProvider $configurationProvider)
     {
         $this->violationBodyMessageBuilder = $violationBodyMessageBuilder;
+        $this->configurationProvider = $configurationProvider;
     }
 
     /**
@@ -33,6 +41,7 @@ class PullRequestDataGenerator
      * @param string $blockerInfo
      * @param string|null $reportId
      * @param array<\Upgrade\Application\Dto\ViolationDtoInterface> $violations
+     * @param int|null $releaseGroupId
      *
      * @return string
      */
@@ -41,9 +50,10 @@ class PullRequestDataGenerator
         ?IntegratorResponseDto $integratorResponseDto,
         string $blockerInfo = '',
         ?string $reportId = null,
-        array $violations = []
+        array $violations = [],
+        ?int $releaseGroupId = null
     ): string {
-        $text = 'Auto created via Upgrader tool.'
+        $text = $this->createDescriptionAboutText($releaseGroupId)
             . PHP_EOL
             . PHP_EOL
             . '#### Overview'
@@ -87,6 +97,26 @@ class PullRequestDataGenerator
             $text .= $this->buildPackageDiffTable($composerDiffDto->getRequiredDevPackages());
             $text .= PHP_EOL;
         }
+
+        return $text;
+    }
+
+    /**
+     * @param int|null $releaseGroupId
+     *
+     * @return string
+     */
+    protected function createDescriptionAboutText(?int $releaseGroupId): string
+    {
+        $text = 'Auto created via Upgrader tool';
+
+        if ($releaseGroupId !== null) {
+            $releaseGroupLink = sprintf('%s/release-groups/view/%s', $this->configurationProvider->getReleaseAppUrl(), $releaseGroupId);
+
+            $text .= sprintf(' for [%s](%s) release group', $releaseGroupLink, $releaseGroupLink);
+        }
+
+        $text .= '.';
 
         return $text;
     }
