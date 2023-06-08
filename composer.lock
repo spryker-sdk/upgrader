@@ -3410,12 +3410,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "be8ddd818550dbdcd6dd8da2ddfe7eb7c25dea50"
+                "reference": "292960d51e942ab64aa460d8158d3e938dbf9d7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/be8ddd818550dbdcd6dd8da2ddfe7eb7c25dea50",
-                "reference": "be8ddd818550dbdcd6dd8da2ddfe7eb7c25dea50",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/292960d51e942ab64aa460d8158d3e938dbf9d7a",
+                "reference": "292960d51e942ab64aa460d8158d3e938dbf9d7a",
                 "shasum": ""
             },
             "require": {
@@ -3432,8 +3432,10 @@
                 "symfony/process": "^5.4 || ^6.0"
             },
             "require-dev": {
+                "ext-zip": "*",
                 "phpstan/phpstan": "^1.0.0",
                 "phpunit/phpunit": "^9.5.0",
+                "spryker-sdk/manifest-test-data-provider": "dev-master",
                 "spryker/code-sniffer": "dev-master",
                 "symfony/filesystem": "^5.3.0 || ^6.0"
             },
@@ -3461,7 +3463,7 @@
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
                 "source": "https://github.com/spryker-sdk/integrator/tree/master"
             },
-            "time": "2023-05-10T11:45:17+00:00"
+            "time": "2023-06-08T12:31:29+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
@@ -8786,5 +8788,5 @@
         "ext-simplexml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
