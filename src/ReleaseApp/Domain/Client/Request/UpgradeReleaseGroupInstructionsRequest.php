@@ -43,9 +43,9 @@ class UpgradeReleaseGroupInstructionsRequest implements RequestInterface
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getParameters(): ?string
+    public function getParameters(): string
     {
         return sprintf('%s=%s', 'release-group-id', $this->releaseGroupId);
     }
