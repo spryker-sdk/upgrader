@@ -26,6 +26,8 @@ class UpgraderExtension extends Extension
     {
         $configDirPath = __DIR__ . '/../../config/';
 
+        $container->setParameter('upgrader.root_dir', dirname(__DIR__, 2));
+
         (new YamlFileLoader($container, new FileLocator($configDirPath)))->load('services.yaml');
     }
 }
