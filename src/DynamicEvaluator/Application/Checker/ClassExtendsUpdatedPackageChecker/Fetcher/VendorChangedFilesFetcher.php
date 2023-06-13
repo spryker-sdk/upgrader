@@ -11,6 +11,7 @@ namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface;
+use DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface;
 
 class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
 {
@@ -24,14 +25,21 @@ class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
      */
     protected ProcessRunnerServiceInterface $processRunner;
 
+    private PublicApiFilePathsProviderInterface $publicApiFilePathsProvider;
+
     /**
      * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface $packagesDirProvider
      * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @param \DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface $publicApiFilePathsProvider
      */
-    public function __construct(PackagesDirProviderInterface $packagesDirProvider, ProcessRunnerServiceInterface $processRunner)
-    {
+    public function __construct(
+        PackagesDirProviderInterface $packagesDirProvider,
+        ProcessRunnerServiceInterface $processRunner,
+        PublicApiFilePathsProviderInterface $publicApiFilePathsProvider
+    ) {
         $this->packagesDirProvider = $packagesDirProvider;
         $this->processRunner = $processRunner;
+        $this->publicApiFilePathsProvider = $publicApiFilePathsProvider;
     }
 
     /**
@@ -88,7 +96,8 @@ class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
                 sed -E 's/Files {TO_PATH_SED}(\S+)(.*)/\1/' | \
                 (grep -E '\.php$' || true) | \
                 (grep -E -v '(Test|Interface|Trait)\.php$' || true) | \
-                (grep -E -v '.*/(tests|test)/.*' || true)
+                (grep -E -v '.*/(tests|test)/.*' || true) | \
+                {EXCLUDE_PUBLIC_API_FILES}
                 COMMAND,
             [
                 '{TO_PATH_ESC}' => escapeshellarg($toDir),
@@ -96,7 +105,22 @@ class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
                 '{TO_PATH}' => $toDir,
                 '{FROM_PATH}' => $fromDir,
                 '{TO_PATH_SED}' => str_replace('/', '\/', $toDir),
+                '{EXCLUDE_PUBLIC_API_FILES}' => $this->excludePublicApiFiles(),
             ],
+        );
+    }
+
+    /**
+     * @return string
+     */
+    protected function excludePublicApiFiles(): string
+    {
+        return implode(
+            ' | ',
+            array_map(
+                static fn (string $el): string => sprintf('(grep -E -v \'%s\' || true)', $el),
+                $this->publicApiFilePathsProvider->getPublicApiFilePathsRegexCollection(),
+            ),
         );
     }
 }
