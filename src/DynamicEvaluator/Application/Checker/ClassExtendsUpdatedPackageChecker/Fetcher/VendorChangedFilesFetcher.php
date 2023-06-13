@@ -105,7 +105,7 @@ class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
                 '{TO_PATH}' => $toDir,
                 '{FROM_PATH}' => $fromDir,
                 '{TO_PATH_SED}' => str_replace('/', '\/', $toDir),
-                '{EXCLUDE_PUBLIC_API_FILES}' => $this->excludePublicApiFiles(),
+                '{EXCLUDE_PUBLIC_API_FILES}' => $this->getExcludedPublicApiFiles(),
             ],
         );
     }
@@ -113,7 +113,7 @@ class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
     /**
      * @return string
      */
-    protected function excludePublicApiFiles(): string
+    protected function getExcludedPublicApiFiles(): string
     {
         return implode(
             ' | ',
