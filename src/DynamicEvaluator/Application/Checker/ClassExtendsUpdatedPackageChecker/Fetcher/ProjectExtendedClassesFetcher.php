@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher;
 
 use Core\Infrastructure\Service\FinderFactory;
+use DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface;
 use Symfony\Component\Finder\Finder;
 use Upgrader\Configuration\ConfigurationProvider;
 
@@ -31,13 +32,23 @@ class ProjectExtendedClassesFetcher implements ProjectExtendedClassesFetcherInte
     protected FinderFactory $finderFactory;
 
     /**
+     * @var \DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface
+     */
+    protected PublicApiFilePathsProviderInterface $publicApiFilePathsProvider;
+
+    /**
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
      * @param \Core\Infrastructure\Service\FinderFactory $finderFactory
+     * @param \DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface $publicApiFilePathsProvider
      */
-    public function __construct(ConfigurationProvider $configurationProvider, FinderFactory $finderFactory)
-    {
+    public function __construct(
+        ConfigurationProvider $configurationProvider,
+        FinderFactory $finderFactory,
+        PublicApiFilePathsProviderInterface $publicApiFilePathsProvider
+    ) {
         $this->configurationProvider = $configurationProvider;
         $this->finderFactory = $finderFactory;
+        $this->publicApiFilePathsProvider = $publicApiFilePathsProvider;
     }
 
     /**
@@ -87,10 +98,22 @@ class ProjectExtendedClassesFetcher implements ProjectExtendedClassesFetcherInte
         $finder->files()
             ->name('*.php')
             ->notName('*Trait.php')
-            ->notName('*Interface.php');
+            ->notName('*Interface.php')
+            ->notPath($this->getPublicApiFilePathsRegexCollection());
 
         return $finder->in($this->configurationProvider->getRootPath() . 'src')
             ->exclude('Generated')
             ->exclude('Orm');
+    }
+
+    /**
+     * @return array<string>
+     */
+    protected function getPublicApiFilePathsRegexCollection(): array
+    {
+        return array_map(
+            static fn (string $el): string => '{' . preg_replace('/^src\//', '', $el) . '}',
+            $this->publicApiFilePathsProvider->getPublicApiFilePathsRegexCollection(),
+        );
     }
 }
