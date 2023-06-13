@@ -216,6 +216,13 @@ export INTEGRATOR_ENABLED=true
 export EVALUATOR_ENABLED=true
 ```
 
+## Specify release group
+​
+* Specify release group to apply only it packages
+```bash
+export RELEASE_GROUP_ID=123
+```
+
 ## Evaluator
 
 [Evaluator documentation](docs/evaluator.md)
