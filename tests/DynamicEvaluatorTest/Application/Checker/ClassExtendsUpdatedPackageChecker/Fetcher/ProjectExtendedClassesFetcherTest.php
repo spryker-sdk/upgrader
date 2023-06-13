@@ -12,6 +12,7 @@ namespace DynamicEvaluatorTest\Application\Checker\ClassExtendsUpdatedPackageChe
 use ArrayIterator;
 use Core\Infrastructure\Service\FinderFactory;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\ProjectExtendedClassesFetcher;
+use DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -37,8 +38,9 @@ class ProjectExtendedClassesFetcherTest extends TestCase
         $finderFactoryMock->method('createFinder')->willReturn($finderMock);
 
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
+        $publicApiFilePathsProvider = $this->createMock(PublicApiFilePathsProviderInterface::class);
 
-        $projectExtendedClassesFetcher = new ProjectExtendedClassesFetcher($configurationProvider, $finderFactoryMock);
+        $projectExtendedClassesFetcher = new ProjectExtendedClassesFetcher($configurationProvider, $finderFactoryMock, $publicApiFilePathsProvider);
 
         // Act
         $extendedClass = $projectExtendedClassesFetcher->fetchExtendedClasses();

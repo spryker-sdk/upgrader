@@ -13,6 +13,7 @@ use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\VendorChangedFilesFetcher;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProvider;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface;
+use DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 
@@ -32,7 +33,9 @@ class VendorChangedFilesFetcherTest extends TestCase
             OUT,
         );
 
-        $vendorChangedFilesFetcher = new VendorChangedFilesFetcher($packagesDirProviderMock, $processRunnerMock);
+        $publicApiFilePathsProviderMock = $this->createPublicApiFilePathsProviderMock();
+
+        $vendorChangedFilesFetcher = new VendorChangedFilesFetcher($packagesDirProviderMock, $processRunnerMock, $publicApiFilePathsProviderMock);
 
         // Act
         $files = $vendorChangedFilesFetcher->fetchChangedFiles();
@@ -53,7 +56,9 @@ class VendorChangedFilesFetcherTest extends TestCase
         $packagesDirProviderMock = $this->createPackagesDirProviderMock(['spryker']);
         $processRunnerMock = $this->createProcessRunnerServiceMock('');
 
-        $vendorChangedFilesFetcher = new VendorChangedFilesFetcher($packagesDirProviderMock, $processRunnerMock);
+        $publicApiFilePathsProviderMock = $this->createPublicApiFilePathsProviderMock();
+
+        $vendorChangedFilesFetcher = new VendorChangedFilesFetcher($packagesDirProviderMock, $processRunnerMock, $publicApiFilePathsProviderMock);
 
         // Act
         $files = $vendorChangedFilesFetcher->fetchChangedFiles();
@@ -91,5 +96,16 @@ class VendorChangedFilesFetcherTest extends TestCase
         $processRunnerService->method('mustRunFromCommandLine')->willReturn($process);
 
         return $processRunnerService;
+    }
+
+    /**
+     * @return \DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface
+     */
+    public function createPublicApiFilePathsProviderMock(): PublicApiFilePathsProviderInterface
+    {
+        $publicApiFilePathsProvider = $this->createMock(PublicApiFilePathsProviderInterface::class);
+        $publicApiFilePathsProvider->method('getPublicApiFilePathsRegexCollection')->willReturn(['someClass.php']);
+
+        return $publicApiFilePathsProvider;
     }
 }
