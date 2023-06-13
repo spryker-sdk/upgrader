@@ -11,6 +11,7 @@ namespace ReleaseApp\Domain\Client;
 
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
+use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
 use ReleaseApp\Domain\Entities\UpgradeAnalysis;
 use ReleaseApp\Domain\Entities\UpgradeInstructions;
 
@@ -29,4 +30,11 @@ interface ReleaseAppClientInterface
      * @return \ReleaseApp\Domain\Entities\UpgradeInstructions
      */
     public function getUpgradeInstructions(UpgradeInstructionsRequest $instructionsRequest): UpgradeInstructions;
+
+    /**
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest $releaseGroupRequest
+     *
+     * @return \ReleaseApp\Domain\Entities\UpgradeInstructions
+     */
+    public function getUpgradeReleaseGroupInstructions(UpgradeReleaseGroupInstructionsRequest $releaseGroupRequest): UpgradeInstructions;
 }

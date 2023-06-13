@@ -12,8 +12,10 @@ namespace ReleaseApp\Application\Service;
 use ReleaseApp\Domain\Client\ReleaseAppClientInterface;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
+use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
 use ReleaseApp\Domain\Entities\Collection\UpgradeAnalysisModuleVersionCollection;
 use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection;
+use ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup;
 
 class ReleaseAppService implements ReleaseAppServiceInterface
 {
@@ -42,6 +44,18 @@ class ReleaseAppService implements ReleaseAppServiceInterface
         $releaseGroupCollection = $this->getReleaseGroupCollection($moduleVersionCollection);
 
         return $releaseGroupCollection->getOnlyWithReleasedDate()->sortByReleasedDate();
+    }
+
+    /**
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest $upgradeReleaseGroupInstructionsRequest
+     *
+     * @return \ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup
+     */
+    public function getReleaseGroup(UpgradeReleaseGroupInstructionsRequest $upgradeReleaseGroupInstructionsRequest): UpgradeInstructionsReleaseGroup
+    {
+        $response = $this->releaseAppClient->getUpgradeReleaseGroupInstructions($upgradeReleaseGroupInstructionsRequest);
+
+        return $response->getReleaseGroup();
     }
 
     /**

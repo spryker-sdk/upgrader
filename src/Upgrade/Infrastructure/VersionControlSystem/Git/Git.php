@@ -23,11 +23,6 @@ class Git
     /**
      * @var string
      */
-    protected string $commitHash = '';
-
-    /**
-     * @var string
-     */
     protected string $baseBranch = '';
 
     /**
@@ -212,21 +207,40 @@ class Git
             return $stepsExecutionDto;
         }
 
+        $releaseGroupId = $this->configurationProvider->getReleaseGroupId();
+
         $pullRequestDto = new PullRequestDto(
             $this->getHeadBranch(),
             $this->getBaseBranch(),
-            'The result of auto-updating Spryker modules on ' . date('Y-m-d H:i', time()),
+            $this->getPullRequestTitle($releaseGroupId),
             $this->pullRequestDataGenerator->buildBody(
                 $composerDiffDto,
                 $stepsExecutionDto->getIntegratorResponseDto(),
                 $stepsExecutionDto->getBlockerInfo(),
                 $stepsExecutionDto->getReportId(),
                 $stepsExecutionDto->getViolations(),
+                $releaseGroupId,
             ),
             $this->configurationProvider->isPullRequestAutoMergeEnabled(),
         );
 
         return $this->sourceCodeProvider->createPullRequest($stepsExecutionDto, $pullRequestDto);
+    }
+
+    /**
+     * @param int|null $releaseGroupId
+     *
+     * @return string
+     */
+    protected function getPullRequestTitle(?int $releaseGroupId): string
+    {
+        $title = 'The result of auto-updating Spryker modules on ' . date('Y-m-d H:i');
+
+        if ($releaseGroupId !== null) {
+            $title .= ' for release group #' . $releaseGroupId;
+        }
+
+        return $title;
     }
 
     /**
@@ -287,10 +301,11 @@ class Git
      */
     protected function getHeadBranch(): string
     {
-        return sprintf(
-            $this->configurationProvider->getBranchPattern(),
-            $this->getBaseBranch(),
-        );
+        $releaseGroupId = $this->configurationProvider->getReleaseGroupId();
+
+        return $releaseGroupId !== null
+            ? sprintf($this->configurationProvider->getReleaseGroupBranchPattern(), $this->getBaseBranch(), $releaseGroupId)
+            : sprintf($this->configurationProvider->getBranchPattern(), $this->getBaseBranch());
     }
 
     /**

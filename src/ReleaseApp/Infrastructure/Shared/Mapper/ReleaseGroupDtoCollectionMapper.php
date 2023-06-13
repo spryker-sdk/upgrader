@@ -43,19 +43,43 @@ class ReleaseGroupDtoCollectionMapper
         $dataProviderReleaseGroupCollection = new ReleaseGroupDtoCollection();
 
         foreach ($releaseGroupCollection->toArray() as $releaseGroup) {
-            $dataProviderReleaseGroup = new ReleaseGroupDto(
-                $releaseGroup->getName(),
-                $this->buildModuleTransferCollection($releaseGroup),
-                $releaseGroup->hasProjectChanges(),
-                $this->getReleaseGroupLink($releaseGroup->getId()),
-            );
-            $dataProviderReleaseGroup->setHasConflict(
-                $releaseGroup->getMeta() && $releaseGroup->getMeta()->getConflict()->count(),
-            );
-            $dataProviderReleaseGroupCollection->add($dataProviderReleaseGroup);
+            $dataProviderReleaseGroupCollection->add($this->mapReleaseGroupDto($releaseGroup));
         }
 
         return $dataProviderReleaseGroupCollection;
+    }
+
+    /**
+     * @param \ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup $releaseGroup
+     *
+     * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection
+     */
+    public function mapReleaseGroupDtoIntoCollection(UpgradeInstructionsReleaseGroup $releaseGroup): ReleaseGroupDtoCollection
+    {
+        $dataProviderReleaseGroupCollection = new ReleaseGroupDtoCollection();
+        $dataProviderReleaseGroupCollection->add($this->mapReleaseGroupDto($releaseGroup));
+
+        return $dataProviderReleaseGroupCollection;
+    }
+
+    /**
+     * @param \ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup $releaseGroup
+     *
+     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto
+     */
+    protected function mapReleaseGroupDto(UpgradeInstructionsReleaseGroup $releaseGroup): ReleaseGroupDto
+    {
+        $dataProviderReleaseGroup = new ReleaseGroupDto(
+            $releaseGroup->getName(),
+            $this->buildModuleTransferCollection($releaseGroup),
+            $releaseGroup->hasProjectChanges(),
+            $this->getReleaseGroupLink($releaseGroup->getId()),
+        );
+        $dataProviderReleaseGroup->setHasConflict(
+            $releaseGroup->getMeta() && $releaseGroup->getMeta()->getConflict()->count(),
+        );
+
+        return $dataProviderReleaseGroup;
     }
 
     /**

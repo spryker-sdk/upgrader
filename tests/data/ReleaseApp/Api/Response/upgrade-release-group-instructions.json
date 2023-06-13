@@ -1,0 +1,22 @@
+{
+    "result": {
+        "release_group": {
+            "id": 4821,
+            "name": "CC-26540 Introduced the Shipment Types BAPI",
+            "released": "2023-05-23T14:26:52+00:00",
+            "project_changes": true,
+            "modules": {
+                "spryker\/shipment-types-backend-api": {
+                    "version": "0.1.0",
+                    "type": "minor",
+                    "files": 41
+                },
+                "spryker\/shipment-type": {
+                    "version": "0.1.1",
+                    "type": "patch",
+                    "files": 4
+                }
+            }
+        }
+    }
+}

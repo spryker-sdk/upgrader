@@ -12,6 +12,7 @@ namespace ReleaseApp\Infrastructure\Service;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
+use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
 use ReleaseApp\Infrastructure\Client\HttpRequestExecutor;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
@@ -53,6 +54,39 @@ class ReleaseAppServiceTest extends KernelTestCase
                         true,
                         'https://api.release.spryker.com/release-group/4395',
                         true,
+                    ),
+                ]),
+            ),
+            $releaseGroups,
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetReleaseGroupSuccess(): void
+    {
+        // Arrange
+        $container = static::bootKernel()->getContainer();
+        $container->set(HttpRequestExecutor::class, $this->createRequestExecutorMock());
+        $request = new UpgradeReleaseGroupInstructionsRequest(4395);
+
+        // Act
+        $releaseGroups = $container->get(ReleaseAppService::class)->getReleaseGroup($request);
+
+        // Assert
+        $this->assertEquals(
+            new ReleaseAppResponse(
+                new ReleaseGroupDtoCollection([
+                    new ReleaseGroupDto(
+                        'CC-26540 Introduced the Shipment Types BAPI',
+                        new ModuleDtoCollection([
+                            new ModuleDto('spryker/shipment-types-backend-api', '0.1.0', 'minor'),
+                            new ModuleDto('spryker/shipment-type', '0.1.1', 'patch'),
+                        ]),
+                        true,
+                        'https://api.release.spryker.com/release-group/4821',
+                        false,
                     ),
                 ]),
             ),

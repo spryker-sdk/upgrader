@@ -14,6 +14,7 @@ use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver;
 use Upgrade\Application\Strategy\StepInterface;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class ReleaseGroupUpdateStep implements StepInterface
 {
@@ -28,15 +29,23 @@ class ReleaseGroupUpdateStep implements StepInterface
     protected ReleaseGroupProcessorInterface $releaseGroupProcessor;
 
     /**
+     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
+     */
+    private ConfigurationProvider $configurationProvider;
+
+    /**
      * @param \Upgrade\Application\Adapter\ReleaseAppClientAdapterInterface $packageManagementSystemBridge
      * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver $groupRequireProcessorResolver
+     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      */
     public function __construct(
         ReleaseAppClientAdapterInterface $packageManagementSystemBridge,
-        ReleaseGroupProcessorResolver $groupRequireProcessorResolver
+        ReleaseGroupProcessorResolver $groupRequireProcessorResolver,
+        ConfigurationProvider $configurationProvider
     ) {
         $this->packageManagementSystemBridge = $packageManagementSystemBridge;
         $this->releaseGroupProcessor = $groupRequireProcessorResolver->getProcessor();
+        $this->configurationProvider = $configurationProvider;
     }
 
     /**
@@ -46,7 +55,11 @@ class ReleaseGroupUpdateStep implements StepInterface
      */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
-        $requireRequestCollection = $this->packageManagementSystemBridge->getNewReleaseGroups()->getReleaseGroupCollection();
+        $releaseGroupId = $this->configurationProvider->getReleaseGroupId();
+
+        $requireRequestCollection = $releaseGroupId !== null
+            ? $this->packageManagementSystemBridge->getReleaseGroup($releaseGroupId)->getReleaseGroupCollection()
+            : $this->packageManagementSystemBridge->getNewReleaseGroups()->getReleaseGroupCollection();
 
         $stepsExecutionDto->addOutputMessage(
             sprintf('Amount of available release groups for the project: %s', $requireRequestCollection->count()),
