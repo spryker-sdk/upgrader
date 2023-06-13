@@ -34,7 +34,7 @@ class ProjectExtendedClassesFetcher implements ProjectExtendedClassesFetcherInte
     /**
      * @var \DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface
      */
-    private PublicApiFilePathsProviderInterface $publicApiFilePathsProvider;
+    protected PublicApiFilePathsProviderInterface $publicApiFilePathsProvider;
 
     /**
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider

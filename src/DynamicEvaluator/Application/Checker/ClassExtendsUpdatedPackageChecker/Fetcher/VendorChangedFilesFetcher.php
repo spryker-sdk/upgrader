@@ -25,7 +25,10 @@ class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
      */
     protected ProcessRunnerServiceInterface $processRunner;
 
-    private PublicApiFilePathsProviderInterface $publicApiFilePathsProvider;
+    /**
+     * @var \DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface
+     */
+    protected PublicApiFilePathsProviderInterface $publicApiFilePathsProvider;
 
     /**
      * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface $packagesDirProvider
