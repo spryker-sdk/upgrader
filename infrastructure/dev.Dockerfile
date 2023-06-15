@@ -29,6 +29,8 @@ COPY --chown=spryker:spryker tests ${srcRoot}/tests
 COPY --chown=spryker:spryker infrastructure ${srcRoot}/infrastructure
 
 COPY --chown=spryker:spryker infrastructure/context/php/91-opcache-dev.ini /usr/local/etc/php/conf.d
+RUN docker-php-ext-enable xdebug
+COPY --chown=spryker:spryker infrastructure/context/php/69-xdebug.ini /usr/local/etc/php/conf.d
 
 RUN --mount=type=cache,id=composer,sharing=locked,target=/home/spryker/.composer/cache,uid=1000 \
   composer dump-autoload -o
