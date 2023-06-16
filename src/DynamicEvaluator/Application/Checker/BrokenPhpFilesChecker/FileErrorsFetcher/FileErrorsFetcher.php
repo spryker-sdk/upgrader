@@ -12,7 +12,9 @@ namespace DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsF
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\BaselineStorageInterface;
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto;
+use Exception;
 use InvalidArgumentException;
+use RuntimeException;
 
 class FileErrorsFetcher implements FileErrorsFetcherInterface
 {
@@ -103,6 +105,8 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     }
 
     /**
+     * @throws \RuntimeException
+     *
      * @return array<mixed>
      */
     protected function fetchErrorsArray(): array
@@ -116,7 +120,22 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
             'prettyJson',
         ]);
 
-        return json_decode($process->getOutput(), true, 512, \JSON_THROW_ON_ERROR);
+        try {
+            $result = json_decode($process->getOutput(), true, 512, \JSON_THROW_ON_ERROR);
+        } catch (Exception $e) {
+            throw new RuntimeException(
+                sprintf(
+                    'Command: %s. Error: %s. Output: %s. Err: %s, Code: %s',
+                    $process->getCommandLine(),
+                    $e->getMessage(),
+                    $process->getOutput(),
+                    $process->getErrorOutput(),
+                    $process->getExitCode(),
+                ),
+            );
+        }
+
+        return $result;
     }
 
     /**
