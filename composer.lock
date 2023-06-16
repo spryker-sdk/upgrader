@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d65c086bb3bc104aaff6fbe38a93b49",
+    "content-hash": "eb1736cbc16fef2075c859ec498e6714",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3410,12 +3410,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "292960d51e942ab64aa460d8158d3e938dbf9d7a"
+                "reference": "ea33a23a7fd930613cbb341503424026a0e6b9b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/292960d51e942ab64aa460d8158d3e938dbf9d7a",
-                "reference": "292960d51e942ab64aa460d8158d3e938dbf9d7a",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/ea33a23a7fd930613cbb341503424026a0e6b9b3",
+                "reference": "ea33a23a7fd930613cbb341503424026a0e6b9b3",
                 "shasum": ""
             },
             "require": {
@@ -3463,7 +3463,7 @@
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
                 "source": "https://github.com/spryker-sdk/integrator/tree/master"
             },
-            "time": "2023-06-08T12:31:29+00:00"
+            "time": "2023-06-16T09:08:33+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
@@ -8777,7 +8777,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "spryker-sdk/azure-php-client": 20,
-        "spryker-sdk/integrator": 20,
         "spryker/code-sniffer": 20
     },
     "prefer-stable": true,
