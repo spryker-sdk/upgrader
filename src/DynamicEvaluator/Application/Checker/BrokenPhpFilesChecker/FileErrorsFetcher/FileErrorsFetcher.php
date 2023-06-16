@@ -126,7 +126,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
                     $e->getMessage(),
                     $process->getOutput(),
                     $process->getErrorOutput(),
-                    $process->getExitCode()
+                    $process->getExitCode(),
                 ));
         }
 
