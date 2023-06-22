@@ -40,6 +40,13 @@ interface PackageManagerAdapterInterface
      *
      * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
+    public function updateSubPackages(PackageCollection $packageCollection): PackageManagerResponseDto;
+
+    /**
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
+     */
     public function require(PackageCollection $packageCollection): PackageManagerResponseDto;
 
     /**
@@ -74,6 +81,13 @@ interface PackageManagerAdapterInterface
      * @return bool
      */
     public function isDevPackage(string $packageName): bool;
+
+    /**
+     * @param string $packageName
+     *
+     * @return bool
+     */
+    public function isSubPackage(string $packageName): bool;
 
     /**
      * @return \Upgrade\Application\Dto\ComposerLockDiffDto

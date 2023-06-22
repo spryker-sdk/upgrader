@@ -117,7 +117,6 @@ services:
               - '@create_pr.step'
               - '@checkout.step'
               - '@send_report.step'
-            - - '@feature_package.fixer'
 
     composer.strategy:
         class: Upgrade\Application\Strategy\Composer\ComposerStrategy
@@ -138,8 +137,6 @@ services:
               - '@create_pr.step'
               - '@checkout.step'
               - '@send_report.step'
-
-            - - '@feature_package.fixer'
 
     release_app.strategy:
         class: Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy
@@ -179,6 +176,14 @@ services:
         arguments:
             - '@configuration.provider'
             - '@Upgrade\Infrastructure\HttpClient\RepeatableHttpClient'
+
+    Upgrade\Infrastructure\PackageManager\Reader\ComposerJsonReader:
+    Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader:
+
+    Upgrade\Infrastructure\PackageManager\ComposerAdapter:
+        arguments:
+            $composerJsonReader: '@Upgrade\Infrastructure\PackageManager\Reader\ComposerJsonReader'
+            $composerLockReader: '@Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader'
 
     github.provider:
         class: Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeProvider

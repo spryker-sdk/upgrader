@@ -40,6 +40,11 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @var string
      */
+    protected const UPTATE_WITH = '--with';
+
+    /**
+     * @var string
+     */
     protected const NO_SCRIPTS_FLAG = '--no-scripts';
 
     /**
@@ -85,6 +90,23 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     {
         $this->processRunner = $processRunner;
         $this->configurationProvider = $configurationProvider;
+    }
+
+    /**
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
+     */
+    public function updateSubPackages(PackageCollection $packageCollection): PackageManagerResponseDto
+    {
+        $command = explode(' ', sprintf(
+            '%s %s%s',
+            static::UPDATE_COMMAND_NAME,
+            static::UPTATE_WITH,
+            $this->getPackageString($packageCollection),
+        ));
+
+        return $this->createResponse($this->runCommand($command));
     }
 
     /**

@@ -68,6 +68,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             implode(PHP_EOL, [
                 'Amount of available release groups for the project: 2',
                 'Applied required packages count: 2',
+                'No new sub packages',
                 'No new required-dev packages',
                 'Amount of applied release groups: 2',
             ]),
@@ -133,6 +134,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 'Amount of available release groups for the project: 2',
                 'Release group "RG2" contains module conflicts. Please follow the link below to find addition information about the conflict https://api.release.spryker.com/release-groups/view/2',
                 'Applied required packages count: 1',
+                'No new sub packages',
                 'No new required-dev packages',
                 'Amount of applied release groups: 1',
             ]),
@@ -167,8 +169,10 @@ class ReleaseGroupUpdateStepTest extends TestCase
             implode(PHP_EOL, [
                 'Amount of available release groups for the project: 2',
                 'Applied required packages count: 1',
+                'No new sub packages',
                 'No new required-dev packages',
                 'Applied required packages count: 1',
+                'No new sub packages',
                 'No new required-dev packages',
                 'Amount of applied release groups: 2',
             ]),
@@ -212,6 +216,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             implode(PHP_EOL, [
                 'Amount of available release groups for the project: 2',
                 'Applied required packages count: 1',
+                'No new sub packages',
                 'No new required-dev packages',
                 'Soft threshold hit by 1 minor releases',
                 'Amount of applied release groups: 1',
@@ -281,6 +286,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             implode(PHP_EOL, [
                 'Amount of available release groups for the project: 2',
                 'Applied required packages count: 1',
+                'No new sub packages',
                 'No new required-dev packages',
                 'Amount of applied release groups: 1',
             ]),
@@ -327,6 +333,54 @@ class ReleaseGroupUpdateStepTest extends TestCase
             implode(PHP_EOL, [
                 'Amount of available release groups for the project: 1',
                 'Applied required packages count: 1',
+                'No new sub packages',
+                'No new required-dev packages',
+                'Amount of applied release groups: 1',
+            ]),
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunShouldProcessReleaseGroupWithSpecificIdWithSubPackage(): void
+    {
+        // Arrange
+        $releaseGroupCollection = new ReleaseGroupDtoCollection([
+            new ReleaseGroupDto(
+                'RG1',
+                new ModuleDtoCollection([
+                    new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
+                ]),
+                false,
+                'https://api.release.spryker.com/release-groups/view/1',
+            ),
+        ]);
+
+        $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
+        $configurationProviderMock->method('getReleaseGroupId')->willReturn(1);
+
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock($releaseGroupCollection),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createAggregateReleaseGroupProcessorForSubPackages(),
+            ),
+            $configurationProviderMock,
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertTrue($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            implode(PHP_EOL, [
+                'Amount of available release groups for the project: 1',
+                'No new required packages',
+                'Updated packages count: 1',
                 'No new required-dev packages',
                 'Amount of applied release groups: 1',
             ]),
@@ -368,6 +422,40 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $composerAdapterMock->method('getReleaseGroup')->willReturn($releaseAppResponse);
 
         return $composerAdapterMock;
+    }
+
+    /**
+     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor
+     */
+    protected function createAggregateReleaseGroupProcessorForSubPackages(): AggregateReleaseGroupProcessor
+    {
+        $responseDto = new PackageManagerResponseDto(true);
+
+        $composerAdapterMock = $this->getMockBuilder(ComposerAdapter::class)
+            ->disableOriginalConstructor()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
+        $composerAdapterMock->method('require')->willReturn($responseDto);
+        $composerAdapterMock->method('requireDev')->willReturn($responseDto);
+        $composerAdapterMock->method('updateSubPackages')->willReturn($responseDto);
+        $composerAdapterMock->method('isDevPackage')->willReturn(false);
+        $composerAdapterMock->method('isSubPackage')->willReturn(true);
+
+        return new AggregateReleaseGroupProcessor(
+            new ReleaseGroupSoftValidator([
+                new ConflictValidator(),
+            ]),
+            new ThresholdSoftValidator([]),
+            new ModuleFetcher(
+                $composerAdapterMock,
+                new PackageCollectionMapper(
+                    $composerAdapterMock,
+                ),
+            ),
+            new ReleaseGroupFilter([]),
+            $this->createEventDispatcherMock(),
+        );
     }
 
     /**

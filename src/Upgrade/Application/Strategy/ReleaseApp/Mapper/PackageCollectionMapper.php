@@ -58,7 +58,10 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
         $resultCollection = new PackageCollection();
 
         foreach ($packageCollection->toArray() as $package) {
-            if (!$this->packageManager->isDevPackage($package->getName())) {
+            if (
+                !$this->packageManager->isDevPackage($package->getName()) &&
+                !$this->packageManager->isSubPackage($package->getName())
+            ) {
                 $resultCollection->add($package);
             }
         }
@@ -77,6 +80,24 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
 
         foreach ($packageCollection->toArray() as $package) {
             if ($this->packageManager->isDevPackage($package->getName())) {
+                $resultCollection->add($package);
+            }
+        }
+
+        return $resultCollection;
+    }
+
+    /**
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
+     */
+    public function getUpdatedPackages(PackageCollection $packageCollection): PackageCollection
+    {
+        $resultCollection = new PackageCollection();
+
+        foreach ($packageCollection->toArray() as $package) {
+            if ($this->packageManager->isSubPackage($package->getName())) {
                 $resultCollection->add($package);
             }
         }

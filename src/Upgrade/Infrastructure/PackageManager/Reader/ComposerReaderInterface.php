@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\PackageManager\Reader;
 
-interface ComposerJsonReaderInterface
+interface ComposerReaderInterface
 {
     /**
      * @return array<mixed>
