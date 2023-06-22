@@ -61,8 +61,6 @@ services:
 
     package_post_update.step:
         class: Upgrade\Application\Strategy\Common\Step\PackagePostUpdateStep
-        arguments:
-            - - '@proper_update.handler'
 
     integrator.step:
         class: Upgrade\Application\Strategy\Common\Step\IntegratorStep
@@ -255,7 +253,6 @@ services:
         class: Upgrade\Application\Executor\StepExecutor
         arguments:
             - - '@integrator_lock_run.step'
-              - '@propel_fix.step'
 
     processor.post_require_step_executor:
         class: Upgrade\Application\Executor\StepExecutor
