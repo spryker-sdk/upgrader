@@ -287,6 +287,17 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * Specification:
+     * - Defines ci execution id.
+     *
+     * @return string
+     */
+    public function getCiExecutionId(): string
+    {
+        return (string)getenv('CI_EXECUTION_ID');
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @return int

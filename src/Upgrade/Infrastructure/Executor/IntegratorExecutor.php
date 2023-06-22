@@ -13,6 +13,7 @@ use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Upgrade\Application\Adapter\IntegratorExecutorInterface;
 use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Domain\ValueObject\Error;
 
 class IntegratorExecutor implements IntegratorExecutorInterface
 {
@@ -95,8 +96,9 @@ class IntegratorExecutor implements IntegratorExecutorInterface
         $stepsExecutionDto->setIsSuccessful($process->isSuccessful());
         if (!$stepsExecutionDto->getIsSuccessful()) {
             $output = $process->getErrorOutput() ?: $process->getOutput();
-            $stepsExecutionDto->addOutputMessage(
-                $command . PHP_EOL . $output . PHP_EOL . 'Error code:' . $process->getExitCode(),
+
+            $stepsExecutionDto->setError(
+                Error::createInternalError($command . PHP_EOL . $output . PHP_EOL . 'Error code:' . $process->getExitCode()),
             );
         }
 

@@ -17,6 +17,7 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface;
+use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class AggregateReleaseGroupProcessor extends BaseReleaseGroupProcessor
@@ -93,14 +94,19 @@ class AggregateReleaseGroupProcessor extends BaseReleaseGroupProcessor
 
             $thresholdValidationResult = $this->thresholdValidator->validate($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccessful()) {
-                $stepsExecutionDto->addOutputMessage($thresholdValidationResult->getOutputMessage());
+                $stepsExecutionDto->setError(
+                    Error::createInternalError($thresholdValidationResult->getOutputMessage() ?? 'Threshold validation error'),
+                );
 
                 break;
             }
 
             $releaseGroupValidateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
             if (!$releaseGroupValidateResult->isSuccessful()) {
-                $stepsExecutionDto->addOutputMessage($releaseGroupValidateResult->getOutputMessage());
+                $stepsExecutionDto->setError(
+                    Error::createInternalError($releaseGroupValidateResult->getOutputMessage() ?? 'RG validation error'),
+                );
+
                 $stepsExecutionDto->setBlockerInfo((string)$releaseGroupValidateResult->getOutputMessage());
 
                 break;
@@ -115,9 +121,17 @@ class AggregateReleaseGroupProcessor extends BaseReleaseGroupProcessor
 
         $response = $this->modulePackageFetcher->require($aggregatedReleaseGroupCollection->getCommonModuleCollection());
         $stepsExecutionDto->setIsSuccessful($response->isSuccessful());
-        if ($response->getOutputMessage() !== null) {
+
+        if (!$response->isSuccessful()) {
+            $stepsExecutionDto->setError(
+                Error::createClientCodeError($response->getOutputMessage() ?? 'Module fetcher error'),
+            );
+        }
+
+        if ($response->isSuccessful() && $response->getOutputMessage() !== null) {
             $stepsExecutionDto->addOutputMessage($response->getOutputMessage());
         }
+
         if ($response->isSuccessful() && $aggregatedReleaseGroupCollection->count()) {
             $stepsExecutionDto->addOutputMessage(
                 sprintf('Amount of applied release groups: %s', $aggregatedReleaseGroupCollection->count()),

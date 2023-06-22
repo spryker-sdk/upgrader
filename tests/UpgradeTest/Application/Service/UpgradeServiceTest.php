@@ -11,6 +11,8 @@ namespace UpgradeTest\Application\Service;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Upgrade\Application\Event\UpgraderEventFactory;
 use Upgrade\Application\Service\UpgradeService;
 use Upgrade\Application\Strategy\StrategyResolver;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
@@ -24,13 +26,15 @@ class UpgradeServiceTest extends KernelTestCase
     {
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
         $configurationProviderMock->method('getUpgradeStrategy')->willReturn('composer');
+        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        $upgraderEventFactory = $this->createMock(UpgraderEventFactory::class);
 
         /** @var \Upgrade\Application\Strategy\StrategyResolver $strategyResolver */
         $strategyResolver = static::bootKernel()->getContainer()->get(StrategyResolver::class);
 
         $logger = $this->createMock(LoggerInterface::class);
 
-        $service = new UpgradeService($configurationProviderMock, $strategyResolver, $logger);
+        $service = new UpgradeService($configurationProviderMock, $strategyResolver, $logger, $eventDispatcherMock, $upgraderEventFactory);
         $res = $service->upgrade();
 
         $this->assertFalse($res->isSuccessful());

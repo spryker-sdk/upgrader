@@ -14,6 +14,7 @@ use SprykerAzure\Api\PullRequestApi\PullRequestData;
 use SprykerAzure\Api\RepositoryPath;
 use Throwable;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface;
@@ -81,7 +82,10 @@ class AzureSourceCodeProvider implements SourceCodeProviderInterface
 
         if (count($violations) > 0) {
             $stepsExecutionDto->setIsSuccessful(false);
-            array_map(static fn (string $violation) => $stepsExecutionDto->addOutputMessage($violation), $violations);
+
+            $stepsExecutionDto->setError(
+                Error::createInternalError(implode(PHP_EOL, $violations)),
+            );
         }
 
         return $stepsExecutionDto;
@@ -118,7 +122,10 @@ class AzureSourceCodeProvider implements SourceCodeProviderInterface
             $stepsExecutionDto->addOutputMessage(sprintf('Pull request was created %s', $response['webUrl'] ?? ''));
         } catch (Throwable $e) {
             $stepsExecutionDto->setIsSuccessful(false);
-            $stepsExecutionDto->addOutputMessage($e->getMessage());
+
+            $stepsExecutionDto->setError(
+                Error::createInternalError($e->getMessage()),
+            );
         }
 
         return $stepsExecutionDto;

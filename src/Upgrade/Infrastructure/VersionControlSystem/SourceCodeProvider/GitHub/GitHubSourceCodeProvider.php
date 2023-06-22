@@ -11,6 +11,7 @@ namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub;
 
 use RuntimeException;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface;
@@ -63,7 +64,10 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
             !$this->configurationProvider->getRepositoryName()
         ) {
             $stepsExecutionDto->setIsSuccessful(false);
-            $stepsExecutionDto->addOutputMessage('Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.');
+
+            $stepsExecutionDto->setError(
+                Error::createInternalError('Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'),
+            );
         }
 
         return $stepsExecutionDto;
@@ -105,7 +109,7 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
         } catch (RuntimeException $runtimeException) {
             return $stepsExecutionDto
                 ->setIsSuccessful(false)
-                ->addOutputMessage($runtimeException->getMessage());
+                ->setError(Error::createInternalError($runtimeException->getMessage()));
         }
     }
 }

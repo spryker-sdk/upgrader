@@ -11,6 +11,7 @@ namespace Upgrade\Application\Dto;
 
 use CodeCompliance\Domain\Entity\Report;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
+use Upgrade\Domain\ValueObject\ErrorInterface;
 
 class StepsResponseDto extends ResponseDto
 {
@@ -43,6 +44,11 @@ class StepsResponseDto extends ResponseDto
      * @var \Upgrade\Application\Dto\IntegratorResponseDto|null
      */
     protected ?IntegratorResponseDto $integratorResponseDto = null;
+
+    /**
+     * @var \Upgrade\Domain\ValueObject\ErrorInterface|null
+     */
+    protected ?ErrorInterface $error = null;
 
     /**
      * @var string
@@ -97,6 +103,30 @@ class StepsResponseDto extends ResponseDto
     public function setIsSuccessful(bool $isSuccessful)
     {
         $this->isSuccessful = $isSuccessful;
+
+        return $this;
+    }
+
+    /**
+     * @return \Upgrade\Domain\ValueObject\ErrorInterface|null
+     */
+    public function getError(): ?ErrorInterface
+    {
+        return $this->error;
+    }
+
+    /**
+     * @param \Upgrade\Domain\ValueObject\ErrorInterface|null $error
+     *
+     * @return $this
+     */
+    public function setError(?ErrorInterface $error)
+    {
+        $this->error = $error;
+
+        if ($error !== null) {
+            $this->addOutputMessage($error->getErrorMessage());
+        }
 
         return $this;
     }

@@ -21,6 +21,8 @@ services:
             - '../../src/Upgrade/Infrastructure/VersionControlSystem/Dto/*'
             - '../../src/Upgrade/Infrastructure/Report/Dto/*'
             - '../../src/Upgrade/Application/Strategy/ReleaseApp/Processor/Event/*'
+            - '../../src/Upgrade/Application/Event/*Event.php'
+            - '../../src/Upgrade/Domain/ValueObject/*'
 
     git.adapter:
         class: Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter

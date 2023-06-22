@@ -14,6 +14,7 @@ use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\Common\Step\AbstractStep;
 use Upgrade\Application\Strategy\RollbackStepInterface;
+use Upgrade\Domain\ValueObject\Error;
 
 class ComposerUpdateStep extends AbstractStep implements RollbackStepInterface
 {
@@ -45,7 +46,9 @@ class ComposerUpdateStep extends AbstractStep implements RollbackStepInterface
         $updateResponse = $this->packageManager->update();
         $stepsExecutionDto->setIsSuccessful($updateResponse->isSuccessful());
         if (!$updateResponse->isSuccessful()) {
-            $stepsExecutionDto->addOutputMessage($updateResponse->getOutputMessage());
+            $stepsExecutionDto->setError(
+                Error::createClientCodeError($updateResponse->getOutputMessage() ?? 'Composer update error'),
+            );
         }
 
         return $stepsExecutionDto;

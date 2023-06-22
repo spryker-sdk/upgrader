@@ -11,6 +11,7 @@ namespace Upgrade\Application\Strategy\Common\Step;
 
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\StepInterface;
+use Upgrade\Domain\ValueObject\Error;
 
 class CheckUncommittedChangesStep extends AbstractStep implements StepInterface
 {
@@ -23,7 +24,9 @@ class CheckUncommittedChangesStep extends AbstractStep implements StepInterface
     {
         $stepsExecutionDto = $this->vsc->hasAnyUncommittedChanges($stepsExecutionDto);
         if (!$stepsExecutionDto->getIsSuccessful()) {
-            $stepsExecutionDto->addOutputMessage('You have to fix uncommitted changes');
+            $stepsExecutionDto->setError(
+                Error::createInternalError('You have to fix uncommitted changes'),
+            );
 
             return $stepsExecutionDto;
         }
