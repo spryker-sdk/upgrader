@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Application\Service;
 
 use Psr\Log\LoggerInterface;
+use SprykerSdk\SdkContracts\Event\MetricEventInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 use Upgrade\Application\Dto\StepsResponseDto;
@@ -105,7 +106,7 @@ class UpgradeService implements UpgradeServiceInterface
     protected function dispatchUpgraderStartedEvent(): void
     {
         $upgraderStartedEvent = $this->upgraderEventFactory->createUpgraderStartedEvent();
-        $this->eventDispatcher->dispatch($upgraderStartedEvent, $upgraderStartedEvent->getName());
+        $this->eventDispatcher->dispatch($upgraderStartedEvent, MetricEventInterface::class);
     }
 
     /**
@@ -117,6 +118,6 @@ class UpgradeService implements UpgradeServiceInterface
     protected function dispatchUpgraderFinishedEvent(StepsResponseDto $stepsResponse, int $startTime): void
     {
         $upgraderFinishedEvent = $this->upgraderEventFactory->createUpgraderFinishedEvent($stepsResponse, time() - $startTime);
-        $this->eventDispatcher->dispatch($upgraderFinishedEvent, $upgraderFinishedEvent->getName());
+        $this->eventDispatcher->dispatch($upgraderFinishedEvent, MetricEventInterface::class);
     }
 }
