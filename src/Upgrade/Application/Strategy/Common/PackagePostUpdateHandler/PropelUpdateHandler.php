@@ -58,13 +58,20 @@ class PropelUpdateHandler implements HandlerInterface
     protected Filesystem $filesystem;
 
     /**
+     * @var bool
+     */
+    protected bool $isReleaseGroupIntegratorEnabled;
+
+    /**
      * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      * @param \Symfony\Component\Filesystem\Filesystem $filesystem
+     * @param bool $isReleaseGroupIntegratorEnabled
      */
-    public function __construct(ProcessRunnerServiceInterface $processRunner, Filesystem $filesystem)
+    public function __construct(ProcessRunnerServiceInterface $processRunner, Filesystem $filesystem, bool $isReleaseGroupIntegratorEnabled = false)
     {
         $this->processRunner = $processRunner;
         $this->filesystem = $filesystem;
+        $this->isReleaseGroupIntegratorEnabled = $isReleaseGroupIntegratorEnabled;
     }
 
     /**
@@ -74,6 +81,10 @@ class PropelUpdateHandler implements HandlerInterface
      */
     public function isApplicable(StepsResponseDto $stepsExecutionDto): bool
     {
+        if ($this->isReleaseGroupIntegratorEnabled) {
+            return false;
+        }
+
         $composerLockDiffDto = $stepsExecutionDto->getComposerLockDiff();
         if (!$composerLockDiffDto) {
             return false;

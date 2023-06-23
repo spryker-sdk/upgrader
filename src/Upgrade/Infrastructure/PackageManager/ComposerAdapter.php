@@ -60,21 +60,29 @@ class ComposerAdapter implements PackageManagerAdapterInterface
     protected ComposerReaderInterface $composerLockReader;
 
     /**
+     * @var bool
+     */
+    protected bool $isReleaseGroupIntegratorEnabled;
+
+    /**
      * @param \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutorInterface $composerCommandExecutor
      * @param \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutorInterface $composerLockComparator
      * @param \Upgrade\Infrastructure\PackageManager\Reader\ComposerReaderInterface $composerJsonReader
      * @param \Upgrade\Infrastructure\PackageManager\Reader\ComposerReaderInterface $composerLockReader
+     * @param bool $isReleaseGroupIntegratorEnabled
      */
     public function __construct(
         ComposerCommandExecutorInterface $composerCommandExecutor,
         ComposerLockComparatorCommandExecutorInterface $composerLockComparator,
         ComposerReaderInterface $composerJsonReader,
-        ComposerReaderInterface $composerLockReader
+        ComposerReaderInterface $composerLockReader,
+        bool $isReleaseGroupIntegratorEnabled = false,
     ) {
         $this->composerCommandExecutor = $composerCommandExecutor;
         $this->composerLockComparator = $composerLockComparator;
         $this->composerJsonReader = $composerJsonReader;
         $this->composerLockReader = $composerLockReader;
+        $this->isReleaseGroupIntegratorEnabled = $isReleaseGroupIntegratorEnabled;
     }
 
     /**
@@ -198,6 +206,10 @@ class ComposerAdapter implements PackageManagerAdapterInterface
      */
     public function isSubPackage(string $packageName): bool
     {
+        if (!$this->isReleaseGroupIntegratorEnabled) {
+            return false;
+        }
+
         $composerJson = $this->composerJsonReader->read();
 
         if (!isset($composerJson['require'][$packageName]) && $this->getPackageVersion($packageName) !== null) {

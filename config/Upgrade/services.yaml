@@ -6,14 +6,18 @@ parameters:
     http_client.timeout_sec: 30
     http_client.repeatable.attempts: 3
     http_client.repeatable.usec_delay: 500000
+    profiler_enabled: "%env(default:profiler_enabled_default:bool:SDK_PROFILER_ENABLED)%"
+    is_release_group_integrator_enabled: false
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
         public: true
+        bind:
+            $isReleaseGroupIntegratorEnabled: '%env(default:is_release_group_integrator_enabled:bool:RELEASE_GROUP_INTEGRATOR_ENABLED)%'
 
-# Upgrade
+    # Upgrade
     Upgrade\:
         resource: '../../src/Upgrade/*'
         exclude:
@@ -24,13 +28,6 @@ services:
 
     git.adapter:
         class: Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter
-
-    Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver:
-        class: Upgrade\Infrastructure\VersionControlSystem\Adapter\Resolver\VersionControlSystemAdapterResolver
-        arguments:
-            - {
-                param1: '@git.adapter'
-              }
 
     check_credentials.step:
         class: Upgrade\Application\Strategy\Common\Step\CheckCredentialsStep
@@ -61,6 +58,8 @@ services:
 
     package_post_update.step:
         class: Upgrade\Application\Strategy\Common\Step\PackagePostUpdateStep
+        arguments:
+            - - '@proper_update.handler'
 
     integrator.step:
         class: Upgrade\Application\Strategy\Common\Step\IntegratorStep
@@ -115,6 +114,7 @@ services:
               - '@create_pr.step'
               - '@checkout.step'
               - '@send_report.step'
+            - - '@feature_package.fixer'
 
     composer.strategy:
         class: Upgrade\Application\Strategy\Composer\ComposerStrategy
@@ -135,6 +135,7 @@ services:
               - '@create_pr.step'
               - '@checkout.step'
               - '@send_report.step'
+            - - '@feature_package.fixer'
 
     release_app.strategy:
         class: Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy
@@ -253,6 +254,7 @@ services:
         class: Upgrade\Application\Executor\StepExecutor
         arguments:
             - - '@integrator_lock_run.step'
+              - '@propel_fix.step'
 
     processor.post_require_step_executor:
         class: Upgrade\Application\Executor\StepExecutor
