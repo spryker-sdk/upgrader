@@ -92,7 +92,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      *
      * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function updateSubPackages(PackageCollection $packageCollection): PackageManagerResponseDto
+    public function updateSubPackage(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         $command = explode(' ', sprintf(
             '%s%s',

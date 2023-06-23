@@ -52,7 +52,7 @@ abstract class AbstractComposerReader implements ComposerReaderInterface
      */
     protected function readFromPath(string $path): array
     {
-        if (!file_exists($path)) {
+        if (!file_exists($path) || !is_file($path)) {
             throw new FileNotFoundException('File is not exist: ' . $path);
         }
         $fileTime = (int)filemtime($path);

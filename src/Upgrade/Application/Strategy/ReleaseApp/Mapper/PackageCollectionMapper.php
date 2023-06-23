@@ -92,7 +92,7 @@ class PackageCollectionMapper implements PackageCollectionMapperInterface
      *
      * @return \Upgrade\Domain\Entity\Collection\PackageCollection
      */
-    public function getUpdatedPackages(PackageCollection $packageCollection): PackageCollection
+    public function getSubPackages(PackageCollection $packageCollection): PackageCollection
     {
         $resultCollection = new PackageCollection();
 

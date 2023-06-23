@@ -73,21 +73,19 @@ class ModuleFetcher
     protected function requirePackageCollection(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         $requiredPackages = $this->packageCollectionMapper->getRequiredPackages($packageCollection);
-        $requiredDevPackages = $this->packageCollectionMapper->getRequiredDevPackages($packageCollection);
-        $subPackages = $this->packageCollectionMapper->getUpdatedPackages($packageCollection);
-
         $response = $this->requirePackages($requiredPackages, static::REQUIRED_TYPE);
 
         if (!$response->isSuccessful()) {
             return $response;
         }
-
-        $responseSubPackages = $this->updateSubPackages($subPackages);
+        $subPackages = $this->packageCollectionMapper->getSubPackages($packageCollection);
+        $responseSubPackages = $this->updateSubPackage($subPackages);
 
         if (!$responseSubPackages->isSuccessful()) {
             return $responseSubPackages;
         }
 
+        $requiredDevPackages = $this->packageCollectionMapper->getRequiredDevPackages($packageCollection);
         $responseDev = $this->requirePackages($requiredDevPackages, static::REQUIRED_DEV_TYPE);
 
         return new PackageManagerResponseDto(
@@ -102,13 +100,13 @@ class ModuleFetcher
      *
      * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    protected function updateSubPackages(PackageCollection $updatedSubPackages): PackageManagerResponseDto
+    protected function updateSubPackage(PackageCollection $updatedSubPackages): PackageManagerResponseDto
     {
         if ($updatedSubPackages->isEmpty()) {
-            return new PackageManagerResponseDto(true, 'No new sub packages');
+            return new PackageManagerResponseDto(true, 'There are no packages for the update.');
         }
 
-        $requireResponse = $this->packageManager->updateSubPackages($updatedSubPackages);
+        $requireResponse = $this->packageManager->updateSubPackage($updatedSubPackages);
 
         if (!$requireResponse->isSuccessful()) {
             return $requireResponse;

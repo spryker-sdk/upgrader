@@ -76,7 +76,7 @@ class ComposerAdapter implements PackageManagerAdapterInterface
         ComposerLockComparatorCommandExecutorInterface $composerLockComparator,
         ComposerReaderInterface $composerJsonReader,
         ComposerReaderInterface $composerLockReader,
-        bool $isReleaseGroupIntegratorEnabled = false,
+        bool $isReleaseGroupIntegratorEnabled = false
     ) {
         $this->composerCommandExecutor = $composerCommandExecutor;
         $this->composerLockComparator = $composerLockComparator;
@@ -116,9 +116,9 @@ class ComposerAdapter implements PackageManagerAdapterInterface
      *
      * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    public function updateSubPackages(PackageCollection $packageCollection): PackageManagerResponseDto
+    public function updateSubPackage(PackageCollection $packageCollection): PackageManagerResponseDto
     {
-        return $this->composerCommandExecutor->updateSubPackages($packageCollection);
+        return $this->composerCommandExecutor->updateSubPackage($packageCollection);
     }
 
     /**
