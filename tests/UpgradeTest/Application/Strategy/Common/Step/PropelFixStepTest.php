@@ -41,6 +41,29 @@ class PropelFixStepTest extends TestCase
     /**
      * @return void
      */
+    protected function testProcessShouldSkipAddingPropelPackageWhenReleaseGroupIntegratorEnabled(): void
+    {
+        // Arrange
+        $packageManagerAdapterMock = $this->createPackageManagerAdapterMock(
+            PropelFixStep::PACKAGE_NAME,
+            PropelFixStep::LOCK_PACKAGE_VERSION,
+            ['require' => [PropelFixStep::PACKAGE_NAME => '1.0.0']],
+        );
+
+        // Assert
+        $packageManagerAdapterMock->expects($this->once())->method('getPackageVersion');
+        $packageManagerAdapterMock->expects($this->never())->method('require');
+
+        // Arrange
+        $propelFixStep = new PropelFixStep($packageManagerAdapterMock, true);
+
+        // Act
+        $propelFixStep->run(new StepsResponseDto());
+    }
+
+    /**
+     * @return void
+     */
     protected function testProcessShouldSkipAddingPropelPackageWhenPackageInComposerRequire(): void
     {
         // Arrange
@@ -51,7 +74,7 @@ class PropelFixStepTest extends TestCase
         );
 
         // Assert
-        $packageManagerAdapterMock->expects($this->never())->method('require');
+        $packageManagerAdapterMock->expects($this->never())->method('getPackageVersion');
 
         // Arrange
         $propelFixStep = new PropelFixStep($packageManagerAdapterMock);
