@@ -19,6 +19,13 @@ interface ComposerCommandExecutorInterface
      *
      * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
+    public function updateSubPackage(PackageCollection $packageCollection): PackageManagerResponseDto;
+
+    /**
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
+     */
     public function require(PackageCollection $packageCollection): PackageManagerResponseDto;
 
     /**

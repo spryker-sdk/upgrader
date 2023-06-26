@@ -25,6 +25,25 @@ class FeaturePackageFixerStepTest extends TestCase
     /**
      * @return void
      */
+    public function testIsApplicableWhenReleaseGroupIntegratorEnabled(): void
+    {
+        // Arrange
+        $fixer = new FeaturePackageFixerStep(
+            $this->createMock(PackageManagerAdapterInterface::class),
+            true,
+        );
+        $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);
+
+        // Act
+        $result = $fixer->isApplicable($stepsResponseDto);
+
+        // Assert
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @return void
+     */
     public function testIsApplicable(): void
     {
         // Arrange

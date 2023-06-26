@@ -73,21 +73,46 @@ class ModuleFetcher
     protected function requirePackageCollection(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         $requiredPackages = $this->packageCollectionMapper->getRequiredPackages($packageCollection);
-        $requiredDevPackages = $this->packageCollectionMapper->getRequiredDevPackages($packageCollection);
-
         $response = $this->requirePackages($requiredPackages, static::REQUIRED_TYPE);
 
         if (!$response->isSuccessful()) {
             return $response;
         }
+        $subPackages = $this->packageCollectionMapper->getSubPackages($packageCollection);
+        $responseSubPackages = $this->updateSubPackage($subPackages);
 
+        if (!$responseSubPackages->isSuccessful()) {
+            return $responseSubPackages;
+        }
+
+        $requiredDevPackages = $this->packageCollectionMapper->getRequiredDevPackages($packageCollection);
         $responseDev = $this->requirePackages($requiredDevPackages, static::REQUIRED_DEV_TYPE);
 
         return new PackageManagerResponseDto(
             $responseDev->isSuccessful(),
-            implode(PHP_EOL, [$response->getOutputMessage(), $responseDev->getOutputMessage()]),
-            array_merge($response->getExecutedCommands(), $responseDev->getExecutedCommands()),
+            implode(PHP_EOL, [$response->getOutputMessage(), $responseSubPackages->getOutputMessage(), $responseDev->getOutputMessage()]),
+            array_merge($response->getExecutedCommands(), $responseDev->getExecutedCommands(), $responseSubPackages->getExecutedCommands()),
         );
+    }
+
+    /**
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $updatedSubPackages
+     *
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
+     */
+    protected function updateSubPackage(PackageCollection $updatedSubPackages): PackageManagerResponseDto
+    {
+        if ($updatedSubPackages->isEmpty()) {
+            return new PackageManagerResponseDto(true, 'There are no packages for the update.');
+        }
+
+        $requireResponse = $this->packageManager->updateSubPackage($updatedSubPackages);
+
+        if (!$requireResponse->isSuccessful()) {
+            return $requireResponse;
+        }
+
+        return new PackageManagerResponseDto(true, sprintf('Updated packages count: %s', $updatedSubPackages->count()), $requireResponse->getExecutedCommands());
     }
 
     /**

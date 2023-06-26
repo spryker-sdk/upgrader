@@ -9,29 +9,12 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\PackageManager\Reader;
 
-use Upgrade\Infrastructure\Exception\FileNotFoundException;
-
-class ComposerLockReader implements ComposerLockReaderInterface
+class ComposerLockReader extends AbstractComposerReader
 {
-    /**
-     * @var int
-     */
-    protected int $modifyTime = 0;
-
-    /**
-     * @var array<mixed>|null
-     */
-    protected ?array $composerLockData = null;
-
     /**
      * @var string
      */
     protected const COMPOSER_LOCK = 'composer.lock';
-
-    /**
-     * @var string
-     */
-    protected string $directory = '';
 
     /**
      * @return array<mixed>
@@ -45,36 +28,5 @@ class ComposerLockReader implements ComposerLockReaderInterface
         }
 
         return $this->readFromPath($path);
-    }
-
-    /**
-     * @param string $directory
-     *
-     * @return void
-     */
-    public function setDirectory(string $directory): void
-    {
-        $this->directory = $directory;
-    }
-
-    /**
-     * @param string $path
-     *
-     * @throws \Upgrade\Infrastructure\Exception\FileNotFoundException
-     *
-     * @return array<mixed>
-     */
-    protected function readFromPath(string $path): array
-    {
-        if (!file_exists($path)) {
-            throw new FileNotFoundException('File is not exist: ' . $path);
-        }
-        $fileTime = (int)filemtime($path);
-        if (!$this->composerLockData || $fileTime > $this->modifyTime) {
-            $this->modifyTime = $fileTime;
-            $this->composerLockData = json_decode((string)file_get_contents($path), true);
-        }
-
-        return $this->composerLockData;
     }
 }
