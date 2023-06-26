@@ -81,6 +81,11 @@ class ProjectExtendedClassesFetcher implements ProjectExtendedClassesFetcherInte
 
             preg_match(sprintf('/use (?<useClass>(\S*)(%s| as %s))/', $matches['extendedClass'], $matches['extendedClass']), $fileContent, $matches);
 
+            // not interested in same namespace classes
+            if (!isset($matches['useClass'])) {
+                continue;
+            }
+
             $className = explode(' as ', $matches['useClass'])[0];
 
             $classNames[$className] = $file->getRealPath();
