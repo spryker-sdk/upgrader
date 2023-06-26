@@ -84,7 +84,6 @@ class UpgradeService implements UpgradeServiceInterface
             $strategy = $this->strategyResolver->getStrategy($this->configurationProvider->getUpgradeStrategy());
 
             $stepsResponse = $strategy->upgrade();
-
         } catch (Throwable $e) {
             $stepsResponse->setIsSuccessful(false);
             $stepsResponse->setError(Error::createInternalError($e->getMessage()));
