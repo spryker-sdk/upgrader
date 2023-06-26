@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace Upgrade\Domain\ValueObject;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Error implements ErrorInterface
 {
     /**

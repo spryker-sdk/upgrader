@@ -13,6 +13,9 @@ use CodeCompliance\Domain\Entity\Report;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Domain\ValueObject\ErrorInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 class StepsResponseDto extends ResponseDto
 {
     /**

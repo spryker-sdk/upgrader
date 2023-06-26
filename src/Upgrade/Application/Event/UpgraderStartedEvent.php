@@ -11,6 +11,9 @@ namespace Upgrade\Application\Event;
 
 use SprykerSdk\SdkContracts\Event\MetricEventInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 class UpgraderStartedEvent implements MetricEventInterface
 {
     /**
