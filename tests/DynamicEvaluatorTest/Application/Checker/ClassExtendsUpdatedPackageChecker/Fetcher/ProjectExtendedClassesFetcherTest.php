@@ -88,6 +88,15 @@ class ProjectExtendedClassesFetcherTest extends TestCase
                 CLASS,
                 null,
             ],
+            'sameNameSpaceExtendedClass' => [
+                <<<CLASS
+                namespace Checker;
+
+                class ClassA extends ClassB
+                {}
+                CLASS,
+                null,
+            ],
         ];
     }
 
