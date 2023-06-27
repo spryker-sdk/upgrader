@@ -34,11 +34,18 @@ class FeaturePackageFixerStep implements FixerStepInterface
     protected PackageManagerAdapterInterface $packageManager;
 
     /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
+     * @var bool
      */
-    public function __construct(PackageManagerAdapterInterface $packageManager)
+    protected bool $isReleaseGroupIntegratorEnabled;
+
+    /**
+     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
+     * @param bool $isReleaseGroupIntegratorEnabled
+     */
+    public function __construct(PackageManagerAdapterInterface $packageManager, bool $isReleaseGroupIntegratorEnabled = false)
     {
         $this->packageManager = $packageManager;
+        $this->isReleaseGroupIntegratorEnabled = $isReleaseGroupIntegratorEnabled;
     }
 
     /**
@@ -48,6 +55,10 @@ class FeaturePackageFixerStep implements FixerStepInterface
      */
     public function isApplicable(StepsResponseDto $stepsExecutionDto): bool
     {
+        if ($this->isReleaseGroupIntegratorEnabled) {
+            return false;
+        }
+
         return !$stepsExecutionDto->getIsSuccessful() &&
             $stepsExecutionDto->getOutputMessage() !== null &&
             preg_match(static::PATTERN, $stepsExecutionDto->getOutputMessage());

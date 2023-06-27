@@ -22,6 +22,25 @@ class PropelUpdateHandlerTest extends TestCase
     /**
      * @return void
      */
+    public function testIsApplicableReturnsTrueWhenReleaseGroupIntegratorEnabled(): void
+    {
+        // Arrange
+        $stepsExecutionDto = new StepsResponseDto(true);
+        $stepsExecutionDto->setComposerLockDiff($this->createComposerLockDiffDto());
+
+        $mockProcessRunner = $this->createMock(ProcessRunnerService::class);
+        $handler = new PropelUpdateHandler($mockProcessRunner, new Filesystem(), true);
+
+        // Act
+        $isApplicable = $handler->isApplicable($stepsExecutionDto);
+
+        // Assert
+        $this->assertFalse($isApplicable);
+    }
+
+    /**
+     * @return void
+     */
     public function testIsApplicableReturnsTrueWhenPropelIsInComposerLockDiff(): void
     {
         // Arrange

@@ -33,11 +33,18 @@ class PropelFixStep implements StepInterface
     protected PackageManagerAdapterInterface $packageManager;
 
     /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
+     * @var bool
      */
-    public function __construct(PackageManagerAdapterInterface $packageManager)
+    protected bool $isReleaseGroupIntegratorEnabled;
+
+    /**
+     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
+     * @param bool $isReleaseGroupIntegratorEnabled
+     */
+    public function __construct(PackageManagerAdapterInterface $packageManager, bool $isReleaseGroupIntegratorEnabled = false)
     {
         $this->packageManager = $packageManager;
+        $this->isReleaseGroupIntegratorEnabled = $isReleaseGroupIntegratorEnabled;
     }
 
     /**
@@ -47,6 +54,10 @@ class PropelFixStep implements StepInterface
      */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
+        if ($this->isReleaseGroupIntegratorEnabled) {
+            return $stepsExecutionDto;
+        }
+
         $packageVersion = $this->packageManager->getPackageVersion(static::PACKAGE_NAME);
 
         if ($packageVersion !== static::LOCK_PACKAGE_VERSION) {

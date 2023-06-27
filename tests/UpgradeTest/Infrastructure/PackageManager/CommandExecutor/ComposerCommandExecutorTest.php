@@ -112,6 +112,21 @@ class ComposerCommandExecutorTest extends TestCase
     /**
      * @return void
      */
+    public function testUpdateSubPackage(): void
+    {
+        $packageCollection = new PackageCollection([
+            new Package('phpspec/prophecy-phpunit', '2.0.1', '2.0.0'),
+        ]);
+        $this->mockConfigurationProvider->method('getComposerNoInstall')
+            ->willReturn(true);
+        $response = $this->cmdExecutor->updateSubPackage($packageCollection);
+
+        $this->assertSame('composer update phpspec/prophecy-phpunit:2.0.1 --no-install', $response->getOutputMessage());
+    }
+
+    /**
+     * @return void
+     */
     public function testUpdate(): void
     {
         $this->mockConfigurationProvider->method('getComposerNoInstall')

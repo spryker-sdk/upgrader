@@ -92,6 +92,22 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      *
      * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
+    public function updateSubPackage(PackageCollection $packageCollection): PackageManagerResponseDto
+    {
+        $command = explode(' ', sprintf(
+            '%s%s',
+            static::UPDATE_COMMAND_NAME,
+            $this->getPackageString($packageCollection),
+        ));
+
+        return $this->createResponse($this->runCommand($command));
+    }
+
+    /**
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
+     */
     public function require(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         $command = explode(' ', sprintf(
