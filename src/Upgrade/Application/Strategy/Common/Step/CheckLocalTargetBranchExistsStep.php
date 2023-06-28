@@ -11,6 +11,7 @@ namespace Upgrade\Application\Strategy\Common\Step;
 
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\StepInterface;
+use Upgrade\Domain\ValueObject\Error;
 
 class CheckLocalTargetBranchExistsStep extends AbstractStep implements StepInterface
 {
@@ -23,7 +24,9 @@ class CheckLocalTargetBranchExistsStep extends AbstractStep implements StepInter
     {
         $stepsExecutionDto = $this->vsc->isLocalTargetBranchNotExist($stepsExecutionDto);
         if (!$stepsExecutionDto->getIsSuccessful()) {
-            $stepsExecutionDto->addOutputMessage('You have an unprocessed local branch from previous start');
+            $stepsExecutionDto->setError(
+                Error::createInternalError('You have an unprocessed local branch from previous start'),
+            );
 
             return $stepsExecutionDto;
         }

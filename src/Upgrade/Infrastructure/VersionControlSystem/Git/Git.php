@@ -12,6 +12,7 @@ namespace Upgrade\Infrastructure\VersionControlSystem\Git;
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
 use Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator;
@@ -349,7 +350,9 @@ class Git
 
         $stepsExecutionDto->setIsSuccessful($process->isSuccessful());
         if (!$process->isSuccessful()) {
-            $stepsExecutionDto->addOutputMessage(implode(PHP_EOL, $outputs));
+            $stepsExecutionDto->setError(
+                Error::createInternalError(implode(PHP_EOL, $outputs)),
+            );
         }
 
         return $stepsExecutionDto;

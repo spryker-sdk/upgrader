@@ -89,6 +89,9 @@ class StepExecutor implements StepExecutorInterface
             if (!$stepsResponseDto->getIsSuccessful()) {
                 continue;
             }
+
+            $stepsResponseDto->setError(null);
+
             $stepsResponseDto = $step->run($stepsResponseDto);
             if ($stepsResponseDto->getIsSuccessful()) {
                 break;
