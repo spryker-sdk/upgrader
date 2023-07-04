@@ -1,6 +1,5 @@
 imports:
     - { resource: './Codebase/services.yaml' }
-    - { resource: './CodeCompliance/services.yaml' }
     - { resource: './Core/Domain/services.yaml' }
     - { resource: './Core/Infrastructure/services.yaml' }
     - { resource: './ReleaseApp/services.yaml' }

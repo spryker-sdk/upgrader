@@ -20,7 +20,7 @@ class UpgradeCommand implements ExecutableCommandInterface
     /**
      * @var \Upgrade\Application\Service\UpgradeServiceInterface
      */
-    protected $upgradeService;
+    protected UpgradeServiceInterface $upgradeService;
 
     /**
      * @param \Upgrade\Application\Service\UpgradeServiceInterface $upgradeService
