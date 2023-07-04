@@ -44,6 +44,7 @@ class UpgraderEventFactory
             $this->configurationProvider->getOrganizationName(),
             $this->configurationProvider->getRepositoryName(),
             $this->getCiExecutionId(),
+            $this->configurationProvider->getCiWorkspaceName(),
         );
     }
 
@@ -66,6 +67,7 @@ class UpgraderEventFactory
             $stepsResponseDto->getIsSuccessful(),
             $stepsResponseDto->getError() !== null && $stepsResponseDto->getError()->getErrorType() === Error::CLIENT_CODE_ERROR,
             $this->getCiExecutionId(),
+            $this->configurationProvider->getCiWorkspaceName(),
         );
     }
 

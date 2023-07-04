@@ -298,6 +298,17 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * Specification:
+     * - Defines ci workspace name.
+     *
+     * @return string
+     */
+    public function getCiWorkspaceName(): string
+    {
+        return (string)getenv('CI_WORKSPACE_NAME');
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @return int
