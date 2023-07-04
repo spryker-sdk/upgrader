@@ -238,7 +238,7 @@ class Git
             $title .= ' for release group #' . $releaseGroupId;
         }
 
-        if ($releaseGroupId !== null) {
+        if ($jiraIssue !== null) {
             $title .= ' / Jira ticket ' . $jiraIssue;
         }
 
