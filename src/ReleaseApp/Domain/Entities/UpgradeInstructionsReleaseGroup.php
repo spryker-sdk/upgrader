@@ -45,6 +45,21 @@ class UpgradeInstructionsReleaseGroup
     /**
      * @var string
      */
+    protected const JIRA_KEY = 'jira';
+
+    /**
+     * @var string
+     */
+    protected const ISSUE_KEY = 'issue';
+
+    /**
+     * @var string
+     */
+    protected const ISSUE_LINK_KEY = 'issue_link';
+
+    /**
+     * @var string
+     */
     protected const ID_KEY = 'id';
 
     /**
@@ -148,5 +163,21 @@ class UpgradeInstructionsReleaseGroup
     public function getMeta(): ?UpgradeInstructionMeta
     {
         return $this->meta;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getJiraIssue(): ?string
+    {
+        return isset($this->body[static::JIRA_KEY]) ? $this->body[static::JIRA_KEY][static::ISSUE_KEY] : null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getJiraIssueLink(): ?string
+    {
+        return isset($this->body[static::JIRA_KEY]) ? $this->body[static::JIRA_KEY][static::ISSUE_LINK_KEY] : null;
     }
 }

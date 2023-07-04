@@ -113,6 +113,7 @@ class AggregateReleaseGroupProcessor extends BaseReleaseGroupProcessor
             }
 
             $aggregatedReleaseGroupCollection->add($releaseGroup);
+            $stepsExecutionDto->setLastAppliedReleaseGroup($releaseGroup);
         }
 
         if (!$this->dispatchEvent(new ReleaseGroupProcessorEvent($stepsExecutionDto), ReleaseGroupProcessorEvent::PRE_REQUIRE)) {

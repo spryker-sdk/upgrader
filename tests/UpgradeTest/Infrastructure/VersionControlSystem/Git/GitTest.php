@@ -11,6 +11,8 @@ namespace UpgradeTest\Infrastructure\VersionControlSystem\Git;
 
 use Core\Infrastructure\Service\ProcessRunnerService;
 use ReflectionClass;
+use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
+use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
@@ -127,6 +129,7 @@ class GitTest extends KernelTestCase
         $stepsExecutionDto = new StepsResponseDto(true);
         $composerLockDiffDto = new ComposerLockDiffDto();
         $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
+        $stepsExecutionDto->setLastAppliedReleaseGroup($this->getReleaseGroupDto());
 
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $git = $this->getGitWithProcessRunner($processRunnerMock);
@@ -262,5 +265,23 @@ class GitTest extends KernelTestCase
         $composerLockComparatorCommandExecutor = new ComposerLockComparatorCommandExecutor($processRunnerMockMock);
 
         return $composerLockComparatorCommandExecutor->getComposerLockDiff();
+    }
+
+    /**
+     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto
+     */
+    protected function getReleaseGroupDto(): ReleaseGroupDto
+    {
+        $releaseGroupDto = new ReleaseGroupDto(
+            'RGname',
+            new ModuleDtoCollection(),
+            true,
+            'https://api.release.spryker.com/release-group/4821',
+            false,
+        );
+        $releaseGroupDto->setJiraIssue('CC-25420');
+        $releaseGroupDto->setJiraIssueLink('https://spryker.atlassian.net/browse/CC-25420');
+
+        return $releaseGroupDto;
     }
 }
