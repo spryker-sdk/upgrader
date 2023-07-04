@@ -64,7 +64,7 @@ class UpgraderFinishedEvent implements MetricEventInterface
     /**
      * @var string
      */
-    private string $workspaceName;
+    protected string $workspaceName;
 
     /**
      * @param int $timestamp
