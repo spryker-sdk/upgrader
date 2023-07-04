@@ -116,10 +116,10 @@ class PullRequestDataGenerator
             $releaseGroupLink = sprintf('%s/release-groups/view/%s', $this->configurationProvider->getReleaseAppUrl(), $releaseGroupId);
 
             $text .= sprintf(' for [%s](%s) release group', $releaseGroupLink, $releaseGroupLink);
-        }
 
-        if ($jiraIssueLink !== null) {
-            $text .= sprintf('.%sJira ticket [%s](%s)', PHP_EOL, $jiraIssueLink, $jiraIssueLink);
+            if ($jiraIssueLink !== null) {
+                $text .= sprintf('.%sJira ticket [%s](%s)', PHP_EOL, $jiraIssueLink, $jiraIssueLink);
+            }
         }
 
         $text .= '.';
