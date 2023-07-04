@@ -42,17 +42,24 @@ class UpgraderStartedEvent implements MetricEventInterface
     protected string $ciExecutionId;
 
     /**
+     * @var string
+     */
+    protected string $workspaceName;
+
+    /**
      * @param int $timestamp
      * @param string $organizationName
      * @param string $repositoryName
      * @param string $ciExecutionId
+     * @param string $workspaceName
      */
-    public function __construct(int $timestamp, string $organizationName, string $repositoryName, string $ciExecutionId)
+    public function __construct(int $timestamp, string $organizationName, string $repositoryName, string $ciExecutionId, string $workspaceName)
     {
         $this->timestamp = $timestamp;
         $this->organizationName = $organizationName;
         $this->repositoryName = $repositoryName;
         $this->ciExecutionId = $ciExecutionId;
+        $this->workspaceName = $workspaceName;
     }
 
     /**
@@ -73,6 +80,7 @@ class UpgraderStartedEvent implements MetricEventInterface
             'organizationName' => $this->organizationName,
             'repositoryName' => $this->repositoryName,
             'ciExecutionId' => $this->ciExecutionId,
+            'workspaceName' => $this->workspaceName,
         ];
     }
 }

@@ -62,6 +62,11 @@ class UpgraderFinishedEvent implements MetricEventInterface
     protected string $ciExecutionId;
 
     /**
+     * @var string
+     */
+    private string $workspaceName;
+
+    /**
      * @param int $timestamp
      * @param int $duration
      * @param string $organizationName
@@ -70,6 +75,7 @@ class UpgraderFinishedEvent implements MetricEventInterface
      * @param bool $isBuildSuccessful
      * @param bool $isClientIssue
      * @param string $ciExecutionId
+     * @param string $workspaceName
      */
     public function __construct(
         int $timestamp,
@@ -79,7 +85,8 @@ class UpgraderFinishedEvent implements MetricEventInterface
         string $reason,
         bool $isBuildSuccessful,
         bool $isClientIssue,
-        string $ciExecutionId
+        string $ciExecutionId,
+        string $workspaceName
     ) {
         $this->timestamp = $timestamp;
         $this->duration = $duration;
@@ -89,6 +96,7 @@ class UpgraderFinishedEvent implements MetricEventInterface
         $this->isBuildSuccessful = $isBuildSuccessful;
         $this->isClientIssue = $isClientIssue;
         $this->ciExecutionId = $ciExecutionId;
+        $this->workspaceName = $workspaceName;
     }
 
     /**
@@ -113,6 +121,7 @@ class UpgraderFinishedEvent implements MetricEventInterface
             'isBuildSuccessful' => $this->isBuildSuccessful,
             'isClientIssue' => $this->isClientIssue,
             'ciExecutionId' => $this->ciExecutionId,
+            'workspaceName' => $this->workspaceName,
         ];
     }
 }
