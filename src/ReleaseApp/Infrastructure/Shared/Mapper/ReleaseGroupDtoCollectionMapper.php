@@ -78,6 +78,8 @@ class ReleaseGroupDtoCollectionMapper
         $dataProviderReleaseGroup->setHasConflict(
             $releaseGroup->getMeta() && $releaseGroup->getMeta()->getConflict()->count(),
         );
+        $dataProviderReleaseGroup->setJiraIssue($releaseGroup->getJiraIssue());
+        $dataProviderReleaseGroup->setJiraIssueLink($releaseGroup->getJiraIssueLink());
 
         return $dataProviderReleaseGroup;
     }
