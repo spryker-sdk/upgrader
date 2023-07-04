@@ -67,6 +67,21 @@ class UpgraderFinishedEvent implements MetricEventInterface
     protected string $workspaceName;
 
     /**
+     * @var int
+     */
+    protected int $availableRgsAmount;
+
+    /**
+     * @var int
+     */
+    protected int $appliedPackagesAmount;
+
+    /**
+     * @var int
+     */
+    protected int $appliedRGsAmount;
+
+    /**
      * @param int $timestamp
      * @param int $duration
      * @param string $organizationName
@@ -76,6 +91,9 @@ class UpgraderFinishedEvent implements MetricEventInterface
      * @param bool $isClientIssue
      * @param string $ciExecutionId
      * @param string $workspaceName
+     * @param int $availableRgsAmount
+     * @param int $appliedPackagesAmount
+     * @param int $appliedRGsAmount
      */
     public function __construct(
         int $timestamp,
@@ -86,7 +104,10 @@ class UpgraderFinishedEvent implements MetricEventInterface
         bool $isBuildSuccessful,
         bool $isClientIssue,
         string $ciExecutionId,
-        string $workspaceName
+        string $workspaceName,
+        int $availableRgsAmount,
+        int $appliedPackagesAmount,
+        int $appliedRGsAmount
     ) {
         $this->timestamp = $timestamp;
         $this->duration = $duration;
@@ -97,6 +118,9 @@ class UpgraderFinishedEvent implements MetricEventInterface
         $this->isClientIssue = $isClientIssue;
         $this->ciExecutionId = $ciExecutionId;
         $this->workspaceName = $workspaceName;
+        $this->availableRgsAmount = $availableRgsAmount;
+        $this->appliedPackagesAmount = $appliedPackagesAmount;
+        $this->appliedRGsAmount = $appliedRGsAmount;
     }
 
     /**
@@ -122,6 +146,9 @@ class UpgraderFinishedEvent implements MetricEventInterface
             'isClientIssue' => $this->isClientIssue,
             'ciExecutionId' => $this->ciExecutionId,
             'workspaceName' => $this->workspaceName,
+            'availableRgsAmount' => $this->availableRgsAmount,
+            'appliedPackages' => $this->appliedPackagesAmount,
+            'appliedRGs' => $this->appliedRGsAmount,
         ];
     }
 }

@@ -9,6 +9,7 @@ ignore:
     - "src/ReleaseApp/Infrastructure/Shared/Dto/*.php"
     - "src/Upgrade/Infrastructure/Report/Dto/*.php"
     - "src/Upgrade/Infrastructure/VersionControlSystem/Dto/*.php"
+    - "src/Codebase/Application/Event/*Event.php"
     - "**/*.md"
     - "**/*.yml"
     - "**/*.yaml"

@@ -123,6 +123,8 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
 
             $response = $this->moduleFetcher->require($releaseGroup->getModuleCollection());
 
+            $this->addReleaseGroupStat($stepsExecutionDto, $response);
+
             if ($response->isSuccessful() && $response->getOutputMessage() !== null) {
                 $stepsExecutionDto->addOutputMessage($response->getOutputMessage());
             }
@@ -150,9 +152,7 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
         }
 
         if ($aggregatedReleaseGroupCollection->count()) {
-            $stepsExecutionDto->addOutputMessage(
-                sprintf('Amount of applied release groups: %s', $aggregatedReleaseGroupCollection->count()),
-            );
+            $this->addAppliedRGsInfo($stepsExecutionDto, $aggregatedReleaseGroupCollection->count());
         }
 
         return $stepsExecutionDto;
