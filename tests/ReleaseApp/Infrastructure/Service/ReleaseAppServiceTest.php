@@ -75,19 +75,23 @@ class ReleaseAppServiceTest extends KernelTestCase
         $releaseGroups = $container->get(ReleaseAppService::class)->getReleaseGroup($request);
 
         // Assert
+        $releaseGroupDto = new ReleaseGroupDto(
+            'CC-26540 Introduced the Shipment Types BAPI',
+            new ModuleDtoCollection([
+                new ModuleDto('spryker/shipment-types-backend-api', '0.1.0', 'minor'),
+                new ModuleDto('spryker/shipment-type', '0.1.1', 'patch'),
+            ]),
+            true,
+            'https://api.release.spryker.com/release-group/4821',
+            false,
+        );
+        $releaseGroupDto->setJiraIssue('CC-25420');
+        $releaseGroupDto->setJiraIssueLink('https://spryker.atlassian.net/browse/CC-25420');
+
         $this->assertEquals(
             new ReleaseAppResponse(
                 new ReleaseGroupDtoCollection([
-                    new ReleaseGroupDto(
-                        'CC-26540 Introduced the Shipment Types BAPI',
-                        new ModuleDtoCollection([
-                            new ModuleDto('spryker/shipment-types-backend-api', '0.1.0', 'minor'),
-                            new ModuleDto('spryker/shipment-type', '0.1.1', 'patch'),
-                        ]),
-                        true,
-                        'https://api.release.spryker.com/release-group/4821',
-                        false,
-                    ),
+                    $releaseGroupDto,
                 ]),
             ),
             $releaseGroups,

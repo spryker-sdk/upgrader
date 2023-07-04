@@ -10,8 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\VersionControlSystem\Generator;
 
 use ReleaseApp\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Application\Dto\ComposerLockDiffDto;
-use Upgrade\Application\Dto\IntegratorResponseDto;
+use Upgrade\Application\Dto\StepsResponseDto;
 
 class PullRequestDataGenerator
 {
@@ -36,38 +35,34 @@ class PullRequestDataGenerator
     }
 
     /**
-     * @param \Upgrade\Application\Dto\ComposerLockDiffDto $composerDiffDto
-     * @param \Upgrade\Application\Dto\IntegratorResponseDto|null $integratorResponseDto
-     * @param string $blockerInfo
-     * @param string|null $reportId
-     * @param array<\Upgrade\Application\Dto\ViolationDtoInterface> $violations
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
      * @param int|null $releaseGroupId
      *
      * @return string
      */
     public function buildBody(
-        ComposerLockDiffDto $composerDiffDto,
-        ?IntegratorResponseDto $integratorResponseDto,
-        string $blockerInfo = '',
-        ?string $reportId = null,
-        array $violations = [],
+        StepsResponseDto $stepsResponseDto,
         ?int $releaseGroupId = null
     ): string {
-        $text = $this->createDescriptionAboutText($releaseGroupId)
+        $text = $this->createDescriptionAboutText(
+            $releaseGroupId,
+            $stepsResponseDto->getLastAppliedReleaseGroup() ? $stepsResponseDto->getLastAppliedReleaseGroup()->getJiraIssueLink() : null,
+        )
             . PHP_EOL
             . PHP_EOL
             . '#### Overview'
             . PHP_EOL
-            . sprintf('Report ID: %s', $reportId ?? 'n/a')
+            . sprintf('Report ID: %s', $stepsResponseDto->getReportId() ?? 'n/a')
             . PHP_EOL
             . PHP_EOL;
 
-        if ($blockerInfo) {
+        if ($stepsResponseDto->getBlockerInfo()) {
             $text .= '​' . PHP_EOL . '**The process was faced with the blocker:**' . PHP_EOL . PHP_EOL;
-            $text .= $blockerInfo;
+            $text .= $stepsResponseDto->getBlockerInfo();
             $text .= str_repeat(PHP_EOL, 2);
         }
 
+        $integratorResponseDto = $stepsResponseDto->getIntegratorResponseDto();
         if ($integratorResponseDto && $integratorResponseDto->getWarnings()) {
             $text .= '<details>' . PHP_EOL . '<summary>';
             $text .= 'Warnings that happened during the manifests applying process';
@@ -76,6 +71,12 @@ class PullRequestDataGenerator
             $text .= PHP_EOL . '</details>' . str_repeat(PHP_EOL, 2);
         }
 
+        $composerDiffDto = $stepsResponseDto->getComposerLockDiff();
+        if (!$composerDiffDto) {
+            return $text;
+        }
+
+        $violations = $stepsResponseDto->getViolations();
         if (count($violations) > 0) {
             $text .= '**Needs attention**' . PHP_EOL . PHP_EOL;
             $text .= 'Please review the warnings shown below because they might affect your upgrade' . PHP_EOL;
@@ -103,10 +104,11 @@ class PullRequestDataGenerator
 
     /**
      * @param int|null $releaseGroupId
+     * @param string|null $jiraIssueLink
      *
      * @return string
      */
-    protected function createDescriptionAboutText(?int $releaseGroupId): string
+    protected function createDescriptionAboutText(?int $releaseGroupId, ?string $jiraIssueLink = null): string
     {
         $text = 'Auto created via Upgrader tool';
 
@@ -114,6 +116,10 @@ class PullRequestDataGenerator
             $releaseGroupLink = sprintf('%s/release-groups/view/%s', $this->configurationProvider->getReleaseAppUrl(), $releaseGroupId);
 
             $text .= sprintf(' for [%s](%s) release group', $releaseGroupLink, $releaseGroupLink);
+
+            if ($jiraIssueLink !== null) {
+                $text .= sprintf('.%sJira ticket [%s](%s)', PHP_EOL, $jiraIssueLink, $jiraIssueLink);
+            }
         }
 
         $text .= '.';

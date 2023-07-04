@@ -213,15 +213,11 @@ class Git
         $pullRequestDto = new PullRequestDto(
             $this->getHeadBranch(),
             $this->getBaseBranch(),
-            $this->getPullRequestTitle($releaseGroupId),
-            $this->pullRequestDataGenerator->buildBody(
-                $composerDiffDto,
-                $stepsExecutionDto->getIntegratorResponseDto(),
-                $stepsExecutionDto->getBlockerInfo(),
-                $stepsExecutionDto->getReportId(),
-                $stepsExecutionDto->getViolations(),
+            $this->getPullRequestTitle(
                 $releaseGroupId,
+                $stepsExecutionDto->getLastAppliedReleaseGroup() ? $stepsExecutionDto->getLastAppliedReleaseGroup()->getJiraIssue() : null,
             ),
+            $this->pullRequestDataGenerator->buildBody($stepsExecutionDto, $releaseGroupId),
             $this->configurationProvider->isPullRequestAutoMergeEnabled(),
         );
 
@@ -230,15 +226,20 @@ class Git
 
     /**
      * @param int|null $releaseGroupId
+     * @param string|null $jiraIssue
      *
      * @return string
      */
-    protected function getPullRequestTitle(?int $releaseGroupId): string
+    protected function getPullRequestTitle(?int $releaseGroupId = null, ?string $jiraIssue = null): string
     {
-        $title = 'The result of auto-updating Spryker modules on ' . date('Y-m-d H:i');
+        $title = 'Auto-updating Spryker modules on ' . date('Y-m-d H:i');
 
         if ($releaseGroupId !== null) {
             $title .= ' for release group #' . $releaseGroupId;
+
+            if ($jiraIssue !== null) {
+                $title .= ' / Jira ticket ' . $jiraIssue;
+            }
         }
 
         return $title;

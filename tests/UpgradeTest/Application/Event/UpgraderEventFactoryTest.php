@@ -26,7 +26,8 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $organizationName = 'org';
         $repositoryName = 'repo';
         $ciExecutionId = 'executionId';
-        $configurationProviderMock = $this->createConfigurationProviderMock($organizationName, $repositoryName, $ciExecutionId);
+        $workspaceName = 'workspaceName';
+        $configurationProviderMock = $this->createConfigurationProviderMock($organizationName, $repositoryName, $ciExecutionId, $workspaceName);
         $upgraderEventFactory = new UpgraderEventFactory($configurationProviderMock);
 
         // Act
@@ -36,6 +37,7 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $this->assertSame($organizationName, $event->getPayLoad()['organizationName']);
         $this->assertSame($repositoryName, $event->getPayLoad()['repositoryName']);
         $this->assertSame($ciExecutionId, $event->getPayLoad()['ciExecutionId']);
+        $this->assertSame($workspaceName, $event->getPayLoad()['workspaceName']);
     }
 
     /**
@@ -47,7 +49,8 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $organizationName = 'org';
         $repositoryName = 'repo';
         $ciExecutionId = '';
-        $configurationProviderMock = $this->createConfigurationProviderMock($organizationName, $repositoryName, $ciExecutionId);
+        $workspaceName = 'workspaceName';
+        $configurationProviderMock = $this->createConfigurationProviderMock($organizationName, $repositoryName, $ciExecutionId, $workspaceName);
         $upgraderEventFactory = new UpgraderEventFactory($configurationProviderMock);
 
         // Act
@@ -66,7 +69,8 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $organizationName = 'org';
         $repositoryName = 'repo';
         $ciExecutionId = 'executionId';
-        $configurationProviderMock = $this->createConfigurationProviderMock($organizationName, $repositoryName, $ciExecutionId);
+        $workspaceName = 'workspaceName';
+        $configurationProviderMock = $this->createConfigurationProviderMock($organizationName, $repositoryName, $ciExecutionId, $workspaceName);
         $upgraderEventFactory = new UpgraderEventFactory($configurationProviderMock);
 
         $stepsResponseDto = new StepsResponseDto();
@@ -81,6 +85,7 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $this->assertSame($organizationName, $event->getPayLoad()['organizationName']);
         $this->assertSame($repositoryName, $event->getPayLoad()['repositoryName']);
         $this->assertSame($ciExecutionId, $event->getPayLoad()['ciExecutionId']);
+        $this->assertSame($workspaceName, $event->getPayLoad()['workspaceName']);
         $this->assertTrue($event->getPayLoad()['isClientIssue']);
         $this->assertSame('client_error', $event->getPayLoad()['reason']);
     }
@@ -94,7 +99,8 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $organizationName = 'org';
         $repositoryName = 'repo';
         $ciExecutionId = 'executionId';
-        $configurationProviderMock = $this->createConfigurationProviderMock($organizationName, $repositoryName, $ciExecutionId);
+        $workspaceName = 'workspaceName';
+        $configurationProviderMock = $this->createConfigurationProviderMock($organizationName, $repositoryName, $ciExecutionId, $workspaceName);
         $upgraderEventFactory = new UpgraderEventFactory($configurationProviderMock);
 
         $stepsResponseDto = new StepsResponseDto();
@@ -108,6 +114,7 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $this->assertSame($organizationName, $event->getPayLoad()['organizationName']);
         $this->assertSame($repositoryName, $event->getPayLoad()['repositoryName']);
         $this->assertSame($ciExecutionId, $event->getPayLoad()['ciExecutionId']);
+        $this->assertSame($workspaceName, $event->getPayLoad()['workspaceName']);
         $this->assertFalse($event->getPayLoad()['isClientIssue']);
         $this->assertSame('', $event->getPayLoad()['reason']);
     }
@@ -116,15 +123,21 @@ class UpgraderEventFactoryTest extends KernelTestCase
      * @param string $organizationName
      * @param string $repositoryName
      * @param string $ciExecutionId
+     * @param string $workspaceName
      *
      * @return \Upgrade\Infrastructure\Configuration\ConfigurationProvider
      */
-    public function createConfigurationProviderMock(string $organizationName, string $repositoryName, string $ciExecutionId): ConfigurationProvider
-    {
+    public function createConfigurationProviderMock(
+        string $organizationName,
+        string $repositoryName,
+        string $ciExecutionId,
+        string $workspaceName
+    ): ConfigurationProvider {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
         $configurationProvider->method('getOrganizationName')->willReturn($organizationName);
         $configurationProvider->method('getRepositoryName')->willReturn($repositoryName);
         $configurationProvider->method('getCiExecutionId')->willReturn($ciExecutionId);
+        $configurationProvider->method('getCiWorkspaceName')->willReturn($workspaceName);
 
         return $configurationProvider;
     }

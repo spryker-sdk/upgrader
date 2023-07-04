@@ -34,6 +34,16 @@ class ReleaseGroupDto
     protected string $link;
 
     /**
+     * @var string|null
+     */
+    protected ?string $jiraIssue = null;
+
+    /**
+     * @var string|null
+     */
+    protected ?string $jiraIssueLink = null;
+
+    /**
      * @var bool
      */
     protected bool $hasConflict = false;
@@ -117,5 +127,41 @@ class ReleaseGroupDto
     public function setHasConflict(bool $hasConflict): void
     {
         $this->hasConflict = $hasConflict;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getJiraIssue(): ?string
+    {
+        return $this->jiraIssue;
+    }
+
+    /**
+     * @param string|null $jiraIssue
+     *
+     * @return void
+     */
+    public function setJiraIssue(?string $jiraIssue): void
+    {
+        $this->jiraIssue = $jiraIssue;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getJiraIssueLink(): ?string
+    {
+        return $this->jiraIssueLink;
+    }
+
+    /**
+     * @param string|null $jiraIssueLink
+     *
+     * @return void
+     */
+    public function setJiraIssueLink(?string $jiraIssueLink): void
+    {
+        $this->jiraIssueLink = $jiraIssueLink;
     }
 }
