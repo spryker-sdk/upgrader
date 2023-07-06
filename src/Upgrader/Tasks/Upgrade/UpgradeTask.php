@@ -20,7 +20,7 @@ class UpgradeTask implements TaskInterface
     /**
      * @var \Upgrade\Application\Service\UpgradeServiceInterface
      */
-    protected $upgraderService;
+    protected UpgradeServiceInterface $upgraderService;
 
     /**
      * @param \Upgrade\Application\Service\UpgradeServiceInterface $upgraderService

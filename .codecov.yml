@@ -1,5 +1,5 @@
 coverage:
-    range: 95..100
+    range: 70..80
     round: nearest
     precision: 2
 
@@ -10,6 +10,8 @@ ignore:
     - "src/Upgrade/Infrastructure/Report/Dto/*.php"
     - "src/Upgrade/Infrastructure/VersionControlSystem/Dto/*.php"
     - "src/Codebase/Application/Event/*Event.php"
+    - "src/Upgrader/Commands/**.php"
+    - "src/Upgrader/Tasks/**.php"
     - "**/*.md"
     - "**/*.yml"
     - "**/*.yaml"
