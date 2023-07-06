@@ -56,18 +56,26 @@ class UpgraderEventFactory
      */
     public function createUpgraderFinishedEvent(StepsResponseDto $stepsResponseDto, int $duration): UpgraderFinishedEvent
     {
+        $finishReason = $stepsResponseDto->getError() !== null
+            ? $stepsResponseDto->getError()->getErrorMessage()
+            : '';
+
+        $isClientIssue = $stepsResponseDto->getError() !== null
+            && $stepsResponseDto->getError()->getErrorType() === Error::CLIENT_CODE_ERROR;
+
         return new UpgraderFinishedEvent(
             time(),
             $duration,
             $this->configurationProvider->getOrganizationName(),
             $this->configurationProvider->getRepositoryName(),
-            $stepsResponseDto->getError() !== null
-                ? $stepsResponseDto->getError()->getErrorMessage()
-                : '',
+            $finishReason,
             $stepsResponseDto->getIsSuccessful(),
-            $stepsResponseDto->getError() !== null && $stepsResponseDto->getError()->getErrorType() === Error::CLIENT_CODE_ERROR,
+            $isClientIssue,
             $this->getCiExecutionId(),
             $this->configurationProvider->getCiWorkspaceName(),
+            $stepsResponseDto->getReleaseGroupStatDto()->getAvailableRgsAmount(),
+            $stepsResponseDto->getReleaseGroupStatDto()->getAppliedPackagesAmount(),
+            $stepsResponseDto->getReleaseGroupStatDto()->getAppliedRGsAmount(),
         );
     }
 

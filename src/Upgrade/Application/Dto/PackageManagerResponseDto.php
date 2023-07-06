@@ -17,14 +17,25 @@ class PackageManagerResponseDto extends ResponseDto
     protected array $executedCommands;
 
     /**
+     * @var int
+     */
+    protected int $appliedPackagesAmount;
+
+    /**
      * @param bool $isSuccessful
      * @param string|null $outputMessage
      * @param array<string> $executedCommands
+     * @param int $appliedPackagesAmount
      */
-    public function __construct(bool $isSuccessful, ?string $outputMessage = null, array $executedCommands = [])
-    {
+    public function __construct(
+        bool $isSuccessful,
+        ?string $outputMessage = null,
+        array $executedCommands = [],
+        int $appliedPackagesAmount = 0
+    ) {
         parent::__construct($isSuccessful, $outputMessage);
         $this->executedCommands = $executedCommands;
+        $this->appliedPackagesAmount = $appliedPackagesAmount;
     }
 
     /**
@@ -33,5 +44,13 @@ class PackageManagerResponseDto extends ResponseDto
     public function getExecutedCommands(): array
     {
         return $this->executedCommands;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAppliedPackagesAmount(): int
+    {
+        return $this->appliedPackagesAmount;
     }
 }

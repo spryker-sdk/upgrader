@@ -72,6 +72,8 @@ class StepsResponseDto extends ResponseDto
      */
     protected array $violations = [];
 
+    protected ReleaseGroupStatDto $releaseGroupStatDto;
+
     /**
      * @param bool $isSuccessful
      * @param string|null $outputMessage
@@ -82,6 +84,8 @@ class StepsResponseDto extends ResponseDto
         if ($outputMessage) {
             $this->outputMessageList[] = $outputMessage;
         }
+
+        $this->releaseGroupStatDto = new ReleaseGroupStatDto();
     }
 
     /**
@@ -334,5 +338,23 @@ class StepsResponseDto extends ResponseDto
         }
 
         $this->violations[] = $violation;
+    }
+
+    /**
+     * @return \Upgrade\Application\Dto\ReleaseGroupStatDto
+     */
+    public function getReleaseGroupStatDto(): ReleaseGroupStatDto
+    {
+        return $this->releaseGroupStatDto;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\ReleaseGroupStatDto $releaseGroupStatDto
+     *
+     * @return void
+     */
+    public function setReleaseGroupStatDto(ReleaseGroupStatDto $releaseGroupStatDto): void
+    {
+        $this->releaseGroupStatDto = $releaseGroupStatDto;
     }
 }
