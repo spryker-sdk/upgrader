@@ -51,7 +51,7 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
     {
         $header = ':warning: ' . static::ERROR_MESSAGE;
 
-        $text = '<br>Switch to this branch, bootstrap your project in the development environment, open the mentioned file and check it\'s correctness compared to the released one by Spryker';
+        $text = '<br>Switch to this branch, bootstrap your project in the development environment, open the mentioned file, and compare its correctness to the released version by Spryker.';
         $text .= PHP_EOL . PHP_EOL
             . '| Composer command | Project file(s) | '
             . PHP_EOL
