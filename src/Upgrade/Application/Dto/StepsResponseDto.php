@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Dto;
 
-use CodeCompliance\Domain\Entity\Report;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Domain\ValueObject\ErrorInterface;
 
@@ -27,11 +26,6 @@ class StepsResponseDto extends ResponseDto
      * @var array<string>
      */
     protected array $outputMessageList = [];
-
-    /**
-     * @var \CodeCompliance\Domain\Entity\Report|null
-     */
-    protected ?Report $codeComplianceReport = null;
 
     /**
      * @var \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto|null
@@ -78,6 +72,8 @@ class StepsResponseDto extends ResponseDto
      */
     protected array $violations = [];
 
+    protected ReleaseGroupStatDto $releaseGroupStatDto;
+
     /**
      * @param bool $isSuccessful
      * @param string|null $outputMessage
@@ -88,6 +84,8 @@ class StepsResponseDto extends ResponseDto
         if ($outputMessage) {
             $this->outputMessageList[] = $outputMessage;
         }
+
+        $this->releaseGroupStatDto = new ReleaseGroupStatDto();
     }
 
     /**
@@ -319,24 +317,6 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @return \CodeCompliance\Domain\Entity\Report|null
-     */
-    public function getCodeComplianceReport(): ?Report
-    {
-        return $this->codeComplianceReport;
-    }
-
-    /**
-     * @param \CodeCompliance\Domain\Entity\Report|null $codeComplianceReport
-     *
-     * @return void
-     */
-    public function setCodeComplianceReport(?Report $codeComplianceReport): void
-    {
-        $this->codeComplianceReport = $codeComplianceReport;
-    }
-
-    /**
      * @return array<\Upgrade\Application\Dto\ViolationDtoInterface>
      */
     public function getViolations(): array
@@ -358,5 +338,23 @@ class StepsResponseDto extends ResponseDto
         }
 
         $this->violations[] = $violation;
+    }
+
+    /**
+     * @return \Upgrade\Application\Dto\ReleaseGroupStatDto
+     */
+    public function getReleaseGroupStatDto(): ReleaseGroupStatDto
+    {
+        return $this->releaseGroupStatDto;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\ReleaseGroupStatDto $releaseGroupStatDto
+     *
+     * @return void
+     */
+    public function setReleaseGroupStatDto(ReleaseGroupStatDto $releaseGroupStatDto): void
+    {
+        $this->releaseGroupStatDto = $releaseGroupStatDto;
     }
 }

@@ -82,12 +82,13 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $event = $upgraderEventFactory->createUpgraderFinishedEvent($stepsResponseDto, $duration);
 
         // Assert
-        $this->assertSame($organizationName, $event->getPayLoad()['organizationName']);
-        $this->assertSame($repositoryName, $event->getPayLoad()['repositoryName']);
-        $this->assertSame($ciExecutionId, $event->getPayLoad()['ciExecutionId']);
-        $this->assertSame($workspaceName, $event->getPayLoad()['workspaceName']);
-        $this->assertTrue($event->getPayLoad()['isClientIssue']);
-        $this->assertSame('client_error', $event->getPayLoad()['reason']);
+        $payload = $event->getPayLoad();
+        $this->assertSame($organizationName, $payload['organizationName']);
+        $this->assertSame($repositoryName, $payload['repositoryName']);
+        $this->assertSame($ciExecutionId, $payload['ciExecutionId']);
+        $this->assertSame($workspaceName, $payload['workspaceName']);
+        $this->assertTrue($payload['isClientIssue']);
+        $this->assertSame('client_error', $payload['reason']);
     }
 
     /**
@@ -111,12 +112,84 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $event = $upgraderEventFactory->createUpgraderFinishedEvent($stepsResponseDto, $duration);
 
         // Assert
-        $this->assertSame($organizationName, $event->getPayLoad()['organizationName']);
-        $this->assertSame($repositoryName, $event->getPayLoad()['repositoryName']);
-        $this->assertSame($ciExecutionId, $event->getPayLoad()['ciExecutionId']);
-        $this->assertSame($workspaceName, $event->getPayLoad()['workspaceName']);
-        $this->assertFalse($event->getPayLoad()['isClientIssue']);
-        $this->assertSame('', $event->getPayLoad()['reason']);
+        $payload = $event->getPayLoad();
+        $this->assertSame($organizationName, $payload['organizationName']);
+        $this->assertSame($repositoryName, $payload['repositoryName']);
+        $this->assertSame($ciExecutionId, $payload['ciExecutionId']);
+        $this->assertSame($workspaceName, $payload['workspaceName']);
+        $this->assertFalse($payload['isClientIssue']);
+        $this->assertSame('', $payload['reason']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreateUpgraderFinishedEventContainsRgStatDataIfSet(): void
+    {
+        // Arrange
+        $upgraderEventFactory = new UpgraderEventFactory($this->createConfigurationProviderMock());
+        $stepsResponseDto = new StepsResponseDto();
+
+        $expectedAvailableRgsAmount = 22;
+        $expectedAppliedRgsAmount = 10;
+        $expectedAppliedPackagesAmount = 18;
+        $stepsResponseDto->getReleaseGroupStatDto()->setAvailableRgsAmount($expectedAvailableRgsAmount);
+        $stepsResponseDto->getReleaseGroupStatDto()->setAppliedRGsAmount($expectedAppliedRgsAmount);
+        $stepsResponseDto->getReleaseGroupStatDto()->setAppliedPackagesAmount($expectedAppliedPackagesAmount);
+
+        // Act
+        $event = $upgraderEventFactory->createUpgraderFinishedEvent($stepsResponseDto, 3);
+
+        // Assert
+        $payload = $event->getPayLoad();
+
+        $this->assertSame(
+            $expectedAvailableRgsAmount,
+            $payload['availableRgsAmount'],
+            'Event contains correct amount of available Release Groups.',
+        );
+        $this->assertSame(
+            $expectedAppliedPackagesAmount,
+            $payload['appliedPackages'],
+            'Event contains correct amount of applied packages.',
+        );
+        $this->assertSame(
+            $expectedAppliedRgsAmount,
+            $payload['appliedRGs'],
+            'Event contains correct amount of applied Release Groups.',
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreateUpgraderFinishedEventContainsDefaultDataIfNotSet(): void
+    {
+        // Arrange
+        $upgraderEventFactory = new UpgraderEventFactory($this->createConfigurationProviderMock());
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $event = $upgraderEventFactory->createUpgraderFinishedEvent($stepsResponseDto, 3);
+
+        // Assert
+        $payload = $event->getPayLoad();
+
+        $this->assertSame(
+            0,
+            $payload['availableRgsAmount'],
+            'Event contains correct amount of available Release Groups.',
+        );
+        $this->assertSame(
+            0,
+            $payload['appliedPackages'],
+            'Event contains correct amount of applied packages.',
+        );
+        $this->assertSame(
+            0,
+            $payload['appliedRGs'],
+            'Event contains correct amount of applied Release Groups.',
+        );
     }
 
     /**
@@ -127,11 +200,11 @@ class UpgraderEventFactoryTest extends KernelTestCase
      *
      * @return \Upgrade\Infrastructure\Configuration\ConfigurationProvider
      */
-    public function createConfigurationProviderMock(
-        string $organizationName,
-        string $repositoryName,
-        string $ciExecutionId,
-        string $workspaceName
+    protected function createConfigurationProviderMock(
+        string $organizationName = 'org',
+        string $repositoryName = 'repo',
+        string $ciExecutionId = 'executionId',
+        string $workspaceName = 'workspaceName'
     ): ConfigurationProvider {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
         $configurationProvider->method('getOrganizationName')->willReturn($organizationName);

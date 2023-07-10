@@ -389,6 +389,36 @@ class ReleaseGroupUpdateStepTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testRunReturnsResponseDtoWithStatData(): void
+    {
+        // Assert
+        $rgDtoCollection = $this->buildReleaseGroupDtoCollection();
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock(
+                $rgDtoCollection,
+            ),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createSequentialReleaseGroupProcessor(),
+            ),
+            $this->createConfigurationProviderMock(),
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Arrange
+        $this->assertSame(
+            $rgDtoCollection->count(),
+            $stepsResponseDto->getReleaseGroupStatDto()->getAvailableRgsAmount(),
+            'Result DTO contains expected number of applied Release Groups.',
+        );
+    }
+
+    /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface $processor
      *
      * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver

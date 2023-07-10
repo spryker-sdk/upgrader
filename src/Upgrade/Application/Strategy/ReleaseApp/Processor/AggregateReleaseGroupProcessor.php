@@ -123,6 +123,8 @@ class AggregateReleaseGroupProcessor extends BaseReleaseGroupProcessor
         $response = $this->modulePackageFetcher->require($aggregatedReleaseGroupCollection->getCommonModuleCollection());
         $stepsExecutionDto->setIsSuccessful($response->isSuccessful());
 
+        $this->addReleaseGroupStat($stepsExecutionDto, $response);
+
         if (!$response->isSuccessful()) {
             $stepsExecutionDto->setError(
                 Error::createClientCodeError($response->getOutputMessage() ?? 'Module fetcher error'),
@@ -134,9 +136,7 @@ class AggregateReleaseGroupProcessor extends BaseReleaseGroupProcessor
         }
 
         if ($response->isSuccessful() && $aggregatedReleaseGroupCollection->count()) {
-            $stepsExecutionDto->addOutputMessage(
-                sprintf('Amount of applied release groups: %s', $aggregatedReleaseGroupCollection->count()),
-            );
+            $this->addAppliedRGsInfo($stepsExecutionDto, $aggregatedReleaseGroupCollection->count());
         }
 
         if (!$this->dispatchEvent(new ReleaseGroupProcessorPostRequireEvent($stepsExecutionDto, $response), ReleaseGroupProcessorPostRequireEvent::POST_REQUIRE)) {

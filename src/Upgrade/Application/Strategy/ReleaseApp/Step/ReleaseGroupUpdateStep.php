@@ -65,6 +65,8 @@ class ReleaseGroupUpdateStep implements StepInterface
             sprintf('Amount of available release groups for the project: %s', $requireRequestCollection->count()),
         );
 
+        $stepsExecutionDto->getReleaseGroupStatDto()->setAvailableRgsAmount($requireRequestCollection->count());
+
         return $this->releaseGroupProcessor->process($requireRequestCollection, $stepsExecutionDto);
     }
 }

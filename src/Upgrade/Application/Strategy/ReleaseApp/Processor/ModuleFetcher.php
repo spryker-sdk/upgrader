@@ -20,6 +20,11 @@ class ModuleFetcher
     /**
      * @var string
      */
+    public const MESSAGE_NO_PACKAGES_FOUND = 'No valid packages found';
+
+    /**
+     * @var string
+     */
     protected const REQUIRED_TYPE = 'required';
 
     /**
@@ -59,7 +64,7 @@ class ModuleFetcher
         $packageCollection = $this->packageCollectionMapper->mapModuleCollectionToPackageCollection($moduleCollection);
 
         if ($packageCollection->isEmpty()) {
-            return new PackageManagerResponseDto(true, 'No valid packages found');
+            return new PackageManagerResponseDto(true, static::MESSAGE_NO_PACKAGES_FOUND);
         }
 
         return $this->requirePackageCollection($packageCollection);
@@ -92,6 +97,7 @@ class ModuleFetcher
             $responseDev->isSuccessful(),
             implode(PHP_EOL, [$response->getOutputMessage(), $responseSubPackages->getOutputMessage(), $responseDev->getOutputMessage()]),
             array_merge($response->getExecutedCommands(), $responseDev->getExecutedCommands(), $responseSubPackages->getExecutedCommands()),
+            $requiredPackages->count() + $requiredDevPackages->count(),
         );
     }
 
@@ -137,6 +143,10 @@ class ModuleFetcher
             return $requireResponse;
         }
 
-        return new PackageManagerResponseDto(true, sprintf('Applied %s packages count: %s', $requiredPackageType, $requiredPackages->count()), $requireResponse->getExecutedCommands());
+        return new PackageManagerResponseDto(
+            true,
+            sprintf('Applied %s packages count: %s', $requiredPackageType, $requiredPackages->count()),
+            $requireResponse->getExecutedCommands(),
+        );
     }
 }
