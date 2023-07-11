@@ -8779,6 +8779,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "spryker-sdk/azure-php-client": 20,
+        "spryker-sdk/integrator": 20,
         "spryker/code-sniffer": 20
     },
     "prefer-stable": true,
