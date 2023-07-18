@@ -41,9 +41,14 @@ class ReleaseAppService implements ReleaseAppServiceInterface
         UpgradeAnalysisRequest $upgradeAnalysisRequest
     ): UpgradeInstructionsReleaseGroupCollection {
         $moduleVersionCollection = $this->getModuleVersionCollection($upgradeAnalysisRequest);
-        $releaseGroupCollection = $this->getReleaseGroupCollection($moduleVersionCollection);
+        $releaseGroupCollection = $this->getReleaseGroupCollection($moduleVersionCollection)->getOnlyWithReleasedDate();
 
-        return $releaseGroupCollection->getOnlyWithReleasedDate()->sortByReleasedDate();
+        $upgradeInstructionsReleaseGroupCollection = new UpgradeInstructionsReleaseGroupCollection([
+            ...$releaseGroupCollection->getOnlySecurityFixes()->sortByReleasedDate()->toArray(),
+            ...$releaseGroupCollection->filterSecurityFixes()->sortByReleasedDate()->toArray(),
+        ]);
+
+        return $upgradeInstructionsReleaseGroupCollection;
     }
 
     /**

@@ -63,6 +63,11 @@ class UpgradeInstructionsReleaseGroup
     protected const ID_KEY = 'id';
 
     /**
+     * @var string
+     */
+    protected const SECURITY_FIX = 'security_fix';
+
+    /**
      * @var array<mixed>
      */
     protected array $body;
@@ -179,5 +184,13 @@ class UpgradeInstructionsReleaseGroup
     public function getJiraIssueLink(): ?string
     {
         return isset($this->body[static::JIRA_KEY]) ? $this->body[static::JIRA_KEY][static::ISSUE_LINK_KEY] : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSecurityFix(): bool
+    {
+        return isset($this->body[static::SECURITY_FIX]) ? (bool)$this->body[static::SECURITY_FIX] : false;
     }
 }

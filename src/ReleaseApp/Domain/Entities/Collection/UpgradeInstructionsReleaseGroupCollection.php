@@ -91,6 +91,30 @@ class UpgradeInstructionsReleaseGroupCollection
     /**
      * @return self
      */
+    public function getOnlySecurityFixes(): self
+    {
+        return new self(
+            array_filter($this->elements, function ($releaseGroup) {
+                return $releaseGroup->isSecurityFix();
+            }),
+        );
+    }
+
+    /**
+     * @return self
+     */
+    public function filterSecurityFixes(): self
+    {
+        return new self(
+            array_filter($this->elements, function ($releaseGroup) {
+                return !$releaseGroup->isSecurityFix();
+            }),
+        );
+    }
+
+    /**
+     * @return self
+     */
     public function getOnlyWithReleasedDate(): self
     {
         $result = new self();
