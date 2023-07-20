@@ -31,7 +31,7 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
 
         foreach ($this->getGroupedViolationsByMessage($violations) as $message => $groupedViolationsByMessage) {
             $header = ':warning: ' . $message;
-            $body = '<br>Switch to this branch, bootstrap your project in the development environment, open the mentioned file and check it\'s correctness compared to the released one by Spryker';
+            $body = '<br>Switch to this branch, bootstrap your project in the development environment, open the mentioned file, and compare its correctness to the released version by Spryker.';
             $body .= PHP_EOL . PHP_EOL
                 . '| Package | Release | Classes that overrides the core private API | '
                 . PHP_EOL
