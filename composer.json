@@ -4,7 +4,7 @@
     "description": "Code evaluator and upgrader tool",
     "license": "proprietary",
     "require": {
-        "php": ">=7.4",
+        "php": ">=7.4 || ^8.0",
         "ext-json": "*",
         "ext-simplexml": "*",
         "davidrjonas/composer-lock-diff": "^1.6",
