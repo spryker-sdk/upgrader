@@ -18,12 +18,12 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
     /**
      * @var string
      */
-    protected const COMMAND = 'rsync -au --delete %s %s';
+    public const GITIGNORE_FILE_NAME = '.gitignore';
 
     /**
      * @var string
      */
-    protected const GITIGNORE_FILE_NAME = '.gitignore';
+    protected const COMMAND = 'rsync -au --delete %s %s';
 
     /**
      * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface
@@ -89,7 +89,9 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
      */
     public function clear(): void
     {
-        $this->filesystem->remove($this->packagesDirProvider->getToDir());
+        if ($this->filesystem->exists($this->packagesDirProvider->getToDir())) {
+            $this->filesystem->remove($this->packagesDirProvider->getToDir());
+        }
     }
 
     public function __destruct()

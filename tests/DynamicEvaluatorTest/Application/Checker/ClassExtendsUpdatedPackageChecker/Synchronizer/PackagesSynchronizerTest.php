@@ -34,7 +34,9 @@ class PackagesSynchronizerTest extends TestCase
         $processRunnerMock = $this->createProcessRunnerServiceMock($process);
 
         $filesystem = $this->createMock(Filesystem::class);
-        $filesystem->expects($this->once())->method('exists')->with($toDir)->willReturn(false);
+        $filesystem->expects($this->exactly(3))->method('exists')
+            ->withConsecutive([$toDir], [$toDir . PackagesSynchronizer::GITIGNORE_FILE_NAME], [$toDir])
+            ->willReturn(false);
         $filesystem->expects($this->once())->method('mkdir')->with($toDir);
 
         $packagesSynchronizer = new PackagesSynchronizer($packagesDirProvider, $filesystem, $processRunnerMock);
@@ -61,6 +63,9 @@ class PackagesSynchronizerTest extends TestCase
         $processRunnerMock->expects($this->once())->method('mustRunFromCommandLine')->willThrowException(new ProcessFailedException($process));
 
         $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->expects($this->exactly(4))->method('exists')
+            ->withConsecutive([$toDir], [$toDir . PackagesSynchronizer::GITIGNORE_FILE_NAME], [$toDir], [$toDir])
+            ->willReturnOnConsecutiveCalls(true, true, true, false);
         $filesystem->expects($this->once())->method('remove')->with($toDir);
 
         $packagesSynchronizer = new PackagesSynchronizer($packagesDirProvider, $filesystem, $processRunnerMock);
@@ -83,12 +88,37 @@ class PackagesSynchronizerTest extends TestCase
         $processRunnerMock = $this->createProcessRunnerServiceMock($process);
 
         $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->expects($this->exactly(2))->method('exists')
+            ->with($toDir)
+            ->willReturnOnConsecutiveCalls(true, false);
         $filesystem->expects($this->once())->method('remove')->with($toDir);
 
         $packagesSynchronizer = new PackagesSynchronizer($packagesDirProvider, $filesystem, $processRunnerMock);
 
         // Act
         $packagesSynchronizer->clear();
+    }
+
+    /**
+     * @return void
+     */
+    public function testClearShouldInvokeRemoveWhenFailed(): void
+    {
+        // Arrange
+        $fromDir = DIRECTORY_SEPARATOR . PackagesDirProvider::FROM_DIR;
+        $toDir = DIRECTORY_SEPARATOR . PackagesDirProvider::TO_DIR;
+        $packagesDirProvider = $this->createPackagesDirProviderMock(['spryker'], $fromDir, $toDir);
+
+        $process = $this->createMock(Process::class);
+        $processRunnerMock = $this->createProcessRunnerServiceMock($process);
+
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->expects($this->once())->method('exists')
+            ->with($toDir)
+            ->willReturn(true);
+        $filesystem->expects($this->once())->method('remove')->with($toDir);
+
+        $packagesSynchronizer = new PackagesSynchronizer($packagesDirProvider, $filesystem, $processRunnerMock);
     }
 
     /**
