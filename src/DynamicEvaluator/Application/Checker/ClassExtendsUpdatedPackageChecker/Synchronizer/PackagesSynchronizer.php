@@ -68,7 +68,7 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
         if (!$this->filesystem->exists($toDir)) {
             $this->filesystem->mkdir($toDir);
         }
-        $gitignorePath = $toDir  . static::GITIGNORE_FILE_NAME;
+        $gitignorePath = $toDir . static::GITIGNORE_FILE_NAME;
         if (!$this->filesystem->exists($gitignorePath)) {
             $this->filesystem->dumpFile($gitignorePath, '*');
         }
@@ -92,9 +92,6 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
         $this->filesystem->remove($this->packagesDirProvider->getToDir());
     }
 
-    /**
-     * @return void
-     */
     public function __destruct()
     {
         $this->clear();
