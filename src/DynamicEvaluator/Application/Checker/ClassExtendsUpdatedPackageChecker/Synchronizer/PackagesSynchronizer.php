@@ -21,6 +21,11 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
     protected const COMMAND = 'rsync -au --delete %s %s';
 
     /**
+     * @var string
+     */
+    protected const GITIGNORE_FILE_NAME = '.gitignore';
+
+    /**
      * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface
      */
     protected PackagesDirProviderInterface $packagesDirProvider;
@@ -63,6 +68,10 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
         if (!$this->filesystem->exists($toDir)) {
             $this->filesystem->mkdir($toDir);
         }
+        $gitignorePath = $toDir  . static::GITIGNORE_FILE_NAME;
+        if (!$this->filesystem->exists($gitignorePath)) {
+            $this->filesystem->dumpFile($gitignorePath, '*');
+        }
 
         try {
             foreach ($this->packagesDirProvider->getSprykerPackageDirs() as $dir) {
@@ -81,5 +90,13 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
     public function clear(): void
     {
         $this->filesystem->remove($this->packagesDirProvider->getToDir());
+    }
+
+    /**
+     * @return void
+     */
+    public function __destruct()
+    {
+        $this->clear();
     }
 }
