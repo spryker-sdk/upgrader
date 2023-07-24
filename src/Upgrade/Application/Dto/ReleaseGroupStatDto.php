@@ -27,6 +27,11 @@ class ReleaseGroupStatDto
     protected int $appliedRGsAmount = 0;
 
     /**
+     * @var int
+     */
+    protected int $appliedSecurityFixesAmount = 0;
+
+    /**
      * @return int
      */
     public function getAvailableRgsAmount(): int
@@ -78,5 +83,23 @@ class ReleaseGroupStatDto
     public function setAppliedRGsAmount(int $appliedRGsAmount): void
     {
         $this->appliedRGsAmount = $appliedRGsAmount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAppliedSecurityFixesAmount(): int
+    {
+        return $this->appliedSecurityFixesAmount;
+    }
+
+    /**
+     * @param int $appliedSecurityFixesAmount
+     *
+     * @return void
+     */
+    public function setAppliedSecurityFixesAmount(int $appliedSecurityFixesAmount): void
+    {
+        $this->appliedSecurityFixesAmount = $appliedSecurityFixesAmount;
     }
 }

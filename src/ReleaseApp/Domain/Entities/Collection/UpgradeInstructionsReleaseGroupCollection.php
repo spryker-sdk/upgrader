@@ -95,7 +95,7 @@ class UpgradeInstructionsReleaseGroupCollection
     {
         return new self(
             array_filter($this->elements, function ($releaseGroup) {
-                return $releaseGroup->isSecurityFix();
+                return $releaseGroup->isSecurity();
             }),
         );
     }
@@ -107,7 +107,7 @@ class UpgradeInstructionsReleaseGroupCollection
     {
         return new self(
             array_filter($this->elements, function ($releaseGroup) {
-                return !$releaseGroup->isSecurityFix();
+                return !$releaseGroup->isSecurity();
             }),
         );
     }

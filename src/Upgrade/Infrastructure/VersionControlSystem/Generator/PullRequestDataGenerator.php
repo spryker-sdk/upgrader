@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\VersionControlSystem\Generator;
 
 use ReleaseApp\Infrastructure\Configuration\ConfigurationProvider;
+use Upgrade\Application\Dto\ReleaseGroupStatDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 
 class PullRequestDataGenerator
@@ -51,6 +52,8 @@ class PullRequestDataGenerator
             . PHP_EOL
             . PHP_EOL
             . '#### Overview'
+            . PHP_EOL
+            . $this->getReleaseGroupsStatInfo($stepsResponseDto->getReleaseGroupStatDto())
             . PHP_EOL
             . sprintf('Report ID: %s', $stepsResponseDto->getReportId() ?? 'n/a')
             . PHP_EOL
@@ -194,5 +197,20 @@ class PullRequestDataGenerator
         }
 
         return $text;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\ReleaseGroupStatDto $releaseGroupStatDto
+     *
+     * @return string
+     */
+    protected function getReleaseGroupsStatInfo(ReleaseGroupStatDto $releaseGroupStatDto): string
+    {
+        $message = sprintf('Amount of applied release groups: %s', $releaseGroupStatDto->getAppliedRGsAmount());
+        if ($releaseGroupStatDto->getAppliedSecurityFixesAmount()) {
+            $message .= sprintf(' (including %s security fixes)', $releaseGroupStatDto->getAppliedSecurityFixesAmount());
+        }
+
+        return $message;
     }
 }

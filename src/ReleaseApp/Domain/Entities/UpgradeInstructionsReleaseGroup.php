@@ -65,7 +65,7 @@ class UpgradeInstructionsReleaseGroup
     /**
      * @var string
      */
-    protected const SECURITY_FIX = 'security_fix';
+    protected const SECURITY_KEY = 'is_security';
 
     /**
      * @var array<mixed>
@@ -189,8 +189,8 @@ class UpgradeInstructionsReleaseGroup
     /**
      * @return bool
      */
-    public function isSecurityFix(): bool
+    public function isSecurity(): bool
     {
-        return isset($this->body[static::SECURITY_FIX]) ? (bool)$this->body[static::SECURITY_FIX] : false;
+        return isset($this->body[static::SECURITY_KEY]) ? (bool)$this->body[static::SECURITY_KEY] : false;
     }
 }

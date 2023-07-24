@@ -62,16 +62,24 @@ abstract class BaseReleaseGroupProcessor implements ReleaseGroupProcessorInterfa
     /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      * @param int $appliedRGsNum
+     * @param int $appliedSecurityRGsNum
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    protected function addAppliedRGsInfo(StepsResponseDto $stepsExecutionDto, int $appliedRGsNum): StepsResponseDto
-    {
+    protected function addAppliedRGsInfo(
+        StepsResponseDto $stepsExecutionDto,
+        int $appliedRGsNum,
+        int $appliedSecurityRGsNum
+    ): StepsResponseDto {
         $stepsExecutionDto->getReleaseGroupStatDto()->setAppliedRGsAmount($appliedRGsNum);
+        $stepsExecutionDto->getReleaseGroupStatDto()->setAppliedSecurityFixesAmount($appliedSecurityRGsNum);
 
-        $stepsExecutionDto->addOutputMessage(
-            sprintf('Amount of applied release groups: %s', $appliedRGsNum),
-        );
+        $message = sprintf('Amount of applied release groups: %s', $appliedRGsNum);
+        if ($appliedSecurityRGsNum) {
+            $message .= sprintf(' (including %s security fixes)', $appliedSecurityRGsNum);
+        }
+
+        $stepsExecutionDto->addOutputMessage($message);
 
         return $stepsExecutionDto;
     }

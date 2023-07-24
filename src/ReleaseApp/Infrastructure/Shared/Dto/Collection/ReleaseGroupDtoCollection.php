@@ -82,4 +82,16 @@ class ReleaseGroupDtoCollection
 
         return $resultCollection;
     }
+
+    /**
+     * @return self
+     */
+    public function getOnlySecurityFixes(): self
+    {
+        return new self(
+            array_filter($this->elements, function ($releaseGroup) {
+                return $releaseGroup->isSecurity();
+            }),
+        );
+    }
 }
