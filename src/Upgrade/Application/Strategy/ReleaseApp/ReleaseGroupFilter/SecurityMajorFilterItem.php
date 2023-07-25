@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter;
 
+use Core\Infrastructure\SemanticVersionHelper;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
-use RuntimeException;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppPackageHelper;
 
@@ -48,7 +48,7 @@ class SecurityMajorFilterItem implements ReleaseGroupFilterItemInterface
 
             if (
                 !$installedVersion ||
-                $this->getMajorVersion($installedVersion) === $this->getMajorVersion($module->getVersion())
+                SemanticVersionHelper::getMajorVersion($installedVersion) === SemanticVersionHelper::getMajorVersion($module->getVersion())
             ) {
                 $filteredModuleCollection->add($module);
             }
@@ -57,32 +57,5 @@ class SecurityMajorFilterItem implements ReleaseGroupFilterItemInterface
         $releaseGroupDto->setModuleCollection($filteredModuleCollection);
 
         return $releaseGroupDto;
-    }
-
-    /**
-     * @param string $semanticVersion
-     *
-     * @throws \RuntimeException
-     *
-     * @return int
-     */
-    protected function getMajorVersion(string $semanticVersion): int
-    {
-        $versionParts = explode('.', $semanticVersion);
-        if (!$versionParts || !count($versionParts)) {
-            throw new RuntimeException(
-                sprintf('Unknown semantic version %s;', $semanticVersion),
-            );
-        }
-
-        $major = array_shift($versionParts);
-
-        if (!is_int($major) && !is_string($major)) {
-            throw new RuntimeException(
-                sprintf('Unknown semantic version %s;', $semanticVersion),
-            );
-        }
-
-        return (int)$major;
     }
 }

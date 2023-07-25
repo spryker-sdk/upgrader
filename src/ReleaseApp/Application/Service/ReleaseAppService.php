@@ -44,8 +44,8 @@ class ReleaseAppService implements ReleaseAppServiceInterface
         $releaseGroupCollection = $this->getReleaseGroupCollection($moduleVersionCollection)->getOnlyWithReleasedDate();
 
         $upgradeInstructionsReleaseGroupCollection = new UpgradeInstructionsReleaseGroupCollection([
-            ...$releaseGroupCollection->getOnlySecurityFixes()->sortByReleasedDate()->toArray(),
-            ...$releaseGroupCollection->filterSecurityFixes()->sortByReleasedDate()->toArray(),
+            ...$releaseGroupCollection->getSecurityFixes()->sortByReleasedDate()->toArray(),
+            ...$releaseGroupCollection->getNonSecurityFixes()->sortByReleasedDate()->toArray(),
         ]);
 
         return $upgradeInstructionsReleaseGroupCollection;

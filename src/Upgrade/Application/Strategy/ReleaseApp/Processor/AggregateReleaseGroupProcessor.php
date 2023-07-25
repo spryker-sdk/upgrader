@@ -138,7 +138,7 @@ class AggregateReleaseGroupProcessor extends BaseReleaseGroupProcessor
             $this->addAppliedRGsInfo(
                 $stepsExecutionDto,
                 $aggregatedReleaseGroupCollection->count(),
-                $aggregatedReleaseGroupCollection->getOnlySecurityFixes()->count(),
+                $aggregatedReleaseGroupCollection->getSecurityFixes()->count(),
             );
         }
 

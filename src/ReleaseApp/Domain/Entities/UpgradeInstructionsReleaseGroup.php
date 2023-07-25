@@ -191,6 +191,6 @@ class UpgradeInstructionsReleaseGroup
      */
     public function isSecurity(): bool
     {
-        return isset($this->body[static::SECURITY_KEY]) ? (bool)$this->body[static::SECURITY_KEY] : false;
+        return (bool)($this->body[static::SECURITY_KEY] ?? false);
     }
 }
