@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5c97257bf878a2bd40bff64b0c98b54",
+    "content-hash": "0d5da10a65706dcc762cfe4b100120d6",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -8779,6 +8779,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "spryker-sdk/azure-php-client": 20,
+        "spryker-sdk/integrator": 20,
         "spryker/code-sniffer": 20
     },
     "prefer-stable": true,

@@ -18,7 +18,7 @@ class SemanticVersionHelperTest extends TestCase
      * @dataProvider getMajorVersionProvider
      *
      * @param mixed $value
-     * @param ?int|int $expectedResult
+     * @param ?int|null $expectedResult
      *
      * @return void
      */
@@ -32,17 +32,33 @@ class SemanticVersionHelperTest extends TestCase
      */
     public function getMajorVersionProvider(): array
     {
-        return [
+        $validSemanticVersions = [
+            ['1.0.0', 1],
+            ['0.1.0', 0],
+            ['0.0.1', 0],
+            ['10.20.30', 10],
+            ['2.3.4-beta', 2],
+            ['5.6.7-alpha.123', 5],
+            ['1.2.3-rc.456+build789', 1],
+            ['3.2.1+build123', 3],
+            ['4.5.6-beta.789+build999', 4],
+            ['1.2', 1],
+            ['1.2.a', 1],
+            ['1.2.3.4', 1],
+            ['1.2.3-rc!', 1],
+            ['1.2.3-beta@456', 1],
+            ['1.2.3+build_789', 1],
+            ['1.2.3-rc.456+build_789', 1],
+            ['1.2.3-beta+build!999', 1],
+            ['1.2.3-beta+build.999-456', 1],
+        ];
+
+        $invalidSemanticVersions = [
             ['', null],
             ['foo-bar-baz', null],
-            [555, null],
-            [-555, null],
-            ['1.0.0', 1],
-            ['1.0.2', 1],
-            ['1.2.2', 1],
-            ['5.2.222', 5],
-            ['55.28888.222', 55],
             ['-55.28888.222', null],
         ];
+
+        return [...$validSemanticVersions, ...$invalidSemanticVersions];
     }
 }

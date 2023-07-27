@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Core\Infrastructure;
 
+use Composer\Semver\Comparator;
+
 class SemanticVersionHelper
 {
     /**
@@ -37,6 +39,6 @@ class SemanticVersionHelper
      */
     protected static function isSemanticVersion(string $version): bool
     {
-        return preg_match('/^\d+\.\d+\.\d+$/', $version) === 1;
+        return Comparator::greaterThanOrEqualTo($version, '0.0.1') === true;
     }
 }
