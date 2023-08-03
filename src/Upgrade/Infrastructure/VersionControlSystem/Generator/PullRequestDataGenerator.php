@@ -208,7 +208,7 @@ class PullRequestDataGenerator
     {
         $message = sprintf('Amount of applied release groups: %s', $releaseGroupStatDto->getAppliedRGsAmount());
         if ($releaseGroupStatDto->getAppliedSecurityFixesAmount()) {
-            $message .= sprintf(' (including %s security fixes)', $releaseGroupStatDto->getAppliedSecurityFixesAmount());
+            $message .= sprintf(' (including %s security fix(s))', $releaseGroupStatDto->getAppliedSecurityFixesAmount());
         }
 
         return $message;
