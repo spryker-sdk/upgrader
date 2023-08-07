@@ -82,4 +82,17 @@ class ReleaseGroupDtoCollection
 
         return $resultCollection;
     }
+
+    /**
+     * @return self
+     */
+    public function getSecurityFixes(): self
+    {
+        return new self(
+            array_filter(
+                $this->elements,
+                fn (ReleaseGroupDto $releaseGroup): bool => $releaseGroup->isSecurity()
+            ),
+        );
+    }
 }

@@ -93,7 +93,6 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
         foreach ($requireRequestCollection->toArray() as $releaseGroup) {
             $releaseGroup = $this->releaseGroupPackageFilter->filter($releaseGroup);
-
             if ($releaseGroup->getModuleCollection()->isEmpty()) {
                 continue;
             }
@@ -152,7 +151,11 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
         }
 
         if ($aggregatedReleaseGroupCollection->count()) {
-            $this->addAppliedRGsInfo($stepsExecutionDto, $aggregatedReleaseGroupCollection->count());
+            $this->addAppliedRGsInfo(
+                $stepsExecutionDto,
+                $aggregatedReleaseGroupCollection->count(),
+                $aggregatedReleaseGroupCollection->getSecurityFixes()->count(),
+            );
         }
 
         return $stepsExecutionDto;

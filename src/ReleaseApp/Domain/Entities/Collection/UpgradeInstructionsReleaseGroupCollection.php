@@ -91,6 +91,32 @@ class UpgradeInstructionsReleaseGroupCollection
     /**
      * @return self
      */
+    public function getSecurityFixes(): self
+    {
+        return new self(
+            array_filter(
+                $this->elements,
+                fn (UpgradeInstructionsReleaseGroup $releaseGroup): bool => $releaseGroup->isSecurity()
+            ),
+        );
+    }
+
+    /**
+     * @return self
+     */
+    public function getNonSecurityFixes(): self
+    {
+        return new self(
+            array_filter(
+                $this->elements,
+                fn (UpgradeInstructionsReleaseGroup $releaseGroup): bool => !$releaseGroup->isSecurity()
+            ),
+        );
+    }
+
+    /**
+     * @return self
+     */
     public function getOnlyWithReleasedDate(): self
     {
         $result = new self();

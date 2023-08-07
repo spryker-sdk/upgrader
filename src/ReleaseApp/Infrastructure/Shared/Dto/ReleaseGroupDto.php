@@ -49,6 +49,11 @@ class ReleaseGroupDto
     protected bool $hasConflict = false;
 
     /**
+     * @var bool
+     */
+    protected bool $isSecurity = false;
+
+    /**
      * @param string $name
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
      * @param bool $containsProjectChanges
@@ -163,5 +168,23 @@ class ReleaseGroupDto
     public function setJiraIssueLink(?string $jiraIssueLink): void
     {
         $this->jiraIssueLink = $jiraIssueLink;
+    }
+
+    /**
+     * @param bool $isSecurity
+     *
+     * @return void
+     */
+    public function setIsSecurity(bool $isSecurity): void
+    {
+        $this->isSecurity = $isSecurity;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSecurity(): bool
+    {
+        return $this->isSecurity;
     }
 }
