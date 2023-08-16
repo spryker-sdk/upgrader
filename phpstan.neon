@@ -2,6 +2,7 @@ parameters:
     level: 8
     reportUnmatchedIgnoredErrors: false
     checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: false
 
     bootstrapFiles:
         - phpstan-bootstrap.php
