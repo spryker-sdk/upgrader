@@ -56,4 +56,12 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
 
         throw new ReleaseGroupValidatorException($message);
     }
+
+    /**
+     * @return string
+     */
+    public static function getValidatorTitle(): string
+    {
+        return 'Major Module Versions requiring manual action';
+    }
 }

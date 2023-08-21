@@ -85,6 +85,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     protected const DEFAULT_REPORTING_ENABLED = false;
 
     /**
+     * @var int
+     */
+    protected const DEFAULT_MANIFESTS_RATING_THRESHOLD = 0;
+
+    /**
      * {@inheritDoc}
      *
      * @return string
@@ -376,5 +381,15 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public function getReportSendAuthToken(): string
     {
         return (string)getenv('REPORT_SEND_AUTH_TOKEN');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return int
+     */
+    public function getManifestsRatingThreshold(): int
+    {
+        return (int)getenv('MANIFESTS_RATING_THRESHOLD') ?: static::DEFAULT_MANIFESTS_RATING_THRESHOLD;
     }
 }

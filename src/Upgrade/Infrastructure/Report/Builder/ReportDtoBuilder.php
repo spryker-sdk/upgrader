@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\Report\Builder;
 
 use DateTimeImmutable;
+use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\Report\Dto\ReportDto;
@@ -93,12 +94,12 @@ class ReportDtoBuilder implements ReportDtoBuilderInterface
             return new ReportPayloadDto();
         }
 
-        $integratorResponse = $stepsResponseDto->getIntegratorResponseDto();
-
         return new ReportPayloadDto(
             $composerLockDiff->getRequiredPackages(),
             $composerLockDiff->getRequiredDevPackages(),
-            $integratorResponse !== null ? $integratorResponse->getWarnings() : [],
+            array_merge(
+                ...array_map(static fn (IntegratorResponseDto $integratorResponseDto): array => $integratorResponseDto->getWarnings(), $stepsResponseDto->getIntegratorResponseDtos()),
+            ),
         );
     }
 }

@@ -28,9 +28,9 @@ class StepsResponseDto extends ResponseDto
     protected array $outputMessageList = [];
 
     /**
-     * @var \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto|null
+     * @var array<\ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto>
      */
-    protected ?ReleaseGroupDto $lastAppliedReleaseGroup = null;
+    protected array $appliedReleaseGroups = [];
 
     /**
      * @var \Upgrade\Application\Dto\ComposerLockDiffDto|null
@@ -38,9 +38,9 @@ class StepsResponseDto extends ResponseDto
     protected ?ComposerLockDiffDto $composerLockDiffDto = null;
 
     /**
-     * @var \Upgrade\Application\Dto\IntegratorResponseDto|null
+     * @var array<int, \Upgrade\Application\Dto\IntegratorResponseDto>
      */
-    protected ?IntegratorResponseDto $integratorResponseDto = null;
+    protected array $integratorResponseDtos = [];
 
     /**
      * @var \Upgrade\Domain\ValueObject\ErrorInterface|null
@@ -48,9 +48,9 @@ class StepsResponseDto extends ResponseDto
     protected ?ErrorInterface $error = null;
 
     /**
-     * @var string
+     * @var array<int, array<\Upgrade\Application\Dto\ValidatorViolationDto>>
      */
-    protected string $blockerInfo = '';
+    protected array $blockers = [];
 
     /**
      * @var int|null
@@ -68,11 +68,19 @@ class StepsResponseDto extends ResponseDto
     protected bool $isStopPropagation = false;
 
     /**
-     * @var array<\Upgrade\Application\Dto\ViolationDtoInterface>
+     * @var array<int, array<\Upgrade\Application\Dto\ViolationDtoInterface>>
      */
     protected array $violations = [];
 
+    /**
+     * @var \Upgrade\Application\Dto\ReleaseGroupStatDto
+     */
     protected ReleaseGroupStatDto $releaseGroupStatDto;
+
+    /**
+     * @var int|null
+     */
+    protected ?int $currentReleaseGroupId = null;
 
     /**
      * @param bool $isSuccessful
@@ -199,23 +207,21 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @return \Upgrade\Application\Dto\IntegratorResponseDto|null
+     * @return array<int, \Upgrade\Application\Dto\IntegratorResponseDto>
      */
-    public function getIntegratorResponseDto(): ?IntegratorResponseDto
+    public function getIntegratorResponseDtos(): array
     {
-        return $this->integratorResponseDto;
+        return $this->integratorResponseDtos;
     }
 
     /**
-     * @param \Upgrade\Application\Dto\IntegratorResponseDto|null $integratorResponseDto
+     * @param \Upgrade\Application\Dto\IntegratorResponseDto $integratorResponseDto
      *
-     * @return $this
+     * @return void
      */
-    public function setIntegratorResponseDto(?IntegratorResponseDto $integratorResponseDto)
+    public function addIntegratorResponseDto(IntegratorResponseDto $integratorResponseDto): void
     {
-        $this->integratorResponseDto = $integratorResponseDto;
-
-        return $this;
+        $this->integratorResponseDtos[(int)$this->currentReleaseGroupId] = $integratorResponseDto;
     }
 
     /**
@@ -239,23 +245,27 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @param string $blockerInfo
+     * @param \Upgrade\Application\Dto\ValidatorViolationDto $blockerInfo
      *
-     * @return $this
+     * @return void
      */
-    public function setBlockerInfo(string $blockerInfo)
+    public function addBlocker(ValidatorViolationDto $blockerInfo): void
     {
-        $this->blockerInfo = $blockerInfo;
+        $currentReleaseGroupId = (int)$this->currentReleaseGroupId;
 
-        return $this;
+        if (!isset($this->blockers[$currentReleaseGroupId])) {
+            $this->blockers[$currentReleaseGroupId] = [];
+        }
+
+        $this->blockers[$currentReleaseGroupId][] = $blockerInfo;
     }
 
     /**
-     * @return string
+     * @return array<int, array<\Upgrade\Application\Dto\ValidatorViolationDto>>
      */
-    public function getBlockerInfo(): string
+    public function getBlockers(): array
     {
-        return $this->blockerInfo;
+        return $this->blockers;
     }
 
     /**
@@ -303,21 +313,58 @@ class StepsResponseDto extends ResponseDto
      */
     public function getLastAppliedReleaseGroup(): ?ReleaseGroupDto
     {
-        return $this->lastAppliedReleaseGroup;
+        return end($this->appliedReleaseGroups) ?: null;
     }
 
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto|null $lastAppliedReleaseGroup
+     * @return array<\ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto>
+     */
+    public function getAppliedReleaseGroups(): array
+    {
+        return $this->appliedReleaseGroups;
+    }
+
+    /**
+     * @return array<\ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto>
+     */
+    public function getAppliedSecurityFixedReleaseGroups(): array
+    {
+        return array_filter(
+            $this->appliedReleaseGroups,
+            static fn (ReleaseGroupDto $releaseGroup): bool => $releaseGroup->isSecurity()
+        );
+    }
+
+    /**
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $appliedReleaseGroup
      *
      * @return void
      */
-    public function setLastAppliedReleaseGroup(?ReleaseGroupDto $lastAppliedReleaseGroup): void
+    public function addAppliedReleaseGroup(ReleaseGroupDto $appliedReleaseGroup): void
     {
-        $this->lastAppliedReleaseGroup = $lastAppliedReleaseGroup;
+        $this->appliedReleaseGroups[] = $appliedReleaseGroup;
     }
 
     /**
-     * @return array<\Upgrade\Application\Dto\ViolationDtoInterface>
+     * @return int|null
+     */
+    public function getCurrentReleaseGroupId(): ?int
+    {
+        return $this->currentReleaseGroupId;
+    }
+
+    /**
+     * @param int|null $currentReleaseGroupId
+     *
+     * @return void
+     */
+    public function setCurrentReleaseGroupId(?int $currentReleaseGroupId): void
+    {
+        $this->currentReleaseGroupId = $currentReleaseGroupId;
+    }
+
+    /**
+     * @return array<int, array<\Upgrade\Application\Dto\ViolationDtoInterface>>
      */
     public function getViolations(): array
     {
@@ -331,13 +378,13 @@ class StepsResponseDto extends ResponseDto
      */
     public function addViolation(ViolationDtoInterface $violation): void
     {
-        foreach ($this->getViolations() as $storedViolation) {
-            if ($storedViolation->equals($violation)) {
-                return;
-            }
+        $currentReleaseGroupId = (int)$this->currentReleaseGroupId;
+
+        if (!isset($this->violations[$currentReleaseGroupId])) {
+            $this->violations[$currentReleaseGroupId] = [];
         }
 
-        $this->violations[] = $violation;
+        $this->violations[$currentReleaseGroupId][] = $violation;
     }
 
     /**

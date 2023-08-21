@@ -26,7 +26,7 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
     /**
      * @var string
      */
-    protected const ERROR_MESSAGE = 'Issues in php files after "composer require" command';
+    protected const ERROR_MESSAGE = 'PHP classes that became not compatible with Spyker Release';
 
     /**
      * @var \Upgrader\Configuration\ConfigurationProvider
@@ -49,9 +49,9 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
      */
     public function buildViolationsMessage(array $violations, array $packageDtos): string
     {
-        $header = ':warning: ' . static::ERROR_MESSAGE;
+        $header = static::ERROR_MESSAGE;
 
-        $text = '<br>Switch to this branch, bootstrap your project in the development environment, open the mentioned file, and compare its correctness to the released version by Spryker.';
+        $text = 'Switch to this branch, bootstrap your project in the development environment, open the mentioned file, and compare its correctness to the released version by Spryker.';
         $text .= PHP_EOL . PHP_EOL
             . '| Composer command | Project file(s) | '
             . PHP_EOL
@@ -74,7 +74,7 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
 
         $text .= PHP_EOL;
 
-        return "<details><summary>$header</summary>$text</details>";
+        return "<details><summary><h3>$header</h3></summary>$text</details>";
     }
 
     /**

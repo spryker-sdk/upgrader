@@ -12,7 +12,7 @@ namespace Upgrade\Application\Strategy\Common\Step;
 use Upgrade\Application\Adapter\IntegratorExecutorInterface;
 use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Provider\ConfigurationProviderInterface;
+use Upgrade\Application\Strategy\Common\IntegratorEvaluatorInterface;
 use Upgrade\Application\Strategy\RollbackStepInterface;
 
 class IntegratorStep extends AbstractStep implements RollbackStepInterface
@@ -23,24 +23,24 @@ class IntegratorStep extends AbstractStep implements RollbackStepInterface
     protected IntegratorExecutorInterface $integratorClient;
 
     /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
+     * @var \Upgrade\Application\Strategy\Common\IntegratorEvaluatorInterface
      */
-    protected ConfigurationProviderInterface $configurationProvider;
+    protected IntegratorEvaluatorInterface $integratorEvaluator;
 
     /**
      * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
      * @param \Upgrade\Application\Adapter\IntegratorExecutorInterface $integratorClient
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
+     * @param \Upgrade\Application\Strategy\Common\IntegratorEvaluatorInterface $integratorEvaluator
      */
     public function __construct(
         VersionControlSystemAdapterInterface $versionControlSystem,
         IntegratorExecutorInterface $integratorClient,
-        ConfigurationProviderInterface $configurationProvider
+        IntegratorEvaluatorInterface $integratorEvaluator
     ) {
         parent::__construct($versionControlSystem);
 
         $this->integratorClient = $integratorClient;
-        $this->configurationProvider = $configurationProvider;
+        $this->integratorEvaluator = $integratorEvaluator;
     }
 
     /**
@@ -50,7 +50,7 @@ class IntegratorStep extends AbstractStep implements RollbackStepInterface
      */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
-        if (!$this->configurationProvider->isIntegratorEnabled()) {
+        if (!$this->integratorEvaluator->isIntegratorShouldBeInvoked()) {
             return $stepsExecutionDto;
         }
 

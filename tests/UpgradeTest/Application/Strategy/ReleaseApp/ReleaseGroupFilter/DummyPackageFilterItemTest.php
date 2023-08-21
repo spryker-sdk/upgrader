@@ -78,10 +78,12 @@ class DummyPackageFilterItemTest extends TestCase
     protected function createReleaseGroupDto(array $moduleDto): ReleaseGroupDto
     {
         return new ReleaseGroupDto(
+            1,
             'RG1',
             new ModuleDtoCollection($moduleDto),
             false,
             'https://api.release.spryker.com/release-groups/view/1',
+            100,
         );
     }
 }

@@ -9,9 +9,11 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Generator;
 
-use ReleaseApp\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Application\Dto\ReleaseGroupStatDto;
+use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
+use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Provider\ConfigurationProviderInterface;
+use Upgrade\Application\Strategy\Common\IntegratorEvaluatorInterface;
 
 class PullRequestDataGenerator
 {
@@ -21,18 +23,28 @@ class PullRequestDataGenerator
     protected ViolationBodyMessageBuilder $violationBodyMessageBuilder;
 
     /**
-     * @var \ReleaseApp\Infrastructure\Configuration\ConfigurationProvider
+     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
      */
-    private ConfigurationProvider $configurationProvider;
+    protected ConfigurationProviderInterface $configurationProvider;
+
+    /**
+     * @var \Upgrade\Application\Strategy\Common\IntegratorEvaluatorInterface
+     */
+    protected IntegratorEvaluatorInterface $integratorEvaluator;
 
     /**
      * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder $violationBodyMessageBuilder
-     * @param \ReleaseApp\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
+     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
+     * @param \Upgrade\Application\Strategy\Common\IntegratorEvaluatorInterface $integratorEvaluator
      */
-    public function __construct(ViolationBodyMessageBuilder $violationBodyMessageBuilder, ConfigurationProvider $configurationProvider)
-    {
+    public function __construct(
+        ViolationBodyMessageBuilder $violationBodyMessageBuilder,
+        ConfigurationProviderInterface $configurationProvider,
+        IntegratorEvaluatorInterface $integratorEvaluator
+    ) {
         $this->violationBodyMessageBuilder = $violationBodyMessageBuilder;
         $this->configurationProvider = $configurationProvider;
+        $this->integratorEvaluator = $integratorEvaluator;
     }
 
     /**
@@ -45,116 +57,256 @@ class PullRequestDataGenerator
         StepsResponseDto $stepsResponseDto,
         ?int $releaseGroupId = null
     ): string {
-        $text = $this->createDescriptionAboutText(
-            $releaseGroupId,
-            $stepsResponseDto->getLastAppliedReleaseGroup() ? $stepsResponseDto->getLastAppliedReleaseGroup()->getJiraIssueLink() : null,
-        )
+        $warningsSection = $this->buildBlockersWarnings($stepsResponseDto)
+            . $this->buildViolationsWarnings($stepsResponseDto)
+            . $this->buildIntegratorWarnings($stepsResponseDto);
+
+        return $this->buildHeaderText($stepsResponseDto, $releaseGroupId)
             . PHP_EOL
+            . $this->buildReleaseGroupsTable($this->configurationProvider, $stepsResponseDto, $releaseGroupId)
             . PHP_EOL
-            . '#### Overview'
-            . PHP_EOL
-            . $this->getReleaseGroupsStatInfo($stepsResponseDto->getReleaseGroupStatDto())
-            . PHP_EOL
-            . sprintf('Report ID: %s', $stepsResponseDto->getReportId() ?? 'n/a')
-            . PHP_EOL
-            . PHP_EOL;
-
-        if ($stepsResponseDto->getBlockerInfo()) {
-            $text .= '​' . PHP_EOL . '**The process was faced with the blocker:**' . PHP_EOL . PHP_EOL;
-            $text .= $stepsResponseDto->getBlockerInfo();
-            $text .= str_repeat(PHP_EOL, 2);
-        }
-
-        $integratorResponseDto = $stepsResponseDto->getIntegratorResponseDto();
-        if ($integratorResponseDto && $integratorResponseDto->getWarnings()) {
-            $text .= '<details>' . PHP_EOL . '<summary>';
-            $text .= 'Warnings that happened during the manifests applying process';
-            $text .= '</summary>' . str_repeat(PHP_EOL, 2);
-            $text .= $this->buildSkippedManifestTable($integratorResponseDto->getWarnings());
-            $text .= PHP_EOL . '</details>' . str_repeat(PHP_EOL, 2);
-        }
-
-        $composerDiffDto = $stepsResponseDto->getComposerLockDiff();
-        if (!$composerDiffDto) {
-            return $text;
-        }
-
-        $violations = $stepsResponseDto->getViolations();
-        if (count($violations) > 0) {
-            $text .= '**Needs attention**' . PHP_EOL . PHP_EOL;
-            $text .= 'Please review the warnings shown below because they might affect your upgrade' . PHP_EOL;
-            $text .= $this->violationBodyMessageBuilder->buildViolationsMessage(
-                $violations,
-                array_merge($composerDiffDto->getRequiredPackages(), $composerDiffDto->getRequiredDevPackages()),
-            );
-            $text .= PHP_EOL;
-        }
-
-        if (count($composerDiffDto->getRequiredPackages()) > 0) {
-            $text .= '**Packages upgraded:**' . PHP_EOL;
-            $text .= $this->buildPackageDiffTable($composerDiffDto->getRequiredPackages());
-            $text .= PHP_EOL;
-        }
-
-        if (count($composerDiffDto->getRequiredDevPackages()) > 0) {
-            $text .= '**Packages dev upgraded:**' . PHP_EOL;
-            $text .= $this->buildPackageDiffTable($composerDiffDto->getRequiredDevPackages());
-            $text .= PHP_EOL;
-        }
-
-        return $text;
+            . (trim($warningsSection) !== '' ? '## Warnings' . PHP_EOL : '')
+            . $warningsSection
+            . $this->buildListOfPackages($stepsResponseDto)
+            . $this->buildFooterText($stepsResponseDto);
     }
 
     /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
      * @param int|null $releaseGroupId
-     * @param string|null $jiraIssueLink
      *
      * @return string
      */
-    protected function createDescriptionAboutText(?int $releaseGroupId, ?string $jiraIssueLink = null): string
+    protected function buildHeaderText(StepsResponseDto $stepsResponseDto, ?int $releaseGroupId): string
     {
-        $text = 'Auto created via Upgrader tool';
+        $releaseGroupStatDto = $stepsResponseDto->getReleaseGroupStatDto();
 
-        if ($releaseGroupId !== null) {
-            $releaseGroupLink = sprintf('%s/release-groups/view/%s', $this->configurationProvider->getReleaseAppUrl(), $releaseGroupId);
+        $text = sprintf('Upgrader installed %s release group(s) ', $releaseGroupStatDto->getAppliedRGsAmount());
 
-            $text .= sprintf(' for [%s](%s) release group', $releaseGroupLink, $releaseGroupLink);
+        if ($releaseGroupStatDto->getAppliedSecurityFixesAmount()) {
+            $text .= sprintf('(including %s security fix(s)) ', $releaseGroupStatDto->getAppliedSecurityFixesAmount());
+        }
 
-            if ($jiraIssueLink !== null) {
-                $text .= sprintf('.%sJira ticket [%s](%s)', PHP_EOL, $jiraIssueLink, $jiraIssueLink);
-            }
+        $composerDiffDto = $stepsResponseDto->getComposerLockDiff();
+
+        if ($composerDiffDto !== null) {
+            $text .= sprintf(
+                'containing %s package version(s)',
+                count($composerDiffDto->getRequiredPackages()) + count($composerDiffDto->getRequiredDevPackages()),
+            );
         }
 
         $text .= '.';
 
+        if ($releaseGroupId !== null && $stepsResponseDto->getLastAppliedReleaseGroup() !== null) {
+            $jiraIssueLink = $stepsResponseDto->getLastAppliedReleaseGroup()->getJiraIssueLink();
+
+            $text .= sprintf(' Jira ticket [%s](%s).', $jiraIssueLink, $jiraIssueLink);
+        }
+
         return $text;
     }
 
     /**
-     * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
+     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $upgradeConfigurationProvider
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     * @param int|null $releaseGroupId
      *
      * @return string
      */
-    protected function buildPackageDiffTable(array $packageDtos): string
-    {
-        $text = '| Package | From | To | Changes | '
-            . PHP_EOL
-            . '|---------|------|----|--------|'
-            . PHP_EOL;
-
-        foreach ($packageDtos as $packageDto) {
-            $row = implode(' | ', [
-                '',
-                '**' . $packageDto->getName() . '**',
-                $packageDto->getPreviousVersion(),
-                $packageDto->getVersion(),
-                $packageDto->getDiffLink(),
-                PHP_EOL,
-            ]);
-            $text .= $row;
+    protected function buildReleaseGroupsTable(
+        ConfigurationProviderInterface $upgradeConfigurationProvider,
+        StepsResponseDto $stepsResponseDto,
+        ?int $releaseGroupId
+    ): string {
+        if (count($stepsResponseDto->getAppliedReleaseGroups()) === 0) {
+            return '';
         }
 
+        $isSequentialProcessor = $upgradeConfigurationProvider->getReleaseGroupProcessor(
+        ) === ConfigurationProviderInterface::SEQUENTIAL_RELEASE_GROUP_PROCESSOR;
+
+        $shouldDisplayWarningColumn = $releaseGroupId !== null || $isSequentialProcessor;
+        $shouldDisplayRatingColumn = $this->integratorEvaluator->isIntegratorShouldBeInvoked();
+
+        $text = sprintf(
+            '| Release |%s%s',
+            $shouldDisplayRatingColumn ? ' Efforts saved by Upgrader |' : '',
+            $shouldDisplayWarningColumn ? ' Warnings detected? |' : '',
+        ) . PHP_EOL;
+
+        $text .= sprintf(
+            '| ------- |%s%s',
+            $shouldDisplayRatingColumn ? ' ---- |' : '',
+            $shouldDisplayWarningColumn ? ' ------------------ |' : '',
+        ) . PHP_EOL;
+
+        foreach ($stepsResponseDto->getAppliedReleaseGroups() as $appliedReleaseGroup) {
+            $text .= sprintf(
+                '| [%s](%s) |%s%s',
+                $appliedReleaseGroup->getId(),
+                $appliedReleaseGroup->getLink(),
+                $shouldDisplayRatingColumn ? $appliedReleaseGroup->getRating() . ' |' : '',
+                $shouldDisplayWarningColumn ? $this->getReleaseGroupsTableWarningColumnText(
+                    $stepsResponseDto,
+                    $appliedReleaseGroup,
+                ) . ' |' : '',
+            ) . PHP_EOL;
+        }
+
+        $text .= PHP_EOL;
+
         return $text;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $appliedReleaseGroup
+     *
+     * @return string
+     */
+    protected function getReleaseGroupsTableWarningColumnText(
+        StepsResponseDto $stepsResponseDto,
+        ReleaseGroupDto $appliedReleaseGroup
+    ): string {
+        return $this->responseHasWarnings($stepsResponseDto, $appliedReleaseGroup) ? 'Yes :warning:' : 'No';
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
+     *
+     * @return bool
+     */
+    protected function responseHasWarnings(StepsResponseDto $stepsResponseDto, ReleaseGroupDto $releaseGroupDto): bool
+    {
+        $releaseGroupId = $releaseGroupDto->getId();
+
+        return (
+                isset($stepsResponseDto->getBlockers()[$releaseGroupId])
+                && count($stepsResponseDto->getBlockers()[$releaseGroupId]) > 0
+            )
+            || (
+                isset($stepsResponseDto->getViolations()[$releaseGroupId])
+                && count($stepsResponseDto->getViolations()[$releaseGroupId]) > 0
+            )
+            || (
+                isset($stepsResponseDto->getIntegratorResponseDtos()[$releaseGroupId])
+                && count($stepsResponseDto->getIntegratorResponseDtos()[$releaseGroupId]->getWarnings()) > 0
+            );
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     *
+     * @return string
+     */
+    protected function buildBlockersWarnings(StepsResponseDto $stepsResponseDto): string
+    {
+        $text = '';
+        $warnings = [];
+
+        foreach ($stepsResponseDto->getBlockers() as $blockers) {
+            foreach ($blockers as $blocker) {
+                if (!isset($warnings[$blocker->getTitle()])) {
+                    $warnings[$blocker->getTitle()] = [];
+                }
+
+                if (in_array($blocker->getMessage(), $warnings[$blocker->getTitle()], true)) {
+                    continue;
+                }
+
+                $warnings[$blocker->getTitle()][] = $blocker->getMessage();
+            }
+        }
+
+        if (count($warnings) === 0) {
+            return '';
+        }
+
+        foreach ($warnings as $title => $messages) {
+            $text .= sprintf('<details><summary><h4>%s</h4></summary>', $title);
+            foreach ($messages as $message) {
+                $text .= sprintf('<p>%s</p>', $message);
+            }
+            $text .= '</details>';
+        }
+
+        return $text . PHP_EOL;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     *
+     * @return string
+     */
+    protected function buildViolationsWarnings(StepsResponseDto $stepsResponseDto): string
+    {
+        $composerDiffDto = $stepsResponseDto->getComposerLockDiff();
+
+        if ($composerDiffDto === null) {
+            return '';
+        }
+
+        /** @var array<\Upgrade\Application\Dto\ViolationDtoInterface> $violations */
+        $violations = array_merge(...array_values($stepsResponseDto->getViolations()));
+
+        if (count($violations) === 0) {
+            return '';
+        }
+
+        /** @var array<\Upgrade\Application\Dto\ViolationDtoInterface> $uniqueViolations */
+        $uniqueViolations = [];
+
+        foreach ($violations as $violation) {
+            foreach ($uniqueViolations as $uniqueViolation) {
+                if ($uniqueViolation->equals($violation)) {
+                    continue 2;
+                }
+            }
+
+            $uniqueViolations[] = $violation;
+        }
+
+        return $this->violationBodyMessageBuilder->buildViolationsMessage(
+            $uniqueViolations,
+            array_merge(
+                $composerDiffDto->getRequiredPackages(),
+                $composerDiffDto->getRequiredDevPackages(),
+            ),
+        ) . PHP_EOL;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     *
+     * @return string
+     */
+    protected function buildIntegratorWarnings(StepsResponseDto $stepsResponseDto): string
+    {
+        $text = '';
+
+        /** @var array<string> $messages */
+        $messages = array_unique(
+            array_merge(
+                ...array_map(
+                    static fn (IntegratorResponseDto $integratorResponseDto): array => $integratorResponseDto->getWarnings(),
+                    $stepsResponseDto->getIntegratorResponseDtos(),
+                ),
+            ),
+        );
+
+        if (count($messages) === 0) {
+            return '';
+        }
+
+        $text .= '<details><summary><h4>We were mot able to integrate these module versions</h4></summary>';
+
+        $text .= PHP_EOL . PHP_EOL;
+        $text .= $this->buildSkippedManifestTable($messages);
+        $text .= '</details>';
+
+        return $text . PHP_EOL;
     }
 
     /**
@@ -200,17 +352,82 @@ class PullRequestDataGenerator
     }
 
     /**
-     * @param \Upgrade\Application\Dto\ReleaseGroupStatDto $releaseGroupStatDto
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
      *
      * @return string
      */
-    protected function getReleaseGroupsStatInfo(ReleaseGroupStatDto $releaseGroupStatDto): string
+    protected function buildListOfPackages(StepsResponseDto $stepsResponseDto): string
     {
-        $message = sprintf('Amount of applied release groups: %s', $releaseGroupStatDto->getAppliedRGsAmount());
-        if ($releaseGroupStatDto->getAppliedSecurityFixesAmount()) {
-            $message .= sprintf(' (including %s security fix(s))', $releaseGroupStatDto->getAppliedSecurityFixesAmount());
+        $text = '';
+
+        $composerDiffDto = $stepsResponseDto->getComposerLockDiff();
+
+        if ($composerDiffDto === null) {
+            return $text;
         }
 
-        return $message;
+        if (count($composerDiffDto->getRequiredPackages()) === 0 && count($composerDiffDto->getRequiredDevPackages()) === 0) {
+            return $text;
+        }
+
+        $text .= '<details open><summary><h2>List of packages</h2></summary>' . PHP_EOL . PHP_EOL;
+
+        if (count($composerDiffDto->getRequiredPackages()) > 0) {
+            $text .= '**Packages upgraded:**' . PHP_EOL . PHP_EOL;
+            $text .= $this->buildPackageDiffTable($composerDiffDto->getRequiredPackages());
+            $text .= PHP_EOL;
+        }
+
+        if (count($composerDiffDto->getRequiredDevPackages()) > 0) {
+            $text .= '**Packages dev upgraded:**' . PHP_EOL . PHP_EOL;
+            $text .= $this->buildPackageDiffTable($composerDiffDto->getRequiredDevPackages());
+            $text .= PHP_EOL;
+        }
+
+        $text .= '</details>' . PHP_EOL . PHP_EOL;
+
+        return $text;
+    }
+
+    /**
+     * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
+     *
+     * @return string
+     */
+    protected function buildPackageDiffTable(array $packageDtos): string
+    {
+        $text = '| Package | From | To | Changes | '
+            . PHP_EOL
+            . '|---------|------|----|--------|'
+            . PHP_EOL;
+
+        foreach ($packageDtos as $packageDto) {
+            $row = implode(' | ', [
+                '',
+                '**' . $packageDto->getName() . '**',
+                $packageDto->getPreviousVersion(),
+                $packageDto->getVersion(),
+                $packageDto->getDiffLink(),
+                PHP_EOL,
+            ]);
+            $text .= $row;
+        }
+
+        return $text;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     *
+     * @return string
+     */
+    protected function buildFooterText(StepsResponseDto $stepsResponseDto): string
+    {
+        return '### Having trouble with Upgrader and going to contact Spryker?'
+            . PHP_EOL
+            . '- Check [Upgrader docs](https://docs.spryker.com/docs/scu/dev/spryker-code-upgrader.html)'
+            . PHP_EOL
+            . '- Please copy this report ID or content of this PR and send it to us. '
+            . sprintf('Report ID: %s', $stepsResponseDto->getReportId() ?? 'n/a');
     }
 }

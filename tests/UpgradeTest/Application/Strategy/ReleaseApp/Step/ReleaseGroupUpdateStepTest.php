@@ -302,12 +302,14 @@ class ReleaseGroupUpdateStepTest extends TestCase
         // Arrange
         $releaseGroupCollection = new ReleaseGroupDtoCollection([
             new ReleaseGroupDto(
+                1,
                 'RG1',
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
                 ]),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',
+                100,
             ),
         ]);
 
@@ -349,12 +351,14 @@ class ReleaseGroupUpdateStepTest extends TestCase
         // Arrange
         $releaseGroupCollection = new ReleaseGroupDtoCollection([
             new ReleaseGroupDto(
+                1,
                 'RG1',
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
                 ]),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',
+                100,
             ),
         ]);
 
@@ -564,20 +568,24 @@ class ReleaseGroupUpdateStepTest extends TestCase
     {
         return new ReleaseGroupDtoCollection([
             new ReleaseGroupDto(
+                1,
                 'RG1',
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
                 ]),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',
+                100,
             ),
             new ReleaseGroupDto(
+                1,
                 'RG2',
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/oauth-backend-api', '1.1.1', 'path'),
                 ]),
                 true,
                 'https://api.release.spryker.com/release-groups/view/2',
+                100,
                 $conflictDetected,
             ),
         ]);

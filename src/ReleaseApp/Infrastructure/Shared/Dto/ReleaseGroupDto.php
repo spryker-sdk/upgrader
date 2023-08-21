@@ -24,6 +24,11 @@ class ReleaseGroupDto
     protected bool $containsProjectChanges;
 
     /**
+     * @var int
+     */
+    protected int $id;
+
+    /**
      * @var string
      */
     protected string $name;
@@ -32,6 +37,11 @@ class ReleaseGroupDto
      * @var string
      */
     protected string $link;
+
+    /**
+     * @var int
+     */
+    protected int $rating;
 
     /**
      * @var string|null
@@ -54,24 +64,38 @@ class ReleaseGroupDto
     protected bool $isSecurity = false;
 
     /**
+     * @param int $id
      * @param string $name
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
      * @param bool $containsProjectChanges
      * @param string $link
+     * @param int $rating
      * @param bool $hasConflict
      */
     public function __construct(
+        int $id,
         string $name,
         ModuleDtoCollection $moduleCollection,
         bool $containsProjectChanges,
         string $link,
+        int $rating,
         bool $hasConflict = false
     ) {
+        $this->id = $id;
         $this->name = $name;
         $this->link = $link;
         $this->moduleCollection = $moduleCollection;
         $this->containsProjectChanges = $containsProjectChanges;
         $this->hasConflict = $hasConflict;
+        $this->rating = $rating;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**
@@ -114,6 +138,14 @@ class ReleaseGroupDto
     public function getLink(): string
     {
         return $this->link;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRating(): int
+    {
+        return $this->rating;
     }
 
     /**
