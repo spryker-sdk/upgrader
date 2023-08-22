@@ -15,6 +15,9 @@ use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\Common\IntegratorEvaluatorInterface;
 
+/**
+ * @codeCoverageIgnore don't need cover presentation view class
+ */
 class PullRequestDataGenerator
 {
     /**
