@@ -12,6 +12,9 @@ namespace Upgrade\Infrastructure\Configuration;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Infrastructure\EnvParser\EnvFetcher;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ConfigurationProvider implements ConfigurationProviderInterface
 {
     /**
