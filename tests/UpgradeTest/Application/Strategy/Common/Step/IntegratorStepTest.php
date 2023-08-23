@@ -11,7 +11,7 @@ namespace UpgradeTest\Application\Strategy\Common\Step;
 
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Strategy\Common\IntegratorEvaluatorInterface;
+use Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface;
 use Upgrade\Application\Strategy\Common\Step\IntegratorStep;
 use Upgrade\Infrastructure\Executor\IntegratorExecutor;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter;
@@ -30,10 +30,10 @@ class IntegratorStepTest extends TestCase
         // Assert
         $integratorExecutor->expects($this->once())->method('runIntegrator');
 
-        $configurationProvider = $this->createMock(IntegratorEvaluatorInterface::class);
-        $configurationProvider->method('isIntegratorShouldBeInvoked')->willReturn(true);
+        $integratorExecutorValidator = $this->createMock(IntegratorExecutionValidatorInterface::class);
+        $integratorExecutorValidator->method('isIntegratorShouldBeInvoked')->willReturn(true);
 
-        $integratorStep = new IntegratorStep($gitAdapter, $integratorExecutor, $configurationProvider);
+        $integratorStep = new IntegratorStep($gitAdapter, $integratorExecutor, $integratorExecutorValidator);
 
         // Act
         $integratorStep->run(new StepsResponseDto(true));
@@ -52,7 +52,7 @@ class IntegratorStepTest extends TestCase
         $integratorExecutor->expects($this->never())->method('runIntegrator');
 
         // Arrange
-        $configurationProvider = $this->createMock(IntegratorEvaluatorInterface::class);
+        $configurationProvider = $this->createMock(IntegratorExecutionValidatorInterface::class);
         $configurationProvider->method('isIntegratorShouldBeInvoked')->willReturn(false);
 
         $integratorStep = new IntegratorStep($gitAdapter, $integratorExecutor, $configurationProvider);

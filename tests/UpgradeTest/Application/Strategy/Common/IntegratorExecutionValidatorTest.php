@@ -11,9 +11,9 @@ namespace UpgradeTest\Application\Strategy\Common;
 
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
-use Upgrade\Application\Strategy\Common\IntegratorEvaluator;
+use Upgrade\Application\Strategy\Common\IntegratorExecutionValidator;
 
-class IntegratorEvaluatorTest extends TestCase
+class IntegratorExecutionValidatorTest extends TestCase
 {
     /**
      * @dataProvider configurationDataProvider
@@ -33,7 +33,7 @@ class IntegratorEvaluatorTest extends TestCase
         $configurationProviderMock = $this->createMock(ConfigurationProviderInterface::class);
         $configurationProviderMock->method('isIntegratorEnabled')->willReturn($isIntegratorEnabled);
         $configurationProviderMock->method('getManifestsRatingThreshold')->willReturn($getManifestsRatingThreshold);
-        $integratorEvaluator = new IntegratorEvaluator($configurationProviderMock);
+        $integratorEvaluator = new IntegratorExecutionValidator($configurationProviderMock);
 
         // Act
         $result = $integratorEvaluator->isIntegratorShouldBeInvoked();

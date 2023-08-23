@@ -98,7 +98,7 @@ class ReportDtoBuilder implements ReportDtoBuilderInterface
             $composerLockDiff->getRequiredPackages(),
             $composerLockDiff->getRequiredDevPackages(),
             array_merge(
-                ...array_map(static fn (IntegratorResponseDto $integratorResponseDto): array => $integratorResponseDto->getWarnings(), $stepsResponseDto->getIntegratorResponseDtos()),
+                ...array_map(static fn (IntegratorResponseDto $integratorResponseDto): array => $integratorResponseDto->getWarnings(), $stepsResponseDto->getIntegratorResponseCollection()),
             ),
         );
     }

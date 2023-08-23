@@ -11,7 +11,7 @@ namespace Upgrade\Application\Strategy\Common;
 
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 
-class IntegratorEvaluator implements IntegratorEvaluatorInterface
+class IntegratorExecutionValidator implements IntegratorExecutionValidatorInterface
 {
     /**
      * @var int

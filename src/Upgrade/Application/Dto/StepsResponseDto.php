@@ -45,7 +45,7 @@ class StepsResponseDto extends ResponseDto
     /**
      * @var array<int, \Upgrade\Application\Dto\IntegratorResponseDto>
      */
-    protected array $integratorResponseDtos = [];
+    protected array $integratorResponseCollection = [];
 
     /**
      * @var \Upgrade\Domain\ValueObject\ErrorInterface|null
@@ -214,9 +214,9 @@ class StepsResponseDto extends ResponseDto
     /**
      * @return array<int, \Upgrade\Application\Dto\IntegratorResponseDto>
      */
-    public function getIntegratorResponseDtos(): array
+    public function getIntegratorResponseCollection(): array
     {
-        return $this->integratorResponseDtos;
+        return $this->integratorResponseCollection;
     }
 
     /**
@@ -224,9 +224,9 @@ class StepsResponseDto extends ResponseDto
      *
      * @return \Upgrade\Application\Dto\IntegratorResponseDto|null
      */
-    public function getReleaseGroupIntegratorResponseDto(int $releaseGroupId): ?IntegratorResponseDto
+    public function getIntegratorResponseDtoByReleaseGroupId(int $releaseGroupId): ?IntegratorResponseDto
     {
-        return $this->integratorResponseDtos[$releaseGroupId] ?? null;
+        return $this->integratorResponseCollection[$releaseGroupId] ?? null;
     }
 
     /**
@@ -236,7 +236,7 @@ class StepsResponseDto extends ResponseDto
      */
     public function addIntegratorResponseDto(IntegratorResponseDto $integratorResponseDto): void
     {
-        $this->integratorResponseDtos[$this->currentReleaseGroupId] = $integratorResponseDto;
+        $this->integratorResponseCollection[$this->currentReleaseGroupId] = $integratorResponseDto;
     }
 
     /**
@@ -288,7 +288,7 @@ class StepsResponseDto extends ResponseDto
      *
      * @return array<\Upgrade\Application\Dto\ValidatorViolationDto>
      */
-    public function getReleaseGroupBlockers(int $releaseGroupId): array
+    public function getBlockersByReleaseGroupId(int $releaseGroupId): array
     {
         return $this->blockers[$releaseGroupId] ?? [];
     }
@@ -401,7 +401,7 @@ class StepsResponseDto extends ResponseDto
      *
      * @return array<\Upgrade\Application\Dto\ViolationDtoInterface>
      */
-    public function getReleaseGroupViolations(int $releaseGroupId): array
+    public function getViolationsByReleaseGroupId(int $releaseGroupId): array
     {
         return $this->violations[$releaseGroupId] ?? [];
     }

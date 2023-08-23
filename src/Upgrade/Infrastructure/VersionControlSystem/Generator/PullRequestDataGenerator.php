@@ -13,7 +13,7 @@ use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
-use Upgrade\Application\Strategy\Common\IntegratorEvaluatorInterface;
+use Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface;
 
 /**
  * @codeCoverageIgnore don't need cover presentation view class
@@ -31,23 +31,23 @@ class PullRequestDataGenerator
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
-     * @var \Upgrade\Application\Strategy\Common\IntegratorEvaluatorInterface
+     * @var \Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface
      */
-    protected IntegratorEvaluatorInterface $integratorEvaluator;
+    protected IntegratorExecutionValidatorInterface $integratorExecutionValidator;
 
     /**
      * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder $violationBodyMessageBuilder
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     * @param \Upgrade\Application\Strategy\Common\IntegratorEvaluatorInterface $integratorEvaluator
+     * @param \Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface $integratorExecutionValidator
      */
     public function __construct(
         ViolationBodyMessageBuilder $violationBodyMessageBuilder,
         ConfigurationProviderInterface $configurationProvider,
-        IntegratorEvaluatorInterface $integratorEvaluator
+        IntegratorExecutionValidatorInterface $integratorExecutionValidator
     ) {
         $this->violationBodyMessageBuilder = $violationBodyMessageBuilder;
         $this->configurationProvider = $configurationProvider;
-        $this->integratorEvaluator = $integratorEvaluator;
+        $this->integratorExecutionValidator = $integratorExecutionValidator;
     }
 
     /**
@@ -130,7 +130,7 @@ class PullRequestDataGenerator
         ) === ConfigurationProviderInterface::SEQUENTIAL_RELEASE_GROUP_PROCESSOR;
 
         $shouldDisplayWarningColumn = $releaseGroupId !== null || $isSequentialProcessor;
-        $shouldDisplayRatingColumn = $this->integratorEvaluator->isIntegratorShouldBeInvoked();
+        $shouldDisplayRatingColumn = $this->integratorExecutionValidator->isIntegratorShouldBeInvoked();
 
         $text = sprintf(
             '| Release |%s%s',
@@ -185,11 +185,11 @@ class PullRequestDataGenerator
     {
         $releaseGroupId = $releaseGroupDto->getId();
 
-        return count($stepsResponseDto->getReleaseGroupBlockers($releaseGroupId)) > 0
-            || count($stepsResponseDto->getReleaseGroupViolations($releaseGroupId)) > 0
+        return count($stepsResponseDto->getBlockersByReleaseGroupId($releaseGroupId)) > 0
+            || count($stepsResponseDto->getViolationsByReleaseGroupId($releaseGroupId)) > 0
             || (
-                $stepsResponseDto->getReleaseGroupIntegratorResponseDto($releaseGroupId) !== null
-                && count($stepsResponseDto->getReleaseGroupIntegratorResponseDto($releaseGroupId)->getWarnings()) > 0
+                $stepsResponseDto->getIntegratorResponseDtoByReleaseGroupId($releaseGroupId) !== null
+                && count($stepsResponseDto->getIntegratorResponseDtoByReleaseGroupId($releaseGroupId)->getWarnings()) > 0
             );
     }
 
@@ -288,7 +288,7 @@ class PullRequestDataGenerator
             array_merge(
                 ...array_map(
                     static fn (IntegratorResponseDto $integratorResponseDto): array => $integratorResponseDto->getWarnings(),
-                    $stepsResponseDto->getIntegratorResponseDtos(),
+                    $stepsResponseDto->getIntegratorResponseCollection(),
                 ),
             ),
         );

@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\Common;
 
-interface IntegratorEvaluatorInterface
+interface IntegratorExecutionValidatorInterface
 {
     /**
      * @return bool
