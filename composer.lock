@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d5da10a65706dcc762cfe4b100120d6",
+    "content-hash": "af9167fc9ba2764738dd77d63e230cf7",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3406,16 +3406,16 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "dev-master",
+            "version": "dev-feature/sdk-2745-rating-based-integrator",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "ec8b68b3c9ebb9a8b3cd1501e1d5c3f03338ed26"
+                "reference": "6a5856a3e4ebb6501ce8c9be12cb41df45245a35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/ec8b68b3c9ebb9a8b3cd1501e1d5c3f03338ed26",
-                "reference": "ec8b68b3c9ebb9a8b3cd1501e1d5c3f03338ed26",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/6a5856a3e4ebb6501ce8c9be12cb41df45245a35",
+                "reference": "6a5856a3e4ebb6501ce8c9be12cb41df45245a35",
                 "shasum": ""
             },
             "require": {
@@ -3424,7 +3424,9 @@
                 "composer/composer": "^2.1.0",
                 "czproject/git-php": "^4.1",
                 "ext-dom": "*",
+                "ext-json": "*",
                 "ext-simplexml": "*",
+                "guzzlehttp/guzzle": "^7.4",
                 "laminas/laminas-filter": "^2.11.0",
                 "nikic/php-parser": "^4.3.0",
                 "php": ">=7.4",
@@ -3441,7 +3443,6 @@
                 "spryker/code-sniffer": "dev-master",
                 "symfony/filesystem": "^5.3.0 || ^6.0"
             },
-            "default-branch": true,
             "bin": [
                 "bin/integrator"
             ],
@@ -3463,9 +3464,9 @@
             "description": "Integrator module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
-                "source": "https://github.com/spryker-sdk/integrator/tree/master"
+                "source": "https://github.com/spryker-sdk/integrator/tree/feature/sdk-2745-rating-based-integrator"
             },
-            "time": "2023-08-23T15:33:29+00:00"
+            "time": "2023-08-23T16:36:10+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
