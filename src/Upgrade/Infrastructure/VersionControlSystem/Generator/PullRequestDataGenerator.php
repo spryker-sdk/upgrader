@@ -185,17 +185,11 @@ class PullRequestDataGenerator
     {
         $releaseGroupId = $releaseGroupDto->getId();
 
-        return (
-                isset($stepsResponseDto->getBlockers()[$releaseGroupId])
-                && count($stepsResponseDto->getBlockers()[$releaseGroupId]) > 0
-            )
+        return count($stepsResponseDto->getReleaseGroupBlockers($releaseGroupId)) > 0
+            || count($stepsResponseDto->getReleaseGroupViolations($releaseGroupId)) > 0
             || (
-                isset($stepsResponseDto->getViolations()[$releaseGroupId])
-                && count($stepsResponseDto->getViolations()[$releaseGroupId]) > 0
-            )
-            || (
-                isset($stepsResponseDto->getIntegratorResponseDtos()[$releaseGroupId])
-                && count($stepsResponseDto->getIntegratorResponseDtos()[$releaseGroupId]->getWarnings()) > 0
+                $stepsResponseDto->getReleaseGroupIntegratorResponseDto($releaseGroupId) !== null
+                && count($stepsResponseDto->getReleaseGroupIntegratorResponseDto($releaseGroupId)->getWarnings()) > 0
             );
     }
 

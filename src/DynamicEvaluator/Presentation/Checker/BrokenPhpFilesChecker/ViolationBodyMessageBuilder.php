@@ -26,7 +26,7 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
     /**
      * @var string
      */
-    protected const ERROR_MESSAGE = 'PHP classes that became not compatible with Spyker Release';
+    protected const ERROR_MESSAGE = 'PHP classes that became not compatible with Spryker Release';
 
     /**
      * @var \Upgrader\Configuration\ConfigurationProvider

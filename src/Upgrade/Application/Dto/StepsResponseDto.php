@@ -18,6 +18,11 @@ use Upgrade\Domain\ValueObject\ErrorInterface;
 class StepsResponseDto extends ResponseDto
 {
     /**
+     * @var int
+     */
+    public const UNDEFINED_RELEASE_GROUP_ID = 0;
+
+    /**
      * @var bool
      */
     protected bool $isSuccessful;
@@ -78,9 +83,9 @@ class StepsResponseDto extends ResponseDto
     protected ReleaseGroupStatDto $releaseGroupStatDto;
 
     /**
-     * @var int|null
+     * @var int
      */
-    protected ?int $currentReleaseGroupId = null;
+    protected int $currentReleaseGroupId = self::UNDEFINED_RELEASE_GROUP_ID;
 
     /**
      * @param bool $isSuccessful
@@ -215,13 +220,23 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
+     * @param int $releaseGroupId
+     *
+     * @return \Upgrade\Application\Dto\IntegratorResponseDto|null
+     */
+    public function getReleaseGroupIntegratorResponseDto(int $releaseGroupId): ?IntegratorResponseDto
+    {
+        return $this->integratorResponseDtos[$releaseGroupId] ?? null;
+    }
+
+    /**
      * @param \Upgrade\Application\Dto\IntegratorResponseDto $integratorResponseDto
      *
      * @return void
      */
     public function addIntegratorResponseDto(IntegratorResponseDto $integratorResponseDto): void
     {
-        $this->integratorResponseDtos[(int)$this->currentReleaseGroupId] = $integratorResponseDto;
+        $this->integratorResponseDtos[$this->currentReleaseGroupId] = $integratorResponseDto;
     }
 
     /**
@@ -251,7 +266,7 @@ class StepsResponseDto extends ResponseDto
      */
     public function addBlocker(ValidatorViolationDto $blockerInfo): void
     {
-        $currentReleaseGroupId = (int)$this->currentReleaseGroupId;
+        $currentReleaseGroupId = $this->currentReleaseGroupId;
 
         if (!isset($this->blockers[$currentReleaseGroupId])) {
             $this->blockers[$currentReleaseGroupId] = [];
@@ -266,6 +281,16 @@ class StepsResponseDto extends ResponseDto
     public function getBlockers(): array
     {
         return $this->blockers;
+    }
+
+    /**
+     * @param int $releaseGroupId
+     *
+     * @return array<\Upgrade\Application\Dto\ValidatorViolationDto>
+     */
+    public function getReleaseGroupBlockers(int $releaseGroupId): array
+    {
+        return $this->blockers[$releaseGroupId] ?? [];
     }
 
     /**
@@ -346,19 +371,19 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getCurrentReleaseGroupId(): ?int
+    public function getCurrentReleaseGroupId(): int
     {
         return $this->currentReleaseGroupId;
     }
 
     /**
-     * @param int|null $currentReleaseGroupId
+     * @param int $currentReleaseGroupId
      *
      * @return void
      */
-    public function setCurrentReleaseGroupId(?int $currentReleaseGroupId): void
+    public function setCurrentReleaseGroupId(int $currentReleaseGroupId): void
     {
         $this->currentReleaseGroupId = $currentReleaseGroupId;
     }
@@ -372,13 +397,23 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
+     * @param int $releaseGroupId
+     *
+     * @return array<\Upgrade\Application\Dto\ViolationDtoInterface>
+     */
+    public function getReleaseGroupViolations(int $releaseGroupId): array
+    {
+        return $this->violations[$releaseGroupId] ?? [];
+    }
+
+    /**
      * @param \Upgrade\Application\Dto\ViolationDtoInterface $violation
      *
      * @return void
      */
     public function addViolation(ViolationDtoInterface $violation): void
     {
-        $currentReleaseGroupId = (int)$this->currentReleaseGroupId;
+        $currentReleaseGroupId = $this->currentReleaseGroupId;
 
         if (!isset($this->violations[$currentReleaseGroupId])) {
             $this->violations[$currentReleaseGroupId] = [];
