@@ -3410,12 +3410,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "6a5856a3e4ebb6501ce8c9be12cb41df45245a35"
+                "reference": "ed06fbf0a0fe861a24b1f9a556e729e4791ccdab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/6a5856a3e4ebb6501ce8c9be12cb41df45245a35",
-                "reference": "6a5856a3e4ebb6501ce8c9be12cb41df45245a35",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/ed06fbf0a0fe861a24b1f9a556e729e4791ccdab",
+                "reference": "ed06fbf0a0fe861a24b1f9a556e729e4791ccdab",
                 "shasum": ""
             },
             "require": {
@@ -3466,7 +3466,7 @@
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
                 "source": "https://github.com/spryker-sdk/integrator/tree/feature/sdk-2745-rating-based-integrator"
             },
-            "time": "2023-08-23T16:36:10+00:00"
+            "time": "2023-08-24T08:48:00+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
@@ -8780,6 +8780,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "spryker-sdk/azure-php-client": 20,
+        "spryker-sdk/integrator": 20,
         "spryker/code-sniffer": 20
     },
     "prefer-stable": true,
