@@ -2,7 +2,7 @@ name: Dependency updated
 
 env:
   AUTH_TOKEN: ${{ secrets.PAT }}
-  EVENT: upgrader_dependency_updated
+  EVENT: dependency_updated
   ORG: spryker-sdk
   REPO: sdk
 
