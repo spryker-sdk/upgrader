@@ -47,7 +47,7 @@ class AzureSourceCodeProviderTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function validateCredentialsDataProvider()
+    public function validateCredentialsDataProvider(): array
     {
         return [
             // Invalid credentials
@@ -81,7 +81,7 @@ class AzureSourceCodeProviderTest extends TestCase
         $azureSourceCodeProvider = new AzureSourceCodeProvider(
             $this->configurationProviderMock,
             $this->azureClientFactoryMock,
-            $this->descriptionNormalizerMock
+            $this->descriptionNormalizerMock,
         );
 
         // Configure the mocks
