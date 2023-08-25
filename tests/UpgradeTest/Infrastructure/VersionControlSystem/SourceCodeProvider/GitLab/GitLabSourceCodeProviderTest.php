@@ -85,7 +85,7 @@ class GitLabSourceCodeProviderTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function createPullRequestDataProvider()
+    public function createPullRequestDataProvider(): array
     {
         return [
             // Invalid credentials
@@ -99,8 +99,15 @@ class GitLabSourceCodeProviderTest extends TestCase
 
     /**
      * @dataProvider createPullRequestDataProvider
+     *
+     * @param string $accessToken
+     * @param string $projectId
+     * @param string $orgName
+     * @param string $repoName
+     * @param string $expectedError
+     * @return void
      */
-    public function testCreatePullRequest($accessToken, $projectId, $orgName, $repoName, $expectedError)
+    public function testCreatePullRequest(string $accessToken, string $projectId, string $orgName, string $repoName, string $expectedError): void
     {
         // Set up mocks and dependencies
 

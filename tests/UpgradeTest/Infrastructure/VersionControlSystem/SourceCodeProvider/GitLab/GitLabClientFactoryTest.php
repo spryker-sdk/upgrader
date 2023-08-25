@@ -20,7 +20,7 @@ class GitLabClientFactoryTest extends TestCase
     /**
      * @return void
      */
-    public function testGetClient()
+    public function testGetClient(): void
     {
         $accessToken = 'your_access_token';
         $sourceCodeProviderUrl = 'https://your.gitlab.url';
@@ -49,7 +49,7 @@ class GitLabClientFactoryTest extends TestCase
     /**
      * @return void
      */
-    public function testCreateClient()
+    public function testCreateClient(): void
     {
         $accessToken = 'your_access_token';
         $sourceCodeProviderUrl = 'https://your.gitlab.url';
