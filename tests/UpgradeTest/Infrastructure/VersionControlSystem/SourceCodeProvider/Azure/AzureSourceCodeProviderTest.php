@@ -81,9 +81,8 @@ class AzureSourceCodeProviderTest extends TestCase
         string $projectId,
         string $repoName,
         string $repoId,
-        string $expectedError,
-    ): void
-    {
+        string $expectedError
+    ): void {
         // Set up mocks and dependencies
 
         $azureSourceCodeProvider = new AzureSourceCodeProvider(
