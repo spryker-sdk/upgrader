@@ -10,12 +10,12 @@ declare(strict_types=1);
 namespace UpgradeTest\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure;
 
 use PHPUnit\Framework\TestCase;
-use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
-use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureSourceCodeProvider;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Domain\ValueObject\Error;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureClientFactory;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzurePullRequestDescriptionNormalizer;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureSourceCodeProvider;
 
 class AzureSourceCodeProviderTest extends TestCase
 {
