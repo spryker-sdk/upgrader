@@ -74,7 +74,15 @@ class AzureSourceCodeProviderTest extends TestCase
      *
      * @return void
      */
-    public function testValidateCredentials(string $accessToken, string $orgName, string $projectName, string $projectId, string $repoName, string $repoId, string $expectedError): void
+    public function testValidateCredentials(
+        string $accessToken,
+        string $orgName,
+        string $projectName,
+        string $projectId,
+        string $repoName,
+        string $repoId,
+        string $expectedError,
+    ): void
     {
         // Set up mocks and dependencies
 
