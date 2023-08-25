@@ -105,6 +105,7 @@ class GitLabSourceCodeProviderTest extends TestCase
      * @param string $orgName
      * @param string $repoName
      * @param string $expectedError
+     *
      * @return void
      */
     public function testCreatePullRequest(string $accessToken, string $projectId, string $orgName, string $repoName, string $expectedError): void
@@ -116,7 +117,7 @@ class GitLabSourceCodeProviderTest extends TestCase
 
         $gitLabSourceCodeProvider = new GitLabSourceCodeProvider(
             $configurationProviderMock,
-            $gitLabClientFactoryMock
+            $gitLabClientFactoryMock,
         );
 
         // Configure the mocks
