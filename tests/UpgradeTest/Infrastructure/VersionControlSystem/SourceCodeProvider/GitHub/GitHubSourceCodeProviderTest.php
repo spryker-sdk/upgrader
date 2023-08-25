@@ -23,7 +23,7 @@ class GitHubSourceCodeProviderTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function createPullRequestDataProvider()
+    public function createPullRequestDataProvider(): array
     {
         return [
             // Invalid credentials
@@ -52,7 +52,7 @@ class GitHubSourceCodeProviderTest extends TestCase
 
         $gitHubSourceCodeProvider = new GitHubSourceCodeProvider(
             $configurationProviderMock,
-            $gitHubClientFactoryMock
+            $gitHubClientFactoryMock,
         );
 
         // Configure the mocks

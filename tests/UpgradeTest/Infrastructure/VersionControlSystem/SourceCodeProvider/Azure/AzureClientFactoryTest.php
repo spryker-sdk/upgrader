@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure;
 
-use SprykerAzure\Client\Client as AzureClient;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
+use SprykerAzure\Client\Client as AzureClient;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureClientFactory;
 
