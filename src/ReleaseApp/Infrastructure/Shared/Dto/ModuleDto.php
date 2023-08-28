@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Infrastructure\Shared\Dto;
 
+use Core\Infrastructure\SemanticVersionHelper;
+use ReleaseApp\Application\Configuration\ReleaseAppConstant;
+
 class ModuleDto
 {
     /**
@@ -60,5 +63,45 @@ class ModuleDto
     public function getVersionType(): string
     {
         return $this->versionType;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMajor(): bool
+    {
+        return $this->versionType === ReleaseAppConstant::MODULE_TYPE_MAJOR;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBetaMajor(): bool
+    {
+        return $this->isMinor() && SemanticVersionHelper::getMajorVersion($this->version) === 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBeta(): bool
+    {
+        return SemanticVersionHelper::getMajorVersion($this->version) === 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMinor(): bool
+    {
+        return $this->versionType === ReleaseAppConstant::MODULE_TYPE_MINOR;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPatch(): bool
+    {
+        return $this->versionType === ReleaseAppConstant::MODULE_TYPE_PATCH;
     }
 }

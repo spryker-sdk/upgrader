@@ -80,6 +80,13 @@ interface PackageManagerAdapterInterface
      *
      * @return bool
      */
+    public function isLockDevPackage(string $packageName): bool;
+
+    /**
+     * @param string $packageName
+     *
+     * @return bool
+     */
     public function isDevPackage(string $packageName): bool;
 
     /**
