@@ -74,7 +74,7 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
 
         $text .= PHP_EOL;
 
-        return "<details><summary><h3>$header</h3></summary>$text</details>";
+        return "<details><summary><h4>$header</h4></summary>$text</details>";
     }
 
     /**

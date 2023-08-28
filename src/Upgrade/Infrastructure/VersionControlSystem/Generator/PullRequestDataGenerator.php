@@ -149,7 +149,7 @@ class PullRequestDataGenerator
                 '| [%s](%s) |%s%s',
                 $appliedReleaseGroup->getId(),
                 $appliedReleaseGroup->getLink(),
-                $shouldDisplayRatingColumn ? $appliedReleaseGroup->getRating() . ' |' : '',
+                $shouldDisplayRatingColumn ? $appliedReleaseGroup->getRating() . '% |' : '',
                 $shouldDisplayWarningColumn ? $this->getReleaseGroupsTableWarningColumnText(
                     $stepsResponseDto,
                     $appliedReleaseGroup,

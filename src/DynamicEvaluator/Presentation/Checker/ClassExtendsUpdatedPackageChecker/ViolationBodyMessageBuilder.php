@@ -40,7 +40,7 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
 
             $body .= $this->getMessageViolationsTableLines($groupedViolationsByMessage, $packageDtos);
 
-            $text = "<details><summary><h3>$header</h3></summary>$body</details>";
+            $text = "<details><summary><h4>$header</h4></summary>$body</details>";
             $text .= PHP_EOL;
         }
 
