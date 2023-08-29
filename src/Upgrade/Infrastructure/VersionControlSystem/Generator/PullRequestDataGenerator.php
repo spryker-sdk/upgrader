@@ -87,7 +87,7 @@ class PullRequestDataGenerator
         $text = sprintf('Upgrader installed %s release group(s) ', $releaseGroupStatDto->getAppliedRGsAmount());
 
         if ($releaseGroupStatDto->getAppliedSecurityFixesAmount()) {
-            $text .= sprintf('(including %s security fix(s)) ', $releaseGroupStatDto->getAppliedSecurityFixesAmount());
+            $text .= sprintf('(including %s security fix(es)) ', $releaseGroupStatDto->getAppliedSecurityFixesAmount());
         }
 
         $composerDiffDto = $stepsResponseDto->getComposerLockDiff();
@@ -316,7 +316,7 @@ class PullRequestDataGenerator
             return '';
         }
 
-        $text .= '<details><summary><h4>We were mot able to integrate these module versions</h4></summary>';
+        $text .= '<details><summary><h4>We were not able to integrate these module versions</h4></summary>';
 
         $text .= PHP_EOL . PHP_EOL;
         $text .= $this->buildSkippedManifestTable($messages);
@@ -350,10 +350,13 @@ class PullRequestDataGenerator
 
             preg_match('/[a-zA-Z]*:[0-9]*.[0-9]*.[0-9]*/', $skippedManifest, $matches);
             if (!count($matches)) {
+                $row = implode(' | ', ['', '-', '-', $skippedManifest, PHP_EOL]);
+                $text .= $row;
+
                 continue;
             }
-            [$moduleName, $version] = explode(':', reset($matches));
 
+            [$moduleName, $version] = explode(':', reset($matches));
             $row = implode(' | ', [
                 '',
                 '**' . $moduleName . '**',
