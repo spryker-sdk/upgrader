@@ -70,7 +70,7 @@ class PullRequestDataGenerator
             . PHP_EOL
             . (trim($warningsSection) !== '' ? '## Warnings' . PHP_EOL : '')
             . $warningsSection
-            . $this->buildListOfPackages($stepsResponseDto)
+            . $this->buildListOfPackages($stepsResponseDto, $releaseGroupId)
             . $this->buildFooterText($stepsResponseDto);
     }
 
@@ -131,6 +131,7 @@ class PullRequestDataGenerator
 
         $shouldDisplayWarningColumn = $releaseGroupId !== null || $isSequentialProcessor;
         $shouldDisplayRatingColumn = $this->integratorExecutionValidator->isIntegratorShouldBeInvoked();
+        $manifestRatingThreshold = $this->configurationProvider->getManifestsRatingThreshold();
 
         $text = sprintf(
             '| Release |%s%s',
@@ -149,7 +150,7 @@ class PullRequestDataGenerator
                 '| [%s](%s) |%s%s',
                 $appliedReleaseGroup->getId(),
                 $appliedReleaseGroup->getLink(),
-                $shouldDisplayRatingColumn ? $appliedReleaseGroup->getRating() . '% |' : '',
+                $shouldDisplayRatingColumn ? $this->buildRatingCell($appliedReleaseGroup, $manifestRatingThreshold) . ' |' : '',
                 $shouldDisplayWarningColumn ? $this->getReleaseGroupsTableWarningColumnText(
                     $stepsResponseDto,
                     $appliedReleaseGroup,
@@ -159,7 +160,25 @@ class PullRequestDataGenerator
 
         $text .= PHP_EOL;
 
+        if (strpos($text, '*') !== false) {
+            $text .= '\* This Release has too low coverage and cannot be automatically integrated.</sub>';
+            $text .= PHP_EOL;
+        }
+
         return $text;
+    }
+
+    /**
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $appliedReleaseGroup
+     * @param int $manifestRatingThreshold
+     *
+     * @return string
+     */
+    protected function buildRatingCell(ReleaseGroupDto $appliedReleaseGroup, int $manifestRatingThreshold): string
+    {
+        return $appliedReleaseGroup->getRating() > 0 && $appliedReleaseGroup->getRating() < $manifestRatingThreshold
+            ? sprintf('%s%%*', $appliedReleaseGroup->getRating())
+            : sprintf('%s%%', $appliedReleaseGroup->getRating());
     }
 
     /**
@@ -350,10 +369,11 @@ class PullRequestDataGenerator
 
     /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     * @param int|null $releaseGroupId
      *
      * @return string
      */
-    protected function buildListOfPackages(StepsResponseDto $stepsResponseDto): string
+    protected function buildListOfPackages(StepsResponseDto $stepsResponseDto, ?int $releaseGroupId): string
     {
         $text = '';
 
@@ -367,7 +387,7 @@ class PullRequestDataGenerator
             return $text;
         }
 
-        $text .= '<details open><summary><h2>List of packages</h2></summary>' . PHP_EOL . PHP_EOL;
+        $text .= sprintf('<details%s><summary><h2>List of packages</h2></summary>', $releaseGroupId !== null ? ' open' : '') . PHP_EOL . PHP_EOL;
 
         if (count($composerDiffDto->getRequiredPackages()) > 0) {
             $text .= '**Packages upgraded:**' . PHP_EOL . PHP_EOL;
