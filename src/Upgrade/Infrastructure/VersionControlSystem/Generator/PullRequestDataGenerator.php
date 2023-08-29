@@ -87,7 +87,7 @@ class PullRequestDataGenerator
         $text = sprintf('Upgrader installed %s release group(s) ', $releaseGroupStatDto->getAppliedRGsAmount());
 
         if ($releaseGroupStatDto->getAppliedSecurityFixesAmount()) {
-            $text .= sprintf('(including %s security fix(s)) ', $releaseGroupStatDto->getAppliedSecurityFixesAmount());
+            $text .= sprintf('(including %s security fix(es)) ', $releaseGroupStatDto->getAppliedSecurityFixesAmount());
         }
 
         $composerDiffDto = $stepsResponseDto->getComposerLockDiff();

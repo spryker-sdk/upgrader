@@ -76,7 +76,7 @@ abstract class BaseReleaseGroupProcessor implements ReleaseGroupProcessorInterfa
 
         $message = sprintf('Amount of applied release groups: %s', $appliedRGsNum);
         if ($appliedSecurityRGsNum) {
-            $message .= sprintf(' (including %s security fix(s))', $appliedSecurityRGsNum);
+            $message .= sprintf(' (including %s security fix(es))', $appliedSecurityRGsNum);
         }
 
         $stepsExecutionDto->addOutputMessage($message);
