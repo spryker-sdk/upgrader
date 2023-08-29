@@ -297,7 +297,7 @@ class PullRequestDataGenerator
             return '';
         }
 
-        $text .= '<details><summary><h4>We were mot able to integrate these module versions</h4></summary>';
+        $text .= '<details><summary><h4>We were not able to integrate these module versions</h4></summary>';
 
         $text .= PHP_EOL . PHP_EOL;
         $text .= $this->buildSkippedManifestTable($messages);
