@@ -331,10 +331,13 @@ class PullRequestDataGenerator
 
             preg_match('/[a-zA-Z]*:[0-9]*.[0-9]*.[0-9]*/', $skippedManifest, $matches);
             if (!count($matches)) {
+                $row = implode(' | ', ['', '-', '-', $skippedManifest, PHP_EOL]);
+                $text .= $row;
+
                 continue;
             }
-            [$moduleName, $version] = explode(':', reset($matches));
 
+            [$moduleName, $version] = explode(':', reset($matches));
             $row = implode(' | ', [
                 '',
                 '**' . $moduleName . '**',
