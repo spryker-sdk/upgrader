@@ -340,6 +340,8 @@ class PullRequestDataGenerator
         $processedSkippedManifests = [];
 
         foreach ($skippedManifests as $skippedManifest) {
+            $skippedManifest = trim($skippedManifest);
+
             $skippedManifestHash = md5($skippedManifest);
 
             if (in_array($skippedManifestHash, $processedSkippedManifests, true)) {
