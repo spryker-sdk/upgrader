@@ -38,8 +38,9 @@ class MajorThresholdValidator implements ThresholdValidatorInterface
     public function validate(ReleaseGroupDtoCollection $releaseReleaseGroupDtoCollection): void
     {
         $softThreshold = $this->configurationProvider->getSoftThresholdMajor();
-        $majorAmount = $releaseReleaseGroupDtoCollection->getCommonModuleCollection()->getMajorAmount();
-        if ($majorAmount && $majorAmount >= $softThreshold) {
+        $majorsCount = count($releaseReleaseGroupDtoCollection->getCommonModuleCollection()->getMajors());
+
+        if ($majorsCount && $majorsCount >= $softThreshold) {
             throw new ReleaseGroupThresholdException(
                 sprintf('Soft threshold hit by %s major releases', $softThreshold),
             );

@@ -40,6 +40,11 @@ class UpgradeInstructionsReleaseGroup
     /**
      * @var string
      */
+    protected const RATING_KEY = 'rating';
+
+    /**
+     * @var string
+     */
     protected const META_KEY = 'meta';
 
     /**
@@ -115,6 +120,14 @@ class UpgradeInstructionsReleaseGroup
     public function getId(): int
     {
         return (int)$this->body[static::ID_KEY];
+    }
+
+    /**
+     * @return int
+     */
+    public function getRating(): int
+    {
+        return (int)$this->body[static::RATING_KEY];
     }
 
     /**

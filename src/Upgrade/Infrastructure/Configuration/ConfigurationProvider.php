@@ -12,6 +12,9 @@ namespace Upgrade\Infrastructure\Configuration;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Infrastructure\EnvParser\EnvFetcher;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ConfigurationProvider implements ConfigurationProviderInterface
 {
     /**
@@ -83,6 +86,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      * @var bool
      */
     protected const DEFAULT_REPORTING_ENABLED = false;
+
+    /**
+     * @var int
+     */
+    protected const DEFAULT_MANIFESTS_RATING_THRESHOLD = 0;
 
     /**
      * {@inheritDoc}
@@ -376,5 +384,15 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public function getReportSendAuthToken(): string
     {
         return (string)getenv('REPORT_SEND_AUTH_TOKEN');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return int
+     */
+    public function getManifestsRatingThreshold(): int
+    {
+        return (int)getenv('MANIFESTS_RATING_THRESHOLD') ?: static::DEFAULT_MANIFESTS_RATING_THRESHOLD;
     }
 }

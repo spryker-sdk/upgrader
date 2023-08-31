@@ -202,6 +202,21 @@ class ComposerAdapter implements PackageManagerAdapterInterface
      *
      * @return bool
      */
+    public function isLockDevPackage(string $packageName): bool
+    {
+        $composerLock = $this->composerLockReader->read();
+
+        return count(array_filter(
+            $composerLock[self::PACKAGES_DEV_KEY],
+            static fn (array $package): bool => $package[self::NAME_KEY] === $packageName
+        )) > 0;
+    }
+
+    /**
+     * @param string $packageName
+     *
+     * @return bool
+     */
     public function isDevPackage(string $packageName): bool
     {
         $composerJson = $this->composerJsonReader->read();

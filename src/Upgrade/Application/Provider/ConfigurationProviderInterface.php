@@ -126,4 +126,12 @@ interface ConfigurationProviderInterface
      * @return string
      */
     public function getReportSendAuthToken(): string;
+
+    /**
+     * Specification:
+     *  - Defines manifest rating threshold.
+     *
+     * @return int
+     */
+    public function getManifestsRatingThreshold(): int;
 }
