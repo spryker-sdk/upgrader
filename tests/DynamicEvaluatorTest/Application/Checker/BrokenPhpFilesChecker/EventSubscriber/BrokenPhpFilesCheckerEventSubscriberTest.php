@@ -89,7 +89,7 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
         $brokenPhpFilesCheckerEventSubscriber->onPostRequire($event);
 
         // Assert
-        $this->assertSame($violations, $event->getStepsExecutionDto()->getViolations());
+        $this->assertSame($violations, $event->getStepsExecutionDto()->getViolations()[0]);
     }
 
     /**

@@ -21,4 +21,9 @@ interface ReleaseGroupValidatorInterface
      * @return void
      */
     public function validate(ReleaseGroupDto $releaseGroup): void;
+
+    /**
+     * @return string
+     */
+    public static function getValidatorTitle(): string;
 }

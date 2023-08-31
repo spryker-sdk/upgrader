@@ -99,10 +99,12 @@ class SecurityMajorFilterItemTest extends TestCase
         ];
 
         return new ReleaseGroupDto(
+            1,
             'RG1',
             new ModuleDtoCollection($moduleDto),
             false,
             'https://api.release.spryker.com/release-groups/view/1',
+            100,
         );
     }
 }

@@ -11,6 +11,7 @@ namespace UpgradeTest\Infrastructure\Report\Builder;
 
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
+use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Domain\Entity\Package;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
@@ -91,6 +92,8 @@ class ReportDtoBuilderTest extends TestCase
             $payload->getDevRequiredPackages()[0]->getDiffLink(),
         );
 
+        $this->assertSame(['Warning One', 'Warning Two'], $payload->getIntegratorWarnings());
+
         $metadata = $reportDto->getMetadata();
         $this->assertSame(static::REPORT_ID, $metadata->getReportId());
         $this->assertSame(static::APP_ENV, $metadata->getAppEnv());
@@ -147,6 +150,12 @@ class ReportDtoBuilderTest extends TestCase
         }
 
         $stepsResponseDto->setReportId(static::REPORT_ID);
+
+        $stepsResponseDto->setCurrentReleaseGroupId(1);
+        $stepsResponseDto->addIntegratorResponseDto(new IntegratorResponseDto(['warning-list' => ['Warning One']]));
+
+        $stepsResponseDto->setCurrentReleaseGroupId(2);
+        $stepsResponseDto->addIntegratorResponseDto(new IntegratorResponseDto(['warning-list' => ['Warning Two']]));
 
         return $stepsResponseDto;
     }
