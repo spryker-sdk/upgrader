@@ -7,19 +7,19 @@
 
 declare(strict_types=1);
 
-namespace Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcherStrategy;
+namespace Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher;
 
-use Upgrade\Application\Dto\PackageManagerResponseDto;
+use Upgrade\Application\Dto\PackageManagerPackagesDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
-interface ModuleFetcherStrategyInterface
+interface PackageManagerPackagesFetcherInterface
 {
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerPackagesDto
      */
-    public function fetchModules(PackageCollection $packageCollection): PackageManagerResponseDto;
+    public function fetchPackages(PackageCollection $packageCollection): PackageManagerPackagesDto;
 
     /**
      * @return bool

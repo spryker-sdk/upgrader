@@ -7,12 +7,12 @@
 
 declare(strict_types=1);
 
-namespace Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcherStrategy;
+namespace Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher;
 
 use Composer\Semver\Semver;
 use Upgrade\Domain\Entity\Package;
 
-class InternalModuleFetcherStrategy extends AbstractModuleFetcherStrategy
+class InternalPackageManagerPackagesFetcher extends AbstractPackageManagerPackagesFetcher
 {
     /**
      * @param \Upgrade\Domain\Entity\Package $package

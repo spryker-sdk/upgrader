@@ -18,8 +18,8 @@ services:
             $isReleaseGroupIntegratorEnabled: '%env(default:is_release_group_integrator_enabled:bool:RELEASE_GROUP_INTEGRATOR_ENABLED)%'
 
     _instanceof:
-        Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcherStrategy\ModuleFetcherStrategyInterface:
-            tags: ['upgrage.modules_fetcher.strategy']
+        Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface:
+            tags: ['upgrage.package_manager_packages_fetcher']
 
     # Upgrade
     Upgrade\:
@@ -337,5 +337,5 @@ services:
         arguments:
             - '@Upgrade\Infrastructure\PackageManager\ComposerAdapter'
             - '@Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapper'
-            - !tagged_iterator upgrage.modules_fetcher.strategy
+            - !tagged_iterator upgrage.package_manager_packages_fetcher
 
