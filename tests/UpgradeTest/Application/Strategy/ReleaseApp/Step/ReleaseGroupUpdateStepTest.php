@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace UpgradeTest\Application\Strategy\ReleaseApp\Step;
 
 use PHPUnit\Framework\TestCase;
+use ReleaseApp\Application\Configuration\ReleaseAppConstant;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
@@ -19,16 +20,19 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Strategy\Common\Module\BetaMajorModule\BetaMajorModulesFetcherInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapper;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor;
+use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\BetaMajorPackageFilterItem;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DevMasterPackageFilterItem;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter;
 use Upgrade\Application\Strategy\ReleaseApp\Step\ReleaseGroupUpdateStep;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ConflictValidator;
+use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\MajorThresholdValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\MinorThresholdValidator;
@@ -419,6 +423,104 @@ class ReleaseGroupUpdateStepTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testRunWithWithBetaMajorReleasesThatNotInstalledInProjectShouldBeSkipped(): void
+    {
+        // Arrange
+        $packageManagerAdapterMock = $this->createPackageManagerAdapterMockForBetaMajorTests(false, null);
+        $betaMajorModulesFetcher = $this->createMock(BetaMajorModulesFetcherInterface::class);
+
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock(
+                $this->buildReleaseGroupDtoCollectionByModules([
+                    new ModuleDto('spryker/picking-lists-backend-api', '0.1.1', ReleaseAppConstant::MODULE_TYPE_MINOR),
+                ]),
+            ),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createSequentialReleaseGroupProcessor(
+                    [new BetaMajorPackageFilterItem($packageManagerAdapterMock)],
+                    [],
+                    [new MajorVersionValidator($this->createConfigurationProviderMock(), $betaMajorModulesFetcher)],
+                ),
+            ),
+            $this->createConfigurationProviderMock(),
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertTrue($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            implode(PHP_EOL, [
+                'Amount of available release groups for the project: 1',
+            ]),
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunWithWithBetaMajorReleasesThatInstalledInProjectShouldTriggerValidationError(): void
+    {
+        // Arrange
+        $releaseGroupModules = [new ModuleDto('spryker/picking-lists-backend-api', '0.1.1', ReleaseAppConstant::MODULE_TYPE_MINOR)];
+
+        $packageManagerAdapterMock = $this->createPackageManagerAdapterMockForBetaMajorTests(false, '0.0.1');
+        $betaMajorModulesFetcher = $this->createMock(BetaMajorModulesFetcherInterface::class);
+        $betaMajorModulesFetcher->method('getBetaMajorsNotInstalledInDev')->willReturn($releaseGroupModules);
+
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock(
+                $this->buildReleaseGroupDtoCollectionByModules($releaseGroupModules),
+            ),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createSequentialReleaseGroupProcessor(
+                    [new BetaMajorPackageFilterItem($packageManagerAdapterMock)],
+                    [],
+                    [new MajorVersionValidator($this->createConfigurationProviderMock(), $betaMajorModulesFetcher)],
+                ),
+            ),
+            $this->createConfigurationProviderMock(),
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertTrue($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            implode(PHP_EOL, [
+                'Amount of available release groups for the project: 1',
+                'There is a major release available for module spryker/picking-lists-backend-api. Please follow the link'
+                . " below to find all documentation needed to help you upgrade to the latest release \nhttps://api.release.spryker.com/release-groups/view/1",
+            ]),
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
+     * @param bool $isLockDevPackage
+     * @param string|null $lockPackageVersion
+     *
+     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
+     */
+    protected function createPackageManagerAdapterMockForBetaMajorTests(bool $isLockDevPackage, ?string $lockPackageVersion): PackageManagerAdapterInterface
+    {
+        $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
+        $packageManagerAdapter->method('isLockDevPackage')->willReturn($isLockDevPackage);
+        $packageManagerAdapter->method('getPackageVersion')->willReturn($lockPackageVersion);
+
+        return $packageManagerAdapter;
+    }
+
+    /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface $processor
      *
      * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver
@@ -523,12 +625,14 @@ class ReleaseGroupUpdateStepTest extends TestCase
     /**
      * @param array $releaseGroupFilters
      * @param array $thresholdSoftValidators
+     * @param array $releaseGroupValidators
      *
      * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
      */
     protected function createSequentialReleaseGroupProcessor(
         array $releaseGroupFilters = [],
-        array $thresholdSoftValidators = []
+        array $thresholdSoftValidators = [],
+        array $releaseGroupValidators = []
     ): SequentialReleaseGroupProcessor {
         $responseDto = new PackageManagerResponseDto(true);
 
@@ -542,7 +646,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $composerAdapterMock->method('isDevPackage')->willReturn(false);
 
         return new SequentialReleaseGroupProcessor(
-            new ReleaseGroupSoftValidator([]),
+            new ReleaseGroupSoftValidator($releaseGroupValidators),
             new ThresholdSoftValidator($thresholdSoftValidators),
             new ModuleFetcher(
                 $composerAdapterMock,
@@ -579,6 +683,23 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 true,
                 'https://api.release.spryker.com/release-groups/view/2',
                 $conflictDetected,
+            ),
+        ]);
+    }
+
+    /**
+     * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto> $moduleDtoCollection
+     *
+     * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection
+     */
+    protected function buildReleaseGroupDtoCollectionByModules(array $moduleDtoCollection): ReleaseGroupDtoCollection
+    {
+        return new ReleaseGroupDtoCollection([
+            new ReleaseGroupDto(
+                'RG1',
+                new ModuleDtoCollection($moduleDtoCollection),
+                false,
+                'https://api.release.spryker.com/release-groups/view/1',
             ),
         ]);
     }

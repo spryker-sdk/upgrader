@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Infrastructure\Shared\Dto\Collection;
 
-use ReleaseApp\Application\Configuration\ReleaseAppConstant;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 
 class ModuleDtoCollection
@@ -76,54 +75,30 @@ class ModuleDtoCollection
      */
     public function getMajors(): array
     {
-        return array_filter(
-            $this->elements,
-            static fn (ModuleDto $module): bool => $module->getVersionType() === ReleaseAppConstant::MODULE_TYPE_MAJOR,
-        );
+        return array_values(array_filter($this->elements, static fn (ModuleDto $module): bool => $module->isMajor()));
     }
 
     /**
-     * @return int
+     * @return array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto>
      */
-    public function getMajorAmount(): int
+    public function getBetaMajors(): array
     {
-        $result = 0;
-        foreach ($this->elements as $module) {
-            if ($module->getVersionType() === ReleaseAppConstant::MODULE_TYPE_MAJOR) {
-                $result++;
-            }
-        }
-
-        return $result;
+        return array_values(array_filter($this->elements, static fn (ModuleDto $module): bool => $module->isBetaMajor()));
     }
 
     /**
-     * @return int
+     * @return array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto>
      */
-    public function getMinorAmount(): int
+    public function getMinors(): array
     {
-        $result = 0;
-        foreach ($this->elements as $module) {
-            if ($module->getVersionType() === ReleaseAppConstant::MODULE_TYPE_MINOR) {
-                $result++;
-            }
-        }
-
-        return $result;
+        return array_values(array_filter($this->elements, static fn (ModuleDto $module): bool => $module->isMinor()));
     }
 
     /**
-     * @return int
+     * @return array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto>
      */
-    public function getPatchAmount(): int
+    public function getPatches(): array
     {
-        $result = 0;
-        foreach ($this->elements as $module) {
-            if ($module->getVersionType() === ReleaseAppConstant::MODULE_TYPE_PATCH) {
-                $result++;
-            }
-        }
-
-        return $result;
+        return array_values(array_filter($this->elements, static fn (ModuleDto $module): bool => $module->isPatch()));
     }
 }

@@ -221,6 +221,7 @@ services:
               - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\AlreadyInstalledPackageFilterItem'
               - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DummyPackageFilterItem'
               - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\SecurityMajorFilterItem'
+              - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\BetaMajorPackageFilterItem'
 
     Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
