@@ -19,7 +19,7 @@ class ClassExtendsUpdatedPackageChecker
     /**
      * @var string
      */
-    protected const ERROR_MESSAGE = 'Project class extends class from updated package';
+    protected const ERROR_MESSAGE = 'These classes of yours extend modified Spryker Core classes and need to be checked';
 
     /**
      * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\VendorChangedClassesFetcherInterface

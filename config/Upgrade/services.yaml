@@ -210,9 +210,6 @@ services:
               - '@gitlab.provider'
               - '@azure.provider'
 
-    validator.project_changes:
-        class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ProjectChangesValidator
-
     validator.release_major:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator
 
@@ -225,12 +222,12 @@ services:
               - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\AlreadyInstalledPackageFilterItem'
               - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DummyPackageFilterItem'
               - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\SecurityMajorFilterItem'
+              - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\BetaMajorPackageFilterItem'
 
     Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
         arguments:
             - {
-#                param1: '@validator.project_changes',
                 param2: '@validator.release_major',
                 param3: '@validator.conflict',
             }

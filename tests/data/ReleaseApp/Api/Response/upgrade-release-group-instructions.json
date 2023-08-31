@@ -2,6 +2,7 @@
     "result": {
         "release_group": {
             "id": 4821,
+            "rating": 100,
             "name": "CC-26540 Introduced the Shipment Types BAPI",
             "released": "2023-05-23T14:26:52+00:00",
             "project_changes": true,

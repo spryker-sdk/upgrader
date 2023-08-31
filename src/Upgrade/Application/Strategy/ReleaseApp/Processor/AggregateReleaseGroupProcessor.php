@@ -91,6 +91,8 @@ class AggregateReleaseGroupProcessor extends BaseReleaseGroupProcessor
                 continue;
             }
 
+            $stepsExecutionDto->setCurrentReleaseGroupId($releaseGroup->getId());
+
             $thresholdValidationResult = $this->thresholdValidator->validate($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccessful()) {
                 $stepsExecutionDto->setError(
@@ -100,19 +102,20 @@ class AggregateReleaseGroupProcessor extends BaseReleaseGroupProcessor
                 break;
             }
 
-            $releaseGroupValidateResult = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
-            if (!$releaseGroupValidateResult->isSuccessful()) {
+            $validatorViolation = $this->releaseGroupValidator->isValidReleaseGroup($releaseGroup);
+
+            if ($validatorViolation !== null) {
                 $stepsExecutionDto->setError(
-                    Error::createInternalError($releaseGroupValidateResult->getOutputMessage() ?? 'RG validation error'),
+                    Error::createInternalError($validatorViolation->getMessage()),
                 );
 
-                $stepsExecutionDto->setBlockerInfo((string)$releaseGroupValidateResult->getOutputMessage());
+                $stepsExecutionDto->addBlocker($validatorViolation);
 
                 break;
             }
 
             $aggregatedReleaseGroupCollection->add($releaseGroup);
-            $stepsExecutionDto->setLastAppliedReleaseGroup($releaseGroup);
+            $stepsExecutionDto->addAppliedReleaseGroup($releaseGroup);
         }
 
         if (!$this->dispatchEvent(new ReleaseGroupProcessorEvent($stepsExecutionDto), ReleaseGroupProcessorEvent::PRE_REQUIRE)) {

@@ -104,7 +104,7 @@ class IntegratorExecutor implements IntegratorExecutorInterface
 
         $integratorOutput = json_decode($process->getOutput(), true);
         if (is_array($integratorOutput)) {
-            $stepsExecutionDto->setIntegratorResponseDto(new IntegratorResponseDto($integratorOutput));
+            $stepsExecutionDto->addIntegratorResponseDto(new IntegratorResponseDto($integratorOutput));
         }
 
         return $stepsExecutionDto;
