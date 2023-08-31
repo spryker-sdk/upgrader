@@ -36,11 +36,14 @@ class BetaMajorPackageFilterItemTest extends TestCase
         ];
 
         $releaseGroupDto = new ReleaseGroupDto(
+            1,
             'RG',
             new ModuleDtoCollection($modules),
             true,
             '',
+            100,
             false,
+
         );
 
         $modulesVersions = [
