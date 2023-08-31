@@ -73,7 +73,7 @@ class UpgradeCommandTest extends TestCase
     }
 
     /**
-     * @return StepsResponseDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
     private function createSuccessfulExecutionDto(): StepsResponseDto
     {
@@ -84,7 +84,7 @@ class UpgradeCommandTest extends TestCase
     }
 
     /**
-     * @return StepsResponseDto
+     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
     private function createFailedExecutionDto(): StepsResponseDto
     {

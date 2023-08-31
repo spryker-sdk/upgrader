@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace UpgradeTest\Infrastructure\Report\Sender;
 
 use DateTimeImmutable;
-use PHPUnit\Framework\TestCase;
 use GuzzleHttp\ClientInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Infrastructure\Report\Dto\ReportDto;
@@ -22,7 +22,7 @@ use Upgrade\Infrastructure\Report\Sender\RemoteEndpointJsonReportSender;
 class RemoteEndpointJsonReportSenderTest extends TestCase
 {
     /**
-     * @return ReportMetadataDto
+     * @return \Upgrade\Infrastructure\Report\Dto\ReportMetadataDto
      */
     protected function createReportMetadataDto(): ReportMetadataDto
     {
@@ -32,7 +32,7 @@ class RemoteEndpointJsonReportSenderTest extends TestCase
             'project_version',
             'github',
             'test',
-            'report_id'
+            'report_id',
         );
     }
 
@@ -53,7 +53,7 @@ class RemoteEndpointJsonReportSenderTest extends TestCase
             'scope',
             new DateTimeImmutable(),
             new ReportPayloadDto(),
-            $this->createReportMetadataDto()
+            $this->createReportMetadataDto(),
         );
 
         // Configure the serializer mock
@@ -79,7 +79,7 @@ class RemoteEndpointJsonReportSenderTest extends TestCase
                     'body' => '{"data": "serialized_report_data"}',
                     'timeout' => 10, // Example value, adjust as needed
                     'connect_timeout' => 5, // Example value, adjust as needed
-                ]
+                ],
             );
 
         // Create an instance of the RemoteEndpointJsonReportSender and inject mocks
@@ -89,7 +89,7 @@ class RemoteEndpointJsonReportSenderTest extends TestCase
             $configurationProvider,
             'your_endpoint_url',
             10, // Example value, adjust as needed
-            5 // Example value, adjust as needed
+            5, // Example value, adjust as needed
         );
 
         // Call the send method
