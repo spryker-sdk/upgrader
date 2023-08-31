@@ -149,6 +149,42 @@ class ReleaseGroupUpdateStepTest extends TestCase
     /**
      * @return void
      */
+    public function testSequentialReleaseGroupProcessorFailedByConflicts(): void
+    {
+        // Arrange
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock(
+                $this->buildReleaseGroupDtoCollection(true),
+            ),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createSequentialReleaseGroupProcessor([], [], [new ConflictValidator()]),
+            ),
+            $this->createConfigurationProviderMock(),
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertTrue($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            implode(PHP_EOL, [
+                'Amount of available release groups for the project: 2',
+                'Applied required packages count: 1',
+                'There are no packages for the update.',
+                'No new required-dev packages',
+                'Release group "RG2" contains module conflicts. Please follow the link below to find addition information about the conflict https://api.release.spryker.com/release-groups/view/2',
+                'Amount of applied release groups: 1',
+            ]),
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testRunWithSequentialReleaseGroupProcessor(): void
     {
         // Arrange
@@ -306,12 +342,14 @@ class ReleaseGroupUpdateStepTest extends TestCase
         // Arrange
         $releaseGroupCollection = new ReleaseGroupDtoCollection([
             new ReleaseGroupDto(
+                1,
                 'RG1',
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
                 ]),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',
+                100,
             ),
         ]);
 
@@ -353,12 +391,14 @@ class ReleaseGroupUpdateStepTest extends TestCase
         // Arrange
         $releaseGroupCollection = new ReleaseGroupDtoCollection([
             new ReleaseGroupDto(
+                1,
                 'RG1',
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
                 ]),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',
+                100,
             ),
         ]);
 
@@ -668,20 +708,24 @@ class ReleaseGroupUpdateStepTest extends TestCase
     {
         return new ReleaseGroupDtoCollection([
             new ReleaseGroupDto(
+                1,
                 'RG1',
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
                 ]),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',
+                100,
             ),
             new ReleaseGroupDto(
+                1,
                 'RG2',
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/oauth-backend-api', '1.1.1', 'path'),
                 ]),
                 true,
                 'https://api.release.spryker.com/release-groups/view/2',
+                100,
                 $conflictDetected,
             ),
         ]);
@@ -696,10 +740,12 @@ class ReleaseGroupUpdateStepTest extends TestCase
     {
         return new ReleaseGroupDtoCollection([
             new ReleaseGroupDto(
+                1,
                 'RG1',
                 new ModuleDtoCollection($moduleDtoCollection),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',
+                100,
             ),
         ]);
     }

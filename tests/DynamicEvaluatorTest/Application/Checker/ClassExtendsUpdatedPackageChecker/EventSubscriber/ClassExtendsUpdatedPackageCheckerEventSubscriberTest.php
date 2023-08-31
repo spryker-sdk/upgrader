@@ -42,7 +42,7 @@ class ClassExtendsUpdatedPackageCheckerEventSubscriberTest extends TestCase
         $checkerExecutorEventSubscriber->onPostRequire($event);
 
         // Assert
-        $violations = $event->getStepsExecutionDto()->getViolations();
+        $violations = $event->getStepsExecutionDto()->getViolations()[0];
         $this->assertCount(1, $violations);
         $this->assertSame('violation one', $violations[0]->getMessage());
     }

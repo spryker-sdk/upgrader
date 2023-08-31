@@ -18,6 +18,8 @@ use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Dto\ValidatorViolationDto;
+use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutor;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
@@ -129,7 +131,6 @@ class GitTest extends KernelTestCase
         $stepsExecutionDto = new StepsResponseDto(true);
         $composerLockDiffDto = new ComposerLockDiffDto();
         $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
-        $stepsExecutionDto->setLastAppliedReleaseGroup($this->getReleaseGroupDto());
 
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $git = $this->getGitWithProcessRunner($processRunnerMock);
@@ -165,12 +166,12 @@ class GitTest extends KernelTestCase
         $stepsExecutionDto = new StepsResponseDto(true);
 
         $stepsExecutionDto->setComposerLockDiff($this->getComposerLockDiffDto());
-        $stepsExecutionDto->setBlockerInfo('Available major info');
+        $stepsExecutionDto->addBlocker(new ValidatorViolationDto(MajorVersionValidator::getValidatorTitle(), 'Available major info'));
         $integratorResponseDto = new IntegratorResponseDto([
             'message-list' => ['Test message'],
             'warning-list' => ['Manifest for Spryker.AuthenticationOauth:1.0.0 was skipped. Please, update it to use full functionality.'],
         ]);
-        $stepsExecutionDto->setIntegratorResponseDto($integratorResponseDto);
+        $stepsExecutionDto->addIntegratorResponseDto($integratorResponseDto);
 
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $git = $this->getGitWithProcessRunner($processRunnerMock);
@@ -273,10 +274,12 @@ class GitTest extends KernelTestCase
     protected function getReleaseGroupDto(): ReleaseGroupDto
     {
         $releaseGroupDto = new ReleaseGroupDto(
+            4821,
             'RGname',
             new ModuleDtoCollection(),
             true,
             'https://api.release.spryker.com/release-group/4821',
+            100,
             false,
         );
         $releaseGroupDto->setJiraIssue('CC-25420');

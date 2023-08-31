@@ -70,10 +70,12 @@ class ReleaseGroupDtoCollectionMapper
     protected function mapReleaseGroupDto(UpgradeInstructionsReleaseGroup $releaseGroup): ReleaseGroupDto
     {
         $dataProviderReleaseGroup = new ReleaseGroupDto(
+            $releaseGroup->getId(),
             $releaseGroup->getName(),
             $this->buildModuleTransferCollection($releaseGroup),
             $releaseGroup->hasProjectChanges(),
             $this->getReleaseGroupLink($releaseGroup->getId()),
+            $releaseGroup->getRating(),
         );
         $dataProviderReleaseGroup->setHasConflict(
             $releaseGroup->getMeta() && $releaseGroup->getMeta()->getConflict()->count(),
