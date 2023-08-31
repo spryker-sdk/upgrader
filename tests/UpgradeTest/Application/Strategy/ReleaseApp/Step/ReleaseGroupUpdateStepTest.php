@@ -745,7 +745,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new ModuleDtoCollection($moduleDtoCollection),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',
-                100
+                100,
             ),
         ]);
     }
