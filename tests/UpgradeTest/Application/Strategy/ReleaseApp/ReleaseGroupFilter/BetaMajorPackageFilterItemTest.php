@@ -43,7 +43,6 @@ class BetaMajorPackageFilterItemTest extends TestCase
             '',
             100,
             false,
-
         );
 
         $modulesVersions = [
