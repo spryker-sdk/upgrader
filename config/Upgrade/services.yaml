@@ -17,6 +17,10 @@ services:
         bind:
             $isReleaseGroupIntegratorEnabled: '%env(default:is_release_group_integrator_enabled:bool:RELEASE_GROUP_INTEGRATOR_ENABLED)%'
 
+    _instanceof:
+        Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcherStrategy\ModuleFetcherStrategyInterface:
+            tags: ['upgrage.modules_fetcher.strategy']
+
     # Upgrade
     Upgrade\:
         resource: '../../src/Upgrade/*'
@@ -328,4 +332,10 @@ services:
             - '%report_send_endpoint_url%'
             - '%report_send_timeout%'
             - '%report_send_connection_timeout%'
+
+    Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher:
+        arguments:
+            - '@Upgrade\Infrastructure\PackageManager\ComposerAdapter'
+            - '@Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapper'
+            - !tagged_iterator upgrage.modules_fetcher.strategy
 

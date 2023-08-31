@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
+use RuntimeException;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
@@ -23,16 +24,6 @@ class ModuleFetcher
     public const MESSAGE_NO_PACKAGES_FOUND = 'No valid packages found';
 
     /**
-     * @var string
-     */
-    protected const REQUIRED_TYPE = 'required';
-
-    /**
-     * @var string
-     */
-    protected const REQUIRED_DEV_TYPE = 'required-dev';
-
-    /**
      * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
     protected PackageManagerAdapterInterface $packageManager;
@@ -43,15 +34,23 @@ class ModuleFetcher
     protected PackageCollectionMapperInterface $packageCollectionMapper;
 
     /**
+     * @var iterable<\Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcherStrategy\ModuleFetcherStrategyInterface>
+     */
+    protected iterable $moduleFetcherStrategies;
+
+    /**
      * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
      * @param \Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface $packageCollectionMapper
+     * @param iterable<\Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcherStrategy\ModuleFetcherStrategyInterface> $moduleFetcherStrategies
      */
     public function __construct(
         PackageManagerAdapterInterface $packageManager,
-        PackageCollectionMapperInterface $packageCollectionMapper
+        PackageCollectionMapperInterface $packageCollectionMapper,
+        iterable $moduleFetcherStrategies
     ) {
         $this->packageManager = $packageManager;
         $this->packageCollectionMapper = $packageCollectionMapper;
+        $this->moduleFetcherStrategies = $moduleFetcherStrategies;
     }
 
     /**
@@ -73,80 +72,18 @@ class ModuleFetcher
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
+     * @throws \RuntimeException
+     *
      * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
     protected function requirePackageCollection(PackageCollection $packageCollection): PackageManagerResponseDto
     {
-        $requiredPackages = $this->packageCollectionMapper->getRequiredPackages($packageCollection);
-        $response = $this->requirePackages($requiredPackages, static::REQUIRED_TYPE);
-
-        if (!$response->isSuccessful()) {
-            return $response;
-        }
-        $subPackages = $this->packageCollectionMapper->getSubPackages($packageCollection);
-        $responseSubPackages = $this->updateSubPackage($subPackages);
-
-        if (!$responseSubPackages->isSuccessful()) {
-            return $responseSubPackages;
+        foreach ($this->moduleFetcherStrategies as $moduleFetcherStrategy) {
+            if ($moduleFetcherStrategy->isApplicable()) {
+                return $moduleFetcherStrategy->fetchModules($packageCollection);
+            }
         }
 
-        $requiredDevPackages = $this->packageCollectionMapper->getRequiredDevPackages($packageCollection);
-        $responseDev = $this->requirePackages($requiredDevPackages, static::REQUIRED_DEV_TYPE);
-
-        return new PackageManagerResponseDto(
-            $responseDev->isSuccessful(),
-            implode(PHP_EOL, [$response->getOutputMessage(), $responseSubPackages->getOutputMessage(), $responseDev->getOutputMessage()]),
-            array_merge($response->getExecutedCommands(), $responseDev->getExecutedCommands(), $responseSubPackages->getExecutedCommands()),
-            $requiredPackages->count() + $requiredDevPackages->count(),
-        );
-    }
-
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $updatedSubPackages
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
-    protected function updateSubPackage(PackageCollection $updatedSubPackages): PackageManagerResponseDto
-    {
-        if ($updatedSubPackages->isEmpty()) {
-            return new PackageManagerResponseDto(true, 'There are no packages for the update.');
-        }
-
-        $requireResponse = $this->packageManager->updateSubPackage($updatedSubPackages);
-
-        if (!$requireResponse->isSuccessful()) {
-            return $requireResponse;
-        }
-
-        return new PackageManagerResponseDto(true, sprintf('Updated packages count: %s', $updatedSubPackages->count()), $requireResponse->getExecutedCommands());
-    }
-
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $requiredPackages
-     * @param string $requiredPackageType
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
-    protected function requirePackages(
-        PackageCollection $requiredPackages,
-        string $requiredPackageType
-    ): PackageManagerResponseDto {
-        if ($requiredPackages->isEmpty()) {
-            return new PackageManagerResponseDto(true, sprintf('No new %s packages', $requiredPackageType));
-        }
-
-        $requireResponse = $requiredPackageType === static::REQUIRED_TYPE
-            ? $this->packageManager->require($requiredPackages)
-            : $this->packageManager->requireDev($requiredPackages);
-
-        if (!$requireResponse->isSuccessful()) {
-            return $requireResponse;
-        }
-
-        return new PackageManagerResponseDto(
-            true,
-            sprintf('Applied %s packages count: %s', $requiredPackageType, $requiredPackages->count()),
-            $requireResponse->getExecutedCommands(),
-        );
+        throw new RuntimeException('No applicable strategy has been found');
     }
 }
