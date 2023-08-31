@@ -3410,12 +3410,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "34d563e2658b66d81df8bc5ac39c386f6a461614"
+                "reference": "f9048db04c1e3e2ecbcf8c5af695d4bcfc292dd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/34d563e2658b66d81df8bc5ac39c386f6a461614",
-                "reference": "34d563e2658b66d81df8bc5ac39c386f6a461614",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/f9048db04c1e3e2ecbcf8c5af695d4bcfc292dd6",
+                "reference": "f9048db04c1e3e2ecbcf8c5af695d4bcfc292dd6",
                 "shasum": ""
             },
             "require": {
@@ -3424,7 +3424,9 @@
                 "composer/composer": "^2.1.0",
                 "czproject/git-php": "^4.1",
                 "ext-dom": "*",
+                "ext-json": "*",
                 "ext-simplexml": "*",
+                "guzzlehttp/guzzle": "^7.4",
                 "laminas/laminas-filter": "^2.11.0",
                 "nikic/php-parser": "^4.3.0",
                 "php": ">=7.4",
@@ -3465,7 +3467,7 @@
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
                 "source": "https://github.com/spryker-sdk/integrator/tree/master"
             },
-            "time": "2023-08-25T13:17:52+00:00"
+            "time": "2023-08-31T08:03:48+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
