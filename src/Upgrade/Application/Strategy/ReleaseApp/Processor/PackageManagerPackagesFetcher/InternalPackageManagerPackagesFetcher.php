@@ -15,6 +15,14 @@ use Upgrade\Domain\Entity\Package;
 class InternalPackageManagerPackagesFetcher extends AbstractPackageManagerPackagesFetcher
 {
     /**
+     * @return bool
+     */
+    public function isApplicable(): bool
+    {
+        return $this->isReleaseGroupIntegratorEnabled;
+    }
+
+    /**
      * @param \Upgrade\Domain\Entity\Package $package
      *
      * @return bool
@@ -54,13 +62,5 @@ class InternalPackageManagerPackagesFetcher extends AbstractPackageManagerPackag
             $requiredPackages,
             static fn (Package $requiredPackage): bool => $requiredPackage->getName() === $package->getName()
         )) === 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isApplicable(): bool
-    {
-        return $this->isReleaseGroupIntegratorEnabled;
     }
 }

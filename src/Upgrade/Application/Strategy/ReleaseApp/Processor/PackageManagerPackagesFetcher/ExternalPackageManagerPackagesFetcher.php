@@ -14,6 +14,14 @@ use Upgrade\Domain\Entity\Package;
 class ExternalPackageManagerPackagesFetcher extends AbstractPackageManagerPackagesFetcher
 {
     /**
+     * @return bool
+     */
+    public function isApplicable(): bool
+    {
+        return !$this->isReleaseGroupIntegratorEnabled;
+    }
+
+    /**
      * @param \Upgrade\Domain\Entity\Package $package
      *
      * @return bool
@@ -42,13 +50,5 @@ class ExternalPackageManagerPackagesFetcher extends AbstractPackageManagerPackag
     protected function isPackageShouldBeUpdated(Package $package, array $requiredPackages): bool
     {
         return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isApplicable(): bool
-    {
-        return !$this->isReleaseGroupIntegratorEnabled;
     }
 }

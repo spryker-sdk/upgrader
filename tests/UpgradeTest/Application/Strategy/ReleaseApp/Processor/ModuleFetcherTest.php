@@ -167,7 +167,7 @@ class ModuleFetcherTest extends KernelTestCase
      */
     public function testRequireReturnsFailedResponseDtoIfRequireDevPackagesFailed(): void
     {
-        // v
+        // Arrange
         $packageCollection = new PackageCollection();
         $packageCollection->add(new Package());
         $packageCollectionMapper = $this->createMock(PackageCollectionMapperInterface::class);
