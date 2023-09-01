@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
-use InvalidArgumentException;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\PackageManagerPackagesDto;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 class ModuleFetcher
@@ -45,23 +45,23 @@ class ModuleFetcher
     protected PackageCollectionMapperInterface $packageCollectionMapper;
 
     /**
-     * @var iterable<\Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface>
+     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface
      */
-    protected iterable $packageManagerPackagesFetchers;
+    protected PackageManagerPackagesFetcherInterface $packageManagerPackagesFetcher;
 
     /**
      * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
      * @param \Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface $packageCollectionMapper
-     * @param iterable<\Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface> $packageManagerPackagesFetchers
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface $packageManagerPackagesFetcher
      */
     public function __construct(
         PackageManagerAdapterInterface $packageManager,
         PackageCollectionMapperInterface $packageCollectionMapper,
-        iterable $packageManagerPackagesFetchers
+        PackageManagerPackagesFetcherInterface $packageManagerPackagesFetcher
     ) {
         $this->packageManager = $packageManager;
         $this->packageCollectionMapper = $packageCollectionMapper;
-        $this->packageManagerPackagesFetchers = $packageManagerPackagesFetchers;
+        $this->packageManagerPackagesFetcher = $packageManagerPackagesFetcher;
     }
 
     /**
@@ -78,28 +78,8 @@ class ModuleFetcher
         }
 
         return $this->requirePackageCollection(
-            $this->getPackageManagerPackages($packageCollection),
+            $this->packageManagerPackagesFetcher->fetchPackages($packageCollection),
         );
-    }
-
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerPackagesDto
-     */
-    protected function getPackageManagerPackages(PackageCollection $packageCollection): PackageManagerPackagesDto
-    {
-        foreach ($this->packageManagerPackagesFetchers as $packageManagerPackagesFetcher) {
-            if (!$packageManagerPackagesFetcher->isApplicable()) {
-                continue;
-            }
-
-            return $packageManagerPackagesFetcher->fetchPackages($packageCollection);
-        }
-
-        throw new InvalidArgumentException('Unable to find package manager packages fetcher');
     }
 
     /**

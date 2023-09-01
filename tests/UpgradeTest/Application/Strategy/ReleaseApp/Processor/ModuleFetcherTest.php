@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Application\Strategy\ReleaseApp\Processor;
 
-use InvalidArgumentException;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
@@ -26,29 +25,6 @@ class ModuleFetcherTest extends KernelTestCase
     /**
      * @return void
      */
-    public function testRequireShouldThrowExceptionWhenPackagesFetcherIsNotFound(): void
-    {
-        // Arrange
-        $this->expectException(InvalidArgumentException::class);
-
-        $packageCollectionMapper = $this->createMock(PackageCollectionMapperInterface::class);
-        $packageCollectionMapper->expects($this->once())
-            ->method('mapModuleCollectionToPackageCollection')
-            ->willReturn(new PackageCollection([new Package()]));
-
-        $moduleFetcher = new ModuleFetcher(
-            $this->createMock(PackageManagerAdapterInterface::class),
-            $packageCollectionMapper,
-            [$this->createPackageManagerPackagesFetcherMock(false)],
-        );
-
-        // Act
-        $moduleFetcher->require(new ModuleDtoCollection());
-    }
-
-    /**
-     * @return void
-     */
     public function testRequireReturnsProperResponseDtoIfNothingToInstall(): void
     {
         // Arrange
@@ -60,7 +36,7 @@ class ModuleFetcherTest extends KernelTestCase
         $moduleFetcher = new ModuleFetcher(
             $this->createMock(PackageManagerAdapterInterface::class),
             $packageCollectionMapper,
-            [$this->createPackageManagerPackagesFetcherMock()],
+            $this->createPackageManagerPackagesFetcherMock(),
         );
 
         // Act
@@ -112,7 +88,7 @@ class ModuleFetcherTest extends KernelTestCase
         $moduleFetcher = new ModuleFetcher(
             $packageManager,
             $packageCollectionMapper,
-            [$this->createPackageManagerPackagesFetcherMock()],
+            $this->createPackageManagerPackagesFetcherMock(),
         );
 
         // Act
@@ -149,7 +125,7 @@ class ModuleFetcherTest extends KernelTestCase
         $moduleFetcher = new ModuleFetcher(
             $packageManager,
             $packageCollectionMapper,
-            [$this->createPackageManagerPackagesFetcherMock()],
+            $this->createPackageManagerPackagesFetcherMock(),
         );
 
         // Act
@@ -189,7 +165,7 @@ class ModuleFetcherTest extends KernelTestCase
         $moduleFetcher = new ModuleFetcher(
             $packageManager,
             $packageCollectionMapper,
-            [$this->createPackageManagerPackagesFetcherMock()],
+            $this->createPackageManagerPackagesFetcherMock(),
         );
 
         // Act
@@ -203,14 +179,11 @@ class ModuleFetcherTest extends KernelTestCase
     }
 
     /**
-     * @param bool $isApplicable
-     *
      * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface
      */
-    protected function createPackageManagerPackagesFetcherMock(bool $isApplicable = true): PackageManagerPackagesFetcherInterface
+    protected function createPackageManagerPackagesFetcherMock(): PackageManagerPackagesFetcherInterface
     {
         $packageManagerPackagesFetcher = $this->createMock(PackageManagerPackagesFetcherInterface::class);
-        $packageManagerPackagesFetcher->method('isApplicable')->willReturn($isApplicable);
         $packageManagerPackagesFetcher->method('fetchPackages')->willReturn(new PackageManagerPackagesDto(
             new PackageCollection([new Package()]),
             new PackageCollection([new Package()]),

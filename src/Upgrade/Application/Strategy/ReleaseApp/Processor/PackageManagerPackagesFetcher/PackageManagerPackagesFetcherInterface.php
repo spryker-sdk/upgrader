@@ -20,9 +20,4 @@ interface PackageManagerPackagesFetcherInterface
      * @return \Upgrade\Application\Dto\PackageManagerPackagesDto
      */
     public function fetchPackages(PackageCollection $packageCollection): PackageManagerPackagesDto;
-
-    /**
-     * @return bool
-     */
-    public function isApplicable(): bool;
 }
