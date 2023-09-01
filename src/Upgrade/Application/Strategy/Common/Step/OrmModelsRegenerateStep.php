@@ -7,22 +7,19 @@
 
 declare(strict_types=1);
 
-namespace Upgrade\Application\Strategy\Common\PackagePostUpdateHandler;
+namespace Upgrade\Application\Strategy\Common\Step;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Dto\ValidatorViolationDto;
+use Upgrade\Application\Strategy\StepInterface;
 
-class PropelUpdateHandler implements HandlerInterface
+class OrmModelsRegenerateStep implements StepInterface
 {
-    /**
-     * @var string
-     */
-    protected const PROPEL_PACKAGE_NAME = 'propel/propel';
-
-    /**
-     * @var string
-     */
+ /**
+  * @var string
+  */
     protected const PROJECT_CONSOLE_PATH = 'vendor/bin/console';
 
     /**
@@ -58,39 +55,13 @@ class PropelUpdateHandler implements HandlerInterface
     protected Filesystem $filesystem;
 
     /**
-     * @var bool
-     */
-    protected bool $isReleaseGroupIntegratorEnabled;
-
-    /**
      * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      * @param \Symfony\Component\Filesystem\Filesystem $filesystem
-     * @param bool $isReleaseGroupIntegratorEnabled
      */
-    public function __construct(ProcessRunnerServiceInterface $processRunner, Filesystem $filesystem, bool $isReleaseGroupIntegratorEnabled = false)
+    public function __construct(ProcessRunnerServiceInterface $processRunner, Filesystem $filesystem)
     {
         $this->processRunner = $processRunner;
         $this->filesystem = $filesystem;
-        $this->isReleaseGroupIntegratorEnabled = $isReleaseGroupIntegratorEnabled;
-    }
-
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return bool
-     */
-    public function isApplicable(StepsResponseDto $stepsExecutionDto): bool
-    {
-        if ($this->isReleaseGroupIntegratorEnabled) {
-            return false;
-        }
-
-        $composerLockDiffDto = $stepsExecutionDto->getComposerLockDiff();
-        if (!$composerLockDiffDto) {
-            return false;
-        }
-
-        return $this->hasPropel($composerLockDiffDto->getRequiredPackages());
     }
 
     /**
@@ -98,7 +69,31 @@ class PropelUpdateHandler implements HandlerInterface
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function handle(StepsResponseDto $stepsExecutionDto): StepsResponseDto
+    public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
+    {
+        if (!$this->isApplicable($stepsExecutionDto)) {
+            return $stepsExecutionDto;
+        }
+
+        return $this->handle($stepsExecutionDto);
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     *
+     * @return bool
+     */
+    protected function isApplicable(StepsResponseDto $stepsExecutionDto): bool
+    {
+        return (bool)$stepsExecutionDto->getComposerLockDiff();
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     *
+     * @return \Upgrade\Application\Dto\StepsResponseDto
+     */
+    protected function handle(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         foreach (static::GENERATED_MODEL_PATH_LIST as $path) {
             $this->filesystem->remove((array)glob($path));
@@ -112,26 +107,17 @@ class PropelUpdateHandler implements HandlerInterface
         foreach ($commandList as $command) {
             $response = $this->processRunner->run(explode(' ', $command), ['APPLICATION_ENV' => 'development']);
             if ($response->getExitCode()) {
-                $stepsExecutionDto->addOutputMessage($response->getErrorOutput());
+                $message = $response->getErrorOutput() ?: $response->getOutput();
+                $stepsExecutionDto->addBlocker(
+                    new ValidatorViolationDto(
+                        'Propel model generation failed',
+                        sprintf('Command: %s, response: %s', $command, $message),
+                    ),
+                );
+                $stepsExecutionDto->addOutputMessage($message);
             }
         }
 
         return $stepsExecutionDto;
-    }
-
-    /**
-     * @param array<\Upgrade\Domain\Entity\Package> $packages
-     *
-     * @return bool
-     */
-    protected function hasPropel(array $packages): bool
-    {
-        foreach ($packages as $package) {
-            if ($package->getName() === static::PROPEL_PACKAGE_NAME) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
