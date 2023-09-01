@@ -201,6 +201,19 @@ To update a project, run the following command from its directory:
 ```bash
 bin/console upgradability:php:upgrade
 ```
+## Enable release group integrator
+​
+* Turn on the specific behavior for the release group integrator (for internal usage).
+```bash
+export RELEASE_GROUP_INTEGRATOR_ENABLED=true
+```
+
+## Enable release group integrator
+​
+* Turn on specific behavior to minimize update 3rd-party dependencies.
+```bash
+export UPDATE_WITH_STRATEGY_ENABLED=true
+```
 
 ## Enable project change integration
 ​

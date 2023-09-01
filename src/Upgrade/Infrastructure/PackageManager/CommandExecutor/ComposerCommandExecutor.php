@@ -20,7 +20,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @var array<string, int>
      */
-    protected const ENV = ['COMPOSER_PROCESS_TIMEOUT' => 36000];
+    public const ENV = ['COMPOSER_PROCESS_TIMEOUT' => 36000];
 
     /**
      * @var string
@@ -55,7 +55,12 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @var string
      */
-    protected const WITH_ALL_DEPENDENCIES_FLAG = '--with-all-dependencies';
+    protected const WITH_DEPENDENCIES_FLAG = '-w';
+
+    /**
+     * @var string
+     */
+    protected const WITH_ALL_DEPENDENCIES_FLAG = '-W';
 
     /**
      * @var string
@@ -78,13 +83,39 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
+     * @var bool
+     */
+    protected bool $isUpdateWithStrategyEnabled;
+
+    /**
      * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
+     * @param bool $isUpdateWithStrategyEnabled
      */
-    public function __construct(ProcessRunnerServiceInterface $processRunner, ConfigurationProviderInterface $configurationProvider)
-    {
+    public function __construct(
+        ProcessRunnerServiceInterface $processRunner,
+        ConfigurationProviderInterface $configurationProvider,
+        bool $isUpdateWithStrategyEnabled = false
+    ) {
         $this->processRunner = $processRunner;
         $this->configurationProvider = $configurationProvider;
+        $this->isUpdateWithStrategyEnabled = $isUpdateWithStrategyEnabled;
+    }
+
+    /**
+     * @return array<string>
+     */
+    protected function getUpdateWithList(): array
+    {
+        return (!$this->isUpdateWithStrategyEnabled) ?
+            [
+                static::WITH_ALL_DEPENDENCIES_FLAG,
+            ] :
+            [
+                '',
+                static::WITH_DEPENDENCIES_FLAG,
+                static::WITH_ALL_DEPENDENCIES_FLAG,
+            ];
     }
 
     /**
@@ -110,16 +141,13 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function require(PackageCollection $packageCollection): PackageManagerResponseDto
     {
-        $command = explode(' ', sprintf(
-            '%s%s %s %s %s',
+        return $this->runWithDependecyFlags(explode(' ', sprintf(
+            '%s%s %s %s',
             static::REQUIRE_COMMAND_NAME,
             $this->getPackageString($packageCollection),
             static::NO_SCRIPTS_FLAG,
             static::NO_PLUGINS_FLAG,
-            static::WITH_ALL_DEPENDENCIES_FLAG,
-        ));
-
-        return $this->createResponse($this->runCommand($command));
+        )));
     }
 
     /**
@@ -147,17 +175,14 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function requireDev(PackageCollection $packageCollection): PackageManagerResponseDto
     {
-        $command = explode(' ', sprintf(
-            '%s%s %s %s %s %s',
+        return $this->runWithDependecyFlags(explode(' ', sprintf(
+            '%s%s %s %s %s',
             static::REQUIRE_COMMAND_NAME,
             $this->getPackageString($packageCollection),
             static::NO_SCRIPTS_FLAG,
             static::NO_PLUGINS_FLAG,
-            static::WITH_ALL_DEPENDENCIES_FLAG,
             static::DEV_FLAG,
-        ));
-
-        return $this->createResponse($this->runCommand($command));
+        )));
     }
 
     /**
@@ -165,16 +190,35 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function update(): PackageManagerResponseDto
     {
-        $command = explode(' ', sprintf(
-            '%s %s %s %s %s',
+        return $this->runWithDependecyFlags(explode(' ', sprintf(
+            '%s %s %s %s',
             static::UPDATE_COMMAND_NAME,
-            static::WITH_ALL_DEPENDENCIES_FLAG,
             static::NO_SCRIPTS_FLAG,
             static::NO_PLUGINS_FLAG,
             static::NO_INTERACTION_FLAG,
-        ));
+        )));
+    }
 
-        return $this->createResponse($this->runCommand($command));
+    /**
+     * @param array<string> $command
+     *
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
+     */
+    protected function runWithDependecyFlags(array $command): PackageManagerResponseDto
+    {
+        $updateWithList = $this->getUpdateWithList() ?: [''];
+        foreach ($updateWithList as $flag) {
+            $commandToRun = $command;
+            if ($flag) {
+                $commandToRun[] = $flag;
+            }
+            $process = $this->runCommand($commandToRun);
+            if ($process->isSuccessful()) {
+                break;
+            }
+        }
+
+        return $this->createResponse($process);
     }
 
     /**
