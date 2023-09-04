@@ -17,20 +17,20 @@ use Upgrade\Application\Strategy\StepInterface;
 
 class OrmModelsRegenerateStep implements StepInterface
 {
- /**
-  * @var string
-  */
+    /**
+     * @var string
+     */
     protected const PROJECT_CONSOLE_PATH = 'vendor/bin/console';
 
     /**
-     * @var string
+     * @var array<string>
      */
-    protected const PROPEL_SCHEMA_COPY_COMMAND = 'propel:schema:copy';
-
-    /**
-     * @var string
-     */
-    protected const PROPEL_MODEL_BUILD_COMMAND = 'propel:model:build';
+    protected const COMMAND_LIST = [
+        'transfer:generate',
+        'propel:schema:copy',
+        'propel:model:build',
+        'transfer:entity:generate',
+    ];
 
     /**
      * @var array<string>
@@ -99,13 +99,8 @@ class OrmModelsRegenerateStep implements StepInterface
             $this->filesystem->remove((array)glob($path));
         }
 
-        $commandList = [
-            sprintf('%s %s', static::PROJECT_CONSOLE_PATH, static::PROPEL_SCHEMA_COPY_COMMAND),
-            sprintf('%s %s', static::PROJECT_CONSOLE_PATH, static::PROPEL_MODEL_BUILD_COMMAND),
-        ];
-
-        foreach ($commandList as $command) {
-            $response = $this->processRunner->run(explode(' ', $command), ['APPLICATION_ENV' => 'development']);
+        foreach (static::COMMAND_LIST as $command) {
+            $response = $this->processRunner->run([static::PROJECT_CONSOLE_PATH, $command], ['APPLICATION_ENV' => 'development']);
             if ($response->getExitCode()) {
                 $message = $response->getErrorOutput() ?: $response->getOutput();
                 $stepsExecutionDto->addBlocker(
