@@ -212,7 +212,7 @@ export RELEASE_GROUP_INTEGRATOR_ENABLED=true
 ​
 * Turn on specific behavior to minimize update 3rd-party dependencies.
 ```bash
-export UPDATE_WITH_STRATEGY_ENABLED=true
+export UPDATE_MINIMUM_DEPENDENCIES_ENABLED=true
 ```
 
 ## Enable project change integration

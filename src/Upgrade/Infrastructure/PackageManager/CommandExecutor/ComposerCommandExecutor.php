@@ -85,21 +85,21 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @var bool
      */
-    protected bool $isUpdateWithStrategyEnabled;
+    protected bool $isUpdateMinimumDependeciesEnabled;
 
     /**
      * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     * @param bool $isUpdateWithStrategyEnabled
+     * @param bool $isUpdateMinimumDependeciesEnabled
      */
     public function __construct(
         ProcessRunnerServiceInterface $processRunner,
         ConfigurationProviderInterface $configurationProvider,
-        bool $isUpdateWithStrategyEnabled = false
+        bool $isUpdateMinimumDependeciesEnabled = false
     ) {
         $this->processRunner = $processRunner;
         $this->configurationProvider = $configurationProvider;
-        $this->isUpdateWithStrategyEnabled = $isUpdateWithStrategyEnabled;
+        $this->isUpdateMinimumDependeciesEnabled = $isUpdateMinimumDependeciesEnabled;
     }
 
     /**
@@ -107,7 +107,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     protected function getUpdateWithList(): array
     {
-        return (!$this->isUpdateWithStrategyEnabled) ?
+        return (!$this->isUpdateMinimumDependeciesEnabled) ?
             [
                 static::WITH_ALL_DEPENDENCIES_FLAG,
             ] :

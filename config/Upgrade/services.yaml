@@ -8,7 +8,7 @@ parameters:
     http_client.repeatable.usec_delay: 500000
     profiler_enabled: "%env(default:profiler_enabled_default:bool:SDK_PROFILER_ENABLED)%"
     is_release_group_integrator_enabled: false
-    is_update_with_strategy_enabled: false #To enable composer run logic without flag, with dependencies, with all dependencies.
+    is_update_minimum_dependecies_enabled: false #To enable composer run logic without flag, with dependencies, with all dependencies.
 
 services:
     _defaults:
@@ -17,7 +17,7 @@ services:
         public: true
         bind:
             $isReleaseGroupIntegratorEnabled: '%env(default:is_release_group_integrator_enabled:bool:RELEASE_GROUP_INTEGRATOR_ENABLED)%'
-            $isUpdateWithStrategyEnabled: '%env(default:is_update_with_strategy_enabled:bool:UPDATE_WITH_STRATEGY_ENABLED)%'
+            $isUpdateMinimumDependeciesEnabled: '%env(default:is_update_minimum_dependecies_enabled:bool:UPDATE_MINIMUM_DEPENDENCIES_ENABLED)%'
 
     # Upgrade
     Upgrade\:
