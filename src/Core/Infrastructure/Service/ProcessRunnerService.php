@@ -37,6 +37,29 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
      *
      * @return \Symfony\Component\Process\Process
      */
+    public function runFromCommandLine(
+        string $command,
+        ?string $cwd = null,
+        ?array $env = null,
+        $input = null,
+        ?float $timeout = self::DEFAULT_PROCESS_TIMEOUT
+    ): Process {
+        $process = Process::fromShellCommandline($command, $cwd, $env, $input, $timeout);
+        $process->setTimeout(static::DEFAULT_PROCESS_TIMEOUT);
+        $process->run();
+
+        return $process;
+    }
+
+    /**
+     * @param string $command
+     * @param string|null $cwd
+     * @param array<mixed>|null $env
+     * @param mixed $input
+     * @param float|null $timeout
+     *
+     * @return \Symfony\Component\Process\Process
+     */
     public function mustRunFromCommandLine(
         string $command,
         ?string $cwd = null,
@@ -68,29 +91,6 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
     ): Process {
         $process = new Process($command, $cwd, $env, $input, $timeout);
         $process->mustRun();
-
-        return $process;
-    }
-
-    /**
-     * @param string $command
-     * @param string|null $cwd
-     * @param array<mixed>|null $env
-     * @param mixed $input
-     * @param float|null $timeout
-     *
-     * @return \Symfony\Component\Process\Process
-     */
-    public function runShellCommand(
-        string $command,
-        ?string $cwd = null,
-        ?array $env = null,
-        $input = null,
-        ?float $timeout = self::DEFAULT_PROCESS_TIMEOUT
-    ): Process {
-        $process = Process::fromShellCommandline($command, $cwd, $env, $input, $timeout);
-        $process->setTimeout(static::DEFAULT_PROCESS_TIMEOUT);
-        $process->run();
 
         return $process;
     }

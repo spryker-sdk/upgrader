@@ -108,7 +108,7 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
             $packageRegexp,
         );
 
-        $process = $this->processRunnerService->runShellCommand($command, $this->configurationProvider->getRootPath());
+        $process = $this->processRunnerService->runFromCommandLine($command, $this->configurationProvider->getRootPath());
 
         if ($process->getExitCode() !== static::GREP_FOUND_PACKAGES_EXIT_CODE) {
             return [];
@@ -120,7 +120,7 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
             $matches,
         );
 
-        if (!isset($matches['packages'])) {
+        if (!isset($matches['packages']) || count($matches['packages']) === 0) {
             return [];
         }
 
@@ -151,7 +151,7 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
             if ($updatedComposerJson === null) {
                 return $composerJsonContent;
             }
-            // // @codeCoverageIgnoreEnd
+            // @codeCoverageIgnoreEnd
         }
 
         return $updatedComposerJson;

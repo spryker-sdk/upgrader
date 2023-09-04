@@ -157,7 +157,7 @@ class ComposerJsonConstraintFixStepTest extends TestCase
     protected function createProcessRunnerServiceMock(Process $process): ProcessRunnerServiceInterface
     {
         $processRunnerService = $this->createMock(ProcessRunnerServiceInterface::class);
-        $processRunnerService->method('runShellCommand')->willReturn($process);
+        $processRunnerService->method('runFromCommandLine')->willReturn($process);
 
         return $processRunnerService;
     }
