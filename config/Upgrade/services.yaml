@@ -72,6 +72,9 @@ services:
     add_changes.step:
         class: Upgrade\Application\Strategy\Common\Step\AddChangesStep
 
+    composer_json_constraint_fix_step:
+        class: Upgrade\Application\Strategy\Common\Step\ComposerJsonConstraintFixStep
+
     commit_changes.step:
         class: Upgrade\Application\Strategy\Common\Step\CommitChangesStep
 
@@ -109,6 +112,7 @@ services:
               - '@package_post_update.step'
               - '@integrator.step'
               - '@create_branch.step'
+              - '@composer_json_constraint_fix_step'
               - '@add_changes.step'
               - '@commit_changes.step'
               - '@push_changes.step'
@@ -262,6 +266,7 @@ services:
             - - '@composer_lock_diff.step'
               - '@package_post_update.step'
               - '@integrator.step'
+              - '@composer_json_constraint_fix_step'
               - '@add_changes.step'
               - '@commit_changes.step'
 
