@@ -11,11 +11,11 @@ namespace UpgradeTest\Application\Strategy\ReleaseApp\Processor\PackageManagerPa
 
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\InternalPackageManagerPackagesFetcher;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcher;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
 
-class InternalPackageManagerPackagesFetcherTest extends TestCase
+class PackageManagerPackagesFetcherTest extends TestCase
 {
     /**
      * Dev package should be updated
@@ -31,7 +31,7 @@ class InternalPackageManagerPackagesFetcherTest extends TestCase
 
         $packageManager = $this->createPackageManagerAdapterMock(['spryker/dev'], ['spryker/dev' => '1.1.0'], ['spryker/dev' => '^1.1.0']);
 
-        $packagesFetcher = new InternalPackageManagerPackagesFetcher($packageManager, true);
+        $packagesFetcher = new PackageManagerPackagesFetcher($packageManager, true);
 
         // Act
         $packageManagerPackagesDto = $packagesFetcher->fetchPackages($packageCollection);
@@ -58,7 +58,7 @@ class InternalPackageManagerPackagesFetcherTest extends TestCase
 
         $packageManager = $this->createPackageManagerAdapterMock(['spryker/dev'], ['spryker/dev' => '1.1.0'], ['spryker/dev' => '^1.1.0']);
 
-        $packagesFetcher = new InternalPackageManagerPackagesFetcher($packageManager, true);
+        $packagesFetcher = new PackageManagerPackagesFetcher($packageManager, true);
 
         // Act
         $packageManagerPackagesDto = $packagesFetcher->fetchPackages($packageCollection);
@@ -85,7 +85,7 @@ class InternalPackageManagerPackagesFetcherTest extends TestCase
 
         $packageManager = $this->createPackageManagerAdapterMock([], ['spryker/package' => null]);
 
-        $packagesFetcher = new InternalPackageManagerPackagesFetcher($packageManager, true);
+        $packagesFetcher = new PackageManagerPackagesFetcher($packageManager, true);
 
         // Act
         $packageManagerPackagesDto = $packagesFetcher->fetchPackages($packageCollection);
@@ -112,7 +112,7 @@ class InternalPackageManagerPackagesFetcherTest extends TestCase
 
         $packageManager = $this->createPackageManagerAdapterMock([], ['spryker/package' => '1.1.1'], ['spryker/package' => '^1.1.1']);
 
-        $packagesFetcher = new InternalPackageManagerPackagesFetcher($packageManager, true);
+        $packagesFetcher = new PackageManagerPackagesFetcher($packageManager, true);
 
         // Act
         $packageManagerPackagesDto = $packagesFetcher->fetchPackages($packageCollection);
@@ -139,7 +139,7 @@ class InternalPackageManagerPackagesFetcherTest extends TestCase
 
         $packageManager = $this->createPackageManagerAdapterMock([], ['spryker/package' => '1.1.1'], ['spryker/package' => '^1.1.1']);
 
-        $packagesFetcher = new InternalPackageManagerPackagesFetcher($packageManager, true);
+        $packagesFetcher = new PackageManagerPackagesFetcher($packageManager, true);
 
         // Act
         $packageManagerPackagesDto = $packagesFetcher->fetchPackages($packageCollection);
@@ -186,7 +186,7 @@ class InternalPackageManagerPackagesFetcherTest extends TestCase
             ],
         );
 
-        $packagesFetcher = new InternalPackageManagerPackagesFetcher($packageManager, true);
+        $packagesFetcher = new PackageManagerPackagesFetcher($packageManager, true);
 
         // Act
         $packageManagerPackagesDto = $packagesFetcher->fetchPackages($packageCollection);
@@ -195,36 +195,6 @@ class InternalPackageManagerPackagesFetcherTest extends TestCase
         $this->assertSame(2, $packageManagerPackagesDto->getPackagesForUpdate()->count());
         $this->assertSame(2, $packageManagerPackagesDto->getPackagesForRequire()->count());
         $this->assertSame(1, $packageManagerPackagesDto->getPackagesForRequireDev()->count());
-    }
-
-    /**
-     * @return void
-     */
-    public function testIsApplicableShouldReturnTrueWhenIsReleaseGroupIntegratorEnabled(): void
-    {
-        // Arrange
-        $packagesFetcher = new InternalPackageManagerPackagesFetcher($this->createPackageManagerAdapterMock(), true);
-
-        // Act
-        $result = $packagesFetcher->isApplicable();
-
-        // Assert
-        $this->assertTrue($result);
-    }
-
-    /**
-     * @return void
-     */
-    public function testIsApplicableShouldReturnFalseWhenIsReleaseGroupIntegratorDisabled(): void
-    {
-        // Arrange
-        $packagesFetcher = new InternalPackageManagerPackagesFetcher($this->createPackageManagerAdapterMock(), false);
-
-        // Act
-        $result = $packagesFetcher->isApplicable();
-
-        // Assert
-        $this->assertFalse($result);
     }
 
     /**

@@ -9,12 +9,13 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher;
 
+use Composer\Semver\Semver;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\PackageManagerPackagesDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
 
-abstract class AbstractPackageManagerPackagesFetcher implements PackageManagerPackagesFetcherInterface
+class PackageManagerPackagesFetcher implements PackageManagerPackagesFetcherInterface
 {
     /**
      * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
@@ -43,15 +44,9 @@ abstract class AbstractPackageManagerPackagesFetcher implements PackageManagerPa
      */
     public function fetchPackages(PackageCollection $packageCollection): PackageManagerPackagesDto
     {
-        $packagesForRequire = $this->getRequiredPackages(
-            $packageCollection,
-            [$this, 'isPackagedShouldBeRequired'],
-        );
+        $packagesForRequire = $this->getRequiredPackages($packageCollection);
 
-        $packagesForRequireDev = $this->getRequiredPackages(
-            $packageCollection,
-            [$this, 'isPackageShouldBeRequiredForDev'],
-        );
+        $packagesForRequireDev = $this->getRequiredDevPackages($packageCollection);
 
         $packagesForUpdate = $this->getPackagesForUpdate(
             $packageCollection,
@@ -63,21 +58,66 @@ abstract class AbstractPackageManagerPackagesFetcher implements PackageManagerPa
 
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     * @param callable $isPackageShouldBeAdded
      *
      * @return \Upgrade\Domain\Entity\Collection\PackageCollection
      */
-    public function getRequiredPackages(PackageCollection $packageCollection, callable $isPackageShouldBeAdded): PackageCollection
+    public function getRequiredPackages(PackageCollection $packageCollection): PackageCollection
     {
         $resultCollection = new PackageCollection();
 
         foreach ($packageCollection->toArray() as $package) {
-            if ($isPackageShouldBeAdded($package)) {
+            if ($this->isPackagedShouldBeRequired($package)) {
                 $resultCollection->add($package);
             }
         }
 
         return $resultCollection;
+    }
+
+    /**
+     * @param \Upgrade\Domain\Entity\Package $package
+     *
+     * @return bool
+     */
+    protected function isPackagedShouldBeRequired(Package $package): bool
+    {
+        $packageConstraint = $this->packageManager->getPackageConstraint($package->getName());
+
+        return !$this->packageManager->isDevPackage($package->getName())
+            && ($this->packageManager->getPackageVersion($package->getName()) === null
+                || ($packageConstraint !== null && !Semver::satisfies($package->getVersion(), $packageConstraint))
+            );
+    }
+
+    /**
+     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     *
+     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
+     */
+    public function getRequiredDevPackages(PackageCollection $packageCollection): PackageCollection
+    {
+        $resultCollection = new PackageCollection();
+
+        foreach ($packageCollection->toArray() as $package) {
+            if ($this->isPackageShouldBeRequiredForDev($package)) {
+                $resultCollection->add($package);
+            }
+        }
+
+        return $resultCollection;
+    }
+
+    /**
+     * @param \Upgrade\Domain\Entity\Package $package
+     *
+     * @return bool
+     */
+    protected function isPackageShouldBeRequiredForDev(Package $package): bool
+    {
+        $packageConstraint = $this->packageManager->getPackageConstraint($package->getName());
+
+        return $this->packageManager->isDevPackage($package->getName())
+            && ($packageConstraint !== null && !Semver::satisfies($package->getVersion(), $packageConstraint));
     }
 
     /**
@@ -101,23 +141,15 @@ abstract class AbstractPackageManagerPackagesFetcher implements PackageManagerPa
 
     /**
      * @param \Upgrade\Domain\Entity\Package $package
-     *
-     * @return bool
-     */
-    abstract protected function isPackagedShouldBeRequired(Package $package): bool;
-
-    /**
-     * @param \Upgrade\Domain\Entity\Package $package
-     *
-     * @return bool
-     */
-    abstract protected function isPackageShouldBeRequiredForDev(Package $package): bool;
-
-    /**
-     * @param \Upgrade\Domain\Entity\Package $package
      * @param array<\Upgrade\Domain\Entity\Package> $requiredPackages
      *
      * @return bool
      */
-    abstract protected function isPackageShouldBeUpdated(Package $package, array $requiredPackages): bool;
+    protected function isPackageShouldBeUpdated(Package $package, array $requiredPackages): bool
+    {
+        return count(array_filter(
+            $requiredPackages,
+            static fn (Package $requiredPackage): bool => $requiredPackage->getName() === $package->getName()
+        )) === 0;
+    }
 }

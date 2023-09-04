@@ -617,7 +617,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $composerAdapterMock->method('updateSubPackage')->willReturn($responseDto);
 
         $packageManagerPackagesFetcher = $this->createMock(PackageManagerPackagesFetcherInterface::class);
-        $packageManagerPackagesFetcher->method('isApplicable')->willReturn(true);
         $packageManagerPackagesFetcher->method('fetchPackages')->willReturn(new PackageManagerPackagesDto(
             new PackageCollection([]),
             new PackageCollection([]),
@@ -634,7 +633,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new PackageCollectionMapper(
                     $composerAdapterMock,
                 ),
-                [$packageManagerPackagesFetcher],
+                $packageManagerPackagesFetcher,
             ),
             new ReleaseGroupFilter([]),
             $this->createEventDispatcherMock(),
@@ -667,7 +666,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new PackageCollectionMapper(
                     $composerAdapterMock,
                 ),
-                [$this->createPackageManagerPackagesFetcherMock()],
+                $this->createPackageManagerPackagesFetcherMock(),
             ),
             new ReleaseGroupFilter([]),
             $this->createEventDispatcherMock(),
@@ -704,7 +703,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new PackageCollectionMapper(
                     $composerAdapterMock,
                 ),
-                [$this->createPackageManagerPackagesFetcherMock()],
+                $this->createPackageManagerPackagesFetcherMock(),
             ),
             new ReleaseGroupFilter($releaseGroupFilters),
             $this->createEventDispatcherMock(),
@@ -825,14 +824,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
             public function fetchPackages(PackageCollection $packageCollection): PackageManagerPackagesDto
             {
                 return new PackageManagerPackagesDto($packageCollection, new PackageCollection([]), new PackageCollection([]));
-            }
-
-            /**
-             * @return bool
-             */
-            public function isApplicable(): bool
-            {
-                return true;
             }
         };
     }
