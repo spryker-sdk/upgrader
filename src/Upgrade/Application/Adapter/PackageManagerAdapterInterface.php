@@ -78,6 +78,13 @@ interface PackageManagerAdapterInterface
     /**
      * @param string $packageName
      *
+     * @return string|null
+     */
+    public function getPackageConstraint(string $packageName): ?string;
+
+    /**
+     * @param string $packageName
+     *
      * @return bool
      */
     public function isLockDevPackage(string $packageName): bool;

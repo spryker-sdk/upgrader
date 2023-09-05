@@ -59,4 +59,79 @@ class ComposerAdapterTest extends TestCase
 
         return $composerReader;
     }
+
+    /**
+     * @return void
+     */
+    public function testGetPackageConstraintShouldReturnNullIfConstraintNotFound(): void
+    {
+        // Arrange
+        $composerJson = [
+            'require' => ['spryker/acl' => '^1.2.0'],
+            'require-dev' => ['spryker/dev' => '^2.2.0'],
+        ];
+
+        $composerAdapter = new ComposerAdapter(
+            $this->createMock(ComposerCommandExecutorInterface::class),
+            $this->createMock(ComposerLockComparatorCommandExecutorInterface::class),
+            $this->createComposerReaderMock($composerJson),
+            $this->createMock(ComposerReaderInterface::class),
+        );
+
+        // Act
+        $result = $composerAdapter->getPackageConstraint('spryker/undefined');
+
+        // Assert
+        $this->assertNull($result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetPackageConstraintShouldReturnRequireConstraint(): void
+    {
+        // Arrange
+        $composerJson = [
+            'require' => ['spryker/acl' => '^1.2.0'],
+            'require-dev' => ['spryker/dev' => '^2.2.0'],
+        ];
+
+        $composerAdapter = new ComposerAdapter(
+            $this->createMock(ComposerCommandExecutorInterface::class),
+            $this->createMock(ComposerLockComparatorCommandExecutorInterface::class),
+            $this->createComposerReaderMock($composerJson),
+            $this->createMock(ComposerReaderInterface::class),
+        );
+
+        // Act
+        $result = $composerAdapter->getPackageConstraint('spryker/acl');
+
+        // Assert
+        $this->assertSame('^1.2.0', $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetPackageConstraintShouldReturnRequireDevConstraint(): void
+    {
+        // Arrange
+        $composerJson = [
+            'require' => ['spryker/acl' => '^1.2.0'],
+            'require-dev' => ['spryker/dev' => '^2.2.0'],
+        ];
+
+        $composerAdapter = new ComposerAdapter(
+            $this->createMock(ComposerCommandExecutorInterface::class),
+            $this->createMock(ComposerLockComparatorCommandExecutorInterface::class),
+            $this->createComposerReaderMock($composerJson),
+            $this->createMock(ComposerReaderInterface::class),
+        );
+
+        // Act
+        $result = $composerAdapter->getPackageConstraint('spryker/dev');
+
+        // Assert
+        $this->assertSame('^2.2.0', $result);
+    }
 }

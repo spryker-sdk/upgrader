@@ -18,12 +18,14 @@ use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
+use Upgrade\Application\Dto\PackageManagerPackagesDto;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\Common\Module\BetaMajorModule\BetaMajorModulesFetcherInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapper;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor;
@@ -39,6 +41,8 @@ use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\MinorThresholdVa
 use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\PatchThresholdValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\ReleaseGroupThresholdValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator;
+use Upgrade\Domain\Entity\Collection\PackageCollection;
+use Upgrade\Domain\Entity\Package;
 use Upgrade\Infrastructure\Adapter\ReleaseAppClientAdapter;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\PackageManager\ComposerAdapter;
@@ -611,8 +615,13 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $composerAdapterMock->method('require')->willReturn($responseDto);
         $composerAdapterMock->method('requireDev')->willReturn($responseDto);
         $composerAdapterMock->method('updateSubPackage')->willReturn($responseDto);
-        $composerAdapterMock->method('isDevPackage')->willReturn(false);
-        $composerAdapterMock->method('isSubPackage')->willReturn(true);
+
+        $packageManagerPackagesFetcher = $this->createMock(PackageManagerPackagesFetcherInterface::class);
+        $packageManagerPackagesFetcher->method('fetchPackages')->willReturn(new PackageManagerPackagesDto(
+            new PackageCollection([]),
+            new PackageCollection([]),
+            new PackageCollection([new Package()]),
+        ));
 
         return new AggregateReleaseGroupProcessor(
             new ReleaseGroupSoftValidator([
@@ -624,6 +633,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new PackageCollectionMapper(
                     $composerAdapterMock,
                 ),
+                $packageManagerPackagesFetcher,
             ),
             new ReleaseGroupFilter([]),
             $this->createEventDispatcherMock(),
@@ -644,7 +654,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             ->getMock();
         $composerAdapterMock->method('require')->willReturn($responseDto);
         $composerAdapterMock->method('requireDev')->willReturn($responseDto);
-        $composerAdapterMock->method('isDevPackage')->willReturn(false);
+        $composerAdapterMock->method('updateSubPackage')->willReturn($responseDto);
 
         return new AggregateReleaseGroupProcessor(
             new ReleaseGroupSoftValidator([
@@ -656,6 +666,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new PackageCollectionMapper(
                     $composerAdapterMock,
                 ),
+                $this->createPackageManagerPackagesFetcherMock(),
             ),
             new ReleaseGroupFilter([]),
             $this->createEventDispatcherMock(),
@@ -683,7 +694,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
             ->getMock();
         $composerAdapterMock->method('require')->willReturn($responseDto);
         $composerAdapterMock->method('requireDev')->willReturn($responseDto);
-        $composerAdapterMock->method('isDevPackage')->willReturn(false);
 
         return new SequentialReleaseGroupProcessor(
             new ReleaseGroupSoftValidator($releaseGroupValidators),
@@ -693,6 +703,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new PackageCollectionMapper(
                     $composerAdapterMock,
                 ),
+                $this->createPackageManagerPackagesFetcherMock(),
             ),
             new ReleaseGroupFilter($releaseGroupFilters),
             $this->createEventDispatcherMock(),
@@ -796,6 +807,25 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $configurationProvider->method('getThresholdReleaseGroup')->willReturn(1);
 
         return $configurationProvider;
+    }
+
+    /**
+     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface
+     */
+    protected function createPackageManagerPackagesFetcherMock(): PackageManagerPackagesFetcherInterface
+    {
+        return new class () implements PackageManagerPackagesFetcherInterface
+        {
+            /**
+             * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+             *
+             * @return \Upgrade\Application\Dto\PackageManagerPackagesDto
+             */
+            public function fetchPackages(PackageCollection $packageCollection): PackageManagerPackagesDto
+            {
+                return new PackageManagerPackagesDto($packageCollection, new PackageCollection([]), new PackageCollection([]));
+            }
+        };
     }
 
     /**

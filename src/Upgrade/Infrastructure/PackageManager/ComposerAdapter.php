@@ -186,6 +186,20 @@ class ComposerAdapter implements PackageManagerAdapterInterface
     /**
      * @param string $packageName
      *
+     * @return string|null
+     */
+    public function getPackageConstraint(string $packageName): ?string
+    {
+        $composerJson = $this->composerJsonReader->read();
+
+        return $composerJson['require'][$packageName]
+            ?? $composerJson['require-dev'][$packageName]
+            ?? null;
+    }
+
+    /**
+     * @param string $packageName
+     *
      * @return bool
      */
     public function isLockDevPackage(string $packageName): bool

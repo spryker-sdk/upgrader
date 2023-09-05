@@ -11,8 +11,10 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
+use Upgrade\Application\Dto\PackageManagerPackagesDto;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 class ModuleFetcher
@@ -43,15 +45,23 @@ class ModuleFetcher
     protected PackageCollectionMapperInterface $packageCollectionMapper;
 
     /**
+     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface
+     */
+    protected PackageManagerPackagesFetcherInterface $packageManagerPackagesFetcher;
+
+    /**
      * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
      * @param \Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface $packageCollectionMapper
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface $packageManagerPackagesFetcher
      */
     public function __construct(
         PackageManagerAdapterInterface $packageManager,
-        PackageCollectionMapperInterface $packageCollectionMapper
+        PackageCollectionMapperInterface $packageCollectionMapper,
+        PackageManagerPackagesFetcherInterface $packageManagerPackagesFetcher
     ) {
         $this->packageManager = $packageManager;
         $this->packageCollectionMapper = $packageCollectionMapper;
+        $this->packageManagerPackagesFetcher = $packageManagerPackagesFetcher;
     }
 
     /**
@@ -67,30 +77,32 @@ class ModuleFetcher
             return new PackageManagerResponseDto(true, static::MESSAGE_NO_PACKAGES_FOUND);
         }
 
-        return $this->requirePackageCollection($packageCollection);
+        return $this->requirePackageCollection(
+            $this->packageManagerPackagesFetcher->fetchPackages($packageCollection),
+        );
     }
 
     /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
+     * @param \Upgrade\Application\Dto\PackageManagerPackagesDto $packageManagerPackagesDto
      *
      * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    protected function requirePackageCollection(PackageCollection $packageCollection): PackageManagerResponseDto
+    protected function requirePackageCollection(PackageManagerPackagesDto $packageManagerPackagesDto): PackageManagerResponseDto
     {
-        $requiredPackages = $this->packageCollectionMapper->getRequiredPackages($packageCollection);
+        $requiredPackages = $packageManagerPackagesDto->getPackagesForRequire();
         $response = $this->requirePackages($requiredPackages, static::REQUIRED_TYPE);
 
         if (!$response->isSuccessful()) {
             return $response;
         }
-        $subPackages = $this->packageCollectionMapper->getSubPackages($packageCollection);
-        $responseSubPackages = $this->updateSubPackage($subPackages);
+
+        $responseSubPackages = $this->updateSubPackage($packageManagerPackagesDto->getPackagesForUpdate());
 
         if (!$responseSubPackages->isSuccessful()) {
             return $responseSubPackages;
         }
 
-        $requiredDevPackages = $this->packageCollectionMapper->getRequiredDevPackages($packageCollection);
+        $requiredDevPackages = $packageManagerPackagesDto->getPackagesForRequireDev();
         $responseDev = $this->requirePackages($requiredDevPackages, static::REQUIRED_DEV_TYPE);
 
         return new PackageManagerResponseDto(
