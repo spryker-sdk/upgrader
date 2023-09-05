@@ -57,13 +57,8 @@ services:
     composer_lock_diff.step:
         class: Upgrade\Application\Strategy\Common\Step\ComposerLockComparatorStep
 
-    proper_update.handler:
-        class: Upgrade\Application\Strategy\Common\PackagePostUpdateHandler\PropelUpdateHandler
-
-    package_post_update.step:
-        class: Upgrade\Application\Strategy\Common\Step\PackagePostUpdateStep
-        arguments:
-            - - '@proper_update.handler'
+    orm_models_regenerate.step:
+        class: Upgrade\Application\Strategy\Common\Step\OrmModelsRegenerateStep
 
     integrator.step:
         class: Upgrade\Application\Strategy\Common\Step\IntegratorStep
@@ -108,7 +103,7 @@ services:
               - '@integrator_lock_run.step'
               - '@composer_update.step'
               - '@composer_lock_diff.step'
-              - '@package_post_update.step'
+              - '@orm_models_regenerate.step'
               - '@integrator.step'
               - '@create_branch.step'
               - '@add_changes.step'
@@ -262,7 +257,7 @@ services:
         class: Upgrade\Application\Executor\StepExecutor
         arguments:
             - - '@composer_lock_diff.step'
-              - '@package_post_update.step'
+              - '@orm_models_regenerate.step'
               - '@integrator.step'
               - '@add_changes.step'
               - '@commit_changes.step'

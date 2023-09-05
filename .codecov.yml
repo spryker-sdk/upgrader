@@ -12,6 +12,7 @@ ignore:
     - "src/Codebase/Application/Event/*Event.php"
     - "src/Upgrader/Commands/**.php"
     - "src/Upgrader/Tasks/**.php"
+    - "src/Upgrader/Configuration/**.php"
     - "**/*.md"
     - "**/*.yml"
     - "**/*.yaml"
