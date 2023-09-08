@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\Executor;
 
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
+use Core\Infrastructure\StringHelper;
+use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use Upgrade\Application\Adapter\IntegratorExecutorInterface;
 use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
@@ -21,6 +23,11 @@ class IntegratorExecutor implements IntegratorExecutorInterface
      * @var string
      */
     protected const RUNNER = '/vendor/bin/integrator';
+
+    /**
+     * @var string
+     */
+    protected const MANIFEST_RUN_COMMAND = 'module:manifest:run';
 
     /**
      * @var string
@@ -52,16 +59,19 @@ class IntegratorExecutor implements IntegratorExecutorInterface
 
     /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto> $modules
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function runIntegrator(StepsResponseDto $stepsExecutionDto): StepsResponseDto
+    public function runIntegrator(StepsResponseDto $stepsExecutionDto, array $modules = []): StepsResponseDto
     {
-        $command = implode(' ', [
+        $command = implode(' ', array_filter([
             APPLICATION_ROOT_DIR . static::RUNNER,
+            static::MANIFEST_RUN_COMMAND,
+            $this->getModulesArgument($modules),
             static::NO_INTERACTION_COMPOSER_FLAG,
             static::FROMAT_JSON_OPTION,
-            ]);
+            ]));
 
         return $this->runIntegratorProcess($command, $stepsExecutionDto);
     }
@@ -81,6 +91,31 @@ class IntegratorExecutor implements IntegratorExecutorInterface
         ]);
 
         return $this->runIntegratorProcess($command, $stepsExecutionDto);
+    }
+
+    /**
+     * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto> $modules
+     *
+     * @return string
+     */
+    protected function getModulesArgument(array $modules): string
+    {
+        $modulesString = implode(',', array_map(static function (ModuleDto $moduleDto): string {
+            [$organization, $package] = explode('/', $moduleDto->getName());
+
+            return trim(sprintf(
+                '%s.%s:%s',
+                StringHelper::fromDashToCamelCase($organization),
+                StringHelper::fromDashToCamelCase($package),
+                $moduleDto->getVersion(),
+            ));
+        }, $modules));
+
+        if ($modulesString === '') {
+            return '';
+        }
+
+        return $modulesString;
     }
 
     /**

@@ -16,6 +16,9 @@ use Codebase\Application\Service\CodebaseServiceInterface;
 use Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface;
 use Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface;
 
+/**
+ * TODO: remove unused service
+ */
 class CodebaseService implements CodebaseServiceInterface
 {
     /**
