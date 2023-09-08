@@ -26,7 +26,7 @@ class IntegratorExecutorTest extends TestCase
     {
         // Arrange
         $processRunnerMock = $this->createProcessRunnerServiceMock(
-            ['/data/vendor/bin/integrator', 'module:manifest:run', '--no-interaction', '--format=json'],
+            [APPLICATION_ROOT_DIR . '/vendor/bin/integrator', 'module:manifest:run', '--no-interaction', '--format=json'],
         );
         $integratorExecutor = new IntegratorExecutor($processRunnerMock);
         $stepsExecutionDto = new StepsResponseDto();
@@ -42,7 +42,7 @@ class IntegratorExecutorTest extends TestCase
     {
         // Arrange
         $processRunnerMock = $this->createProcessRunnerServiceMock(
-            ['/data/vendor/bin/integrator', 'module:manifest:run', 'Spryker.Acl:1.0.1,SprykerShop.CompanyPage:2.0.0', '--no-interaction', '--format=json'],
+            [APPLICATION_ROOT_DIR . '/vendor/bin/integrator', 'module:manifest:run', 'Spryker.Acl:1.0.1,SprykerShop.CompanyPage:2.0.0', '--no-interaction', '--format=json'],
         );
         $integratorExecutor = new IntegratorExecutor($processRunnerMock);
         $stepsExecutionDto = new StepsResponseDto();
