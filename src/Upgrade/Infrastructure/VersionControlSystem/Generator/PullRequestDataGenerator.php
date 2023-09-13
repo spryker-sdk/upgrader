@@ -184,7 +184,7 @@ class PullRequestDataGenerator
         if (
             count(array_filter(
                 $stepsResponseDto->getAppliedReleaseGroups(),
-                fn (ReleaseGroupDto $appliedReleaseGroup) => $appliedReleaseGroup->getIntegrationGuide()
+                fn (ReleaseGroupDto $appliedReleaseGroup): ?string => $appliedReleaseGroup->getIntegrationGuide()
             )) === 0
         ) {
             return '';
@@ -193,8 +193,8 @@ class PullRequestDataGenerator
 
         foreach ($stepsResponseDto->getAppliedReleaseGroups() as $appliedReleaseGroup) {
             $integrationGuide = $appliedReleaseGroup->getIntegrationGuide();
-            if ($integrationGuide && strlen($integrationGuide) > static::INTEGRATION_GUIDE_LENGTH) {
-                $integrationGuide = substr($integrationGuide, 0, static::INTEGRATION_GUIDE_LENGTH);
+            if ($integrationGuide && mb_strlen($integrationGuide) > static::INTEGRATION_GUIDE_LENGTH) {
+                $integrationGuide = mb_substr($integrationGuide, 0, static::INTEGRATION_GUIDE_LENGTH);
                 $integrationGuide .= sprintf('... [read more](%s)', $appliedReleaseGroup->getLink());
             }
             $text .= sprintf('- %s', $integrationGuide) . PHP_EOL;
