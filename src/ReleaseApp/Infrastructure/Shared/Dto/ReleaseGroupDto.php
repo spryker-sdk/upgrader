@@ -81,6 +81,9 @@ class ReleaseGroupDto
      * @param string $link
      * @param int $rating
      * @param bool $hasConflict
+     * @param bool $isSecurity
+     * @param string|null $integrationGuide
+     * @param bool $manualActionNeeded
      */
     public function __construct(
         int $id,
