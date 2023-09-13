@@ -21,6 +21,11 @@ use Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface;
 class PullRequestDataGenerator
 {
     /**
+     * @var int
+     */
+    protected const INTEGRATION_GUIDE_LENGTH = 500;
+
+    /**
      * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder
      */
     protected ViolationBodyMessageBuilder $violationBodyMessageBuilder;
@@ -70,6 +75,7 @@ class PullRequestDataGenerator
             . PHP_EOL
             . (trim($warningsSection) !== '' ? '## Warnings' . PHP_EOL : '')
             . $warningsSection
+            . $this->buildReleaseGroupIntegrationGuideTable($stepsResponseDto)
             . $this->buildListOfPackages($stepsResponseDto, $releaseGroupId)
             . $this->buildFooterText($stepsResponseDto);
     }
@@ -164,6 +170,36 @@ class PullRequestDataGenerator
             $text .= '\* This Release has too low coverage and cannot be automatically integrated.</sub>';
             $text .= PHP_EOL;
         }
+
+        return $text;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     *
+     * @return string
+     */
+    protected function buildReleaseGroupIntegrationGuideTable(StepsResponseDto $stepsResponseDto): string
+    {
+        if (
+            count(array_filter(
+                $stepsResponseDto->getAppliedReleaseGroups(),
+                fn (ReleaseGroupDto $appliedReleaseGroup) => $appliedReleaseGroup->getIntegrationGuide()
+            )) === 0
+        ) {
+            return '';
+        }
+        $text = '<details><summary><h2>Integration Instructions</h2></summary>' . PHP_EOL . PHP_EOL;
+
+        foreach ($stepsResponseDto->getAppliedReleaseGroups() as $appliedReleaseGroup) {
+            $integrationGuide = $appliedReleaseGroup->getIntegrationGuide();
+            if ($integrationGuide && strlen($integrationGuide) > static::INTEGRATION_GUIDE_LENGTH) {
+                $integrationGuide = substr($integrationGuide, 0, static::INTEGRATION_GUIDE_LENGTH);
+                $integrationGuide .= sprintf('... [read more](%s)', $appliedReleaseGroup->getLink());
+            }
+            $text .= sprintf('- %s', $integrationGuide) . PHP_EOL;
+        }
+        $text .= '</details>' . PHP_EOL . PHP_EOL;
 
         return $text;
     }
