@@ -15,6 +15,7 @@ use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use Upgrade\Application\Adapter\IntegratorExecutorInterface;
 use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppPackageHelper;
 use Upgrade\Domain\ValueObject\Error;
 
 class IntegratorExecutor implements IntegratorExecutorInterface
@@ -101,7 +102,7 @@ class IntegratorExecutor implements IntegratorExecutorInterface
     protected function getModulesArgument(array $modules): string
     {
         $modulesString = implode(',', array_map(static function (ModuleDto $moduleDto): string {
-            [$organization, $package] = explode('/', $moduleDto->getName());
+            [$organization, $package] = explode('/', ReleaseAppPackageHelper::normalizePackageName($moduleDto->getName()));
 
             return trim(sprintf(
                 '%s.%s:%s',
