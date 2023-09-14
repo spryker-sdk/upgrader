@@ -17,8 +17,42 @@ use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\NewPackageFilterItem;
 
+/**
+ * @group test1
+ */
 class NewPackageFilterItemTest extends TestCase
 {
+    /**
+     * @return void
+     */
+    public function testFilterShouldNotFilterNewPackages(): void
+    {
+        // Arrange
+        $releaseGroupDto = $this->createReleaseGroupDto([
+            new ModuleDto('spryker/package-one', '4.17.0', 'minor'),
+            new ModuleDto('spryker/package-two', '3.17.0', 'minor'),
+            new ModuleDto('spryker/package-three', '2.17.0', 'minor'),
+        ]);
+
+        $packageManagerAdapterMock = $this->createPackageManagerAdapterMock([
+            ['spryker/package-one', '4.16.0'],
+            ['spryker/package-two', null],
+            ['spryker/package-three', '2.16.0'],
+        ]);
+        $configurationProviderMock = $this->createConfigurationProviderMock();
+        $configurationProviderMock
+            ->method('isPackageUpgradeOnly')
+            ->willReturn(false);
+
+        $filter = new NewPackageFilterItem($packageManagerAdapterMock, $configurationProviderMock);
+
+        // Act
+        $releaseGroupDto = $filter->filter($releaseGroupDto);
+
+        // Assert
+        $this->assertSame(3, $releaseGroupDto->getModuleCollection()->count());
+    }
+
     /**
      * @return void
      */
@@ -36,8 +70,11 @@ class NewPackageFilterItemTest extends TestCase
             ['spryker/package-two', null],
             ['spryker/package-three', '2.16.0'],
         ]);
-
-        $filter = new NewPackageFilterItem($packageManagerAdapterMock, $this->createConfigurationProviderMock());
+        $configurationProviderMock = $this->createConfigurationProviderMock();
+        $configurationProviderMock
+            ->method('isPackageUpgradeOnly')
+            ->willReturn(true);
+        $filter = new NewPackageFilterItem($packageManagerAdapterMock, $configurationProviderMock);
 
         // Act
         $releaseGroupDto = $filter->filter($releaseGroupDto);
@@ -70,16 +107,11 @@ class NewPackageFilterItemTest extends TestCase
     }
 
     /**
-     * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Upgrade\Application\Provider\ConfigurationProviderInterface
      */
     protected function createConfigurationProviderMock(): ConfigurationProviderInterface
     {
-        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
-        $configurationProvider
-            ->method('isPackageUpgradeOnly')
-            ->willReturn(true);
-
-        return $configurationProvider;
+        return $this->createMock(ConfigurationProviderInterface::class);
     }
 
     /**
