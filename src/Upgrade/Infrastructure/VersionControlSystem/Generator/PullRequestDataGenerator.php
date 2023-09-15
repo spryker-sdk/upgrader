@@ -200,7 +200,7 @@ class PullRequestDataGenerator
                 $integrationGuide = mb_substr($integrationGuide, 0, static::INTEGRATION_GUIDE_LENGTH);
                 $integrationGuide .= sprintf('... [read more](%s)', $appliedReleaseGroup->getLink());
             }
-            $text .= sprintf('[%s](%s) - %s \\', $appliedReleaseGroup->getId(), $appliedReleaseGroup->getLink(), $integrationGuide) . PHP_EOL . PHP_EOL;
+            $text .= sprintf('[%s](%s) - %s', $appliedReleaseGroup->getId(), $appliedReleaseGroup->getLink(), $integrationGuide) . PHP_EOL . PHP_EOL;
         }
         $text .= '</details>' . PHP_EOL . PHP_EOL;
 
