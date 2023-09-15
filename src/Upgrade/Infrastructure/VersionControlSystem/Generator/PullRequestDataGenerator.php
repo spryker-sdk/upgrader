@@ -196,7 +196,7 @@ class PullRequestDataGenerator
             if (!$integrationGuide) {
                 continue;
             }
-            if ($integrationGuide && mb_strlen($integrationGuide) > static::INTEGRATION_GUIDE_LENGTH) {
+            if (mb_strlen($integrationGuide) > static::INTEGRATION_GUIDE_LENGTH) {
                 $integrationGuide = mb_substr($integrationGuide, 0, static::INTEGRATION_GUIDE_LENGTH);
                 $integrationGuide .= sprintf('... [read more](%s)', $appliedReleaseGroup->getLink());
             }
