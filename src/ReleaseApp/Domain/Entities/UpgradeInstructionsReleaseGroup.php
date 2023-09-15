@@ -73,6 +73,16 @@ class UpgradeInstructionsReleaseGroup
     protected const SECURITY_KEY = 'is_security';
 
     /**
+     * @var string
+     */
+    protected const INTEGRATION_GUIDE = 'integration_guide';
+
+    /**
+     * @var string
+     */
+    protected const MANUAL_ACTION_NEEDED = 'manual_action_needed';
+
+    /**
      * @var array<mixed>
      */
     protected array $body;
@@ -205,5 +215,21 @@ class UpgradeInstructionsReleaseGroup
     public function isSecurity(): bool
     {
         return (bool)($this->body[static::SECURITY_KEY] ?? false);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIntegrationGuide(): ?string
+    {
+        return $this->body[static::INTEGRATION_GUIDE] ?? null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getManualActionNeeded(): bool
+    {
+        return $this->body[static::MANUAL_ACTION_NEEDED] ?? false;
     }
 }

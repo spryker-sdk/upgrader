@@ -83,6 +83,8 @@ class ReleaseGroupDtoCollectionMapper
         $dataProviderReleaseGroup->setJiraIssue($releaseGroup->getJiraIssue());
         $dataProviderReleaseGroup->setJiraIssueLink($releaseGroup->getJiraIssueLink());
         $dataProviderReleaseGroup->setIsSecurity($releaseGroup->isSecurity());
+        $dataProviderReleaseGroup->setIntegrationGuide($releaseGroup->getIntegrationGuide());
+        $dataProviderReleaseGroup->setManualActionNeeded($releaseGroup->getManualActionNeeded());
 
         return $dataProviderReleaseGroup;
     }
