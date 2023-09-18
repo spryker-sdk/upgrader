@@ -17,7 +17,7 @@
         "nikic/php-parser": "4.15.*",
         "phpstan/phpstan": "^1.2",
         "spryker-sdk/azure-php-client": "dev-master",
-        "spryker-sdk/integrator": "dev-feature/sdk-4164-integrate-specific-manifests",
+        "spryker-sdk/integrator": "dev-master",
         "spryker-sdk/sdk-contracts": "^0.4.7",
         "symfony/config": "^5.0",
         "symfony/console": "^5.0",

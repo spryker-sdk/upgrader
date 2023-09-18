@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72dc810fb3d0335c007093fd2562e879",
+    "content-hash": "a995285312f9681911fb8741b639a7ec",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3406,16 +3406,16 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "dev-feature/sdk-4164-integrate-specific-manifests",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "971e0d767d28a410621c4feafffeab14f0bb21bc"
+                "reference": "fe98e436275726a5156877dcbf4cd19f9f5b8490"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/971e0d767d28a410621c4feafffeab14f0bb21bc",
-                "reference": "971e0d767d28a410621c4feafffeab14f0bb21bc",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/fe98e436275726a5156877dcbf4cd19f9f5b8490",
+                "reference": "fe98e436275726a5156877dcbf4cd19f9f5b8490",
                 "shasum": ""
             },
             "require": {
@@ -3439,10 +3439,11 @@
                 "ext-zip": "*",
                 "phpstan/phpstan": "^1.0.0",
                 "phpunit/phpunit": "^9.5.0",
-                "spryker-sdk/manifest-test-data-provider": "dev-feature/sdk-4164-integrate-specific-manifests",
+                "spryker-sdk/manifest-test-data-provider": "dev-master",
                 "spryker/code-sniffer": "dev-master",
                 "symfony/filesystem": "^5.3.0 || ^6.0"
             },
+            "default-branch": true,
             "bin": [
                 "bin/integrator"
             ],
@@ -3464,9 +3465,9 @@
             "description": "Integrator module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
-                "source": "https://github.com/spryker-sdk/integrator/tree/feature/sdk-4164-integrate-specific-manifests"
+                "source": "https://github.com/spryker-sdk/integrator/tree/master"
             },
-            "time": "2023-09-11T07:53:23+00:00"
+            "time": "2023-09-15T11:20:26+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
@@ -8791,5 +8792,5 @@
         "ext-simplexml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

@@ -550,6 +550,52 @@ class ReleaseGroupUpdateStepTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testRunWithWithManualChangesThatInstalledInProjectShouldTriggerValidationError(): void
+    {
+        // Arrange
+        $releaseGroupDtoCollection = new ReleaseGroupDtoCollection(array_map(
+            function (ReleaseGroupDto $releaseGroupDto) {
+                $releaseGroupDto->setManualActionNeeded(true);
+
+                return $releaseGroupDto;
+            },
+            $this->buildReleaseGroupDtoCollection()->toArray(),
+        ));
+        $betaMajorModulesFetcher = $this->createMock(BetaMajorModulesFetcherInterface::class);
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock(
+                $releaseGroupDtoCollection,
+            ),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createSequentialReleaseGroupProcessor(
+                    [],
+                    [],
+                    [new MajorVersionValidator($this->createConfigurationProviderMock(), $betaMajorModulesFetcher)],
+                ),
+            ),
+            $this->createConfigurationProviderMock(),
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertTrue($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            implode(PHP_EOL, [
+                'Amount of available release groups for the project: 2',
+                'This release needs manual changes, please follow migration guide. Please follow the link below to find all documentation needed to help you upgrade to the latest release ',
+                'https://api.release.spryker.com/release-groups/view/1',
+            ]),
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
      * @param bool $isLockDevPackage
      * @param string|null $lockPackageVersion
      *

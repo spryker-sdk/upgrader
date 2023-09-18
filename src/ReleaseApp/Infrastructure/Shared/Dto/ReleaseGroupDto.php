@@ -64,6 +64,16 @@ class ReleaseGroupDto
     protected bool $isSecurity = false;
 
     /**
+     * @var string|null
+     */
+    protected ?string $integrationGuide;
+
+    /**
+     * @var bool
+     */
+    protected bool $manualActionNeeded;
+
+    /**
      * @param int $id
      * @param string $name
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
@@ -71,6 +81,9 @@ class ReleaseGroupDto
      * @param string $link
      * @param int $rating
      * @param bool $hasConflict
+     * @param bool $isSecurity
+     * @param string|null $integrationGuide
+     * @param bool $manualActionNeeded
      */
     public function __construct(
         int $id,
@@ -79,7 +92,10 @@ class ReleaseGroupDto
         bool $containsProjectChanges,
         string $link,
         int $rating,
-        bool $hasConflict = false
+        bool $hasConflict = false,
+        bool $isSecurity = false,
+        ?string $integrationGuide = null,
+        bool $manualActionNeeded = false
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -88,6 +104,9 @@ class ReleaseGroupDto
         $this->containsProjectChanges = $containsProjectChanges;
         $this->hasConflict = $hasConflict;
         $this->rating = $rating;
+        $this->isSecurity = $isSecurity;
+        $this->integrationGuide = $integrationGuide;
+        $this->manualActionNeeded = $manualActionNeeded;
     }
 
     /**
@@ -218,5 +237,41 @@ class ReleaseGroupDto
     public function isSecurity(): bool
     {
         return $this->isSecurity;
+    }
+
+    /**
+     * @param string|null $integrationGuide
+     *
+     * @return void
+     */
+    public function setIntegrationGuide(?string $integrationGuide): void
+    {
+        $this->integrationGuide = $integrationGuide;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIntegrationGuide(): ?string
+    {
+        return $this->integrationGuide;
+    }
+
+    /**
+     * @param bool $manualActionNeeded
+     *
+     * @return void
+     */
+    public function setManualActionNeeded(bool $manualActionNeeded): void
+    {
+        $this->manualActionNeeded = $manualActionNeeded;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getManualActionNeeded(): bool
+    {
+        return $this->manualActionNeeded;
     }
 }
