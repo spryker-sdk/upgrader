@@ -222,6 +222,13 @@ export UPDATE_MINIMUM_DEPENDENCIES_ENABLED=true
 export INTEGRATOR_ENABLED=true
 ```
 
+## Disable installing new Spryker packages
+​
+* Turn off installing new Spryker packages
+```bash
+export PACKAGE_UPGRADE_ONLY=true
+```
+
 ## Enable project code compliance after update
 ​
 * Turn on code compliance trigger after package update step

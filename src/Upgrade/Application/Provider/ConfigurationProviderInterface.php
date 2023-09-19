@@ -121,6 +121,14 @@ interface ConfigurationProviderInterface
 
     /**
      * Specification:
+     * - Defines has Upgrader install new packages in the release group.
+     *
+     * @return bool
+     */
+    public function isPackageUpgradeOnly(): bool;
+
+    /**
+     * Specification:
      * - Defines the report request auth token.
      *
      * @return string

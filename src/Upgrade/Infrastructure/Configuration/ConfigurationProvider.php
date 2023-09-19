@@ -75,6 +75,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * @var bool
      */
+    protected const DEFAULT_PACKAGE_UPGRADE_ONLY = false;
+
+    /**
+     * @var bool
+     */
     protected const COMPOSER_NO_INSTALL = false;
 
     /**
@@ -374,6 +379,16 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public function isReportingEnabled(): bool
     {
         return EnvFetcher::getBool('REPORTING_ENABLED', static::DEFAULT_REPORTING_ENABLED);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function isPackageUpgradeOnly(): bool
+    {
+        return EnvFetcher::getBool('PACKAGE_UPGRADE_ONLY', static::DEFAULT_PACKAGE_UPGRADE_ONLY);
     }
 
     /**
