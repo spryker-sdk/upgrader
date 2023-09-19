@@ -208,7 +208,7 @@ bin/console upgradability:php:upgrade
 export RELEASE_GROUP_INTEGRATOR_ENABLED=true
 ```
 
-## Enable release group integrator
+## Enable minimal updates of third-party dependencies
 ​
 * Turn on specific behavior to minimize update 3rd-party dependencies.
 ```bash
