@@ -75,8 +75,11 @@ class PullRequestDataGenerator
             . PHP_EOL
             . (trim($warningsSection) !== '' ? '## Warnings' . PHP_EOL : '')
             . $warningsSection
+            . PHP_EOL
             . $this->buildReleaseGroupIntegrationGuideTable($stepsResponseDto)
+            . PHP_EOL
             . $this->buildListOfPackages($stepsResponseDto, $releaseGroupId)
+            . PHP_EOL
             . $this->buildFooterText($stepsResponseDto);
     }
 

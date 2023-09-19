@@ -266,6 +266,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
         if ($this->configurationProvider->getComposerNoInstall()) {
             $command[] = static::NO_INSTALL_FLAG;
         }
+        $command[] = '--ignore-platform-reqs';
 
         return $this->processRunner->run($command, static::ENV);
     }
