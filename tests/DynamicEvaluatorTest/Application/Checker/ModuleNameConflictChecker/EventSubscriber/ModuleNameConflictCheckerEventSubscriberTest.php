@@ -109,7 +109,7 @@ class ModuleNameConflictCheckerEventSubscriberTest extends TestCase
         $eventSubscriber = new ModuleNameConflictCheckerEventSubscriber(
             $this->createComposerModulesNamesFetcherMock(['moduleOne', 'moduleTwo']),
             $this->createProjectModulesNamesFetcherMock([]),
-            $this->createConfigurationProviderMock(false),
+            $this->createConfigurationProviderMock(),
             $previousModuleStateStorage,
         );
 

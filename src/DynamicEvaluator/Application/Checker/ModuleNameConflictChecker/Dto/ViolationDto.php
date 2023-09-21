@@ -11,6 +11,9 @@ namespace DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Dto;
 
 use Upgrade\Application\Dto\ViolationDtoInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ViolationDto implements ViolationDtoInterface
 {
     /**
