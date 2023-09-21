@@ -89,19 +89,25 @@ class PullRequestDataGenerator
     protected function buildHeaderText(StepsResponseDto $stepsResponseDto, ?int $releaseGroupId): string
     {
         $releaseGroupStatDto = $stepsResponseDto->getReleaseGroupStatDto();
-
-        $text = sprintf('Upgrader installed %s release group(s) ', $releaseGroupStatDto->getAppliedRGsAmount());
+        $composerDiffDto = $stepsResponseDto->getComposerLockDiff();
+        $countOfPackages = 0;
+        if ($composerDiffDto !== null) {
+            $countOfPackages = count($composerDiffDto->getRequiredPackages()) + count($composerDiffDto->getRequiredDevPackages());
+        }
+        $countOfRGs = $releaseGroupStatDto->getAppliedRGsAmount();
+        if (!$countOfRGs && $countOfPackages) {
+            $countOfRGs = 1;
+        }
+        $text = sprintf('Upgrader installed %s release group(s) ', $countOfRGs);
 
         if ($releaseGroupStatDto->getAppliedSecurityFixesAmount()) {
             $text .= sprintf('(including %s security fix(es)) ', $releaseGroupStatDto->getAppliedSecurityFixesAmount());
         }
 
-        $composerDiffDto = $stepsResponseDto->getComposerLockDiff();
-
-        if ($composerDiffDto !== null) {
+        if ($countOfPackages) {
             $text .= sprintf(
                 'containing %s package version(s)',
-                count($composerDiffDto->getRequiredPackages()) + count($composerDiffDto->getRequiredDevPackages()),
+                $countOfPackages,
             );
         }
 
