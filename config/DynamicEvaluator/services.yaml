@@ -25,4 +25,7 @@ services:
             - '@SprykerSdk\Integrator\ConfigReader\ConfigReader'
 
     SprykerSdk\Integrator\ConfigReader\ConfigReader:
-        factory:   ['@DynamicEvaluator\Infrastructure\IntegratorAdapter\IntegratorConfigReaderFactory', 'createConfigReader']
+        arguments:
+            - '@PhpParser\ParserFactory'
+
+    PhpParser\ParserFactory:
