@@ -19,3 +19,13 @@ services:
             - '%checker_broken_php_files_config_executable_path%'
             - '%checker_broken_php_files_executable_path%'
             - '@Core\Infrastructure\Service\ProcessRunnerService'
+
+    DynamicEvaluator\Infrastructure\IntegratorAdapter\IntegratorConfigReaderAdapter:
+        arguments:
+            - '@SprykerSdk\Integrator\ConfigReader\ConfigReader'
+
+    SprykerSdk\Integrator\ConfigReader\ConfigReader:
+        arguments:
+            - '@PhpParser\ParserFactory'
+
+    PhpParser\ParserFactory:
