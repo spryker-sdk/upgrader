@@ -3410,12 +3410,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "222c675b6ad66b7e08c9972152e76728cdc04c17"
+                "reference": "91022a4ae96053ccb0072fe4b0e79aa02063a2b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/222c675b6ad66b7e08c9972152e76728cdc04c17",
-                "reference": "222c675b6ad66b7e08c9972152e76728cdc04c17",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/91022a4ae96053ccb0072fe4b0e79aa02063a2b2",
+                "reference": "91022a4ae96053ccb0072fe4b0e79aa02063a2b2",
                 "shasum": ""
             },
             "require": {
@@ -3467,7 +3467,7 @@
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
                 "source": "https://github.com/spryker-sdk/integrator/tree/master"
             },
-            "time": "2023-09-27T09:05:56+00:00"
+            "time": "2023-10-02T18:06:00+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
