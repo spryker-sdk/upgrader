@@ -103,11 +103,7 @@ class AggregateReleaseGroupProcessor extends BaseReleaseGroupProcessor
                 $stepsExecutionDto->setError(
                     Error::createInternalError($thresholdValidationResult->getOutputMessage() ?? 'Threshold validation error'),
                 );
-                $this->logger->debug(sprintf(
-                    'Release group `%s` is skipped by threshold, message: %s',
-                    $releaseGroup->getId(),
-                    $thresholdValidationResult->getOutputMessage(),
-                ));
+                $this->logger->debug(sprintf('Release group `%s` is skipped by threshold, message: %s', $releaseGroup->getId(), $thresholdValidationResult->getOutputMessage()));
 
                 break;
             }
@@ -144,10 +140,7 @@ class AggregateReleaseGroupProcessor extends BaseReleaseGroupProcessor
             $stepsExecutionDto->setError(
                 Error::createClientCodeError($response->getOutputMessage() ?? 'Module fetcher error'),
             );
-            $this->logger->debug(sprintf(
-                'Release group processor is failed, message: %s',
-                $response->getOutputMessage(),
-            ));
+            $this->logger->debug(sprintf('Release group processor is failed, message: %s', $response->getOutputMessage()));
         }
 
         if ($response->isSuccessful() && $response->getOutputMessage() !== null) {
