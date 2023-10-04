@@ -11,6 +11,7 @@ namespace CoreTest\Infrastructure\Service;
 
 use Core\Infrastructure\Service\ProcessRunnerService;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 
 class ProcessRunnerServiceTest extends TestCase
@@ -24,7 +25,7 @@ class ProcessRunnerServiceTest extends TestCase
      */
     public function testRunReturnsProcessObject(array $command): void
     {
-        $service = new ProcessRunnerService();
+        $service = $this->createProcessRunnerService();
 
         $process = $service->run($command);
 
@@ -48,7 +49,7 @@ class ProcessRunnerServiceTest extends TestCase
      */
     public function testMustRunFromCommandLineShouldReturnProcessObject(): void
     {
-        $service = new ProcessRunnerService();
+        $service = $this->createProcessRunnerService();
 
         $process = $service->mustRunFromCommandLine('ls');
 
@@ -61,11 +62,19 @@ class ProcessRunnerServiceTest extends TestCase
      */
     public function testRunShellCommandShouldReturnProcessObject(): void
     {
-        $service = new ProcessRunnerService();
+        $service = $this->createProcessRunnerService();
 
         $process = $service->runFromCommandLine('ls');
 
         $this->assertInstanceOf(Process::class, $process);
         $this->assertSame(0, $process->getExitCode());
+    }
+
+    /**
+     * @return \Core\Infrastructure\Service\ProcessRunnerService
+     */
+    protected function createProcessRunnerService(): ProcessRunnerService
+    {
+        return new ProcessRunnerService($this->createMock(LoggerInterface::class));
     }
 }

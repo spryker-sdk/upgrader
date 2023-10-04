@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy;
 
+use Psr\Log\LoggerInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Executor\StepExecutorInterface;
 
@@ -20,11 +21,20 @@ abstract class AbstractStrategy implements StrategyInterface
     protected StepExecutorInterface $stepExecutor;
 
     /**
-     * @param \Upgrade\Application\Executor\StepExecutorInterface $stepExecutor
+     * @var \Psr\Log\LoggerInterface
      */
-    public function __construct(StepExecutorInterface $stepExecutor)
-    {
+    protected LoggerInterface $logger;
+
+    /**
+     * @param \Upgrade\Application\Executor\StepExecutorInterface $stepExecutor
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(
+        StepExecutorInterface $stepExecutor,
+        LoggerInterface $logger
+    ) {
         $this->stepExecutor = $stepExecutor;
+        $this->logger = $logger;
     }
 
     /**
@@ -32,8 +42,10 @@ abstract class AbstractStrategy implements StrategyInterface
      */
     public function upgrade(): StepsResponseDto
     {
-        $stepsResponseDto = new StepsResponseDto(true);
+        $stepsResponseDto = $this->stepExecutor->execute(new StepsResponseDto(true));
 
-        return $this->stepExecutor->execute($stepsResponseDto);
+        $this->logger->info('Steps execution is finished', [$stepsResponseDto]);
+
+        return $stepsResponseDto;
     }
 }

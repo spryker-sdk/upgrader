@@ -99,6 +99,7 @@ services:
     composer.step_executor:
         class: Upgrade\Application\Executor\StepExecutor
         arguments:
+            - '@monolog.logger'
             - - '@check_credentials.step'
               - '@check_is_remote_target_branch_exist.step'
               - '@check_is_local_target_branch_exist.step'
@@ -127,6 +128,7 @@ services:
     release_app.step_executor:
         class: Upgrade\Application\Executor\StepExecutor
         arguments:
+            - '@monolog.logger'
             - - '@check_credentials.step'
               - '@check_is_remote_target_branch_exist.step'
               - '@check_is_local_target_branch_exist.step'
@@ -255,12 +257,14 @@ services:
     processor.pre_require_step_executor:
         class: Upgrade\Application\Executor\StepExecutor
         arguments:
+            - '@monolog.logger'
             - - '@integrator_lock_run.step'
               - '@propel_fix.step'
 
     processor.post_require_step_executor:
         class: Upgrade\Application\Executor\StepExecutor
         arguments:
+            - '@monolog.logger'
             - - '@composer_lock_diff.step'
               - '@orm_models_regenerate.step'
               - '@integrator.step'

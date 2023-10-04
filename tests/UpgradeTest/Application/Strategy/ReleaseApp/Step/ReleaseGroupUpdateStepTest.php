@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace UpgradeTest\Application\Strategy\ReleaseApp\Step;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use ReleaseApp\Application\Configuration\ReleaseAppConstant;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
@@ -63,6 +64,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 $this->createAggregateReleaseGroupProcessor(),
             ),
             $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -97,6 +99,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 $this->createAggregateReleaseGroupProcessor(),
             ),
             $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
         );
         $stepsResponseDto = new StepsResponseDto();
 
@@ -128,6 +131,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 $this->createAggregateReleaseGroupProcessor(),
             ),
             $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -164,6 +168,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 $this->createSequentialReleaseGroupProcessor([], [], [new ConflictValidator()]),
             ),
             $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -200,6 +205,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 $this->createSequentialReleaseGroupProcessor(),
             ),
             $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -247,6 +253,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 ),
             ),
             $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -282,6 +289,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 $this->createSequentialReleaseGroupProcessor(),
             ),
             $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
         );
         $stepsResponseDto = new StepsResponseDto();
 
@@ -317,6 +325,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 $this->createSequentialReleaseGroupProcessor($releaseGroupFilters),
             ),
             $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -366,6 +375,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 $this->createAggregateReleaseGroupProcessor(),
             ),
             $configurationProviderMock,
+            $this->createMock(LoggerInterface::class),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -415,6 +425,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 $this->createAggregateReleaseGroupProcessorForSubPackages(),
             ),
             $configurationProviderMock,
+            $this->createMock(LoggerInterface::class),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -451,6 +462,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 $this->createSequentialReleaseGroupProcessor(),
             ),
             $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -489,6 +501,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 ),
             ),
             $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -530,6 +543,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 ),
             ),
             $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -576,6 +590,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 ),
             ),
             $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
         );
 
         $stepsResponseDto = new StepsResponseDto();
@@ -683,6 +698,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             ),
             new ReleaseGroupFilter([]),
             $this->createEventDispatcherMock(),
+            $this->createMock(LoggerInterface::class),
         );
     }
 
@@ -716,6 +732,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             ),
             new ReleaseGroupFilter([]),
             $this->createEventDispatcherMock(),
+            $this->createMock(LoggerInterface::class),
         );
     }
 
@@ -753,6 +770,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             ),
             new ReleaseGroupFilter($releaseGroupFilters),
             $this->createEventDispatcherMock(),
+            $this->createMock(LoggerInterface::class),
         );
     }
 

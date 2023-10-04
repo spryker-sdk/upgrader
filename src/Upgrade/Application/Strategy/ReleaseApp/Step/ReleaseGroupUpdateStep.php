@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Step;
 
+use Psr\Log\LoggerInterface;
 use Upgrade\Application\Adapter\ReleaseAppClientAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
@@ -34,18 +35,26 @@ class ReleaseGroupUpdateStep implements StepInterface
     private ConfigurationProvider $configurationProvider;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected LoggerInterface $logger;
+
+    /**
      * @param \Upgrade\Application\Adapter\ReleaseAppClientAdapterInterface $packageManagementSystemBridge
      * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver $groupRequireProcessorResolver
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         ReleaseAppClientAdapterInterface $packageManagementSystemBridge,
         ReleaseGroupProcessorResolver $groupRequireProcessorResolver,
-        ConfigurationProvider $configurationProvider
+        ConfigurationProvider $configurationProvider,
+        LoggerInterface $logger
     ) {
         $this->packageManagementSystemBridge = $packageManagementSystemBridge;
         $this->releaseGroupProcessor = $groupRequireProcessorResolver->getProcessor();
         $this->configurationProvider = $configurationProvider;
+        $this->logger = $logger;
     }
 
     /**
@@ -66,6 +75,8 @@ class ReleaseGroupUpdateStep implements StepInterface
         );
 
         $stepsExecutionDto->getReleaseGroupStatDto()->setAvailableRgsAmount($requireRequestCollection->count());
+
+        $this->logger->info(sprintf('Run release group processor `%s`', $this->releaseGroupProcessor->getProcessorName()));
 
         return $this->releaseGroupProcessor->process($requireRequestCollection, $stepsExecutionDto);
     }

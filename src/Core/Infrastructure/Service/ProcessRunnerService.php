@@ -9,10 +9,24 @@ declare(strict_types=1);
 
 namespace Core\Infrastructure\Service;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 
 class ProcessRunnerService implements ProcessRunnerServiceInterface
 {
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected LoggerInterface $logger;
+
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * @param array<string> $command
      * @param array<string, mixed> $env
@@ -21,6 +35,7 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
      */
     public function run(array $command, array $env = []): Process
     {
+        $this->logger->debug(sprintf('Run command: %s', implode(' ', $command)), $env);
         $process = new Process($command, (string)getcwd(), $env);
         $process->setTimeout(static::DEFAULT_PROCESS_TIMEOUT);
         $process->run();
@@ -44,6 +59,7 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
         $input = null,
         ?float $timeout = self::DEFAULT_PROCESS_TIMEOUT
     ): Process {
+        $this->logger->debug(sprintf('Run command: %s', $command), ['cwd' => $cwd, 'env' => $env]);
         $process = Process::fromShellCommandline($command, $cwd, $env, $input, $timeout);
         $process->setTimeout(static::DEFAULT_PROCESS_TIMEOUT);
         $process->run();
@@ -67,6 +83,7 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
         $input = null,
         ?float $timeout = self::DEFAULT_PROCESS_TIMEOUT
     ): Process {
+        $this->logger->debug(sprintf('Run command: %s', $command), ['cwd' => $cwd, 'env' => $env]);
         $process = Process::fromShellCommandline($command, $cwd, $env, $input, $timeout);
         $process->mustRun();
 
@@ -89,6 +106,7 @@ class ProcessRunnerService implements ProcessRunnerServiceInterface
         $input = null,
         ?float $timeout = self::DEFAULT_PROCESS_TIMEOUT
     ): Process {
+        $this->logger->debug(sprintf('Run command: %s', implode(' ', $command)), ['cwd' => $cwd, 'env' => $env]);
         $process = new Process($command, $cwd, $env, $input, $timeout);
         $process->mustRun();
 
