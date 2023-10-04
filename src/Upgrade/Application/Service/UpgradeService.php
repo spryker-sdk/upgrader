@@ -76,20 +76,25 @@ class UpgradeService implements UpgradeServiceInterface
     {
         $startTime = time();
 
+        $this->logger->info('Starting upgrade process');
         $this->dispatchUpgraderStartedEvent();
 
         $stepsResponse = new StepsResponseDto();
 
         try {
             $strategy = $this->strategyResolver->getStrategy($this->configurationProvider->getUpgradeStrategy());
+            $this->logger->info(sprintf('Using strategy: %s for upgrade', $strategy->getStrategyName()));
 
             $stepsResponse = $strategy->upgrade();
         } catch (Throwable $e) {
             $stepsResponse->setIsSuccessful(false);
             $stepsResponse->setError(Error::createInternalError($e->getMessage()));
 
+            $this->logger->error($e->getMessage());
+
             throw $e;
         } finally {
+            $this->logger->info('Upgrade process finished');
             $this->dispatchUpgraderFinishedEvent($stepsResponse, $startTime);
         }
 

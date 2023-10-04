@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
+use Psr\Log\LoggerInterface;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
@@ -48,15 +49,17 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
      * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher $moduleFetcher
      * @param \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface $releaseGroupFilter
      * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
         ThresholdSoftValidatorInterface $thresholdSoftValidator,
         ModuleFetcher $moduleFetcher,
         ReleaseGroupFilterInterface $releaseGroupFilter,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        LoggerInterface $logger
     ) {
-        parent::__construct($eventDispatcher);
+        parent::__construct($eventDispatcher, $logger);
 
         $this->releaseGroupValidator = $releaseGroupValidateManager;
         $this->thresholdValidator = $thresholdSoftValidator;
@@ -93,7 +96,10 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
         foreach ($requireRequestCollection->toArray() as $releaseGroup) {
             $releaseGroup = $this->releaseGroupPackageFilter->filter($releaseGroup);
+            $this->logger->debug(sprintf('Release group `%s` is processing', $releaseGroup->getId()));
             if ($releaseGroup->getModuleCollection()->isEmpty()) {
+                $this->logger->debug(sprintf('Release group `%s` is skipped', $releaseGroup->getId()));
+
                 continue;
             }
 
@@ -104,6 +110,11 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
                 $stepsExecutionDto->setError(
                     Error::createInternalError($thresholdValidationResult->getOutputMessage() ?? 'Threshold validation error'),
                 );
+                $this->logger->debug(sprintf(
+                    'Release group `%s` is skipped by threshold, message: %s',
+                    $releaseGroup->getId(),
+                    $thresholdValidationResult->getOutputMessage(),
+                ));
 
                 break;
             }
@@ -114,6 +125,11 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
                     Error::createInternalError($validatorViolation->getMessage()),
                 );
                 $stepsExecutionDto->addBlocker($validatorViolation);
+                $this->logger->debug(sprintf(
+                    'Release group `%s` is skipped by validator, message: %s',
+                    $releaseGroup->getId(),
+                    $validatorViolation->getMessage(),
+                ));
 
                 break;
             }
@@ -132,21 +148,28 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
 
             if (!$response->isSuccessful()) {
                 $stepsExecutionDto->setIsSuccessful(false);
-
                 $stepsExecutionDto->setError(
                     Error::createClientCodeError($response->getOutputMessage() ?? 'Module fetcher error'),
                 );
+                $this->logger->debug(sprintf(
+                    'Release group `%s` applying failed, message: %s',
+                    $releaseGroup->getId(),
+                    $response->getOutputMessage(),
+                ));
 
                 break;
             }
 
             $stepsExecutionDto->addAppliedReleaseGroup($releaseGroup);
             $aggregatedReleaseGroupCollection->add($releaseGroup);
+            $this->logger->debug(sprintf('Release group `%s` is processed', $releaseGroup->getId()));
 
             if (!$this->dispatchEvent(new ReleaseGroupProcessorPostRequireEvent($stepsExecutionDto, $response), ReleaseGroupProcessorPostRequireEvent::POST_REQUIRE)) {
                 break;
             }
         }
+
+        $this->logger->debug(sprintf('Release group processor is finished, applied release groups: %s', $aggregatedReleaseGroupCollection->count()));
 
         if (!$this->dispatchEvent(new ReleaseGroupProcessorEvent($stepsExecutionDto), ReleaseGroupProcessorEvent::POST_PROCESSOR)) {
             return $stepsExecutionDto;
