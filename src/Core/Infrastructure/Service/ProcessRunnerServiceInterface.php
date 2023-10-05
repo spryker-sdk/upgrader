@@ -16,7 +16,7 @@ interface ProcessRunnerServiceInterface
     /**
      * @var int
      */
-    public const DEFAULT_PROCESS_TIMEOUT = 600;
+    public const DEFAULT_PROCESS_TIMEOUT = 900;
 
     /**
      * @param array<string> $command
