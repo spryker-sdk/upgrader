@@ -39,6 +39,11 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
     protected const VERSION_CONSTRAINT_PREFIX = '^';
 
     /**
+     * @var string
+     */
+    protected const SPRYKER_PACKAGE_PREFIX = 'spryker';
+
+    /**
      * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunnerService;
@@ -140,6 +145,10 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
         foreach ($packages as $package) {
             [$packageName, $packageVersion] = array_map(static fn (string $part) => trim($part, ' "'), explode(':', $package));
 
+            if (!$this->isSprykerPackage($packageName) || !$this->isDigitPackageVersion($packageVersion)) {
+                continue;
+            }
+
             $updatedComposerJson = preg_replace(
                 sprintf('#"(%s)"(\s*):(\s*)"(%s)"#', preg_quote($packageName, '#'), preg_quote($packageVersion, '#')),
                 sprintf('"$1"$2:$3"%s$4"', static::VERSION_CONSTRAINT_PREFIX),
@@ -163,6 +172,26 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
     protected function readComposerFile(): string
     {
         return $this->filesystem->readFile($this->getComposerFilePath());
+    }
+
+    /**
+     * @param string $packageName
+     *
+     * @return bool
+     */
+    protected function isSprykerPackage(string $packageName): bool
+    {
+        return strpos($packageName, static::SPRYKER_PACKAGE_PREFIX) === 0;
+    }
+
+    /**
+     * @param string $packageVersion
+     *
+     * @return bool
+     */
+    protected function isDigitPackageVersion(string $packageVersion): bool
+    {
+        return (bool)preg_match('/^\d+(\.\d+)*$/', $packageVersion);
     }
 
     /**
