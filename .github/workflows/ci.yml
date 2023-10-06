@@ -47,7 +47,7 @@ jobs:
       - name: Composer install
         run: |
           composer --version
-          composer install --optimize-autoloader
+          composer install --prefer-dist --no-interaction --optimize-autoloader
 
       - name: PHPStan checks
         run: composer stan
