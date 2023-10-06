@@ -47,7 +47,11 @@ jobs:
       - name: Composer install
         run: |
           composer --version
-          composer install --prefer-dist --no-interaction --optimize-autoloader
+          if [[ ${{ matrix.php-version }} == '8.2' ]]; then
+            composer update --optimize-autoloader
+          else
+          composer install --optimize-autoloader
+          fi
 
       - name: PHPStan checks
         run: composer stan
