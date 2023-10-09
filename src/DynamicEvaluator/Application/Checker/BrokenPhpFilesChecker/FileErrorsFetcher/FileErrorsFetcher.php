@@ -116,6 +116,8 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
             'analyse',
             '-c',
             $this->executableConfig,
+            '--memory-limit',
+            '-1',
             '--error-format',
             'prettyJson',
         ]);
