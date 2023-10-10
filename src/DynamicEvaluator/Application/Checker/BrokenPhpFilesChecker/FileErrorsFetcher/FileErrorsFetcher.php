@@ -94,7 +94,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
             $this->logger->debug($e->getMessage());
 
             return [
-                new FileErrorDto('src', 0, 'Can not detect broken files, please run phpstan manually'),
+                new FileErrorDto('src', 0, 'Unable to identify corrupted files; kindly execute phpstan manually'),
             ];
         }
 
