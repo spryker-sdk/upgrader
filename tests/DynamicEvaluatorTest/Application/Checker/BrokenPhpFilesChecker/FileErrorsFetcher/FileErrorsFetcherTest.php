@@ -136,7 +136,7 @@ class FileErrorsFetcherTest extends TestCase
         $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
         $processRunnerServiceMock
             ->method('run')
-            ->with(['phpstan', 'analyse', '-c', 'internal', '--error-format', 'prettyJson'])
+            ->with(['phpstan', 'analyse', '-c', 'internal', '--memory-limit', '-1', '--error-format', 'prettyJson'])
             ->willReturn($processMock);
 
         $fileErrorsFetcher = new FileErrorsFetcher('internal', 'project', 'phpstan', $processRunnerServiceMock, new BaselineStorage(), 'nonexist.neon');
@@ -161,7 +161,7 @@ class FileErrorsFetcherTest extends TestCase
         $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
         $processRunnerServiceMock
             ->method('run')
-            ->with(['phpstan', 'analyse', '-c', 'project', '--error-format', 'prettyJson'])
+            ->with(['phpstan', 'analyse', '-c', 'project', '--memory-limit', '-1', '--error-format', 'prettyJson'])
             ->willReturn($processMock);
 
         $fileErrorsFetcher = new FileErrorsFetcher('internal', 'project', 'phpstan', $processRunnerServiceMock, new BaselineStorage(), 'phpstan.neon');
