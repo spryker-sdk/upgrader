@@ -26,6 +26,11 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     /**
      * @var string
      */
+    protected string $executableProjectConfig;
+
+    /**
+     * @var string
+     */
     protected string $executable;
 
     /**
@@ -39,21 +44,32 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     protected BaselineStorageInterface $baselineStorage;
 
     /**
+     * @var string
+     */
+    protected string $phpstanNeonFileName;
+
+    /**
      * @param string $executableConfig
+     * @param string $executableProjectConfig
      * @param string $executable
      * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
      * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\BaselineStorageInterface $baselineStorage
+     * @param string $phpstanNeonFileName
      */
     public function __construct(
         string $executableConfig,
+        string $executableProjectConfig,
         string $executable,
         ProcessRunnerServiceInterface $processRunnerService,
-        BaselineStorageInterface $baselineStorage
+        BaselineStorageInterface $baselineStorage,
+        string $phpstanNeonFileName = 'phpstan.neon'
     ) {
         $this->executableConfig = $executableConfig;
+        $this->executableProjectConfig = $executableProjectConfig;
         $this->executable = $executable;
         $this->processRunnerService = $processRunnerService;
         $this->baselineStorage = $baselineStorage;
+        $this->phpstanNeonFileName = $phpstanNeonFileName;
     }
 
     /**
@@ -115,9 +131,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
             $this->executable,
             'analyse',
             '-c',
-            $this->executableConfig,
-            '--memory-limit',
-            '-1',
+            file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) ? $this->executableProjectConfig : $this->executableConfig,
             '--error-format',
             'prettyJson',
         ]);

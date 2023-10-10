@@ -1,0 +1,10 @@
+includes:
+    - %currentWorkingDirectory%/phpstan.neon
+parameters:
+    level: 3 # for performance reasons
+    paths:
+        - %currentWorkingDirectory%/src
+    excludePaths:
+        analyse:
+            - %currentWorkingDirectory%/src/Generated/*
+            - %currentWorkingDirectory%/src/Orm/*

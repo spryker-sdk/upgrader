@@ -31,7 +31,7 @@ class FileErrorsFetcherTest extends TestCase
         // Arrange
         $this->expectException(InvalidArgumentException::class);
 
-        $fileErrorsFetcher = new FileErrorsFetcher('', '', $this->createProcessRunnerServiceMock($toolOutput), new BaselineStorage());
+        $fileErrorsFetcher = new FileErrorsFetcher('', '', '', $this->createProcessRunnerServiceMock($toolOutput), new BaselineStorage());
 
         // Act
         $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
@@ -61,7 +61,7 @@ class FileErrorsFetcherTest extends TestCase
         $baseLineStorage = new BaselineStorage();
         $baseLineStorage->addFileError(new FileErrorDto('src/someClass.php', 1, 'test message'));
 
-        $fileErrorsFetcher = new FileErrorsFetcher('', '', $this->createProcessRunnerServiceMock($toolOutput), $baseLineStorage);
+        $fileErrorsFetcher = new FileErrorsFetcher('', '', '', $this->createProcessRunnerServiceMock($toolOutput), $baseLineStorage);
 
         // Act
         $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
@@ -79,7 +79,7 @@ class FileErrorsFetcherTest extends TestCase
         $toolOutput = ['files' => ['src/someClass.php' => ['messages' => [['line' => 1, 'message' => 'test message']]]]];
 
         $baseLineStorage = new BaselineStorage();
-        $fileErrorsFetcher = new FileErrorsFetcher('', '', $this->createProcessRunnerServiceMock($toolOutput), $baseLineStorage);
+        $fileErrorsFetcher = new FileErrorsFetcher('', '', '', $this->createProcessRunnerServiceMock($toolOutput), $baseLineStorage);
 
         // Act
         $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
@@ -100,7 +100,7 @@ class FileErrorsFetcherTest extends TestCase
         $baseLineStorageMock = $this->createMock(BaselineStorage::class);
         $baseLineStorageMock->expects($this->once())->method('clear');
 
-        $fileErrorsFetcher = new FileErrorsFetcher('', '', $this->createProcessRunnerServiceMock([]), $baseLineStorageMock);
+        $fileErrorsFetcher = new FileErrorsFetcher('', '', '', $this->createProcessRunnerServiceMock([]), $baseLineStorageMock);
 
         // Act
         $fileErrorsFetcher->reset();
@@ -121,5 +121,55 @@ class FileErrorsFetcherTest extends TestCase
         $processRunnerService->method('run')->willReturn($process);
 
         return $processRunnerService;
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunWithoutProjectConfig(): void
+    {
+        // Arrange
+        $toolOutput = ['files' => []];
+        $processMock = $this->createMock(Process::class);
+        $processMock->method('getOutput')->willReturn(json_encode($toolOutput, \JSON_THROW_ON_ERROR));
+        /** @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface&\PHPUnit\Framework\MockObject\MockObject $processRunnerServiceMock */
+        $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
+        $processRunnerServiceMock
+            ->method('run')
+            ->with(['phpstan', 'analyse', '-c', 'internal', '--error-format', 'prettyJson'])
+            ->willReturn($processMock);
+
+        $fileErrorsFetcher = new FileErrorsFetcher('internal', 'project', 'phpstan', $processRunnerServiceMock, new BaselineStorage(), 'nonexist.neon');
+
+        // Act
+        $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
+
+        // Assert
+        $this->assertEmpty($fileErrors);
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunWithProjectConfig(): void
+    {
+        // Arrange
+        $toolOutput = ['files' => []];
+        $processMock = $this->createMock(Process::class);
+        $processMock->method('getOutput')->willReturn(json_encode($toolOutput, \JSON_THROW_ON_ERROR));
+        /** @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface&\PHPUnit\Framework\MockObject\MockObject $processRunnerServiceMock */
+        $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
+        $processRunnerServiceMock
+            ->method('run')
+            ->with(['phpstan', 'analyse', '-c', 'project', '--error-format', 'prettyJson'])
+            ->willReturn($processMock);
+
+        $fileErrorsFetcher = new FileErrorsFetcher('internal', 'project', 'phpstan', $processRunnerServiceMock, new BaselineStorage(), 'phpstan.neon');
+
+        // Act
+        $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
+
+        // Assert
+        $this->assertEmpty($fileErrors);
     }
 }
