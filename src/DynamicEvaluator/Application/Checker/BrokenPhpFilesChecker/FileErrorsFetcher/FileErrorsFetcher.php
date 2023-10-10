@@ -132,6 +132,8 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
             'analyse',
             '-c',
             file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) ? $this->executableProjectConfig : $this->executableConfig,
+            '--memory-limit',
+            '-1',
             '--error-format',
             'prettyJson',
         ]);
