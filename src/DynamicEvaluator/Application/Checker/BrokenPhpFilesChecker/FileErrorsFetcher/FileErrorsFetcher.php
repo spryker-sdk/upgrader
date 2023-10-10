@@ -14,6 +14,7 @@ use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\Baseline
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto;
 use Exception;
 use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 class FileErrorsFetcher implements FileErrorsFetcherInterface
@@ -44,6 +45,11 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     protected BaselineStorageInterface $baselineStorage;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected LoggerInterface $logger;
+
+    /**
      * @var string
      */
     protected string $phpstanNeonFileName;
@@ -54,6 +60,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
      * @param string $executable
      * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
      * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\BaselineStorageInterface $baselineStorage
+     * @param \Psr\Log\LoggerInterface $logger
      * @param string $phpstanNeonFileName
      */
     public function __construct(
@@ -62,6 +69,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
         string $executable,
         ProcessRunnerServiceInterface $processRunnerService,
         BaselineStorageInterface $baselineStorage,
+        LoggerInterface $logger,
         string $phpstanNeonFileName = 'phpstan.neon'
     ) {
         $this->executableConfig = $executableConfig;
@@ -69,6 +77,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
         $this->executable = $executable;
         $this->processRunnerService = $processRunnerService;
         $this->baselineStorage = $baselineStorage;
+        $this->logger = $logger;
         $this->phpstanNeonFileName = $phpstanNeonFileName;
     }
 
@@ -79,7 +88,15 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     {
         $fileErrors = [];
 
-        $errors = $this->fetchErrorsArray();
+        try {
+            $errors = $this->fetchErrorsArray();
+        } catch (Exception $e) {
+            $this->logger->debug($e->getMessage());
+
+            return [
+                new FileErrorDto('src', 0, 'Can not detect broken files, please run phpstan manually'),
+            ];
+        }
 
         $this->assertArrayKeyExists($errors, 'files', true);
 
