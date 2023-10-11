@@ -14,7 +14,8 @@ jobs:
       matrix:
         php-version: [
             '7.4',
-            '8.1'
+            '8.1',
+            '8.2'
         ]
 
     steps:
@@ -46,7 +47,11 @@ jobs:
       - name: Composer install
         run: |
           composer --version
-          composer install --optimize-autoloader
+          if [[ ${{ matrix.php-version }} == '8.2' ]]; then
+            composer update --prefer-stable --optimize-autoloader
+          else
+            composer install --optimize-autoloader
+          fi
 
       - name: PHPStan checks
         run: composer stan

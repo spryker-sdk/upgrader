@@ -168,7 +168,7 @@ class Git
             );
         }
 
-        $command = ['git', 'commit', '-m', $commitMessage];
+        $command = ['git', 'commit', '-n', '-m', $commitMessage];
 
         return $this->process($stepsExecutionDto, $command);
     }

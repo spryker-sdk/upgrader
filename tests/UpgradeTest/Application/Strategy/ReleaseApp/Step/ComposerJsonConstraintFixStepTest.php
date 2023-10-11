@@ -77,9 +77,17 @@ class ComposerJsonConstraintFixStepTest extends TestCase
         $process = $this->createProcessMock(
             <<<OUT
             +        "spryker-feature/invoice": "202212.0",
+            +        "spryker-shop/test-invalid": "1.2.3-beta",
+            +        "spryker-shop/test-invalid-one": "dev-branch",
+            +        "spryker-shop/test-valid": "2",
+            +        "spryker-shop/test-valid-one": "2.1",
+            +        "spryker-shop/test-valid-two": "2.1.1",
             +        "spryker/company-users-rest-api": "2.6.0",
             +        "spryker/oauth-api": "1.0.0",
-            +        "spryker/uuid": "1.1.0"
+            +        "spryker/uuid": "1.1.0",
+            +        "spryker/acl": "1.1.*",
+            +        "symfony/kernel": "6.1.*",
+            +        "symfony/uuid": "5.1.0",
             OUT,
         );
 
@@ -93,11 +101,19 @@ class ComposerJsonConstraintFixStepTest extends TestCase
                 "license": "proprietary",
                 "require": {
                     "spryker-feature/invoice": "202212.0",
+                    "spryker-shop/test-invalid": "1.2.3-beta",
+                    "spryker-shop/test-invalid-one": "dev-branch",
+                    "spryker-shop/test-valid": "2",
+                    "spryker-shop/test-valid-one": "2.1",
+                    "spryker-shop/test-valid-two": "2.1.1",
                     "spryker/company-users-rest-api": "2.6.0",
                     "spryker/oauth-api": "1.0.0",
                     "symfony/finder": "~5.0.0",
                     "spryker/nopayment": "dev-feature/ticket",
-                    "spryker/uuid": "1.1.0"
+                    "spryker/uuid": "1.1.0",
+                    "spryker/acl": "1.1.*",
+                    "symfony/kernel": "6.1.*",
+                    "symfony/uuid": "5.1.0"
                 }
             FILE,
         );
@@ -110,11 +126,19 @@ class ComposerJsonConstraintFixStepTest extends TestCase
                 "license": "proprietary",
                 "require": {
                     "spryker-feature/invoice": "^202212.0",
+                    "spryker-shop/test-invalid": "1.2.3-beta",
+                    "spryker-shop/test-invalid-one": "dev-branch",
+                    "spryker-shop/test-valid": "^2",
+                    "spryker-shop/test-valid-one": "^2.1",
+                    "spryker-shop/test-valid-two": "^2.1.1",
                     "spryker/company-users-rest-api": "^2.6.0",
                     "spryker/oauth-api": "^1.0.0",
                     "symfony/finder": "~5.0.0",
                     "spryker/nopayment": "dev-feature/ticket",
-                    "spryker/uuid": "^1.1.0"
+                    "spryker/uuid": "^1.1.0",
+                    "spryker/acl": "1.1.*",
+                    "symfony/kernel": "6.1.*",
+                    "symfony/uuid": "5.1.0"
                 }
             FILE,
         ));
