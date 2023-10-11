@@ -38,7 +38,7 @@ class ReleaseGroupFilterTest extends TestCase
 
         // Assert
         $this->assertInstanceOf(ReleaseGroupFilterResponseDto::class, $filterResponse);
-        $this->assertSame(2, $filterResponse->getFilteredModuleCollection()->count());
+        $this->assertSame(2, $filterResponse->getProposedModuleCollection()->count());
     }
 
     /**

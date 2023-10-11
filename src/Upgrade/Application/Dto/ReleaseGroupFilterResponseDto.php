@@ -22,16 +22,16 @@ class ReleaseGroupFilterResponseDto
     /**
      * @var \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection
      */
-    protected ModuleDtoCollection $filteredModuleCollection;
+    protected ModuleDtoCollection $proposedModuleCollection;
 
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection|null $filteredModuleCollection
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection|null $proposedModuleCollection
      */
-    public function __construct(ReleaseGroupDto $releaseGroupDto, ?ModuleDtoCollection $filteredModuleCollection = null)
+    public function __construct(ReleaseGroupDto $releaseGroupDto, ?ModuleDtoCollection $proposedModuleCollection = null)
     {
         $this->releaseGroupDto = $releaseGroupDto;
-        $this->filteredModuleCollection = $filteredModuleCollection ?? new ModuleDtoCollection();
+        $this->proposedModuleCollection = $proposedModuleCollection ?? new ModuleDtoCollection();
     }
 
     /**
@@ -45,8 +45,8 @@ class ReleaseGroupFilterResponseDto
     /**
      * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection
      */
-    public function getFilteredModuleCollection(): ModuleDtoCollection
+    public function getProposedModuleCollection(): ModuleDtoCollection
     {
-        return $this->filteredModuleCollection;
+        return $this->proposedModuleCollection;
     }
 }

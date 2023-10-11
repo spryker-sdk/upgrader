@@ -52,13 +52,13 @@ class NewPackageFilterItem implements ReleaseGroupFilterItemInterface
         }
 
         $approvedModuleCollection = new ModuleDtoCollection();
-        $filteredModuleCollection = new ModuleDtoCollection();
+        $proposedModuleCollection = new ModuleDtoCollection();
 
         foreach ($releaseGroupDto->getModuleCollection()->toArray() as $module) {
             $moduleName = ReleaseAppPackageHelper::normalizePackageName($module->getName());
 
             if (!$this->packageManagerAdapter->getPackageVersion($moduleName)) {
-                $filteredModuleCollection->add($module);
+                $proposedModuleCollection->add($module);
 
                 continue;
             }
@@ -68,6 +68,6 @@ class NewPackageFilterItem implements ReleaseGroupFilterItemInterface
 
         $releaseGroupDto->setModuleCollection($approvedModuleCollection);
 
-        return new ReleaseGroupFilterResponseDto($releaseGroupDto, $filteredModuleCollection);
+        return new ReleaseGroupFilterResponseDto($releaseGroupDto, $proposedModuleCollection);
     }
 }

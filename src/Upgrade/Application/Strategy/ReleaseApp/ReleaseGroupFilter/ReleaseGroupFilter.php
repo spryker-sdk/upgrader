@@ -35,14 +35,14 @@ class ReleaseGroupFilter implements ReleaseGroupFilterInterface
      */
     public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupFilterResponseDto
     {
-        $filteredModuleCollection = new ModuleDtoCollection();
+        $proposedModuleCollection = new ModuleDtoCollection();
 
         foreach ($this->releaseGroupFilterItems as $releaseGroupFilterItem) {
             $filterResponse = $releaseGroupFilterItem->filter($releaseGroupDto);
             $releaseGroupDto = $filterResponse->getReleaseGroupDto();
-            $filteredModuleCollection->addCollection($filterResponse->getFilteredModuleCollection());
+            $proposedModuleCollection->addCollection($filterResponse->getProposedModuleCollection());
         }
 
-        return new ReleaseGroupFilterResponseDto($releaseGroupDto, $filteredModuleCollection);
+        return new ReleaseGroupFilterResponseDto($releaseGroupDto, $proposedModuleCollection);
     }
 }

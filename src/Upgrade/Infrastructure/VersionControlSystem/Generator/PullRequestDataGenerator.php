@@ -11,6 +11,7 @@ namespace Upgrade\Infrastructure\VersionControlSystem\Generator;
 
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Dto\IntegratorResponseDto;
+use Upgrade\Application\Dto\ReleaseGroupFilterResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface;
@@ -271,16 +272,7 @@ class PullRequestDataGenerator
      */
     protected function shouldDisplayModuleOfferColumn(array $filterResponseList): bool
     {
-        foreach ($filterResponseList as $filterResponse) {
-            $isEmpty = $filterResponse->getFilteredModuleCollection()->isEmpty();
-            var_dump('!!!!');
-            var_dump($isEmpty);
-            if (!$isEmpty) {
-                return true;
-            }
-        }
-
-        return false;
+        return count(array_filter($filterResponseList, static fn (ReleaseGroupFilterResponseDto $filterResponse): bool => !$filterResponse->getProposedModuleCollection()->isEmpty())) > 0;
     }
 
     /**
@@ -296,12 +288,12 @@ class PullRequestDataGenerator
             if ($filterResponse->getReleaseGroupDto()->getId() !== $appliedReleaseGroup->getId()) {
                 continue;
             }
-            foreach ($filterResponse->getFilteredModuleCollection()->toArray() as $moduleOffer) {
+            foreach ($filterResponse->getProposedModuleCollection()->toArray() as $moduleOffer) {
                 $moduleList[] = sprintf('%s:%s', $moduleOffer->getName(), $moduleOffer->getVersion());
             }
         }
 
-        return implode(', ', $moduleList);
+        return implode(', ', array_unique($moduleList));
     }
 
     /**

@@ -51,7 +51,7 @@ class NewPackageFilterItemTest extends TestCase
 
         // Assert
         $this->assertSame(3, $response->getReleaseGroupDto()->getModuleCollection()->count());
-        $this->assertTrue($response->getFilteredModuleCollection()->isEmpty());
+        $this->assertTrue($response->getProposedModuleCollection()->isEmpty());
     }
 
     /**
@@ -91,7 +91,7 @@ class NewPackageFilterItemTest extends TestCase
         $this->assertSame('spryker/package-three', $modules[1]->getName());
         $this->assertSame('2.17.0', $modules[1]->getVersion());
 
-        $this->assertSame(1, $response->getFilteredModuleCollection()->count());
+        $this->assertSame(1, $response->getProposedModuleCollection()->count());
     }
 
     /**
