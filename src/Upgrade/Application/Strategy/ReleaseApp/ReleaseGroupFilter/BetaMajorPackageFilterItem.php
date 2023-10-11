@@ -13,6 +13,7 @@ use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
+use Upgrade\Application\Dto\ReleaseGroupFilterResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppPackageHelper;
 
 class BetaMajorPackageFilterItem implements ReleaseGroupFilterItemInterface
@@ -33,9 +34,9 @@ class BetaMajorPackageFilterItem implements ReleaseGroupFilterItemInterface
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
      *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto
+     * @return \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto
      */
-    public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupDto
+    public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupFilterResponseDto
     {
         $filteredModuleCollection = new ModuleDtoCollection();
 
@@ -49,7 +50,7 @@ class BetaMajorPackageFilterItem implements ReleaseGroupFilterItemInterface
 
         $releaseGroupDto->setModuleCollection($filteredModuleCollection);
 
-        return $releaseGroupDto;
+        return new ReleaseGroupFilterResponseDto($releaseGroupDto);
     }
 
     /**

@@ -11,6 +11,7 @@ namespace Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter;
 
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
+use Upgrade\Application\Dto\ReleaseGroupFilterResponseDto;
 
 class DummyPackageFilterItem implements ReleaseGroupFilterItemInterface
 {
@@ -22,9 +23,9 @@ class DummyPackageFilterItem implements ReleaseGroupFilterItemInterface
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
      *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto
+     * @return \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto
      */
-    public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupDto
+    public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupFilterResponseDto
     {
         $filteredModuleCollection = new ModuleDtoCollection();
 
@@ -38,6 +39,6 @@ class DummyPackageFilterItem implements ReleaseGroupFilterItemInterface
 
         $releaseGroupDto->setModuleCollection($filteredModuleCollection);
 
-        return $releaseGroupDto;
+        return new ReleaseGroupFilterResponseDto($releaseGroupDto);
     }
 }

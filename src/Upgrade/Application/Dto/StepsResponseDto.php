@@ -78,6 +78,11 @@ class StepsResponseDto extends ResponseDto
     protected array $violations = [];
 
     /**
+     * @var array<\Upgrade\Application\Dto\ReleaseGroupFilterResponseDto>
+     */
+    protected array $filterResponseList = [];
+
+    /**
      * @var \Upgrade\Application\Dto\ReleaseGroupStatDto
      */
     protected ReleaseGroupStatDto $releaseGroupStatDto;
@@ -438,5 +443,23 @@ class StepsResponseDto extends ResponseDto
     public function setReleaseGroupStatDto(ReleaseGroupStatDto $releaseGroupStatDto): void
     {
         $this->releaseGroupStatDto = $releaseGroupStatDto;
+    }
+
+    /**
+     * @return array<\Upgrade\Application\Dto\ReleaseGroupFilterResponseDto>
+     */
+    public function getFilterResponseList(): array
+    {
+        return $this->filterResponseList;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto $responseDto
+     *
+     * @return void
+     */
+    public function addFilterResponse(ReleaseGroupFilterResponseDto $responseDto): void
+    {
+        $this->filterResponseList[] = $responseDto;
     }
 }

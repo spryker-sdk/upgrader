@@ -47,10 +47,11 @@ class NewPackageFilterItemTest extends TestCase
         $filter = new NewPackageFilterItem($packageManagerAdapterMock, $configurationProviderMock);
 
         // Act
-        $releaseGroupDto = $filter->filter($releaseGroupDto);
+        $response = $filter->filter($releaseGroupDto);
 
         // Assert
-        $this->assertSame(3, $releaseGroupDto->getModuleCollection()->count());
+        $this->assertSame(3, $response->getReleaseGroupDto()->getModuleCollection()->count());
+        $this->assertTrue($response->getFilteredModuleCollection()->isEmpty());
     }
 
     /**
@@ -77,18 +78,20 @@ class NewPackageFilterItemTest extends TestCase
         $filter = new NewPackageFilterItem($packageManagerAdapterMock, $configurationProviderMock);
 
         // Act
-        $releaseGroupDto = $filter->filter($releaseGroupDto);
+        $response = $filter->filter($releaseGroupDto);
 
         // Assert
-        $this->assertSame(2, $releaseGroupDto->getModuleCollection()->count());
+        $this->assertSame(2, $response->getReleaseGroupDto()->getModuleCollection()->count());
 
-        $modules = $releaseGroupDto->getModuleCollection()->toArray();
+        $modules = $response->getReleaseGroupDto()->getModuleCollection()->toArray();
 
         $this->assertSame('spryker/package-one', $modules[0]->getName());
         $this->assertSame('4.17.0', $modules[0]->getVersion());
 
         $this->assertSame('spryker/package-three', $modules[1]->getName());
         $this->assertSame('2.17.0', $modules[1]->getVersion());
+
+        $this->assertSame(1, $response->getFilteredModuleCollection()->count());
     }
 
     /**

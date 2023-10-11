@@ -89,7 +89,9 @@ class AggregateReleaseGroupProcessor extends BaseReleaseGroupProcessor
 
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
         foreach ($requireRequestCollection->toArray() as $releaseGroup) {
-            $releaseGroup = $this->releaseGroupFilter->filter($releaseGroup);
+            $filterResponse = $this->releaseGroupFilter->filter($releaseGroup);
+            $stepsExecutionDto->addFilterResponse($filterResponse);
+            $releaseGroup = $filterResponse->getReleaseGroupDto();
             if ($releaseGroup->getModuleCollection()->isEmpty()) {
                 $this->logger->debug(sprintf('Release group `%s` is skipped by module filter', $releaseGroup->getId()));
 

@@ -95,8 +95,11 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
 
         $aggregatedReleaseGroupCollection = new ReleaseGroupDtoCollection();
         foreach ($requireRequestCollection->toArray() as $releaseGroup) {
-            $releaseGroup = $this->releaseGroupPackageFilter->filter($releaseGroup);
             $this->logger->debug(sprintf('Release group `%s` is processing', $releaseGroup->getId()));
+
+            $filterResponse = $this->releaseGroupPackageFilter->filter($releaseGroup);
+            $stepsExecutionDto->addFilterResponse($filterResponse);
+            $releaseGroup = $filterResponse->getReleaseGroupDto();
             if ($releaseGroup->getModuleCollection()->isEmpty()) {
                 $this->logger->debug(sprintf('Release group `%s` is skipped', $releaseGroup->getId()));
 
