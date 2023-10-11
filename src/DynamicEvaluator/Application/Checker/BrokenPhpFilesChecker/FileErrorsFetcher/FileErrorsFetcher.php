@@ -94,7 +94,14 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
             $this->logger->debug($e->getMessage());
 
             return [
-                new FileErrorDto('src', 0, 'Unable to identify corrupted files; kindly execute phpstan manually'),
+                new FileErrorDto(
+                    'src',
+                    0,
+                    sprintf(
+                        'Cannot detect broken PHP files because PHPStan fails with an error “Timeout %s”. To check manually, run `vendor/bin/phpstan analyse src/` from project root dir',
+                        ProcessRunnerServiceInterface::DEFAULT_PROCESS_TIMEOUT,
+                    ),
+                ),
             ];
         }
 
