@@ -12,11 +12,13 @@ namespace UpgradeTest\Infrastructure\VersionControlSystem\Git;
 use Core\Infrastructure\Service\ProcessRunnerService;
 use ReflectionClass;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
+use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\IntegratorResponseDto;
+use Upgrade\Application\Dto\ReleaseGroupFilterResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator;
@@ -179,6 +181,15 @@ class GitTest extends KernelTestCase
         $gitHubProviderMock = $this->getMockBuilder(GitHubSourceCodeProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $stepsExecutionDto->addFilterResponse(
+            new ReleaseGroupFilterResponseDto(
+                $this->getReleaseGroupDto(),
+                new ModuleDtoCollection([
+                    new ModuleDto('spryker/shipment-types-backend-api', '0.1.0', 'minor'),
+                ]),
+            ),
+        );
 
         // Assert
         $gitHubProviderMock->expects($this->exactly(1))

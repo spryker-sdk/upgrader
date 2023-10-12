@@ -56,9 +56,10 @@ class BetaMajorPackageFilterItemTest extends TestCase
         $betaMajorPackageFilterItem = new BetaMajorPackageFilterItem($packageManagerAdapterMock);
 
         // Act
-        $releaseGroupDto = $betaMajorPackageFilterItem->filter($releaseGroupDto);
+        $response = $betaMajorPackageFilterItem->filter($releaseGroupDto);
 
         // Assert
+        $releaseGroupDto = $response->getReleaseGroupDto();
         $this->assertSame(2, $releaseGroupDto->getModuleCollection()->count());
         $this->assertSame([$modules[1]], $releaseGroupDto->getModuleCollection()->getMajors());
         $this->assertSame([$modules[2]], $releaseGroupDto->getModuleCollection()->getBetaMajors());

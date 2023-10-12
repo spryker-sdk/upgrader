@@ -13,6 +13,7 @@ use Core\Infrastructure\SemanticVersionHelper;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
+use Upgrade\Application\Dto\ReleaseGroupFilterResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppPackageHelper;
 
 class SecurityMajorFilterItem implements ReleaseGroupFilterItemInterface
@@ -33,12 +34,12 @@ class SecurityMajorFilterItem implements ReleaseGroupFilterItemInterface
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
      *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto
+     * @return \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto
      */
-    public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupDto
+    public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupFilterResponseDto
     {
         if (!$releaseGroupDto->isSecurity()) {
-            return $releaseGroupDto;
+            return new ReleaseGroupFilterResponseDto($releaseGroupDto);
         }
 
         $filteredModuleCollection = new ModuleDtoCollection();
@@ -56,6 +57,6 @@ class SecurityMajorFilterItem implements ReleaseGroupFilterItemInterface
 
         $releaseGroupDto->setModuleCollection($filteredModuleCollection);
 
-        return $releaseGroupDto;
+        return new ReleaseGroupFilterResponseDto($releaseGroupDto);
     }
 }

@@ -35,10 +35,10 @@ class DummyPackageFilterItemTest extends TestCase
         $dummyPackageFilterItem = new DummyPackageFilterItem();
 
         // Act
-        $releaseGroupDto = $dummyPackageFilterItem->filter($releaseGroupDto);
+        $response = $dummyPackageFilterItem->filter($releaseGroupDto);
 
         // Assert
-        $modules = $releaseGroupDto->getModuleCollection()->toArray();
+        $modules = $response->getReleaseGroupDto()->getModuleCollection()->toArray();
 
         if ($isDummy) {
             $this->assertEmpty($modules);

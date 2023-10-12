@@ -11,6 +11,7 @@ namespace Upgrade\Infrastructure\VersionControlSystem\Generator;
 
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Dto\IntegratorResponseDto;
+use Upgrade\Application\Dto\ReleaseGroupFilterResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface;
@@ -146,23 +147,26 @@ class PullRequestDataGenerator
 
         $shouldDisplayWarningColumn = $releaseGroupId !== null || $isSequentialProcessor;
         $shouldDisplayRatingColumn = $this->integratorExecutionValidator->isIntegratorShouldBeInvoked();
+        $shouldDisplayModuleOfferColumn = $this->shouldDisplayModuleOfferColumn($stepsResponseDto->getFilterResponseList());
         $manifestRatingThreshold = $this->configurationProvider->getManifestsRatingThreshold();
 
         $text = sprintf(
-            '| Release |%s%s',
+            '| Release |%s%s%s',
             $shouldDisplayRatingColumn ? ' Efforts saved by Upgrader |' : '',
             $shouldDisplayWarningColumn ? ' Warnings detected? |' : '',
+            $shouldDisplayModuleOfferColumn ? ' These new modules might be interesting for you? |' : '',
         ) . PHP_EOL;
 
         $text .= sprintf(
-            '| ------- |%s%s',
+            '| ------- |%s%s%s',
             $shouldDisplayRatingColumn ? ' ---- |' : '',
             $shouldDisplayWarningColumn ? ' ------------------ |' : '',
+            $shouldDisplayModuleOfferColumn ? ' ------------------ |' : '',
         ) . PHP_EOL;
 
         foreach ($stepsResponseDto->getAppliedReleaseGroups() as $appliedReleaseGroup) {
             $text .= sprintf(
-                '| [%s](%s) |%s%s',
+                '| [%s](%s) |%s%s%s',
                 $appliedReleaseGroup->getId(),
                 $appliedReleaseGroup->getLink(),
                 $shouldDisplayRatingColumn ? $this->buildRatingCell($appliedReleaseGroup, $manifestRatingThreshold) . ' |' : '',
@@ -170,6 +174,7 @@ class PullRequestDataGenerator
                     $stepsResponseDto,
                     $appliedReleaseGroup,
                 ) . ' |' : '',
+                $shouldDisplayModuleOfferColumn ? $this->buildModuleOfferCell($stepsResponseDto->getFilterResponseList(), $appliedReleaseGroup) . ' |' : '',
             ) . PHP_EOL;
         }
 
@@ -258,6 +263,37 @@ class PullRequestDataGenerator
                 $stepsResponseDto->getIntegratorResponseDtoByReleaseGroupId($releaseGroupId) !== null
                 && count($stepsResponseDto->getIntegratorResponseDtoByReleaseGroupId($releaseGroupId)->getWarnings()) > 0
             );
+    }
+
+    /**
+     * @param array<\Upgrade\Application\Dto\ReleaseGroupFilterResponseDto> $filterResponseList
+     *
+     * @return bool
+     */
+    protected function shouldDisplayModuleOfferColumn(array $filterResponseList): bool
+    {
+        return count(array_filter($filterResponseList, static fn (ReleaseGroupFilterResponseDto $filterResponse): bool => !$filterResponse->getProposedModuleCollection()->isEmpty())) > 0;
+    }
+
+    /**
+     * @param array<\Upgrade\Application\Dto\ReleaseGroupFilterResponseDto> $filterResponseList
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $appliedReleaseGroup
+     *
+     * @return string
+     */
+    protected function buildModuleOfferCell(array $filterResponseList, ReleaseGroupDto $appliedReleaseGroup): string
+    {
+        $moduleList = [];
+        foreach ($filterResponseList as $filterResponse) {
+            if ($filterResponse->getReleaseGroupDto()->getId() !== $appliedReleaseGroup->getId()) {
+                continue;
+            }
+            foreach ($filterResponse->getProposedModuleCollection()->toArray() as $moduleOffer) {
+                $moduleList[] = sprintf('[%s:%s](https://github.com/%s)', $moduleOffer->getName(), $moduleOffer->getVersion(), $moduleOffer->getName());
+            }
+        }
+
+        return implode('<br>', array_unique($moduleList));
     }
 
     /**

@@ -12,6 +12,7 @@ namespace Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
+use Upgrade\Application\Dto\ReleaseGroupFilterResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppPackageHelper;
 
@@ -42,28 +43,31 @@ class NewPackageFilterItem implements ReleaseGroupFilterItemInterface
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
      *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto
+     * @return \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto
      */
-    public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupDto
+    public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupFilterResponseDto
     {
         if (!$this->configurationProvider->isPackageUpgradeOnly()) {
-            return $releaseGroupDto;
+            return new ReleaseGroupFilterResponseDto($releaseGroupDto);
         }
 
-        $filteredModuleCollection = new ModuleDtoCollection();
+        $approvedModuleCollection = new ModuleDtoCollection();
+        $proposedModuleCollection = new ModuleDtoCollection();
 
         foreach ($releaseGroupDto->getModuleCollection()->toArray() as $module) {
             $moduleName = ReleaseAppPackageHelper::normalizePackageName($module->getName());
 
             if (!$this->packageManagerAdapter->getPackageVersion($moduleName)) {
+                $proposedModuleCollection->add($module);
+
                 continue;
             }
 
-            $filteredModuleCollection->add($module);
+            $approvedModuleCollection->add($module);
         }
 
-        $releaseGroupDto->setModuleCollection($filteredModuleCollection);
+        $releaseGroupDto->setModuleCollection($approvedModuleCollection);
 
-        return $releaseGroupDto;
+        return new ReleaseGroupFilterResponseDto($releaseGroupDto, $proposedModuleCollection);
     }
 }
