@@ -289,11 +289,11 @@ class PullRequestDataGenerator
                 continue;
             }
             foreach ($filterResponse->getProposedModuleCollection()->toArray() as $moduleOffer) {
-                $moduleList[] = sprintf('%s:%s', $moduleOffer->getName(), $moduleOffer->getVersion());
+                $moduleList[] = sprintf('[%s:%s](https://github.com/%s)', $moduleOffer->getName(), $moduleOffer->getVersion(), $moduleOffer->getName());
             }
         }
 
-        return implode(', ', array_unique($moduleList));
+        return implode('<br>', array_unique($moduleList));
     }
 
     /**
