@@ -12,8 +12,11 @@ namespace UpgradeTest\Application\Strategy\ReleaseApp\Step;
 use Core\Infrastructure\Service\Filesystem;
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
+use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
+use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\Common\Step\ComposerJsonConstraintFixStep;
 use Upgrader\Configuration\ConfigurationProvider;
@@ -33,6 +36,8 @@ class ComposerJsonConstraintFixStepTest extends TestCase
             $this->createProcessRunnerServiceMock($process),
             $this->createFilesystemMock(false),
             new ConfigurationProvider(),
+            $this->createPackageManagerAdapterMock(new PackageManagerResponseDto(true)),
+            $this->createLoggerMock(),
         );
 
         $stepResponseDto = new StepsResponseDto();
@@ -57,6 +62,8 @@ class ComposerJsonConstraintFixStepTest extends TestCase
             $this->createProcessRunnerServiceMock($process),
             $this->createFilesystemMock(false),
             new ConfigurationProvider(),
+            $this->createPackageManagerAdapterMock(new PackageManagerResponseDto(true)),
+            $this->createLoggerMock(),
         );
 
         $stepResponseDto = new StepsResponseDto();
@@ -148,6 +155,8 @@ class ComposerJsonConstraintFixStepTest extends TestCase
             $this->createProcessRunnerServiceMock($process),
             $filesystem,
             new ConfigurationProvider(),
+            $this->createPackageManagerAdapterMock(new PackageManagerResponseDto(false)),
+            $this->createLoggerMock(true),
         );
 
         $stepResponseDto = new StepsResponseDto();
@@ -199,5 +208,31 @@ class ComposerJsonConstraintFixStepTest extends TestCase
         $process->method('getOutput')->willReturn($output);
 
         return $process;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $managerResponseDto
+     *
+     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
+     */
+    protected function createPackageManagerAdapterMock(PackageManagerResponseDto $managerResponseDto): PackageManagerAdapterInterface
+    {
+        $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
+        $packageManagerAdapter->method('updateLockHash')->willReturn($managerResponseDto);
+
+        return $packageManagerAdapter;
+    }
+
+    /**
+     * @param bool $expectsErrorLog
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function createLoggerMock(bool $expectsErrorLog = false): LoggerInterface
+    {
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($expectsErrorLog ? $this->once() : $this->never())->method('error');
+
+        return $logger;
     }
 }

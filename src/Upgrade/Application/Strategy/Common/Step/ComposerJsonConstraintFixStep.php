@@ -11,6 +11,8 @@ namespace Upgrade\Application\Strategy\Common\Step;
 
 use Core\Infrastructure\Service\Filesystem;
 use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
+use Psr\Log\LoggerInterface;
+use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\StepInterface;
@@ -59,22 +61,38 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
     protected ConfigurationProvider $configurationProvider;
 
     /**
+     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
+     */
+    protected PackageManagerAdapterInterface $packageManagerAdapter;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected LoggerInterface $logger;
+
+    /**
      * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
      * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
      * @param \Core\Infrastructure\Service\Filesystem $filesystem
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
+     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManagerAdapter
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         VersionControlSystemAdapterInterface $versionControlSystem,
         ProcessRunnerServiceInterface $processRunnerService,
         Filesystem $filesystem,
-        ConfigurationProvider $configurationProvider
+        ConfigurationProvider $configurationProvider,
+        PackageManagerAdapterInterface $packageManagerAdapter,
+        LoggerInterface $logger
     ) {
         parent::__construct($versionControlSystem);
 
         $this->processRunnerService = $processRunnerService;
         $this->filesystem = $filesystem;
         $this->configurationProvider = $configurationProvider;
+        $this->packageManagerAdapter = $packageManagerAdapter;
+        $this->logger = $logger;
     }
 
     /**
@@ -94,6 +112,8 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
         $composerJsonContent = $this->addCaretToVersionConstraints($composerJsonContent, $packages);
 
         $this->writeComposerFile($composerJsonContent);
+
+        $this->updateLockHash();
 
         return $stepsExecutionDto;
     }
@@ -164,6 +184,24 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
         }
 
         return $updatedComposerJson;
+    }
+
+    /**
+     * @return void
+     */
+    protected function updateLockHash(): void
+    {
+        $response = $this->packageManagerAdapter->updateLockHash();
+
+        if (!$response->isSuccessful()) {
+            $this->logger->error(
+                sprintf(
+                    'Error `%s` while executing `%s`.',
+                    (string)$response->getOutputMessage(),
+                    implode(', ', $response->getExecutedCommands()),
+                ),
+            );
+        }
     }
 
     /**

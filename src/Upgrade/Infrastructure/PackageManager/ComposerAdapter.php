@@ -160,6 +160,14 @@ class ComposerAdapter implements PackageManagerAdapterInterface
     }
 
     /**
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
+     */
+    public function updateLockHash(): PackageManagerResponseDto
+    {
+        return $this->composerCommandExecutor->updateLockHash();
+    }
+
+    /**
      * @param string $packageName
      *
      * @return string|null
