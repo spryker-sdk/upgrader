@@ -35,7 +35,7 @@ class ComposerLockComparatorStepTest extends TestCase
         $processRunnerMock = $this->mockProcessRunnerWithOutput($processOutput);
 
         $composerAdapter = new ComposerAdapter(
-            new ComposerCommandExecutor($processRunnerMock, $this->mockConfigurationProvider()),
+            new ComposerCommandExecutor($processRunnerMock, $this->mockConfigurationProvider(), $this->createComposerLockReaderMock()),
             new ComposerLockComparatorCommandExecutor($processRunnerMock),
             new ComposerJsonReader(),
             new ComposerLockReader(),
@@ -68,7 +68,7 @@ class ComposerLockComparatorStepTest extends TestCase
         $processRunnerMock = $this->mockProcessRunnerWithOutput($processOutput);
 
         $composerAdapter = new ComposerAdapter(
-            new ComposerCommandExecutor($processRunnerMock, $this->mockConfigurationProvider()),
+            new ComposerCommandExecutor($processRunnerMock, $this->mockConfigurationProvider(), $this->createComposerLockReaderMock()),
             new ComposerLockComparatorCommandExecutor($processRunnerMock),
             new ComposerJsonReader(),
             new ComposerLockReader(),
@@ -92,7 +92,7 @@ class ComposerLockComparatorStepTest extends TestCase
         // Arrange
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $composerAdapter = new ComposerAdapter(
-            new ComposerCommandExecutor($processRunnerMock, $this->mockConfigurationProvider()),
+            new ComposerCommandExecutor($processRunnerMock, $this->mockConfigurationProvider(), $this->createComposerLockReaderMock()),
             new ComposerLockComparatorCommandExecutor($processRunnerMock),
             new ComposerJsonReader(),
             new ComposerLockReader(),
@@ -136,5 +136,13 @@ class ComposerLockComparatorStepTest extends TestCase
             ->willReturn($withDependencies);
 
         return $configurationProvider;
+    }
+
+    /**
+     * @return \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader
+     */
+    protected function createComposerLockReaderMock(): ComposerLockReader
+    {
+        return $this->createMock(ComposerLockReader::class);
     }
 }
