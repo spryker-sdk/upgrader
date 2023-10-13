@@ -209,9 +209,9 @@ class ComposerCommandExecutorTest extends TestCase
         $this->expectException(RuntimeException::class);
 
         $invalidComposerLockData = [
-            'packages' => [
+            'packages' => [[
                 'some_key' => 'val',
-            ],
+            ]],
         ];
 
         $commandExecutor = new ComposerCommandExecutor(
