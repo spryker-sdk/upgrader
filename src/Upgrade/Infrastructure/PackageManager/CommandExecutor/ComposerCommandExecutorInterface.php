@@ -46,4 +46,9 @@ interface ComposerCommandExecutorInterface
      * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
     public function update(): PackageManagerResponseDto;
+
+    /**
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
+     */
+    public function updateLockHash(): PackageManagerResponseDto;
 }

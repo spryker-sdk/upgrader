@@ -134,4 +134,24 @@ class ComposerAdapterTest extends TestCase
         // Assert
         $this->assertSame('^2.2.0', $result);
     }
+
+    /**
+     * @return void
+     */
+    public function testUpdateLockHashShouldInvokeComposerCommandExecutor(): void
+    {
+        // Arrange & Assert
+        $composerCommandExecutorMock = $this->createMock(ComposerCommandExecutorInterface::class);
+        $composerCommandExecutorMock->expects($this->once())->method('updateLockHash');
+
+        $composerAdapter = new ComposerAdapter(
+            $composerCommandExecutorMock,
+            $this->createMock(ComposerLockComparatorCommandExecutorInterface::class),
+            $this->createMock(ComposerReaderInterface::class),
+            $this->createMock(ComposerReaderInterface::class),
+        );
+
+        // Act
+        $composerAdapter->updateLockHash();
+    }
 }
