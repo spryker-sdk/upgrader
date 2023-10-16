@@ -14,6 +14,7 @@ use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\Baseline
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto;
 use Exception;
 use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 class FileErrorsFetcher implements FileErrorsFetcherInterface
@@ -22,6 +23,11 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
      * @var string
      */
     protected string $executableConfig;
+
+    /**
+     * @var string
+     */
+    protected string $executableProjectConfig;
 
     /**
      * @var string
@@ -39,21 +45,40 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     protected BaselineStorageInterface $baselineStorage;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected LoggerInterface $logger;
+
+    /**
+     * @var string
+     */
+    protected string $phpstanNeonFileName;
+
+    /**
      * @param string $executableConfig
+     * @param string $executableProjectConfig
      * @param string $executable
      * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
      * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\BaselineStorageInterface $baselineStorage
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param string $phpstanNeonFileName
      */
     public function __construct(
         string $executableConfig,
+        string $executableProjectConfig,
         string $executable,
         ProcessRunnerServiceInterface $processRunnerService,
-        BaselineStorageInterface $baselineStorage
+        BaselineStorageInterface $baselineStorage,
+        LoggerInterface $logger,
+        string $phpstanNeonFileName = 'phpstan.neon'
     ) {
         $this->executableConfig = $executableConfig;
+        $this->executableProjectConfig = $executableProjectConfig;
         $this->executable = $executable;
         $this->processRunnerService = $processRunnerService;
         $this->baselineStorage = $baselineStorage;
+        $this->logger = $logger;
+        $this->phpstanNeonFileName = $phpstanNeonFileName;
     }
 
     /**
@@ -63,7 +88,22 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     {
         $fileErrors = [];
 
-        $errors = $this->fetchErrorsArray();
+        try {
+            $errors = $this->fetchErrorsArray();
+        } catch (Exception $e) {
+            $this->logger->debug($e->getMessage());
+
+            return [
+                new FileErrorDto(
+                    'src',
+                    0,
+                    sprintf(
+                        'Cannot detect broken PHP files because PHPStan fails with an error “Timeout %s”. To check manually, run `vendor/bin/phpstan analyse src/` from project root dir',
+                        ProcessRunnerServiceInterface::DEFAULT_PROCESS_TIMEOUT,
+                    ),
+                ),
+            ];
+        }
 
         $this->assertArrayKeyExists($errors, 'files', true);
 
@@ -115,7 +155,9 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
             $this->executable,
             'analyse',
             '-c',
-            $this->executableConfig,
+            file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) ? $this->executableProjectConfig : $this->executableConfig,
+            '--memory-limit',
+            '-1',
             '--error-format',
             'prettyJson',
         ]);
