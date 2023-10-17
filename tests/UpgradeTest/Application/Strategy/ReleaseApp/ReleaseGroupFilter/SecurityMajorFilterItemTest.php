@@ -35,10 +35,10 @@ class SecurityMajorFilterItemTest extends TestCase
         $filter = new SecurityMajorFilterItem($packageManagerAdapterMock);
 
         // Act
-        $releaseGroupDto = $filter->filter($releaseGroupDto);
+        $response = $filter->filter($releaseGroupDto);
 
         // Assert
-        $this->assertSame(2, $releaseGroupDto->getModuleCollection()->count());
+        $this->assertSame(2, $response->getReleaseGroupDto()->getModuleCollection()->count());
 
         $modules = $releaseGroupDto->getModuleCollection()->toArray();
 
@@ -66,10 +66,10 @@ class SecurityMajorFilterItemTest extends TestCase
         $filter = new SecurityMajorFilterItem($packageManagerAdapterMock);
 
         // Act
-        $releaseGroupDto = $filter->filter($releaseGroupDto);
+        $response = $filter->filter($releaseGroupDto);
 
         // Assert
-        $this->assertSame(3, $releaseGroupDto->getModuleCollection()->count());
+        $this->assertSame(3, $response->getReleaseGroupDto()->getModuleCollection()->count());
     }
 
     /**
@@ -99,10 +99,12 @@ class SecurityMajorFilterItemTest extends TestCase
         ];
 
         return new ReleaseGroupDto(
+            1,
             'RG1',
             new ModuleDtoCollection($moduleDto),
             false,
             'https://api.release.spryker.com/release-groups/view/1',
+            100,
         );
     }
 }

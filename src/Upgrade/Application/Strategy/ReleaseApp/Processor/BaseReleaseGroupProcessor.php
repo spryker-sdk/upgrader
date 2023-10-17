@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\ReleaseApp\Processor;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
@@ -22,11 +23,20 @@ abstract class BaseReleaseGroupProcessor implements ReleaseGroupProcessorInterfa
     protected EventDispatcherInterface $eventDispatcher;
 
     /**
-     * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     * @var \Psr\Log\LoggerInterface
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
+    protected LoggerInterface $logger;
+
+    /**
+     * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(
+        EventDispatcherInterface $eventDispatcher,
+        LoggerInterface $logger
+    ) {
         $this->eventDispatcher = $eventDispatcher;
+        $this->logger = $logger;
     }
 
     /**
@@ -76,7 +86,7 @@ abstract class BaseReleaseGroupProcessor implements ReleaseGroupProcessorInterfa
 
         $message = sprintf('Amount of applied release groups: %s', $appliedRGsNum);
         if ($appliedSecurityRGsNum) {
-            $message .= sprintf(' (including %s security fix(s))', $appliedSecurityRGsNum);
+            $message .= sprintf(' (including %s security fix(es))', $appliedSecurityRGsNum);
         }
 
         $stepsExecutionDto->addOutputMessage($message);

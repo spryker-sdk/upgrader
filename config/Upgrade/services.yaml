@@ -8,6 +8,7 @@ parameters:
     http_client.repeatable.usec_delay: 500000
     profiler_enabled: "%env(default:profiler_enabled_default:bool:SDK_PROFILER_ENABLED)%"
     is_release_group_integrator_enabled: false
+    is_update_minimum_dependecies_enabled: false #To enable composer run logic without flag, with dependencies, with all dependencies.
 
 services:
     _defaults:
@@ -16,6 +17,7 @@ services:
         public: true
         bind:
             $isReleaseGroupIntegratorEnabled: '%env(default:is_release_group_integrator_enabled:bool:RELEASE_GROUP_INTEGRATOR_ENABLED)%'
+            $isUpdateMinimumDependeciesEnabled: '%env(default:is_update_minimum_dependecies_enabled:bool:UPDATE_MINIMUM_DEPENDENCIES_ENABLED)%'
 
     # Upgrade
     Upgrade\:
@@ -55,13 +57,8 @@ services:
     composer_lock_diff.step:
         class: Upgrade\Application\Strategy\Common\Step\ComposerLockComparatorStep
 
-    proper_update.handler:
-        class: Upgrade\Application\Strategy\Common\PackagePostUpdateHandler\PropelUpdateHandler
-
-    package_post_update.step:
-        class: Upgrade\Application\Strategy\Common\Step\PackagePostUpdateStep
-        arguments:
-            - - '@proper_update.handler'
+    orm_models_regenerate.step:
+        class: Upgrade\Application\Strategy\Common\Step\OrmModelsRegenerateStep
 
     integrator.step:
         class: Upgrade\Application\Strategy\Common\Step\IntegratorStep
@@ -71,6 +68,9 @@ services:
 
     add_changes.step:
         class: Upgrade\Application\Strategy\Common\Step\AddChangesStep
+
+    composer_json_constraint_fix_step:
+        class: Upgrade\Application\Strategy\Common\Step\ComposerJsonConstraintFixStep
 
     commit_changes.step:
         class: Upgrade\Application\Strategy\Common\Step\CommitChangesStep
@@ -99,6 +99,7 @@ services:
     composer.step_executor:
         class: Upgrade\Application\Executor\StepExecutor
         arguments:
+            - '@monolog.logger'
             - - '@check_credentials.step'
               - '@check_is_remote_target_branch_exist.step'
               - '@check_is_local_target_branch_exist.step'
@@ -106,9 +107,10 @@ services:
               - '@integrator_lock_run.step'
               - '@composer_update.step'
               - '@composer_lock_diff.step'
-              - '@package_post_update.step'
+              - '@orm_models_regenerate.step'
               - '@integrator.step'
               - '@create_branch.step'
+              - '@composer_json_constraint_fix_step'
               - '@add_changes.step'
               - '@commit_changes.step'
               - '@push_changes.step'
@@ -126,6 +128,7 @@ services:
     release_app.step_executor:
         class: Upgrade\Application\Executor\StepExecutor
         arguments:
+            - '@monolog.logger'
             - - '@check_credentials.step'
               - '@check_is_remote_target_branch_exist.step'
               - '@check_is_local_target_branch_exist.step'
@@ -206,9 +209,6 @@ services:
               - '@gitlab.provider'
               - '@azure.provider'
 
-    validator.project_changes:
-        class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\ProjectChangesValidator
-
     validator.release_major:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator
 
@@ -219,14 +219,15 @@ services:
         arguments:
             - - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DevMasterPackageFilterItem'
               - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\AlreadyInstalledPackageFilterItem'
+              - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\NewPackageFilterItem'
               - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DummyPackageFilterItem'
               - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\SecurityMajorFilterItem'
+              - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\BetaMajorPackageFilterItem'
 
     Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
         arguments:
             - {
-#                param1: '@validator.project_changes',
                 param2: '@validator.release_major',
                 param3: '@validator.conflict',
             }
@@ -256,15 +257,18 @@ services:
     processor.pre_require_step_executor:
         class: Upgrade\Application\Executor\StepExecutor
         arguments:
+            - '@monolog.logger'
             - - '@integrator_lock_run.step'
               - '@propel_fix.step'
 
     processor.post_require_step_executor:
         class: Upgrade\Application\Executor\StepExecutor
         arguments:
+            - '@monolog.logger'
             - - '@composer_lock_diff.step'
-              - '@package_post_update.step'
+              - '@orm_models_regenerate.step'
               - '@integrator.step'
+              - '@composer_json_constraint_fix_step'
               - '@add_changes.step'
               - '@commit_changes.step'
 
@@ -328,4 +332,3 @@ services:
             - '%report_send_endpoint_url%'
             - '%report_send_timeout%'
             - '%report_send_connection_timeout%'
-

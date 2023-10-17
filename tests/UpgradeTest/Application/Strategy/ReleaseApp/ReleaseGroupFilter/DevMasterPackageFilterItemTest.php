@@ -32,11 +32,11 @@ class DevMasterPackageFilterItemTest extends TestCase
         $devMasterPackageFilterItem = new DevMasterPackageFilterItem($packageManagerAdapterMock);
 
         // Act
-        $releaseGroupDto = $devMasterPackageFilterItem->filter($releaseGroupDto);
+        $response = $devMasterPackageFilterItem->filter($releaseGroupDto);
 
         // Assert
-        $this->assertSame(1, $releaseGroupDto->getModuleCollection()->count());
-        $this->assertSame('spryker/package-two', $releaseGroupDto->getModuleCollection()->toArray()[0]->getName());
+        $this->assertSame(1, $response->getReleaseGroupDto()->getModuleCollection()->count());
+        $this->assertSame('spryker/package-two', $response->getReleaseGroupDto()->getModuleCollection()->toArray()[0]->getName());
     }
 
     /**
@@ -57,11 +57,11 @@ class DevMasterPackageFilterItemTest extends TestCase
         $devMasterPackageFilterItem = new DevMasterPackageFilterItem($packageManagerAdapterMock);
 
         // Act
-        $releaseGroupDto = $devMasterPackageFilterItem->filter($releaseGroupDto);
+        $response = $devMasterPackageFilterItem->filter($releaseGroupDto);
 
         // Assert
-        $this->assertSame(1, $releaseGroupDto->getModuleCollection()->count());
-        $this->assertSame('spryker/package-three', $releaseGroupDto->getModuleCollection()->toArray()[0]->getName());
+        $this->assertSame(1, $response->getReleaseGroupDto()->getModuleCollection()->count());
+        $this->assertSame('spryker/package-three', $response->getReleaseGroupDto()->getModuleCollection()->toArray()[0]->getName());
     }
 
     /**
@@ -72,10 +72,12 @@ class DevMasterPackageFilterItemTest extends TestCase
     protected function createReleaseGroupDto(array $moduleDto): ReleaseGroupDto
     {
         return new ReleaseGroupDto(
+            1,
             'RG1',
             new ModuleDtoCollection($moduleDto),
             false,
             'https://api.release.spryker.com/release-groups/view/1',
+            100,
         );
     }
 

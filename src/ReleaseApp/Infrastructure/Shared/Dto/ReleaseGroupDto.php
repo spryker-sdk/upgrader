@@ -24,6 +24,11 @@ class ReleaseGroupDto
     protected bool $containsProjectChanges;
 
     /**
+     * @var int
+     */
+    protected int $id;
+
+    /**
      * @var string
      */
     protected string $name;
@@ -32,6 +37,11 @@ class ReleaseGroupDto
      * @var string
      */
     protected string $link;
+
+    /**
+     * @var int
+     */
+    protected int $rating;
 
     /**
      * @var string|null
@@ -54,24 +64,57 @@ class ReleaseGroupDto
     protected bool $isSecurity = false;
 
     /**
+     * @var string|null
+     */
+    protected ?string $integrationGuide;
+
+    /**
+     * @var bool
+     */
+    protected bool $manualActionNeeded;
+
+    /**
+     * @param int $id
      * @param string $name
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
      * @param bool $containsProjectChanges
      * @param string $link
+     * @param int $rating
      * @param bool $hasConflict
+     * @param bool $isSecurity
+     * @param string|null $integrationGuide
+     * @param bool $manualActionNeeded
      */
     public function __construct(
+        int $id,
         string $name,
         ModuleDtoCollection $moduleCollection,
         bool $containsProjectChanges,
         string $link,
-        bool $hasConflict = false
+        int $rating,
+        bool $hasConflict = false,
+        bool $isSecurity = false,
+        ?string $integrationGuide = null,
+        bool $manualActionNeeded = false
     ) {
+        $this->id = $id;
         $this->name = $name;
         $this->link = $link;
         $this->moduleCollection = $moduleCollection;
         $this->containsProjectChanges = $containsProjectChanges;
         $this->hasConflict = $hasConflict;
+        $this->rating = $rating;
+        $this->isSecurity = $isSecurity;
+        $this->integrationGuide = $integrationGuide;
+        $this->manualActionNeeded = $manualActionNeeded;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**
@@ -114,6 +157,14 @@ class ReleaseGroupDto
     public function getLink(): string
     {
         return $this->link;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRating(): int
+    {
+        return $this->rating;
     }
 
     /**
@@ -186,5 +237,41 @@ class ReleaseGroupDto
     public function isSecurity(): bool
     {
         return $this->isSecurity;
+    }
+
+    /**
+     * @param string|null $integrationGuide
+     *
+     * @return void
+     */
+    public function setIntegrationGuide(?string $integrationGuide): void
+    {
+        $this->integrationGuide = $integrationGuide;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIntegrationGuide(): ?string
+    {
+        return $this->integrationGuide;
+    }
+
+    /**
+     * @param bool $manualActionNeeded
+     *
+     * @return void
+     */
+    public function setManualActionNeeded(bool $manualActionNeeded): void
+    {
+        $this->manualActionNeeded = $manualActionNeeded;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getManualActionNeeded(): bool
+    {
+        return $this->manualActionNeeded;
     }
 }

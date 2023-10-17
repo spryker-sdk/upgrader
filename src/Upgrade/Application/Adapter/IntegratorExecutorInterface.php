@@ -15,10 +15,11 @@ interface IntegratorExecutorInterface
 {
     /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto> $modules
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
-    public function runIntegrator(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
+    public function runIntegrator(StepsResponseDto $stepsExecutionDto, array $modules = []): StepsResponseDto;
 
     /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto

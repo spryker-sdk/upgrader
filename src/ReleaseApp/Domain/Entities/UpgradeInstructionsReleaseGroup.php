@@ -40,6 +40,11 @@ class UpgradeInstructionsReleaseGroup
     /**
      * @var string
      */
+    protected const RATING_KEY = 'rating';
+
+    /**
+     * @var string
+     */
     protected const META_KEY = 'meta';
 
     /**
@@ -66,6 +71,16 @@ class UpgradeInstructionsReleaseGroup
      * @var string
      */
     protected const SECURITY_KEY = 'is_security';
+
+    /**
+     * @var string
+     */
+    protected const INTEGRATION_GUIDE = 'integration_guide';
+
+    /**
+     * @var string
+     */
+    protected const MANUAL_ACTION_NEEDED = 'manual_action_needed';
 
     /**
      * @var array<mixed>
@@ -115,6 +130,14 @@ class UpgradeInstructionsReleaseGroup
     public function getId(): int
     {
         return (int)$this->body[static::ID_KEY];
+    }
+
+    /**
+     * @return int
+     */
+    public function getRating(): int
+    {
+        return (int)$this->body[static::RATING_KEY];
     }
 
     /**
@@ -192,5 +215,21 @@ class UpgradeInstructionsReleaseGroup
     public function isSecurity(): bool
     {
         return (bool)($this->body[static::SECURITY_KEY] ?? false);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIntegrationGuide(): ?string
+    {
+        return $this->body[static::INTEGRATION_GUIDE] ?? null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getManualActionNeeded(): bool
+    {
+        return $this->body[static::MANUAL_ACTION_NEEDED] ?? false;
     }
 }

@@ -13,6 +13,7 @@ use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Exception\ReleaseGroupValidatorException;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
+use Upgrade\Application\Strategy\Common\Module\BetaMajorModule\BetaMajorModulesFetcherInterface;
 
 class MajorVersionValidator implements ReleaseGroupValidatorInterface
 {
@@ -22,11 +23,18 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
+     * @var \Upgrade\Application\Strategy\Common\Module\BetaMajorModule\BetaMajorModulesFetcherInterface
      */
-    public function __construct(ConfigurationProviderInterface $configurationProvider)
+    protected BetaMajorModulesFetcherInterface $betaMajorModulesFetcher;
+
+    /**
+     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
+     * @param \Upgrade\Application\Strategy\Common\Module\BetaMajorModule\BetaMajorModulesFetcherInterface $betaMajorModulesFetcher
+     */
+    public function __construct(ConfigurationProviderInterface $configurationProvider, BetaMajorModulesFetcherInterface $betaMajorModulesFetcher)
     {
         $this->configurationProvider = $configurationProvider;
+        $this->betaMajorModulesFetcher = $betaMajorModulesFetcher;
     }
 
     /**
@@ -42,18 +50,32 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
             return;
         }
 
-        $moduleWithMajorUpdates = $releaseGroup->getModuleCollection()->getMajors();
+        if ($releaseGroup->getManualActionNeeded()) {
+            throw new ReleaseGroupValidatorException(sprintf(
+                'This release needs manual changes, please follow migration guide. Please follow the link below to find all documentation needed to help you upgrade to the latest release %s',
+                PHP_EOL . $releaseGroup->getLink(),
+            ));
+        }
 
-        if (count($moduleWithMajorUpdates) === 0) {
+        $moduleWithMajorUpdates = $releaseGroup->getModuleCollection()->getMajors();
+        $moduleWithBetaMajorUpdates = $this->betaMajorModulesFetcher->getBetaMajorsNotInstalledInDev($releaseGroup->getModuleCollection());
+
+        if (count($moduleWithMajorUpdates) === 0 && count($moduleWithBetaMajorUpdates) === 0) {
             return;
         }
 
-        $message = sprintf(
+        throw new ReleaseGroupValidatorException(sprintf(
             'There is a major release available for module %s. Please follow the link below to find all documentation needed to help you upgrade to the latest release %s',
-            implode(', ', array_map(static fn (ModuleDto $module): string => $module->getName(), $moduleWithMajorUpdates)),
+            implode(', ', array_map(static fn (ModuleDto $module): string => $module->getName(), array_merge($moduleWithMajorUpdates, $moduleWithBetaMajorUpdates))),
             PHP_EOL . $releaseGroup->getLink(),
-        );
+        ));
+    }
 
-        throw new ReleaseGroupValidatorException($message);
+    /**
+     * @return string
+     */
+    public static function getValidatorTitle(): string
+    {
+        return 'Major Module Versions requiring manual action';
     }
 }

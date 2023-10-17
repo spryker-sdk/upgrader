@@ -39,12 +39,12 @@ class AlreadyInstalledPackageFilterItemTest extends TestCase
         $filter = new AlreadyInstalledPackageFilterItem($packageManagerAdapterMock);
 
         // Act
-        $releaseGroupDto = $filter->filter($releaseGroupDto);
+        $response = $filter->filter($releaseGroupDto);
 
         // Assert
-        $this->assertSame(2, $releaseGroupDto->getModuleCollection()->count());
+        $this->assertSame(2, $response->getReleaseGroupDto()->getModuleCollection()->count());
 
-        $modules = $releaseGroupDto->getModuleCollection()->toArray();
+        $modules = $response->getReleaseGroupDto()->getModuleCollection()->toArray();
 
         $this->assertSame('spryker/package-one', $modules[0]->getName());
         $this->assertSame('4.17.0', $modules[0]->getVersion());
@@ -76,10 +76,12 @@ class AlreadyInstalledPackageFilterItemTest extends TestCase
     protected function createReleaseGroupDto(array $moduleDto): ReleaseGroupDto
     {
         return new ReleaseGroupDto(
+            1,
             'RG1',
             new ModuleDtoCollection($moduleDto),
             false,
             'https://api.release.spryker.com/release-groups/view/1',
+            100,
         );
     }
 }

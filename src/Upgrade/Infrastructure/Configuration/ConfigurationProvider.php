@@ -12,6 +12,9 @@ namespace Upgrade\Infrastructure\Configuration;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Infrastructure\EnvParser\EnvFetcher;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ConfigurationProvider implements ConfigurationProviderInterface
 {
     /**
@@ -72,6 +75,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * @var bool
      */
+    protected const DEFAULT_PACKAGE_UPGRADE_ONLY = false;
+
+    /**
+     * @var bool
+     */
     protected const COMPOSER_NO_INSTALL = false;
 
     /**
@@ -83,6 +91,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      * @var bool
      */
     protected const DEFAULT_REPORTING_ENABLED = false;
+
+    /**
+     * @var int
+     */
+    protected const DEFAULT_MANIFESTS_RATING_THRESHOLD = 0;
 
     /**
      * {@inheritDoc}
@@ -371,10 +384,30 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * {@inheritDoc}
      *
+     * @return bool
+     */
+    public function isPackageUpgradeOnly(): bool
+    {
+        return EnvFetcher::getBool('PACKAGE_UPGRADE_ONLY', static::DEFAULT_PACKAGE_UPGRADE_ONLY);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @return string
      */
     public function getReportSendAuthToken(): string
     {
         return (string)getenv('REPORT_SEND_AUTH_TOKEN');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return int
+     */
+    public function getManifestsRatingThreshold(): int
+    {
+        return (int)getenv('MANIFESTS_RATING_THRESHOLD') ?: static::DEFAULT_MANIFESTS_RATING_THRESHOLD;
     }
 }

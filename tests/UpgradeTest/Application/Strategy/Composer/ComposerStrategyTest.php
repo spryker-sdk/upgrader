@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace UpgradeTest\Application\Strategy\Composer;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Executor\StepExecutor;
 use Upgrade\Application\Strategy\Composer\ComposerStrategy;
@@ -25,7 +26,10 @@ class ComposerStrategyTest extends TestCase
     public function testUpgradeWithoutSteps(): void
     {
         // Arrange
-        $strategy = new ComposerStrategy(new StepExecutor());
+        $strategy = new ComposerStrategy(
+            new StepExecutor($this->createMock(LoggerInterface::class)),
+            $this->createMock(LoggerInterface::class),
+        );
 
         // Act
         $stepsExecutionDto = $strategy->upgrade();
@@ -49,11 +53,15 @@ class ComposerStrategyTest extends TestCase
         $fooStep->expects($this->never())->method('rollBack');
 
         $strategy = new ComposerStrategy(
-            new StepExecutor([
+            new StepExecutor(
+                $this->createMock(LoggerInterface::class),
+                [
                 $fooStep,
                 new FooStep(),
                 new FooRollbackStep(),
-            ]),
+                ],
+            ),
+            $this->createMock(LoggerInterface::class),
         );
 
         // Act
@@ -83,10 +91,14 @@ class ComposerStrategyTest extends TestCase
         $barStep->expects($this->never())->method('rollBack');
 
         $strategy = new ComposerStrategy(
-            new StepExecutor([
+            new StepExecutor(
+                $this->createMock(LoggerInterface::class),
+                [
                 $fooStep,
                 $barStep,
-            ]),
+                ],
+            ),
+            $this->createMock(LoggerInterface::class),
         );
 
         // Act
@@ -120,6 +132,7 @@ class ComposerStrategyTest extends TestCase
 
         $strategy = new ComposerStrategy(
             new StepExecutor(
+                $this->createMock(LoggerInterface::class),
                 [
                     $fooStep,
                     new FooStep(),
@@ -129,6 +142,7 @@ class ComposerStrategyTest extends TestCase
                     $fixerStep,
                 ],
             ),
+            $this->createMock(LoggerInterface::class),
         );
 
         // Act
@@ -147,10 +161,14 @@ class ComposerStrategyTest extends TestCase
     {
         // Arrange
         $strategy = new ComposerStrategy(
-            new StepExecutor([
-                new FooStep(),
-                $this->mockUnSuccessFooStep(),
-            ]),
+            new StepExecutor(
+                $this->createMock(LoggerInterface::class),
+                [
+                    new FooStep(),
+                    $this->mockUnSuccessFooStep(),
+                ],
+            ),
+            $this->createMock(LoggerInterface::class),
         );
 
         // Act
@@ -173,12 +191,14 @@ class ComposerStrategyTest extends TestCase
 
         $strategy = new ComposerStrategy(
             new StepExecutor(
+                $this->createMock(LoggerInterface::class),
                 [
                     new FooStep(),
                     $fooRollbackStep,
                     $this->mockUnSuccessFooStep(),
                 ],
             ),
+            $this->createMock(LoggerInterface::class),
         );
 
         // Act

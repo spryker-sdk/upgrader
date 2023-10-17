@@ -201,12 +201,32 @@ To update a project, run the following command from its directory:
 ```bash
 bin/console upgradability:php:upgrade
 ```
+## Enable release group integrator
+​
+* Turn on the specific behavior for the release group integrator (for internal usage).
+```bash
+export RELEASE_GROUP_INTEGRATOR_ENABLED=true
+```
+
+## Enable minimal updates of third-party dependencies
+​
+* Turn on specific behavior to minimize update 3rd-party dependencies.
+```bash
+export UPDATE_MINIMUM_DEPENDENCIES_ENABLED=true
+```
 
 ## Enable project change integration
 ​
 * Turn on integrator trigger after package update step
 ```bash
 export INTEGRATOR_ENABLED=true
+```
+
+## Disable installing new Spryker packages
+​
+* Turn off installing new Spryker packages
+```bash
+export PACKAGE_UPGRADE_ONLY=true
 ```
 
 ## Enable project code compliance after update

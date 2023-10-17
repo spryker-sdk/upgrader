@@ -70,10 +70,12 @@ class ReleaseGroupDtoCollectionMapper
     protected function mapReleaseGroupDto(UpgradeInstructionsReleaseGroup $releaseGroup): ReleaseGroupDto
     {
         $dataProviderReleaseGroup = new ReleaseGroupDto(
+            $releaseGroup->getId(),
             $releaseGroup->getName(),
             $this->buildModuleTransferCollection($releaseGroup),
             $releaseGroup->hasProjectChanges(),
             $this->getReleaseGroupLink($releaseGroup->getId()),
+            $releaseGroup->getRating(),
         );
         $dataProviderReleaseGroup->setHasConflict(
             $releaseGroup->getMeta() && $releaseGroup->getMeta()->getConflict()->count(),
@@ -81,6 +83,8 @@ class ReleaseGroupDtoCollectionMapper
         $dataProviderReleaseGroup->setJiraIssue($releaseGroup->getJiraIssue());
         $dataProviderReleaseGroup->setJiraIssueLink($releaseGroup->getJiraIssueLink());
         $dataProviderReleaseGroup->setIsSecurity($releaseGroup->isSecurity());
+        $dataProviderReleaseGroup->setIntegrationGuide($releaseGroup->getIntegrationGuide());
+        $dataProviderReleaseGroup->setManualActionNeeded($releaseGroup->getManualActionNeeded());
 
         return $dataProviderReleaseGroup;
     }

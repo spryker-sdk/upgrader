@@ -7,11 +7,10 @@
 
 declare(strict_types=1);
 
-namespace UpgraderTest;
+namespace Upgrader;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Upgrader\UpgraderExtension;
 
 class UpgraderExtensionTest extends TestCase
 {

@@ -35,10 +35,10 @@ class DummyPackageFilterItemTest extends TestCase
         $dummyPackageFilterItem = new DummyPackageFilterItem();
 
         // Act
-        $releaseGroupDto = $dummyPackageFilterItem->filter($releaseGroupDto);
+        $response = $dummyPackageFilterItem->filter($releaseGroupDto);
 
         // Assert
-        $modules = $releaseGroupDto->getModuleCollection()->toArray();
+        $modules = $response->getReleaseGroupDto()->getModuleCollection()->toArray();
 
         if ($isDummy) {
             $this->assertEmpty($modules);
@@ -78,10 +78,12 @@ class DummyPackageFilterItemTest extends TestCase
     protected function createReleaseGroupDto(array $moduleDto): ReleaseGroupDto
     {
         return new ReleaseGroupDto(
+            1,
             'RG1',
             new ModuleDtoCollection($moduleDto),
             false,
             'https://api.release.spryker.com/release-groups/view/1',
+            100,
         );
     }
 }

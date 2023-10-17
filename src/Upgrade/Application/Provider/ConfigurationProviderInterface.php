@@ -121,9 +121,25 @@ interface ConfigurationProviderInterface
 
     /**
      * Specification:
+     * - Defines has Upgrader install new packages in the release group.
+     *
+     * @return bool
+     */
+    public function isPackageUpgradeOnly(): bool;
+
+    /**
+     * Specification:
      * - Defines the report request auth token.
      *
      * @return string
      */
     public function getReportSendAuthToken(): string;
+
+    /**
+     * Specification:
+     *  - Defines manifest rating threshold.
+     *
+     * @return int
+     */
+    public function getManifestsRatingThreshold(): int;
 }

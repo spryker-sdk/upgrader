@@ -69,11 +69,30 @@ interface PackageManagerAdapterInterface
     public function update(): PackageManagerResponseDto;
 
     /**
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
+     */
+    public function updateLockHash(): PackageManagerResponseDto;
+
+    /**
      * @param string $packageName
      *
      * @return string|null
      */
     public function getPackageVersion(string $packageName): ?string;
+
+    /**
+     * @param string $packageName
+     *
+     * @return string|null
+     */
+    public function getPackageConstraint(string $packageName): ?string;
+
+    /**
+     * @param string $packageName
+     *
+     * @return bool
+     */
+    public function isLockDevPackage(string $packageName): bool;
 
     /**
      * @param string $packageName

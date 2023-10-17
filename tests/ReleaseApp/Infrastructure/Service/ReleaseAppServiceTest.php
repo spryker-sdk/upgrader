@@ -46,6 +46,7 @@ class ReleaseAppServiceTest extends KernelTestCase
             new ReleaseAppResponse(
                 new ReleaseGroupDtoCollection([
                     new ReleaseGroupDto(
+                        4395,
                         'FRW-229 Replace Swiftmailer dependency with SymfonyMailer',
                         new ModuleDtoCollection([
                             new ModuleDto('spryker/mail-extension', '1.0.0', 'major'),
@@ -53,6 +54,7 @@ class ReleaseAppServiceTest extends KernelTestCase
                         ]),
                         true,
                         'https://api.release.spryker.com/release-group/4395',
+                        100,
                         true,
                     ),
                 ]),
@@ -76,6 +78,7 @@ class ReleaseAppServiceTest extends KernelTestCase
 
         // Assert
         $releaseGroupDto = new ReleaseGroupDto(
+            4821,
             'CC-26540 Introduced the Shipment Types BAPI',
             new ModuleDtoCollection([
                 new ModuleDto('spryker/shipment-types-backend-api', '0.1.0', 'minor'),
@@ -83,6 +86,7 @@ class ReleaseAppServiceTest extends KernelTestCase
             ]),
             true,
             'https://api.release.spryker.com/release-group/4821',
+            100,
             false,
         );
         $releaseGroupDto->setJiraIssue('CC-25420');

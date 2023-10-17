@@ -12,12 +12,16 @@ namespace UpgradeTest\Infrastructure\VersionControlSystem\Git;
 use Core\Infrastructure\Service\ProcessRunnerService;
 use ReflectionClass;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
+use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\IntegratorResponseDto;
+use Upgrade\Application\Dto\ReleaseGroupFilterResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Dto\ValidatorViolationDto;
+use Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroup\MajorVersionValidator;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutor;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
@@ -129,7 +133,6 @@ class GitTest extends KernelTestCase
         $stepsExecutionDto = new StepsResponseDto(true);
         $composerLockDiffDto = new ComposerLockDiffDto();
         $stepsExecutionDto->setComposerLockDiff($composerLockDiffDto);
-        $stepsExecutionDto->setLastAppliedReleaseGroup($this->getReleaseGroupDto());
 
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $git = $this->getGitWithProcessRunner($processRunnerMock);
@@ -165,12 +168,12 @@ class GitTest extends KernelTestCase
         $stepsExecutionDto = new StepsResponseDto(true);
 
         $stepsExecutionDto->setComposerLockDiff($this->getComposerLockDiffDto());
-        $stepsExecutionDto->setBlockerInfo('Available major info');
+        $stepsExecutionDto->addBlocker(new ValidatorViolationDto(MajorVersionValidator::getValidatorTitle(), 'Available major info'));
         $integratorResponseDto = new IntegratorResponseDto([
             'message-list' => ['Test message'],
             'warning-list' => ['Manifest for Spryker.AuthenticationOauth:1.0.0 was skipped. Please, update it to use full functionality.'],
         ]);
-        $stepsExecutionDto->setIntegratorResponseDto($integratorResponseDto);
+        $stepsExecutionDto->addIntegratorResponseDto($integratorResponseDto);
 
         $processRunnerMock = $this->mockProcessRunnerWithOutput('');
         $git = $this->getGitWithProcessRunner($processRunnerMock);
@@ -178,6 +181,15 @@ class GitTest extends KernelTestCase
         $gitHubProviderMock = $this->getMockBuilder(GitHubSourceCodeProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $stepsExecutionDto->addFilterResponse(
+            new ReleaseGroupFilterResponseDto(
+                $this->getReleaseGroupDto(),
+                new ModuleDtoCollection([
+                    new ModuleDto('spryker/shipment-types-backend-api', '0.1.0', 'minor'),
+                ]),
+            ),
+        );
 
         // Assert
         $gitHubProviderMock->expects($this->exactly(1))
@@ -273,10 +285,12 @@ class GitTest extends KernelTestCase
     protected function getReleaseGroupDto(): ReleaseGroupDto
     {
         $releaseGroupDto = new ReleaseGroupDto(
+            4821,
             'RGname',
             new ModuleDtoCollection(),
             true,
             'https://api.release.spryker.com/release-group/4821',
+            100,
             false,
         );
         $releaseGroupDto->setJiraIssue('CC-25420');

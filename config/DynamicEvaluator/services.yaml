@@ -1,6 +1,7 @@
 parameters:
     checker_broken_php_files_executable_path: '%kernel.project_dir%/vendor/bin/phpstan'
     checker_broken_php_files_config_executable_path: '%upgrader.root_dir%/config/DynamicEvaluator/checker_phpstan.neon'
+    checker_broken_php_files_with_project_config_executable_path: '%upgrader.root_dir%/config/DynamicEvaluator/checker_phpstan_include_project.neon'
 
 services:
     _defaults:
@@ -17,5 +18,16 @@ services:
     DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher\FileErrorsFetcher:
         arguments:
             - '%checker_broken_php_files_config_executable_path%'
+            - '%checker_broken_php_files_with_project_config_executable_path%'
             - '%checker_broken_php_files_executable_path%'
             - '@Core\Infrastructure\Service\ProcessRunnerService'
+
+    DynamicEvaluator\Infrastructure\IntegratorAdapter\IntegratorConfigReaderAdapter:
+        arguments:
+            - '@SprykerSdk\Integrator\ConfigReader\ConfigReader'
+
+    SprykerSdk\Integrator\ConfigReader\ConfigReader:
+        arguments:
+            - '@PhpParser\ParserFactory'
+
+    PhpParser\ParserFactory:

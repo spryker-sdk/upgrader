@@ -20,25 +20,4 @@ interface PackageCollectionMapperInterface
      * @return \Upgrade\Domain\Entity\Collection\PackageCollection
      */
     public function mapModuleCollectionToPackageCollection(ModuleDtoCollection $moduleCollection): PackageCollection;
-
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
-    public function getRequiredPackages(PackageCollection $packageCollection): PackageCollection;
-
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
-    public function getSubPackages(PackageCollection $packageCollection): PackageCollection;
-
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
-    public function getRequiredDevPackages(PackageCollection $packageCollection): PackageCollection;
 }

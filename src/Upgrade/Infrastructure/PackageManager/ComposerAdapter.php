@@ -160,6 +160,14 @@ class ComposerAdapter implements PackageManagerAdapterInterface
     }
 
     /**
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
+     */
+    public function updateLockHash(): PackageManagerResponseDto
+    {
+        return $this->composerCommandExecutor->updateLockHash();
+    }
+
+    /**
      * @param string $packageName
      *
      * @return string|null
@@ -181,6 +189,35 @@ class ComposerAdapter implements PackageManagerAdapterInterface
         }
 
         return null;
+    }
+
+    /**
+     * @param string $packageName
+     *
+     * @return string|null
+     */
+    public function getPackageConstraint(string $packageName): ?string
+    {
+        $composerJson = $this->composerJsonReader->read();
+
+        return $composerJson['require'][$packageName]
+            ?? $composerJson['require-dev'][$packageName]
+            ?? null;
+    }
+
+    /**
+     * @param string $packageName
+     *
+     * @return bool
+     */
+    public function isLockDevPackage(string $packageName): bool
+    {
+        $composerLock = $this->composerLockReader->read();
+
+        return count(array_filter(
+            $composerLock[self::PACKAGES_DEV_KEY],
+            static fn (array $package): bool => $package[self::NAME_KEY] === $packageName
+        )) > 0;
     }
 
     /**

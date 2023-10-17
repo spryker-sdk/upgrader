@@ -16,7 +16,7 @@ interface ProcessRunnerServiceInterface
     /**
      * @var int
      */
-    public const DEFAULT_PROCESS_TIMEOUT = 600;
+    public const DEFAULT_PROCESS_TIMEOUT = 900;
 
     /**
      * @param array<string> $command
@@ -25,6 +25,23 @@ interface ProcessRunnerServiceInterface
      * @return \Symfony\Component\Process\Process<string, string>
      */
     public function run(array $command, array $env = []): Process;
+
+    /**
+     * @param string $command
+     * @param string|null $cwd
+     * @param array<mixed>|null $env
+     * @param mixed $input
+     * @param float|null $timeout
+     *
+     * @return \Symfony\Component\Process\Process
+     */
+    public function runFromCommandLine(
+        string $command,
+        ?string $cwd = null,
+        ?array $env = null,
+        $input = null,
+        ?float $timeout = self::DEFAULT_PROCESS_TIMEOUT
+    ): Process;
 
     /**
      * @param string $command

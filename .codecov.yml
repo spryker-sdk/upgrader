@@ -5,13 +5,15 @@ coverage:
 
 ignore:
     - "src/Codebase/Application/Dto/*.php"
-    - "src/Update/Application/Dto/*.php"
+    - "src/DynamicEvaluator/**/Dto/*.php"
     - "src/ReleaseApp/Infrastructure/Shared/Dto/*.php"
+    - "src/Update/Application/Dto/*.php"
     - "src/Upgrade/Infrastructure/Report/Dto/*.php"
     - "src/Upgrade/Infrastructure/VersionControlSystem/Dto/*.php"
     - "src/Codebase/Application/Event/*Event.php"
     - "src/Upgrader/Commands/**.php"
     - "src/Upgrader/Tasks/**.php"
+    - "src/Upgrader/Configuration/**.php"
     - "**/*.md"
     - "**/*.yml"
     - "**/*.yaml"
