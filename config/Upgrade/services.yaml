@@ -272,15 +272,6 @@ services:
               - '@add_changes.step'
               - '@commit_changes.step'
 
-    processor.aggregate_release_group_processor:
-        class: Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor
-        arguments:
-            - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator'
-            - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator'
-            - '@Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher'
-            - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter'
-            - '@event_dispatcher'
-
     processor.sequential_release_group_processor:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
         arguments:
@@ -300,7 +291,6 @@ services:
         arguments:
             - '@configuration.provider'
             - {
-                param1: '@processor.aggregate_release_group_processor',
                 param2: '@processor.sequential_release_group_processor',
             }
 

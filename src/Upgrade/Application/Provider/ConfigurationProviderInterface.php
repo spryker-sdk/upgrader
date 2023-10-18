@@ -27,11 +27,6 @@ interface ConfigurationProviderInterface
     public const SEQUENTIAL_RELEASE_GROUP_PROCESSOR = 'sequential';
 
     /**
-     * @var string
-     */
-    public const AGGREGATE_RELEASE_GROUP_PROCESSOR = 'aggregate';
-
-    /**
      * Specification:
      * - Defines upgrade strategy.
      * - Possible strategies: composer and release-app (default).
@@ -65,7 +60,7 @@ interface ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines package require mode.
-     * - Possible mode: sequential and aggregate (default).
+     * - Possible mode: sequential (default).
      *
      * @return string
      */
