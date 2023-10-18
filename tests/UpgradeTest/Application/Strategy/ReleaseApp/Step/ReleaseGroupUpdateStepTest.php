@@ -42,7 +42,6 @@ use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\PatchThresholdVa
 use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\ReleaseGroupThresholdValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
-use Upgrade\Domain\Entity\Package;
 use Upgrade\Infrastructure\Adapter\ReleaseAppClientAdapter;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\PackageManager\ComposerAdapter;
