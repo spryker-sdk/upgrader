@@ -151,7 +151,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function require(PackageCollection $packageCollection): PackageManagerResponseDto
     {
-        return $this->runWithDependecyFlags(explode(' ', sprintf(
+        return $this->runWithDependencyFlags(explode(' ', sprintf(
             '%s%s %s %s',
             static::REQUIRE_COMMAND_NAME,
             $this->getPackageString($packageCollection),
@@ -185,7 +185,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function requireDev(PackageCollection $packageCollection): PackageManagerResponseDto
     {
-        return $this->runWithDependecyFlags(explode(' ', sprintf(
+        return $this->runWithDependencyFlags(explode(' ', sprintf(
             '%s%s %s %s %s',
             static::REQUIRE_COMMAND_NAME,
             $this->getPackageString($packageCollection),
@@ -200,7 +200,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function update(): PackageManagerResponseDto
     {
-        return $this->runWithDependecyFlags(explode(' ', sprintf(
+        return $this->runWithDependencyFlags(explode(' ', sprintf(
             '%s %s %s %s',
             static::UPDATE_COMMAND_NAME,
             static::NO_SCRIPTS_FLAG,
@@ -257,7 +257,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      *
      * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
-    protected function runWithDependecyFlags(array $command): PackageManagerResponseDto
+    protected function runWithDependencyFlags(array $command): PackageManagerResponseDto
     {
         $updateWithList = $this->getUpdateWithList() ?: [''];
         foreach ($updateWithList as $flag) {
@@ -290,7 +290,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             }
             $version = $package->getVersion();
             if (str_contains($package->getVersion(), ' ')) {
-                $version = sprintf("'%s'", $version);
+                $version = sprintf('"%s"', $version);
             }
             $package = sprintf('%s:%s', $package->getName(), $version);
             $result = sprintf('%s %s', $result, $package);

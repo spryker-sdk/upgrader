@@ -68,13 +68,14 @@ class ComposerCommandExecutorTest extends TestCase
         $this->runWithoutStrategy();
         $packageCollection = new PackageCollection([
             new Package('spryker-sdk/sdk-contracts', '0.2.1', '0.2.0'),
+            new Package('spryker-sdk/sdk', 'dev-master as 1.0.0', '0.2.0'),
         ]);
         $this->mockConfigurationProvider->method('getComposerNoInstall')
             ->willReturn(false);
 
         $response = $this->cmdExecutor->require($packageCollection);
 
-        $this->assertSame('composer require spryker-sdk/sdk-contracts:0.2.1 --no-scripts --no-plugins -W', $response->getOutputMessage());
+        $this->assertSame('composer require spryker-sdk/sdk-contracts:0.2.1 spryker-sdk/sdk:"dev-master as 1.0.0" --no-scripts --no-plugins -W', $response->getOutputMessage());
     }
 
     /**

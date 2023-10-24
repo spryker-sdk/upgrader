@@ -62,6 +62,29 @@ class FeatureDevMasterPackageFixerStepTest extends TestCase
     /**
      * @return void
      */
+    public function testRunSkip(): void
+    {
+        // Arrange
+        $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
+        $packageManagerAdapter->expects($this->never())
+            ->method('require');
+
+        $fixer = new FeatureDevMasterPackageFixerStep($packageManagerAdapter);
+        $stepsResponseDtoInput = new StepsResponseDto(false, 'n/a');
+
+        // Act
+        $stepsResponseDto = $fixer->run($stepsResponseDtoInput);
+
+        // Assert
+        $this->assertEquals(
+            $stepsResponseDtoInput,
+            $stepsResponseDto,
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testIsNotApplicable(): void
     {
         // Arrange
@@ -103,6 +126,31 @@ class FeatureDevMasterPackageFixerStepTest extends TestCase
                 1,
             ),
             $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunWithFailed(): void
+    {
+        // Arrange
+        $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
+        $packageManagerAdapter->expects($this->once())
+            ->method('require')
+            ->willReturn(new PackageManagerResponseDto(false, 'error-output'));
+
+        $fixer = new FeatureDevMasterPackageFixerStep($packageManagerAdapter);
+        $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);
+
+        // Act
+        $stepsResponseDto = $fixer->run($stepsResponseDto);
+
+        // Assert
+        $this->assertFalse($stepsResponseDto->isSuccessful());
+        $this->assertStringContainsString(
+            'error-output',
+            (string)$stepsResponseDto->getOutputMessage(),
         );
     }
 
