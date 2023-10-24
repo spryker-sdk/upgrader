@@ -23,7 +23,7 @@ abstract class AbstractFeaturePackageFixerStep implements FixerStepInterface
     /**
      * @var string
      */
-    protected const PATTERN = '/(?<features>spryker-feature\/[-\w]+).+conflicts.+/';
+    protected const FEATURE_PACKAGE_PATTERN = '/(?<' . self::KEY_FEATURES . '>spryker-feature\/[-\w]+).+conflicts.+/';
 
     /**
      * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
@@ -47,6 +47,6 @@ abstract class AbstractFeaturePackageFixerStep implements FixerStepInterface
     {
         return !$stepsExecutionDto->getIsSuccessful() &&
             $stepsExecutionDto->getOutputMessage() !== null &&
-            preg_match(static::PATTERN, $stepsExecutionDto->getOutputMessage());
+            preg_match(static::FEATURE_PACKAGE_PATTERN, $stepsExecutionDto->getOutputMessage());
     }
 }

@@ -54,8 +54,8 @@ class FeaturePackageFixerStep extends AbstractFeaturePackageFixerStep
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $messages = $stepsExecutionDto->getOutputMessages();
-        $foundMessages = (array)preg_grep(static::PATTERN, $messages);
-        preg_match_all(static::PATTERN, (string)$stepsExecutionDto->getOutputMessage(), $matches);
+        $foundMessages = (array)preg_grep(static::FEATURE_PACKAGE_PATTERN, $messages);
+        preg_match_all(static::FEATURE_PACKAGE_PATTERN, (string)$stepsExecutionDto->getOutputMessage(), $matches);
 
         if (empty($matches[static::KEY_FEATURES]) || !is_array($matches[static::KEY_FEATURES])) {
             return $stepsExecutionDto;

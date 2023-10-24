@@ -19,7 +19,7 @@ class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
     /**
      * @var string
      */
-    public const ALIAS_DEV_MASTER = 'dev-master as 202000.0';
+    public const ALIAS_DEV_MASTER = 'dev-master as %s';
 
     /**
      * @var bool
@@ -44,11 +44,7 @@ class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
      */
     public function isApplicable(StepsResponseDto $stepsExecutionDto): bool
     {
-        if (!$this->isFeatureToDevMasterEnabled) {
-            return false;
-        }
-
-        return parent::isApplicable($stepsExecutionDto);
+        return $this->isFeatureToDevMasterEnabled && parent::isApplicable($stepsExecutionDto);
     }
 
     /**
@@ -59,14 +55,21 @@ class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $messages = $stepsExecutionDto->getOutputMessages();
-        $foundMessages = (array)preg_grep(static::PATTERN, $messages);
-        preg_match_all(static::PATTERN, (string)$stepsExecutionDto->getOutputMessage(), $matches);
+        $foundMessages = (array)preg_grep(static::FEATURE_PACKAGE_PATTERN, $messages);
+        preg_match_all(static::FEATURE_PACKAGE_PATTERN, (string)$stepsExecutionDto->getOutputMessage(), $matches);
 
-        if (empty($matches[static::KEY_FEATURES]) || !is_array($matches[static::KEY_FEATURES])) {
+        if (!isset($matches[static::KEY_FEATURES]) || !$matches[static::KEY_FEATURES] || !is_array($matches[static::KEY_FEATURES])) {
             return $stepsExecutionDto;
         }
+
+        $version = sprintf(
+            static::ALIAS_DEV_MASTER,
+            date('Y', strtotime(date('m') <= 11 ? 'now' : '+1 year')) . '00.0',
+        );
+
+
         $packageCollection = new PackageCollection(array_map(
-            fn (string $featurePackage): Package => new Package($featurePackage, static::ALIAS_DEV_MASTER),
+            fn (string $featurePackage): Package => new Package($featurePackage, sprintf(static::ALIAS_DEV_MASTER, $version)),
             $matches[static::KEY_FEATURES],
         ));
 
