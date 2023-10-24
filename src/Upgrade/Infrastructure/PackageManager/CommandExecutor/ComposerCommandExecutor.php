@@ -16,6 +16,7 @@ use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader;
+use function PHPUnit\Framework\stringContains;
 
 class ComposerCommandExecutor implements ComposerCommandExecutorInterface
 {
@@ -288,7 +289,11 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
 
                 continue;
             }
-            $package = sprintf('%s:%s', $package->getName(), $package->getVersion());
+            $version = $package->getVersion();
+            if (str_contains($package->getVersion(), ' ')) {
+                $version = sprintf("'%s'", $version);
+            }
+            $package = sprintf('%s:%s', $package->getName(), $version);
             $result = sprintf('%s %s', $result, $package);
         }
 

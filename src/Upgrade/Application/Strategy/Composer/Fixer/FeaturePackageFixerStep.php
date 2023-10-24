@@ -9,30 +9,13 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\Composer\Fixer;
 
-use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Strategy\FixerStepInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
 
-class FeaturePackageFixerStep implements FixerStepInterface
+class FeaturePackageFixerStep extends AbstractFeaturePackageFixerStep
 {
-    /**
-     * @var string
-     */
-    protected const KEY_FEATURES = 'features';
-
-    /**
-     * @var string
-     */
-    protected const PATTERN = '/(?<features>spryker-feature\/[-\w]+).+conflicts.+/';
-
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
-    protected PackageManagerAdapterInterface $packageManager;
-
     /**
      * @var bool
      */
@@ -44,8 +27,9 @@ class FeaturePackageFixerStep implements FixerStepInterface
      */
     public function __construct(PackageManagerAdapterInterface $packageManager, bool $isReleaseGroupIntegratorEnabled = false)
     {
-        $this->packageManager = $packageManager;
         $this->isReleaseGroupIntegratorEnabled = $isReleaseGroupIntegratorEnabled;
+
+        parent::__construct($packageManager);
     }
 
     /**
@@ -59,9 +43,7 @@ class FeaturePackageFixerStep implements FixerStepInterface
             return false;
         }
 
-        return !$stepsExecutionDto->getIsSuccessful() &&
-            $stepsExecutionDto->getOutputMessage() !== null &&
-            preg_match(static::PATTERN, $stepsExecutionDto->getOutputMessage());
+        return parent::isApplicable($stepsExecutionDto);
     }
 
     /**
@@ -82,7 +64,6 @@ class FeaturePackageFixerStep implements FixerStepInterface
         $featurePackages = $this->getPackagesFromFeatures($matches[static::KEY_FEATURES]);
 
         $packageCollection = new PackageCollection($featurePackages);
-        $packageCollection->addCollection($this->getPreRequireModuleCollection());
 
         $responseDto = $this->packageManager->require($packageCollection);
 
@@ -109,7 +90,7 @@ class FeaturePackageFixerStep implements FixerStepInterface
             unset($messages[$key]);
         }
         $stepsExecutionDto->setOutputMessages($messages);
-        $stepsExecutionDto->addOutputMessage(sprintf('Splitted %s feature packages', count($matches[static::KEY_FEATURES])));
+        $stepsExecutionDto->addOutputMessage(sprintf('Splitted %s feature package(s)', count($matches[static::KEY_FEATURES])));
 
         return $stepsExecutionDto;
     }
@@ -144,23 +125,5 @@ class FeaturePackageFixerStep implements FixerStepInterface
             array_keys($packages),
             array_values($packages),
         );
-    }
-
-    /**
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
-    protected function getPreRequireModuleCollection(): PackageCollection
-    {
-        $releaseGroupCollection = new ReleaseGroupDtoCollection();
-
-        $moduleCollection = $releaseGroupCollection->getCommonModuleCollection();
-
-        $packageCollection = new PackageCollection();
-
-        foreach ($moduleCollection->toArray() as $moduleDto) {
-            $packageCollection->add(new Package($moduleDto->getName(), $moduleDto->getVersion()));
-        }
-
-        return $packageCollection;
     }
 }

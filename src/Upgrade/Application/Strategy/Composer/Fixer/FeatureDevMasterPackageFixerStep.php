@@ -9,29 +9,17 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\Composer\Fixer;
 
-use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Strategy\FixerStepInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
 
-class FeatureDevMasterPackageFixerStep implements FixerStepInterface
+class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
 {
     /**
      * @var string
      */
-    protected const KEY_FEATURES = 'features';
-
-    /**
-     * @var string
-     */
-    protected const PATTERN = '/(?<features>spryker-feature\/[-\w]+).+conflicts.+/';
-
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
-    protected PackageManagerAdapterInterface $packageManager;
+    public const ALIAS_DEV_MASTER = 'dev-master as 202000.0';
 
     /**
      * @var bool
@@ -44,8 +32,9 @@ class FeatureDevMasterPackageFixerStep implements FixerStepInterface
      */
     public function __construct(PackageManagerAdapterInterface $packageManager, bool $isFeatureToDevMasterEnabled = false)
     {
-        $this->packageManager = $packageManager;
         $this->isFeatureToDevMasterEnabled = $isFeatureToDevMasterEnabled;
+
+        parent::__construct($packageManager);
     }
 
     /**
@@ -59,9 +48,7 @@ class FeatureDevMasterPackageFixerStep implements FixerStepInterface
             return false;
         }
 
-        return !$stepsExecutionDto->getIsSuccessful() &&
-            $stepsExecutionDto->getOutputMessage() !== null &&
-            preg_match(static::PATTERN, $stepsExecutionDto->getOutputMessage());
+        return parent::isApplicable($stepsExecutionDto);
     }
 
     /**
@@ -78,25 +65,13 @@ class FeatureDevMasterPackageFixerStep implements FixerStepInterface
         if (empty($matches[static::KEY_FEATURES]) || !is_array($matches[static::KEY_FEATURES])) {
             return $stepsExecutionDto;
         }
-
-        $featurePackages = $this->getPackagesFromFeatures($matches[static::KEY_FEATURES]);
-
-        $packageCollection = new PackageCollection($featurePackages);
-        $packageCollection->addCollection($this->getPreRequireModuleCollection());
+        $packageCollection = new PackageCollection(array_map(
+            fn (string $featurePackage): Package => new Package($featurePackage, static::ALIAS_DEV_MASTER),
+            $matches[static::KEY_FEATURES],
+        ));
 
         $responseDto = $this->packageManager->require($packageCollection);
 
-        $stepsExecutionDto->setIsSuccessful($responseDto->isSuccessful());
-        if (!$responseDto->isSuccessful()) {
-            $stepsExecutionDto->addOutputMessage($responseDto->getOutputMessage());
-
-            return $stepsExecutionDto;
-        }
-
-        $responseDto = $this->packageManager->remove(new PackageCollection(array_map(
-            fn (string $featurePackage): Package => new Package($featurePackage),
-            $matches[static::KEY_FEATURES],
-        )));
         $stepsExecutionDto->setIsSuccessful($responseDto->isSuccessful());
 
         if (!$responseDto->isSuccessful()) {
@@ -109,58 +84,8 @@ class FeatureDevMasterPackageFixerStep implements FixerStepInterface
             unset($messages[$key]);
         }
         $stepsExecutionDto->setOutputMessages($messages);
-        $stepsExecutionDto->addOutputMessage(sprintf('Splitted %s feature packages', count($matches[static::KEY_FEATURES])));
+        $stepsExecutionDto->addOutputMessage(sprintf('Versions were changed to %s for %s feature package(s)', static::ALIAS_DEV_MASTER, count($matches[static::KEY_FEATURES])));
 
         return $stepsExecutionDto;
-    }
-
-    /**
-     * @param array<string> $featurePackages
-     *
-     * @return array<\Upgrade\Domain\Entity\Package>
-     */
-    protected function getPackagesFromFeatures(array $featurePackages): array
-    {
-        $composerLockFile = $this->packageManager->getComposerLockFile();
-        $packages = [];
-        if (!isset($composerLockFile['packages'])) {
-            return [];
-        }
-
-        foreach ($composerLockFile['packages'] as $lockPackage) {
-            foreach ($featurePackages as $featurePackage) {
-                if ($lockPackage['name'] !== $featurePackage) {
-                    continue;
-                }
-
-                unset($lockPackage['require']['php']);
-                $packages[] = $lockPackage['require'];
-            }
-        }
-        $packages = array_merge(...$packages);
-
-        return array_map(
-            fn (string $featurePackage, string $version): Package => new Package($featurePackage, $version),
-            array_keys($packages),
-            array_values($packages),
-        );
-    }
-
-    /**
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
-    protected function getPreRequireModuleCollection(): PackageCollection
-    {
-        $releaseGroupCollection = new ReleaseGroupDtoCollection();
-
-        $moduleCollection = $releaseGroupCollection->getCommonModuleCollection();
-
-        $packageCollection = new PackageCollection();
-
-        foreach ($moduleCollection->toArray() as $moduleDto) {
-            $packageCollection->add(new Package($moduleDto->getName(), $moduleDto->getVersion()));
-        }
-
-        return $packageCollection;
     }
 }

@@ -9,6 +9,7 @@ parameters:
     profiler_enabled: "%env(default:profiler_enabled_default:bool:SDK_PROFILER_ENABLED)%"
     is_release_group_integrator_enabled: false
     is_update_minimum_dependecies_enabled: false #To enable composer run logic without flag, with dependencies, with all dependencies.
+    is_update_features_to_dev_master: false #To convert feature to dev master version.
 
 services:
     _defaults:
@@ -18,7 +19,7 @@ services:
         bind:
             $isReleaseGroupIntegratorEnabled: '%env(default:is_release_group_integrator_enabled:bool:RELEASE_GROUP_INTEGRATOR_ENABLED)%'
             $isUpdateMinimumDependeciesEnabled: '%env(default:is_update_minimum_dependecies_enabled:bool:UPDATE_MINIMUM_DEPENDENCIES_ENABLED)%'
-            $isFeatureToDevMasterEnabled: '%env(default:update_features_to_dev_master:bool:UPDATE_FEATURES_TO_DEV_MASTER)%'
+            $isFeatureToDevMasterEnabled: '%env(default:is_update_features_to_dev_master:bool:UPDATE_FEATURES_TO_DEV_MASTER)%'
 
     # Upgrade
     Upgrade\:
