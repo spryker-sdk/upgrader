@@ -16,7 +16,6 @@ use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader;
-use function PHPUnit\Framework\stringContains;
 
 class ComposerCommandExecutor implements ComposerCommandExecutorInterface
 {
