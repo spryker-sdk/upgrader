@@ -54,8 +54,6 @@ class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
      */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
-        $messages = $stepsExecutionDto->getOutputMessages();
-        $foundMessages = (array)preg_grep(static::FEATURE_PACKAGE_PATTERN, $messages);
         preg_match_all(static::FEATURE_PACKAGE_PATTERN, (string)$stepsExecutionDto->getOutputMessage(), $matches);
 
         if (!isset($matches[static::KEY_FEATURES]) || !$matches[static::KEY_FEATURES] || !is_array($matches[static::KEY_FEATURES])) {
@@ -66,7 +64,6 @@ class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
             static::MASK_ALIAS_DEV_MASTER,
             date('Y', strtotime(date('m') <= 11 ? 'now' : '+1 year')) . '00.0',
         );
-
 
         $packageCollection = new PackageCollection(array_map(
             fn (string $featurePackage): Package => new Package($featurePackage, sprintf(static::MASK_ALIAS_DEV_MASTER, $version)),
@@ -82,7 +79,8 @@ class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
 
             return $stepsExecutionDto;
         }
-
+        $messages = $stepsExecutionDto->getOutputMessages();
+        $foundMessages = (array)preg_grep(static::FEATURE_PACKAGE_PATTERN, $messages);
         foreach ($foundMessages as $key => $foundMessage) {
             unset($messages[$key]);
         }
