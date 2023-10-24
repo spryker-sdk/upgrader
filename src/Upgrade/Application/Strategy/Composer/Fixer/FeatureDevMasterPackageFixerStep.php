@@ -19,7 +19,7 @@ class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
     /**
      * @var string
      */
-    public const ALIAS_DEV_MASTER = 'dev-master as %s';
+    public const MASK_ALIAS_DEV_MASTER = 'dev-master as %s';
 
     /**
      * @var bool
@@ -63,13 +63,13 @@ class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
         }
 
         $version = sprintf(
-            static::ALIAS_DEV_MASTER,
+            static::MASK_ALIAS_DEV_MASTER,
             date('Y', strtotime(date('m') <= 11 ? 'now' : '+1 year')) . '00.0',
         );
 
 
         $packageCollection = new PackageCollection(array_map(
-            fn (string $featurePackage): Package => new Package($featurePackage, sprintf(static::ALIAS_DEV_MASTER, $version)),
+            fn (string $featurePackage): Package => new Package($featurePackage, sprintf(static::MASK_ALIAS_DEV_MASTER, $version)),
             $matches[static::KEY_FEATURES],
         ));
 
@@ -87,7 +87,7 @@ class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
             unset($messages[$key]);
         }
         $stepsExecutionDto->setOutputMessages($messages);
-        $stepsExecutionDto->addOutputMessage(sprintf('Versions were changed to %s for %s feature package(s)', static::ALIAS_DEV_MASTER, count($matches[static::KEY_FEATURES])));
+        $stepsExecutionDto->addOutputMessage(sprintf('Versions were changed to %s for %s feature package(s)', static::MASK_ALIAS_DEV_MASTER, count($matches[static::KEY_FEATURES])));
 
         return $stepsExecutionDto;
     }

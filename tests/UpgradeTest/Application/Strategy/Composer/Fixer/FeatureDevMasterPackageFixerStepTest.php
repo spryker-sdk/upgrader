@@ -122,7 +122,7 @@ class FeatureDevMasterPackageFixerStepTest extends TestCase
         $this->assertSame(
             sprintf(
                 'Versions were changed to %s for %s feature package(s)',
-                FeatureDevMasterPackageFixerStep::ALIAS_DEV_MASTER,
+                FeatureDevMasterPackageFixerStep::MASK_ALIAS_DEV_MASTER,
                 1,
             ),
             $stepsResponseDto->getOutputMessage(),
