@@ -137,7 +137,7 @@ class ComposerCommandExecutorTest extends TestCase
             ->willReturn(true);
         $response = $this->cmdExecutor->updateSubPackage($packageCollection);
 
-        $this->assertSame('composer update phpspec/prophecy-phpunit:2.0.1 --no-install', $response->getOutputMessage());
+        $this->assertSame('composer update phpspec/prophecy-phpunit:2.0.1 -W --no-install', $response->getOutputMessage());
     }
 
     /**
