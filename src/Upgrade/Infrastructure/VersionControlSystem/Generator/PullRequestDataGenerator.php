@@ -13,6 +13,7 @@ use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\ReleaseGroupFilterResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface;
 
@@ -66,7 +67,8 @@ class PullRequestDataGenerator
         StepsResponseDto $stepsResponseDto,
         ?int $releaseGroupId = null
     ): string {
-        $warningsSection = $this->buildBlockersWarnings($stepsResponseDto)
+        $warningsSection = $this->buildProjectViolationWarnings($stepsResponseDto)
+            . $this->buildBlockersWarnings($stepsResponseDto)
             . $this->buildViolationsWarnings($stepsResponseDto)
             . $this->buildIntegratorWarnings($stepsResponseDto);
 
@@ -303,26 +305,70 @@ class PullRequestDataGenerator
      */
     protected function buildBlockersWarnings(StepsResponseDto $stepsResponseDto): string
     {
-        $text = '';
         $warnings = [];
 
         foreach ($stepsResponseDto->getBlockers() as $blockers) {
             foreach ($blockers as $blocker) {
-                if (!isset($warnings[$blocker->getTitle()])) {
-                    $warnings[$blocker->getTitle()] = [];
-                }
-
-                if (in_array($blocker->getMessage(), $warnings[$blocker->getTitle()], true)) {
-                    continue;
-                }
-
-                $warnings[$blocker->getTitle()][] = $blocker->getMessage();
+                $warnings = $this->addValidatorViolationIntoWarnings($warnings, $blocker);
             }
         }
 
         if (count($warnings) === 0) {
             return '';
         }
+
+        return $this->buildWarningsTextBlocks($warnings) . PHP_EOL;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     *
+     * @return string
+     */
+    protected function buildProjectViolationWarnings(StepsResponseDto $stepsResponseDto): string
+    {
+        $warnings = [];
+
+        foreach ($stepsResponseDto->getProjectViolations() as $projectViolation) {
+            $warnings = $this->addValidatorViolationIntoWarnings($warnings, $projectViolation);
+        }
+
+        if (count($warnings) === 0) {
+            return '';
+        }
+
+        return $this->buildWarningsTextBlocks($warnings) . PHP_EOL;
+    }
+
+    /**
+     * @param array<string, array<string>> $warnings
+     * @param \Upgrade\Application\Dto\ValidatorViolationDto $validatorViolationDto
+     *
+     * @return array<string, array<string>>
+     */
+    protected function addValidatorViolationIntoWarnings(array $warnings, ValidatorViolationDto $validatorViolationDto): array
+    {
+        if (!isset($warnings[$validatorViolationDto->getTitle()])) {
+            $warnings[$validatorViolationDto->getTitle()] = [];
+        }
+
+        if (in_array($validatorViolationDto->getMessage(), $warnings[$validatorViolationDto->getTitle()], true)) {
+            return $warnings;
+        }
+
+        $warnings[$validatorViolationDto->getTitle()][] = $validatorViolationDto->getMessage();
+
+        return $warnings;
+    }
+
+    /**
+     * @param array<string, array<string>> $warnings
+     *
+     * @return string
+     */
+    protected function buildWarningsTextBlocks(array $warnings): string
+    {
+        $text = '';
 
         foreach ($warnings as $title => $messages) {
             $text .= sprintf('<details><summary><h4>%s</h4></summary>', $title);
@@ -332,7 +378,7 @@ class PullRequestDataGenerator
             $text .= '</details>';
         }
 
-        return $text . PHP_EOL;
+        return $text;
     }
 
     /**

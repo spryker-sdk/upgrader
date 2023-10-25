@@ -51,6 +51,9 @@ services:
     propel_fix.step:
         class: Upgrade\Application\Strategy\Common\Step\PropelFixStep
 
+    project_validation_step:
+        class: Upgrade\Application\Strategy\Common\Step\ProjectValidationStep
+
     composer_update.step:
         class: Upgrade\Application\Strategy\Composer\Step\ComposerUpdateStep
 
@@ -105,6 +108,7 @@ services:
               - '@check_is_local_target_branch_exist.step'
               - '@check_uncommitted_changes.step'
               - '@integrator_lock_run.step'
+              - '@project_validation_step'
               - '@composer_update.step'
               - '@composer_lock_diff.step'
               - '@orm_models_regenerate.step'
@@ -134,6 +138,7 @@ services:
               - '@check_is_local_target_branch_exist.step'
               - '@check_uncommitted_changes.step'
               - '@create_branch.step'
+              - '@project_validation_step'
               - '@release_group_update.step'
               - '@push_changes.step'
               - '@generate_report_id.step'
@@ -231,6 +236,10 @@ services:
                 param2: '@validator.release_major',
                 param3: '@validator.conflict',
             }
+
+    Upgrade\Application\Validator\ProjectValidator:
+        arguments:
+            - - '@Upgrade\Application\Validator\Rule\PhpcsInstallationValidatorRule'
 
     validator.threshold_major:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\MajorThresholdValidator
