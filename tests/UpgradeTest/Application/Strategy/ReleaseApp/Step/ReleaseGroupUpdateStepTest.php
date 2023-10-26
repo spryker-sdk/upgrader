@@ -24,7 +24,6 @@ use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\Common\Module\BetaMajorModule\BetaMajorModulesFetcherInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapper;
-use Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
@@ -43,117 +42,12 @@ use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\PatchThresholdVa
 use Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\ReleaseGroupThresholdValidator;
 use Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
-use Upgrade\Domain\Entity\Package;
 use Upgrade\Infrastructure\Adapter\ReleaseAppClientAdapter;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\PackageManager\ComposerAdapter;
 
 class ReleaseGroupUpdateStepTest extends TestCase
 {
-    /**
-     * @return void
-     */
-    public function testRunWithAggregateReleaseGroupProcessor(): void
-    {
-        // Arrange
-        $step = new ReleaseGroupUpdateStep(
-            $this->creteReleaseAppClientAdapterMock(
-                $this->buildReleaseGroupDtoCollection(),
-            ),
-            $this->creteReleaseGroupProcessorResolverMock(
-                $this->createAggregateReleaseGroupProcessor(),
-            ),
-            $this->createConfigurationProviderMock(),
-            $this->createMock(LoggerInterface::class),
-        );
-
-        $stepsResponseDto = new StepsResponseDto();
-
-        // Act
-        $stepsResponseDto = $step->run($stepsResponseDto);
-
-        // Assert
-        $this->assertTrue($stepsResponseDto->isSuccessful());
-        $this->assertSame(
-            implode(PHP_EOL, [
-                'Amount of available release groups for the project: 2',
-                'Applied required packages count: 2',
-                'There are no packages for the update.',
-                'No new required-dev packages',
-                'Amount of applied release groups: 2',
-            ]),
-            $stepsResponseDto->getOutputMessage(),
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testProcessWithAggregateReleaseGroupProcessorAndEmptyReleaseGroupDtoCollection(): void
-    {
-        // Arrange
-        $releaseGroupDtoCollection = new ReleaseGroupDtoCollection();
-        $step = new ReleaseGroupUpdateStep(
-            $this->creteReleaseAppClientAdapterMock($releaseGroupDtoCollection),
-            $this->creteReleaseGroupProcessorResolverMock(
-                $this->createAggregateReleaseGroupProcessor(),
-            ),
-            $this->createConfigurationProviderMock(),
-            $this->createMock(LoggerInterface::class),
-        );
-        $stepsResponseDto = new StepsResponseDto();
-
-        // Act
-        $stepsResponseDto = $step->run($stepsResponseDto);
-
-        // Assert
-        $this->assertTrue($stepsResponseDto->isSuccessful());
-        $this->assertSame(
-            implode(PHP_EOL, [
-                'Amount of available release groups for the project: 0',
-                'No valid packages found',
-            ]),
-            $stepsResponseDto->getOutputMessage(),
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testAggregateReleaseGroupProcessorFailedByConflicts(): void
-    {
-        // Arrange
-        $step = new ReleaseGroupUpdateStep(
-            $this->creteReleaseAppClientAdapterMock(
-                $this->buildReleaseGroupDtoCollection(true),
-            ),
-            $this->creteReleaseGroupProcessorResolverMock(
-                $this->createAggregateReleaseGroupProcessor(),
-            ),
-            $this->createConfigurationProviderMock(),
-            $this->createMock(LoggerInterface::class),
-        );
-
-        $stepsResponseDto = new StepsResponseDto();
-
-        // Act
-        $stepsResponseDto = $step->run($stepsResponseDto);
-
-        // Assert
-        $this->assertTrue($stepsResponseDto->isSuccessful());
-        $this->assertSame(
-            implode(PHP_EOL, [
-                'Amount of available release groups for the project: 2',
-                'Release group "RG2" contains module conflicts. Please follow the link below to find addition information about the conflict https://api.release.spryker.com/release-groups/view/2',
-                'Applied required packages count: 1',
-                'There are no packages for the update.',
-                'No new required-dev packages',
-                'Amount of applied release groups: 1',
-            ]),
-            $stepsResponseDto->getOutputMessage(),
-        );
-    }
-
     /**
      * @return void
      */
@@ -340,106 +234,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 'Amount of available release groups for the project: 2',
                 'Applied required packages count: 1',
                 'There are no packages for the update.',
-                'No new required-dev packages',
-                'Amount of applied release groups: 1',
-            ]),
-            $stepsResponseDto->getOutputMessage(),
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testRunShouldProcessReleaseGroupWithSpecificId(): void
-    {
-        // Arrange
-        $releaseGroupCollection = new ReleaseGroupDtoCollection([
-            new ReleaseGroupDto(
-                1,
-                'RG1',
-                new ModuleDtoCollection([
-                    new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
-                ]),
-                false,
-                'https://api.release.spryker.com/release-groups/view/1',
-                100,
-            ),
-        ]);
-
-        $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
-        $configurationProviderMock->method('getReleaseGroupId')->willReturn(1);
-
-        $step = new ReleaseGroupUpdateStep(
-            $this->creteReleaseAppClientAdapterMock($releaseGroupCollection),
-            $this->creteReleaseGroupProcessorResolverMock(
-                $this->createAggregateReleaseGroupProcessor(),
-            ),
-            $configurationProviderMock,
-            $this->createMock(LoggerInterface::class),
-        );
-
-        $stepsResponseDto = new StepsResponseDto();
-
-        // Act
-        $stepsResponseDto = $step->run($stepsResponseDto);
-
-        // Assert
-        $this->assertTrue($stepsResponseDto->isSuccessful());
-        $this->assertSame(
-            implode(PHP_EOL, [
-                'Amount of available release groups for the project: 1',
-                'Applied required packages count: 1',
-                'There are no packages for the update.',
-                'No new required-dev packages',
-                'Amount of applied release groups: 1',
-            ]),
-            $stepsResponseDto->getOutputMessage(),
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testRunShouldProcessReleaseGroupWithSpecificIdWithSubPackage(): void
-    {
-        // Arrange
-        $releaseGroupCollection = new ReleaseGroupDtoCollection([
-            new ReleaseGroupDto(
-                1,
-                'RG1',
-                new ModuleDtoCollection([
-                    new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
-                ]),
-                false,
-                'https://api.release.spryker.com/release-groups/view/1',
-                100,
-            ),
-        ]);
-
-        $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
-        $configurationProviderMock->method('getReleaseGroupId')->willReturn(1);
-
-        $step = new ReleaseGroupUpdateStep(
-            $this->creteReleaseAppClientAdapterMock($releaseGroupCollection),
-            $this->creteReleaseGroupProcessorResolverMock(
-                $this->createAggregateReleaseGroupProcessorForSubPackages(),
-            ),
-            $configurationProviderMock,
-            $this->createMock(LoggerInterface::class),
-        );
-
-        $stepsResponseDto = new StepsResponseDto();
-
-        // Act
-        $stepsResponseDto = $step->run($stepsResponseDto);
-
-        // Assert
-        $this->assertTrue($stepsResponseDto->isSuccessful());
-        $this->assertSame(
-            implode(PHP_EOL, [
-                'Amount of available release groups for the project: 1',
-                'No new required packages',
-                'Updated packages count: 1',
                 'No new required-dev packages',
                 'Amount of applied release groups: 1',
             ]),
@@ -659,81 +453,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $composerAdapterMock->method('getReleaseGroup')->willReturn($releaseAppResponse);
 
         return $composerAdapterMock;
-    }
-
-    /**
-     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor
-     */
-    protected function createAggregateReleaseGroupProcessorForSubPackages(): AggregateReleaseGroupProcessor
-    {
-        $responseDto = new PackageManagerResponseDto(true);
-
-        $composerAdapterMock = $this->getMockBuilder(ComposerAdapter::class)
-            ->disableOriginalConstructor()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->getMock();
-        $composerAdapterMock->method('require')->willReturn($responseDto);
-        $composerAdapterMock->method('requireDev')->willReturn($responseDto);
-        $composerAdapterMock->method('updateSubPackage')->willReturn($responseDto);
-
-        $packageManagerPackagesFetcher = $this->createMock(PackageManagerPackagesFetcherInterface::class);
-        $packageManagerPackagesFetcher->method('fetchPackages')->willReturn(new PackageManagerPackagesDto(
-            new PackageCollection([]),
-            new PackageCollection([]),
-            new PackageCollection([new Package()]),
-        ));
-
-        return new AggregateReleaseGroupProcessor(
-            new ReleaseGroupSoftValidator([
-                new ConflictValidator(),
-            ]),
-            new ThresholdSoftValidator([]),
-            new ModuleFetcher(
-                $composerAdapterMock,
-                new PackageCollectionMapper(
-                    $composerAdapterMock,
-                ),
-                $packageManagerPackagesFetcher,
-            ),
-            new ReleaseGroupFilter([]),
-            $this->createEventDispatcherMock(),
-            $this->createMock(LoggerInterface::class),
-        );
-    }
-
-    /**
-     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor
-     */
-    protected function createAggregateReleaseGroupProcessor(): AggregateReleaseGroupProcessor
-    {
-        $responseDto = new PackageManagerResponseDto(true);
-
-        $composerAdapterMock = $this->getMockBuilder(ComposerAdapter::class)
-            ->disableOriginalConstructor()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->getMock();
-        $composerAdapterMock->method('require')->willReturn($responseDto);
-        $composerAdapterMock->method('requireDev')->willReturn($responseDto);
-        $composerAdapterMock->method('updateSubPackage')->willReturn($responseDto);
-
-        return new AggregateReleaseGroupProcessor(
-            new ReleaseGroupSoftValidator([
-                new ConflictValidator(),
-            ]),
-            new ThresholdSoftValidator([]),
-            new ModuleFetcher(
-                $composerAdapterMock,
-                new PackageCollectionMapper(
-                    $composerAdapterMock,
-                ),
-                $this->createPackageManagerPackagesFetcherMock(),
-            ),
-            new ReleaseGroupFilter([]),
-            $this->createEventDispatcherMock(),
-            $this->createMock(LoggerInterface::class),
-        );
     }
 
     /**

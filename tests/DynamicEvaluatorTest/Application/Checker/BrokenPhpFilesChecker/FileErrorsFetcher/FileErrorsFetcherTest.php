@@ -17,6 +17,7 @@ use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
 
 class FileErrorsFetcherTest extends TestCase
@@ -146,7 +147,7 @@ class FileErrorsFetcherTest extends TestCase
         $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
         $processRunnerServiceMock
             ->method('run')
-            ->with(['phpstan', 'analyse', '-c', 'internal', '--memory-limit', '-1', '--error-format', 'prettyJson'])
+            ->with(['phpstan', 'analyse', '-c', 'internal', '--error-format', 'prettyJson'])
             ->willReturn($processMock);
 
         $fileErrorsFetcher = new FileErrorsFetcher('internal', 'project', 'phpstan', $processRunnerServiceMock, new BaselineStorage(), $this->createLoggerMock(), 'nonexist.neon');
@@ -171,7 +172,7 @@ class FileErrorsFetcherTest extends TestCase
         $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
         $processRunnerServiceMock
             ->method('run')
-            ->with(['phpstan', 'analyse', '-c', 'project', '--memory-limit', '-1', '--error-format', 'prettyJson'])
+            ->with(['phpstan', 'analyse', '-c', 'project', '--error-format', 'prettyJson'])
             ->willReturn($processMock);
 
         $fileErrorsFetcher = new FileErrorsFetcher('internal', 'project', 'phpstan', $processRunnerServiceMock, new BaselineStorage(), $this->createLoggerMock(), 'phpstan.neon');
@@ -193,10 +194,13 @@ class FileErrorsFetcherTest extends TestCase
         $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
         /** @var \Psr\Log\LoggerInterface&\PHPUnit\Framework\MockObject\MockObject $loggerMock */
         $loggerMock = $this->createLoggerMock();
-        $loggerMock->method('debug')->with('timeout');
+        $loggerMock->method('debug')->with('The process "test_process" exceeded the timeout of 900 seconds.');
+        $processMock = $this->createMock(Process::class);
+        $processMock->method('getCommandLine')->willReturn('test_process');
+        $processMock->method('getTimeout')->willReturn(ProcessRunnerServiceInterface::DEFAULT_PROCESS_TIMEOUT);
         $processRunnerServiceMock
             ->method('run')
-            ->willThrowException(new Exception('timeout'));
+            ->willThrowException(new ProcessTimedOutException($processMock, ProcessTimedOutException::TYPE_GENERAL));
 
         $fileErrorsFetcher = new FileErrorsFetcher('', '', '', $processRunnerServiceMock, new BaselineStorage(), $loggerMock, 'phpstan.neon');
 
@@ -206,5 +210,38 @@ class FileErrorsFetcherTest extends TestCase
         // Assert
         $this->assertCount(1, $fileErrors);
         $this->assertInstanceOf(FileErrorDto::class, $fileErrors[0]);
+        $this->assertSame(sprintf(
+            'Cannot detect broken PHP files because PHPStan fails with an error “Timeout %s”. To check manually, run `vendor/bin/phpstan analyse src/` from project root dir',
+            ProcessRunnerServiceInterface::DEFAULT_PROCESS_TIMEOUT,
+        ), $fileErrors[0]->getMessage());
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunProcessWithException(): void
+    {
+        // Arrange
+        /** @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface&\PHPUnit\Framework\MockObject\MockObject $processRunnerServiceMock */
+        $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
+        /** @var \Psr\Log\LoggerInterface&\PHPUnit\Framework\MockObject\MockObject $loggerMock */
+        $loggerMock = $this->createLoggerMock();
+        $loggerMock->method('debug')->with('error');
+        $processRunnerServiceMock
+            ->method('run')
+            ->willThrowException(new Exception('error'));
+
+        $fileErrorsFetcher = new FileErrorsFetcher('', '', '', $processRunnerServiceMock, new BaselineStorage(), $loggerMock, 'phpstan.neon');
+
+        // Act
+        $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
+
+        // Assert
+        $this->assertCount(1, $fileErrors);
+        $this->assertInstanceOf(FileErrorDto::class, $fileErrors[0]);
+        $this->assertSame(sprintf(
+            'Cannot detect broken PHP files because PHPStan fails. To check manually, run `vendor/bin/phpstan analyse src/` from project root dir',
+            ProcessRunnerServiceInterface::DEFAULT_PROCESS_TIMEOUT,
+        ), $fileErrors[0]->getMessage());
     }
 }

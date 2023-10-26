@@ -142,7 +142,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function getReleaseGroupProcessor(): string
     {
-        return (string)getenv('RELEASE_GROUP_PROCESSOR') ?: static::AGGREGATE_RELEASE_GROUP_PROCESSOR;
+        return (string)getenv('RELEASE_GROUP_PROCESSOR') ?: static::SEQUENTIAL_RELEASE_GROUP_PROCESSOR;
     }
 
     /**
