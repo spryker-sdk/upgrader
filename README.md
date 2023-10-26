@@ -48,10 +48,10 @@ Only Minor and Paths could be automatically applied, for now. In case when some 
 export UPGRADE_STRATEGY=release-app
 ```
 
-In the strategy, Upgrader contains aggregate (default) release group requiring processor and sequential processor (one by one release group).
+In the strategy, Upgrader contains sequential (default) release group requiring processor (one by one release group).
 
 #### Sequential release group processor
-* To enable Sequential release group processor:
+* To enable Sequential release group processor (default):
 ```bash
 export RELEASE_GROUP_PROCESSOR=sequential
 ```
@@ -60,12 +60,6 @@ Sequential release group processor contains threshold, by default 30 release gro
 * To change the threshold:
 ```bash
 export THRESHOLD_RELEASE_GROUP=<number>
-```
-
-#### Aggregate release group processor
-* To enable aggregate release group processor:
-```bash
-export RELEASE_GROUP_PROCESSOR=aggregate
 ```
 
 #### Soft thresholds:

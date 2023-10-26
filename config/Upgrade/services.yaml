@@ -157,10 +157,8 @@ services:
     Upgrade\Application\Strategy\StrategyResolver:
         class: Upgrade\Application\Strategy\StrategyResolver
         arguments:
-            - {
-                param1: '@composer.strategy',
-                param2: '@release_app.strategy'
-            }
+            - - '@composer.strategy'
+              - '@release_app.strategy'
 
     http.client:
         class: GuzzleHttp\Client
@@ -234,10 +232,8 @@ services:
     Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator
         arguments:
-            - {
-                param2: '@validator.release_major',
-                param3: '@validator.conflict',
-            }
+            - - '@validator.release_major'
+              - '@validator.conflict'
 
     validator.threshold_major:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\Threshold\MajorThresholdValidator
@@ -254,12 +250,10 @@ services:
     Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator:
         class: Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator
         arguments:
-            - {
-                param1: '@validator.threshold_major',
-                param2: '@validator.threshold_minor',
-                param3: '@validator.threshold_patch',
-                param4: '@validator.threshold_release_group',
-            }
+            - - '@validator.threshold_major'
+              - '@validator.threshold_minor'
+              - '@validator.threshold_patch'
+              - '@validator.threshold_release_group'
 
     processor.pre_require_step_executor:
         class: Upgrade\Application\Executor\StepExecutor
@@ -279,15 +273,6 @@ services:
               - '@add_changes.step'
               - '@commit_changes.step'
 
-    processor.aggregate_release_group_processor:
-        class: Upgrade\Application\Strategy\ReleaseApp\Processor\AggregateReleaseGroupProcessor
-        arguments:
-            - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator'
-            - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator'
-            - '@Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher'
-            - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter'
-            - '@event_dispatcher'
-
     processor.sequential_release_group_processor:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
         arguments:
@@ -306,10 +291,7 @@ services:
         class: Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver
         arguments:
             - '@configuration.provider'
-            - {
-                param1: '@processor.aggregate_release_group_processor',
-                param2: '@processor.sequential_release_group_processor',
-            }
+            - - '@processor.sequential_release_group_processor'
 
     Upgrade\Infrastructure\VersionControlSystem\Generator\CheckerViolationMessageBuilderRegistry:
         arguments:

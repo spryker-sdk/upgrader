@@ -12,7 +12,6 @@ namespace Upgrade\Application\Strategy\ReleaseApp\Step;
 use Psr\Log\LoggerInterface;
 use Upgrade\Application\Adapter\ReleaseAppClientAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver;
 use Upgrade\Application\Strategy\StepInterface;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
@@ -25,9 +24,9 @@ class ReleaseGroupUpdateStep implements StepInterface
     protected ReleaseAppClientAdapterInterface $packageManagementSystemBridge;
 
     /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface
+     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver
      */
-    protected ReleaseGroupProcessorInterface $releaseGroupProcessor;
+    protected ReleaseGroupProcessorResolver $groupRequireProcessorResolver;
 
     /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
@@ -52,7 +51,7 @@ class ReleaseGroupUpdateStep implements StepInterface
         LoggerInterface $logger
     ) {
         $this->packageManagementSystemBridge = $packageManagementSystemBridge;
-        $this->releaseGroupProcessor = $groupRequireProcessorResolver->getProcessor();
+        $this->groupRequireProcessorResolver = $groupRequireProcessorResolver;
         $this->configurationProvider = $configurationProvider;
         $this->logger = $logger;
     }
@@ -76,8 +75,9 @@ class ReleaseGroupUpdateStep implements StepInterface
 
         $stepsExecutionDto->getReleaseGroupStatDto()->setAvailableRgsAmount($requireRequestCollection->count());
 
-        $this->logger->info(sprintf('Run release group processor `%s`', $this->releaseGroupProcessor->getProcessorName()));
+        $releaseGroupProcessor = $this->groupRequireProcessorResolver->getProcessor();
+        $this->logger->info(sprintf('Run release group processor `%s`', $releaseGroupProcessor->getProcessorName()));
 
-        return $this->releaseGroupProcessor->process($requireRequestCollection, $stepsExecutionDto);
+        return $releaseGroupProcessor->process($requireRequestCollection, $stepsExecutionDto);
     }
 }

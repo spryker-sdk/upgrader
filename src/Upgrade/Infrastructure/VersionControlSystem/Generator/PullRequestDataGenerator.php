@@ -142,10 +142,7 @@ class PullRequestDataGenerator
             return '';
         }
 
-        $isSequentialProcessor = $upgradeConfigurationProvider->getReleaseGroupProcessor(
-        ) === ConfigurationProviderInterface::SEQUENTIAL_RELEASE_GROUP_PROCESSOR;
-
-        $shouldDisplayWarningColumn = $releaseGroupId !== null || $isSequentialProcessor;
+        $shouldDisplayWarningColumn = $releaseGroupId !== null;
         $shouldDisplayRatingColumn = $this->integratorExecutionValidator->isIntegratorShouldBeInvoked();
         $shouldDisplayModuleOfferColumn = $this->shouldDisplayModuleOfferColumn($stepsResponseDto->getFilterResponseList());
         $manifestRatingThreshold = $this->configurationProvider->getManifestsRatingThreshold();
@@ -154,7 +151,7 @@ class PullRequestDataGenerator
             '| Release |%s%s%s',
             $shouldDisplayRatingColumn ? ' Efforts saved by Upgrader |' : '',
             $shouldDisplayWarningColumn ? ' Warnings detected? |' : '',
-            $shouldDisplayModuleOfferColumn ? ' These new modules might be interesting for you? |' : '',
+            $shouldDisplayModuleOfferColumn ? ' These new modules might be interesting for you |' : '',
         ) . PHP_EOL;
 
         $text .= sprintf(
