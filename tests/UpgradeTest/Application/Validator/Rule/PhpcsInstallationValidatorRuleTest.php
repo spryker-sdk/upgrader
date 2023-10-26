@@ -15,7 +15,7 @@ use Upgrade\Application\Exception\UpgraderException;
 use Upgrade\Application\Validator\Rule\PhpcsInstallationValidatorRule;
 use Upgrader\Configuration\ConfigurationProvider;
 
-class PhpcsInstallationValidationRuleTest extends TestCase
+class PhpcsInstallationValidatorRuleTest extends TestCase
 {
     /**
      * @return void
@@ -47,6 +47,24 @@ class PhpcsInstallationValidationRuleTest extends TestCase
 
         // Act
         $validator->validate();
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetViolationTitleShouldReturnTitle(): void
+    {
+        // Arrange
+        $validator = new PhpcsInstallationValidatorRule(
+            $this->createMock(ConfigurationProvider::class),
+            $this->createMock(Filesystem::class),
+        );
+
+        // Act
+        $title = $validator->getViolationTitle();
+
+        // Assert
+        $this->assertSame(PhpcsInstallationValidatorRule::VIOLATION_TITLE, $title);
     }
 
     /**
