@@ -66,7 +66,7 @@ class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
         );
 
         $packageCollection = new PackageCollection(array_map(
-            fn (string $featurePackage): Package => new Package($featurePackage, sprintf(static::MASK_ALIAS_DEV_MASTER, $version)),
+            fn (string $featurePackage): Package => new Package($featurePackage, $version),
             $matches[static::KEY_FEATURES],
         ));
 
