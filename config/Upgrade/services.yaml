@@ -9,6 +9,7 @@ parameters:
     profiler_enabled: "%env(default:profiler_enabled_default:bool:SDK_PROFILER_ENABLED)%"
     is_release_group_integrator_enabled: false
     is_update_minimum_dependecies_enabled: false #To enable composer run logic without flag, with dependencies, with all dependencies.
+    is_update_features_to_dev_master: false #To convert feature to dev master version.
 
 services:
     _defaults:
@@ -18,6 +19,7 @@ services:
         bind:
             $isReleaseGroupIntegratorEnabled: '%env(default:is_release_group_integrator_enabled:bool:RELEASE_GROUP_INTEGRATOR_ENABLED)%'
             $isUpdateMinimumDependeciesEnabled: '%env(default:is_update_minimum_dependecies_enabled:bool:UPDATE_MINIMUM_DEPENDENCIES_ENABLED)%'
+            $isFeatureToDevMasterEnabled: '%env(default:is_update_features_to_dev_master:bool:UPDATE_FEATURES_TO_DEV_MASTER)%'
 
     # Upgrade
     Upgrade\:
@@ -93,6 +95,9 @@ services:
     send_report.step:
         class: Upgrade\Application\Strategy\Common\Step\SendReportStep
 
+    feature_dev_master.fixer:
+        class: Upgrade\Application\Strategy\Composer\Fixer\FeatureDevMasterPackageFixerStep
+
     feature_package.fixer:
         class: Upgrade\Application\Strategy\Composer\Fixer\FeaturePackageFixerStep
 
@@ -118,7 +123,8 @@ services:
               - '@create_pr.step'
               - '@checkout.step'
               - '@send_report.step'
-            - - '@feature_package.fixer'
+            - - '@feature_dev_master.fixer'
+              - '@feature_package.fixer'
 
     composer.strategy:
         class: Upgrade\Application\Strategy\Composer\ComposerStrategy
@@ -140,7 +146,8 @@ services:
               - '@create_pr.step'
               - '@checkout.step'
               - '@send_report.step'
-            - - '@feature_package.fixer'
+            - - '@feature_dev_master.fixer'
+              - '@feature_package.fixer'
 
     release_app.strategy:
         class: Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy
