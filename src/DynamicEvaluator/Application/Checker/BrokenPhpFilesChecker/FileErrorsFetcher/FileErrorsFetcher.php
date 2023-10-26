@@ -16,6 +16,7 @@ use Exception;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
 
 class FileErrorsFetcher implements FileErrorsFetcherInterface
 {
@@ -90,7 +91,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
 
         try {
             $errors = $this->fetchErrorsArray();
-        } catch (Exception $e) {
+        } catch (ProcessTimedOutException $e) {
             $this->logger->debug($e->getMessage());
 
             return [
@@ -101,6 +102,16 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
                         'Cannot detect broken PHP files because PHPStan fails with an error “Timeout %s”. To check manually, run `vendor/bin/phpstan analyse src/` from project root dir',
                         ProcessRunnerServiceInterface::DEFAULT_PROCESS_TIMEOUT,
                     ),
+                ),
+            ];
+        } catch (Exception $e) {
+            $this->logger->debug($e->getMessage());
+
+            return [
+                new FileErrorDto(
+                    'src',
+                    0,
+                    'Cannot detect broken PHP files because PHPStan fails. To check manually, run `vendor/bin/phpstan analyse src/` from project root dir',
                 ),
             ];
         }
@@ -156,8 +167,6 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
             'analyse',
             '-c',
             file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) ? $this->executableProjectConfig : $this->executableConfig,
-            '--memory-limit',
-            '-1',
             '--error-format',
             'prettyJson',
         ]);
