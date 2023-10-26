@@ -240,7 +240,7 @@ class FileErrorsFetcherTest extends TestCase
         $this->assertCount(1, $fileErrors);
         $this->assertInstanceOf(FileErrorDto::class, $fileErrors[0]);
         $this->assertSame(sprintf(
-            'error',
+            'Cannot detect broken PHP files because PHPStan fails. To check manually, run `vendor/bin/phpstan analyse src/` from project root dir',
             ProcessRunnerServiceInterface::DEFAULT_PROCESS_TIMEOUT,
         ), $fileErrors[0]->getMessage());
     }
