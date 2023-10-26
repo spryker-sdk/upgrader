@@ -141,7 +141,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             $this->getPackageString($packageCollection),
         ));
 
-        return $this->createResponse($this->runCommand($command));
+        return $this->runWithDependecyFlags($command);
     }
 
     /**
