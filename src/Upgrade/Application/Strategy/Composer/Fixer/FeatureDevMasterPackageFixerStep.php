@@ -19,7 +19,7 @@ class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
     /**
      * @var string
      */
-    public const MASK_ALIAS_DEV_MASTER = 'dev-master as %s';
+    public const MASK_ALIAS_DEV_MASTER = 'dev-master as ^%s';
 
     /**
      * @var bool
