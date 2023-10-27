@@ -53,9 +53,10 @@ class BrokenPhpFilesCheckerEventSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents(): array
     {
+        // TODO: SDK-5303 uncomment to activate checker
         return [
-            ReleaseGroupProcessorEvent::PRE_PROCESSOR => 'onPreProcessor',
-            ReleaseGroupProcessorPostRequireEvent::POST_REQUIRE => 'onPostRequire',
+//            ReleaseGroupProcessorEvent::PRE_PROCESSOR => 'onPreProcessor',
+//            ReleaseGroupProcessorPostRequireEvent::POST_REQUIRE => 'onPostRequire',
         ];
     }
 
