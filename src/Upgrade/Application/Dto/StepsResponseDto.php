@@ -58,6 +58,11 @@ class StepsResponseDto extends ResponseDto
     protected array $blockers = [];
 
     /**
+     * @var array<\Upgrade\Application\Dto\ValidatorViolationDto>
+     */
+    protected array $projectViolations = [];
+
+    /**
      * @var int|null
      */
     protected ?int $pullRequestId = null;
@@ -296,6 +301,24 @@ class StepsResponseDto extends ResponseDto
     public function getBlockersByReleaseGroupId(int $releaseGroupId): array
     {
         return $this->blockers[$releaseGroupId] ?? [];
+    }
+
+    /**
+     * @return array<\Upgrade\Application\Dto\ValidatorViolationDto>
+     */
+    public function getProjectViolations(): array
+    {
+        return $this->projectViolations;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\ValidatorViolationDto $violationDto
+     *
+     * @return void
+     */
+    public function addProjectViolation(ValidatorViolationDto $violationDto): void
+    {
+        $this->projectViolations[] = $violationDto;
     }
 
     /**
