@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Application\Strategy\ReleaseApp\ReleaseGroupFilter;
 
+use DateTime;
 use PHPUnit\Framework\TestCase;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
@@ -75,6 +76,7 @@ class DevMasterPackageFilterItemTest extends TestCase
             1,
             'RG1',
             new ModuleDtoCollection($moduleDto),
+            new DateTime(),
             false,
             'https://api.release.spryker.com/release-groups/view/1',
             100,

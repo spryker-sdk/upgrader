@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Application\Strategy\ReleaseApp\Step;
 
+use DateTime;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use ReleaseApp\Application\Configuration\ReleaseAppConstant;
@@ -507,6 +508,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
                 ]),
+                new DateTime(),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',
                 100,
@@ -517,6 +519,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/oauth-backend-api', '1.1.1', 'path'),
                 ]),
+                new DateTime(),
                 true,
                 'https://api.release.spryker.com/release-groups/view/2',
                 100,
@@ -537,6 +540,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 1,
                 'RG1',
                 new ModuleDtoCollection($moduleDtoCollection),
+                new DateTime(),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',
                 100,

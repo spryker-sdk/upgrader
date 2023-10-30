@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Application\Strategy\Common\Step;
 
+use DateTime;
 use PHPUnit\Framework\TestCase;
 use ReleaseApp\Application\Configuration\ReleaseAppConstant;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
@@ -74,7 +75,7 @@ class IntegratorStepTest extends TestCase
     {
         // Arrange
         $module = new ModuleDto('spryker/acl', '1.1.1', ReleaseAppConstant::MODULE_TYPE_MAJOR);
-        $releaseGroup = new ReleaseGroupDto(1, 'RG', new ModuleDtoCollection([$module]), false, '', 100);
+        $releaseGroup = new ReleaseGroupDto(1, 'RG', new ModuleDtoCollection([$module]), new DateTime(), false, '', 100);
         $stepsResponseDto = new StepsResponseDto(true);
         $stepsResponseDto->addAppliedReleaseGroup($releaseGroup);
 
@@ -99,7 +100,7 @@ class IntegratorStepTest extends TestCase
     {
         // Arrange
         $module = new ModuleDto('spryker/acl', '1.1.1', ReleaseAppConstant::MODULE_TYPE_MAJOR);
-        $releaseGroup = new ReleaseGroupDto(1, 'RG', new ModuleDtoCollection([$module]), false, '', 100);
+        $releaseGroup = new ReleaseGroupDto(1, 'RG', new ModuleDtoCollection([$module]), new DateTime(), false, '', 100);
         $stepsResponseDto = new StepsResponseDto(true);
         $stepsResponseDto->addAppliedReleaseGroup($releaseGroup);
 
