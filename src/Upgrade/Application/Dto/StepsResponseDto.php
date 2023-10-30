@@ -286,6 +286,25 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
+     * @param string $title
+     *
+     * @return void
+     */
+    public function removeBlockersByTitle(string $title): void
+    {
+        $currentReleaseGroupId = $this->currentReleaseGroupId;
+
+        if (!isset($this->blockers[$currentReleaseGroupId])) {
+            return;
+        }
+
+        $this->blockers[$currentReleaseGroupId] = array_filter(
+            $this->blockers[$currentReleaseGroupId],
+            static fn (ValidatorViolationDto $violation): bool => $violation->getTitle() !== $title
+        );
+    }
+
+    /**
      * @return array<int, array<\Upgrade\Application\Dto\ValidatorViolationDto>>
      */
     public function getBlockers(): array
@@ -484,5 +503,21 @@ class StepsResponseDto extends ResponseDto
     public function addFilterResponse(ReleaseGroupFilterResponseDto $responseDto): void
     {
         $this->filterResponseList[] = $responseDto;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasErrors(): bool
+    {
+        return count($this->getBlockers()) > 0
+            || count($this->getViolations()) > 0
+            || count(
+                array_filter(
+                    $this->getIntegratorResponseCollection(),
+                    static fn (IntegratorResponseDto $response): bool => count($response->getWarnings()) > 0,
+                ),
+            ) > 0
+            || count($this->getProjectViolations()) > 0;
     }
 }

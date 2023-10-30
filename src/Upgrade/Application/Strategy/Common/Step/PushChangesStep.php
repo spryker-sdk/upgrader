@@ -31,6 +31,10 @@ class PushChangesStep extends AbstractStep implements RollbackStepInterface
      */
     public function rollBack(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
+        if ($stepsExecutionDto->hasErrors()) {
+            return $stepsExecutionDto;
+        }
+
         return $this->vsc->deleteRemoteBranch($stepsExecutionDto);
     }
 }

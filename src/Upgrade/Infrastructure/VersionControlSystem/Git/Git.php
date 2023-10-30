@@ -204,7 +204,7 @@ class Git
     public function createPullRequest(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $composerDiffDto = $stepsExecutionDto->getComposerLockDiff();
-        if ($composerDiffDto === null) {
+        if ($composerDiffDto === null && !$stepsExecutionDto->hasErrors()) {
             return $stepsExecutionDto;
         }
 

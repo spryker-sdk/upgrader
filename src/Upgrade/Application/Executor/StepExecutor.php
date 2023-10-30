@@ -80,8 +80,7 @@ class StepExecutor implements StepExecutorInterface
                         $rollBackExecutionDto = $executedStep->rollBack($rollBackExecutionDto);
                     }
                 }
-
-                return $stepsResponseDto;
+                $executedSteps = [];
             }
         }
 

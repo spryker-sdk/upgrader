@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Factory\ComposerViolationDtoFactory;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorPostRequireEvent;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface;
@@ -44,12 +45,18 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
     protected ReleaseGroupFilterInterface $releaseGroupPackageFilter;
 
     /**
+     * @var \Upgrade\Application\Factory\ComposerViolationDtoFactory
+     */
+    protected ComposerViolationDtoFactory $composerViolationDtoFactory;
+
+    /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
      * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher $moduleFetcher
      * @param \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface $releaseGroupFilter
      * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Upgrade\Application\Factory\ComposerViolationDtoFactory $composerViolationDtoFactory
      */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
@@ -57,7 +64,8 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
         ModuleFetcher $moduleFetcher,
         ReleaseGroupFilterInterface $releaseGroupFilter,
         EventDispatcherInterface $eventDispatcher,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ComposerViolationDtoFactory $composerViolationDtoFactory
     ) {
         parent::__construct($eventDispatcher, $logger);
 
@@ -65,6 +73,7 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
         $this->thresholdValidator = $thresholdSoftValidator;
         $this->moduleFetcher = $moduleFetcher;
         $this->releaseGroupPackageFilter = $releaseGroupFilter;
+        $this->composerViolationDtoFactory = $composerViolationDtoFactory;
     }
 
     /**
@@ -151,14 +160,18 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
 
             if (!$response->isSuccessful()) {
                 $stepsExecutionDto->setIsSuccessful(false);
+                $composerViolation = $this->composerViolationDtoFactory->createFromPackageManagerResponse($response);
+
                 $stepsExecutionDto->setError(
-                    Error::createClientCodeError($response->getOutputMessage() ?? 'Module fetcher error'),
+                    Error::createClientCodeError($composerViolation->getMessage()),
                 );
                 $this->logger->debug(sprintf(
                     'Release group `%s` applying failed, message: %s',
                     $releaseGroup->getId(),
                     $response->getOutputMessage(),
                 ));
+
+                $stepsExecutionDto->addBlocker($composerViolation);
 
                 break;
             }

@@ -72,11 +72,13 @@ class PullRequestDataGenerator
             . $this->buildViolationsWarnings($stepsResponseDto)
             . $this->buildIntegratorWarnings($stepsResponseDto);
 
-        return $this->buildHeaderText($stepsResponseDto, $releaseGroupId)
+        $hasWarnings = trim($warningsSection) !== '';
+
+        return $this->buildHeaderText($stepsResponseDto, $releaseGroupId, $hasWarnings)
             . PHP_EOL
-            . $this->buildReleaseGroupsTable($this->configurationProvider, $stepsResponseDto, $releaseGroupId)
+            . $this->buildReleaseGroupsTable($stepsResponseDto, $releaseGroupId)
             . PHP_EOL
-            . (trim($warningsSection) !== '' ? '## Warnings' . PHP_EOL : '')
+            . ($hasWarnings ? '## ' . $this->createErrorTitle($stepsResponseDto) . PHP_EOL : '')
             . $warningsSection
             . PHP_EOL
             . $this->buildReleaseGroupIntegrationGuideTable($stepsResponseDto)
@@ -89,11 +91,16 @@ class PullRequestDataGenerator
     /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
      * @param int|null $releaseGroupId
+     * @param bool $hasWarnings
      *
      * @return string
      */
-    protected function buildHeaderText(StepsResponseDto $stepsResponseDto, ?int $releaseGroupId): string
+    protected function buildHeaderText(StepsResponseDto $stepsResponseDto, ?int $releaseGroupId, bool $hasWarnings): string
     {
+        if ($hasWarnings && count($stepsResponseDto->getAppliedReleaseGroups()) === 0) {
+            return 'Unfortunately Upgrader was not able to create a pull request with code changes due to errors. Please see the list below and resolve them.';
+        }
+
         $releaseGroupStatDto = $stepsResponseDto->getReleaseGroupStatDto();
         $composerDiffDto = $stepsResponseDto->getComposerLockDiff();
         $countOfPackages = 0;
@@ -129,14 +136,12 @@ class PullRequestDataGenerator
     }
 
     /**
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $upgradeConfigurationProvider
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
      * @param int|null $releaseGroupId
      *
      * @return string
      */
     protected function buildReleaseGroupsTable(
-        ConfigurationProviderInterface $upgradeConfigurationProvider,
         StepsResponseDto $stepsResponseDto,
         ?int $releaseGroupId
     ): string {
@@ -185,6 +190,16 @@ class PullRequestDataGenerator
         }
 
         return $text;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
+     *
+     * @return string
+     */
+    protected function createErrorTitle(StepsResponseDto $stepsResponseDto): string
+    {
+        return count($stepsResponseDto->getAppliedReleaseGroups()) > 0 ? 'Warnings' : 'Errors :warning:';
     }
 
     /**
@@ -370,7 +385,7 @@ class PullRequestDataGenerator
         foreach ($warnings as $title => $messages) {
             $text .= sprintf('<details><summary><h4>%s</h4></summary>', $title);
             foreach ($messages as $message) {
-                $text .= sprintf('<p>%s</p>', $message);
+                $text .= sprintf('<p>%s</p>', nl2br($message));
             }
             $text .= '</details>';
         }

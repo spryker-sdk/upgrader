@@ -22,6 +22,7 @@ use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\PackageManagerPackagesDto;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Factory\ComposerViolationDtoFactory;
 use Upgrade\Application\Strategy\Common\Module\BetaMajorModule\BetaMajorModulesFetcherInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapper;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher;
@@ -490,6 +491,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
             new ReleaseGroupFilter($releaseGroupFilters),
             $this->createEventDispatcherMock(),
             $this->createMock(LoggerInterface::class),
+            new ComposerViolationDtoFactory(),
         );
     }
 
