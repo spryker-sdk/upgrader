@@ -313,6 +313,14 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
+     * @return bool
+     */
+    public function hasBlockers(): bool
+    {
+        return count($this->blockers) > 0;
+    }
+
+    /**
      * @param int $releaseGroupId
      *
      * @return array<\Upgrade\Application\Dto\ValidatorViolationDto>
