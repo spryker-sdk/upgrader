@@ -134,6 +134,8 @@ services:
         class: Upgrade\Application\Strategy\Composer\ComposerStrategy
         arguments:
             - '@composer.step_executor'
+            - '@create_empty_pr.step_executor'
+            - '@monolog.logger'
 
     release_app.step_executor:
         class: Upgrade\Application\Executor\StepExecutor
@@ -154,10 +156,21 @@ services:
             - - '@feature_dev_master.fixer'
               - '@feature_package.fixer'
 
+    create_empty_pr.step_executor:
+        class: Upgrade\Application\Executor\StepExecutor
+        arguments:
+            - '@monolog.logger'
+            - - '@create_branch.step'
+              - '@push_changes.step'
+              - '@create_pr.step'
+              - '@checkout.step'
+
     release_app.strategy:
         class: Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy
         arguments:
-            -  '@release_app.step_executor'
+            - '@release_app.step_executor'
+            - '@create_empty_pr.step_executor'
+            - '@monolog.logger'
 
     Upgrade\Application\Strategy\StrategyResolver:
         class: Upgrade\Application\Strategy\StrategyResolver

@@ -98,6 +98,11 @@ class StepsResponseDto extends ResponseDto
     protected int $currentReleaseGroupId = self::UNDEFINED_RELEASE_GROUP_ID;
 
     /**
+     * @var bool
+     */
+    protected bool $isPullRequestSent = false;
+
+    /**
      * @param bool $isSuccessful
      * @param string|null $outputMessage
      */
@@ -511,6 +516,24 @@ class StepsResponseDto extends ResponseDto
     public function addFilterResponse(ReleaseGroupFilterResponseDto $responseDto): void
     {
         $this->filterResponseList[] = $responseDto;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPullRequestSent(): bool
+    {
+        return $this->isPullRequestSent;
+    }
+
+    /**
+     * @param bool $isPullRequestSent
+     *
+     * @return void
+     */
+    public function setIsPullRequestSent(bool $isPullRequestSent): void
+    {
+        $this->isPullRequestSent = $isPullRequestSent;
     }
 
     /**

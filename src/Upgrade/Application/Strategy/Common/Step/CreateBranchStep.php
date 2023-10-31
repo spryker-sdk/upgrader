@@ -31,10 +31,6 @@ class CreateBranchStep extends AbstractStep implements RollbackStepInterface
      */
     public function rollBack(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
-        if ($stepsExecutionDto->hasErrors()) {
-            return $stepsExecutionDto;
-        }
-
         $stepsExecutionDto = $this->vsc->checkout($stepsExecutionDto);
         $stepsExecutionDto = $this->vsc->deleteLocalBranch($stepsExecutionDto);
 

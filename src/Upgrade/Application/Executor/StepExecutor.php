@@ -73,7 +73,7 @@ class StepExecutor implements StepExecutorInterface
             if (!$stepsResponseDto->getIsSuccessful()) {
                 $this->logger->warning(sprintf('Step `%s` is failed', $this->getStepName($step)), [$stepsResponseDto->getOutputMessage()]);
                 $stepsResponseDto->addOutputMessage(sprintf('Step `%s` is failed', $this->getStepName($step)));
-                $rollBackExecutionDto = clone $stepsResponseDto;
+                $rollBackExecutionDto = new StepsResponseDto(true);
                 foreach (array_reverse($executedSteps) as $executedStep) {
                     if ($executedStep instanceof RollbackStepInterface) {
                         $this->logger->info(sprintf('Run rollback step `%s`', $this->getStepName($executedStep)));
@@ -81,11 +81,7 @@ class StepExecutor implements StepExecutorInterface
                     }
                 }
 
-                $executedSteps = [];
-
-                if (!$stepsResponseDto->hasErrors()) {
-                    return $stepsResponseDto;
-                }
+                return $stepsResponseDto;
             }
         }
 

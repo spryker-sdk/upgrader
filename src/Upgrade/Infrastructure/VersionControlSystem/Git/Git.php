@@ -204,11 +204,14 @@ class Git
     public function createPullRequest(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $composerDiffDto = $stepsExecutionDto->getComposerLockDiff();
+
         if ($composerDiffDto === null && !$stepsExecutionDto->hasErrors()) {
             return $stepsExecutionDto;
         }
 
         $releaseGroupId = $this->configurationProvider->getReleaseGroupId();
+
+        $stepsExecutionDto->setIsPullRequestSent(true);
 
         $pullRequestDto = new PullRequestDto(
             $this->getHeadBranch(),
