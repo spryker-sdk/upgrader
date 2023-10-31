@@ -128,6 +128,65 @@ class ReleaseGroupUpdateStepTest extends TestCase
     /**
      * @return void
      */
+    public function testRunWithSequentialReleaseGroupProcessorPackageManagerError(): void
+    {
+        // Arrange
+        $packageManagerResponseDto = new PackageManagerResponseDto(
+            false,
+            <<<OUT
+            Some text
+            Some text
+            Some text
+              Problem 1
+                - Root composer.json requires spryker/country-gui 1.0.0 -> satisfiable by spryker/country-gui[1.0.0].
+                - spryker/country-gui 1.0.0 requires spryker/country ^4.0.0 -> found spryker/country[dev-master, 4.0.0, 4.0.x-dev, 4.1.0] but these were not loaded, likely because it conflicts with another require.
+              Problem 2
+                - Root composer.json requires spryker/currency-gui 1.0.0 -> satisfiable by spryker/currency-gui[1.0.0].
+                - spryker/currency-gui 1.0.0 requires spryker/currency ^4.0.0 -> found spryker/currency[dev-master, 4.0.0, 4.0.x-dev] but these were not loaded, likely because it conflicts with another require.
+              Problem 3
+                - Root composer.json requires spryker/locale-gui 1.0.0 -> satisfiable by spryker/locale-gui[1.0.0].
+                - spryker/locale-gui 1.0.0 requires spryker/locale ^4.0.0 -> found spryker/locale[dev-master, 4.0.0, ..., 4.2.0] but these were not loaded, likely because it conflicts with another require.
+            OUT,
+        );
+
+        $step = new ReleaseGroupUpdateStep(
+            $this->creteReleaseAppClientAdapterMock(
+                $this->buildReleaseGroupDtoCollection(),
+            ),
+            $this->creteReleaseGroupProcessorResolverMock(
+                $this->createSequentialReleaseGroupProcessor([], [], [], $packageManagerResponseDto),
+            ),
+            $this->createConfigurationProviderMock(),
+            $this->createMock(LoggerInterface::class),
+        );
+
+        $stepsResponseDto = new StepsResponseDto();
+
+        // Act
+        $stepsResponseDto = $step->run($stepsResponseDto);
+
+        // Assert
+        $this->assertFalse($stepsResponseDto->isSuccessful());
+        $this->assertSame(
+            <<<OUT
+            Amount of available release groups for the project: 2
+            Problem 1
+                - Root composer.json requires spryker/country-gui 1.0.0 -> satisfiable by spryker/country-gui[1.0.0].
+                - spryker/country-gui 1.0.0 requires spryker/country ^4.0.0 -> found spryker/country[dev-master, 4.0.0, 4.0.x-dev, 4.1.0] but these were not loaded, likely because it conflicts with another require.
+              Problem 2
+                - Root composer.json requires spryker/currency-gui 1.0.0 -> satisfiable by spryker/currency-gui[1.0.0].
+                - spryker/currency-gui 1.0.0 requires spryker/currency ^4.0.0 -> found spryker/currency[dev-master, 4.0.0, 4.0.x-dev] but these were not loaded, likely because it conflicts with another require.
+              Problem 3
+                - Root composer.json requires spryker/locale-gui 1.0.0 -> satisfiable by spryker/locale-gui[1.0.0].
+                - spryker/locale-gui 1.0.0 requires spryker/locale ^4.0.0 -> found spryker/locale[dev-master, 4.0.0, ..., 4.2.0] but these were not loaded, likely because it conflicts with another require.
+            OUT,
+            $stepsResponseDto->getOutputMessage(),
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testRunWithSequentialReleaseGroupProcessorApplySoftThreshold(): void
     {
         // Arrange
@@ -460,15 +519,17 @@ class ReleaseGroupUpdateStepTest extends TestCase
      * @param array $releaseGroupFilters
      * @param array $thresholdSoftValidators
      * @param array $releaseGroupValidators
+     * @param \Upgrade\Application\Dto\PackageManagerResponseDto|null $packageManagerResponseDto
      *
      * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
      */
     protected function createSequentialReleaseGroupProcessor(
         array $releaseGroupFilters = [],
         array $thresholdSoftValidators = [],
-        array $releaseGroupValidators = []
+        array $releaseGroupValidators = [],
+        ?PackageManagerResponseDto $packageManagerResponseDto = null
     ): SequentialReleaseGroupProcessor {
-        $responseDto = new PackageManagerResponseDto(true);
+        $responseDto = $packageManagerResponseDto ?? new PackageManagerResponseDto(true);
 
         $composerAdapterMock = $this->getMockBuilder(ComposerAdapter::class)
             ->disableOriginalConstructor()
