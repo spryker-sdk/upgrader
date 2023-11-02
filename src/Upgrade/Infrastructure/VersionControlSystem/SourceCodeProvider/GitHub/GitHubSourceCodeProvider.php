@@ -11,6 +11,7 @@ namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub;
 
 use RuntimeException;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
@@ -111,5 +112,20 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
                 ->setIsSuccessful(false)
                 ->setError(Error::createInternalError($runtimeException->getMessage()));
         }
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\ValidatorViolationDto $blocker
+     *
+     * @return string
+     */
+    public function buildBlockerTextBlock(ValidatorViolationDto $blocker): string
+    {
+        return sprintf(
+            '> [!IMPORTANT] %s> <b>%s.</b> %s',
+            PHP_EOL,
+            $blocker->getTitle(),
+            $blocker->getMessage(),
+        ) . PHP_EOL;
     }
 }

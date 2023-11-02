@@ -16,6 +16,8 @@ use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider;
+use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface;
 
 /**
  * @codeCoverageIgnore don't need cover presentation view class
@@ -43,18 +45,26 @@ class PullRequestDataGenerator
     protected IntegratorExecutionValidatorInterface $integratorExecutionValidator;
 
     /**
+     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface
+     */
+    protected SourceCodeProviderInterface $sourceCodeProvider;
+
+    /**
      * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder $violationBodyMessageBuilder
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      * @param \Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface $integratorExecutionValidator
+     * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $sourceCodeProvider
      */
     public function __construct(
         ViolationBodyMessageBuilder $violationBodyMessageBuilder,
         ConfigurationProviderInterface $configurationProvider,
-        IntegratorExecutionValidatorInterface $integratorExecutionValidator
+        IntegratorExecutionValidatorInterface $integratorExecutionValidator,
+        SourceCodeProvider $sourceCodeProvider
     ) {
         $this->violationBodyMessageBuilder = $violationBodyMessageBuilder;
         $this->configurationProvider = $configurationProvider;
         $this->integratorExecutionValidator = $integratorExecutionValidator;
+        $this->sourceCodeProvider = $sourceCodeProvider->getSourceCodeProvider();
     }
 
     /**
@@ -67,8 +77,8 @@ class PullRequestDataGenerator
         StepsResponseDto $stepsResponseDto,
         ?int $releaseGroupId = null
     ): string {
-        $warningsSection = $this->buildProjectViolationWarnings($stepsResponseDto)
-            . $this->buildBlockersWarnings($stepsResponseDto)
+        $warningsSection = $this->buildBlockers($stepsResponseDto)
+            . $this->buildProjectViolationWarnings($stepsResponseDto)
             . $this->buildViolationsWarnings($stepsResponseDto)
             . $this->buildIntegratorWarnings($stepsResponseDto);
 
@@ -300,21 +310,16 @@ class PullRequestDataGenerator
      *
      * @return string
      */
-    protected function buildBlockersWarnings(StepsResponseDto $stepsResponseDto): string
+    protected function buildBlockers(StepsResponseDto $stepsResponseDto): string
     {
-        $warnings = [];
-
+        $message = '';
         foreach ($stepsResponseDto->getBlockers() as $blockers) {
             foreach ($blockers as $blocker) {
-                $warnings = $this->addValidatorViolationIntoWarnings($warnings, $blocker);
+                $message .= $this->sourceCodeProvider->buildBlockerTextBlock($blocker);
             }
         }
 
-        if (count($warnings) === 0) {
-            return '';
-        }
-
-        return $this->buildWarningsTextBlocks($warnings) . PHP_EOL;
+        return $message;
     }
 
     /**
