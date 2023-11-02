@@ -11,6 +11,7 @@ namespace UpgradeTest\Infrastructure\VersionControlSystem\SourceCodeProvider\Azu
 
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureClientFactory;
@@ -111,5 +112,34 @@ class AzureSourceCodeProviderTest extends TestCase
             $this->assertTrue($stepsExecutionDto->getIsSuccessful());
             $this->assertNull($stepsExecutionDto->getError());
         }
+    }
+
+    /**
+     * @dataProvider buildBlockerTextBlockDataProvider
+     *
+     * @return void
+     */
+    public function testBuildBlockerTextBlock($title, $message, $expectedOutput): void
+    {
+        $azureSourceCodeProvider = new AzureSourceCodeProvider(
+            $this->configurationProviderMock,
+            $this->azureClientFactoryMock,
+            $this->descriptionNormalizerMock,
+        );
+
+        $result = $azureSourceCodeProvider->buildBlockerTextBlock(new ValidatorViolationDto($title, $message));
+
+        $this->assertSame($expectedOutput, $result);
+    }
+
+    /**
+     * @return array<array>
+     */
+    public function buildBlockerTextBlockDataProvider(): array
+    {
+        return [
+            ['Title 1', 'Message 1', "> <b>Title 1.</b> Message 1\n <br>\n"],
+            ['Another Title', 'Another Message', "> <b>Another Title.</b> Another Message\n <br>\n"],
+        ];
     }
 }
