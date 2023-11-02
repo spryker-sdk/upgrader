@@ -247,3 +247,4 @@ export RELEASE_GROUP_ID=123
 ## Installation
 ​
 For Spryker SDK installation instructions, see [Spryker SDK](https://github.com/spryker-sdk/sdk#installation)
+
