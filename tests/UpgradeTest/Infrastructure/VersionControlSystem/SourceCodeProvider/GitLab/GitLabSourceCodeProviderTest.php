@@ -152,6 +152,10 @@ class GitLabSourceCodeProviderTest extends TestCase
     /**
      * @dataProvider buildBlockerTextBlockDataProvider
      *
+     * @param $title
+     * @param $message
+     * @param $expectedOutput
+     *
      * @return void
      */
     public function testBuildBlockerTextBlock($title, $message, $expectedOutput): void
