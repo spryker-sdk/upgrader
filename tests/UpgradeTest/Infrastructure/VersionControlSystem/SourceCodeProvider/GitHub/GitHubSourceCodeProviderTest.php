@@ -86,13 +86,13 @@ class GitHubSourceCodeProviderTest extends TestCase
     /**
      * @dataProvider buildBlockerTextBlockDataProvider
      *
-     * @param $title
-     * @param $message
-     * @param $expectedOutput
+     * @param string $title
+     * @param string $message
+     * @param string $expectedOutput
      *
      * @return void
      */
-    public function testBuildBlockerTextBlock($title, $message, $expectedOutput): void
+    public function testBuildBlockerTextBlock(string $title, string $message, string $expectedOutput): void
     {
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
         $gitHubClientFactoryMock = $this->createMock(GitHubClientFactory::class);
