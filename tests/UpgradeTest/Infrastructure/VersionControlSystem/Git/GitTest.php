@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace UpgradeTest\Infrastructure\VersionControlSystem\Git;
 
 use Core\Infrastructure\Service\ProcessRunnerService;
+use DateTime;
 use ReflectionClass;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
@@ -288,6 +289,7 @@ class GitTest extends KernelTestCase
             4821,
             'RGname',
             new ModuleDtoCollection(),
+            new DateTime(),
             true,
             'https://api.release.spryker.com/release-group/4821',
             100,

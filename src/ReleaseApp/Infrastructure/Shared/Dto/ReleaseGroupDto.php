@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Infrastructure\Shared\Dto;
 
+use DateTimeInterface;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 
 class ReleaseGroupDto
@@ -32,6 +33,11 @@ class ReleaseGroupDto
      * @var string
      */
     protected string $name;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    protected DateTimeInterface $released;
 
     /**
      * @var string
@@ -77,6 +83,7 @@ class ReleaseGroupDto
      * @param int $id
      * @param string $name
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
+     * @param \DateTimeInterface $released
      * @param bool $containsProjectChanges
      * @param string $link
      * @param int $rating
@@ -89,6 +96,7 @@ class ReleaseGroupDto
         int $id,
         string $name,
         ModuleDtoCollection $moduleCollection,
+        DateTimeInterface $released,
         bool $containsProjectChanges,
         string $link,
         int $rating,
@@ -99,6 +107,7 @@ class ReleaseGroupDto
     ) {
         $this->id = $id;
         $this->name = $name;
+        $this->released = $released;
         $this->link = $link;
         $this->moduleCollection = $moduleCollection;
         $this->containsProjectChanges = $containsProjectChanges;
@@ -273,5 +282,13 @@ class ReleaseGroupDto
     public function getManualActionNeeded(): bool
     {
         return $this->manualActionNeeded;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getReleased(): DateTimeInterface
+    {
+        return $this->released;
     }
 }

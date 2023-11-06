@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Generator;
 
+use ReleaseApp\Application\Service\ReleaseAppServiceInterface;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\ReleaseGroupFilterResponseDto;
@@ -43,18 +44,26 @@ class PullRequestDataGenerator
     protected IntegratorExecutionValidatorInterface $integratorExecutionValidator;
 
     /**
+     * @var \ReleaseApp\Application\Service\ReleaseAppServiceInterface $releaseApp
+     */
+    protected ReleaseAppServiceInterface $releaseApp;
+
+    /**
      * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder $violationBodyMessageBuilder
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      * @param \Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface $integratorExecutionValidator
+     * @param \ReleaseApp\Application\Service\ReleaseAppServiceInterface $releaseApp
      */
     public function __construct(
         ViolationBodyMessageBuilder $violationBodyMessageBuilder,
         ConfigurationProviderInterface $configurationProvider,
-        IntegratorExecutionValidatorInterface $integratorExecutionValidator
+        IntegratorExecutionValidatorInterface $integratorExecutionValidator,
+        ReleaseAppServiceInterface $releaseApp
     ) {
         $this->violationBodyMessageBuilder = $violationBodyMessageBuilder;
         $this->configurationProvider = $configurationProvider;
         $this->integratorExecutionValidator = $integratorExecutionValidator;
+        $this->releaseApp = $releaseApp;
     }
 
     /**
@@ -74,7 +83,7 @@ class PullRequestDataGenerator
 
         return $this->buildHeaderText($stepsResponseDto, $releaseGroupId)
             . PHP_EOL
-            . $this->buildReleaseGroupsTable($this->configurationProvider, $stepsResponseDto, $releaseGroupId)
+            . $this->buildReleaseGroupsTable($stepsResponseDto, $releaseGroupId)
             . PHP_EOL
             . (trim($warningsSection) !== '' ? '## Warnings' . PHP_EOL : '')
             . $warningsSection
@@ -129,14 +138,12 @@ class PullRequestDataGenerator
     }
 
     /**
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $upgradeConfigurationProvider
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
      * @param int|null $releaseGroupId
      *
      * @return string
      */
     protected function buildReleaseGroupsTable(
-        ConfigurationProviderInterface $upgradeConfigurationProvider,
         StepsResponseDto $stepsResponseDto,
         ?int $releaseGroupId
     ): string {
@@ -181,6 +188,16 @@ class PullRequestDataGenerator
 
         if (strpos($text, '*') !== false) {
             $text .= '\* This Release has too low coverage and cannot be automatically integrated.</sub>';
+            $text .= PHP_EOL;
+        }
+
+        /** @var \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $firstAppliedRG */
+        $firstAppliedRG = $stepsResponseDto->getAppliedReleaseGroups()[0] ?? null;
+        if ($firstAppliedRG) {
+            $text .= sprintf(
+                'There are also [releases](%s), that did not include any modules, please check them out.',
+                $this->releaseApp->getReleaseHistoryLink('released', 'asc', $firstAppliedRG->getReleased(), true),
+            );
             $text .= PHP_EOL;
         }
 
