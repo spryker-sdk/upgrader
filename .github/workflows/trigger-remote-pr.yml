@@ -52,7 +52,7 @@ jobs:
             - name: "Update composer dependency"
               if: ${{ success() }}
               run: |
-                  composer update ${{ env.SOURCE_PACKAGE }} --no-scripts --no-progress --no-install
+                  composer update ${{ env.SOURCE_PACKAGE_NAME }} --no-scripts --no-progress --no-install
               working-directory: ${{ env.TARGET_REPO }}
 
             - name: "Prepare PR Body"
@@ -81,7 +81,7 @@ jobs:
                   title: ${{ format('Dependency update. {0}', steps.PR.outputs.pr_title) }}
                   body: ${{ steps.target-pr-body.outputs.target_pr_body }}
                   committer: SprykerReleaseBot <spryker-release-bot@spryker.com>
-                  author: ${{ github.actor }} <${{ github.actor }}@example.test>
+                  author: SprykerReleaseBot <spryker-release-bot@spryker.com>
                   labels: ${{ env.PR_LABELS }}
                   delete-branch: true
                   assignees: ${{ env.PR_ASSIGNEES }}
