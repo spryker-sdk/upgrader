@@ -69,7 +69,7 @@ jobs:
                   echo 'EOF' >> $GITHUB_OUTPUT
 
             # https://github.com/marketplace/actions/create-pull-request
-            - name: "Commit, push and create pull request"
+            - name: "Commit, push and create pull request."
               if: ${{ success() }}
               uses: peter-evans/create-pull-request@v5
               with:
