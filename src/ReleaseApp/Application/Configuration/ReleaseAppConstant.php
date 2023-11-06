@@ -35,4 +35,9 @@ class ReleaseAppConstant
      * @var string
      */
     public const RELEASE_GROUP_LINK_PATTERN = '%s/release-group/%s';
+
+    /**
+     * @var string
+     */
+    public const RELEASE_HISTORY_PATH = 'release-history';
 }

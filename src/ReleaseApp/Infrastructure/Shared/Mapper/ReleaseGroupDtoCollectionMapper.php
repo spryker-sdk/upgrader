@@ -73,6 +73,7 @@ class ReleaseGroupDtoCollectionMapper
             $releaseGroup->getId(),
             $releaseGroup->getName(),
             $this->buildModuleTransferCollection($releaseGroup),
+            $releaseGroup->getReleased(),
             $releaseGroup->hasProjectChanges(),
             $this->getReleaseGroupLink($releaseGroup->getId()),
             $releaseGroup->getRating(),

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Application\Strategy\ReleaseApp\ReleaseGroupFilter;
 
+use DateTime;
 use PHPUnit\Framework\TestCase;
 use ReleaseApp\Application\Configuration\ReleaseAppConstant;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
@@ -39,6 +40,7 @@ class BetaMajorPackageFilterItemTest extends TestCase
             1,
             'RG',
             new ModuleDtoCollection($modules),
+            new DateTime(),
             true,
             '',
             100,
