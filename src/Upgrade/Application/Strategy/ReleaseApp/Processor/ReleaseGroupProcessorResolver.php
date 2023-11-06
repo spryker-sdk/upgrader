@@ -42,12 +42,20 @@ class ReleaseGroupProcessorResolver
     public function getProcessor(): ReleaseGroupProcessorInterface
     {
         $processorName = $this->configurationProvider->getReleaseGroupProcessor();
+        $availableProcessors = [];
         foreach ($this->processorList as $processor) {
+            $availableProcessors[] = $processor->getProcessorName();
             if ($processor->getProcessorName() === $processorName) {
                 return $processor;
             }
         }
 
-        throw new ReleaseGroupRequireProcessorIsNotDefinedException();
+        throw new ReleaseGroupRequireProcessorIsNotDefinedException(
+            sprintf(
+                '`%s` processor is not available. Available processors: %s.',
+                $processorName,
+                implode(',', $availableProcessors),
+            ),
+        );
     }
 }
