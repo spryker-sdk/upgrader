@@ -7,7 +7,6 @@ env:
     SOURCE_PACKAGE_NAME: 'spryker-sdk/upgrader'
     PR_LABELS: 'composer dependencies'
     PR_ASSIGNEES: pavelmaksimov25,DmytroKlymanSpryker
-    PR_REVIEWERS: pavelmaksimov25,DmytroKlymanSpryker
 
 on:
     pull_request:
@@ -85,4 +84,3 @@ jobs:
                   labels: ${{ env.PR_LABELS }}
                   delete-branch: true
                   assignees: ${{ env.PR_ASSIGNEES }}
-                  reviewers: ${{ env.PR_REVIEWERS }}
