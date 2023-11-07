@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Infrastructure\Service;
 
+use DateTimeInterface;
 use ReleaseApp\Application\Service\ReleaseAppService as ApplicationReleaseAppService;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
@@ -65,5 +66,22 @@ class ReleaseAppService implements ReleaseAppServiceInterface
         );
 
         return new ReleaseAppResponse($releaseGroupCollection);
+    }
+
+    /**
+     * @param string|null $sort
+     * @param string|null $direction
+     * @param \DateTimeInterface|null $releasedFrom
+     * @param bool $projectOnly
+     *
+     * @return string
+     */
+    public function getReleaseHistoryLink(
+        ?string $sort = null,
+        ?string $direction = null,
+        ?DateTimeInterface $releasedFrom = null,
+        bool $projectOnly = false
+    ): string {
+        return $this->releaseApp->getReleaseHistoryLink($sort, $direction, $releasedFrom, $projectOnly);
     }
 }

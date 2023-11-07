@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Infrastructure\Service;
 
+use DateTime;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
@@ -52,6 +53,7 @@ class ReleaseAppServiceTest extends KernelTestCase
                             new ModuleDto('spryker/mail-extension', '1.0.0', 'major'),
                             new ModuleDto('spryker/symfony-mailer', '1.0.2', 'major'),
                         ]),
+                        DateTime::createFromFormat("Y-m-d\TH:i:s.uO", '2022-11-13T18:12:50.000000+0000'),
                         true,
                         'https://api.release.spryker.com/release-group/4395',
                         100,
@@ -84,6 +86,7 @@ class ReleaseAppServiceTest extends KernelTestCase
                 new ModuleDto('spryker/shipment-types-backend-api', '0.1.0', 'minor'),
                 new ModuleDto('spryker/shipment-type', '0.1.1', 'patch'),
             ]),
+            DateTime::createFromFormat("Y-m-d\TH:i:s.uO", '2023-05-23T14:26:52.000000+0000'),
             true,
             'https://api.release.spryker.com/release-group/4821',
             100,
@@ -99,6 +102,29 @@ class ReleaseAppServiceTest extends KernelTestCase
                 ]),
             ),
             $releaseGroups,
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetReleaseHistoryLink(): void
+    {
+        // Arrange
+        $container = static::bootKernel()->getContainer();
+        $container->set(HttpRequestExecutor::class, $this->createRequestExecutorMock());
+
+        $sort = 'date';
+        $direction = 'asc';
+        $released = new DateTime('2021-01-01');
+
+        // Act
+        $result = $container->get(ReleaseAppService::class)->getReleaseHistoryLink($sort, $direction, $released, true);
+
+        // Assert
+        $this->assertSame(
+            'https://api.release.spryker.com/release-history?sort=date&direction=asc&project_only=1&released_from%5Bday%5D=01&released_from%5Bmonth%5D=01&released_from%5Byear%5D=2021',
+            $result,
         );
     }
 
