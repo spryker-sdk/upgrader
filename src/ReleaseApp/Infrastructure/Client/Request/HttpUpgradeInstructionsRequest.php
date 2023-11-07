@@ -16,7 +16,7 @@ class HttpUpgradeInstructionsRequest implements HttpRequestInterface
     /**
      * @var string
      */
-    public const REQUEST_ENDPOINT = '/upgrade-instructions.json';
+    public const REQUEST_ENDPOINT = '/upgrader-instruction-list.json';
 
     /**
      * @var \ReleaseApp\Domain\Client\Request\RequestInterface

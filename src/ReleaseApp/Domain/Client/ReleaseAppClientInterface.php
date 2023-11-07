@@ -9,21 +9,13 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Domain\Client;
 
-use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
-use ReleaseApp\Domain\Entities\UpgradeAnalysis;
+use ReleaseApp\Domain\Entities\UpgradeInstruction;
 use ReleaseApp\Domain\Entities\UpgradeInstructions;
 
 interface ReleaseAppClientInterface
 {
-    /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $upgradeAnalysisRequest
-     *
-     * @return \ReleaseApp\Domain\Entities\UpgradeAnalysis
-     */
-    public function getUpgradeAnalysis(UpgradeAnalysisRequest $upgradeAnalysisRequest): UpgradeAnalysis;
-
     /**
      * @param \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest $instructionsRequest
      *
@@ -34,7 +26,7 @@ interface ReleaseAppClientInterface
     /**
      * @param \ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest $releaseGroupRequest
      *
-     * @return \ReleaseApp\Domain\Entities\UpgradeInstructions
+     * @return \ReleaseApp\Domain\Entities\UpgradeInstruction
      */
-    public function getUpgradeReleaseGroupInstructions(UpgradeReleaseGroupInstructionsRequest $releaseGroupRequest): UpgradeInstructions;
+    public function getUpgradeReleaseGroupInstruction(UpgradeReleaseGroupInstructionsRequest $releaseGroupRequest): UpgradeInstruction;
 }

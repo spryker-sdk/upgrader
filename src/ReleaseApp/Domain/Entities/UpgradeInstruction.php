@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace ReleaseApp\Domain\Entities;
 
 use ReleaseApp\Domain\Client\Response\Response;
-use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection;
 use Upgrade\Application\Exception\UpgraderException;
 
 class UpgradeInstruction extends Response
@@ -18,26 +17,21 @@ class UpgradeInstruction extends Response
     /**
      * @var string
      */
-    protected const RELEASE_GROUPS_KEY = 'release_groups';
+    protected const RELEASE_GROUP_KEY = 'release_group';
 
     /**
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
-     * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection
+     * @return \ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup
      */
-    public function getReleaseGroups(): UpgradeInstructionsReleaseGroupCollection
+    public function getReleaseGroup(): UpgradeInstructionsReleaseGroup
     {
         $bodyArray = $this->getBody();
 
         if (!$bodyArray) {
             throw new UpgraderException('Response body not found');
         }
-        $releaseGroupCollection = new UpgradeInstructionsReleaseGroupCollection();
 
-        foreach ($bodyArray[static::RELEASE_GROUPS_KEY] as $releaseGroup) {
-            $releaseGroupCollection->add(new UpgradeInstructionsReleaseGroup($releaseGroup));
-        }
-
-        return $releaseGroupCollection;
+        return new UpgradeInstructionsReleaseGroup($bodyArray[static::RELEASE_GROUP_KEY]);
     }
 }

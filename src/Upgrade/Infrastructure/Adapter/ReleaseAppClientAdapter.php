@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\Adapter;
 
-use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
+use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
 use ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
@@ -43,9 +43,9 @@ class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
      */
     public function getNewReleaseGroups(): ReleaseAppResponse
     {
-        $upgradeAnalysisRequest = $this->createDataProviderRequest();
+        $upgradeInstructionsRequest = $this->createDataProviderRequest();
 
-        return $this->releaseApp->getNewReleaseGroups($upgradeAnalysisRequest);
+        return $this->releaseApp->getNewReleaseGroups($upgradeInstructionsRequest);
     }
 
     /**
@@ -59,14 +59,37 @@ class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
     }
 
     /**
-     * @return \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest
+     * @return \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest
      */
-    protected function createDataProviderRequest(): UpgradeAnalysisRequest
+    protected function createDataProviderRequest(): UpgradeInstructionsRequest
     {
-        $projectName = $this->packageManager->getProjectName();
-        $composerJson = $this->packageManager->getComposerJsonFile();
-        $composerLock = $this->packageManager->getComposerLockFile();
+        $packages = $this->extractLockedPackages($this->packageManager->getComposerLockFile());
 
-        return new UpgradeAnalysisRequest($projectName, $composerJson, $composerLock);
+        return new UpgradeInstructionsRequest($packages);
+    }
+
+    /**
+     * @param array<string, mixed> $composerLockArray
+     *
+     * @return array<string, string>
+     */
+    protected function extractLockedPackages(array $composerLockArray): array
+    {
+        if (empty($composerLockArray['packages'])) {
+            return [];
+        }
+
+        $locked = [];
+
+        foreach ($composerLockArray['packages'] as $package) {
+            $name = (string)$package['name'];
+            if (!preg_match('#^spryker.*(?<!feature)/#', $name)) {
+                continue;
+            }
+
+            $locked[$name] = (string)$package['version'];
+        }
+
+        return $locked;
     }
 }
