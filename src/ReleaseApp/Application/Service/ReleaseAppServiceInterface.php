@@ -9,9 +9,8 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Application\Service;
 
-use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use DateTimeInterface;
-use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
+use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
 use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection;
 use ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup;
