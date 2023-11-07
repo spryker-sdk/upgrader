@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Application\Service;
 
+use DateTimeInterface;
 use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
 use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection;
@@ -29,4 +30,19 @@ interface ReleaseAppServiceInterface
      * @return \ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup
      */
     public function getReleaseGroup(UpgradeReleaseGroupInstructionsRequest $upgradeReleaseGroupInstructionsRequest): UpgradeInstructionsReleaseGroup;
+
+    /**
+     * @param string|null $sort
+     * @param string|null $direction
+     * @param \DateTimeInterface|null $releasedFrom
+     * @param bool $projectOnly
+     *
+     * @return string
+     */
+    public function getReleaseHistoryLink(
+        ?string $sort = null,
+        ?string $direction = null,
+        ?DateTimeInterface $releasedFrom = null,
+        bool $projectOnly = false
+    ): string;
 }
