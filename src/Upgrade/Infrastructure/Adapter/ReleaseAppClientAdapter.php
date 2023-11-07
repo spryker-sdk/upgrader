@@ -29,12 +29,12 @@ class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
     protected PackageManagerAdapterInterface $packageManager;
 
     /**
-     * @param \ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface $dataProvider
+     * @param \ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface $releaseApp
      * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
      */
-    public function __construct(ReleaseAppServiceInterface $dataProvider, PackageManagerAdapterInterface $packageManager)
+    public function __construct(ReleaseAppServiceInterface $releaseApp, PackageManagerAdapterInterface $packageManager)
     {
-        $this->releaseApp = $dataProvider;
+        $this->releaseApp = $releaseApp;
         $this->packageManager = $packageManager;
     }
 
