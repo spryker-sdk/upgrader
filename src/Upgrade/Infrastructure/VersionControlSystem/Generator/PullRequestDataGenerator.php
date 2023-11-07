@@ -66,8 +66,7 @@ class PullRequestDataGenerator
         ViolationBodyMessageBuilder $violationBodyMessageBuilder,
         ConfigurationProviderInterface $configurationProvider,
         IntegratorExecutionValidatorInterface $integratorExecutionValidator,
-        ReleaseAppServiceInterface $releaseApp
-        IntegratorExecutionValidatorInterface $integratorExecutionValidator,
+        ReleaseAppServiceInterface $releaseApp,
         SourceCodeProvider $sourceCodeProvider
     ) {
         $this->violationBodyMessageBuilder = $violationBodyMessageBuilder;
