@@ -209,6 +209,11 @@ class Git
             return $stepsExecutionDto;
         }
 
+        if ($composerDiffDto === null) {
+            $this->createEmptyCommit($stepsExecutionDto, 'pr empty commit');
+            $this->push($stepsExecutionDto);
+        }
+
         $releaseGroupId = $this->configurationProvider->getReleaseGroupId();
 
         $stepsExecutionDto->setIsPullRequestSent(true);
@@ -299,6 +304,19 @@ class Git
         $stepsExecutionDto = $this->process($stepsExecutionDto, $restore);
 
         return $this->process($stepsExecutionDto, $removeUntracked);
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     * @param string $message
+     *
+     * @return \Upgrade\Application\Dto\StepsResponseDto
+     */
+    protected function createEmptyCommit(StepsResponseDto $stepsExecutionDto, string $message): StepsResponseDto
+    {
+        $command = ['git', 'commit', '--allow-empty', '-m', $message];
+
+        return $this->process($stepsExecutionDto, $command);
     }
 
     /**
