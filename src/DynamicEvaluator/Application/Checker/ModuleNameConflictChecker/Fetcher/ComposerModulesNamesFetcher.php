@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Fetcher;
 
-use SprykerSdk\Utils\Infrastructure\Helper\StringHelper;
+use SprykerSdk\Utils\Infrastructure\Helper\TextCaseHelper;
 use Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader;
 
 class ComposerModulesNamesFetcher implements ComposerModulesNamesFetcherInterface
@@ -60,6 +60,6 @@ class ComposerModulesNamesFetcher implements ComposerModulesNamesFetcherInterfac
     {
         [, $moduleName] = explode('/', $package);
 
-        return StringHelper::fromDashToCamelCase($moduleName);
+        return TextCaseHelper::fromDashToCamelCase($moduleName);
     }
 }

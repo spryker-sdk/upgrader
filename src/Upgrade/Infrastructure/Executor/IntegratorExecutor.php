@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\Executor;
 
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
-use SprykerSdk\Utils\Infrastructure\Helper\StringHelper;
+use SprykerSdk\Utils\Infrastructure\Helper\TextCaseHelper;
 use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Upgrade\Application\Adapter\IntegratorExecutorInterface;
 use Upgrade\Application\Dto\IntegratorResponseDto;
@@ -106,8 +106,8 @@ class IntegratorExecutor implements IntegratorExecutorInterface
 
             return trim(sprintf(
                 '%s.%s:%s',
-                StringHelper::fromDashToCamelCase($organization),
-                StringHelper::fromDashToCamelCase($package),
+                TextCaseHelper::fromDashToCamelCase($organization),
+                TextCaseHelper::fromDashToCamelCase($package),
                 $moduleDto->getVersion(),
             ));
         }, $modules));
