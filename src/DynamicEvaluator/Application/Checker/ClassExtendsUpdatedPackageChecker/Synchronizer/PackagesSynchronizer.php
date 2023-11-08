@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer;
 
-use Core\Infrastructure\Service\Filesystem;
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
+use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class PackagesSynchronizer implements PackagesSynchronizerInterface
@@ -31,19 +31,19 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
     protected PackagesDirProviderInterface $packagesDirProvider;
 
     /**
-     * @var \Core\Infrastructure\Service\Filesystem
+     * @var \SprykerSdk\Utils\Infrastructure\Service\Filesystem
      */
     protected Filesystem $filesystem;
 
     /**
-     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunnerService;
 
     /**
      * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface $packagesDirProvider
-     * @param \Core\Infrastructure\Service\Filesystem $filesystem
-     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
+     * @param \SprykerSdk\Utils\Infrastructure\Service\Filesystem $filesystem
+     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
      */
     public function __construct(
         PackagesDirProviderInterface $packagesDirProvider,

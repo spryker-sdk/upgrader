@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\Executor;
 
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
-use Core\Infrastructure\StringHelper;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
+use SprykerSdk\Utils\Infrastructure\Helper\StringHelper;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Upgrade\Application\Adapter\IntegratorExecutorInterface;
 use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
@@ -46,12 +46,12 @@ class IntegratorExecutor implements IntegratorExecutorInterface
     protected const FROMAT_JSON_OPTION = '--format=json';
 
     /**
-     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunner;
 
     /**
-     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      */
     public function __construct(ProcessRunnerServiceInterface $processRunner)
     {

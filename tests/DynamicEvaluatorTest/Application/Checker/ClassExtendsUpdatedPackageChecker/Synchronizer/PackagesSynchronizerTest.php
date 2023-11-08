@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace DynamicEvaluatorTest\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer;
 
-use Core\Infrastructure\Service\Filesystem;
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProvider;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesSynchronizer;
 use PHPUnit\Framework\TestCase;
+use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -141,7 +141,7 @@ class PackagesSynchronizerTest extends TestCase
     /**
      * @param \Symfony\Component\Process\Process $process
      *
-     * @return \Core\Infrastructure\Service\ProcessRunnerServiceInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     public function createProcessRunnerServiceMock(Process $process): ProcessRunnerServiceInterface
     {

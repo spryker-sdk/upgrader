@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Infrastructure\VersionControlSystem\Git;
 
-use Core\Infrastructure\Service\ProcessRunnerService;
 use DateTime;
 use ReflectionClass;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
@@ -211,7 +211,7 @@ class GitTest extends KernelTestCase
     }
 
     /**
-     * @param \Core\Infrastructure\Service\ProcessRunnerService $processRunner
+     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService $processRunner
      *
      * @return \Upgrade\Infrastructure\VersionControlSystem\Git\Git
      */
@@ -236,7 +236,7 @@ class GitTest extends KernelTestCase
      * @param string $outputMessage
      * @param bool $isSuccessful
      *
-     * @return \Core\Infrastructure\Service\ProcessRunnerService
+     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService
      */
     protected function mockProcessRunnerWithOutput(string $outputMessage, bool $isSuccessful = true): ProcessRunnerService
     {

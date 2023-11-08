@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Infrastructure\Shared\Dto;
 
-use Core\Infrastructure\SemanticVersionHelper;
 use ReleaseApp\Application\Configuration\ReleaseAppConstant;
+use SprykerSdk\Utils\Infrastructure\Helper\SemanticVersionHelper;
 
 class ModuleDto
 {

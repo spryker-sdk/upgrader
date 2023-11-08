@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Application\Strategy\ReleaseApp\Step;
 
-use Core\Infrastructure\Service\Filesystem;
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
@@ -171,7 +171,7 @@ class ComposerJsonConstraintFixStepTest extends TestCase
     /**
      * @param bool $expectWriting
      *
-     * @return \Core\Infrastructure\Service\Filesystem
+     * @return \SprykerSdk\Utils\Infrastructure\Service\Filesystem
      */
     protected function createFilesystemMock(bool $expectWriting = true): Filesystem
     {
@@ -185,7 +185,7 @@ class ComposerJsonConstraintFixStepTest extends TestCase
     /**
      * @param \Symfony\Component\Process\Process $process
      *
-     * @return \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected function createProcessRunnerServiceMock(Process $process): ProcessRunnerServiceInterface
     {

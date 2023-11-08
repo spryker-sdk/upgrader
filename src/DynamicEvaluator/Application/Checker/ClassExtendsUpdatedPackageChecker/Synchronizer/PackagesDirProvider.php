@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer;
 
-use Core\Infrastructure\Service\Filesystem;
+use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
 use Upgrader\Configuration\ConfigurationProvider;
 
 class PackagesDirProvider implements PackagesDirProviderInterface
@@ -35,13 +35,13 @@ class PackagesDirProvider implements PackagesDirProviderInterface
     protected ConfigurationProvider $configurationProvider;
 
     /**
-     * @var \Core\Infrastructure\Service\Filesystem
+     * @var \SprykerSdk\Utils\Infrastructure\Service\Filesystem
      */
     protected Filesystem $filesystem;
 
     /**
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Core\Infrastructure\Service\Filesystem $filesystem
+     * @param \SprykerSdk\Utils\Infrastructure\Service\Filesystem $filesystem
      */
     public function __construct(ConfigurationProvider $configurationProvider, Filesystem $filesystem)
     {

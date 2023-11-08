@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Infrastructure\Executor;
 
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use PHPUnit\Framework\TestCase;
 use ReleaseApp\Application\Configuration\ReleaseAppConstant;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\Executor\IntegratorExecutor;
@@ -60,7 +60,7 @@ class IntegratorExecutorTest extends TestCase
     /**
      * @param array<string> $expectedCommand
      *
-     * @return \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected function createProcessRunnerServiceMock(array $expectedCommand): ProcessRunnerServiceInterface
     {

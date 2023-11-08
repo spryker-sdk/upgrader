@@ -330,3 +330,9 @@ services:
             - '%report_send_endpoint_url%'
             - '%report_send_timeout%'
             - '%report_send_connection_timeout%'
+
+    SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService: ~
+    SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface: '@SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService'
+
+    SprykerSdk\Utils\Infrastructure\Service\Filesystem: ~
+    SprykerSdk\Utils\Infrastructure\Service\FinderFactory: ~

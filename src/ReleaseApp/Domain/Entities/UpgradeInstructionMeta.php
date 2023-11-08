@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Domain\Entities;
 
-use Core\Infrastructure\TextCaseHelper;
 use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection;
+use SprykerSdk\Utils\Infrastructure\Helper\TextCaseHelper;
 
 class UpgradeInstructionMeta
 {

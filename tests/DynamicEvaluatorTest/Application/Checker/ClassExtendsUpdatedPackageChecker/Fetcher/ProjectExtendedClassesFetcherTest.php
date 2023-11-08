@@ -10,10 +10,10 @@ declare(strict_types=1);
 namespace DynamicEvaluatorTest\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher;
 
 use ArrayIterator;
-use Core\Infrastructure\Service\FinderFactory;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\ProjectExtendedClassesFetcher;
 use DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface;
 use PHPUnit\Framework\TestCase;
+use SprykerSdk\Utils\Infrastructure\Service\FinderFactory;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Upgrader\Configuration\ConfigurationProvider;

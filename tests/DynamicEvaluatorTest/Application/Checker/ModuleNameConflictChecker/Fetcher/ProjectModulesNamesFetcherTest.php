@@ -9,11 +9,11 @@ declare(strict_types=1);
 
 namespace DynamicEvaluatorTest\Application\Checker\ModuleNameConflictChecker\Fetcher;
 
-use Core\Infrastructure\Service\FinderFactory;
 use DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Fetcher\ProjectModulesNamesFetcher;
 use DynamicEvaluator\Application\ProjectConfigReader\ProjectConfigReaderInterface;
 use PHPUnit\Framework\TestCase;
 use SplFileInfo;
+use SprykerSdk\Utils\Infrastructure\Service\FinderFactory;
 use Symfony\Component\Finder\Finder;
 use Upgrader\Configuration\ConfigurationProvider;
 
@@ -62,7 +62,7 @@ class ProjectModulesNamesFetcherTest extends TestCase
      * @param array<string> $expectedLookupPaths
      * @param array<string> $modules
      *
-     * @return \Core\Infrastructure\Service\FinderFactory
+     * @return \SprykerSdk\Utils\Infrastructure\Service\FinderFactory
      */
     protected function createFinderFactoryMock(array $expectedLookupPaths, array $modules): FinderFactory
     {

@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Fetcher;
 
-use Core\Infrastructure\StringHelper;
+use SprykerSdk\Utils\Infrastructure\Helper\StringHelper;
 use Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader;
 
 class ComposerModulesNamesFetcher implements ComposerModulesNamesFetcherInterface
