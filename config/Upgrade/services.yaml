@@ -335,4 +335,3 @@ services:
     SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface: '@SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService'
 
     SprykerSdk\Utils\Infrastructure\Service\Filesystem: ~
-    SprykerSdk\Utils\Infrastructure\Service\FinderFactory: ~

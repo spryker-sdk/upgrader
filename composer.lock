@@ -3514,12 +3514,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/utils.git",
-                "reference": "b5e09bcfc4e2af34886f77ce23442535a0b93255"
+                "reference": "b32edda4ff8acf7ee0765650ab280b2673b5836f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/utils/zipball/b5e09bcfc4e2af34886f77ce23442535a0b93255",
-                "reference": "b5e09bcfc4e2af34886f77ce23442535a0b93255",
+                "url": "https://api.github.com/repos/spryker-sdk/utils/zipball/b32edda4ff8acf7ee0765650ab280b2673b5836f",
+                "reference": "b32edda4ff8acf7ee0765650ab280b2673b5836f",
                 "shasum": ""
             },
             "require": {
@@ -3527,9 +3527,9 @@
                 "ext-mbstring": "*",
                 "laminas/laminas-filter": "^2.11.0",
                 "php": ">=7.4",
+                "psr/log": "^1.0",
                 "symfony/filesystem": "^5.3",
                 "symfony/finder": "^5.3",
-                "symfony/monolog-bundle": "^3.8",
                 "symfony/process": "^5.0"
             },
             "require-dev": {
@@ -3553,7 +3553,7 @@
                 "issues": "https://github.com/spryker-sdk/utils/issues",
                 "source": "https://github.com/spryker-sdk/utils/tree/feature/sdk-extract-utils"
             },
-            "time": "2023-11-09T06:54:21+00:00"
+            "time": "2023-11-09T14:19:42+00:00"
         },
         {
             "name": "symfony/cache",

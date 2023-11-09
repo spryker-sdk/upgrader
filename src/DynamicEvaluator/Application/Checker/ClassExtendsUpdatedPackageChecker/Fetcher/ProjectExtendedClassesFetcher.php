@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher;
 
+use Core\Infrastructure\Service\FinderFactory;
 use DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface;
-use SprykerSdk\Utils\Infrastructure\Service\FinderFactory;
 use Symfony\Component\Finder\Finder;
 use Upgrader\Configuration\ConfigurationProvider;
 
@@ -27,7 +27,7 @@ class ProjectExtendedClassesFetcher implements ProjectExtendedClassesFetcherInte
     protected ?array $foundClasses = null;
 
     /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\FinderFactory
+     * @var \Core\Infrastructure\Service\FinderFactory
      */
     protected FinderFactory $finderFactory;
 
@@ -38,7 +38,7 @@ class ProjectExtendedClassesFetcher implements ProjectExtendedClassesFetcherInte
 
     /**
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     * @param \SprykerSdk\Utils\Infrastructure\Service\FinderFactory $finderFactory
+     * @param \Core\Infrastructure\Service\FinderFactory $finderFactory
      * @param \DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface $publicApiFilePathsProvider
      */
     public function __construct(

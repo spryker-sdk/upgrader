@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Fetcher;
 
+use Core\Infrastructure\Service\FinderFactory;
 use DynamicEvaluator\Application\ProjectConfigReader\ProjectConfigReaderInterface;
-use SprykerSdk\Utils\Infrastructure\Service\FinderFactory;
 use Symfony\Component\Finder\Finder;
 use Upgrader\Configuration\ConfigurationProvider;
 
@@ -27,7 +27,7 @@ class ProjectModulesNamesFetcher implements ProjectModulesNamesFetcherInterface
     protected ProjectConfigReaderInterface $projectConfigReader;
 
     /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\FinderFactory
+     * @var \Core\Infrastructure\Service\FinderFactory
      */
     protected FinderFactory $finderFactory;
 
@@ -38,7 +38,7 @@ class ProjectModulesNamesFetcher implements ProjectModulesNamesFetcherInterface
 
     /**
      * @param \DynamicEvaluator\Application\ProjectConfigReader\ProjectConfigReaderInterface $projectConfigReader
-     * @param \SprykerSdk\Utils\Infrastructure\Service\FinderFactory $finderFactory
+     * @param \Core\Infrastructure\Service\FinderFactory $finderFactory
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
      */
     public function __construct(
