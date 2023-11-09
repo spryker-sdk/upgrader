@@ -14,6 +14,7 @@ use SprykerAzure\Api\PullRequestApi\PullRequestData;
 use SprykerAzure\Api\RepositoryPath;
 use Throwable;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
@@ -129,6 +130,16 @@ class AzureSourceCodeProvider implements SourceCodeProviderInterface
         }
 
         return $stepsExecutionDto;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\ValidatorViolationDto $blocker
+     *
+     * @return string
+     */
+    public function buildBlockerTextBlock(ValidatorViolationDto $blocker): string
+    {
+        return sprintf('> <b>%s.</b> %s <br>', $blocker->getTitle(), $blocker->getMessage() . PHP_EOL) . PHP_EOL;
     }
 
     /**
