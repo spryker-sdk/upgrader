@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "699761113410ff054fca0874cb454c4a",
+    "content-hash": "ece8a223c2d4a7f02333985810a6ba42",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3510,16 +3510,16 @@
         },
         {
             "name": "spryker-sdk/utils",
-            "version": "dev-feature/sdk-extract-utils",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/utils.git",
-                "reference": "b32edda4ff8acf7ee0765650ab280b2673b5836f"
+                "reference": "528ab983e3f800fc4d7fe86fc2a90bfb568fb6ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/utils/zipball/b32edda4ff8acf7ee0765650ab280b2673b5836f",
-                "reference": "b32edda4ff8acf7ee0765650ab280b2673b5836f",
+                "url": "https://api.github.com/repos/spryker-sdk/utils/zipball/528ab983e3f800fc4d7fe86fc2a90bfb568fb6ed",
+                "reference": "528ab983e3f800fc4d7fe86fc2a90bfb568fb6ed",
                 "shasum": ""
             },
             "require": {
@@ -3538,6 +3538,7 @@
                 "phpunit/phpunit": "^9.5.0",
                 "spryker/code-sniffer": "0.17.18"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -3551,9 +3552,9 @@
             "description": "Spryker SDK Utils Module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/utils/issues",
-                "source": "https://github.com/spryker-sdk/utils/tree/feature/sdk-extract-utils"
+                "source": "https://github.com/spryker-sdk/utils/tree/master"
             },
-            "time": "2023-11-09T14:19:42+00:00"
+            "time": "2023-11-09T15:27:48+00:00"
         },
         {
             "name": "symfony/cache",
