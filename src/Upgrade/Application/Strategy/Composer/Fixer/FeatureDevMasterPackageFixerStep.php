@@ -11,6 +11,7 @@ namespace Upgrade\Application\Strategy\Composer\Fixer;
 
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Factory\ComposerViolationDtoFactory;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
 
@@ -86,6 +87,10 @@ class FeatureDevMasterPackageFixerStep extends AbstractFeaturePackageFixerStep
         }
         $stepsExecutionDto->setOutputMessages($messages);
         $stepsExecutionDto->addOutputMessage(sprintf('Versions were changed to %s for %s feature package(s)', static::MASK_ALIAS_DEV_MASTER, count($matches[static::KEY_FEATURES])));
+
+        if ($stepsExecutionDto->getIsSuccessful()) {
+            $stepsExecutionDto->removeBlockersByTitle(ComposerViolationDtoFactory::VIOLATION_TITLE);
+        }
 
         return $stepsExecutionDto;
     }
