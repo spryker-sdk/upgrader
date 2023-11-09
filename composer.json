@@ -32,7 +32,7 @@
         "symfony/serializer": "^5.4",
         "symfony/uid": "^5.4",
         "symfony/yaml": "^5.3",
-        "spryker-sdk/utils": "dev-master"
+        "spryker-sdk/utils": "dev-feature/sdk-extract-utils"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
