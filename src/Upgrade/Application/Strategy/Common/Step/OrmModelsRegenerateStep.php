@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\Common\Step;
 
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Dto\ValidatorViolationDto;
@@ -45,7 +45,7 @@ class OrmModelsRegenerateStep implements StepInterface
     ];
 
     /**
-     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunner;
 
@@ -55,7 +55,7 @@ class OrmModelsRegenerateStep implements StepInterface
     protected Filesystem $filesystem;
 
     /**
-     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      * @param \Symfony\Component\Filesystem\Filesystem $filesystem
      */
     public function __construct(ProcessRunnerServiceInterface $processRunner, Filesystem $filesystem)

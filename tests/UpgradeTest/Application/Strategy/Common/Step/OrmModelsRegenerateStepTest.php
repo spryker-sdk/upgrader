@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Application\Strategy\Common\Step;
 
-use Core\Infrastructure\Service\ProcessRunnerService;
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use PHPUnit\Framework\TestCase;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
@@ -89,7 +89,7 @@ class OrmModelsRegenerateStepTest extends TestCase
     }
 
     /**
-     * @return \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected function createProcessRunnerServiceMock(): ProcessRunnerServiceInterface
     {

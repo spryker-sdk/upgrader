@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider;
 
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
 
 interface SourceCodeProviderInterface
@@ -36,4 +37,11 @@ interface SourceCodeProviderInterface
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
     public function validateCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
+
+    /**
+     * @param \Upgrade\Application\Dto\ValidatorViolationDto $blocker
+     *
+     * @return string
+     */
+    public function buildBlockerTextBlock(ValidatorViolationDto $blocker): string;
 }

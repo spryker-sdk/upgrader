@@ -28,6 +28,7 @@ class ComposerStrategyTest extends TestCase
         // Arrange
         $strategy = new ComposerStrategy(
             new StepExecutor($this->createMock(LoggerInterface::class)),
+            new StepExecutor($this->createMock(LoggerInterface::class)),
             $this->createMock(LoggerInterface::class),
         );
 
@@ -61,6 +62,7 @@ class ComposerStrategyTest extends TestCase
                 new FooRollbackStep(),
                 ],
             ),
+            new StepExecutor($this->createMock(LoggerInterface::class)),
             $this->createMock(LoggerInterface::class),
         );
 
@@ -98,6 +100,7 @@ class ComposerStrategyTest extends TestCase
                 $barStep,
                 ],
             ),
+            new StepExecutor($this->createMock(LoggerInterface::class)),
             $this->createMock(LoggerInterface::class),
         );
 
@@ -142,6 +145,7 @@ class ComposerStrategyTest extends TestCase
                     $fixerStep,
                 ],
             ),
+            new StepExecutor($this->createMock(LoggerInterface::class)),
             $this->createMock(LoggerInterface::class),
         );
 
@@ -168,6 +172,7 @@ class ComposerStrategyTest extends TestCase
                     $this->mockUnSuccessFooStep(),
                 ],
             ),
+            new StepExecutor($this->createMock(LoggerInterface::class)),
             $this->createMock(LoggerInterface::class),
         );
 
@@ -198,6 +203,7 @@ class ComposerStrategyTest extends TestCase
                     $this->mockUnSuccessFooStep(),
                 ],
             ),
+            new StepExecutor($this->createMock(LoggerInterface::class)),
             $this->createMock(LoggerInterface::class),
         );
 
@@ -211,7 +217,7 @@ class ComposerStrategyTest extends TestCase
     }
 
     /**
-     * @return \Fixtures\Infrastructure\Processor\Strategy\Composer\Steps\FooStep
+     * @return \UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps\FooStep
      */
     protected function mockUnSuccessFooStep(): FooStep
     {

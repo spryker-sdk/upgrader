@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\Common\Step;
 
-use Core\Infrastructure\Service\Filesystem;
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Psr\Log\LoggerInterface;
+use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
@@ -46,12 +46,12 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
     protected const SPRYKER_PACKAGE_PREFIX = 'spryker';
 
     /**
-     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunnerService;
 
     /**
-     * @var \Core\Infrastructure\Service\Filesystem
+     * @var \SprykerSdk\Utils\Infrastructure\Service\Filesystem
      */
     protected Filesystem $filesystem;
 
@@ -72,8 +72,8 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
 
     /**
      * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
-     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
-     * @param \Core\Infrastructure\Service\Filesystem $filesystem
+     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
+     * @param \SprykerSdk\Utils\Infrastructure\Service\Filesystem $filesystem
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
      * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManagerAdapter
      * @param \Psr\Log\LoggerInterface $logger

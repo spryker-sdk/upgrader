@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter;
 
-use Core\Infrastructure\SemanticVersionHelper;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
+use SprykerSdk\Utils\Infrastructure\Helper\SemanticVersionHelper;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\ReleaseGroupFilterResponseDto;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppPackageHelper;

@@ -9,13 +9,13 @@ declare(strict_types=1);
 
 namespace DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher;
 
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\BaselineStorageInterface;
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto;
 use Exception;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 
 class FileErrorsFetcher implements FileErrorsFetcherInterface
@@ -36,7 +36,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     protected string $executable;
 
     /**
-     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunnerService;
 
@@ -59,7 +59,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
      * @param string $executableConfig
      * @param string $executableProjectConfig
      * @param string $executable
-     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
+     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
      * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\BaselineStorageInterface $baselineStorage
      * @param \Psr\Log\LoggerInterface $logger
      * @param string $phpstanNeonFileName

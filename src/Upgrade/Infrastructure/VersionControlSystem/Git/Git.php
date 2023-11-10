@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Git;
 
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Domain\ValueObject\Error;
@@ -27,7 +27,7 @@ class Git
     protected string $baseBranch = '';
 
     /**
-     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunner;
 
@@ -53,7 +53,7 @@ class Git
 
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $sourceCodeProvider
      * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator $pullRequestDataGenerator
      */
@@ -204,11 +204,19 @@ class Git
     public function createPullRequest(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $composerDiffDto = $stepsExecutionDto->getComposerLockDiff();
-        if ($composerDiffDto === null) {
+
+        if ($composerDiffDto === null && !$stepsExecutionDto->hasErrors()) {
             return $stepsExecutionDto;
         }
 
+        if ($composerDiffDto === null) {
+            $this->createEmptyCommit($stepsExecutionDto, 'pr empty commit');
+            $this->push($stepsExecutionDto);
+        }
+
         $releaseGroupId = $this->configurationProvider->getReleaseGroupId();
+
+        $stepsExecutionDto->setIsPullRequestSent(true);
 
         $pullRequestDto = new PullRequestDto(
             $this->getHeadBranch(),
@@ -296,6 +304,19 @@ class Git
         $stepsExecutionDto = $this->process($stepsExecutionDto, $restore);
 
         return $this->process($stepsExecutionDto, $removeUntracked);
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     * @param string $message
+     *
+     * @return \Upgrade\Application\Dto\StepsResponseDto
+     */
+    protected function createEmptyCommit(StepsResponseDto $stepsExecutionDto, string $message): StepsResponseDto
+    {
+        $command = ['git', 'commit', '--allow-empty', '-m', $message];
+
+        return $this->process($stepsExecutionDto, $command);
     }
 
     /**

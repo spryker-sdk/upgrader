@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace DynamicEvaluatorTest\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer;
 
-use Core\Infrastructure\Service\Filesystem;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProvider;
 use PHPUnit\Framework\TestCase;
+use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
 use Upgrader\Configuration\ConfigurationProvider;
 
 class PackagesDirProviderTest extends TestCase
@@ -70,7 +70,7 @@ class PackagesDirProviderTest extends TestCase
     /**
      * @param array<string> $dirFiles
      *
-     * @return \Core\Infrastructure\Service\Filesystem
+     * @return \SprykerSdk\Utils\Infrastructure\Service\Filesystem
      */
     public function createFilesystemMock(array $dirFiles): Filesystem
     {

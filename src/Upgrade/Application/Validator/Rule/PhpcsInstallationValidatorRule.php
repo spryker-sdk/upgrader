@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Validator\Rule;
 
-use Core\Infrastructure\Service\Filesystem;
+use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
 use Upgrade\Application\Exception\UpgraderException;
 use Upgrade\Application\Validator\ProjectValidatorRuleInterface;
 use Upgrader\Configuration\ConfigurationProvider;
@@ -32,13 +32,13 @@ class PhpcsInstallationValidatorRule implements ProjectValidatorRuleInterface
     protected ConfigurationProvider $configurationProvider;
 
     /**
-     * @var \Core\Infrastructure\Service\Filesystem
+     * @var \SprykerSdk\Utils\Infrastructure\Service\Filesystem
      */
     protected Filesystem $filesystem;
 
     /**
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Core\Infrastructure\Service\Filesystem $filesystem
+     * @param \SprykerSdk\Utils\Infrastructure\Service\Filesystem $filesystem
      */
     public function __construct(ConfigurationProvider $configurationProvider, Filesystem $filesystem)
     {

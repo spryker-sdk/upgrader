@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Domain\Entities;
 
-use Core\Infrastructure\TextCaseHelper;
 use ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection;
+use SprykerSdk\Utils\Infrastructure\Helper\StrHelper;
 
 class UpgradeInstructionMeta
 {
@@ -105,7 +105,7 @@ class UpgradeInstructionMeta
         foreach ($this->body[$key] as $name => $version) {
             $list[] = new UpgradeInstructionModule(
                 [UpgradeInstructionModule::VERSION_KEY => $version],
-                TextCaseHelper::packageCamelCaseToDash($name),
+                StrHelper::packageCamelCaseToDash($name),
             );
         }
 

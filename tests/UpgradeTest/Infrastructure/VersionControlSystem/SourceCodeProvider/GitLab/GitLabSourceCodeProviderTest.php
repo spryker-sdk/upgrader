@@ -12,6 +12,7 @@ namespace UpgradeTest\Infrastructure\VersionControlSystem\SourceCodeProvider\Git
 use Gitlab\Client as GitLabClient;
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Dto\StepsResponseDto;
+use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
@@ -146,5 +147,40 @@ class GitLabSourceCodeProviderTest extends TestCase
             $this->assertTrue($stepsExecutionDto->getIsSuccessful());
             $this->assertNull($stepsExecutionDto->getError());
         }
+    }
+
+    /**
+     * @dataProvider buildBlockerTextBlockDataProvider
+     *
+     * @param string $title
+     * @param string $message
+     * @param string $expectedOutput
+     *
+     * @return void
+     */
+    public function testBuildBlockerTextBlock(string $title, string $message, string $expectedOutput): void
+    {
+        $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
+        $gitLabClientFactoryMock = $this->createMock(GitLabClientFactory::class);
+
+        $gitLabSourceCodeProvider = new GitLabSourceCodeProvider(
+            $configurationProviderMock,
+            $gitLabClientFactoryMock,
+        );
+
+        $result = $gitLabSourceCodeProvider->buildBlockerTextBlock(new ValidatorViolationDto($title, $message));
+
+        $this->assertSame($expectedOutput, $result);
+    }
+
+    /**
+     * @return array<array>
+     */
+    public function buildBlockerTextBlockDataProvider(): array
+    {
+        return [
+            ['Title 1', 'Message 1', "> <b>Title 1.</b> Message 1\n <br>\n"],
+            ['Another Title', 'Another Message', "> <b>Another Title.</b> Another Message\n <br>\n"],
+        ];
     }
 }

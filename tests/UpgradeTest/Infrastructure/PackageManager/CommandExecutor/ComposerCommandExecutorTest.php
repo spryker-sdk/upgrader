@@ -9,13 +9,13 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Infrastructure\PackageManager\CommandExecutor;
 
-use Core\Infrastructure\Service\ProcessRunnerService;
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Generator;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use RuntimeException;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
@@ -29,7 +29,7 @@ class ComposerCommandExecutorTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var \Core\Infrastructure\Service\ProcessRunnerService|\Prophecy\Prophecy\ObjectProphecy
+     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService|\Prophecy\Prophecy\ObjectProphecy
      */
     protected $processRunner;
 
