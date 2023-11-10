@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Application\Validator\Rule;
 
-use Core\Infrastructure\Service\Filesystem;
 use PHPUnit\Framework\TestCase;
+use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
 use Upgrade\Application\Exception\UpgraderException;
 use Upgrade\Application\Validator\Rule\PhpcsInstallationValidatorRule;
 use Upgrader\Configuration\ConfigurationProvider;
@@ -81,7 +81,7 @@ class PhpcsInstallationValidatorRuleTest extends TestCase
     /**
      * @param bool $isPhpcsFound
      *
-     * @return \Core\Infrastructure\Service\Filesystem
+     * @return \SprykerSdk\Utils\Infrastructure\Service\Filesystem
      */
     protected function createFilesystemMock(bool $isPhpcsFound = true): Filesystem
     {

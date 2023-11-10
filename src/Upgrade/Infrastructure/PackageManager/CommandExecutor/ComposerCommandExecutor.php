@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\PackageManager\CommandExecutor;
 
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use RuntimeException;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
@@ -75,7 +75,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     protected const NO_INSTALL_FLAG = '--no-install';
 
     /**
-     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunner;
 
@@ -95,7 +95,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     protected ComposerLockReader $composerLockReader;
 
     /**
-     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      * @param \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader $composerLockReader
      * @param bool $isUpdateMinimumDependeciesEnabled

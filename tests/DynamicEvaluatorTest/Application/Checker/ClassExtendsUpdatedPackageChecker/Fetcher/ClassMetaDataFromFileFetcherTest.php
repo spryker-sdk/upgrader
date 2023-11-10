@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace DynamicEvaluatorTest\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher;
 
-use Core\Infrastructure\Service\Filesystem;
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\ClassMetaDataFromFileFetcher;
 use PHPUnit\Framework\TestCase;
+use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
 
 class ClassMetaDataFromFileFetcherTest extends TestCase
 {
@@ -215,7 +215,7 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
     /**
      * @param string $fileContent
      *
-     * @return \Core\Infrastructure\Service\Filesystem
+     * @return \SprykerSdk\Utils\Infrastructure\Service\Filesystem
      */
     public function createFilesystemFacadeMock(string $fileContent): Filesystem
     {

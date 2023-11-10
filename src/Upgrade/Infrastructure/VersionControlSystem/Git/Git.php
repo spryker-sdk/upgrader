@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\VersionControlSystem\Git;
 
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Domain\ValueObject\Error;
@@ -27,7 +27,7 @@ class Git
     protected string $baseBranch = '';
 
     /**
-     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunner;
 
@@ -53,7 +53,7 @@ class Git
 
     /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $sourceCodeProvider
      * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator $pullRequestDataGenerator
      */

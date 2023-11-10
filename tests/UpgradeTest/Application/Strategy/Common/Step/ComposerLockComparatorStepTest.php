@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Application\Strategy\Common\Step;
 
-use Core\Infrastructure\Service\ProcessRunnerService;
 use PHPUnit\Framework\TestCase;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\StepsResponseDto;
@@ -111,7 +111,7 @@ class ComposerLockComparatorStepTest extends TestCase
     /**
      * @param string $outputMessage
      *
-     * @return \Core\Infrastructure\Service\ProcessRunnerService
+     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService
      */
     protected function mockProcessRunnerWithOutput(string $outputMessage): ProcessRunnerService
     {

@@ -9,17 +9,17 @@ declare(strict_types=1);
 
 namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher;
 
-use Core\Infrastructure\Service\Filesystem;
+use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
 
 class ClassMetaDataFromFileFetcher implements ClassMetaDataFromFileFetcherInterface
 {
-    /**
-     * @var \Core\Infrastructure\Service\Filesystem
-     */
+ /**
+  * @var \SprykerSdk\Utils\Infrastructure\Service\Filesystem
+  */
     protected Filesystem $filesystem;
 
     /**
-     * @param \Core\Infrastructure\Service\Filesystem $filesystem
+     * @param \SprykerSdk\Utils\Infrastructure\Service\Filesystem $filesystem
      */
     public function __construct(Filesystem $filesystem)
     {

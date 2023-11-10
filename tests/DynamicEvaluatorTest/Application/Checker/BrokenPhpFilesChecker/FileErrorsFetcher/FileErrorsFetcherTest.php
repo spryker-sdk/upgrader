@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace DynamicEvaluatorTest\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher;
 
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\BaselineStorage;
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto;
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher\FileErrorsFetcher;
@@ -17,6 +16,7 @@ use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
 
@@ -112,7 +112,7 @@ class FileErrorsFetcherTest extends TestCase
     /**
      * @param array<mixed> $returnValue
      *
-     * @return \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     public function createProcessRunnerServiceMock(array $returnValue): ProcessRunnerServiceInterface
     {
@@ -143,7 +143,7 @@ class FileErrorsFetcherTest extends TestCase
         $toolOutput = ['files' => []];
         $processMock = $this->createMock(Process::class);
         $processMock->method('getOutput')->willReturn(json_encode($toolOutput, \JSON_THROW_ON_ERROR));
-        /** @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface&\PHPUnit\Framework\MockObject\MockObject $processRunnerServiceMock */
+        /** @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface&\PHPUnit\Framework\MockObject\MockObject $processRunnerServiceMock */
         $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
         $processRunnerServiceMock
             ->method('run')
@@ -168,7 +168,7 @@ class FileErrorsFetcherTest extends TestCase
         $toolOutput = ['files' => []];
         $processMock = $this->createMock(Process::class);
         $processMock->method('getOutput')->willReturn(json_encode($toolOutput, \JSON_THROW_ON_ERROR));
-        /** @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface&\PHPUnit\Framework\MockObject\MockObject $processRunnerServiceMock */
+        /** @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface&\PHPUnit\Framework\MockObject\MockObject $processRunnerServiceMock */
         $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
         $processRunnerServiceMock
             ->method('run')
@@ -190,7 +190,7 @@ class FileErrorsFetcherTest extends TestCase
     public function testRunProcessWithTimeout(): void
     {
         // Arrange
-        /** @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface&\PHPUnit\Framework\MockObject\MockObject $processRunnerServiceMock */
+        /** @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface&\PHPUnit\Framework\MockObject\MockObject $processRunnerServiceMock */
         $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
         /** @var \Psr\Log\LoggerInterface&\PHPUnit\Framework\MockObject\MockObject $loggerMock */
         $loggerMock = $this->createLoggerMock();
@@ -222,7 +222,7 @@ class FileErrorsFetcherTest extends TestCase
     public function testRunProcessWithException(): void
     {
         // Arrange
-        /** @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface&\PHPUnit\Framework\MockObject\MockObject $processRunnerServiceMock */
+        /** @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface&\PHPUnit\Framework\MockObject\MockObject $processRunnerServiceMock */
         $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
         /** @var \Psr\Log\LoggerInterface&\PHPUnit\Framework\MockObject\MockObject $loggerMock */
         $loggerMock = $this->createLoggerMock();

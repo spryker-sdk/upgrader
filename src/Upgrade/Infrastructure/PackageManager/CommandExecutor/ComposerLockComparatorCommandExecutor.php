@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\PackageManager\CommandExecutor;
 
-use Core\Infrastructure\Service\ProcessRunnerServiceInterface;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Domain\Entity\Package;
 
@@ -36,12 +36,12 @@ class ComposerLockComparatorCommandExecutor implements ComposerLockComparatorCom
     protected const JSON_OUTPUT_FLAG = '--json';
 
     /**
-     * @var \Core\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected ProcessRunnerServiceInterface $processRunner;
 
     /**
-     * @param \Core\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      */
     public function __construct(ProcessRunnerServiceInterface $processRunner)
     {

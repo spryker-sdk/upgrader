@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Infrastructure\PackageManager\CommandExecutor;
 
-use Core\Infrastructure\Service\ProcessRunnerService;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService;
 use Symfony\Component\Process\Process;
 use Upgrade\Domain\Entity\Package;
 use Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutor;
