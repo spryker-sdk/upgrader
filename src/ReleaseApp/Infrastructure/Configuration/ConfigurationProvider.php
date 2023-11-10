@@ -33,7 +33,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function getReleaseAppUrl(): string
     {
-        return (string)getenv('UPGRADER_RELEASE_APP_URL') ?: static::DEFAULT_RELEASE_APP_URL;
+        return (string)getenv('RELEASE_APP_URL') ?: static::DEFAULT_RELEASE_APP_URL;
     }
 
     /**
