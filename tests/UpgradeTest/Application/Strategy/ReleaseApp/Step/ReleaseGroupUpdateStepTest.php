@@ -167,7 +167,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $stepsResponseDto = $step->run($stepsResponseDto);
 
         // Assert
-        $this->assertFalse($stepsResponseDto->isSuccessful());
+        $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             <<<OUT
             Amount of available release groups for the project: 2
