@@ -33,7 +33,7 @@ class PullRequestDataGenerator
     /**
      * @var int
      */
-    protected const RG_TITLE_LENGTH = 50;
+    protected const RELEASE_GROUP_TITLE_LENGTH = 50;
 
     /**
      * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder
@@ -226,8 +226,8 @@ class PullRequestDataGenerator
      */
     protected function getReleaseGroupName(ReleaseGroupDto $releaseGroupDto): string
     {
-        return mb_strlen($releaseGroupDto->getName()) > static::RG_TITLE_LENGTH
-            ? mb_substr($releaseGroupDto->getName(), 0, static::RG_TITLE_LENGTH) . '...'
+        return mb_strlen($releaseGroupDto->getName()) > static::RELEASE_GROUP_TITLE_LENGTH
+            ? mb_substr($releaseGroupDto->getName(), 0, static::RELEASE_GROUP_TITLE_LENGTH) . '...'
             : $releaseGroupDto->getName();
     }
 
