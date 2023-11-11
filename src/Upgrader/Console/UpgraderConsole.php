@@ -63,7 +63,7 @@ class UpgraderConsole extends Command
 
         $output->writeln((string)$stepsExecutionDto->getOutputMessage());
 
-        if (!$stepsExecutionDto->getIsSuccessful()) {
+        if (!$stepsExecutionDto->getIsSuccessful() || $stepsExecutionDto->hasBlockers()) {
             return Command::FAILURE;
         }
 

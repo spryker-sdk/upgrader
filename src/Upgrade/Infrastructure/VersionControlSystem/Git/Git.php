@@ -209,7 +209,7 @@ class Git
             return $stepsExecutionDto;
         }
 
-        if ($composerDiffDto === null) {
+        if (!$this->hasCurrentBranchCommits()) {
             $this->createEmptyCommit($stepsExecutionDto, 'pr empty commit');
             $this->push($stepsExecutionDto);
         }
@@ -378,5 +378,17 @@ class Git
         }
 
         return $stepsExecutionDto;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasCurrentBranchCommits(): bool
+    {
+        $command = ['git', 'log', '--oneline', $this->getBaseBranch() . '..'];
+
+        $process = $this->processRunner->run($command);
+
+        return trim($process->getOutput()) !== '';
     }
 }

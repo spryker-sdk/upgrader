@@ -159,7 +159,6 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
             }
 
             if (!$response->isSuccessful()) {
-                $stepsExecutionDto->setIsSuccessful(false);
                 $composerViolation = $this->composerViolationDtoFactory->createFromPackageManagerResponse($response);
 
                 $stepsExecutionDto->setError(
