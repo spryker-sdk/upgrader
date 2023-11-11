@@ -31,6 +31,11 @@ class PullRequestDataGenerator
     protected const INTEGRATION_GUIDE_LENGTH = 500;
 
     /**
+     * @var int
+     */
+    protected const RG_TITLE_LENGTH = 50;
+
+    /**
      * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder
      */
     protected ViolationBodyMessageBuilder $violationBodyMessageBuilder;
@@ -95,7 +100,7 @@ class PullRequestDataGenerator
 
         return $this->buildHeaderText($stepsResponseDto, $releaseGroupId, $hasWarnings)
             . PHP_EOL
-            . $this->buildReleaseGroupsTable($stepsResponseDto, $releaseGroupId)
+            . $this->buildReleaseGroupsTable($stepsResponseDto)
             . PHP_EOL
             . ($hasWarnings ? '## ' . $this->createErrorTitle($stepsResponseDto) . PHP_EOL : '')
             . $warningsSection
@@ -156,19 +161,15 @@ class PullRequestDataGenerator
 
     /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     * @param int|null $releaseGroupId
      *
      * @return string
      */
-    protected function buildReleaseGroupsTable(
-        StepsResponseDto $stepsResponseDto,
-        ?int $releaseGroupId
-    ): string {
+    protected function buildReleaseGroupsTable(StepsResponseDto $stepsResponseDto): string
+    {
         if (count($stepsResponseDto->getAppliedReleaseGroups()) === 0) {
             return '';
         }
 
-        $shouldDisplayWarningColumn = $releaseGroupId !== null;
         $shouldDisplayRatingColumn = $this->integratorExecutionValidator->isIntegratorShouldBeInvoked();
         $shouldDisplayModuleOfferColumn = $this->shouldDisplayModuleOfferColumn($stepsResponseDto->getFilterResponseList());
         $manifestRatingThreshold = $this->configurationProvider->getManifestsRatingThreshold();
@@ -176,27 +177,24 @@ class PullRequestDataGenerator
         $text = sprintf(
             '| Release |%s%s%s',
             $shouldDisplayRatingColumn ? ' Efforts saved by Upgrader |' : '',
-            $shouldDisplayWarningColumn ? ' Warnings detected? |' : '',
+            ' Warnings detected? |',
             $shouldDisplayModuleOfferColumn ? ' These new modules might be interesting for you |' : '',
         ) . PHP_EOL;
 
         $text .= sprintf(
             '| ------- |%s%s%s',
             $shouldDisplayRatingColumn ? ' ---- |' : '',
-            $shouldDisplayWarningColumn ? ' ------------------ |' : '',
+            ' ------------------ |',
             $shouldDisplayModuleOfferColumn ? ' ------------------ |' : '',
         ) . PHP_EOL;
 
         foreach ($stepsResponseDto->getAppliedReleaseGroups() as $appliedReleaseGroup) {
             $text .= sprintf(
                 '| [%s](%s) |%s%s%s',
-                $appliedReleaseGroup->getId(),
+                $this->getReleaseGroupName($appliedReleaseGroup),
                 $appliedReleaseGroup->getLink(),
                 $shouldDisplayRatingColumn ? $this->buildRatingCell($appliedReleaseGroup, $manifestRatingThreshold) . ' |' : '',
-                $shouldDisplayWarningColumn ? $this->getReleaseGroupsTableWarningColumnText(
-                    $stepsResponseDto,
-                    $appliedReleaseGroup,
-                ) . ' |' : '',
+                $this->getReleaseGroupsTableWarningColumnText($stepsResponseDto, $appliedReleaseGroup) . ' |',
                 $shouldDisplayModuleOfferColumn ? $this->buildModuleOfferCell($stepsResponseDto->getFilterResponseList(), $appliedReleaseGroup) . ' |' : '',
             ) . PHP_EOL;
         }
@@ -219,6 +217,18 @@ class PullRequestDataGenerator
         }
 
         return $text;
+    }
+
+    /**
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
+     *
+     * @return string
+     */
+    protected function getReleaseGroupName(ReleaseGroupDto $releaseGroupDto): string
+    {
+        return mb_strlen($releaseGroupDto->getName()) > static::RG_TITLE_LENGTH
+            ? mb_substr($releaseGroupDto->getName(), 0, static::RG_TITLE_LENGTH) . '...'
+            : $releaseGroupDto->getName();
     }
 
     /**
