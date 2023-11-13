@@ -12,7 +12,7 @@ namespace ReleaseApp\Infrastructure\Service;
 use DateTime;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
+use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
 use ReleaseApp\Infrastructure\Client\HttpRequestExecutor;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
@@ -37,7 +37,7 @@ class ReleaseAppServiceTest extends KernelTestCase
         // Arrange
         $container = static::bootKernel()->getContainer();
         $container->set(HttpRequestExecutor::class, $this->createRequestExecutorMock());
-        $request = new UpgradeAnalysisRequest('project-name', [], []);
+        $request = new UpgradeInstructionsRequest([]);
 
         // Act
         $releaseGroups = $container->get(ReleaseAppService::class)->getNewReleaseGroups($request);

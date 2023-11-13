@@ -10,18 +10,18 @@ declare(strict_types=1);
 namespace ReleaseApp\Infrastructure\Service;
 
 use DateTimeInterface;
-use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
+use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
 
 interface ReleaseAppServiceInterface
 {
     /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $upgradeAnalysisRequest
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest $upgradeInstructionsRequest
      *
      * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
      */
-    public function getNewReleaseGroups(UpgradeAnalysisRequest $upgradeAnalysisRequest): ReleaseAppResponse;
+    public function getNewReleaseGroups(UpgradeInstructionsRequest $upgradeInstructionsRequest): ReleaseAppResponse;
 
     /**
      * @param \ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest $upgradeReleaseGroupInstructionsRequest

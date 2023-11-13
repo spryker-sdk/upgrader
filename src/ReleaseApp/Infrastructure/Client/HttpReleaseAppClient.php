@@ -10,16 +10,14 @@ declare(strict_types=1);
 namespace ReleaseApp\Infrastructure\Client;
 
 use ReleaseApp\Domain\Client\ReleaseAppClientInterface;
-use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
 use ReleaseApp\Domain\Client\Response\ResponseInterface;
-use ReleaseApp\Domain\Entities\UpgradeAnalysis;
+use ReleaseApp\Domain\Entities\UpgradeInstruction;
 use ReleaseApp\Domain\Entities\UpgradeInstructions;
 use ReleaseApp\Infrastructure\Client\Builder\HttpRequestBuilderInterface;
 use ReleaseApp\Infrastructure\Client\Builder\HttpResponseBuilderInterface;
 use ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface;
-use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeAnalysisHttpRequest;
 use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeInstructionsRequest;
 use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeReleaseGroupInstructionsRequest;
 
@@ -71,25 +69,12 @@ class HttpReleaseAppClient implements ReleaseAppClientInterface
     /**
      * @param \ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest $releaseGroupRequest
      *
-     * @return \ReleaseApp\Domain\Entities\UpgradeInstructions
+     * @return \ReleaseApp\Domain\Entities\UpgradeInstruction
      */
-    public function getUpgradeReleaseGroupInstructions(UpgradeReleaseGroupInstructionsRequest $releaseGroupRequest): UpgradeInstructions
+    public function getUpgradeReleaseGroupInstruction(UpgradeReleaseGroupInstructionsRequest $releaseGroupRequest): UpgradeInstruction
     {
-        /** @var \ReleaseApp\Domain\Entities\UpgradeInstructions $response */
+        /** @var \ReleaseApp\Domain\Entities\UpgradeInstruction $response */
         $response = $this->getResponse(new HttpUpgradeReleaseGroupInstructionsRequest($releaseGroupRequest));
-
-        return $response;
-    }
-
-    /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $upgradeAnalysisRequest
-     *
-     * @return \ReleaseApp\Domain\Entities\UpgradeAnalysis
-     */
-    public function getUpgradeAnalysis(UpgradeAnalysisRequest $upgradeAnalysisRequest): UpgradeAnalysis
-    {
-        /** @var \ReleaseApp\Domain\Entities\UpgradeAnalysis $response */
-        $response = $this->getResponse(new HttpUpgradeAnalysisHttpRequest($upgradeAnalysisRequest));
 
         return $response;
     }

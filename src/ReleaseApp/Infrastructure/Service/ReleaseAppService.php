@@ -11,7 +11,7 @@ namespace ReleaseApp\Infrastructure\Service;
 
 use DateTimeInterface;
 use ReleaseApp\Application\Service\ReleaseAppService as ApplicationReleaseAppService;
-use ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest;
+use ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest;
 use ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse;
 use ReleaseApp\Infrastructure\Shared\Mapper\ReleaseGroupDtoCollectionMapper;
@@ -41,14 +41,14 @@ class ReleaseAppService implements ReleaseAppServiceInterface
     }
 
     /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeAnalysisRequest $upgradeAnalysisRequest
+     * @param \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest $upgradeInstructionsRequest
      *
      * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
      */
-    public function getNewReleaseGroups(UpgradeAnalysisRequest $upgradeAnalysisRequest): ReleaseAppResponse
+    public function getNewReleaseGroups(UpgradeInstructionsRequest $upgradeInstructionsRequest): ReleaseAppResponse
     {
         $releaseGroupCollection = $this->releaseGroupDtoCollectionMapper->mapReleaseGroupTransferCollection(
-            $this->releaseApp->getNewReleaseGroupsSortedByReleaseDate($upgradeAnalysisRequest),
+            $this->releaseApp->getNewReleaseGroupsSortedByReleaseDate($upgradeInstructionsRequest),
         );
 
         return new ReleaseAppResponse($releaseGroupCollection);

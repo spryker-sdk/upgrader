@@ -1,0 +1,42 @@
+{
+    "result": {
+        "release_groups": [
+            {
+                "id": 4395,
+                "rating": 100,
+                "name": "FRW-229 Replace Swiftmailer dependency with SymfonyMailer",
+                "released": "2022-11-13T18:12:50+00:00",
+                "project_changes": true,
+                "is_security": false,
+                "modules": {
+                    "spryker/mail-extension": {
+                        "version": "1.0.0",
+                        "type": "major",
+                        "files": 16
+                    },
+                    "spryker/symfony-mailer": {
+                        "version": "1.0.0",
+                        "type": "major",
+                        "files": 43
+                    },
+                    "spryker/availability-notification": {
+                        "version": "1.2.0",
+                        "type": "minor",
+                        "files": 9
+                    }
+                },
+                "meta": {
+                    "include": {
+                        "Spryker.SymfonyMailer": "1.0.2"
+                    },
+                    "exclude": {
+                        "Spryker.AvailabilityNotification":  "1.2.0"
+                    },
+                    "conflict": {
+                        "Spryker.MailExtension":  "1.0.0"
+                    }
+                }
+            }
+        ]
+    }
+}

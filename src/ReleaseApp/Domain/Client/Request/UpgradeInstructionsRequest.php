@@ -14,24 +14,29 @@ use ReleaseApp\Domain\Entities\UpgradeInstructions;
 class UpgradeInstructionsRequest implements RequestInterface
 {
     /**
-     * @var int
+     * @var string
      */
-    protected int $idModuleVersion;
+    protected const PACKAGES = 'packages';
 
     /**
-     * @param int $moduleVersionId
+     * @var array<string, string>
      */
-    public function __construct(int $moduleVersionId)
+    protected array $packages;
+
+    /**
+     * @param array<string, string> $packages
+     */
+    public function __construct(array $packages)
     {
-        $this->idModuleVersion = $moduleVersionId;
+        $this->packages = $packages;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getBody(): ?string
+    public function getBody(): string
     {
-        return null;
+        return (string)json_encode($this->getBodyArray());
     }
 
     /**
@@ -47,6 +52,16 @@ class UpgradeInstructionsRequest implements RequestInterface
      */
     public function getParameters(): ?string
     {
-        return sprintf('%s=%s', 'module_version_id', $this->idModuleVersion);
+        return null;
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    protected function getBodyArray(): array
+    {
+        return [
+            self::PACKAGES => $this->packages,
+        ];
     }
 }

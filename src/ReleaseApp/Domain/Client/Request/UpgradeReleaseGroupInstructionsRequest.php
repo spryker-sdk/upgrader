@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace ReleaseApp\Domain\Client\Request;
 
-use ReleaseApp\Domain\Entities\UpgradeInstructions;
+use ReleaseApp\Domain\Entities\UpgradeInstruction;
 
 class UpgradeReleaseGroupInstructionsRequest implements RequestInterface
 {
@@ -39,7 +39,7 @@ class UpgradeReleaseGroupInstructionsRequest implements RequestInterface
      */
     public function getResponseClass(): string
     {
-        return UpgradeInstructions::class;
+        return UpgradeInstruction::class;
     }
 
     /**
