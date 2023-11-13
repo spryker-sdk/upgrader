@@ -136,9 +136,12 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     public function updateSubPackage(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         $command = explode(' ', sprintf(
-            '%s%s',
+            '%s%s %s %s %s',
             static::UPDATE_COMMAND_NAME,
             $this->getPackageString($packageCollection),
+            static::NO_SCRIPTS_FLAG,
+            static::NO_PLUGINS_FLAG,
+            static::NO_INTERACTION_FLAG,
         ));
 
         return $this->runWithDependencyFlags($command);
