@@ -226,9 +226,15 @@ class PullRequestDataGenerator
      */
     protected function getReleaseGroupName(ReleaseGroupDto $releaseGroupDto): string
     {
-        return mb_strlen($releaseGroupDto->getName()) > static::RELEASE_GROUP_TITLE_LENGTH
-            ? mb_substr($releaseGroupDto->getName(), 0, static::RELEASE_GROUP_TITLE_LENGTH) . '...'
-            : $releaseGroupDto->getName();
+        $name = trim((string)preg_replace(
+            '/^' . preg_quote((string)$releaseGroupDto->getJiraIssue(), '/') . '\b/i',
+            '',
+            $releaseGroupDto->getName(),
+        ));
+
+        return mb_strlen($name) > static::RELEASE_GROUP_TITLE_LENGTH
+            ? mb_substr($name, 0, static::RELEASE_GROUP_TITLE_LENGTH) . '...'
+            : $name;
     }
 
     /**
