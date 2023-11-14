@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ece8a223c2d4a7f02333985810a6ba42",
+    "content-hash": "f187fda43697bd223f398aae9cf95eed",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3410,12 +3410,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "ba3d28dc45fc6b53093e09e406a8d733eb85ac19"
+                "reference": "5a0ccc06f2a1130947b82ba5c9ce4e35ad093b58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/ba3d28dc45fc6b53093e09e406a8d733eb85ac19",
-                "reference": "ba3d28dc45fc6b53093e09e406a8d733eb85ac19",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/5a0ccc06f2a1130947b82ba5c9ce4e35ad093b58",
+                "reference": "5a0ccc06f2a1130947b82ba5c9ce4e35ad093b58",
                 "shasum": ""
             },
             "require": {
@@ -3430,7 +3430,7 @@
                 "nikic/php-parser": "^4.3.0",
                 "php": ">=7.4",
                 "sebastian/diff": "^4.0.0",
-                "spryker-sdk/utils": "dev-master",
+                "spryker-sdk/utils": "^0.1.1",
                 "symfony/console": "^5.3.0 || ^6.0",
                 "symfony/finder": "^5.3.0 || ^6.0",
                 "symfony/process": "^5.4 || ^6.0"
@@ -3467,7 +3467,7 @@
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
                 "source": "https://github.com/spryker-sdk/integrator/tree/master"
             },
-            "time": "2023-11-14T10:39:47+00:00"
+            "time": "2023-11-14T13:03:20+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
@@ -3510,16 +3510,16 @@
         },
         {
             "name": "spryker-sdk/utils",
-            "version": "dev-master",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/utils.git",
-                "reference": "528ab983e3f800fc4d7fe86fc2a90bfb568fb6ed"
+                "reference": "1b0b9da1700df2d6b2bd30c49d15f0cadf30cbfa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/utils/zipball/528ab983e3f800fc4d7fe86fc2a90bfb568fb6ed",
-                "reference": "528ab983e3f800fc4d7fe86fc2a90bfb568fb6ed",
+                "url": "https://api.github.com/repos/spryker-sdk/utils/zipball/1b0b9da1700df2d6b2bd30c49d15f0cadf30cbfa",
+                "reference": "1b0b9da1700df2d6b2bd30c49d15f0cadf30cbfa",
                 "shasum": ""
             },
             "require": {
@@ -3527,10 +3527,10 @@
                 "ext-mbstring": "*",
                 "laminas/laminas-filter": "^2.11.0",
                 "php": ">=7.4",
-                "psr/log": "^1.0",
-                "symfony/filesystem": "^5.3",
-                "symfony/finder": "^5.3",
-                "symfony/process": "^5.0"
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
+                "symfony/filesystem": "^5.3.0 || ^6.0.0",
+                "symfony/finder": "^5.3.0 || ^6.0.0",
+                "symfony/process": "^5.0.0 || ^6.0.0"
             },
             "require-dev": {
                 "ext-zip": "*",
@@ -3538,7 +3538,6 @@
                 "phpunit/phpunit": "^9.5.0",
                 "spryker/code-sniffer": "0.17.18"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -3552,9 +3551,9 @@
             "description": "Spryker SDK Utils Module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/utils/issues",
-                "source": "https://github.com/spryker-sdk/utils/tree/master"
+                "source": "https://github.com/spryker-sdk/utils/tree/0.1.1"
             },
-            "time": "2023-11-09T15:27:48+00:00"
+            "time": "2023-11-14T12:52:26+00:00"
         },
         {
             "name": "symfony/cache",
@@ -8843,7 +8842,6 @@
     "stability-flags": {
         "spryker-sdk/azure-php-client": 20,
         "spryker-sdk/integrator": 20,
-        "spryker-sdk/utils": 20,
         "spryker/code-sniffer": 20
     },
     "prefer-stable": true,
