@@ -26,7 +26,7 @@ class CheckRemoteTargetBranchExistsStep extends AbstractStep implements StepInte
         if (!$stepsExecutionDto->getIsSuccessful()) {
             $stepsExecutionDto->setError(
                 Error::createClientCodeError(
-                    sprintf('You have "%s" branch from a previous update. Upgrader can\'t provide a new update until you remove it.', $stepsExecutionDto->getTargetBranch())
+                    sprintf('You have "%s" branch from a previous update. Upgrader can\'t provide a new update until you remove it.', $stepsExecutionDto->getTargetBranch()),
                 ),
             );
 
