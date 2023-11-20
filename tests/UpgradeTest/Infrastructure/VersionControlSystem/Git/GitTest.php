@@ -44,6 +44,7 @@ class GitTest extends KernelTestCase
 
         // Assert
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
+        $this->assertSame('upgradebot/upgrade-bot', $stepsExecutionDto->getTargetBranch());
     }
 
     /**
@@ -259,6 +260,7 @@ class GitTest extends KernelTestCase
         $configurationProviderMock->method('getAccessToken')->willReturn('-');
         $configurationProviderMock->method('getRepositoryName')->willReturn('-');
         $configurationProviderMock->method('getOrganizationName')->willReturn('-');
+        $configurationProviderMock->method('getBranchPattern')->willReturn('upgradebot/upgrade-bot');
 
         return $configurationProviderMock;
     }

@@ -76,7 +76,10 @@ class Git
      */
     public function isRemoteTargetBranchNotExist(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
-        $command = ['git', 'ls-remote', '--heads', 'origin', $this->getHeadBranch()];
+        $targetBranch = $this->getHeadBranch();
+        $stepsExecutionDto->setTargetBranch($targetBranch);
+
+        $command = ['git', 'ls-remote', '--heads', 'origin', $targetBranch];
         $process = $this->processRunner->run($command);
         if (strlen($process->getOutput()) > 0) {
             $stepsExecutionDto->setIsSuccessful(false);

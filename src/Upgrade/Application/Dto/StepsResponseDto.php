@@ -103,6 +103,11 @@ class StepsResponseDto extends ResponseDto
     protected bool $isPullRequestSent = false;
 
     /**
+     * @var string
+     */
+    protected string $targetBranch = '';
+
+    /**
      * @param bool $isSuccessful
      * @param string|null $outputMessage
      */
@@ -534,6 +539,24 @@ class StepsResponseDto extends ResponseDto
     public function setIsPullRequestSent(bool $isPullRequestSent): void
     {
         $this->isPullRequestSent = $isPullRequestSent;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTargetBranch(): string
+    {
+        return $this->targetBranch;
+    }
+
+    /**
+     * @param string $targetBranch
+     *
+     * @return void
+     */
+    public function setTargetBranch(string $targetBranch): void
+    {
+        $this->targetBranch = $targetBranch;
     }
 
     /**

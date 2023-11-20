@@ -25,7 +25,9 @@ class CheckRemoteTargetBranchExistsStep extends AbstractStep implements StepInte
         $stepsExecutionDto = $this->vsc->isRemoteTargetBranchNotExist($stepsExecutionDto);
         if (!$stepsExecutionDto->getIsSuccessful()) {
             $stepsExecutionDto->setError(
-                Error::createClientCodeError('You have an unprocessed PR from a previous update. Upgrader can\'t provide a new update until you process these changes'),
+                Error::createClientCodeError(
+                    sprintf('You have "%s" branch from a previous update. Upgrader can\'t provide a new update until you remove it.', $stepsExecutionDto->getTargetBranch())
+                ),
             );
 
             return $stepsExecutionDto;
