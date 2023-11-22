@@ -329,7 +329,7 @@ services:
     serializer.json_encoder:
         class: Symfony\Component\Serializer\Encoder\JsonEncoder
 
-    report.serializer:
+    upgrader_report.serializer:
         class: Symfony\Component\Serializer\Serializer
         arguments:
             - [ '@Upgrade\Infrastructure\Report\Serializer\Normalizer\ReportNormalizer' ]
@@ -338,7 +338,7 @@ services:
     Upgrade\Infrastructure\Report\Sender\RemoteEndpointJsonReportSender:
         arguments:
             - '@GuzzleHttp\Client'
-            - '@report.serializer'
+            - '@upgrader_report.serializer'
             - '@configuration.provider'
             - '%report_send_endpoint_url%'
             - '%report_send_timeout%'
