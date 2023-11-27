@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\EventSubscriber;
 
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\BrokenPhpFilesChecker;
-use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher\FileErrorsFetcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent;
@@ -24,27 +23,19 @@ class BrokenPhpFilesCheckerEventSubscriber implements EventSubscriberInterface
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
-     * @var \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher\FileErrorsFetcherInterface
-     */
-    protected FileErrorsFetcherInterface $fileErrorsFetcher;
-
-    /**
      * @var \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\BrokenPhpFilesChecker
      */
     protected BrokenPhpFilesChecker $brokenPhpFilesChecker;
 
     /**
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher\FileErrorsFetcherInterface $fileErrorsFetcher
      * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\BrokenPhpFilesChecker $brokenPhpFilesChecker
      */
     public function __construct(
         ConfigurationProviderInterface $configurationProvider,
-        FileErrorsFetcherInterface $fileErrorsFetcher,
         BrokenPhpFilesChecker $brokenPhpFilesChecker
     ) {
         $this->configurationProvider = $configurationProvider;
-        $this->fileErrorsFetcher = $fileErrorsFetcher;
         $this->brokenPhpFilesChecker = $brokenPhpFilesChecker;
     }
 
@@ -53,10 +44,11 @@ class BrokenPhpFilesCheckerEventSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents(): array
     {
-        // TODO: SDK-5303 uncomment to activate checker
         return [
-//            ReleaseGroupProcessorEvent::PRE_PROCESSOR => 'onPreProcessor',
-//            ReleaseGroupProcessorPostRequireEvent::POST_REQUIRE => 'onPostRequire',
+            ReleaseGroupProcessorEvent::PRE_PROCESSOR => 'onPreProcessor',
+            ReleaseGroupProcessorEvent::PRE_REQUIRE => 'onPreRequire',
+            ReleaseGroupProcessorPostRequireEvent::POST_REQUIRE => 'onPostRequire',
+            ReleaseGroupProcessorEvent::POST_PROCESSOR => 'onPostProcessor',
         ];
     }
 
@@ -71,8 +63,21 @@ class BrokenPhpFilesCheckerEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->fileErrorsFetcher->reset();
-        $this->fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
+        $this->brokenPhpFilesChecker->fetchAndPersistInitialErrors();
+    }
+
+    /**
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $event
+     *
+     * @return void
+     */
+    public function onPreRequire(ReleaseGroupProcessorEvent $event): void
+    {
+        if (!$this->configurationProvider->isEvaluatorEnabled()) {
+            return;
+        }
+
+        $this->brokenPhpFilesChecker->fetchAndPersistInstalledSprykerModules();
     }
 
     /**
@@ -88,7 +93,29 @@ class BrokenPhpFilesCheckerEventSubscriber implements EventSubscriberInterface
 
         $stepsExecutorDto = $event->getStepsExecutionDto();
 
-        $violations = $this->brokenPhpFilesChecker->check($event->getPackageManagerResponseDto()->getExecutedCommands());
+        $violations = $this->brokenPhpFilesChecker->checkUpdatedSprykerModules(
+            $event->getPackageManagerResponseDto()->getExecutedCommands(),
+        );
+
+        foreach ($violations as $violation) {
+            $stepsExecutorDto->addViolation($violation);
+        }
+    }
+
+    /**
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $event
+     *
+     * @return void
+     */
+    public function onPostProcessor(ReleaseGroupProcessorEvent $event): void
+    {
+        if (!$this->configurationProvider->isEvaluatorEnabled()) {
+            return;
+        }
+
+        $stepsExecutorDto = $event->getStepsExecutionDto();
+
+        $violations = $this->brokenPhpFilesChecker->checkAll();
 
         foreach ($violations as $violation) {
             $stepsExecutorDto->addViolation($violation);

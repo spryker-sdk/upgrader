@@ -19,6 +19,7 @@
         "spryker-sdk/azure-php-client": "dev-master as 1.0.0",
         "spryker-sdk/integrator": "dev-master as 1.0.0",
         "spryker-sdk/sdk-contracts": "^0.4.7",
+        "spryker-sdk/utils": "0.1.1",
         "symfony/config": "^5.0",
         "symfony/console": "^5.0",
         "symfony/dependency-injection": "^5.0",

@@ -282,14 +282,14 @@ services:
         arguments:
             - '@monolog.logger'
             - - '@integrator_lock_run.step'
-              - '@propel_fix.step'
+#              - '@propel_fix.step'
 
     processor.post_require_step_executor:
         class: Upgrade\Application\Executor\StepExecutor
         arguments:
             - '@monolog.logger'
             - - '@composer_lock_diff.step'
-              - '@orm_models_regenerate.step'
+#              - '@orm_models_regenerate.step'
               - '@integrator.step'
               - '@composer_json_constraint_fix_step'
               - '@add_changes.step'
