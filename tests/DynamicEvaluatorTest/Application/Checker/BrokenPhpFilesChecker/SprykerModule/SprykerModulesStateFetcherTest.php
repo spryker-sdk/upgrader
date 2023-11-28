@@ -40,16 +40,7 @@ class SprykerModulesStateFetcherTest extends TestCase
                     'version' => '202311.0',
                 ],
             ],
-            'packages-dev' => [
-                [
-                    'name' => 'doctrine/deprecations',
-                    'version' => 'v1.0.0',
-                ],
-                [
-                    'name' => 'spryker-sdk/benchmark',
-                    'version' => '0.2.2',
-                ],
-            ],
+            'minimum-stability' => 'dev',
         ]);
 
         $sprykerModulesStateFetcher = new SprykerModulesStateFetcher($composerReaderMock);
@@ -58,7 +49,7 @@ class SprykerModulesStateFetcherTest extends TestCase
         $modules = $sprykerModulesStateFetcher->fetchCurrentSprykerModulesState();
 
         // Assert
-        $this->assertSame(['spryker/acl' => '3.18.0', 'spryker-shop/shop-ui' => '1.73.0', 'spryker-sdk/benchmark' => '0.2.2'], $modules);
+        $this->assertSame(['spryker/acl' => '3.18.0', 'spryker-shop/shop-ui' => '1.73.0'], $modules);
     }
 
     /**

@@ -31,6 +31,7 @@ class SprykerModuleComparerTest extends TestCase
             'spryker/module-one' => '1.3.0',
             'spryker/module-three' => '1.4.0',
             'spryker/module-five' => '1.5.0',
+            'spryker/module-six' => '1.5.0',
         ];
 
         $sprykerModuleComparer = new SprykerModuleComparer();
