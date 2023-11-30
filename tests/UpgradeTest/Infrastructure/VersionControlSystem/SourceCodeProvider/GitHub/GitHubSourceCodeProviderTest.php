@@ -29,9 +29,9 @@ class GitHubSourceCodeProviderTest extends TestCase
     {
         return [
             // Invalid credentials
-//            ['', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'],
-//            ['access_token', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'],
-//            ['access_token', 'org_name', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'],
+            ['', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'],
+            ['access_token', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'],
+            ['access_token', 'org_name', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'],
             ['access_token', 'org_name', 'repo_name', ''],
         ];
     }
