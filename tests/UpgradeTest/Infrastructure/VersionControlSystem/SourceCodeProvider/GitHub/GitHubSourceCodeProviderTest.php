@@ -56,8 +56,6 @@ class GitHubSourceCodeProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['pr'])
             ->getMock();
-        // Create a mock for the GitHub client and its methods used in the createPullRequest method
-        //$gitHubClientMock = $this->createMock(GitHubClient::class);
         $gitHubClientMock->method('pr')->willReturn($prMock);
 
         // Set up mocks and dependencies
