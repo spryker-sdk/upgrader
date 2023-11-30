@@ -101,8 +101,10 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
             );
 
             if (isset($response[static::HTML_URL_KEY])) {
+                $outputMessage = sprintf('Pull request was created %s', $response[static::HTML_URL_KEY]);
+                $border = PHP_EOL . str_repeat('*', strlen($outputMessage)) . PHP_EOL;
                 $stepsExecutionDto->addOutputMessage(
-                    sprintf('Pull request was created %s', $response[static::HTML_URL_KEY]),
+                    sprintf('%s%s%s', $border, $outputMessage, $border),
                 );
             }
 

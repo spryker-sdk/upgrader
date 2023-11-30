@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub;
 
+use Github\Api\PullRequest;
 use GitHub\Client as GitHubClient;
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Dto\StepsResponseDto;
@@ -47,6 +48,16 @@ class GitHubSourceCodeProviderTest extends TestCase
      */
     public function testCreatePullRequest(string $accessToken, string $orgName, string $repoName, string $expectedError): void
     {
+        $prMock = $this->createMock(PullRequest::class);
+        $prMock->method('create')->willReturn(['html_url' => 'some_url']);
+
+        // Create a mock for the GitHub client and its methods used in the createPullRequest method
+        $gitHubClientMock = $this->getMockBuilder(GitHubClient::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['pr'])
+            ->getMock();
+        $gitHubClientMock->method('pr')->willReturn($prMock);
+
         // Set up mocks and dependencies
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
         $gitHubClientFactoryMock = $this->createMock(GitHubClientFactory::class);
@@ -55,6 +66,7 @@ class GitHubSourceCodeProviderTest extends TestCase
             $configurationProviderMock,
             $gitHubClientFactoryMock,
         );
+        $gitHubClientFactoryMock->method('getClient')->willReturn($gitHubClientMock);
 
         // Configure the mocks
         $configurationProviderMock->method('getAccessToken')->willReturn($accessToken);
@@ -65,21 +77,16 @@ class GitHubSourceCodeProviderTest extends TestCase
         $stepsExecutionDto = new StepsResponseDto();
         $pullRequestDto = new PullRequestDto('', '', '');
 
-        // Create a mock for the GitHub client and its methods used in the createPullRequest method
-        $gitHubClientMock = $this->getMockBuilder(GitHubClient::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $gitHubClientFactoryMock->method('getClient')->willReturn($gitHubClientMock);
+        $stepsExecutionDto = $gitHubSourceCodeProvider->createPullRequest($stepsExecutionDto, $pullRequestDto);
 
         if ($expectedError) {
-            $stepsExecutionDto = $gitHubSourceCodeProvider->createPullRequest($stepsExecutionDto, $pullRequestDto);
             $this->assertFalse($stepsExecutionDto->getIsSuccessful());
             $this->assertInstanceOf(Error::class, $stepsExecutionDto->getError());
             $this->assertEquals($expectedError, $stepsExecutionDto->getError()->getErrorMessage());
         } else {
             $this->assertTrue($stepsExecutionDto->getIsSuccessful());
             $this->assertNull($stepsExecutionDto->getError());
+            $this->assertStringContainsString('Pull request was created some_url', $stepsExecutionDto->getOutputMessage());
         }
     }
 
