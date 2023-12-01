@@ -97,8 +97,8 @@ class GitLabSourceCodeProviderTest extends TestCase
             // Invalid credentials
             ['', '', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN and (PROJECT_ID or (ORGANIZATION_NAME and REPOSITORY_NAME)).'],
             ['access_token', '', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN and (PROJECT_ID or (ORGANIZATION_NAME and REPOSITORY_NAME)).'],
-            ['access_token', 'project_id', '', '', ''],
-            ['access_token', '', 'org_name', 'repo_name', ''],
+            ['access_token', 'project_id', '', '', 'Invalid create PR response.'],
+            ['access_token', '', 'org_name', 'repo_name', 'Invalid create PR response.'],
             // Add more test cases as needed
         ];
     }
@@ -144,8 +144,11 @@ class GitLabSourceCodeProviderTest extends TestCase
 
         $gitLabClientFactoryMock->method('getClient')->willReturn($gitLabClientMock);
 
+        // Act
+        $stepsExecutionDto = $gitLabSourceCodeProvider->createPullRequest($stepsExecutionDto, $pullRequestDto);
+
+        //Assert
         if ($expectedError) {
-            $stepsExecutionDto = $gitLabSourceCodeProvider->createPullRequest($stepsExecutionDto, $pullRequestDto);
             $this->assertFalse($stepsExecutionDto->getIsSuccessful());
             $this->assertInstanceOf(Error::class, $stepsExecutionDto->getError());
             $this->assertEquals($expectedError, $stepsExecutionDto->getError()->getErrorMessage());
