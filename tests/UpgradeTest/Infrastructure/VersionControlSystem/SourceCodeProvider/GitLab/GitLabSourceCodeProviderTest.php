@@ -16,6 +16,7 @@ use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
+use Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabClientFactory;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabSourceCodeProvider;
 
@@ -46,7 +47,11 @@ class GitLabSourceCodeProviderTest extends TestCase
         $configurationMock->method('getOrganizationName')->willReturn($hasOrganizationName);
         $configurationMock->method('getRepositoryName')->willReturn($hasRepositoryName);
 
-        $gitLabSourceCodeProvider = new GitLabSourceCodeProvider($configurationMock, $this->createGitLabClientFactoryMock());
+        $gitLabSourceCodeProvider = new GitLabSourceCodeProvider(
+            $configurationMock,
+            $this->createGitLabClientFactoryMock(),
+            new OutputMessageBuilder(),
+        );
         $stepsResponseDto = new StepsResponseDto(true);
 
         // Act
@@ -119,6 +124,7 @@ class GitLabSourceCodeProviderTest extends TestCase
         $gitLabSourceCodeProvider = new GitLabSourceCodeProvider(
             $configurationProviderMock,
             $gitLabClientFactoryMock,
+            new OutputMessageBuilder(),
         );
 
         // Configure the mocks
@@ -166,6 +172,7 @@ class GitLabSourceCodeProviderTest extends TestCase
         $gitLabSourceCodeProvider = new GitLabSourceCodeProvider(
             $configurationProviderMock,
             $gitLabClientFactoryMock,
+            new OutputMessageBuilder(),
         );
 
         $result = $gitLabSourceCodeProvider->buildBlockerTextBlock(new ValidatorViolationDto($title, $message));

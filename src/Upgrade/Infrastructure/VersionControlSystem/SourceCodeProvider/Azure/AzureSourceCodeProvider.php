@@ -18,6 +18,7 @@ use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
+use Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface;
 
 class AzureSourceCodeProvider implements SourceCodeProviderInterface
@@ -38,18 +39,26 @@ class AzureSourceCodeProvider implements SourceCodeProviderInterface
     protected AzurePullRequestDescriptionNormalizer $descriptionNormalizer;
 
     /**
+     * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder
+     */
+    protected OutputMessageBuilder $outputMessageBuilder;
+
+    /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureClientFactory $azureClientFactory
      * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzurePullRequestDescriptionNormalizer $descriptionNormalizer
+     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder $outputMessageBuilder
      */
     public function __construct(
         ConfigurationProvider $configurationProvider,
         AzureClientFactory $azureClientFactory,
-        AzurePullRequestDescriptionNormalizer $descriptionNormalizer
+        AzurePullRequestDescriptionNormalizer $descriptionNormalizer,
+        OutputMessageBuilder $outputMessageBuilder
     ) {
         $this->configurationProvider = $configurationProvider;
         $this->azureClientFactory = $azureClientFactory;
         $this->descriptionNormalizer = $descriptionNormalizer;
+        $this->outputMessageBuilder = $outputMessageBuilder;
     }
 
     /**
@@ -120,7 +129,9 @@ class AzureSourceCodeProvider implements SourceCodeProviderInterface
                 ),
             );
 
-            $stepsExecutionDto->addOutputMessage(sprintf('Pull request was created %s', $response['webUrl'] ?? ''));
+            $stepsExecutionDto->addOutputMessage(
+                $this->outputMessageBuilder->buildOutputMessage($response['webUrl'] ?? ''),
+            );
         } catch (Throwable $e) {
             $stepsExecutionDto->setIsSuccessful(false);
 

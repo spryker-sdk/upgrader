@@ -16,6 +16,7 @@ use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
+use Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface;
 
 class GitLabSourceCodeProvider implements SourceCodeProviderInterface
@@ -31,13 +32,23 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
     protected GitLabClientFactory $gitLabClientFactory;
 
     /**
+     * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder
+     */
+    protected OutputMessageBuilder $outputMessageBuilder;
+
+    /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabClientFactory $gitLabClientFactory
+     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder $outputMessageBuilder
      */
-    public function __construct(ConfigurationProvider $configurationProvider, GitLabClientFactory $gitLabClientFactory)
-    {
+    public function __construct(
+        ConfigurationProvider $configurationProvider,
+        GitLabClientFactory $gitLabClientFactory,
+        OutputMessageBuilder $outputMessageBuilder
+    ) {
         $this->configurationProvider = $configurationProvider;
         $this->gitLabClientFactory = $gitLabClientFactory;
+        $this->outputMessageBuilder = $outputMessageBuilder;
     }
 
     /**
@@ -130,7 +141,9 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
             throw new RuntimeException('Invalid create PR response.');
         }
 
-        $stepsExecutionDto->addOutputMessage(sprintf('Pull request was created %s', $prCreatingResult['web_url'] ?? ''));
+        $stepsExecutionDto->addOutputMessage(
+            $this->outputMessageBuilder->buildOutputMessage($prCreatingResult['web_url'] ?? ''),
+        );
 
         return $prCreatingResult['iid'];
     }

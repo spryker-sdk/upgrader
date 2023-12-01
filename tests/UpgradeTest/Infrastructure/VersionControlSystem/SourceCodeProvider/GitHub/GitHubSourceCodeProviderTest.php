@@ -17,6 +17,7 @@ use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
+use Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubClientFactory;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeProvider;
 
@@ -65,6 +66,7 @@ class GitHubSourceCodeProviderTest extends TestCase
         $gitHubSourceCodeProvider = new GitHubSourceCodeProvider(
             $configurationProviderMock,
             $gitHubClientFactoryMock,
+            new OutputMessageBuilder(),
         );
         $gitHubClientFactoryMock->method('getClient')->willReturn($gitHubClientMock);
 
@@ -86,7 +88,7 @@ class GitHubSourceCodeProviderTest extends TestCase
         } else {
             $this->assertTrue($stepsExecutionDto->getIsSuccessful());
             $this->assertNull($stepsExecutionDto->getError());
-            $this->assertStringContainsString('Pull request was created some_url', $stepsExecutionDto->getOutputMessage());
+            $this->assertStringContainsString('Link to pull request some_url', $stepsExecutionDto->getOutputMessage());
         }
     }
 
@@ -107,6 +109,7 @@ class GitHubSourceCodeProviderTest extends TestCase
         $gitHubSourceCodeProvider = new GitHubSourceCodeProvider(
             $configurationProviderMock,
             $gitHubClientFactoryMock,
+            new OutputMessageBuilder(),
         );
 
         $result = $gitHubSourceCodeProvider->buildBlockerTextBlock(new ValidatorViolationDto($title, $message));

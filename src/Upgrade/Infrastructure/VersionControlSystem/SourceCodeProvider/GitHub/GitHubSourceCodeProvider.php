@@ -15,6 +15,7 @@ use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
+use Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface;
 
 class GitHubSourceCodeProvider implements SourceCodeProviderInterface
@@ -35,13 +36,23 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
     protected GitHubClientFactory $gitHubClientFactory;
 
     /**
+     * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder
+     */
+    protected OutputMessageBuilder $outputMessageBuilder;
+
+    /**
      * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubClientFactory $gitHubClientFactory
+     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder $outputMessageBuilder
      */
-    public function __construct(ConfigurationProvider $configurationProvider, GitHubClientFactory $gitHubClientFactory)
-    {
+    public function __construct(
+        ConfigurationProvider $configurationProvider,
+        GitHubClientFactory $gitHubClientFactory,
+        OutputMessageBuilder $outputMessageBuilder
+    ) {
         $this->configurationProvider = $configurationProvider;
         $this->gitHubClientFactory = $gitHubClientFactory;
+        $this->outputMessageBuilder = $outputMessageBuilder;
     }
 
     /**
@@ -101,10 +112,8 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
             );
 
             if (isset($response[static::HTML_URL_KEY])) {
-                $outputMessage = sprintf('Pull request was created %s', $response[static::HTML_URL_KEY]);
-                $border = PHP_EOL . str_repeat('*', strlen($outputMessage)) . PHP_EOL;
                 $stepsExecutionDto->addOutputMessage(
-                    sprintf('%s%s%s', $border, $outputMessage, $border),
+                    $this->outputMessageBuilder->buildOutputMessage($response[static::HTML_URL_KEY]),
                 );
             }
 
