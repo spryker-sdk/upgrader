@@ -130,6 +130,19 @@ class Git
     }
 
     /**
+     * @param string $file
+     *
+     * @return bool
+     */
+    public function hasUncommittedFile(string $file): bool
+    {
+        $command = ['git', 'status', '--porcelain', $file];
+        $process = $this->processRunner->run($command);
+
+        return mb_strlen($process->getOutput()) > 0;
+    }
+
+    /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
@@ -174,6 +187,16 @@ class Git
         $command = ['git', 'commit', '-n', '-m', $commitMessage];
 
         return $this->process($stepsExecutionDto, $command);
+    }
+
+    /**
+     * @param string $commitMessage
+     *
+     * @return void
+     */
+    public function commitWithMessage(string $commitMessage): void
+    {
+        $this->processRunner->run(['git', 'commit', '-n', '-m', $commitMessage]);
     }
 
     /**
@@ -393,5 +416,15 @@ class Git
         $process = $this->processRunner->run($command);
 
         return trim($process->getOutput()) !== '';
+    }
+
+    /**
+     * @param string ...$fileNames
+     *
+     * @return void
+     */
+    public function removeTrackedFiles(string ...$fileNames): void
+    {
+        $this->processRunner->run(array_merge(['git', 'rm'], $fileNames));
     }
 }

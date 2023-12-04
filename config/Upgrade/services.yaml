@@ -98,6 +98,9 @@ services:
     send_report.step:
         class: Upgrade\Application\Strategy\Common\Step\SendReportStep
 
+    remove_integrator_lock_file.step:
+        class: Upgrade\Application\Strategy\Common\Step\RemoveIntegratorLockFileStep
+
     feature_dev_master.fixer:
         class: Upgrade\Application\Strategy\Composer\Fixer\FeatureDevMasterPackageFixerStep
 
@@ -151,6 +154,7 @@ services:
               - '@push_changes.step'
               - '@generate_report_id.step'
               - '@create_pr.step'
+              - '@remove_integrator_lock_file.step'
               - '@checkout.step'
               - '@send_report.step'
             - - '@feature_dev_master.fixer'
