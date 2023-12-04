@@ -3512,27 +3512,27 @@
         },
         {
             "name": "spryker-sdk/utils",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/utils.git",
-                "reference": "1b0b9da1700df2d6b2bd30c49d15f0cadf30cbfa"
+                "reference": "a8db5e53e71a39fc94ed8105e2ec78be5c88e9e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/utils/zipball/1b0b9da1700df2d6b2bd30c49d15f0cadf30cbfa",
-                "reference": "1b0b9da1700df2d6b2bd30c49d15f0cadf30cbfa",
+                "url": "https://api.github.com/repos/spryker-sdk/utils/zipball/a8db5e53e71a39fc94ed8105e2ec78be5c88e9e2",
+                "reference": "a8db5e53e71a39fc94ed8105e2ec78be5c88e9e2",
                 "shasum": ""
             },
             "require": {
-                "composer/semver": "^3.3",
+                "composer/semver": "^3.4",
                 "ext-mbstring": "*",
-                "laminas/laminas-filter": "^2.11.0",
+                "laminas/laminas-filter": "^2.22.0",
                 "php": ">=7.4",
                 "psr/log": "^1.0 || ^2.0 || ^3.0",
-                "symfony/filesystem": "^5.3.0 || ^6.0.0",
-                "symfony/finder": "^5.3.0 || ^6.0.0",
-                "symfony/process": "^5.0.0 || ^6.0.0"
+                "symfony/filesystem": "^5.4.0 || ^6.0.0",
+                "symfony/finder": "^5.4.0 || ^6.0.0",
+                "symfony/process": "^5.4.0 || ^6.0.0"
             },
             "require-dev": {
                 "ext-zip": "*",
@@ -3553,9 +3553,9 @@
             "description": "Spryker SDK Utils Module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/utils/issues",
-                "source": "https://github.com/spryker-sdk/utils/tree/0.1.1"
+                "source": "https://github.com/spryker-sdk/utils/tree/0.1.2"
             },
-            "time": "2023-11-14T12:52:26+00:00"
+            "time": "2023-12-04T17:07:52+00:00"
         },
         {
             "name": "symfony/cache",
@@ -8858,5 +8858,5 @@
         "ext-simplexml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
