@@ -28,6 +28,7 @@ class DbSchemaConflictCheckerTest extends TestCase
             $fileName => [
                 'api_key' => ['col_one', 'col_two'],
                 'api_token' => ['col_one'],
+                'custom_table' => ['col_one'],
             ],
         ];
 

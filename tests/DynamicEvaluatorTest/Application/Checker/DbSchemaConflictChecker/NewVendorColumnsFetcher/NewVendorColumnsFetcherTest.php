@@ -28,8 +28,8 @@ class NewVendorColumnsFetcherTest extends TestCase
             $this->createPackagesDirProviderMock(),
             $this->createXmlSchemaFileParserMock(
                 [
-                    ['table_one' => ['col_one', 'col_two', 'col_three']],
-                    ['table_one' => ['col_one', 'col_four']],
+                    ['table_one' => ['col_one', 'col_two', 'col_three'], 'table_new' => ['col_one'], 'table_same' => ['col_one']],
+                    ['table_one' => ['col_one', 'col_four'], 'table_same' => ['col_one']],
                     ['table_two' => ['col_one', 'col_two'], 'table_one' => ['col_two']],
                     ['table_two' => ['col_two'], 'table_one' => ['col_two']],
                 ],
@@ -40,7 +40,7 @@ class NewVendorColumnsFetcherTest extends TestCase
         $result = $newVendorsColumnsFetcher->fetchUpdatedVendorColumnsMap();
 
         // Assert
-        $this->assertSame(['table_one' => ['col_three'], 'table_two' => ['col_one']], $result);
+        $this->assertSame(['table_one' => ['col_three'], 'table_new' => ['col_one'], 'table_two' => ['col_one']], $result);
     }
 
     /**

@@ -60,9 +60,12 @@ class XmlSchemaFileParser implements XmlSchemaFileParserInterface
 
         $rootNode = simplexml_load_string($fileContent);
 
+        // Unable to cover if due to additional warnings from simplexml
+        // @codeCoverageIgnoreStart
         if ($rootNode === false) {
             throw new InvalidArgumentException(sprintf('Unable to parse xml %s', $schemaFile));
         }
+        // @codeCoverageIgnoreEnd
 
         return $this->parseSchemaXmlToColumnsMap($rootNode, $schemaFile);
     }

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace DynamicEvaluatorTest\Application\Checker\DbSchemaConflictChecker\XmlSchemaFileParser;
 
 use DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\XmlSchemaFileParser\XmlSchemaFileParser;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
 
@@ -37,7 +38,7 @@ class XmlSchemaFileParserTest extends TestCase
      */
     public function testParseXmlToColumnsMapShouldParseXmlColumns(): void
     {
-        //Arrange & Assert
+        // Arrange
         $xmlSchemaFileParser = new XmlSchemaFileParser(
             $this->createFilesystemMock(
                 <<<SCHEMA
@@ -56,7 +57,7 @@ class XmlSchemaFileParserTest extends TestCase
 
                          <foreign-key name="spy_api_key-created_by" foreignTable="spy_user" phpName="User" refPhpName="ApiKey">
                             <reference local="created_by" foreign="id_user"/>
-                        </foreign-key>
+                         </foreign-key>
                         <behavior name="timestampable"/>
                     </table>
 
@@ -70,6 +71,33 @@ class XmlSchemaFileParserTest extends TestCase
 
         // Assert
         $this->assertSame(['spy_api_key' => ['id_api_key', 'name']], $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testParseXmlToColumnsMapShouldShouldThrowExceptionWhenNameIsNotDefined(): void
+    {
+        // Arrange & Assert
+        $this->expectException(InvalidArgumentException::class);
+
+        $xmlSchemaFileParser = new XmlSchemaFileParser(
+            $this->createFilesystemMock(
+                <<<SCHEMA
+                <database xmlns="spryker:schema-01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="zed" xsi:schemaLocation="spryker:schema-01 https://static.spryker.com/schema-01.xsd" namespace="Orm\Zed\ApiKey\Persistence" package="src.Orm.Zed.ApiKey.Persistence">
+                    <non-table-node></non-table-node>
+                    <table idMethod="native" identifierQuoting="true">
+                        <column required="true" type="INTEGER" autoIncrement="true" primaryKey="true"/>
+                        <column name="name" required="true" size="255" type="VARCHAR"/>
+                    </table>
+
+                </database>
+                SCHEMA,
+            ),
+        );
+
+        // Act
+        $xmlSchemaFileParser->parseXmlToColumnsMap('schema.xml');
     }
 
     /**
