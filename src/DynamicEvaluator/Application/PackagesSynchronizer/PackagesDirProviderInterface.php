@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer;
+namespace DynamicEvaluator\Application\PackagesSynchronizer;
 
 interface PackagesDirProviderInterface
 {

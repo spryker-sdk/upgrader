@@ -4,6 +4,7 @@ coverage:
     precision: 2
 
 ignore:
+    - "**/*Dto.php"
     - "src/Codebase/Application/Dto/*.php"
     - "src/DynamicEvaluator/**/Dto/*.php"
     - "src/ReleaseApp/Infrastructure/Shared/Dto/*.php"

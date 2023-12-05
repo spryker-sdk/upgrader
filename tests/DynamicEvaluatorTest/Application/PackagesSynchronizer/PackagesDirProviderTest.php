@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
-namespace DynamicEvaluatorTest\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer;
+namespace DynamicEvaluatorTest\Application\PackagesSynchronizer;
 
-use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProvider;
+use DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProvider;
 use PHPUnit\Framework\TestCase;
 use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
 use Upgrader\Configuration\ConfigurationProvider;

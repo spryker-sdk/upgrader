@@ -7,11 +7,11 @@
 
 declare(strict_types=1);
 
-namespace DynamicEvaluatorTest\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer;
+namespace DynamicEvaluatorTest\Application\PackagesSynchronizer;
 
-use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProvider;
-use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface;
-use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesSynchronizer;
+use DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProvider;
+use DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface;
+use DynamicEvaluator\Application\PackagesSynchronizer\PackagesSynchronizer;
 use PHPUnit\Framework\TestCase;
 use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
 use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
@@ -126,7 +126,7 @@ class PackagesSynchronizerTest extends TestCase
      * @param string $fromDir
      * @param string $toDir
      *
-     * @return \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface
+     * @return \DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface
      */
     public function createPackagesDirProviderMock(array $dirs, string $fromDir, string $toDir): PackagesDirProviderInterface
     {
