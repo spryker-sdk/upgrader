@@ -212,6 +212,40 @@ class GitTest extends KernelTestCase
     }
 
     /**
+     * @return void
+     */
+    public function testHasUncommittedFile(): void
+    {
+        // Arrange
+        $filename = 'integrator.lock';
+        $processRunnerMock = $this->mockProcessRunnerWithOutput("M $filename");
+        $git = $this->getGitWithProcessRunner($processRunnerMock);
+
+        // Act
+        $isExist = $git->hasUncommittedFile($filename);
+
+        // Assert
+        $this->assertTrue($isExist);
+    }
+
+    /**
+     * @return void
+     */
+    public function testHasUncommittedFileFails(): void
+    {
+        // Arrange
+        $filename = 'integrator.lock';
+        $processRunnerMock = $this->mockProcessRunnerWithOutput('');
+        $git = $this->getGitWithProcessRunner($processRunnerMock);
+
+        // Act
+        $isExist = $git->hasUncommittedFile($filename);
+
+        // Assert
+        $this->assertFalse($isExist);
+    }
+
+    /**
      * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService $processRunner
      *
      * @return \Upgrade\Infrastructure\VersionControlSystem\Git\Git
