@@ -35,13 +35,6 @@ interface VersionControlSystemAdapterInterface
     public function hasAnyUncommittedChanges(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
 
     /**
-     * @param string $filename
-     *
-     * @return bool
-     */
-    public function hasUncommittedFile(string $filename): bool;
-
-    /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
@@ -61,13 +54,6 @@ interface VersionControlSystemAdapterInterface
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
     public function commitChanges(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
-
-    /**
-     * @param string $commitMessage
-     *
-     * @return void
-     */
-    public function commitWithMessage(string $commitMessage): void;
 
     /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
@@ -117,11 +103,4 @@ interface VersionControlSystemAdapterInterface
      * @return \Upgrade\Application\Dto\StepsResponseDto
      */
     public function validateSourceCodeProviderCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
-
-    /**
-     * @param string ...$fileNames
-     *
-     * @return void
-     */
-    public function removeTrackedFiles(string ...$fileNames): void;
 }

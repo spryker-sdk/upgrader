@@ -154,7 +154,6 @@ services:
               - '@push_changes.step'
               - '@generate_report_id.step'
               - '@create_pr.step'
-              - '@remove_integrator_lock_file.step'
               - '@checkout.step'
               - '@send_report.step'
             - - '@feature_dev_master.fixer'
@@ -296,6 +295,7 @@ services:
               - '@orm_models_regenerate.step'
               - '@integrator.step'
               - '@composer_json_constraint_fix_step'
+              - '@remove_integrator_lock_file.step'
               - '@add_changes.step'
               - '@commit_changes.step'
 

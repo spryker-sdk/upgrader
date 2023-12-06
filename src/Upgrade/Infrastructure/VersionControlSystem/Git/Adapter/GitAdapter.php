@@ -62,16 +62,6 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     }
 
     /**
-     * @param string $filename
-     *
-     * @return bool
-     */
-    public function hasUncommittedFile(string $filename): bool
-    {
-        return $this->git->hasUncommittedFile($filename);
-    }
-
-    /**
      * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      *
      * @return \Upgrade\Application\Dto\StepsResponseDto
@@ -99,16 +89,6 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     public function commitChanges(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->commit($stepsExecutionDto);
-    }
-
-    /**
-     * @param string $commitMessage
-     *
-     * @return void
-     */
-    public function commitWithMessage(string $commitMessage): void
-    {
-        $this->git->commitWithMessage($commitMessage);
     }
 
     /**
@@ -179,15 +159,5 @@ class GitAdapter implements VersionControlSystemAdapterInterface
     public function validateSourceCodeProviderCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->git->validateSourceCodeProviderCredentials($stepsExecutionDto);
-    }
-
-    /**
-     * @param string ...$fileNames
-     *
-     * @return void
-     */
-    public function removeTrackedFiles(string ...$fileNames): void
-    {
-        $this->git->removeTrackedFiles(...$fileNames);
     }
 }

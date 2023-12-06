@@ -24,34 +24,9 @@ class RemoveIntegratorLockFileStepTest extends TestCase
     {
         // Arrange & Assert
         $filesystemMock = $this->createMock(Filesystem::class);
-        $filesystemMock->expects($this->once())->method('exists')->willReturn(true);
         $filesystemMock->expects($this->once())->method('remove');
 
         $vcsMock = $this->createMock(VersionControlSystemAdapterInterface::class);
-        $vcsMock->expects($this->once())->method('hasUncommittedFile')->willReturn(true);
-        $vcsMock->expects($this->once())->method('removeTrackedFiles');
-        $vcsMock->expects($this->once())->method('commitWithMessage');
-
-        $removeIntegratorLockFileStep = new RemoveIntegratorLockFileStep($vcsMock, $filesystemMock);
-
-        // Act
-        $removeIntegratorLockFileStep->run(new StepsResponseDto());
-    }
-
-    /**
-     * @return void
-     */
-    public function testRunDoesNothingIfFileDoesNotExists(): void
-    {
-        // Arrange & Assert
-        $filesystemMock = $this->createMock(Filesystem::class);
-        $filesystemMock->expects($this->once())->method('exists')->willReturn(false);
-        $filesystemMock->expects($this->never())->method('remove');
-
-        $vcsMock = $this->createMock(VersionControlSystemAdapterInterface::class);
-        $vcsMock->expects($this->once())->method('hasUncommittedFile')->willReturn(false);
-        $vcsMock->expects($this->never())->method('removeTrackedFiles');
-        $vcsMock->expects($this->never())->method('commitWithMessage');
 
         $removeIntegratorLockFileStep = new RemoveIntegratorLockFileStep($vcsMock, $filesystemMock);
 

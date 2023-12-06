@@ -46,14 +46,7 @@ class RemoveIntegratorLockFileStep extends AbstractStep implements StepInterface
      */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
-        if ($this->filesystem->exists(static::FILENAME)) {
-            $this->filesystem->remove(static::FILENAME);
-        }
-
-        if ($this->vsc->hasUncommittedFile(static::FILENAME)) {
-            $this->vsc->removeTrackedFiles(static::FILENAME);
-            $this->vsc->commitWithMessage('Remove ' . static::FILENAME . ' file');
-        }
+        $this->filesystem->remove(static::FILENAME);
 
         return $stepsExecutionDto;
     }
