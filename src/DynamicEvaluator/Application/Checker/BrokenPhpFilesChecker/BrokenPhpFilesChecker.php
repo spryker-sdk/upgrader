@@ -82,6 +82,10 @@ class BrokenPhpFilesChecker
 
         $modulesDirsToCheck = $this->sprykerModulesDirsFetcher->fetchModulesDirs($updatedModules);
 
+        if (count($modulesDirsToCheck) === 0) {
+            return [];
+        }
+
         $fileErrors = $this->fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine($modulesDirsToCheck);
 
         if (count($fileErrors) === 0) {

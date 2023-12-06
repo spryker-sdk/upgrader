@@ -152,7 +152,7 @@ class BrokenPhpFilesCheckerTest extends TestCase
             new SprykerModuleComparer(),
             new SprykerModulesStateStorage($previousState),
             $this->createSprykerModulesStateFetcherMock($newState),
-            $this->createSprykerModulesDirsFetcherMock([], ['spryker/module-one']),
+            $this->createSprykerModulesDirsFetcherMock(['src/ModuleOne'], ['spryker/module-one']),
         );
 
         // Act
