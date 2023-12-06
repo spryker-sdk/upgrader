@@ -13,6 +13,9 @@ use Upgrade\Application\Adapter\VersionControlSystemAdapterInterface;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Infrastructure\VersionControlSystem\Git\Git;
 
+/**
+ * TODO :: Get rid of this class. It just duplicates all the logic in the Git class and adds no value.
+ */
 class GitAdapter implements VersionControlSystemAdapterInterface
 {
     /**
