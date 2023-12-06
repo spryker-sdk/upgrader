@@ -17,3 +17,4 @@ ignore:
     - "**/*.md"
     - "**/*.yml"
     - "**/*.yaml"
+    - "src/Upgrade/Infrastructure/VersionControlSystem/Git/Adapter/GitAdapter.php"

@@ -52,7 +52,7 @@ class RemoveIntegratorLockFileStep extends AbstractStep implements StepInterface
 
         if ($this->vsc->hasUncommittedFile(static::FILENAME)) {
             $this->vsc->removeTrackedFiles(static::FILENAME);
-            $this->vsc->commitWithMessage('Remove integrator.lock file');
+            $this->vsc->commitWithMessage('Remove ' . static::FILENAME . ' file');
         }
 
         return $stepsExecutionDto;

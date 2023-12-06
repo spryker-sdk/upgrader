@@ -15,6 +15,7 @@ use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Process\Process;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
@@ -243,6 +244,43 @@ class GitTest extends KernelTestCase
 
         // Assert
         $this->assertFalse($isExist);
+    }
+
+    /**
+     * @return void
+     */
+    public function testRemoveTrackedFiles(): void
+    {
+        // Arrange & Assert
+        $filenameOne = 'integrator.lock';
+        $filenameTwo = 'composer.lock';
+        $processRunnerMock = $this->createMock(ProcessRunnerService::class);
+        $processRunnerMock->expects($this->once())
+            ->method('run')
+            ->with(['git', 'rm', $filenameOne, $filenameTwo]);
+
+        $git = $this->getGitWithProcessRunner($processRunnerMock);
+
+        // Act
+        $git->removeTrackedFiles($filenameOne, $filenameTwo);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCommitWithMessage(): void
+    {
+        // Arrange & Assert
+        $message = 'Test message';
+        $processRunnerMock = $this->createMock(ProcessRunnerService::class);
+        $processRunnerMock->expects($this->once())
+            ->method('run')
+            ->with(['git', 'commit', '-n', '-m', $message]);
+
+        $git = $this->getGitWithProcessRunner($processRunnerMock);
+
+        // Act
+        $git->commitWithMessage($message);
     }
 
     /**
