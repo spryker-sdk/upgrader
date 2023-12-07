@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace DynamicEvaluatorTest\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher;
 
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\VendorChangedFilesFetcher;
-use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProvider;
-use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface;
+use DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProvider;
+use DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface;
 use DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface;
 use PHPUnit\Framework\TestCase;
 use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
@@ -70,7 +70,7 @@ class VendorChangedFilesFetcherTest extends TestCase
     /**
      * @param array<string> $dirs
      *
-     * @return \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface
+     * @return \DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface
      */
     public function createPackagesDirProviderMock(array $dirs): PackagesDirProviderInterface
     {

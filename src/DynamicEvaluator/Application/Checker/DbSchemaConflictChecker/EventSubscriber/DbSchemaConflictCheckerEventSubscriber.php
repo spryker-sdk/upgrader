@@ -7,19 +7,19 @@
 
 declare(strict_types=1);
 
-namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\EventSubscriber;
+namespace DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\EventSubscriber;
 
-use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker;
+use DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\DbSchemaConflictChecker;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Upgrade\Application\Provider\ConfigurationProviderInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorPostRequireEvent;
 
-class ClassExtendsUpdatedPackageCheckerEventSubscriber implements EventSubscriberInterface
+class DbSchemaConflictCheckerEventSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker
+     * @var \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\DbSchemaConflictChecker
      */
-    protected ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker;
+    protected DbSchemaConflictChecker $dbSchemaConflictChecker;
 
     /**
      * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
@@ -27,19 +27,19 @@ class ClassExtendsUpdatedPackageCheckerEventSubscriber implements EventSubscribe
     protected ConfigurationProviderInterface $configurationProvider;
 
     /**
-     * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker
+     * @param \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\DbSchemaConflictChecker $dbSchemaConflictChecker
      * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
      */
     public function __construct(
-        ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker,
+        DbSchemaConflictChecker $dbSchemaConflictChecker,
         ConfigurationProviderInterface $configurationProvider
     ) {
+        $this->dbSchemaConflictChecker = $dbSchemaConflictChecker;
         $this->configurationProvider = $configurationProvider;
-        $this->classExtendsUpdatedPackageChecker = $classExtendsUpdatedPackageChecker;
     }
 
     /**
-     * @return array<mixed>
+     * @return array<string, string>
      */
     public static function getSubscribedEvents(): array
     {
@@ -61,7 +61,7 @@ class ClassExtendsUpdatedPackageCheckerEventSubscriber implements EventSubscribe
 
         $stepsExecutorDto = $event->getStepsExecutionDto();
 
-        $violations = $this->classExtendsUpdatedPackageChecker->check();
+        $violations = $this->dbSchemaConflictChecker->check();
 
         foreach ($violations as $violation) {
             $stepsExecutorDto->addViolation($violation);
