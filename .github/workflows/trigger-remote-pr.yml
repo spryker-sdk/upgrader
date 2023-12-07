@@ -51,7 +51,7 @@ jobs:
             - name: "Update composer dependency"
               if: ${{ success() }}
               run: |
-                  composer update ${{ env.SOURCE_PACKAGE_NAME }} --no-scripts --no-progress --no-install -W
+                  composer update ${{ env.SOURCE_PACKAGE_NAME }} --no-scripts --no-progress --no-install
               working-directory: ${{ env.TARGET_REPO }}
 
             - name: "Prepare PR Body"
