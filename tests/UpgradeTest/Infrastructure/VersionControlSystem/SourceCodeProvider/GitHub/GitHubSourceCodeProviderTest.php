@@ -12,11 +12,13 @@ namespace UpgradeTest\Infrastructure\VersionControlSystem\SourceCodeProvider\Git
 use Github\Api\PullRequest;
 use GitHub\Client as GitHubClient;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
+use Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubClientFactory;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeProvider;
 
@@ -29,10 +31,11 @@ class GitHubSourceCodeProviderTest extends TestCase
     {
         return [
             // Invalid credentials
-            ['', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'],
-            ['access_token', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'],
-            ['access_token', 'org_name', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'],
-            ['access_token', 'org_name', 'repo_name', ''],
+            ['', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
+            ['access_token', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
+            ['access_token', 'org_name', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
+            ['access_token', 'org_name', 'repo_name', 'some error', true],
+            ['access_token', 'org_name', 'repo_name', '', false],
         ];
     }
 
@@ -43,20 +46,22 @@ class GitHubSourceCodeProviderTest extends TestCase
      * @param string $orgName
      * @param string $repoName
      * @param string $expectedError
+     * @param bool $produceException
      *
      * @return void
      */
-    public function testCreatePullRequest(string $accessToken, string $orgName, string $repoName, string $expectedError): void
-    {
+    public function testCreatePullRequest(
+        string $accessToken,
+        string $orgName,
+        string $repoName,
+        string $expectedError,
+        bool $produceException
+    ): void {
         $prMock = $this->createMock(PullRequest::class);
         $prMock->method('create')->willReturn(['html_url' => 'some_url']);
 
         // Create a mock for the GitHub client and its methods used in the createPullRequest method
-        $gitHubClientMock = $this->getMockBuilder(GitHubClient::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['pr'])
-            ->getMock();
-        $gitHubClientMock->method('pr')->willReturn($prMock);
+        $gitHubClientMock = $this->createGitHubClientMock($produceException ? null : $prMock);
 
         // Set up mocks and dependencies
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
@@ -65,6 +70,7 @@ class GitHubSourceCodeProviderTest extends TestCase
         $gitHubSourceCodeProvider = new GitHubSourceCodeProvider(
             $configurationProviderMock,
             $gitHubClientFactoryMock,
+            new OutputMessageBuilder(),
         );
         $gitHubClientFactoryMock->method('getClient')->willReturn($gitHubClientMock);
 
@@ -86,8 +92,32 @@ class GitHubSourceCodeProviderTest extends TestCase
         } else {
             $this->assertTrue($stepsExecutionDto->getIsSuccessful());
             $this->assertNull($stepsExecutionDto->getError());
-            $this->assertStringContainsString('Pull request was created some_url', $stepsExecutionDto->getOutputMessage());
+            $this->assertStringContainsString('Link to pull request some_url', $stepsExecutionDto->getOutputMessage());
         }
+    }
+
+    /**
+     * @param \Github\Api\PullRequest|null $pr
+     *
+     * @return \GitHub\Client
+     */
+    protected function createGitHubClientMock(?PullRequest $pr): GitHubClient
+    {
+        // Create a mock for the GitHub client and its methods used in the createPullRequest method
+        $gitHubClientMock = $this->getMockBuilder(GitHubClient::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['pr'])
+            ->getMock();
+
+        if (!$pr) {
+            $gitHubClientMock->method('pr')->willThrowException(new RuntimeException('some error'));
+
+            return $gitHubClientMock;
+        }
+
+        $gitHubClientMock->method('pr')->willReturn($pr);
+
+        return $gitHubClientMock;
     }
 
     /**
@@ -107,6 +137,7 @@ class GitHubSourceCodeProviderTest extends TestCase
         $gitHubSourceCodeProvider = new GitHubSourceCodeProvider(
             $configurationProviderMock,
             $gitHubClientFactoryMock,
+            new OutputMessageBuilder(),
         );
 
         $result = $gitHubSourceCodeProvider->buildBlockerTextBlock(new ValidatorViolationDto($title, $message));
