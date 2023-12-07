@@ -83,14 +83,16 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     }
 
     /**
+     * @param array<string> $dirs
+     *
      * @return array<\DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto>
      */
-    public function fetchProjectFileErrorsAndSaveInBaseLine(): array
+    public function fetchProjectFileErrorsAndSaveInBaseLine(array $dirs = []): array
     {
         $fileErrors = [];
 
         try {
-            $errors = $this->fetchErrorsArray();
+            $errors = $this->fetchErrorsArray($dirs);
         } catch (ProcessTimedOutException $e) {
             $this->logger->debug($e->getMessage());
 
@@ -156,11 +158,13 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     }
 
     /**
+     * @param array<string> $dirs
+     *
      * @throws \RuntimeException
      *
      * @return array<mixed>
      */
-    protected function fetchErrorsArray(): array
+    protected function fetchErrorsArray(array $dirs): array
     {
         $process = $this->processRunnerService->run([
             $this->executable,
@@ -169,6 +173,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
             file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) ? $this->executableProjectConfig : $this->executableConfig,
             '--error-format',
             'prettyJson',
+            ...$dirs,
         ]);
 
         try {

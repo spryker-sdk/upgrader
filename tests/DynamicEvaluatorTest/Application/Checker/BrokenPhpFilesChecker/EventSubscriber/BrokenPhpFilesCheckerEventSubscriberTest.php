@@ -13,7 +13,6 @@ use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\BrokenPhpFilesChe
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto;
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\ViolationDto;
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\EventSubscriber\BrokenPhpFilesCheckerEventSubscriber;
-use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher\FileErrorsFetcherInterface;
 use PHPUnit\Framework\TestCase;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
@@ -29,16 +28,14 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
     public function testOnPreProcessorShouldInvokeFileFetcherMethods(): void
     {
         // Arrange
-        $fileErrorsFetcherMock = $this->createMock(FileErrorsFetcherInterface::class);
-        $fileErrorsFetcherMock->expects($this->once())->method('reset');
-        $fileErrorsFetcherMock->expects($this->once())->method('fetchProjectFileErrorsAndSaveInBaseLine');
+        $brokenPhpFilesCheckerMock = $this->createMock(BrokenPhpFilesChecker::class);
+        $brokenPhpFilesCheckerMock->expects($this->once())->method('fetchAndPersistInitialErrors');
 
         $event = new ReleaseGroupProcessorEvent(new StepsResponseDto());
 
         $brokenPhpFilesCheckerEventSubscriber = new BrokenPhpFilesCheckerEventSubscriber(
             $this->createConfigurationProviderMock(),
-            $fileErrorsFetcherMock,
-            $this->createBrokenPhpFilesCheckerMock([]),
+            $brokenPhpFilesCheckerMock,
         );
 
         // Act
@@ -48,23 +45,61 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
     /**
      * @return void
      */
-    public function testOnPreProcessorShouldShouldCkipExecutionWhenEvaluatorDisabled(): void
+    public function testOnPreProcessorShouldShouldSkipExecutionWhenEvaluatorDisabled(): void
     {
         // Arrange
-        $fileErrorsFetcherMock = $this->createMock(FileErrorsFetcherInterface::class);
-        $fileErrorsFetcherMock->expects($this->never())->method('reset');
-        $fileErrorsFetcherMock->expects($this->never())->method('fetchProjectFileErrorsAndSaveInBaseLine');
+        $brokenPhpFilesCheckerMock = $this->createMock(BrokenPhpFilesChecker::class);
+        $brokenPhpFilesCheckerMock->expects($this->never())->method('fetchAndPersistInitialErrors');
 
         $event = new ReleaseGroupProcessorEvent(new StepsResponseDto());
 
         $brokenPhpFilesCheckerEventSubscriber = new BrokenPhpFilesCheckerEventSubscriber(
             $this->createConfigurationProviderMock(false),
-            $fileErrorsFetcherMock,
-            $this->createBrokenPhpFilesCheckerMock([]),
+            $brokenPhpFilesCheckerMock,
         );
 
         // Act
         $brokenPhpFilesCheckerEventSubscriber->onPreProcessor($event);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOnPreRequireShouldInvokeFetchAndPersistInstalledSprykerModules(): void
+    {
+        // Arrange
+        $event = new ReleaseGroupProcessorEvent(new StepsResponseDto());
+
+        $brokenPhpFilesCheckerMock = $this->createMock(BrokenPhpFilesChecker::class);
+        $brokenPhpFilesCheckerMock->expects($this->once())->method('fetchAndPersistInstalledSprykerModules');
+
+        $brokenPhpFilesCheckerEventSubscriber = new BrokenPhpFilesCheckerEventSubscriber(
+            $this->createConfigurationProviderMock(),
+            $brokenPhpFilesCheckerMock,
+        );
+
+        // Act
+        $brokenPhpFilesCheckerEventSubscriber->onPreRequire($event);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOnPreRequireShouldNotInvokeCheckerWhenItDisabled(): void
+    {
+        // Arrange
+        $event = new ReleaseGroupProcessorEvent(new StepsResponseDto());
+
+        $brokenPhpFilesCheckerMock = $this->createMock(BrokenPhpFilesChecker::class);
+        $brokenPhpFilesCheckerMock->expects($this->never())->method('fetchAndPersistInstalledSprykerModules');
+
+        $brokenPhpFilesCheckerEventSubscriber = new BrokenPhpFilesCheckerEventSubscriber(
+            $this->createConfigurationProviderMock(false),
+            $brokenPhpFilesCheckerMock,
+        );
+
+        // Act
+        $brokenPhpFilesCheckerEventSubscriber->onPreRequire($event);
     }
 
     /**
@@ -73,16 +108,19 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
     public function testOnPostRequireShouldAddViolation(): void
     {
         // Arrange
-        $fileErrorsFetcherMock = $this->createMock(FileErrorsFetcherInterface::class);
+        $violations = [new ViolationDto([], [new FileErrorDto('src/someClass.php', 1, 'test message')])];
+
+        $brokenPhpFilesCheckerMock = $this->createMock(BrokenPhpFilesChecker::class);
+        $brokenPhpFilesCheckerMock
+            ->expects($this->once())
+            ->method('checkUpdatedSprykerModules')
+            ->willReturn($violations);
 
         $event = new ReleaseGroupProcessorPostRequireEvent(new StepsResponseDto(), new PackageManagerResponseDto(true));
 
-        $violations = [new ViolationDto([], [new FileErrorDto('src/someClass.php', 1, 'test message')])];
-
         $brokenPhpFilesCheckerEventSubscriber = new BrokenPhpFilesCheckerEventSubscriber(
             $this->createConfigurationProviderMock(),
-            $fileErrorsFetcherMock,
-            $this->createBrokenPhpFilesCheckerMock($violations),
+            $brokenPhpFilesCheckerMock,
         );
 
         // Act
@@ -98,21 +136,62 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
     public function testOnPostRequireShouldNotInvokeCheckerWhenItDisabled(): void
     {
         // Arrange
-        $fileErrorsFetcherMock = $this->createMock(FileErrorsFetcherInterface::class);
-
         $event = new ReleaseGroupProcessorPostRequireEvent(new StepsResponseDto(), new PackageManagerResponseDto(true));
 
         $brokenPhpFilesCheckerMock = $this->createMock(BrokenPhpFilesChecker::class);
-        $brokenPhpFilesCheckerMock->expects($this->never())->method('check');
+        $brokenPhpFilesCheckerMock->expects($this->never())->method('checkUpdatedSprykerModules');
 
         $brokenPhpFilesCheckerEventSubscriber = new BrokenPhpFilesCheckerEventSubscriber(
             $this->createConfigurationProviderMock(false),
-            $fileErrorsFetcherMock,
             $brokenPhpFilesCheckerMock,
         );
 
         // Act
         $brokenPhpFilesCheckerEventSubscriber->onPostRequire($event);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOnPostProcessorShouldAddViolations(): void
+    {
+        // Arrange
+        $event = new ReleaseGroupProcessorEvent(new StepsResponseDto());
+        $violations = [new ViolationDto([], [new FileErrorDto('src/someClass.php', 1, 'test message')])];
+
+        $brokenPhpFilesCheckerMock = $this->createMock(BrokenPhpFilesChecker::class);
+        $brokenPhpFilesCheckerMock
+            ->expects($this->once())
+            ->method('checkAll')
+            ->willReturn($violations);
+
+        $brokenPhpFilesCheckerEventSubscriber = new BrokenPhpFilesCheckerEventSubscriber(
+            $this->createConfigurationProviderMock(),
+            $brokenPhpFilesCheckerMock,
+        );
+
+        // Act
+        $brokenPhpFilesCheckerEventSubscriber->onPostProcessor($event);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOnPostProcessorShouldNotInvokeCheckerWhenItDisabled(): void
+    {
+        // Arrange
+        $event = new ReleaseGroupProcessorEvent(new StepsResponseDto());
+
+        $brokenPhpFilesCheckerMock = $this->createMock(BrokenPhpFilesChecker::class);
+        $brokenPhpFilesCheckerMock->expects($this->never())->method('checkAll');
+
+        $brokenPhpFilesCheckerEventSubscriber = new BrokenPhpFilesCheckerEventSubscriber(
+            $this->createConfigurationProviderMock(false),
+            $brokenPhpFilesCheckerMock,
+        );
+
+        // Act
+        $brokenPhpFilesCheckerEventSubscriber->onPostProcessor($event);
     }
 
     /**
@@ -126,18 +205,5 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
         $configurationProvider->method('isEvaluatorEnabled')->willReturn($isEvaluatorEnabled);
 
         return $configurationProvider;
-    }
-
-    /**
-     * @param array<\DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\ViolationDto> $violations
-     *
-     * @return \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\BrokenPhpFilesChecker
-     */
-    public function createBrokenPhpFilesCheckerMock(array $violations): BrokenPhpFilesChecker
-    {
-        $brokenPhpFilesChecker = $this->createMock(BrokenPhpFilesChecker::class);
-        $brokenPhpFilesChecker->method('check')->willReturn($violations);
-
-        return $brokenPhpFilesChecker;
     }
 }
