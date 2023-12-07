@@ -31,3 +31,6 @@ services:
             - '@PhpParser\ParserFactory'
 
     PhpParser\ParserFactory:
+
+    DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModulesStateFetcher:
+        arguments: [ '@Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader' ]
