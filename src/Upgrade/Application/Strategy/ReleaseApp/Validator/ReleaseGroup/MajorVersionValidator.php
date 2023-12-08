@@ -76,6 +76,6 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
      */
     public static function getValidatorTitle(): string
     {
-        return 'Major Module Versions requiring manual action';
+        return 'Major Module Version or this version requires manual actions';
     }
 }
