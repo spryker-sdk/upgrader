@@ -410,4 +410,14 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     {
         return (int)getenv('MANIFESTS_RATING_THRESHOLD') ?: static::DEFAULT_MANIFESTS_RATING_THRESHOLD;
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return string|null
+     */
+    public function getPullRequestReviewers(): ?string
+    {
+        return getenv('PULL_REQUEST_REVIEWERS') ?: null;
+    }
 }

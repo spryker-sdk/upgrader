@@ -137,4 +137,12 @@ interface ConfigurationProviderInterface
      * @return int
      */
     public function getManifestsRatingThreshold(): int;
+
+    /**
+     * Specification:
+     *  - Defines
+     *
+     * @return string|null
+     */
+    public function getPullRequestReviewers(): ?string;
 }
