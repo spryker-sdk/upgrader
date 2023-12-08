@@ -12,9 +12,11 @@ namespace DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsF
 interface FileErrorsFetcherInterface
 {
     /**
+     * @param array<string> $dirs
+     *
      * @return array<\DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto>
      */
-    public function fetchProjectFileErrorsAndSaveInBaseLine(): array;
+    public function fetchProjectFileErrorsAndSaveInBaseLine(array $dirs = []): array;
 
     /**
      * @return void

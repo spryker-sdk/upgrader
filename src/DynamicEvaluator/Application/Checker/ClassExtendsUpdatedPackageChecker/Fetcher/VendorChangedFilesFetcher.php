@@ -9,14 +9,14 @@ declare(strict_types=1);
 
 namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher;
 
-use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface;
+use DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface;
 use DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface;
 use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 
 class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
 {
     /**
-     * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface
+     * @var \DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface
      */
     protected PackagesDirProviderInterface $packagesDirProvider;
 
@@ -31,7 +31,7 @@ class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
     protected PublicApiFilePathsProviderInterface $publicApiFilePathsProvider;
 
     /**
-     * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface $packagesDirProvider
+     * @param \DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface $packagesDirProvider
      * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      * @param \DynamicEvaluator\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface $publicApiFilePathsProvider
      */

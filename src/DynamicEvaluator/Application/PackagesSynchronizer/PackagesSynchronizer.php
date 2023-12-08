@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer;
+namespace DynamicEvaluator\Application\PackagesSynchronizer;
 
 use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
 use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
@@ -26,7 +26,7 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
     protected const COMMAND = 'rsync -au --delete %s %s';
 
     /**
-     * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface
+     * @var \DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface
      */
     protected PackagesDirProviderInterface $packagesDirProvider;
 
@@ -41,7 +41,7 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
     protected ProcessRunnerServiceInterface $processRunnerService;
 
     /**
-     * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Synchronizer\PackagesDirProviderInterface $packagesDirProvider
+     * @param \DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface $packagesDirProvider
      * @param \SprykerSdk\Utils\Infrastructure\Service\Filesystem $filesystem
      * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
      */

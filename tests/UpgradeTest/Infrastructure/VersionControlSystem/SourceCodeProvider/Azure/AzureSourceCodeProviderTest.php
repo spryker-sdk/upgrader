@@ -14,6 +14,7 @@ use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
+use Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureClientFactory;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzurePullRequestDescriptionNormalizer;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureSourceCodeProvider;
@@ -90,6 +91,7 @@ class AzureSourceCodeProviderTest extends TestCase
             $this->configurationProviderMock,
             $this->azureClientFactoryMock,
             $this->descriptionNormalizerMock,
+            new OutputMessageBuilder(),
         );
 
         // Configure the mocks
@@ -129,6 +131,7 @@ class AzureSourceCodeProviderTest extends TestCase
             $this->configurationProviderMock,
             $this->azureClientFactoryMock,
             $this->descriptionNormalizerMock,
+            new OutputMessageBuilder(),
         );
 
         $result = $azureSourceCodeProvider->buildBlockerTextBlock(new ValidatorViolationDto($title, $message));
