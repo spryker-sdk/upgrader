@@ -35,3 +35,35 @@ docker exec -it -u spryker upgrader_upgrader-sdk_1 bash
 cd /data/project
 ../bin/upgrader {command_name}
 ```
+
+## Configuring upgrader settings
+
+All the predefined sittings you can find in `.env` and `.env.dev`.
+For you local configs that contain the specific or private data like ACCESS_TOKEN you must create `.env.dev.local` that is in gitignore.
+To find the options that should be set in `.env.dev.local` you can find in `.env.dev` with empty values.
+
+The priorities of configuration sources look like this:
+```
+export ENV_VAR=... > .env.dev.local > .env.dev > .env
+```
+It means that the left hand settings can override other from the right side.
+
+More about symfony .env https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-env-files
+
+### How to run upgrader
+
+Populate placeholders `<..>` with yours data
+
+```bash
+#Configure
+
+cd /data/project && \
+git remote set-url origin https://<account-name>:<gh-auth-token>@github.com/<account-name>/<repository-name>.git && \
+composer global config -g github-oauth.github.com <gh-auth-token> && \
+git config --global user.email "<user-email>" && \
+git config --global user.name "<user-name>"
+
+#Run upgrader
+
+../bin/upgrader upgradability:php:upgrade -vvv
+```
