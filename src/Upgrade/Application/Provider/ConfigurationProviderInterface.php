@@ -142,7 +142,7 @@ interface ConfigurationProviderInterface
      * Specification:
      *  - Defines
      *
-     * @return string|null
+     * @return array<string>
      */
-    public function getPullRequestReviewers(): ?string;
+    public function getPullRequestReviewers(): array;
 }

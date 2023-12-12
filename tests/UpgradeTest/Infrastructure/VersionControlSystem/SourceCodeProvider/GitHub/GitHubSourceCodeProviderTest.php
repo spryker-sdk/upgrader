@@ -32,11 +32,11 @@ class GitHubSourceCodeProviderTest extends TestCase
     {
         return [
             // Invalid credentials
-            ['', '', '', null, 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
-            ['access_token', '', '', null, 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
-            ['access_token', 'org_name', '', null, 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
-            ['access_token', 'org_name', 'repo_name', null, 'some error', true],
-            ['access_token', 'org_name', 'repo_name', 'github_user,github_user2', '', false],
+            ['', '', '', [], 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
+            ['access_token', '', '', [], 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
+            ['access_token', 'org_name', '', [], 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
+            ['access_token', 'org_name', 'repo_name', [], 'some error', true],
+            ['access_token', 'org_name', 'repo_name', ['github_user', 'github_user2'], '', false],
         ];
     }
 
@@ -46,7 +46,7 @@ class GitHubSourceCodeProviderTest extends TestCase
      * @param string $accessToken
      * @param string $orgName
      * @param string $repoName
-     * @param string|null $reviewers
+     * @param array $reviewers
      * @param string $expectedError
      * @param bool $produceException
      *
@@ -56,7 +56,7 @@ class GitHubSourceCodeProviderTest extends TestCase
         string $accessToken,
         string $orgName,
         string $repoName,
-        ?string $reviewers,
+        array $reviewers,
         string $expectedError,
         bool $produceException
     ): void {
@@ -67,7 +67,7 @@ class GitHubSourceCodeProviderTest extends TestCase
             $reviewMock = $this->createMock(ReviewRequest::class);
             $reviewMock->expects($this->once())
                 ->method('create')
-                ->with($orgName, $repoName, 123, explode(',', $reviewers));
+                ->with($orgName, $repoName, 123, $reviewers);
             $prMock->method('reviewRequests')->willReturn($reviewMock);
         }
 

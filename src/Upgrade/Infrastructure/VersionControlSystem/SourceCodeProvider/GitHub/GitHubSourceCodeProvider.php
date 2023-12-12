@@ -127,7 +127,7 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
 
             $reviewers = $this->configurationProvider->getPullRequestReviewers();
             if ($reviewers) {
-                $prClient->reviewRequests()->create($organizationName, $repositoryName, $response[static::NUMBER_KEY], explode(',', $reviewers));
+                $prClient->reviewRequests()->create($organizationName, $repositoryName, $response[static::NUMBER_KEY], $reviewers);
             }
 
             return $stepsExecutionDto;

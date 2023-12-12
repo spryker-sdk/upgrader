@@ -414,10 +414,10 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * {@inheritDoc}
      *
-     * @return string|null
+     * @return array<string>
      */
-    public function getPullRequestReviewers(): ?string
+    public function getPullRequestReviewers(): array
     {
-        return getenv('PULL_REQUEST_REVIEWERS') ?: null;
+        return getenv('PULL_REQUEST_REVIEWERS') ? explode(',', getenv('PULL_REQUEST_REVIEWERS')) : [];
     }
 }
