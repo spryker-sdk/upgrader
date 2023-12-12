@@ -9,13 +9,16 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub;
 
+use Github\Api\PullRequest;
 use GitHub\Client as GitHubClient;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Domain\ValueObject\Error;
 use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
+use Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubClientFactory;
 use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubSourceCodeProvider;
 
@@ -28,10 +31,11 @@ class GitHubSourceCodeProviderTest extends TestCase
     {
         return [
             // Invalid credentials
-            ['', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'],
-            ['access_token', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'],
-            ['access_token', 'org_name', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.'],
-            ['access_token', 'org_name', 'repo_name', ''],
+            ['', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
+            ['access_token', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
+            ['access_token', 'org_name', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
+            ['access_token', 'org_name', 'repo_name', 'some error', true],
+            ['access_token', 'org_name', 'repo_name', '', false],
         ];
     }
 
@@ -42,11 +46,23 @@ class GitHubSourceCodeProviderTest extends TestCase
      * @param string $orgName
      * @param string $repoName
      * @param string $expectedError
+     * @param bool $produceException
      *
      * @return void
      */
-    public function testCreatePullRequest(string $accessToken, string $orgName, string $repoName, string $expectedError): void
-    {
+    public function testCreatePullRequest(
+        string $accessToken,
+        string $orgName,
+        string $repoName,
+        string $expectedError,
+        bool $produceException
+    ): void {
+        $prMock = $this->createMock(PullRequest::class);
+        $prMock->method('create')->willReturn(['html_url' => 'some_url']);
+
+        // Create a mock for the GitHub client and its methods used in the createPullRequest method
+        $gitHubClientMock = $this->createGitHubClientMock($produceException ? null : $prMock);
+
         // Set up mocks and dependencies
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
         $gitHubClientFactoryMock = $this->createMock(GitHubClientFactory::class);
@@ -54,7 +70,9 @@ class GitHubSourceCodeProviderTest extends TestCase
         $gitHubSourceCodeProvider = new GitHubSourceCodeProvider(
             $configurationProviderMock,
             $gitHubClientFactoryMock,
+            new OutputMessageBuilder(),
         );
+        $gitHubClientFactoryMock->method('getClient')->willReturn($gitHubClientMock);
 
         // Configure the mocks
         $configurationProviderMock->method('getAccessToken')->willReturn($accessToken);
@@ -65,22 +83,41 @@ class GitHubSourceCodeProviderTest extends TestCase
         $stepsExecutionDto = new StepsResponseDto();
         $pullRequestDto = new PullRequestDto('', '', '');
 
-        // Create a mock for the GitHub client and its methods used in the createPullRequest method
-        $gitHubClientMock = $this->getMockBuilder(GitHubClient::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $gitHubClientFactoryMock->method('getClient')->willReturn($gitHubClientMock);
+        $stepsExecutionDto = $gitHubSourceCodeProvider->createPullRequest($stepsExecutionDto, $pullRequestDto);
 
         if ($expectedError) {
-            $stepsExecutionDto = $gitHubSourceCodeProvider->createPullRequest($stepsExecutionDto, $pullRequestDto);
             $this->assertFalse($stepsExecutionDto->getIsSuccessful());
             $this->assertInstanceOf(Error::class, $stepsExecutionDto->getError());
             $this->assertEquals($expectedError, $stepsExecutionDto->getError()->getErrorMessage());
         } else {
             $this->assertTrue($stepsExecutionDto->getIsSuccessful());
             $this->assertNull($stepsExecutionDto->getError());
+            $this->assertStringContainsString('Link to pull request some_url', $stepsExecutionDto->getOutputMessage());
         }
+    }
+
+    /**
+     * @param \Github\Api\PullRequest|null $pr
+     *
+     * @return \GitHub\Client
+     */
+    protected function createGitHubClientMock(?PullRequest $pr): GitHubClient
+    {
+        // Create a mock for the GitHub client and its methods used in the createPullRequest method
+        $gitHubClientMock = $this->getMockBuilder(GitHubClient::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['pr'])
+            ->getMock();
+
+        if (!$pr) {
+            $gitHubClientMock->method('pr')->willThrowException(new RuntimeException('some error'));
+
+            return $gitHubClientMock;
+        }
+
+        $gitHubClientMock->method('pr')->willReturn($pr);
+
+        return $gitHubClientMock;
     }
 
     /**
@@ -100,6 +137,7 @@ class GitHubSourceCodeProviderTest extends TestCase
         $gitHubSourceCodeProvider = new GitHubSourceCodeProvider(
             $configurationProviderMock,
             $gitHubClientFactoryMock,
+            new OutputMessageBuilder(),
         );
 
         $result = $gitHubSourceCodeProvider->buildBlockerTextBlock(new ValidatorViolationDto($title, $message));
