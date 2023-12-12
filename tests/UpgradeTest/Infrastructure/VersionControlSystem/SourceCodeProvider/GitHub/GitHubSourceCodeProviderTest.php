@@ -65,7 +65,7 @@ class GitHubSourceCodeProviderTest extends TestCase
 
         if ($reviewers) {
             $reviewMock = $this->createMock(ReviewRequest::class);
-            $reviewMock->expects($this->once(0))
+            $reviewMock->expects($this->once())
                 ->method('create')
                 ->with($orgName, $repoName, 123, explode(',', $reviewers));
             $prMock->method('reviewRequests')->willReturn($reviewMock);
