@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace UpgradeTest\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub;
 
 use Github\Api\PullRequest;
+use Github\Api\PullRequest\ReviewRequest;
 use GitHub\Client as GitHubClient;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -35,7 +36,7 @@ class GitHubSourceCodeProviderTest extends TestCase
             ['access_token', '', '', null, 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
             ['access_token', 'org_name', '', null, 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
             ['access_token', 'org_name', 'repo_name', null, 'some error', true],
-            ['access_token', 'org_name', 'repo_name', null, '', false],
+            ['access_token', 'org_name', 'repo_name', 'github_user,github_user2', '', false],
         ];
     }
 
@@ -60,7 +61,15 @@ class GitHubSourceCodeProviderTest extends TestCase
         bool $produceException
     ): void {
         $prMock = $this->createMock(PullRequest::class);
-        $prMock->method('create')->willReturn(['html_url' => 'some_url']);
+        $prMock->method('create')->willReturn(['html_url' => 'some_url', 'number' => 123]);
+
+        if ($reviewers) {
+            $reviewMock = $this->createMock(ReviewRequest::class);
+            $reviewMock->expects($this->once(0))
+                ->method('create')
+                ->with($orgName, $repoName, 123, explode(',', $reviewers));
+            $prMock->method('reviewRequests')->willReturn($reviewMock);
+        }
 
         // Create a mock for the GitHub client and its methods used in the createPullRequest method
         $gitHubClientMock = $this->createGitHubClientMock($produceException ? null : $prMock);
