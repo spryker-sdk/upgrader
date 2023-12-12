@@ -48,7 +48,8 @@
             "Upgrade\\": "src/Upgrade/",
             "Upgrader\\": "src/Upgrader/",
             "ReleaseApp\\": "src/ReleaseApp/",
-            "DynamicEvaluator\\": "src/DynamicEvaluator/"
+            "DynamicEvaluator\\": "src/DynamicEvaluator/",
+            "PackageStorage\\": "src/PackageStorage/"
         }
     },
     "autoload-dev": {
@@ -59,7 +60,8 @@
             "TestCore\\": "tests/data/Evaluate/Core/",
             "UpgradeData\\": "tests/data/Upgrade/",
             "UpgraderTest\\": "tests/UpgraderTest/",
-            "DynamicEvaluatorTest\\": "tests/DynamicEvaluatorTest/"
+            "DynamicEvaluatorTest\\": "tests/DynamicEvaluatorTest/",
+            "PackageStorage\\": "tests/PackageStorage/"
         }
     },
     "config": {

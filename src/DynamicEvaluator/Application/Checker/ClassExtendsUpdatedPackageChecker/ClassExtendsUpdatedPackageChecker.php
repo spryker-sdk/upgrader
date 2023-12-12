@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker;
 
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Dto\ViolationDto;
-use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\ProjectExtendedClassesFetcherInterface;
-use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\VendorChangedClassesFetcherInterface;
+use PackageStorage\Application\Fetcher\ProjectExtendedClassesFetcherInterface;
+use PackageStorage\Application\Fetcher\VendorChangedClassesFetcherInterface;
 use Upgrader\Configuration\ConfigurationProvider;
 
 class ClassExtendsUpdatedPackageChecker
@@ -22,12 +22,12 @@ class ClassExtendsUpdatedPackageChecker
     protected const ERROR_MESSAGE = 'These classes of yours extend modified Spryker Core classes and need to be checked';
 
     /**
-     * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\VendorChangedClassesFetcherInterface
+     * @var \PackageStorage\Application\Fetcher\VendorChangedClassesFetcherInterface
      */
     protected VendorChangedClassesFetcherInterface $vendorChangedClassesFetcher;
 
     /**
-     * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\ProjectExtendedClassesFetcherInterface
+     * @var \PackageStorage\Application\Fetcher\ProjectExtendedClassesFetcherInterface
      */
     protected ProjectExtendedClassesFetcherInterface $projectExtendedClassesFetcher;
 
@@ -37,8 +37,8 @@ class ClassExtendsUpdatedPackageChecker
     protected ConfigurationProvider $configurationProvider;
 
     /**
-     * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\VendorChangedClassesFetcherInterface $vendorChangedClassesFetcher
-     * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\ProjectExtendedClassesFetcherInterface $projectExtendedClassesFetcher
+     * @param \PackageStorage\Application\Fetcher\VendorChangedClassesFetcherInterface $vendorChangedClassesFetcher
+     * @param \PackageStorage\Application\Fetcher\ProjectExtendedClassesFetcherInterface $projectExtendedClassesFetcher
      * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
      */
     public function __construct(

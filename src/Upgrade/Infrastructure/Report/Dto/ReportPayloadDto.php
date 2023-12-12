@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\Report\Dto;
 
+use Upgrade\Application\Dto\ModelStatisticDto;
+
 class ReportPayloadDto
 {
     /**
@@ -27,18 +29,26 @@ class ReportPayloadDto
     protected array $integratorWarnings;
 
     /**
+     * @var \Upgrade\Application\Dto\ModelStatisticDto|null
+     */
+    protected ?ModelStatisticDto $modelStatisticDto;
+
+    /**
      * @param array<\Upgrade\Domain\Entity\Package> $requiredPackages
      * @param array<\Upgrade\Domain\Entity\Package> $devRequiredPackages
      * @param array<string> $integratorWarnings
+     * @param \Upgrade\Application\Dto\ModelStatisticDto|null $modelStatisticDto
      */
     public function __construct(
         array $requiredPackages = [],
         array $devRequiredPackages = [],
-        array $integratorWarnings = []
+        array $integratorWarnings = [],
+        ?ModelStatisticDto $modelStatisticDto = null
     ) {
         $this->requiredPackages = $requiredPackages;
         $this->devRequiredPackages = $devRequiredPackages;
         $this->integratorWarnings = $integratorWarnings;
+        $this->modelStatisticDto = $modelStatisticDto;
     }
 
     /**
@@ -63,5 +73,13 @@ class ReportPayloadDto
     public function getIntegratorWarnings(): array
     {
         return $this->integratorWarnings;
+    }
+
+    /**
+     * @return \Upgrade\Application\Dto\ModelStatisticDto|null
+     */
+    public function getModelStatisticDto(): ?ModelStatisticDto
+    {
+        return $this->modelStatisticDto;
     }
 }

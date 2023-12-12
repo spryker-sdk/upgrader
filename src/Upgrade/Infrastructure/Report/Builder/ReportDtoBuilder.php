@@ -78,6 +78,8 @@ class ReportDtoBuilder implements ReportDtoBuilderInterface
             $this->configurationProvider->getSourceCodeProvider(),
             $this->configurationProvider->getAppEnv(),
             (string)$stepsResponseDto->getReportId(),
+            $stepsResponseDto->getCurrentReleaseGroupId(),
+            $stepsResponseDto->getLastAppliedReleaseGroup() ? $stepsResponseDto->getLastAppliedReleaseGroup()->getReleased() : new DateTimeImmutable(),
         );
     }
 
@@ -100,6 +102,7 @@ class ReportDtoBuilder implements ReportDtoBuilderInterface
             array_merge(
                 ...array_map(static fn (IntegratorResponseDto $integratorResponseDto): array => $integratorResponseDto->getWarnings(), $stepsResponseDto->getIntegratorResponseCollection()),
             ),
+            $stepsResponseDto->getModelStatisticDto(),
         );
     }
 }

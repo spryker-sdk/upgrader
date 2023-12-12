@@ -33,6 +33,8 @@ class RemoteEndpointJsonReportSenderTest extends TestCase
             'github',
             'test',
             'report_id',
+            1,
+            new DateTimeImmutable(),
         );
     }
 

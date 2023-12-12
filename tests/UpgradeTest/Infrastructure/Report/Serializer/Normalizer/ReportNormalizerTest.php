@@ -13,6 +13,7 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Upgrade\Application\Dto\ModelStatisticDto;
 use Upgrade\Domain\Entity\Package;
 use Upgrade\Infrastructure\Report\Dto\ReportDto;
 use Upgrade\Infrastructure\Report\Dto\ReportMetadataDto;
@@ -79,7 +80,12 @@ class ReportNormalizerTest extends TestCase
                             'diff_link' => 'https://github.com/spryker/testify/compare/2.0.0...2.0.1',
                         ],
                     ],
-                    'integrator_warnings' => [],
+                    'integrator_warnings' => ['warning'],
+                    'module_statistic' => [
+                        'total_overwritten_models' => 2,
+                        'total_changed_models' => 3,
+                        'total_intersecting_models' => 1,
+                    ],
                 ],
             'metadata' => [
                 'organization_name' => 'spryker',
@@ -88,6 +94,8 @@ class ReportNormalizerTest extends TestCase
                 'source_code_provider' => 'github',
                 'application_env' => 'CI',
                 'report_id' => '902072d8-a2cc-11ed-a8fc-0242ac120002',
+                'released' => $reportDto->getMetadata()->getReleased(),
+                'id_rg' => 1,
             ],
         ], $jsonArray);
     }
@@ -119,6 +127,8 @@ class ReportNormalizerTest extends TestCase
                         'https://github.com/spryker/testify/compare/2.0.0...2.0.1',
                     ),
                 ],
+                ['warning'],
+                new ModelStatisticDto(2, 3, 1),
             ),
             new ReportMetadataDto(
                 'spryker',
@@ -127,6 +137,8 @@ class ReportNormalizerTest extends TestCase
                 'github',
                 'CI',
                 '902072d8-a2cc-11ed-a8fc-0242ac120002',
+                1,
+                new DateTimeImmutable(),
             ),
         );
     }
