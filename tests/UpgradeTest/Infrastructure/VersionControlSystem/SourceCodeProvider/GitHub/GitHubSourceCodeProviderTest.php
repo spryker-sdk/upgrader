@@ -31,11 +31,11 @@ class GitHubSourceCodeProviderTest extends TestCase
     {
         return [
             // Invalid credentials
-            ['', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
-            ['access_token', '', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
-            ['access_token', 'org_name', '', 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
-            ['access_token', 'org_name', 'repo_name', 'some error', true],
-            ['access_token', 'org_name', 'repo_name', '', false],
+            ['', '', '', null, 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
+            ['access_token', '', '', null, 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
+            ['access_token', 'org_name', '', null, 'Please check defined values of environment variables: ACCESS_TOKEN, ORGANIZATION_NAME and REPOSITORY_NAME.', false],
+            ['access_token', 'org_name', 'repo_name', null, 'some error', true],
+            ['access_token', 'org_name', 'repo_name', null, '', false],
         ];
     }
 
@@ -45,6 +45,7 @@ class GitHubSourceCodeProviderTest extends TestCase
      * @param string $accessToken
      * @param string $orgName
      * @param string $repoName
+     * @param string|null $reviewers
      * @param string $expectedError
      * @param bool $produceException
      *
@@ -54,6 +55,7 @@ class GitHubSourceCodeProviderTest extends TestCase
         string $accessToken,
         string $orgName,
         string $repoName,
+        ?string $reviewers,
         string $expectedError,
         bool $produceException
     ): void {
@@ -78,6 +80,7 @@ class GitHubSourceCodeProviderTest extends TestCase
         $configurationProviderMock->method('getAccessToken')->willReturn($accessToken);
         $configurationProviderMock->method('getOrganizationName')->willReturn($orgName);
         $configurationProviderMock->method('getRepositoryName')->willReturn($repoName);
+        $configurationProviderMock->method('getPullRequestReviewers')->willReturn($reviewers);
 
         // Create mock DTOs
         $stepsExecutionDto = new StepsResponseDto();
