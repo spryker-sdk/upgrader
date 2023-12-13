@@ -46,12 +46,12 @@ class ReportMetadataDto
     /**
      * @var int
      */
-    private int $idRg;
+    protected int $idRg;
 
     /**
      * @var \DateTimeInterface
      */
-    private DateTimeInterface $released;
+    protected DateTimeInterface $released;
 
     /**
      * @param string $organizationName
