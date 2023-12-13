@@ -98,9 +98,6 @@ services:
     send_report.step:
         class: Upgrade\Application\Strategy\Common\Step\SendReportStep
 
-    remove_integrator_lock_file.step:
-        class: Upgrade\Application\Strategy\Common\Step\RemoveIntegratorLockFileStep
-
     feature_dev_master.fixer:
         class: Upgrade\Application\Strategy\Composer\Fixer\FeatureDevMasterPackageFixerStep
 
@@ -295,7 +292,6 @@ services:
               - '@orm_models_regenerate.step'
               - '@integrator.step'
               - '@composer_json_constraint_fix_step'
-              - '@remove_integrator_lock_file.step'
               - '@add_changes.step'
               - '@commit_changes.step'
 
