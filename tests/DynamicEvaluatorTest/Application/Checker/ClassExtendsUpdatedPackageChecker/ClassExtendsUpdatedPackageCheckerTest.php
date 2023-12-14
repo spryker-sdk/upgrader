@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace DynamicEvaluatorTest\Application\Checker\ClassExtendsUpdatedPackageChecker;
 
 use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker;
-use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\ProjectExtendedClassesFetcherInterface;
-use DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\VendorChangedClassesFetcherInterface;
+use PackageStorage\Application\Fetcher\ProjectExtendedClassesFetcherInterface;
+use PackageStorage\Application\Fetcher\VendorChangedClassesFetcherInterface;
 use PHPUnit\Framework\TestCase;
 use Upgrader\Configuration\ConfigurationProvider;
 
@@ -68,7 +68,7 @@ class ClassExtendsUpdatedPackageCheckerTest extends TestCase
     /**
      * @param array<string, string> $vendorChangedClasses
      *
-     * @return \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\VendorChangedClassesFetcherInterface
+     * @return \PackageStorage\Application\Fetcher\VendorChangedClassesFetcherInterface
      */
     public function createVendorChangedClassesFetcher(array $vendorChangedClasses): VendorChangedClassesFetcherInterface
     {
@@ -81,7 +81,7 @@ class ClassExtendsUpdatedPackageCheckerTest extends TestCase
     /**
      * @param array<string, string> $extendedClasses
      *
-     * @return \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Fetcher\ProjectExtendedClassesFetcherInterface
+     * @return \PackageStorage\Application\Fetcher\ProjectExtendedClassesFetcherInterface
      */
     protected function createProjectExtendedClassesFetcher(array $extendedClasses): ProjectExtendedClassesFetcherInterface
     {

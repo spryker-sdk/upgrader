@@ -12,7 +12,7 @@ namespace DynamicEvaluatorTest\Application\Checker\DbSchemaConflictChecker\NewVe
 use DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\NewVendorColumnsFetcher\ChangedXmlFilesFetcher;
 use DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\NewVendorColumnsFetcher\NewVendorColumnsFetcher;
 use DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\XmlSchemaFileParser\XmlSchemaFileParserInterface;
-use DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface;
+use PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface;
 use PHPUnit\Framework\TestCase;
 
 class NewVendorColumnsFetcherTest extends TestCase
@@ -58,7 +58,7 @@ class NewVendorColumnsFetcherTest extends TestCase
     }
 
     /**
-     * @return \DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface
+     * @return \PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface
      */
     protected function createPackagesDirProviderMock(): PackagesDirProviderInterface
     {

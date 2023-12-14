@@ -6,3 +6,4 @@ imports:
     - { resource: './Upgrade/services.yaml' }
     - { resource: './Upgrader/services.yaml' }
     - { resource: './DynamicEvaluator/services.yaml' }
+    - { resource: './PackageStorage/services.yaml' }

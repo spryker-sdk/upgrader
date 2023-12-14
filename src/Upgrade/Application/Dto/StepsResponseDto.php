@@ -93,6 +93,11 @@ class StepsResponseDto extends ResponseDto
     protected ReleaseGroupStatDto $releaseGroupStatDto;
 
     /**
+     * @var \Upgrade\Application\Dto\ModelStatisticDto
+     */
+    protected ModelStatisticDto $modelStatisticDto;
+
+    /**
      * @var int
      */
     protected int $currentReleaseGroupId = self::UNDEFINED_RELEASE_GROUP_ID;
@@ -119,6 +124,7 @@ class StepsResponseDto extends ResponseDto
         }
 
         $this->releaseGroupStatDto = new ReleaseGroupStatDto();
+        $this->modelStatisticDto = new ModelStatisticDto();
     }
 
     /**
@@ -432,7 +438,7 @@ class StepsResponseDto extends ResponseDto
      */
     public function addAppliedReleaseGroup(ReleaseGroupDto $appliedReleaseGroup): void
     {
-        $this->appliedReleaseGroups[] = $appliedReleaseGroup;
+        $this->appliedReleaseGroups[$appliedReleaseGroup->getId()] = $appliedReleaseGroup;
     }
 
     /**
@@ -573,5 +579,23 @@ class StepsResponseDto extends ResponseDto
                 ),
             ) > 0
             || count($this->getProjectViolations()) > 0;
+    }
+
+    /**
+     * @return \Upgrade\Application\Dto\ModelStatisticDto
+     */
+    public function getModelStatisticDto(): ModelStatisticDto
+    {
+        return $this->modelStatisticDto;
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\ModelStatisticDto $modelStatisticDto
+     *
+     * @return void
+     */
+    public function setModelStatisticDto(ModelStatisticDto $modelStatisticDto): void
+    {
+        $this->modelStatisticDto = $modelStatisticDto;
     }
 }

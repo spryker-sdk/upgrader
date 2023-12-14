@@ -11,6 +11,7 @@ namespace Upgrade\Infrastructure\Report\Serializer\Normalizer;
 
 use InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Upgrade\Application\Dto\ModelStatisticDto;
 use Upgrade\Domain\Entity\Package;
 use Upgrade\Infrastructure\Report\Dto\ReportDto;
 use Upgrade\Infrastructure\Report\Dto\ReportMetadataDto;
@@ -67,6 +68,7 @@ class ReportNormalizer implements NormalizerInterface
             'required_packages' => array_map([$this, 'formatPackage'], $reportPayloadDto->getRequiredPackages()),
             'dev_required_packages' => array_map([$this, 'formatPackage'], $reportPayloadDto->getDevRequiredPackages()),
             'integrator_warnings' => $reportPayloadDto->getIntegratorWarnings(),
+            'module_statistic' => $reportPayloadDto->getModelStatisticDto() ? $this->formatModuleStatistic($reportPayloadDto->getModelStatisticDto()) : [],
         ];
     }
 
@@ -84,6 +86,8 @@ class ReportNormalizer implements NormalizerInterface
             'source_code_provider' => $metadataDto->getSourceCodeProvider(),
             'application_env' => $metadataDto->getAppEnv(),
             'report_id' => $metadataDto->getReportId(),
+            'released' => $metadataDto->getReleased(),
+            'id_rg' => $metadataDto->getIdRg(),
         ];
     }
 
@@ -99,6 +103,21 @@ class ReportNormalizer implements NormalizerInterface
             'version' => $package->getVersion(),
             'previous_version' => $package->getPreviousVersion(),
             'diff_link' => $package->getDiffLink(),
+        ];
+    }
+
+    /**
+     * @param \Upgrade\Application\Dto\ModelStatisticDto $modelStatisticDto
+     *
+     * @return array<string, mixed>
+     */
+    protected function formatModuleStatistic(ModelStatisticDto $modelStatisticDto): array
+    {
+        return [
+            'total_overwritten_models' => $modelStatisticDto->getTotalOverwrittenModels(),
+            'total_changed_models' => $modelStatisticDto->getTotalChangedModels(),
+            'total_intersecting_models' => $modelStatisticDto->getTotalIntersectingModels(),
+            'intersecting_models' => $modelStatisticDto->getIntersectingModels(),
         ];
     }
 }

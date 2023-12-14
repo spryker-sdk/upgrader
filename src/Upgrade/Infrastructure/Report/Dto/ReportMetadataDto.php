@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Upgrade\Infrastructure\Report\Dto;
 
+use DateTimeInterface;
+
 class ReportMetadataDto
 {
     /**
@@ -42,12 +44,24 @@ class ReportMetadataDto
     protected string $reportId;
 
     /**
+     * @var int
+     */
+    protected int $idRg;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    protected DateTimeInterface $released;
+
+    /**
      * @param string $organizationName
      * @param string $repositoryName
      * @param string $projectId
      * @param string $sourceCodeProvider
      * @param string $appEnv
      * @param string $reportId
+     * @param int $idRg
+     * @param \DateTimeInterface $released
      */
     public function __construct(
         string $organizationName,
@@ -55,7 +69,9 @@ class ReportMetadataDto
         string $projectId,
         string $sourceCodeProvider,
         string $appEnv,
-        string $reportId
+        string $reportId,
+        int $idRg,
+        DateTimeInterface $released
     ) {
         $this->organizationName = $organizationName;
         $this->repositoryName = $repositoryName;
@@ -63,6 +79,8 @@ class ReportMetadataDto
         $this->sourceCodeProvider = $sourceCodeProvider;
         $this->appEnv = $appEnv;
         $this->reportId = $reportId;
+        $this->idRg = $idRg;
+        $this->released = $released;
     }
 
     /**
@@ -111,5 +129,21 @@ class ReportMetadataDto
     public function getReportId(): string
     {
         return $this->reportId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdRg(): int
+    {
+        return $this->idRg;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getReleased(): DateTimeInterface
+    {
+        return $this->released;
     }
 }

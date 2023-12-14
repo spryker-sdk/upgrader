@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\NewVendorColumnsFetcher;
 
 use DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\XmlSchemaFileParser\XmlSchemaFileParserInterface;
-use DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface;
+use PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface;
 
 class NewVendorColumnsFetcher implements NewVendorColumnsFetcherInterface
 {
@@ -20,7 +20,7 @@ class NewVendorColumnsFetcher implements NewVendorColumnsFetcherInterface
     protected ChangedXmlFilesFetcher $changedXmlFilesFetcher;
 
     /**
-     * @var \DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface
+     * @var \PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface
      */
     protected PackagesDirProviderInterface $packagesDirProvider;
 
@@ -31,7 +31,7 @@ class NewVendorColumnsFetcher implements NewVendorColumnsFetcherInterface
 
     /**
      * @param \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\NewVendorColumnsFetcher\ChangedXmlFilesFetcher $changedXmlFilesFetcher
-     * @param \DynamicEvaluator\Application\PackagesSynchronizer\PackagesDirProviderInterface $packagesDirProvider
+     * @param \PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface $packagesDirProvider
      * @param \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\XmlSchemaFileParser\XmlSchemaFileParserInterface $xmlSchemaFileParser
      */
     public function __construct(
