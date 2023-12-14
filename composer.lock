@@ -3412,12 +3412,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "8e2075ddf996d1eecf25948e15bf0fcedb7abbb9"
+                "reference": "6ead79654fd94391d144af7b378880f8a1bb9ed9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/8e2075ddf996d1eecf25948e15bf0fcedb7abbb9",
-                "reference": "8e2075ddf996d1eecf25948e15bf0fcedb7abbb9",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/6ead79654fd94391d144af7b378880f8a1bb9ed9",
+                "reference": "6ead79654fd94391d144af7b378880f8a1bb9ed9",
                 "shasum": ""
             },
             "require": {
@@ -3468,7 +3468,7 @@
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
                 "source": "https://github.com/spryker-sdk/integrator/tree/bugfix/sdk-5690-remove-integrator-lock-and-ignore-it"
             },
-            "time": "2023-12-13T20:49:20+00:00"
+            "time": "2023-12-14T11:21:37+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
