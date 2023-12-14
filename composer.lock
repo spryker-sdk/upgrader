@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "115212ff62d956eca95aedefc5d39203",
+    "content-hash": "0a44f97d172866febdb5797b6301bab7",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3408,33 +3408,33 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "dev-bugfix/sdk-5690-remove-integrator-lock-and-ignore-it",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "6ead79654fd94391d144af7b378880f8a1bb9ed9"
+                "reference": "583f966daad60ebf1f5dab3718c260e7918f8e31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/6ead79654fd94391d144af7b378880f8a1bb9ed9",
-                "reference": "6ead79654fd94391d144af7b378880f8a1bb9ed9",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/583f966daad60ebf1f5dab3718c260e7918f8e31",
+                "reference": "583f966daad60ebf1f5dab3718c260e7918f8e31",
                 "shasum": ""
             },
             "require": {
                 "aws/aws-sdk-php": "^3.257",
                 "composer-plugin-api": "^1.0.0 || ^2.0.0",
-                "composer/composer": "^2.1.0",
+                "composer/composer": "^2.6.0",
                 "czproject/git-php": "^4.1",
                 "ext-dom": "*",
                 "ext-json": "*",
                 "ext-simplexml": "*",
                 "guzzlehttp/guzzle": "^7.4",
-                "nikic/php-parser": "^4.3.0",
+                "nikic/php-parser": "^4.13.0",
                 "php": ">=7.4",
                 "sebastian/diff": "^4.0.0",
                 "spryker-sdk/utils": "^0.1.2",
-                "symfony/console": "^5.3.0 || ^6.0",
-                "symfony/finder": "^5.3.0 || ^6.0",
+                "symfony/console": "^5.4 || ^6.0",
+                "symfony/finder": "^5.4 || ^6.0",
                 "symfony/process": "^5.4 || ^6.0"
             },
             "require-dev": {
@@ -3443,8 +3443,9 @@
                 "phpunit/phpunit": "^9.5.0",
                 "spryker-sdk/manifest-test-data-provider": "dev-master",
                 "spryker/code-sniffer": "0.17.18",
-                "symfony/filesystem": "^5.3.0 || ^6.0"
+                "symfony/filesystem": "^5.4 || ^6.0"
             },
+            "default-branch": true,
             "bin": [
                 "bin/integrator"
             ],
@@ -3466,9 +3467,9 @@
             "description": "Integrator module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
-                "source": "https://github.com/spryker-sdk/integrator/tree/bugfix/sdk-5690-remove-integrator-lock-and-ignore-it"
+                "source": "https://github.com/spryker-sdk/integrator/tree/master"
             },
-            "time": "2023-12-14T11:21:37+00:00"
+            "time": "2023-12-14T16:07:47+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
@@ -8910,7 +8911,7 @@
         },
         {
             "package": "spryker-sdk/integrator",
-            "version": "dev-bugfix/sdk-5690-remove-integrator-lock-and-ignore-it",
+            "version": "9999999-dev",
             "alias": "1.0.0",
             "alias_normalized": "1.0.0.0"
         }
@@ -8929,5 +8930,5 @@
         "ext-simplexml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

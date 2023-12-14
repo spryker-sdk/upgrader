@@ -17,7 +17,7 @@
         "nikic/php-parser": "4.15.*",
         "phpstan/phpstan": "^1.10",
         "spryker-sdk/azure-php-client": "dev-master as 1.0.0",
-        "spryker-sdk/integrator": "dev-bugfix/sdk-5690-remove-integrator-lock-and-ignore-it as 1.0.0",
+        "spryker-sdk/integrator": "dev-master as 1.0.0",
         "spryker-sdk/sdk-contracts": "^0.4.7",
         "spryker-sdk/utils": "^0.1.2",
         "symfony/config": "^5.4",
