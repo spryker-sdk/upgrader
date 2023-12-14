@@ -61,8 +61,17 @@ class ModuleStatisticUpdater implements ModuleStatisticUpdaterInterface
         $projectExtendedClasses = $this->projectExtendedClassesFetcher->fetchExtendedClasses();
         $stepsResponseDto->getModelStatisticDto()->setTotalChangedModels(count($totalChangedCoreModules));
 
-        $totalIntersectingModels = count(array_intersect_key($projectExtendedClasses, $totalChangedCoreModules));
+        $intersectedModuleNamespaces = array_intersect_key($projectExtendedClasses, $totalChangedCoreModules);
+        $totalIntersectingModels = count($intersectedModuleNamespaces);
+        $intersectedModuleNames = [];
+        foreach ($intersectedModuleNamespaces as $intersectedModuleNamespace => $path) {
+            $namespaceParts = explode('\\', $intersectedModuleNamespace);
+            if (isset($namespaceParts[2])) {
+                $intersectedModuleNames[] = $namespaceParts[2];
+            }
+        }
 
+        $stepsResponseDto->getModelStatisticDto()->setIntersectingModels($intersectedModuleNames);
         $stepsResponseDto->getModelStatisticDto()->setTotalIntersectingModels($totalIntersectingModels);
 
         return $stepsResponseDto;

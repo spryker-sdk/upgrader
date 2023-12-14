@@ -85,6 +85,7 @@ class ReportNormalizerTest extends TestCase
                         'total_overwritten_models' => 2,
                         'total_changed_models' => 3,
                         'total_intersecting_models' => 1,
+                        'intersecting_models' => ['Test'],
                     ],
                 ],
             'metadata' => [
@@ -128,7 +129,7 @@ class ReportNormalizerTest extends TestCase
                     ),
                 ],
                 ['warning'],
-                new ModelStatisticDto(2, 3, 1),
+                new ModelStatisticDto(2, 3, 1, ['Test']),
             ),
             new ReportMetadataDto(
                 'spryker',
