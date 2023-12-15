@@ -53,23 +53,26 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
 
         $text = 'Switch to this branch, bootstrap your project in the development environment, open the mentioned file, and compare its correctness to the released version by Spryker.';
         $text .= PHP_EOL . PHP_EOL
-            . '| Composer command | Project file(s) | '
+            . '| Composer command | Project file(s) |'
             . PHP_EOL
             . '|------------------|-----------------|'
             . PHP_EOL;
 
         foreach ($violations as $violation) {
+            $text .= '| ';
+
             $text .= implode(
                 ' | ',
                 [
                     $violation->getComposerCommands() ? implode('<br>', $violation->getComposerCommands()) : '-',
                     implode(
                         '<br>',
-                        array_map(fn (FileErrorDto $fileErrorDto): string => '<b>' . $this->trimRootDir($fileErrorDto->getFilename()) . '</b><br>' . str_replace('|', '\|', $fileErrorDto->getMessage()) . '<br>', $violation->getFileErrors()),
+                        array_map(fn(FileErrorDto $fileErrorDto): string => '<b>' . $this->trimRootDir($fileErrorDto->getFilename()) . '</b><br>' . str_replace('|', '\|', $fileErrorDto->getMessage()) . '<br>', $violation->getFileErrors()),
                     ),
-                    PHP_EOL,
                 ],
             );
+
+            $text .= ' |' . PHP_EOL;
         }
 
         $text .= PHP_EOL;
