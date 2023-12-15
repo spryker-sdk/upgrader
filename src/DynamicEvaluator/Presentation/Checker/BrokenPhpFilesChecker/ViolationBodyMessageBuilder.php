@@ -67,7 +67,7 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
                     $violation->getComposerCommands() ? implode('<br>', $violation->getComposerCommands()) : '-',
                     implode(
                         '<br>',
-                        array_map(fn(FileErrorDto $fileErrorDto): string => '<b>' . $this->trimRootDir($fileErrorDto->getFilename()) . '</b><br>' . str_replace('|', '\|', $fileErrorDto->getMessage()) . '<br>', $violation->getFileErrors()),
+                        array_map(fn (FileErrorDto $fileErrorDto): string => '<b>' . $this->trimRootDir($fileErrorDto->getFilename()) . '</b><br>' . str_replace('|', '\|', $fileErrorDto->getMessage()) . '<br>', $violation->getFileErrors()),
                     ),
                 ],
             );

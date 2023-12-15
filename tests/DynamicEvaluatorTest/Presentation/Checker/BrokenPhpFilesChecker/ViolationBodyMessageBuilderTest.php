@@ -31,7 +31,7 @@ class ViolationBodyMessageBuilderTest extends TestCase
                         0,
                         'Access to undefined constant Generated\Shared\Transfer\ShipmentTransfer::SHIPMENT_TYPE_UUID.',
                     ),
-                ]
+                ],
             ),
             new ViolationDto(
                 [],
