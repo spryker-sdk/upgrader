@@ -244,6 +244,13 @@ export EVALUATOR_ENABLED=true
 export RELEASE_GROUP_ID=123
 ```
 
+## Specify the pull request reviewers
+​
+* Specify the GitHub user login to add as reviewers to the pull request
+```bash
+export PULL_REQUEST_REVIEWERS=<login_1,login_two,...>
+```
+
 ## Installation
 ​
 For Spryker SDK installation instructions, see [Spryker SDK](https://github.com/spryker-sdk/sdk#installation)
