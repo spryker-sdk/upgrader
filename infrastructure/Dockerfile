@@ -8,7 +8,10 @@ RUN apk update \
     curl \
     bash \
     git \
-    rsync
+    rsync \
+    libxslt1-dev
+
+docker-php-ext-install xsl
 
 COPY --chown=spryker:spryker ../composer.json composer.lock ${srcRoot}/
 
