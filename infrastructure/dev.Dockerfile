@@ -8,10 +8,7 @@ RUN apk update \
     curl \
     bash \
     git \
-    rsync \
-    libxslt-dev
-
-RUN docker-php-ext-install xsl
+    rsync
 
 COPY --chown=spryker:spryker composer.json composer.lock ${srcRoot}/
 
@@ -22,7 +19,6 @@ RUN --mount=type=cache,id=composer,sharing=locked,target=/home/spryker/.composer
 FROM application-production-dependencies AS application-production-codebase
 
 RUN chown spryker:spryker ${srcRoot}
-
 
 COPY --chown=spryker:spryker phpstan-bootstrap.php ${srcRoot}/phpstan-bootstrap.php
 COPY --chown=spryker:spryker app ${srcRoot}/app
