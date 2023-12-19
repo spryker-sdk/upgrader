@@ -1,5 +1,3 @@
-includes:
-    - %currentWorkingDirectory%/phpstan.neon
 parameters:
     level: 3 # for performance reasons
     paths:
@@ -8,3 +6,5 @@ parameters:
         analyse:
             - %currentWorkingDirectory%/src/Generated/*
             - %currentWorkingDirectory%/src/Orm/*
+            - %currentWorkingDirectory%/src/Pyz/Zed/*/Persistence/*Repository.php
+            - %currentWorkingDirectory%/src/Pyz/Zed/*/Persistence/*QueryContainer.php
