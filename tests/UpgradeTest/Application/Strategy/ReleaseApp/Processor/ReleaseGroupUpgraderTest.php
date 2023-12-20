@@ -132,7 +132,6 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
         $fixer2 = $fixer2->getMock();
         $fixer2->expects($this->once())->method('isApplicable')->willReturn(true);
         $fixer2->expects($this->once())->method('run')->willReturn(new PackageManagerResponseDto(false));
-        $fixer2->expects($this->once())->method('isReRunStep')->willReturn(true);
         $releaseGroupUpgrader = new ReleaseGroupUpgrader(
             $moduleFetcherMock,
             $loggerMock,
