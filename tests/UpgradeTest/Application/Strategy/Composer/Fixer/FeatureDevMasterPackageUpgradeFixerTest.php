@@ -13,9 +13,9 @@ use PHPUnit\Framework\TestCase;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
-use Upgrade\Application\Strategy\Composer\Fixer\FeaturePackageUpgradeFixer;
+use Upgrade\Application\Strategy\Composer\Fixer\FeatureDevMasterPackageUpgradeFixer;
 
-class FeaturePackageFixerStepTest extends TestCase
+class FeatureDevMasterPackageUpgradeFixerTest extends TestCase
 {
     /**
      * @var string
@@ -25,12 +25,11 @@ class FeaturePackageFixerStepTest extends TestCase
     /**
      * @return void
      */
-    public function testIsApplicableWhenReleaseGroupIntegratorEnabled(): void
+    public function testIsApplicableWhenIsFeatureToDevMasterDisabled(): void
     {
         // Arrange
-        $fixer = new FeaturePackageUpgradeFixer(
+        $fixer = new FeatureDevMasterPackageUpgradeFixer(
             $this->createMock(PackageManagerAdapterInterface::class),
-            true,
         );
         $packageManagerResponseDto = new PackageManagerResponseDto(false, static::ERROR_MESSAGE);
 
@@ -47,8 +46,9 @@ class FeaturePackageFixerStepTest extends TestCase
     public function testIsApplicable(): void
     {
         // Arrange
-        $fixer = new FeaturePackageUpgradeFixer(
+        $fixer = new FeatureDevMasterPackageUpgradeFixer(
             $this->createMock(PackageManagerAdapterInterface::class),
+            true,
         );
         $packageManagerResponseDto = new PackageManagerResponseDto(false, static::ERROR_MESSAGE);
 
@@ -62,13 +62,36 @@ class FeaturePackageFixerStepTest extends TestCase
     /**
      * @return void
      */
+    public function testRunSkip(): void
+    {
+        // Arrange
+        $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
+        $packageManagerAdapter->expects($this->never())
+            ->method('require');
+
+        $fixer = new FeatureDevMasterPackageUpgradeFixer($packageManagerAdapter);
+        $packageManagerResponseDtoInput = new PackageManagerResponseDto(false, 'n/a');
+
+        // Act
+        $packageManagerResponseDto = $fixer->run($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDtoInput);
+
+        // Assert
+        $this->assertEquals(
+            null,
+            $packageManagerResponseDto,
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testIsNotApplicable(): void
     {
         // Arrange
-        $fixer = new FeaturePackageUpgradeFixer(
+        $fixer = new FeatureDevMasterPackageUpgradeFixer(
             $this->createMock(PackageManagerAdapterInterface::class),
         );
-        $packageManagerResponseDto = new PackageManagerResponseDto(false, 'spryker-feature1/spryker-core');
+        $packageManagerResponseDto = new PackageManagerResponseDto(false, 'spryker/spryker-core');
 
         // Act
         $result = $fixer->isApplicable($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDto);
@@ -83,19 +106,12 @@ class FeaturePackageFixerStepTest extends TestCase
     public function testRunFix(): void
     {
         // Arrange
-        $responseDto = new PackageManagerResponseDto(true);
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter->expects($this->once())
-            ->method('remove')
-            ->willReturn($responseDto);
-        $packageManagerAdapter->expects($this->once())
             ->method('require')
-            ->willReturn($responseDto);
-        $packageManagerAdapter->expects($this->once())
-            ->method('getComposerLockFile')
-            ->willReturn(['packages' => [['name' => 'name']]]);
+            ->willReturn(new PackageManagerResponseDto(true));
 
-        $fixer = new FeaturePackageUpgradeFixer($packageManagerAdapter);
+        $fixer = new FeatureDevMasterPackageUpgradeFixer($packageManagerAdapter);
         $packageManagerResponseDto = new PackageManagerResponseDto(false, static::ERROR_MESSAGE);
 
         // Act
@@ -109,40 +125,42 @@ class FeaturePackageFixerStepTest extends TestCase
     /**
      * @return void
      */
-    public function testRunCanNotRequirePackages(): void
+    public function testRunWithFailed(): void
     {
         // Arrange
-        $packageManagerResponseDto = new PackageManagerResponseDto(false, static::ERROR_MESSAGE);
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter->expects($this->once())
             ->method('require')
-            ->willReturn($packageManagerResponseDto);
+            ->willReturn(new PackageManagerResponseDto(false, 'error-output'));
 
-        $fixer = new FeaturePackageUpgradeFixer($packageManagerAdapter);
+        $fixer = new FeatureDevMasterPackageUpgradeFixer($packageManagerAdapter);
+        $packageManagerResponseDto = new PackageManagerResponseDto(false, static::ERROR_MESSAGE);
 
         // Act
-        $packageManagerResponse = $fixer->run($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDto);
+        $packageManagerResponseDto = $fixer->run($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDto);
 
         // Assert
-        $this->assertSame($packageManagerResponseDto, $packageManagerResponse);
+        $this->assertNotNull($packageManagerResponseDto);
+        $this->assertFalse($packageManagerResponseDto->isSuccessful());
+        $this->assertStringContainsString(
+            'error-output',
+            (string)$packageManagerResponseDto->getOutputMessage(),
+        );
     }
 
     /**
      * @return void
      */
-    public function testRunCanNotRemoveFeature(): void
+    public function testRunCanNotUpdateFeatureDevMaster(): void
     {
         // Arrange
-        $responseDto = new PackageManagerResponseDto(false, static::ERROR_MESSAGE);
+        $responseDto = new PackageManagerResponseDto(true);
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter->expects($this->once())
-            ->method('remove')
-            ->willReturn($responseDto);
-        $packageManagerAdapter->expects($this->once())
             ->method('require')
-            ->willReturn(new PackageManagerResponseDto(true));
+            ->willReturn($responseDto);
 
-        $fixer = new FeaturePackageUpgradeFixer($packageManagerAdapter);
+        $fixer = new FeatureDevMasterPackageUpgradeFixer($packageManagerAdapter);
         $packageManagerResponseDto = new PackageManagerResponseDto(false, static::ERROR_MESSAGE);
 
         // Act

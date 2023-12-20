@@ -105,7 +105,7 @@ services:
         class: Upgrade\Application\Strategy\Composer\Fixer\FeaturePackageUpgradeFixer
 
     backport.fixer:
-        class: Upgrade\Application\Strategy\Composer\Fixer\BackportFixerStep
+        class: Upgrade\Application\Strategy\Composer\Fixer\BackportUpgradeFixer
 
     composer.step_executor:
         class: Upgrade\Application\Executor\StepExecutor

@@ -15,7 +15,7 @@ use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
 
-class BackportFixerStep extends AbstractFeaturePackageUpgradeFixer
+class BackportUpgradeFixer extends AbstractFeaturePackageUpgradeFixer
 {
     /**
      * @var bool
@@ -74,6 +74,6 @@ class BackportFixerStep extends AbstractFeaturePackageUpgradeFixer
             $packages[$packageName] = new Package($packageName, $moduleDto->getVersion());
         }
 
-        return new PackageCollection($packages);
+        return new PackageCollection(array_values($packages));
     }
 }
