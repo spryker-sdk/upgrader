@@ -6,6 +6,7 @@ coverage:
 ignore:
     - "**/*Dto.php"
     - "src/Codebase/Application/Dto/*.php"
+    - "src/ReleaseApp/Domain/Entities/*.php"
     - "src/DynamicEvaluator/**/Dto/*.php"
     - "src/DynamicEvaluator/Presentation/**.php"
     - "src/ReleaseApp/Infrastructure/Shared/Dto/*.php"

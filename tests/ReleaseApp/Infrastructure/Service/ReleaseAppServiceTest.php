@@ -87,7 +87,9 @@ class ReleaseAppServiceTest extends KernelTestCase
                 new ModuleDto('spryker/shipment-types-backend-api', '0.1.0', 'minor'),
                 new ModuleDto('spryker/shipment-type', '0.1.1', 'patch'),
             ]),
-            new ModuleDtoCollection(),
+            new ModuleDtoCollection([
+                new ModuleDto('spryker/shipment-types-backend-api', '0.0.1', 'minor'),
+            ]),
             DateTime::createFromFormat("Y-m-d\TH:i:s.uO", '2023-05-23T14:26:52.000000+0000'),
             true,
             'https://api.release.spryker.com/release-group/4821',
