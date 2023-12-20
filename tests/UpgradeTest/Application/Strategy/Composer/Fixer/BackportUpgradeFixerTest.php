@@ -11,12 +11,11 @@ namespace UpgradeTest\Application\Strategy\Composer\Fixer;
 
 use PHPUnit\Framework\TestCase;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
+use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
-use Upgrade\Application\Strategy\Composer\Fixer\FeaturePackageUpgradeFixer;
 use Upgrade\Application\Strategy\Composer\Fixer\BackportUpgradeFixer;
-use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
 
