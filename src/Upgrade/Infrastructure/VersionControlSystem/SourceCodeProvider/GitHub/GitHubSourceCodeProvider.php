@@ -26,6 +26,11 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
     protected const HTML_URL_KEY = 'html_url';
 
     /**
+     * @var string
+     */
+    protected const NUMBER_KEY = 'number';
+
+    /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
      */
     protected ConfigurationProvider $configurationProvider;
@@ -98,10 +103,13 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
             if (!$stepsExecutionDto->getIsSuccessful()) {
                 return $stepsExecutionDto;
             }
+            $organizationName = $this->configurationProvider->getOrganizationName();
+            $repositoryName = $this->configurationProvider->getRepositoryName();
+            $prClient = $this->gitHubClientFactory->getClient()->pr();
 
-            $response = $this->gitHubClientFactory->getClient()->pr()->create(
-                $this->configurationProvider->getOrganizationName(),
-                $this->configurationProvider->getRepositoryName(),
+            $response = $prClient->create(
+                $organizationName,
+                $repositoryName,
                 [
                     'base' => $pullRequestDto->getTargetBranch(),
                     'head' => $pullRequestDto->getSourceBranch(),
@@ -115,6 +123,11 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
                 $stepsExecutionDto->addOutputMessage(
                     $this->outputMessageBuilder->buildOutputMessage($response[static::HTML_URL_KEY]),
                 );
+            }
+
+            $reviewers = $this->configurationProvider->getPullRequestReviewers();
+            if ($reviewers) {
+                $prClient->reviewRequests()->create($organizationName, $repositoryName, $response[static::NUMBER_KEY], $reviewers);
             }
 
             return $stepsExecutionDto;
