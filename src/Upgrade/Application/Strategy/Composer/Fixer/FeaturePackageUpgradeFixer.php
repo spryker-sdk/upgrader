@@ -56,7 +56,6 @@ class FeaturePackageUpgradeFixer extends AbstractFeaturePackageUpgradeFixer
      */
     public function run(ReleaseGroupDto $releaseGroup, PackageManagerResponseDto $packageManagerResponseDto): ?PackageManagerResponseDto
     {
-        $messages = $packageManagerResponseDto->getOutputMessage();
         preg_match_all(static::FEATURE_PACKAGE_PATTERN, (string)$packageManagerResponseDto->getOutputMessage(), $matches);
 
         if (empty($matches[static::KEY_FEATURES]) || !is_array($matches[static::KEY_FEATURES])) {

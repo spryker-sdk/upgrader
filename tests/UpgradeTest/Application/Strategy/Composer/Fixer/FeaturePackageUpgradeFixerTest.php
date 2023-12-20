@@ -97,6 +97,23 @@ class FeaturePackageUpgradeFixerTest extends TestCase
     /**
      * @return void
      */
+    public function testRunFixWithNoPackage(): void
+    {
+        // Arrange
+        $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
+        $fixer = new FeaturePackageUpgradeFixer($packageManagerAdapter);
+        $packageManagerResponseDto = new PackageManagerResponseDto(false, 'test/package');
+
+        // Act
+        $packageManagerResponseDto = $fixer->run($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDto);
+
+        // Assert
+        $this->assertNull($packageManagerResponseDto);
+    }
+
+    /**
+     * @return void
+     */
     public function testRunFix(): void
     {
         // Arrange

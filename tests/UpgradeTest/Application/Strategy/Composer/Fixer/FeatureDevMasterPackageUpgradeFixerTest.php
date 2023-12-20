@@ -186,4 +186,21 @@ class FeatureDevMasterPackageUpgradeFixerTest extends TestCase
         // Assert
         $this->assertEquals($responseDto, $packageManagerResponse);
     }
+
+    /**
+     * @return void
+     */
+    public function testRunFixWithNoPackage(): void
+    {
+        // Arrange
+        $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
+        $fixer = new FeatureDevMasterPackageUpgradeFixer($packageManagerAdapter);
+        $packageManagerResponseDto = new PackageManagerResponseDto(false, 'test/package');
+
+        // Act
+        $packageManagerResponseDto = $fixer->run($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDto);
+
+        // Assert
+        $this->assertNull($packageManagerResponseDto);
+    }
 }
