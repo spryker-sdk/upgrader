@@ -30,6 +30,7 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupUpgrader;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\BetaMajorPackageFilterItem;
 use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DevMasterPackageFilterItem;
@@ -539,20 +540,22 @@ class ReleaseGroupUpdateStepTest extends TestCase
             ->getMock();
         $composerAdapterMock->method('require')->willReturn($responseDto);
         $composerAdapterMock->method('requireDev')->willReturn($responseDto);
+        $moduleFetcher = new ModuleFetcher(
+            $composerAdapterMock,
+            new PackageCollectionMapper(
+                $composerAdapterMock,
+            ),
+            $this->createPackageManagerPackagesFetcherMock(),
+        );
+        $logger = $this->createMock(LoggerInterface::class);
 
         return new SequentialReleaseGroupProcessor(
             new ReleaseGroupSoftValidator($releaseGroupValidators),
             new ThresholdSoftValidator($thresholdSoftValidators),
-            new ModuleFetcher(
-                $composerAdapterMock,
-                new PackageCollectionMapper(
-                    $composerAdapterMock,
-                ),
-                $this->createPackageManagerPackagesFetcherMock(),
-            ),
+            new ReleaseGroupUpgrader($moduleFetcher, $logger, []),
             new ReleaseGroupFilter($releaseGroupFilters),
             $this->createEventDispatcherMock(),
-            $this->createMock(LoggerInterface::class),
+            $logger,
             new ComposerViolationDtoFactory(),
         );
     }
@@ -571,6 +574,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
                 ]),
+                new ModuleDtoCollection(),
                 new DateTime(),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',
@@ -582,6 +586,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/oauth-backend-api', '1.1.1', 'path'),
                 ]),
+                new ModuleDtoCollection(),
                 new DateTime(),
                 true,
                 'https://api.release.spryker.com/release-groups/view/2',
@@ -603,6 +608,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 1,
                 'RG1',
                 new ModuleDtoCollection($moduleDtoCollection),
+                new ModuleDtoCollection(),
                 new DateTime(),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',

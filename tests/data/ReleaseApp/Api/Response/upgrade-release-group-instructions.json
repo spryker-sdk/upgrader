@@ -18,6 +18,7 @@
                     "files": 4
                 }
             },
+            "backports": [],
             "jira": {
                "issue": "CC-25420",
                 "issue_link": "https://spryker.atlassian.net/browse/CC-25420"

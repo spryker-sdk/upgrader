@@ -99,10 +99,13 @@ services:
         class: Upgrade\Application\Strategy\Common\Step\SendReportStep
 
     feature_dev_master.fixer:
-        class: Upgrade\Application\Strategy\Composer\Fixer\FeatureDevMasterPackageFixerStep
+        class: Upgrade\Application\Strategy\Composer\Fixer\FeatureDevMasterPackageUpgradeFixer
 
     feature_package.fixer:
-        class: Upgrade\Application\Strategy\Composer\Fixer\FeaturePackageFixerStep
+        class: Upgrade\Application\Strategy\Composer\Fixer\FeaturePackageUpgradeFixer
+
+    backport.fixer:
+        class: Upgrade\Application\Strategy\Composer\Fixer\BackportFixerStep
 
     composer.step_executor:
         class: Upgrade\Application\Executor\StepExecutor
@@ -127,8 +130,6 @@ services:
               - '@create_pr.step'
               - '@checkout.step'
               - '@send_report.step'
-            - - '@feature_dev_master.fixer'
-              - '@feature_package.fixer'
 
     composer.strategy:
         class: Upgrade\Application\Strategy\Composer\ComposerStrategy
@@ -153,8 +154,14 @@ services:
               - '@create_pr.step'
               - '@checkout.step'
               - '@send_report.step'
+    release_group_upgrader.upgrader:
+        class: Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupUpgrader
+        arguments:
+            - '@Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher'
+            - '@monolog.logger'
             - - '@feature_dev_master.fixer'
               - '@feature_package.fixer'
+              - '@backport.fixer'
 
     create_empty_pr.step_executor:
         class: Upgrade\Application\Executor\StepExecutor
@@ -300,7 +307,7 @@ services:
         arguments:
             - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidator'
             - '@Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidator'
-            - '@Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher'
+            - '@release_group_upgrader.upgrader'
             - '@Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilter'
             - '@event_dispatcher'
 

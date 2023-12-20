@@ -9,12 +9,18 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\Composer\Fixer;
 
+use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Strategy\FixerStepInterface;
+use Upgrade\Application\Dto\PackageManagerResponseDto;
+use Upgrade\Application\Strategy\UpgradeFixerInterface;
 
-abstract class AbstractFeaturePackageFixerStep implements FixerStepInterface
+abstract class AbstractFeaturePackageUpgradeFixer implements UpgradeFixerInterface
 {
+    /**
+     * @var bool
+     */
+    protected const RE_RUN_STEP = true;
+
     /**
      * @var string
      */
@@ -39,14 +45,23 @@ abstract class AbstractFeaturePackageFixerStep implements FixerStepInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
+     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $packageManagerResponseDto
      *
      * @return bool
      */
-    public function isApplicable(StepsResponseDto $stepsExecutionDto): bool
+    public function isApplicable(ReleaseGroupDto $releaseGroup, PackageManagerResponseDto $packageManagerResponseDto): bool
     {
-        return !$stepsExecutionDto->getIsSuccessful() &&
-            $stepsExecutionDto->getOutputMessage() !== null &&
-            preg_match(static::FEATURE_PACKAGE_PATTERN, $stepsExecutionDto->getOutputMessage());
+        return !$packageManagerResponseDto->isSuccessful() &&
+            $packageManagerResponseDto->getOutputMessage() !== null &&
+            preg_match(static::FEATURE_PACKAGE_PATTERN, $packageManagerResponseDto->getOutputMessage());
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReRunStep(): bool
+    {
+        return static::RE_RUN_STEP;
     }
 }

@@ -10,10 +10,10 @@ declare(strict_types=1);
 namespace UpgradeTest\Application\Strategy\Composer\Fixer;
 
 use PHPUnit\Framework\TestCase;
+use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
-use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Strategy\Composer\Fixer\FeatureDevMasterPackageFixerStep;
+use Upgrade\Application\Strategy\Composer\Fixer\FeatureDevMasterPackageUpgradeFixer;
 
 class FeatureDevMasterPackageFixerStepTest extends TestCase
 {
@@ -28,13 +28,13 @@ class FeatureDevMasterPackageFixerStepTest extends TestCase
     public function testIsApplicableWhenIsFeatureToDevMasterDisabled(): void
     {
         // Arrange
-        $fixer = new FeatureDevMasterPackageFixerStep(
+        $fixer = new FeatureDevMasterPackageUpgradeFixer(
             $this->createMock(PackageManagerAdapterInterface::class),
         );
-        $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);
+        $packageManagerResponseDto = new PackageManagerResponseDto(false, static::ERROR_MESSAGE);
 
         // Act
-        $result = $fixer->isApplicable($stepsResponseDto);
+        $result = $fixer->isApplicable($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDto);
 
         // Assert
         $this->assertFalse($result);
@@ -46,14 +46,14 @@ class FeatureDevMasterPackageFixerStepTest extends TestCase
     public function testIsApplicable(): void
     {
         // Arrange
-        $fixer = new FeatureDevMasterPackageFixerStep(
+        $fixer = new FeatureDevMasterPackageUpgradeFixer(
             $this->createMock(PackageManagerAdapterInterface::class),
             true,
         );
-        $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);
+        $packageManagerResponseDto = new PackageManagerResponseDto(false, static::ERROR_MESSAGE);
 
         // Act
-        $result = $fixer->isApplicable($stepsResponseDto);
+        $result = $fixer->isApplicable($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDto);
 
         // Assert
         $this->assertTrue($result);
@@ -69,16 +69,16 @@ class FeatureDevMasterPackageFixerStepTest extends TestCase
         $packageManagerAdapter->expects($this->never())
             ->method('require');
 
-        $fixer = new FeatureDevMasterPackageFixerStep($packageManagerAdapter);
-        $stepsResponseDtoInput = new StepsResponseDto(false, 'n/a');
+        $fixer = new FeatureDevMasterPackageUpgradeFixer($packageManagerAdapter);
+        $packageManagerResponseDtoInput = new PackageManagerResponseDto(false, 'n/a');
 
         // Act
-        $stepsResponseDto = $fixer->run($stepsResponseDtoInput);
+        $packageManagerResponseDto = $fixer->run($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDtoInput);
 
         // Assert
         $this->assertEquals(
-            $stepsResponseDtoInput,
-            $stepsResponseDto,
+            null,
+            $packageManagerResponseDto,
         );
     }
 
@@ -88,13 +88,13 @@ class FeatureDevMasterPackageFixerStepTest extends TestCase
     public function testIsNotApplicable(): void
     {
         // Arrange
-        $fixer = new FeatureDevMasterPackageFixerStep(
+        $fixer = new FeatureDevMasterPackageUpgradeFixer(
             $this->createMock(PackageManagerAdapterInterface::class),
         );
-        $stepsResponseDto = new StepsResponseDto(false, 'spryker/spryker-core');
+        $packageManagerResponseDto = new PackageManagerResponseDto(false, 'spryker/spryker-core');
 
         // Act
-        $result = $fixer->isApplicable($stepsResponseDto);
+        $result = $fixer->isApplicable($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDto);
 
         // Assert
         $this->assertFalse($result);
@@ -111,22 +111,15 @@ class FeatureDevMasterPackageFixerStepTest extends TestCase
             ->method('require')
             ->willReturn(new PackageManagerResponseDto(true));
 
-        $fixer = new FeatureDevMasterPackageFixerStep($packageManagerAdapter);
-        $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);
+        $fixer = new FeatureDevMasterPackageUpgradeFixer($packageManagerAdapter);
+        $packageManagerResponseDto = new PackageManagerResponseDto(false, static::ERROR_MESSAGE);
 
         // Act
-        $stepsResponseDto = $fixer->run($stepsResponseDto);
+        $packageManagerResponseDto = $fixer->run($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDto);
 
         // Assert
-        $this->assertTrue($stepsResponseDto->isSuccessful());
-        $this->assertSame(
-            sprintf(
-                'Versions were changed to %s for %s feature package(s)',
-                FeatureDevMasterPackageFixerStep::MASK_ALIAS_DEV_MASTER,
-                1,
-            ),
-            $stepsResponseDto->getOutputMessage(),
-        );
+        $this->assertNotNull($packageManagerResponseDto);
+        $this->assertTrue($packageManagerResponseDto->isSuccessful());
     }
 
     /**
@@ -140,17 +133,18 @@ class FeatureDevMasterPackageFixerStepTest extends TestCase
             ->method('require')
             ->willReturn(new PackageManagerResponseDto(false, 'error-output'));
 
-        $fixer = new FeatureDevMasterPackageFixerStep($packageManagerAdapter);
-        $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);
+        $fixer = new FeatureDevMasterPackageUpgradeFixer($packageManagerAdapter);
+        $packageManagerResponseDto = new PackageManagerResponseDto(false, static::ERROR_MESSAGE);
 
         // Act
-        $stepsResponseDto = $fixer->run($stepsResponseDto);
+        $packageManagerResponseDto = $fixer->run($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDto);
 
         // Assert
-        $this->assertFalse($stepsResponseDto->isSuccessful());
+        $this->assertNotNull($packageManagerResponseDto);
+        $this->assertFalse($packageManagerResponseDto->isSuccessful());
         $this->assertStringContainsString(
             'error-output',
-            (string)$stepsResponseDto->getOutputMessage(),
+            (string)$packageManagerResponseDto->getOutputMessage(),
         );
     }
 
@@ -160,19 +154,19 @@ class FeatureDevMasterPackageFixerStepTest extends TestCase
     public function testRunCanNotUpdateFeatureDevMaster(): void
     {
         // Arrange
-        $responseDto = new PackageManagerResponseDto(false);
+        $responseDto = new PackageManagerResponseDto(true);
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter->expects($this->once())
             ->method('require')
-            ->willReturn(new PackageManagerResponseDto(true));
+            ->willReturn($responseDto);
 
-        $fixer = new FeatureDevMasterPackageFixerStep($packageManagerAdapter);
-        $stepsResponseDto = new StepsResponseDto(false, static::ERROR_MESSAGE);
+        $fixer = new FeatureDevMasterPackageUpgradeFixer($packageManagerAdapter);
+        $packageManagerResponseDto = new PackageManagerResponseDto(false, static::ERROR_MESSAGE);
 
         // Act
-        $stepsResponse = $fixer->run($stepsResponseDto);
+        $packageManagerResponse = $fixer->run($this->createMock(ReleaseGroupDto::class), $packageManagerResponseDto);
 
         // Assert
-        $this->assertSame($stepsResponseDto, $stepsResponse);
+        $this->assertEquals($responseDto, $packageManagerResponse);
     }
 }

@@ -71,7 +71,7 @@ class ModuleStatisticUpdater implements ModuleStatisticUpdaterInterface
             }
         }
 
-        $stepsResponseDto->getModelStatisticDto()->setIntersectingModels($intersectedModuleNames);
+        $stepsResponseDto->getModelStatisticDto()->setIntersectingModules($intersectedModuleNames);
         $stepsResponseDto->getModelStatisticDto()->setTotalIntersectingModels($totalIntersectingModels);
 
         return $stepsResponseDto;

@@ -80,6 +80,7 @@ class AlreadyInstalledPackageFilterItemTest extends TestCase
             1,
             'RG1',
             new ModuleDtoCollection($moduleDto),
+            new ModuleDtoCollection(),
             new DateTime(),
             false,
             'https://api.release.spryker.com/release-groups/view/1',

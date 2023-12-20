@@ -9,13 +9,13 @@ declare(strict_types=1);
 
 namespace Upgrade\Application\Strategy\Composer\Fixer;
 
+use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Application\Dto\StepsResponseDto;
-use Upgrade\Application\Factory\ComposerViolationDtoFactory;
+use Upgrade\Application\Dto\PackageManagerResponseDto;
 use Upgrade\Domain\Entity\Collection\PackageCollection;
 use Upgrade\Domain\Entity\Package;
 
-class FeaturePackageFixerStep extends AbstractFeaturePackageFixerStep
+class FeaturePackageUpgradeFixer extends AbstractFeaturePackageUpgradeFixer
 {
     /**
      * @var bool
@@ -34,70 +34,51 @@ class FeaturePackageFixerStep extends AbstractFeaturePackageFixerStep
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
+     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $packageManagerResponseDto
      *
      * @return bool
      */
-    public function isApplicable(StepsResponseDto $stepsExecutionDto): bool
+    public function isApplicable(ReleaseGroupDto $releaseGroup, PackageManagerResponseDto $packageManagerResponseDto): bool
     {
         if ($this->isReleaseGroupIntegratorEnabled) {
             return false;
         }
 
-        return parent::isApplicable($stepsExecutionDto);
+        return parent::isApplicable($releaseGroup, $packageManagerResponseDto);
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
+     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $packageManagerResponseDto
      *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
+     * @return \Upgrade\Application\Dto\PackageManagerResponseDto|null
      */
-    public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
+    public function run(ReleaseGroupDto $releaseGroup, PackageManagerResponseDto $packageManagerResponseDto): ?PackageManagerResponseDto
     {
-        $messages = $stepsExecutionDto->getOutputMessages();
-        $foundMessages = (array)preg_grep(static::FEATURE_PACKAGE_PATTERN, $messages);
-        preg_match_all(static::FEATURE_PACKAGE_PATTERN, (string)$stepsExecutionDto->getOutputMessage(), $matches);
+        $messages = $packageManagerResponseDto->getOutputMessage();
+        preg_match_all(static::FEATURE_PACKAGE_PATTERN, (string)$packageManagerResponseDto->getOutputMessage(), $matches);
 
         if (empty($matches[static::KEY_FEATURES]) || !is_array($matches[static::KEY_FEATURES])) {
-            return $stepsExecutionDto;
+            return null;
         }
 
         $featurePackages = $this->getPackagesFromFeatures($matches[static::KEY_FEATURES]);
 
         $packageCollection = new PackageCollection($featurePackages);
 
-        $responseDto = $this->packageManager->require($packageCollection);
+        $response = $this->packageManager->require($packageCollection);
 
-        $stepsExecutionDto->setIsSuccessful($responseDto->isSuccessful());
-        if (!$responseDto->isSuccessful()) {
-            $stepsExecutionDto->addOutputMessage($responseDto->getOutputMessage());
-
-            return $stepsExecutionDto;
+        if (!$response->isSuccessful()) {
+            return $response;
         }
 
         $responseDto = $this->packageManager->remove(new PackageCollection(array_map(
             fn (string $featurePackage): Package => new Package($featurePackage),
             $matches[static::KEY_FEATURES],
         )));
-        $stepsExecutionDto->setIsSuccessful($responseDto->isSuccessful());
 
-        if (!$responseDto->isSuccessful()) {
-            $stepsExecutionDto->addOutputMessage($responseDto->getOutputMessage());
-
-            return $stepsExecutionDto;
-        }
-
-        foreach ($foundMessages as $key => $foundMessage) {
-            unset($messages[$key]);
-        }
-        $stepsExecutionDto->setOutputMessages($messages);
-        $stepsExecutionDto->addOutputMessage(sprintf('Splitted %s feature package(s)', count($matches[static::KEY_FEATURES])));
-
-        if ($stepsExecutionDto->getIsSuccessful()) {
-            $stepsExecutionDto->removeBlockersByTitle(ComposerViolationDtoFactory::VIOLATION_TITLE);
-        }
-
-        return $stepsExecutionDto;
+        return $responseDto;
     }
 
     /**

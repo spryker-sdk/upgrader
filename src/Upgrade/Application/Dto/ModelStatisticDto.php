@@ -29,20 +29,20 @@ class ModelStatisticDto
     /**
      * @var array<string>
      */
-    protected array $intersectingModels = [];
+    protected array $intersectingModules = [];
 
     /**
      * @param int $totalOverwrittenModels
      * @param int $totalChangedModels
      * @param int $totalIntersectingModels
-     * @param array<string> $intersectingModels
+     * @param array<string> $intersectingModules
      */
-    public function __construct(int $totalOverwrittenModels = 0, int $totalChangedModels = 0, int $totalIntersectingModels = 0, array $intersectingModels = [])
+    public function __construct(int $totalOverwrittenModels = 0, int $totalChangedModels = 0, int $totalIntersectingModels = 0, array $intersectingModules = [])
     {
         $this->totalOverwrittenModels = $totalOverwrittenModels;
         $this->totalChangedModels = $totalChangedModels;
         $this->totalIntersectingModels = $totalIntersectingModels;
-        $this->intersectingModels = $intersectingModels;
+        $this->intersectingModules = $intersectingModules;
     }
 
     /**
@@ -102,18 +102,18 @@ class ModelStatisticDto
     /**
      * @return array<string>
      */
-    public function getIntersectingModels(): array
+    public function getIntersectingModules(): array
     {
-        return $this->intersectingModels;
+        return $this->intersectingModules;
     }
 
     /**
-     * @param array<string> $intersectingModels
+     * @param array<string> $intersectingModules
      *
      * @return void
      */
-    public function setIntersectingModels(array $intersectingModels): void
+    public function setIntersectingModules(array $intersectingModules): void
     {
-        $this->intersectingModels = $intersectingModels;
+        $this->intersectingModules = $intersectingModules;
     }
 }

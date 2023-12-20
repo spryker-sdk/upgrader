@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace UpgradeTest\Infrastructure\Report\Builder;
 
 use PHPUnit\Framework\TestCase;
+use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\IntegratorResponseDto;
 use Upgrade\Application\Dto\StepsResponseDto;
@@ -151,10 +152,14 @@ class ReportDtoBuilderTest extends TestCase
 
         $stepsResponseDto->setReportId(static::REPORT_ID);
 
-        $stepsResponseDto->setCurrentReleaseGroupId(1);
+        $releaseGroupDtoMock = $this->createMock(ReleaseGroupDto::class);
+        $releaseGroupDtoMock->method('getId')->willReturn(1);
+        $stepsResponseDto->setCurrentReleaseGroup($releaseGroupDtoMock);
         $stepsResponseDto->addIntegratorResponseDto(new IntegratorResponseDto(['warning-list' => ['Warning One']]));
 
-        $stepsResponseDto->setCurrentReleaseGroupId(2);
+        $releaseGroupDtoMock = $this->createMock(ReleaseGroupDto::class);
+        $releaseGroupDtoMock->method('getId')->willReturn(2);
+        $stepsResponseDto->setCurrentReleaseGroup($releaseGroupDtoMock);
         $stepsResponseDto->addIntegratorResponseDto(new IntegratorResponseDto(['warning-list' => ['Warning Two']]));
 
         return $stepsResponseDto;

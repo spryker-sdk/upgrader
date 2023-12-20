@@ -35,9 +35,9 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
     protected ThresholdSoftValidatorInterface $thresholdValidator;
 
     /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher
+     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupUpgrader
      */
-    protected ModuleFetcher $moduleFetcher;
+    protected ReleaseGroupUpgrader $releaseGroupUpgrader;
 
     /**
      * @var \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface
@@ -52,7 +52,7 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
     /**
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
      * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher $moduleFetcher
+     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupUpgrader $releaseGroupUpgrader
      * @param \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface $releaseGroupFilter
      * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param \Psr\Log\LoggerInterface $logger
@@ -61,7 +61,7 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
         ThresholdSoftValidatorInterface $thresholdSoftValidator,
-        ModuleFetcher $moduleFetcher,
+        ReleaseGroupUpgrader $releaseGroupUpgrader,
         ReleaseGroupFilterInterface $releaseGroupFilter,
         EventDispatcherInterface $eventDispatcher,
         LoggerInterface $logger,
@@ -71,7 +71,7 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
 
         $this->releaseGroupValidator = $releaseGroupValidateManager;
         $this->thresholdValidator = $thresholdSoftValidator;
-        $this->moduleFetcher = $moduleFetcher;
+        $this->releaseGroupUpgrader = $releaseGroupUpgrader;
         $this->releaseGroupPackageFilter = $releaseGroupFilter;
         $this->composerViolationDtoFactory = $composerViolationDtoFactory;
     }
@@ -115,7 +115,7 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
                 continue;
             }
 
-            $stepsExecutionDto->setCurrentReleaseGroupId($releaseGroup->getId());
+            $stepsExecutionDto->setCurrentReleaseGroup($releaseGroup);
 
             $thresholdValidationResult = $this->thresholdValidator->validate($aggregatedReleaseGroupCollection);
             if (!$thresholdValidationResult->isSuccessful()) {
@@ -150,7 +150,7 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
                 break;
             }
 
-            $response = $this->moduleFetcher->require($releaseGroup->getModuleCollection());
+            $response = $this->releaseGroupUpgrader->upgrade($releaseGroup);
 
             $this->addReleaseGroupStat($stepsExecutionDto, $response);
 
