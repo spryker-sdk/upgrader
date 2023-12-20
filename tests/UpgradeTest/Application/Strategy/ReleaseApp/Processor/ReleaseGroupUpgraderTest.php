@@ -9,187 +9,144 @@ declare(strict_types=1);
 
 namespace UpgradeTest\Application\Strategy\ReleaseApp\Processor;
 
+use Psr\Log\LoggerInterface;
 use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
+use ReleaseApp\Infrastructure\Shared\Dto\ModuleDto;
+use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Upgrade\Application\Adapter\PackageManagerAdapterInterface;
-use Upgrade\Application\Dto\PackageManagerPackagesDto;
 use Upgrade\Application\Dto\PackageManagerResponseDto;
-use Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface;
 use Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher;
-use Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface;
-use Upgrade\Domain\Entity\Collection\PackageCollection;
-use Upgrade\Domain\Entity\Package;
+use Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupUpgrader;
+use Upgrade\Application\Strategy\UpgradeFixerInterface;
 
 class ReleaseGroupUpgraderTest extends KernelTestCase
 {
     /**
      * @return void
      */
-    public function testRequireReturnsProperResponseDtoIfNothingToInstall(): void
+    public function testRequireWithoutRunFixer(): void
     {
         // Arrange
-        $packageCollectionMapper = $this->createMock(PackageCollectionMapperInterface::class);
-        $packageCollectionMapper->expects($this->once())
-            ->method('mapModuleCollectionToPackageCollection')
-            ->willReturn(new PackageCollection());
-
-        $moduleFetcher = new ModuleFetcher(
-            $this->createMock(PackageManagerAdapterInterface::class),
-            $packageCollectionMapper,
-            $this->createPackageManagerPackagesFetcherMock(),
-        );
+        $moduleFetcherMock = $this->createMock(ModuleFetcher::class);
+        $moduleFetcherMock->method('require')->willReturn(new PackageManagerResponseDto(true));
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $loggerMock->expects($this->never())->method('info');
+        $releaseGroupUpgrader = new ReleaseGroupUpgrader($moduleFetcherMock, $loggerMock, []);
 
         // Act
-        $packageResponseDto = $moduleFetcher->require(new ModuleDtoCollection());
+        $packageManagerResponseDto = $releaseGroupUpgrader->upgrade($this->createMock(ReleaseGroupDto::class));
 
         // Assert
-        $this->assertTrue(
-            $packageResponseDto->isSuccessful(),
-            'Returned PackageManagerResponseDto is successful',
-        );
-
-        $this->assertSame(
-            ModuleFetcher::MESSAGE_NO_PACKAGES_FOUND,
-            $packageResponseDto->getOutputMessage(),
-            'Returned PackageManagerResponseDto contains correct message.',
-        );
-
-        $this->assertSame(
-            0,
-            $packageResponseDto->getAppliedPackagesAmount(),
-            'Returned PackageManagerResponseDto has 0 in $appliedPackagesAmount.',
-        );
-
-        $this->assertCount(
-            0,
-            $packageResponseDto->getExecutedCommands(),
-            'Returned PackageManagerResponseDto has 0 executedCommands.',
-        );
+        $this->assertNotNull($releaseGroupUpgrader);
+        $this->assertTrue($packageManagerResponseDto->isSuccessful());
     }
 
     /**
      * @return void
      */
-    public function testRequireReturnsFailedResponseDtoIfRequirePackagesFailed(): void
+    public function testRequireWithRunFixer(): void
     {
         // Arrange
-        $packageCollection = new PackageCollection();
-        $packageCollection->add(new Package());
-        $packageCollectionMapper = $this->createMock(PackageCollectionMapperInterface::class);
-        $packageCollectionMapper->expects($this->once())
-            ->method('mapModuleCollectionToPackageCollection')
-            ->willReturn($packageCollection);
+        $moduleDtoCollection = new ModuleDtoCollection([
+            new ModuleDto('spryker/cart', '2.1.9', 'minor'),
+            new ModuleDto('spryker-shup/cart-page', '1.1.9', 'minor'),
+            new ModuleDto('spryker/merchant', '3.2.1', 'minor'),
+        ]);
+        $releaseGroupDtoMock = $this->createMock(ReleaseGroupDto::class);
+        $releaseGroupDtoMock->method('getModuleCollection')->willReturn($moduleDtoCollection);
+        $moduleFetcherMock = $this->createMock(ModuleFetcher::class);
+        $moduleFetcherMock->method('require')->willReturn(
+            new PackageManagerResponseDto(false),
+            new PackageManagerResponseDto(true),
+        )->with($moduleDtoCollection);
 
-        $packageManager = $this->createMock(PackageManagerAdapterInterface::class);
-        $packageManager->expects($this->once())
-            ->method('require')
-            ->willReturn(new PackageManagerResponseDto(false, ''));
-
-        $moduleFetcher = new ModuleFetcher(
-            $packageManager,
-            $packageCollectionMapper,
-            $this->createPackageManagerPackagesFetcherMock(),
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $loggerMock->method('info')->withConsecutive(
+            ['Release Group `0` is failed. Trying to fix it', [null]],
+            ['Fixer `FixerOne` is not applicable'],
+            ['`FixerTwo` fixer is applying'],
+            ['Run release group upgrade after fixer.'],
+        );
+        $fixer1 = $this->getMockBuilder(UpgradeFixerInterface::class);
+        $fixer1->setMockClassName('FixerOne');
+        $fixer1 = $fixer1->getMock();
+        $fixer1->expects($this->once())->method('isApplicable')->willReturn(false);
+        $fixer1->expects($this->never())->method('run');
+        $fixer2 = $this->getMockBuilder(UpgradeFixerInterface::class);
+        $fixer2->setMockClassName('FixerTwo');
+        $fixer2 = $fixer2->getMock();
+        $fixer2->expects($this->once())->method('isApplicable')->willReturn(true);
+        $fixer2->expects($this->once())->method('run')->willReturn(new PackageManagerResponseDto(true));
+        $fixer2->expects($this->once())->method('isReRunStep')->willReturn(true);
+        $releaseGroupUpgrader = new ReleaseGroupUpgrader(
+            $moduleFetcherMock,
+            $loggerMock,
+            [
+                $fixer1,
+                $fixer2,
+            ],
         );
 
         // Act
-        $packageResponseDto = $moduleFetcher->require(new ModuleDtoCollection());
+        $packageManagerResponseDto = $releaseGroupUpgrader->upgrade($releaseGroupDtoMock);
 
         // Assert
-        $this->assertFalse(
-            $packageResponseDto->isSuccessful(),
-            'Returned PackageManagerResponseDto must be failed because require packages operation failed.',
-        );
+        $this->assertNotNull($releaseGroupUpgrader);
+        $this->assertTrue($packageManagerResponseDto->isSuccessful());
     }
 
     /**
      * @return void
      */
-    public function testRequireReturnsFailedResponseDtoIfItFailedToUpdateSubPackages(): void
+    public function testRequireWithRunFixerThatFailed(): void
     {
         // Arrange
-        $packageCollection = new PackageCollection();
-        $packageCollection->add(new Package());
-        $packageCollectionMapper = $this->createMock(PackageCollectionMapperInterface::class);
-        $packageCollectionMapper->expects($this->once())
-            ->method('mapModuleCollectionToPackageCollection')
-            ->willReturn($packageCollection);
+        $moduleDtoCollection = new ModuleDtoCollection([
+            new ModuleDto('spryker/cart', '2.1.9', 'minor'),
+            new ModuleDto('spryker-shup/cart-page', '1.1.9', 'minor'),
+            new ModuleDto('spryker/merchant', '3.2.1', 'minor'),
+        ]);
+        $releaseGroupDtoMock = $this->createMock(ReleaseGroupDto::class);
+        $releaseGroupDtoMock->method('getModuleCollection')->willReturn($moduleDtoCollection);
+        $moduleFetcherMock = $this->createMock(ModuleFetcher::class);
+        $moduleFetcherMock->method('require')->willReturn(
+            new PackageManagerResponseDto(false),
+            new PackageManagerResponseDto(true),
+        )->with($moduleDtoCollection);
 
-        $packageManager = $this->createMock(PackageManagerAdapterInterface::class);
-        $packageManager->expects($this->once())
-            ->method('require')
-            ->willReturn(new PackageManagerResponseDto(true, ''));
-        $packageManager->expects($this->once())
-            ->method('updateSubPackage')
-            ->willReturn(new PackageManagerResponseDto(false, ''));
-
-        $moduleFetcher = new ModuleFetcher(
-            $packageManager,
-            $packageCollectionMapper,
-            $this->createPackageManagerPackagesFetcherMock(),
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $loggerMock->method('warning')->with('Fixer `FixerTwo` is failed', [null]);
+        $loggerMock->method('info')->withConsecutive(
+            ['Release Group `0` is failed. Trying to fix it', [null]],
+            ['Fixer `FixerOne` is not applicable'],
+            ['`FixerTwo` fixer is applying'],
+            ['Run release group upgrade after fixer.'],
+        );
+        $fixer1 = $this->getMockBuilder(UpgradeFixerInterface::class);
+        $fixer1->setMockClassName('FixerOne');
+        $fixer1 = $fixer1->getMock();
+        $fixer1->expects($this->once())->method('isApplicable')->willReturn(false);
+        $fixer1->expects($this->never())->method('run');
+        $fixer2 = $this->getMockBuilder(UpgradeFixerInterface::class);
+        $fixer2->setMockClassName('FixerTwo');
+        $fixer2 = $fixer2->getMock();
+        $fixer2->expects($this->once())->method('isApplicable')->willReturn(true);
+        $fixer2->expects($this->once())->method('run')->willReturn(new PackageManagerResponseDto(false));
+        $fixer2->expects($this->once())->method('isReRunStep')->willReturn(true);
+        $releaseGroupUpgrader = new ReleaseGroupUpgrader(
+            $moduleFetcherMock,
+            $loggerMock,
+            [
+                $fixer1,
+                $fixer2,
+            ],
         );
 
         // Act
-        $packageResponseDto = $moduleFetcher->require(new ModuleDtoCollection());
+        $packageManagerResponseDto = $releaseGroupUpgrader->upgrade($releaseGroupDtoMock);
 
         // Assert
-        $this->assertFalse(
-            $packageResponseDto->isSuccessful(),
-            'Returned PackageManagerResponseDto must be failed because sub-packages update failed.',
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testRequireReturnsFailedResponseDtoIfRequireDevPackagesFailed(): void
-    {
-        // Arrange
-        $packageCollection = new PackageCollection();
-        $packageCollection->add(new Package());
-        $packageCollectionMapper = $this->createMock(PackageCollectionMapperInterface::class);
-        $packageCollectionMapper->expects($this->once())
-            ->method('mapModuleCollectionToPackageCollection')
-            ->willReturn($packageCollection);
-
-        $packageManager = $this->createMock(PackageManagerAdapterInterface::class);
-        $packageManager->expects($this->once())
-            ->method('require')
-            ->willReturn(new PackageManagerResponseDto(true, ''));
-        $packageManager->expects($this->once())
-            ->method('updateSubPackage')
-            ->willReturn(new PackageManagerResponseDto(true, ''));
-        $packageManager->expects($this->once())
-            ->method('requireDev')
-            ->willReturn(new PackageManagerResponseDto(false, ''));
-
-        $moduleFetcher = new ModuleFetcher(
-            $packageManager,
-            $packageCollectionMapper,
-            $this->createPackageManagerPackagesFetcherMock(),
-        );
-
-        // Act
-        $packageResponseDto = $moduleFetcher->require(new ModuleDtoCollection());
-
-        // Assert
-        $this->assertFalse(
-            $packageResponseDto->isSuccessful(),
-            'Returned PackageManagerResponseDto must be failed because require-dev packages operation failed.',
-        );
-    }
-
-    /**
-     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface
-     */
-    protected function createPackageManagerPackagesFetcherMock(): PackageManagerPackagesFetcherInterface
-    {
-        $packageManagerPackagesFetcher = $this->createMock(PackageManagerPackagesFetcherInterface::class);
-        $packageManagerPackagesFetcher->method('fetchPackages')->willReturn(new PackageManagerPackagesDto(
-            new PackageCollection([new Package()]),
-            new PackageCollection([new Package()]),
-            new PackageCollection([new Package()]),
-        ));
-
-        return $packageManagerPackagesFetcher;
+        $this->assertNotNull($releaseGroupUpgrader);
+        $this->assertFalse($packageManagerResponseDto->isSuccessful());
     }
 }

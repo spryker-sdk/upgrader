@@ -25,6 +25,23 @@ class FeatureDevMasterPackageUpgradeFixerTest extends TestCase
     /**
      * @return void
      */
+    public function testIsReRunStep(): void
+    {
+        // Arrange
+        $fixer = new FeatureDevMasterPackageUpgradeFixer(
+            $this->createMock(PackageManagerAdapterInterface::class),
+        );
+
+        // Act
+        $result = $fixer->isReRunStep();
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @return void
+     */
     public function testIsApplicableWhenIsFeatureToDevMasterDisabled(): void
     {
         // Arrange
