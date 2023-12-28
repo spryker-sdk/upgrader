@@ -98,9 +98,9 @@ class StepsResponseDto extends ResponseDto
     protected ModelStatisticDto $modelStatisticDto;
 
     /**
-     * @var int
+     * @var \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto|null
      */
-    protected int $currentReleaseGroupId = self::UNDEFINED_RELEASE_GROUP_ID;
+    protected ?ReleaseGroupDto $currentReleaseGroup = null;
 
     /**
      * @var bool
@@ -262,7 +262,7 @@ class StepsResponseDto extends ResponseDto
      */
     public function addIntegratorResponseDto(IntegratorResponseDto $integratorResponseDto): void
     {
-        $this->integratorResponseCollection[$this->currentReleaseGroupId] = $integratorResponseDto;
+        $this->integratorResponseCollection[$this->getCurrentReleaseGroupId()] = $integratorResponseDto;
     }
 
     /**
@@ -292,7 +292,7 @@ class StepsResponseDto extends ResponseDto
      */
     public function addBlocker(ValidatorViolationDto $blockerInfo): void
     {
-        $currentReleaseGroupId = $this->currentReleaseGroupId;
+        $currentReleaseGroupId = $this->getCurrentReleaseGroupId();
 
         if (!isset($this->blockers[$currentReleaseGroupId])) {
             $this->blockers[$currentReleaseGroupId] = [];
@@ -308,7 +308,7 @@ class StepsResponseDto extends ResponseDto
      */
     public function removeBlockersByTitle(string $title): void
     {
-        $currentReleaseGroupId = $this->currentReleaseGroupId;
+        $currentReleaseGroupId = $this->getCurrentReleaseGroupId();
 
         if (!isset($this->blockers[$currentReleaseGroupId])) {
             return;
@@ -413,7 +413,7 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @return array<\ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto>
+     * @return array<int, \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto>
      */
     public function getAppliedReleaseGroups(): array
     {
@@ -442,21 +442,29 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
+     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto|null
+     */
+    public function getCurrentReleaseGroup(): ?ReleaseGroupDto
+    {
+        return $this->currentReleaseGroup;
+    }
+
+    /**
      * @return int
      */
     public function getCurrentReleaseGroupId(): int
     {
-        return $this->currentReleaseGroupId;
+        return $this->currentReleaseGroup ? $this->currentReleaseGroup->getId() : static::UNDEFINED_RELEASE_GROUP_ID;
     }
 
     /**
-     * @param int $currentReleaseGroupId
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $currentReleaseGroup
      *
      * @return void
      */
-    public function setCurrentReleaseGroupId(int $currentReleaseGroupId): void
+    public function setCurrentReleaseGroup(ReleaseGroupDto $currentReleaseGroup): void
     {
-        $this->currentReleaseGroupId = $currentReleaseGroupId;
+        $this->currentReleaseGroup = $currentReleaseGroup;
     }
 
     /**
@@ -484,7 +492,7 @@ class StepsResponseDto extends ResponseDto
      */
     public function addViolation(ViolationDtoInterface $violation): void
     {
-        $currentReleaseGroupId = $this->currentReleaseGroupId;
+        $currentReleaseGroupId = $this->getCurrentReleaseGroupId();
 
         if (!isset($this->violations[$currentReleaseGroupId])) {
             $this->violations[$currentReleaseGroupId] = [];

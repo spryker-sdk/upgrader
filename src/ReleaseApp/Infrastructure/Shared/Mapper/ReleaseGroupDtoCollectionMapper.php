@@ -73,6 +73,7 @@ class ReleaseGroupDtoCollectionMapper
             $releaseGroup->getId(),
             $releaseGroup->getName(),
             $this->buildModuleTransferCollection($releaseGroup),
+            $this->buildBackportModuleTransferCollection($releaseGroup),
             $releaseGroup->getReleased(),
             $releaseGroup->hasProjectChanges(),
             $this->getReleaseGroupLink($releaseGroup->getId()),
@@ -101,6 +102,24 @@ class ReleaseGroupDtoCollectionMapper
         if ($releaseGroup->getMeta()) {
             $releaseGroupModuleCollection = $this->applyMeta($releaseGroupModuleCollection, $releaseGroup->getMeta());
         }
+
+        $dataProviderModuleCollection = new ModuleDtoCollection();
+        foreach ($releaseGroupModuleCollection->toArray() as $module) {
+            $dataProviderModule = new ModuleDto($module->getName(), $module->getVersion(), $module->getType());
+            $dataProviderModuleCollection->add($dataProviderModule);
+        }
+
+        return $dataProviderModuleCollection;
+    }
+
+    /**
+     * @param \ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup $releaseGroup
+     *
+     * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection
+     */
+    protected function buildBackportModuleTransferCollection(UpgradeInstructionsReleaseGroup $releaseGroup): ModuleDtoCollection
+    {
+        $releaseGroupModuleCollection = $releaseGroup->getBackportModuleCollection();
 
         $dataProviderModuleCollection = new ModuleDtoCollection();
         foreach ($releaseGroupModuleCollection->toArray() as $module) {

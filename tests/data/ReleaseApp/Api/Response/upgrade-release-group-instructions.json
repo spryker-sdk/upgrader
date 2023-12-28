@@ -18,6 +18,13 @@
                     "files": 4
                 }
             },
+            "backports": {
+                "spryker\/shipment-types-backend-api": {
+                    "version": "0.0.1",
+                    "type": "minor",
+                    "files": 3
+                }
+            },
             "jira": {
                "issue": "CC-25420",
                 "issue_link": "https://spryker.atlassian.net/browse/CC-25420"

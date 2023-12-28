@@ -27,20 +27,13 @@ class StepExecutor implements StepExecutorInterface
     protected array $steps = [];
 
     /**
-     * @var array<\Upgrade\Application\Strategy\FixerStepInterface>
-     */
-    protected array $fixers = [];
-
-    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param array<\Upgrade\Application\Strategy\StepInterface> $steps
-     * @param array<\Upgrade\Application\Strategy\FixerStepInterface> $fixers
      */
-    public function __construct(LoggerInterface $logger, array $steps = [], array $fixers = [])
+    public function __construct(LoggerInterface $logger, array $steps = [])
     {
         $this->logger = $logger;
         $this->steps = $steps;
-        $this->fixers = $fixers;
     }
 
     /**
@@ -56,13 +49,6 @@ class StepExecutor implements StepExecutorInterface
 
             $this->logger->info(sprintf('Run step `%s`', $this->getStepName($step)));
             $stepsResponseDto = $step->run($stepsResponseDto);
-            if (!$stepsResponseDto->getIsSuccessful()) {
-                $this->logger->info(
-                    sprintf('Step `%s` is failed. Trying to fix it', $this->getStepName($step)),
-                    [$stepsResponseDto->getOutputMessage()],
-                );
-                $stepsResponseDto = $this->runWithFixer($step, $stepsResponseDto);
-            }
 
             if ($stepsResponseDto->isSuccessful() && $stepsResponseDto->getIsStopPropagation()) {
                 $this->logger->info(sprintf('Stop propagation from step`%s`', $this->getStepName($step)), [$stepsResponseDto]);
@@ -82,43 +68,6 @@ class StepExecutor implements StepExecutorInterface
                 }
 
                 return $stepsResponseDto;
-            }
-        }
-
-        return $stepsResponseDto;
-    }
-
-    /**
-     * @param \Upgrade\Application\Strategy\StepInterface $step
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
-    protected function runWithFixer(StepInterface $step, StepsResponseDto $stepsResponseDto): StepsResponseDto
-    {
-        $this->logger->info(sprintf('Try to fix step `%s`', $this->getStepName($step)));
-        foreach ($this->fixers as $fixer) {
-            if (!$fixer->isApplicable($stepsResponseDto)) {
-                $this->logger->info(sprintf('Fixer `%s` is not applicable', get_class($fixer)));
-
-                continue;
-            }
-            $stepsResponseDto->addOutputMessage('Step is failed. It will be reapplied with a fixer');
-
-            $this->logger->info(sprintf('Run fixer `%s`', get_class($fixer)));
-            $stepsResponseDto = $fixer->run($stepsResponseDto);
-            if (!$stepsResponseDto->getIsSuccessful()) {
-                $this->logger->warning(sprintf('Fixer `%s` is failed', get_class($fixer)));
-
-                continue;
-            }
-
-            $stepsResponseDto->setError(null);
-
-            $this->logger->info(sprintf('Run step `%s` after fixer', $this->getStepName($step)));
-            $stepsResponseDto = $step->run($stepsResponseDto);
-            if ($stepsResponseDto->getIsSuccessful()) {
-                break;
             }
         }
 

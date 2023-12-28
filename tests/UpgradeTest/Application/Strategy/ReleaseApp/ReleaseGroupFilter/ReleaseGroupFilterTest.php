@@ -51,6 +51,7 @@ class ReleaseGroupFilterTest extends TestCase
             4821,
             'CC-26540 Introduced the Shipment Types BAPI',
             new ModuleDtoCollection([$this->createModuleDto()]),
+            new ModuleDtoCollection(),
             new DateTime(),
             true,
             'https://api.release.spryker.com/release-group/4821',

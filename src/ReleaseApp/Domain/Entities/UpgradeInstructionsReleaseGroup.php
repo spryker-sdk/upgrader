@@ -25,6 +25,11 @@ class UpgradeInstructionsReleaseGroup
     /**
      * @var string
      */
+    protected const BACKPORTS_KEY = 'backports';
+
+    /**
+     * @var string
+     */
     protected const RELEASED_KEY = 'released';
 
     /**
@@ -91,6 +96,11 @@ class UpgradeInstructionsReleaseGroup
      * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection|null
      */
     protected ?UpgradeInstructionModuleCollection $moduleCollection = null;
+
+    /**
+     * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection|null
+     */
+    protected ?UpgradeInstructionModuleCollection $backportModuleCollection = null;
 
     /**
      * @var \ReleaseApp\Domain\Entities\UpgradeInstructionMeta|null
@@ -183,6 +193,27 @@ class UpgradeInstructionsReleaseGroup
         $this->moduleCollection = new UpgradeInstructionModuleCollection($moduleList);
 
         return $this->moduleCollection;
+    }
+
+    /**
+     * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection
+     */
+    public function getBackportModuleCollection(): UpgradeInstructionModuleCollection
+    {
+        if ($this->backportModuleCollection) {
+            return $this->backportModuleCollection;
+        }
+
+        $moduleList = [];
+        if (!isset($this->body[static::BACKPORTS_KEY])) {
+            return new UpgradeInstructionModuleCollection();
+        }
+        foreach ($this->body[static::BACKPORTS_KEY] as $name => $moduleData) {
+            $moduleList[] = new UpgradeInstructionModule($moduleData, $name);
+        }
+        $this->backportModuleCollection = new UpgradeInstructionModuleCollection($moduleList);
+
+        return $this->backportModuleCollection;
     }
 
     /**

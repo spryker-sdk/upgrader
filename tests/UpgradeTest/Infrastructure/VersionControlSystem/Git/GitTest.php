@@ -291,6 +291,7 @@ class GitTest extends KernelTestCase
             4821,
             'RGname',
             new ModuleDtoCollection(),
+            new ModuleDtoCollection(),
             new DateTime(),
             true,
             'https://api.release.spryker.com/release-group/4821',

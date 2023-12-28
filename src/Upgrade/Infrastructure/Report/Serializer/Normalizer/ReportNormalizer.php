@@ -117,7 +117,7 @@ class ReportNormalizer implements NormalizerInterface
             'total_overwritten_models' => $modelStatisticDto->getTotalOverwrittenModels(),
             'total_changed_models' => $modelStatisticDto->getTotalChangedModels(),
             'total_intersecting_models' => $modelStatisticDto->getTotalIntersectingModels(),
-            'intersecting_models' => $modelStatisticDto->getIntersectingModels(),
+            'intersecting_modules' => $modelStatisticDto->getIntersectingModules(),
         ];
     }
 }

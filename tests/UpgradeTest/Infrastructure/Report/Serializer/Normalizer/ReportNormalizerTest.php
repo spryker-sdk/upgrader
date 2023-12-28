@@ -85,7 +85,7 @@ class ReportNormalizerTest extends TestCase
                         'total_overwritten_models' => 2,
                         'total_changed_models' => 3,
                         'total_intersecting_models' => 1,
-                        'intersecting_models' => ['Test'],
+                        'intersecting_modules' => ['Test'],
                     ],
                 ],
             'metadata' => [

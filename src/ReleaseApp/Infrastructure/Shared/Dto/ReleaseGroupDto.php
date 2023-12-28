@@ -80,9 +80,15 @@ class ReleaseGroupDto
     protected bool $manualActionNeeded;
 
     /**
+     * @var \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection
+     */
+    protected ModuleDtoCollection $backportModuleCollection;
+
+    /**
      * @param int $id
      * @param string $name
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $backportModuleCollection
      * @param \DateTimeInterface $released
      * @param bool $containsProjectChanges
      * @param string $link
@@ -96,6 +102,7 @@ class ReleaseGroupDto
         int $id,
         string $name,
         ModuleDtoCollection $moduleCollection,
+        ModuleDtoCollection $backportModuleCollection,
         DateTimeInterface $released,
         bool $containsProjectChanges,
         string $link,
@@ -110,6 +117,7 @@ class ReleaseGroupDto
         $this->released = $released;
         $this->link = $link;
         $this->moduleCollection = $moduleCollection;
+        $this->backportModuleCollection = $backportModuleCollection;
         $this->containsProjectChanges = $containsProjectChanges;
         $this->hasConflict = $hasConflict;
         $this->rating = $rating;
@@ -142,6 +150,14 @@ class ReleaseGroupDto
     public function setModuleCollection(ModuleDtoCollection $moduleCollection): void
     {
         $this->moduleCollection = $moduleCollection;
+    }
+
+    /**
+     * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection
+     */
+    public function getBackportModuleCollection(): ModuleDtoCollection
+    {
+        return $this->backportModuleCollection;
     }
 
     /**
