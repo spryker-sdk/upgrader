@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3bfc143b869eac20556f33cb37d7495f",
+    "content-hash": "35362d10845468dee7e3d18f6ff15fca",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3407,21 +3407,21 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "dev-master",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "17dbf52c96381e71312f03374b1f29015684c552"
+                "reference": "5be372c72ea1307589568b8a7ce82131adfd7d8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/17dbf52c96381e71312f03374b1f29015684c552",
-                "reference": "17dbf52c96381e71312f03374b1f29015684c552",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/5be372c72ea1307589568b8a7ce82131adfd7d8a",
+                "reference": "5be372c72ea1307589568b8a7ce82131adfd7d8a",
                 "shasum": ""
             },
             "require": {
                 "aws/aws-sdk-php": "^3.257",
-                "composer-plugin-api": "^1.0.0 || ^2.0.0",
+                "composer-plugin-api": "^2.0.0",
                 "composer/composer": "^2.6.0",
                 "czproject/git-php": "^4.1",
                 "ext-dom": "*",
@@ -3429,22 +3429,21 @@
                 "ext-simplexml": "*",
                 "guzzlehttp/guzzle": "^7.4",
                 "nikic/php-parser": "^4.13.0",
-                "php": ">=7.4",
+                "php": ">=8.0",
                 "sebastian/diff": "^4.0.0",
-                "spryker-sdk/utils": "^0.1.2",
-                "symfony/console": "^5.4 || ^6.0",
-                "symfony/finder": "^5.4 || ^6.0",
-                "symfony/process": "^5.4 || ^6.0"
+                "spryker-sdk/utils": "^0.2.0",
+                "symfony/console": "^6.0",
+                "symfony/finder": "^6.0",
+                "symfony/process": "^6.0"
             },
             "require-dev": {
                 "ext-zip": "*",
                 "phpstan/phpstan": "^1.0.0",
                 "phpunit/phpunit": "^9.5.0",
                 "spryker-sdk/manifest-test-data-provider": "dev-master",
-                "spryker/code-sniffer": "0.17.18",
-                "symfony/filesystem": "^5.4 || ^6.0"
+                "spryker/code-sniffer": "^0.17.19",
+                "symfony/filesystem": "^6.0"
             },
-            "default-branch": true,
             "bin": [
                 "bin/integrator"
             ],
@@ -3466,9 +3465,9 @@
             "description": "Integrator module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
-                "source": "https://github.com/spryker-sdk/integrator/tree/master"
+                "source": "https://github.com/spryker-sdk/integrator/tree/0.1.0"
             },
-            "time": "2024-01-02T12:21:37+00:00"
+            "time": "2024-01-04T09:18:05+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
@@ -3511,33 +3510,33 @@
         },
         {
             "name": "spryker-sdk/utils",
-            "version": "0.1.2",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/utils.git",
-                "reference": "a8db5e53e71a39fc94ed8105e2ec78be5c88e9e2"
+                "reference": "586535a5de0a5c23bb85632607ed6d075b8851ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/utils/zipball/a8db5e53e71a39fc94ed8105e2ec78be5c88e9e2",
-                "reference": "a8db5e53e71a39fc94ed8105e2ec78be5c88e9e2",
+                "url": "https://api.github.com/repos/spryker-sdk/utils/zipball/586535a5de0a5c23bb85632607ed6d075b8851ac",
+                "reference": "586535a5de0a5c23bb85632607ed6d075b8851ac",
                 "shasum": ""
             },
             "require": {
                 "composer/semver": "^3.4",
                 "ext-mbstring": "*",
                 "laminas/laminas-filter": "^2.22.0",
-                "php": ">=7.4",
+                "php": ">=8.0",
                 "psr/log": "^1.0 || ^2.0 || ^3.0",
-                "symfony/filesystem": "^5.4.0 || ^6.0.0",
-                "symfony/finder": "^5.4.0 || ^6.0.0",
-                "symfony/process": "^5.4.0 || ^6.0.0"
+                "symfony/filesystem": "^6.0.0",
+                "symfony/finder": "^6.0.0",
+                "symfony/process": "^6.0.0"
             },
             "require-dev": {
                 "ext-zip": "*",
                 "phpstan/phpstan": "^1.0.0",
                 "phpunit/phpunit": "^9.5.0",
-                "spryker/code-sniffer": "0.17.18"
+                "spryker/code-sniffer": "^0.17.18"
             },
             "type": "library",
             "autoload": {
@@ -3552,9 +3551,9 @@
             "description": "Spryker SDK Utils Module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/utils/issues",
-                "source": "https://github.com/spryker-sdk/utils/tree/0.1.2"
+                "source": "https://github.com/spryker-sdk/utils/tree/0.2.0"
             },
-            "time": "2023-12-04T17:07:52+00:00"
+            "time": "2024-01-03T13:00:18+00:00"
         },
         {
             "name": "symfony/cache",
@@ -8878,17 +8877,9 @@
             "time": "2022-06-03T18:03:27+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "spryker-sdk/integrator",
-            "version": "9999999-dev",
-            "alias": "1.0.0",
-            "alias_normalized": "1.0.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "spryker-sdk/integrator": 20,
         "spryker/code-sniffer": 20
     },
     "prefer-stable": true,
