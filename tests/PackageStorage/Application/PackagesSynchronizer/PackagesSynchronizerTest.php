@@ -60,15 +60,34 @@ class PackagesSynchronizerTest extends TestCase
         $processRunnerMock->expects($this->once())->method('mustRunFromCommandLine')->willThrowException(new ProcessFailedException($process));
 
         $filesystem = $this->createMock(Filesystem::class);
-        $filesystem->expects($this->exactly(4))->method('exists')
-            ->withConsecutive([$toDir], [$toDir . PackagesSynchronizer::GITIGNORE_FILE_NAME], [$toDir], [$toDir])
-            ->willReturnOnConsecutiveCalls(true, true, true, false);
+        $filesystem->expects($this->exactly(3))->method('exists')
+            ->withConsecutive([$toDir], [$toDir . PackagesSynchronizer::GITIGNORE_FILE_NAME], [$toDir])
+            ->willReturnOnConsecutiveCalls(true, true, true);
         $filesystem->expects($this->once())->method('remove')->with($toDir);
 
         $packagesSynchronizer = new PackagesSynchronizer($packagesDirProvider, $filesystem, $processRunnerMock);
 
         // Act
         $packagesSynchronizer->sync();
+    }
+
+    /**
+     * @return void
+     */
+    public function testPackagesSynchronizerDestruct(): void
+    {
+        // Arrange
+        $packagesSynchronizer = $this->getMockBuilder(PackagesSynchronizer::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(array_diff(
+                get_class_methods(PackagesSynchronizer::class),
+                ['__destruct'],
+            ))
+            ->getMock();
+        $packagesSynchronizer->expects($this->once())->method('clear');
+
+        // Act
+        $packagesSynchronizer->__destruct();
     }
 
     /**

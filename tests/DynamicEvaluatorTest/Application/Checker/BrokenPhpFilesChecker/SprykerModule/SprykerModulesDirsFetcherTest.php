@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace DynamicEvaluatorTest\Application\Checker\BrokenPhpFilesChecker\SprykerModule;
 
-use ArrayObject;
+use ArrayIterator;
 use Core\Infrastructure\Service\FinderFactory;
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModulesDirsFetcher;
 use DynamicEvaluator\Application\ProjectConfigReader\ProjectConfigReaderInterface;
@@ -77,10 +77,11 @@ class SprykerModulesDirsFetcherTest extends TestCase
 
         $finder = $this->createMock(Finder::class);
 
+        $finder->method('in')->willReturn($finder);
         $finder->expects($this->once())->method('depth')->willReturn($finder);
         $finder->expects($this->once())->method('path')->with($expectedRegExp)->willReturn($finder);
         $finder->expects($this->once())->method('directories')->willReturn($finder);
-        $finder->method('in')->willReturn(new ArrayObject($paths));
+        $finder->method('getIterator')->willReturn(new ArrayIterator($paths));
 
         $finderFactory = $this->createMock(FinderFactory::class);
         $finderFactory->method('createFinder')->willReturn($finder);
