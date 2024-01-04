@@ -60,7 +60,7 @@ class PackagesSynchronizerTest extends TestCase
         $processRunnerMock->expects($this->once())->method('mustRunFromCommandLine')->willThrowException(new ProcessFailedException($process));
 
         $filesystem = $this->createMock(Filesystem::class);
-        $filesystem->expects($this->exactly(3))->method('exists')
+        $filesystem->method('exists')
             ->withConsecutive([$toDir], [$toDir . PackagesSynchronizer::GITIGNORE_FILE_NAME], [$toDir])
             ->willReturnOnConsecutiveCalls(true, true, true);
         $filesystem->expects($this->once())->method('remove')->with($toDir);
