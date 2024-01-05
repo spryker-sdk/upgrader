@@ -61,8 +61,8 @@ class PackagesSynchronizerTest extends TestCase
 
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->method('exists')
-            ->withConsecutive([$toDir], [$toDir . PackagesSynchronizer::GITIGNORE_FILE_NAME], [$toDir])
-            ->willReturnOnConsecutiveCalls(true, true, true);
+            ->withConsecutive([$toDir], [$toDir . PackagesSynchronizer::GITIGNORE_FILE_NAME], [$toDir], [$toDir])
+            ->willReturnOnConsecutiveCalls(true, true, true, false);
         $filesystem->expects($this->once())->method('remove')->with($toDir);
 
         $packagesSynchronizer = new PackagesSynchronizer($packagesDirProvider, $filesystem, $processRunnerMock);
