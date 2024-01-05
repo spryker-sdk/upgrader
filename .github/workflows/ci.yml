@@ -13,8 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         php-version: [
-            '7.4',
-            '8.1',
+            '8.0',
             '8.2',
             '8.3'
         ]
@@ -51,7 +50,7 @@ jobs:
           if [[ ${{ matrix.php-version }} == '8.2' || ${{ matrix.php-version }} == '8.3' ]]; then
             composer update laminas/laminas-servicemanager laminas/laminas-stdlib laminas/laminas-filter --prefer-stable --optimize-autoloader
           else
-            composer install --optimize-autoloader
+            composer install --prefer-dist --no-interaction --optimize-autoloader
           fi
 
       - name: PHPStan checks
@@ -62,14 +61,14 @@ jobs:
 
       - name: Run tests
         run: |
-          if [[ ${{ matrix.php-version }} == '7.4' ]]; then
+          if [[ ${{ matrix.php-version }} == '8.0' ]]; then
            XDEBUG_MODE=coverage vendor/bin/phpunit tests/ --coverage-clover coverage.xml
           else
            composer tests
           fi
 
       - name: Code Coverage Report
-        if: success() && matrix.php-version == '7.4'
+        if: success() && matrix.php-version == '8.0'
         uses: codecov/codecov-action@v1
 
   automerge:

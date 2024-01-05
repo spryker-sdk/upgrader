@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace DynamicEvaluatorTest\Application\Checker\ModuleNameConflictChecker\Fetcher;
 
+use ArrayIterator;
 use Core\Infrastructure\Service\FinderFactory;
 use DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Fetcher\ProjectModulesNamesFetcher;
 use DynamicEvaluator\Application\ProjectConfigReader\ProjectConfigReaderInterface;
@@ -70,8 +71,9 @@ class ProjectModulesNamesFetcherTest extends TestCase
 
         $finderMock = $this->createMock(Finder::class);
         $finderMock->method('directories')->willReturn($finderMock);
-
-        $finderMock->expects($this->once())->method('in')->with($expectedLookupPaths)->willReturn($modules);
+        $finderMock->method('in')->willReturn($finderMock);
+        $finderMock->expects($this->once())->method('in')->with($expectedLookupPaths)->willReturn($finderMock);
+        $finderMock->method('getIterator')->willReturn(new ArrayIterator($modules));
 
         $finderFactory = $this->createMock(FinderFactory::class);
         $finderFactory->method('createFinder')->willReturn($finderMock);

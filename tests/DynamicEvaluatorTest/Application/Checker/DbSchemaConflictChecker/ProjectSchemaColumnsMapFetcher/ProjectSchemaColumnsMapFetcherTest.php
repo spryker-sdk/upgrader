@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace DynamicEvaluatorTest\Application\Checker\DbSchemaConflictChecker\ProjectSchemaColumnsMapFetcher;
 
-use ArrayObject;
+use ArrayIterator;
 use Core\Infrastructure\Service\FinderFactory;
 use DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\ProjectSchemaColumnsMapFetcher\ProjectSchemaColumnsMapFetcher;
 use DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\XmlSchemaFileParser\XmlSchemaFileParserInterface;
@@ -58,8 +58,9 @@ class ProjectSchemaColumnsMapFetcherTest extends TestCase
 
         $finder = $this->createMock(Finder::class);
         $finder->method('name')->willReturn($finder);
-        $finder->method('in')->willReturn($finder);
-        $finder->method('exclude')->willReturn(new ArrayObject($files));
+        $finder->method('exclude')->willReturn($finder);
+        $finder->expects($this->once())->method('in')->willReturn($finder);
+        $finder->method('getIterator')->willReturn(new ArrayIterator($files));
 
         $finderFactory = $this->createMock(FinderFactory::class);
         $finderFactory->method('createFinder')->willReturn($finder);
