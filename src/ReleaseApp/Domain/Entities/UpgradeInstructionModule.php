@@ -24,6 +24,11 @@ class UpgradeInstructionModule
     protected const TYPE_KEY = 'type';
 
     /**
+     * @var string
+     */
+    protected const FEATURE_PACKAGES_KEY = 'feature_packages';
+
+    /**
      * @var array<mixed>
      */
     protected array $body;
@@ -97,5 +102,23 @@ class UpgradeInstructionModule
     public function setType(string $type): void
     {
         $this->body[static::TYPE_KEY] = $type;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getFeaturePackages(): array
+    {
+        return $this->body[static::FEATURE_PACKAGES_KEY] ?? [];
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return void
+     */
+    public function setFeaturePackages(string $type): void
+    {
+        $this->body[static::FEATURE_PACKAGES_KEY] = $type;
     }
 }

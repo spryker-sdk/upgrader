@@ -96,6 +96,47 @@ class NewPackageFilterItemTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testFilterShouldFilterNewPackagesIfFeaturePackageExist(): void
+    {
+        // Arrange
+        $releaseGroupDto = $this->createReleaseGroupDto([
+            new ModuleDto('spryker/package-one', '4.17.0', 'minor', ['spryker-feature/package' => 'dev-master as 1', 'spryker-feature/package-two' => 'dev-master as 2']),
+            new ModuleDto('spryker/package-two', '3.17.0', 'minor', ['spryker-feature/package-two' => 'dev-master as 1']),
+            new ModuleDto('spryker/package-three', '2.17.0', 'minor', ['spryker-feature/package-three' => 'dev-master as 1']),
+        ]);
+
+        $packageManagerAdapterMock = $this->createPackageManagerAdapterMock([
+            ['spryker-feature/package', '200405.0'],
+            ['spryker-feature/package-two', '200405.0'],
+        ]);
+        $configurationProviderMock = $this->createConfigurationProviderMock();
+        $configurationProviderMock->method('isPackageUpgradeOnly')
+            ->willReturn(true);
+        $configurationProviderMock
+            ->method('getReleaseGroupId')
+            ->willReturn(1);
+        $filter = new NewPackageFilterItem($packageManagerAdapterMock, $configurationProviderMock, true);
+
+        // Act
+        $response = $filter->filter($releaseGroupDto);
+
+        // Assert
+        $this->assertSame(2, $response->getReleaseGroupDto()->getModuleCollection()->count());
+
+        $modules = $response->getReleaseGroupDto()->getModuleCollection()->toArray();
+
+        $this->assertSame('spryker/package-one', $modules[0]->getName());
+        $this->assertSame('4.17.0', $modules[0]->getVersion());
+
+        $this->assertSame('spryker/package-two', $modules[1]->getName());
+        $this->assertSame('3.17.0', $modules[1]->getVersion());
+
+        $this->assertSame(1, $response->getProposedModuleCollection()->count());
+    }
+
+    /**
      * @param array<array<string>> $packageVersionMap
      *
      * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
@@ -129,6 +170,7 @@ class NewPackageFilterItemTest extends TestCase
             1,
             'RG1',
             new ModuleDtoCollection($moduleDto),
+            new ModuleDtoCollection(),
             new ModuleDtoCollection(),
             new DateTime(),
             false,

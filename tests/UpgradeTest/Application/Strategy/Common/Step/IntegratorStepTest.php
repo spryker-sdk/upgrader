@@ -75,7 +75,7 @@ class IntegratorStepTest extends TestCase
     {
         // Arrange
         $module = new ModuleDto('spryker/acl', '1.1.1', ReleaseAppConstant::MODULE_TYPE_MAJOR);
-        $releaseGroup = new ReleaseGroupDto(1, 'RG', new ModuleDtoCollection([$module]), new ModuleDtoCollection(), new DateTime(), false, '', 100);
+        $releaseGroup = new ReleaseGroupDto(1, 'RG', new ModuleDtoCollection([$module]), new ModuleDtoCollection(), new ModuleDtoCollection(), new DateTime(), false, '', 100);
         $stepsResponseDto = new StepsResponseDto(true);
         $stepsResponseDto->addAppliedReleaseGroup($releaseGroup);
 
@@ -100,7 +100,7 @@ class IntegratorStepTest extends TestCase
     {
         // Arrange
         $module = new ModuleDto('spryker/acl', '1.1.1', ReleaseAppConstant::MODULE_TYPE_MAJOR);
-        $releaseGroup = new ReleaseGroupDto(1, 'RG', new ModuleDtoCollection([$module]), new ModuleDtoCollection(), new DateTime(), false, '', 100);
+        $releaseGroup = new ReleaseGroupDto(1, 'RG', new ModuleDtoCollection([$module]), new ModuleDtoCollection(), new ModuleDtoCollection(), new DateTime(), false, '', 100);
         $stepsResponseDto = new StepsResponseDto(true);
         $stepsResponseDto->addAppliedReleaseGroup($releaseGroup);
 

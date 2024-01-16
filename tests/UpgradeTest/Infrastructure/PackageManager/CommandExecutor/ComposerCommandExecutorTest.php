@@ -75,7 +75,7 @@ class ComposerCommandExecutorTest extends TestCase
 
         $response = $this->cmdExecutor->require($packageCollection);
 
-        $this->assertSame('composer require spryker-sdk/sdk-contracts:0.2.1 spryker-sdk/sdk:"dev-master as 1.0.0" --no-scripts --no-plugins -W', $response->getOutputMessage());
+        $this->assertSame('composer require spryker-sdk/sdk-contracts:0.2.1 spryker-sdk/sdk:dev-master as 1.0.0 --no-scripts --no-plugins -W', $response->getOutputMessage());
     }
 
     /**

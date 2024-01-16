@@ -10,7 +10,10 @@
                 "spryker\/shipment-types-backend-api": {
                     "version": "0.1.0",
                     "type": "minor",
-                    "files": 41
+                    "files": 41,
+                    "spryker-feature": {
+                        "spryker-feature/shipment": "200402.0"
+                    }
                 },
                 "spryker\/shipment-type": {
                     "version": "0.1.1",

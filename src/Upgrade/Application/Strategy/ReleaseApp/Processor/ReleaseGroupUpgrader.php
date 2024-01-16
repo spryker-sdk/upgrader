@@ -49,12 +49,40 @@ class ReleaseGroupUpgrader
      */
     public function upgrade(ReleaseGroupDto $releaseGroup): PackageManagerResponseDto
     {
-        $response = $this->moduleFetcher->require($releaseGroup->getModuleCollection());
+        $alternativeRequireModuleCollections = $this->getAlternativeRequireModuleCollections($releaseGroup);
+        $alternativeRequireModuleCollections[] = $releaseGroup->getModuleCollection();
+
+        foreach ($alternativeRequireModuleCollections as $alternativeRequireModuleCollection) {
+            $response = $this->moduleFetcher->require($alternativeRequireModuleCollection);
+            if ($response->isSuccessful()) {
+                break;
+            }
+        }
+
         if (!$response->isSuccessful()) {
             $response = $this->runWithFixer($releaseGroup, $response);
         }
 
         return $response;
+    }
+
+    /**
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
+     *
+     * @return array<\ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection>
+     */
+    protected function getAlternativeRequireModuleCollections(ReleaseGroupDto $releaseGroup): array
+    {
+        $moduleAlternativeCollection = [];
+        if ($releaseGroup->getFeaturePackages()->count()) {
+            $packageCollection = clone $releaseGroup->getModuleCollection();
+            foreach ($releaseGroup->getFeaturePackages()->toArray() as $package) {
+                $packageCollection->add($package);
+            }
+            $moduleAlternativeCollection[] = $packageCollection;
+        }
+
+        return $moduleAlternativeCollection;
     }
 
     /**

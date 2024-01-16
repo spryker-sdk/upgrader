@@ -74,6 +74,7 @@ class ReleaseGroupDtoCollectionMapper
             $releaseGroup->getName(),
             $this->buildModuleTransferCollection($releaseGroup),
             $this->buildBackportModuleTransferCollection($releaseGroup),
+            new ModuleDtoCollection(),
             $releaseGroup->getReleased(),
             $releaseGroup->hasProjectChanges(),
             $this->getReleaseGroupLink($releaseGroup->getId()),
@@ -105,7 +106,7 @@ class ReleaseGroupDtoCollectionMapper
 
         $dataProviderModuleCollection = new ModuleDtoCollection();
         foreach ($releaseGroupModuleCollection->toArray() as $module) {
-            $dataProviderModule = new ModuleDto($module->getName(), $module->getVersion(), $module->getType());
+            $dataProviderModule = new ModuleDto($module->getName(), $module->getVersion(), $module->getType(), $module->getFeaturePackages());
             $dataProviderModuleCollection->add($dataProviderModule);
         }
 

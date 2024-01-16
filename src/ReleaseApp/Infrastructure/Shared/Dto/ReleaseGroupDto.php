@@ -85,10 +85,16 @@ class ReleaseGroupDto
     protected ModuleDtoCollection $backportModuleCollection;
 
     /**
+     * @var \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection
+     */
+    protected ModuleDtoCollection $featurePackages;
+
+    /**
      * @param int $id
      * @param string $name
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $backportModuleCollection
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $featurePackages
      * @param \DateTimeInterface $released
      * @param bool $containsProjectChanges
      * @param string $link
@@ -103,6 +109,7 @@ class ReleaseGroupDto
         string $name,
         ModuleDtoCollection $moduleCollection,
         ModuleDtoCollection $backportModuleCollection,
+        ModuleDtoCollection $featurePackages,
         DateTimeInterface $released,
         bool $containsProjectChanges,
         string $link,
@@ -118,6 +125,7 @@ class ReleaseGroupDto
         $this->link = $link;
         $this->moduleCollection = $moduleCollection;
         $this->backportModuleCollection = $backportModuleCollection;
+        $this->featurePackages = $featurePackages;
         $this->containsProjectChanges = $containsProjectChanges;
         $this->hasConflict = $hasConflict;
         $this->rating = $rating;
@@ -150,6 +158,24 @@ class ReleaseGroupDto
     public function setModuleCollection(ModuleDtoCollection $moduleCollection): void
     {
         $this->moduleCollection = $moduleCollection;
+    }
+
+    /**
+     * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection
+     */
+    public function getFeaturePackages(): ModuleDtoCollection
+    {
+        return $this->featurePackages;
+    }
+
+    /**
+     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $featurePackages
+     *
+     * @return void
+     */
+    public function setFeaturePackages(ModuleDtoCollection $featurePackages): void
+    {
+        $this->featurePackages = $featurePackages;
     }
 
     /**
