@@ -22,67 +22,67 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 
 class FeatureDevMasterPackageExpanderSubscriberTest extends TestCase
 {
-//    /**
-//     * @return void
-//     */
-//    public function testOnPreRequireShouldNotInvokeCheckerWhenFeatureDevMasterDisabled(): void
-//    {
-//        // Arrange & Assert
-//        $stepsResponseDtoMock = $this->createMock(StepsResponseDto::class);
-//        $stepsResponseDtoMock->expects($this->never())->method('getCurrentReleaseGroup');
-//        $event = new ReleaseGroupProcessorEvent($stepsResponseDtoMock);
-//
-//        $featureDevMasterPackageExpanderEventSubscriber = new FeatureDevMasterPackageExpanderEventSubscriber(
-//            $this->createConfigurationProviderMock(true),
-//            $this->createMock(PackageManagerAdapterInterface::class),
-//            false,
-//        );
-//
-//        // Act
-//        $featureDevMasterPackageExpanderEventSubscriber->onPreRequire($event);
-//    }
-//
-//    /**
-//     * @return void
-//     */
-//    public function testOnPreRequireShouldNotInvokeCheckerWhenReleaseGroupIdEmpty(): void
-//    {
-//        // Arrange & Assert
-//        $stepsResponseDtoMock = $this->createMock(StepsResponseDto::class);
-//        $stepsResponseDtoMock->expects($this->never())->method('getCurrentReleaseGroup');
-//        $event = new ReleaseGroupProcessorEvent($stepsResponseDtoMock);
-//
-//        $featureDevMasterPackageExpanderEventSubscriber = new FeatureDevMasterPackageExpanderEventSubscriber(
-//            $this->createConfigurationProviderMock(false),
-//            $this->createMock(PackageManagerAdapterInterface::class),
-//            true,
-//        );
-//
-//        // Act
-//        $featureDevMasterPackageExpanderEventSubscriber->onPreRequire($event);
-//    }
+    /**
+     * @return void
+     */
+    public function testOnPreRequireShouldNotInvokeCheckerWhenFeatureDevMasterDisabled(): void
+    {
+        // Arrange & Assert
+        $stepsResponseDtoMock = $this->createMock(StepsResponseDto::class);
+        $stepsResponseDtoMock->expects($this->never())->method('getCurrentReleaseGroup');
+        $event = new ReleaseGroupProcessorEvent($stepsResponseDtoMock);
+
+        $featureDevMasterPackageExpanderEventSubscriber = new FeatureDevMasterPackageExpanderEventSubscriber(
+            $this->createConfigurationProviderMock(true),
+            $this->createMock(PackageManagerAdapterInterface::class),
+            false,
+        );
+
+        // Act
+        $featureDevMasterPackageExpanderEventSubscriber->onPreRequire($event);
+    }
 
     /**
      * @return void
      */
-//    public function testOnPreRequireShouldNotInvokeCheckerWhenCurrentReleaseGroupEmpty(): void
-//    {
-//        // Arrange & Assert
-//        $stepsResponseDtoMock = $this->createMock(StepsResponseDto::class);
-//        $stepsResponseDtoMock->method('getCurrentReleaseGroup')->willReturn(null);
-//        $event = new ReleaseGroupProcessorEvent($stepsResponseDtoMock);
-//        $packageManagerAdapterMock = $this->createMock(PackageManagerAdapterInterface::class);
-//        $packageManagerAdapterMock->expects($this->never())->method('getComposerJsonFile');
-//
-//        $featureDevMasterPackageExpanderEventSubscriber = new FeatureDevMasterPackageExpanderEventSubscriber(
-//            $this->createConfigurationProviderMock(true),
-//            $packageManagerAdapterMock,
-//            true,
-//        );
-//
-//        // Act
-//        $featureDevMasterPackageExpanderEventSubscriber->onPreRequire($event);
-//    }
+    public function testOnPreRequireShouldNotInvokeCheckerWhenReleaseGroupIdEmpty(): void
+    {
+        // Arrange & Assert
+        $stepsResponseDtoMock = $this->createMock(StepsResponseDto::class);
+        $stepsResponseDtoMock->expects($this->never())->method('getCurrentReleaseGroup');
+        $event = new ReleaseGroupProcessorEvent($stepsResponseDtoMock);
+
+        $featureDevMasterPackageExpanderEventSubscriber = new FeatureDevMasterPackageExpanderEventSubscriber(
+            $this->createConfigurationProviderMock(false),
+            $this->createMock(PackageManagerAdapterInterface::class),
+            true,
+        );
+
+        // Act
+        $featureDevMasterPackageExpanderEventSubscriber->onPreRequire($event);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOnPreRequireShouldNotInvokeCheckerWhenCurrentReleaseGroupEmpty(): void
+    {
+        // Arrange & Assert
+        $stepsResponseDtoMock = $this->createMock(StepsResponseDto::class);
+        $stepsResponseDtoMock->method('getCurrentReleaseGroup')->willReturn(null);
+        $event = new ReleaseGroupProcessorEvent($stepsResponseDtoMock);
+        $packageManagerAdapterMock = $this->createMock(PackageManagerAdapterInterface::class);
+        $packageManagerAdapterMock->expects($this->never())->method('getComposerJsonFile');
+
+        $featureDevMasterPackageExpanderEventSubscriber = new FeatureDevMasterPackageExpanderEventSubscriber(
+            $this->createConfigurationProviderMock(true),
+            $packageManagerAdapterMock,
+            true,
+        );
+
+        // Act
+        $featureDevMasterPackageExpanderEventSubscriber->onPreRequire($event);
+    }
 
     /**
      * @return void
