@@ -575,6 +575,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                     new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
                 ]),
                 new ModuleDtoCollection(),
+                new ModuleDtoCollection(),
                 new DateTime(),
                 false,
                 'https://api.release.spryker.com/release-groups/view/1',
@@ -586,6 +587,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 new ModuleDtoCollection([
                     new ModuleDto('spryker/oauth-backend-api', '1.1.1', 'path'),
                 ]),
+                new ModuleDtoCollection(),
                 new ModuleDtoCollection(),
                 new DateTime(),
                 true,
@@ -608,6 +610,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 1,
                 'RG1',
                 new ModuleDtoCollection($moduleDtoCollection),
+                new ModuleDtoCollection(),
                 new ModuleDtoCollection(),
                 new DateTime(),
                 false,

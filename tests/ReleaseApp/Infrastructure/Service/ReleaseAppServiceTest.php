@@ -54,6 +54,7 @@ class ReleaseAppServiceTest extends KernelTestCase
                             new ModuleDto('spryker/symfony-mailer', '1.0.2', 'major'),
                         ]),
                         new ModuleDtoCollection(),
+                        new ModuleDtoCollection(),
                         DateTime::createFromFormat("Y-m-d\TH:i:s.uO", '2022-11-13T18:12:50.000000+0000'),
                         true,
                         'https://api.release.spryker.com/release-group/4395',
@@ -90,6 +91,7 @@ class ReleaseAppServiceTest extends KernelTestCase
             new ModuleDtoCollection([
                 new ModuleDto('spryker/shipment-types-backend-api', '0.0.1', 'minor'),
             ]),
+            new ModuleDtoCollection(),
             DateTime::createFromFormat("Y-m-d\TH:i:s.uO", '2023-05-23T14:26:52.000000+0000'),
             true,
             'https://api.release.spryker.com/release-group/4821',

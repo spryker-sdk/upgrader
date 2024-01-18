@@ -27,17 +27,22 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @var string
      */
-    protected const REQUIRE_COMMAND_NAME = 'composer require';
+    protected const COMPOSER_COMMAND_NAME = 'composer';
 
     /**
      * @var string
      */
-    protected const REMOVE_COMMAND_NAME = 'composer remove';
+    protected const REQUIRE_COMMAND_NAME = 'require';
 
     /**
      * @var string
      */
-    protected const UPDATE_COMMAND_NAME = 'composer update';
+    protected const REMOVE_COMMAND_NAME = 'remove';
+
+    /**
+     * @var string
+     */
+    protected const UPDATE_COMMAND_NAME = 'update';
 
     /**
      * @var string
@@ -135,16 +140,14 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function updateSubPackage(PackageCollection $packageCollection): PackageManagerResponseDto
     {
-        $command = explode(' ', sprintf(
-            '%s%s %s %s %s',
+        return $this->runWithDependencyFlags([
+            static::COMPOSER_COMMAND_NAME,
             static::UPDATE_COMMAND_NAME,
-            $this->getPackageString($packageCollection),
+            ...$this->getPackageString($packageCollection),
             static::NO_SCRIPTS_FLAG,
             static::NO_PLUGINS_FLAG,
             static::NO_INTERACTION_FLAG,
-        ));
-
-        return $this->runWithDependencyFlags($command);
+        ]);
     }
 
     /**
@@ -154,13 +157,13 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function require(PackageCollection $packageCollection): PackageManagerResponseDto
     {
-        return $this->runWithDependencyFlags(explode(' ', sprintf(
-            '%s%s %s %s',
+        return $this->runWithDependencyFlags([
+            static::COMPOSER_COMMAND_NAME,
             static::REQUIRE_COMMAND_NAME,
-            $this->getPackageString($packageCollection),
+            ...$this->getPackageString($packageCollection),
             static::NO_SCRIPTS_FLAG,
             static::NO_PLUGINS_FLAG,
-        )));
+        ]);
     }
 
     /**
@@ -170,13 +173,13 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function remove(PackageCollection $packageCollection): PackageManagerResponseDto
     {
-        $command = explode(' ', sprintf(
-            '%s%s %s %s',
+        $command = [
+            static::COMPOSER_COMMAND_NAME,
             static::REMOVE_COMMAND_NAME,
-            $this->getPackageString($packageCollection),
+            ...$this->getPackageString($packageCollection),
             static::NO_SCRIPTS_FLAG,
             static::NO_PLUGINS_FLAG,
-        ));
+        ];
 
         return $this->createResponse($this->processRunner->run($command, static::ENV));
     }
@@ -188,14 +191,14 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function requireDev(PackageCollection $packageCollection): PackageManagerResponseDto
     {
-        return $this->runWithDependencyFlags(explode(' ', sprintf(
-            '%s%s %s %s %s',
+        return $this->runWithDependencyFlags([
+            static::COMPOSER_COMMAND_NAME,
             static::REQUIRE_COMMAND_NAME,
-            $this->getPackageString($packageCollection),
+            ...$this->getPackageString($packageCollection),
             static::NO_SCRIPTS_FLAG,
             static::NO_PLUGINS_FLAG,
             static::DEV_FLAG,
-        )));
+        ]);
     }
 
     /**
@@ -203,13 +206,13 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     public function update(): PackageManagerResponseDto
     {
-        return $this->runWithDependencyFlags(explode(' ', sprintf(
-            '%s %s %s %s',
+        return $this->runWithDependencyFlags([
+            static::COMPOSER_COMMAND_NAME,
             static::UPDATE_COMMAND_NAME,
             static::NO_SCRIPTS_FLAG,
             static::NO_PLUGINS_FLAG,
             static::NO_INTERACTION_FLAG,
-        )));
+        ]);
     }
 
     /**
@@ -268,6 +271,7 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             if ($flag) {
                 $commandToRun[] = $flag;
             }
+
             $process = $this->runCommand($commandToRun);
             if ($process->isSuccessful()) {
                 break;
@@ -280,23 +284,23 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      *
-     * @return string
+     * @return array<string>
      */
-    protected function getPackageString(PackageCollection $packageCollection): string
+    protected function getPackageString(PackageCollection $packageCollection): array
     {
-        $result = '';
+        $result = [];
         foreach ($packageCollection->toArray() as $package) {
             if ($package->getVersion() === '') {
-                $result = sprintf('%s %s', $result, $package->getName());
+                $result[] = $package->getName();
 
                 continue;
             }
             $version = $package->getVersion();
             if (str_contains($package->getVersion(), ' ')) {
-                $version = sprintf('"%s"', $version);
+                $version = sprintf('%s', $version);
             }
             $package = sprintf('%s:%s', $package->getName(), $version);
-            $result = sprintf('%s %s', $result, $package);
+            $result[] = $package;
         }
 
         return $result;

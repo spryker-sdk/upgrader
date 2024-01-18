@@ -24,6 +24,34 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
     /**
      * @return void
      */
+    public function testRequireWithAlternativePackages(): void
+    {
+        // Arrange
+        $moduleCollection = new ModuleDtoCollection([new ModuleDto('spryker/cart', '200402.0')]);
+        $featureCollection = new ModuleDtoCollection([new ModuleDto('spryker-feature/cart', '200402.0')]);
+        $moduleWithFeatureCollection = clone $moduleCollection;
+        foreach ($featureCollection->toArray() as $feature) {
+            $moduleWithFeatureCollection->add($feature);
+        }
+
+        $moduleFetcherMock = $this->createMock(ModuleFetcher::class);
+        $moduleFetcherMock->expects($this->exactly(2))->method('require')->withConsecutive([$moduleWithFeatureCollection], [$moduleCollection])->willReturn(new PackageManagerResponseDto(false));
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $releaseGroupUpgrader = new ReleaseGroupUpgrader($moduleFetcherMock, $loggerMock, []);
+        $releaseGroupMock = $this->createMock(ReleaseGroupDto::class);
+        $releaseGroupMock->method('getModuleCollection')->willReturn($moduleCollection);
+        $releaseGroupMock->method('getFeaturePackages')->willReturn($featureCollection);
+        // Act
+        $packageManagerResponseDto = $releaseGroupUpgrader->upgrade($releaseGroupMock);
+
+        // Assert
+        $this->assertNotNull($releaseGroupUpgrader);
+        $this->assertFalse($packageManagerResponseDto->isSuccessful());
+    }
+
+    /**
+     * @return void
+     */
     public function testRequireWithoutRunFixer(): void
     {
         // Arrange

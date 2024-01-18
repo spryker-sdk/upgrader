@@ -211,7 +211,7 @@ export UPDATE_MINIMUM_DEPENDENCIES_ENABLED=true
 
 ## Enable update features to dev-master fixer
 ​
-* Turn on internal specific behavior to update features to dev-master if it's blocker.
+* Turn on internal specific behavior to update features to dev-master.
 ```bash
 export UPDATE_FEATURES_TO_DEV_MASTER=true
 ```

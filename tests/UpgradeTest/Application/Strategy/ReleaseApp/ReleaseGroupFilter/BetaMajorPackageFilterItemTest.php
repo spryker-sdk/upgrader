@@ -41,6 +41,7 @@ class BetaMajorPackageFilterItemTest extends TestCase
             'RG',
             new ModuleDtoCollection($modules),
             new ModuleDtoCollection(),
+            new ModuleDtoCollection(),
             new DateTime(),
             true,
             '',

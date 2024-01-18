@@ -30,15 +30,22 @@ class ModuleDto
     protected string $versionType;
 
     /**
+     * @var array<string, string>
+     */
+    protected array $featurePackages;
+
+    /**
      * @param string $name
      * @param string $version
      * @param string $versionType
+     * @param array<string, string> $featurePackages
      */
-    public function __construct(string $name, string $version, string $versionType)
+    public function __construct(string $name, string $version, string $versionType = ReleaseAppConstant::MODULE_TYPE_MINOR, array $featurePackages = [])
     {
         $this->name = $name;
         $this->version = $version;
         $this->versionType = $versionType;
+        $this->featurePackages = $featurePackages;
     }
 
     /**
@@ -55,6 +62,14 @@ class ModuleDto
     public function getVersion(): string
     {
         return $this->version;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getFeaturePackages(): array
+    {
+        return $this->featurePackages;
     }
 
     /**

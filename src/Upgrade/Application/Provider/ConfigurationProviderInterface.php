@@ -124,6 +124,14 @@ interface ConfigurationProviderInterface
 
     /**
      * Specification:
+     *  - Defines the specific release group id.
+     *
+     * @return int|null
+     */
+    public function getReleaseGroupId(): ?int;
+
+    /**
+     * Specification:
      * - Defines the report request auth token.
      *
      * @return string
