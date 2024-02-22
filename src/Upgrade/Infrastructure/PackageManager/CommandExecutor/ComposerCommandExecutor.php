@@ -223,7 +223,8 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
         $package = $this->getFirstAvailablePackage();
 
         $command = [
-            ...explode(' ', static::UPDATE_COMMAND_NAME),
+            static::COMPOSER_COMMAND_NAME,
+            static::UPDATE_COMMAND_NAME,
             sprintf('%s:%s', $package['name'], $package['version']),
             static::NO_PLUGINS_FLAG,
             static::NO_SCRIPTS_FLAG,

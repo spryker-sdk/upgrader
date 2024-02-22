@@ -251,7 +251,7 @@ class ComposerCommandExecutorTest extends TestCase
         $processRunnerServiceMock
             ->expects($this->once())
             ->method('run')
-            ->with($this->containsEqual('phpunit/phpunit:9.5.23'))
+            ->with(['composer', 'update', 'phpunit/phpunit:9.5.23', '--no-plugins', '--no-scripts', '--no-install', '--no-interaction'])
             ->willReturn($processMock);
 
         $commandExecutor = new ComposerCommandExecutor(
