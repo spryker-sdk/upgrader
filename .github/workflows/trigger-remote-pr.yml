@@ -6,7 +6,7 @@ env:
     TARGET_REPO: sdk
     SOURCE_PACKAGE_NAME: 'spryker-sdk/upgrader'
     PR_LABELS: 'composer dependencies'
-    PR_ASSIGNEES: pavelmaksimov25,DmytroKlymanSpryker
+    PR_ASSIGNEES: vol4onok,asmarovydlo
 
 on:
     release:
