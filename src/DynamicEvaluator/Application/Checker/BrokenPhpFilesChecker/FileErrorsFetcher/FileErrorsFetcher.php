@@ -138,7 +138,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
         $this->assertArrayKeyExists($message, 'line');
         $this->assertArrayKeyExists($message, 'message');
 
-        $fileError = new FileErrorDto($file, $message['line'], $message['message']);
+        $fileError = new FileErrorDto($file, (int)$message['line'], (string)$message['message']);
 
         if ($this->baselineStorage->hasFileError($fileError)) {
             return null;
@@ -146,7 +146,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
 
         $this->baselineStorage->addFileError($fileError);
 
-        return new FileErrorDto($file, $message['line'], $message['message']);
+        return new FileErrorDto($file, (int)$message['line'], (string)$message['message']);
     }
 
     /**
@@ -212,7 +212,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
      */
     protected function assertArrayKeyExists(array $data, string $key, bool $isArray = false): void
     {
-        if (!isset($data[$key]) || ($isArray && !is_array($data[$key]))) {
+        if (!array_key_exists($key, $data) || ($isArray && !is_array($data[$key]))) {
             throw new InvalidArgumentException(sprintf(
                 'Unable to find %s key or it\'s not an array in %s. Tooling export format is changes.',
                 $key,
