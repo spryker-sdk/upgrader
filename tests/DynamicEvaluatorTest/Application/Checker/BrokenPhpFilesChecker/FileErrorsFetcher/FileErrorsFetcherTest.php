@@ -74,13 +74,16 @@ class FileErrorsFetcherTest extends TestCase
     }
 
     /**
+     * @dataProvider projectFileErrorsDataProvider
+     *
+     * @param array<mixed> $toolOutput
+     * @param array<mixed> $expectedResult
+     *
      * @return void
      */
-    public function testFetchProjectFileErrorsAndSaveInBaseLineShouldFetchFileErrors(): void
+    public function testFetchProjectFileErrorsAndSaveInBaseLineShouldFetchFileErrors(array $toolOutput, array $expectedResult): void
     {
         // Arrange
-        $toolOutput = ['files' => ['src/someClass.php' => ['messages' => [['line' => 1, 'message' => 'test message']]]]];
-
         $baseLineStorage = new BaselineStorage();
         $fileErrorsFetcher = new FileErrorsFetcher('', '', $this->createProcessRunnerServiceMock($toolOutput), $baseLineStorage, $this->createLoggerMock());
 
@@ -89,9 +92,30 @@ class FileErrorsFetcherTest extends TestCase
 
         // Assert
         $this->assertCount(1, $fileErrors);
-        $this->assertSame('src/someClass.php', $fileErrors[0]->getFilename());
-        $this->assertSame(1, $fileErrors[0]->getLine());
-        $this->assertSame('test message', $fileErrors[0]->getMessage());
+        $this->assertSame($expectedResult['expectedClass'], $fileErrors[0]->getFilename());
+        $this->assertSame($expectedResult['expectedLine'], $fileErrors[0]->getLine());
+        $this->assertSame($expectedResult['expectedMessage'], $fileErrors[0]->getMessage());
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function projectFileErrorsDataProvider(): array
+    {
+        return [
+            [
+                ['files' => ['src/someClass.php' => ['messages' => [['line' => 1, 'message' => 'test message']]]]],
+                ['expectedClass' => 'src/someClass.php', 'expectedLine' => 1, 'expectedMessage' => 'test message'],
+            ],
+            [
+                ['files' => ['src/someClass.php' => ['messages' => [['line' => null, 'message' => 'test message']]]]],
+                ['expectedClass' => 'src/someClass.php', 'expectedLine' => 0, 'expectedMessage' => 'test message'],
+            ],
+            [
+                ['files' => ['src/someClass.php' => ['messages' => [['line' => 1, 'message' => null]]]]],
+                ['expectedClass' => 'src/someClass.php', 'expectedLine' => 1, 'expectedMessage' => ''],
+            ],
+        ];
     }
 
     /**
