@@ -281,6 +281,10 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
 
         $neonContent = file_get_contents($neonFilePath);
 
+        if ($neonContent === false) {
+            return [];
+        }
+
         return Neon::decode($neonContent);
     }
 
@@ -298,7 +302,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
         }
 
         foreach ($config['parameters']['paths'] as $basePath) {
-            $basePath = str_replace('%currentWorkingDirectory%', getcwd(), $basePath);
+            $basePath = str_replace('%currentWorkingDirectory%', getcwd() ?: '', $basePath);
             $dirs = array_merge($dirs, $this->findDirectories($basePath, $config['parameters']['excludePaths']['analyse']));
         }
 
