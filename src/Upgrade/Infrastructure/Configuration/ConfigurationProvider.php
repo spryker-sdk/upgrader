@@ -420,4 +420,14 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     {
         return getenv('PULL_REQUEST_REVIEWERS') ? explode(',', getenv('PULL_REQUEST_REVIEWERS')) : [];
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function isPhpStanRunPerDirectory(): bool
+    {
+        return EnvFetcher::getBool('PHPSTAN_RUN_PER_DIRECTORY', false);
+    }
 }

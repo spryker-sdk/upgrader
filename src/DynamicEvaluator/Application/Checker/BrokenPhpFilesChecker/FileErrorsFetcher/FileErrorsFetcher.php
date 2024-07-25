@@ -20,6 +20,7 @@ use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class FileErrorsFetcher implements FileErrorsFetcherInterface
 {
@@ -49,6 +50,11 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     protected LoggerInterface $logger;
 
     /**
+     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
+     */
+    protected ConfigurationProvider $configurationProvider;
+
+    /**
      * @var string
      */
     protected string $phpstanNeonFileName;
@@ -59,6 +65,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
      * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
      * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\BaselineStorageInterface $baselineStorage
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      * @param string $phpstanNeonFileName
      */
     public function __construct(
@@ -67,6 +74,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
         ProcessRunnerServiceInterface $processRunnerService,
         BaselineStorageInterface $baselineStorage,
         LoggerInterface $logger,
+        ConfigurationProvider $configurationProvider,
         string $phpstanNeonFileName = 'phpstan.neon'
     ) {
         $this->executableConfig = $executableConfig;
@@ -74,6 +82,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
         $this->processRunnerService = $processRunnerService;
         $this->baselineStorage = $baselineStorage;
         $this->logger = $logger;
+        $this->configurationProvider = $configurationProvider;
         $this->phpstanNeonFileName = $phpstanNeonFileName;
     }
 
@@ -86,7 +95,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     {
         $fileErrors = [];
 
-        if ($dirs === []) {
+        if ($dirs === [] && $this->configurationProvider->isPhpStanRunPerDirectory() === true) {
             $dirs = $this->getDirectories($dirs);
         }
 
@@ -198,7 +207,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
      */
     protected function fetchErrorsArray(array $dirs): array
     {
-        if ($dirs !== []) {
+        if ($dirs !== [] && $this->configurationProvider->isPhpStanRunPerDirectory() === true) {
             return $this->fetchErrorsArrayPerDirectory($dirs);
         }
 

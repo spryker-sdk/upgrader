@@ -153,4 +153,12 @@ interface ConfigurationProviderInterface
      * @return array<string>
      */
     public function getPullRequestReviewers(): array;
+
+    /**
+     * Specification:
+     *  - Defines whether to run PHPStan per directory or analyze all files at once.
+     *
+     * @return bool
+     */
+    public function isPhpStanRunPerDirectory(): bool;
 }
