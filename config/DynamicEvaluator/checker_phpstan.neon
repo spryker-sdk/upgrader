@@ -1,5 +1,7 @@
 parameters:
     level: 3 # for performance reasons
+    parallel:
+        maximumNumberOfProcesses: 2
     paths:
         - %currentWorkingDirectory%/src
     excludePaths:
@@ -8,3 +10,5 @@ parameters:
             - %currentWorkingDirectory%/src/Orm/*
             - %currentWorkingDirectory%/src/Pyz/Zed/*/Persistence/*Repository.php
             - %currentWorkingDirectory%/src/Pyz/Zed/*/Persistence/*QueryContainer.php
+            - %currentWorkingDirectory%/src/**/Spy*.php
+            - %currentWorkingDirectory%/src/**/*Transfer.php
