@@ -243,4 +243,47 @@ class FileErrorsFetcherTest extends TestCase
             ProcessRunnerServiceInterface::DEFAULT_PROCESS_TIMEOUT,
         ), $fileErrors[0]->getMessage());
     }
+
+    /**
+     * @return void
+     */
+    public function testFetchProjectFileErrorsExecutesPerDir(): void
+    {
+        // Arrange
+        $returnValues = [
+            json_encode(['files' => ['src/someClass.php' => ['messages' => [['line' => 1, 'message' => 'test message']]]]], \JSON_THROW_ON_ERROR),
+            json_encode(['files' => ['src/someClass2.php' => ['messages' => [['line' => 1, 'message' => 'test message2']]]]], \JSON_THROW_ON_ERROR),
+        ];
+
+        $process = $this->createMock(Process::class);
+        $process->expects($this->exactly(2))
+            ->method('getOutput')
+            ->willReturnOnConsecutiveCalls(...$returnValues);
+
+        /** @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface&\PHPUnit\Framework\MockObject\MockObject $processRunnerServiceMock */
+        $processRunnerServiceMock = $this->createMock(ProcessRunnerServiceInterface::class);
+        $processRunnerServiceMock->expects($this->exactly(2))
+            ->method('run')
+            ->willReturn($process);
+
+        $fileErrorsFetcher = new FileErrorsFetcher(
+            'config/DynamicEvaluator/checker_phpstan.neon',
+            '',
+            $processRunnerServiceMock,
+            new BaselineStorage(),
+            $this->createLoggerMock(),
+        );
+
+        // Act
+        $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine(['dir1', 'dir2']);
+
+        // Assert
+        $this->assertCount(2, $fileErrors);
+        $this->assertSame('src/someClass.php', $fileErrors[0]->getFilename());
+        $this->assertSame(1, $fileErrors[0]->getLine());
+        $this->assertSame('test message', $fileErrors[0]->getMessage());
+        $this->assertSame('src/someClass2.php', $fileErrors[1]->getFilename());
+        $this->assertSame(1, $fileErrors[1]->getLine());
+        $this->assertSame('test message2', $fileErrors[1]->getMessage());
+    }
 }
