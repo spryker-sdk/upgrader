@@ -95,7 +95,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     {
         $fileErrors = [];
 
-        if ($dirs === [] && $this->configurationProvider->isPhpStanRunPerDirectory() === true) {
+        if ($dirs === [] && $this->configurationProvider->isPhpStanOptimizationRun() === true) {
             $dirs = $this->getDirectories($dirs);
         }
 
@@ -207,7 +207,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
      */
     protected function fetchErrorsArray(array $dirs): array
     {
-        if ($dirs !== [] && $this->configurationProvider->isPhpStanRunPerDirectory() === true) {
+        if ($dirs !== [] && $this->configurationProvider->isPhpStanOptimizationRun() === true) {
             return $this->fetchErrorsArrayPerDirectory($dirs);
         }
 

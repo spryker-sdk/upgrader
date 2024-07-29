@@ -426,8 +426,8 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      *
      * @return bool
      */
-    public function isPhpStanRunPerDirectory(): bool
+    public function isPhpStanOptimizationRun(): bool
     {
-        return EnvFetcher::getBool('PHPSTAN_RUN_PER_DIRECTORY', false);
+        return EnvFetcher::getBool('PHPSTAN_OPTIMIZATION_RUN', false);
     }
 }

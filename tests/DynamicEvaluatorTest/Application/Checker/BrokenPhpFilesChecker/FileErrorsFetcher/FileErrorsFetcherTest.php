@@ -174,7 +174,7 @@ class FileErrorsFetcherTest extends TestCase
     protected function createConfigurationProviderMock(bool $configurableValue = false): ConfigurationProvider
     {
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
-        $configurationProviderMock->method('isPhpStanRunPerDirectory')->willReturn($configurableValue);
+        $configurationProviderMock->method('isPhpStanOptimizationRun')->willReturn($configurableValue);
 
         return $configurationProviderMock;
     }
