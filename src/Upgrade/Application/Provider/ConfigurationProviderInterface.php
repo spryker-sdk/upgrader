@@ -160,5 +160,5 @@ interface ConfigurationProviderInterface
      *
      * @return bool
      */
-    public function isPhpStanRunPerDirectory(): bool;
+    public function isPhpStanOptimizationRun(): bool;
 }
