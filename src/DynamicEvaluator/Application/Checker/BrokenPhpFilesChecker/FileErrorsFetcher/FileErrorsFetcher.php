@@ -219,11 +219,13 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
             return $this->fetchErrorsArrayPerDirectory($dirs);
         }
 
+        $executableConfig = file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) && $this->configurationProvider->isPhpStanOptimizationRun() === true ? $this->executableProjectConfig : $this->executableConfig;
+
         $process = $this->processRunnerService->run([
             $this->executable,
             'analyse',
             '-c',
-            file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) ? $this->executableProjectConfig : $this->executableConfig,
+            $executableConfig,
             '--error-format',
             'prettyJson',
             ...$dirs,
@@ -240,13 +242,14 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     protected function fetchErrorsArrayPerDirectory(array $dirs): array
     {
         $result = [];
+        $executableConfig = file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) && $this->configurationProvider->isPhpStanOptimizationRun() === true ? $this->executableProjectConfig : $this->executableConfig;
 
         foreach ($dirs as $dir) {
             $process = $this->processRunnerService->run([
                 $this->executable,
                 'analyse',
                 '-c',
-                file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) ? $this->executableProjectConfig : $this->executableConfig,
+                $executableConfig,
                 '--error-format',
                 'prettyJson',
                 $dir,
