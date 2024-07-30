@@ -38,6 +38,7 @@ class FileErrorsFetcherTest extends TestCase
         $fileErrorsFetcher = new FileErrorsFetcher(
             '',
             '',
+            '',
             $this->createProcessRunnerServiceMock($toolOutput),
             new BaselineStorage(),
             $this->createLoggerMock(),
@@ -72,7 +73,7 @@ class FileErrorsFetcherTest extends TestCase
         $baseLineStorage = new BaselineStorage();
         $baseLineStorage->addFileError(new FileErrorDto('src/someClass.php', 1, 'test message'));
 
-        $fileErrorsFetcher = new FileErrorsFetcher('', '', $this->createProcessRunnerServiceMock($toolOutput), $baseLineStorage, $this->createLoggerMock(), $this->createConfigurationProviderMock());
+        $fileErrorsFetcher = new FileErrorsFetcher('', '', '', $this->createProcessRunnerServiceMock($toolOutput), $baseLineStorage, $this->createLoggerMock(), $this->createConfigurationProviderMock());
 
         // Act
         $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
@@ -93,7 +94,7 @@ class FileErrorsFetcherTest extends TestCase
     {
         // Arrange
         $baseLineStorage = new BaselineStorage();
-        $fileErrorsFetcher = new FileErrorsFetcher('', '', $this->createProcessRunnerServiceMock($toolOutput), $baseLineStorage, $this->createLoggerMock(), $this->createConfigurationProviderMock());
+        $fileErrorsFetcher = new FileErrorsFetcher('', '', '', $this->createProcessRunnerServiceMock($toolOutput), $baseLineStorage, $this->createLoggerMock(), $this->createConfigurationProviderMock());
 
         // Act
         $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
@@ -135,7 +136,7 @@ class FileErrorsFetcherTest extends TestCase
         $baseLineStorageMock = $this->createMock(BaselineStorage::class);
         $baseLineStorageMock->expects($this->once())->method('clear');
 
-        $fileErrorsFetcher = new FileErrorsFetcher('', '', $this->createProcessRunnerServiceMock([]), $baseLineStorageMock, $this->createLoggerMock(), $this->createConfigurationProviderMock());
+        $fileErrorsFetcher = new FileErrorsFetcher('', '', '', $this->createProcessRunnerServiceMock([]), $baseLineStorageMock, $this->createLoggerMock(), $this->createConfigurationProviderMock());
 
         // Act
         $fileErrorsFetcher->reset();
@@ -195,7 +196,7 @@ class FileErrorsFetcherTest extends TestCase
             ->with(['phpstan', 'analyse', '-c', 'internal', '--error-format', 'prettyJson'])
             ->willReturn($processMock);
 
-        $fileErrorsFetcher = new FileErrorsFetcher('internal', 'phpstan', $processRunnerServiceMock, new BaselineStorage(), $this->createLoggerMock(), $this->createConfigurationProviderMock(), 'nonexist.neon');
+        $fileErrorsFetcher = new FileErrorsFetcher('internal', '', 'phpstan', $processRunnerServiceMock, new BaselineStorage(), $this->createLoggerMock(), $this->createConfigurationProviderMock(), 'nonexist.neon');
 
         // Act
         $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
@@ -222,7 +223,7 @@ class FileErrorsFetcherTest extends TestCase
             ->method('run')
             ->willThrowException(new ProcessTimedOutException($processMock, ProcessTimedOutException::TYPE_GENERAL));
 
-        $fileErrorsFetcher = new FileErrorsFetcher('', '', $processRunnerServiceMock, new BaselineStorage(), $loggerMock, $this->createConfigurationProviderMock(), 'phpstan.neon');
+        $fileErrorsFetcher = new FileErrorsFetcher('', '', '', $processRunnerServiceMock, new BaselineStorage(), $loggerMock, $this->createConfigurationProviderMock(), 'phpstan.neon');
 
         // Act
         $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
@@ -251,7 +252,7 @@ class FileErrorsFetcherTest extends TestCase
             ->method('run')
             ->willThrowException(new Exception('error'));
 
-        $fileErrorsFetcher = new FileErrorsFetcher('', '', $processRunnerServiceMock, new BaselineStorage(), $loggerMock, $this->createConfigurationProviderMock(), 'phpstan.neon');
+        $fileErrorsFetcher = new FileErrorsFetcher('', '', '', $processRunnerServiceMock, new BaselineStorage(), $loggerMock, $this->createConfigurationProviderMock(), 'phpstan.neon');
 
         // Act
         $fileErrors = $fileErrorsFetcher->fetchProjectFileErrorsAndSaveInBaseLine();
@@ -289,6 +290,7 @@ class FileErrorsFetcherTest extends TestCase
 
         $fileErrorsFetcher = new FileErrorsFetcher(
             'config/DynamicEvaluator/checker_phpstan.neon',
+            '',
             '',
             $processRunnerServiceMock,
             new BaselineStorage(),

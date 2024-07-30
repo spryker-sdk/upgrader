@@ -32,6 +32,11 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     /**
      * @var string
      */
+    protected string $executableProjectConfig;
+
+    /**
+     * @var string
+     */
     protected string $executable;
 
     /**
@@ -61,6 +66,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
 
     /**
      * @param string $executableConfig
+     * @param string $executableProjectConfig
      * @param string $executable
      * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
      * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\BaselineStorageInterface $baselineStorage
@@ -70,6 +76,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
      */
     public function __construct(
         string $executableConfig,
+        string $executableProjectConfig,
         string $executable,
         ProcessRunnerServiceInterface $processRunnerService,
         BaselineStorageInterface $baselineStorage,
@@ -78,6 +85,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
         string $phpstanNeonFileName = 'phpstan.neon'
     ) {
         $this->executableConfig = $executableConfig;
+        $this->executableProjectConfig = $executableProjectConfig;
         $this->executable = $executable;
         $this->processRunnerService = $processRunnerService;
         $this->baselineStorage = $baselineStorage;
@@ -211,11 +219,13 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
             return $this->fetchErrorsArrayPerDirectory($dirs);
         }
 
+        $executableConfig = file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) && $this->configurationProvider->isPhpStanOptimizationRun() === true ? $this->executableProjectConfig : $this->executableConfig;
+
         $process = $this->processRunnerService->run([
             $this->executable,
             'analyse',
             '-c',
-            $this->executableConfig,
+            $executableConfig,
             '--error-format',
             'prettyJson',
             ...$dirs,
@@ -232,13 +242,14 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     protected function fetchErrorsArrayPerDirectory(array $dirs): array
     {
         $result = [];
+        $executableConfig = file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) && $this->configurationProvider->isPhpStanOptimizationRun() === true ? $this->executableProjectConfig : $this->executableConfig;
 
         foreach ($dirs as $dir) {
             $process = $this->processRunnerService->run([
                 $this->executable,
                 'analyse',
                 '-c',
-                $this->executableConfig,
+                $executableConfig,
                 '--error-format',
                 'prettyJson',
                 $dir,
