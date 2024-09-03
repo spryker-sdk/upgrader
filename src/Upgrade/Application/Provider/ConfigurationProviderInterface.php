@@ -161,4 +161,12 @@ interface ConfigurationProviderInterface
      * @return bool
      */
     public function isPhpStanOptimizationRun(): bool;
+
+    /**
+     * Specification:
+     *  - Defines whether Dynamic Multistore feature is enabled in Spryker.
+     *
+     * @return bool
+     */
+    public function isDynamicStoreEnabled(): bool;
 }

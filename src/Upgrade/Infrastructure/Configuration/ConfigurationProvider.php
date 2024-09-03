@@ -430,4 +430,14 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     {
         return EnvFetcher::getBool('PHPSTAN_OPTIMIZATION_RUN', false);
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function isDynamicStoreEnabled(): bool
+    {
+        return EnvFetcher::getBool('DYNAMIC_STORE_ENABLED', false);
+    }
 }

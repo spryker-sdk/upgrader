@@ -14,9 +14,15 @@ use Symfony\Component\Filesystem\Filesystem;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Dto\ValidatorViolationDto;
 use Upgrade\Application\Strategy\StepInterface;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class OrmModelsRegenerateStep implements StepInterface
 {
+    /**
+     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
+     */
+    protected ConfigurationProvider $configurationProvider;
+
     /**
      * @var string
      */
@@ -57,11 +63,16 @@ class OrmModelsRegenerateStep implements StepInterface
     /**
      * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      * @param \Symfony\Component\Filesystem\Filesystem $filesystem
+     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      */
-    public function __construct(ProcessRunnerServiceInterface $processRunner, Filesystem $filesystem)
-    {
+    public function __construct(
+        ProcessRunnerServiceInterface $processRunner,
+        Filesystem $filesystem,
+        ConfigurationProvider $configurationProvider
+    ) {
         $this->processRunner = $processRunner;
         $this->filesystem = $filesystem;
+        $this->configurationProvider = $configurationProvider;
     }
 
     /**
@@ -100,7 +111,10 @@ class OrmModelsRegenerateStep implements StepInterface
         }
 
         foreach (static::COMMAND_LIST as $command) {
-            $response = $this->processRunner->run([static::PROJECT_CONSOLE_PATH, $command], ['APPLICATION_ENV' => 'development']);
+            $response = $this->processRunner->run([static::PROJECT_CONSOLE_PATH, $command], [
+                'APPLICATION_ENV' => 'development',
+                'SPRYKER_DYNAMIC_STORE_MODE' => $this->configurationProvider->isPhpStanOptimizationRun() === true,
+            ]);
             if ($response->getExitCode()) {
                 $message = $response->getErrorOutput() ?: $response->getOutput();
                 $stepsExecutionDto->addBlocker(
