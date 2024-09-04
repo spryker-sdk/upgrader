@@ -438,6 +438,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function isDynamicStoreEnabled(): bool
     {
-        return EnvFetcher::getBool('DYNAMIC_STORE_ENABLED', false);
+        return EnvFetcher::getBool('SPRYKER_DYNAMIC_STORE_MODE', false);
     }
 }
