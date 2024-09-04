@@ -168,5 +168,5 @@ interface ConfigurationProviderInterface
      *
      * @return bool
      */
-    public function isDynamicStoreEnabled(): bool;
+    public function isSprykerDynamicStoreModeEnabled(): bool;
 }
