@@ -113,7 +113,7 @@ class OrmModelsRegenerateStep implements StepInterface
         foreach (static::COMMAND_LIST as $command) {
             $response = $this->processRunner->run([static::PROJECT_CONSOLE_PATH, $command], [
                 'APPLICATION_ENV' => 'development',
-                'SPRYKER_DYNAMIC_STORE_MODE' => $this->configurationProvider->isPhpStanOptimizationRun() === true,
+                'SPRYKER_DYNAMIC_STORE_MODE' => $this->configurationProvider->isDynamicStoreEnabled() === true,
             ]);
             if ($response->getExitCode()) {
                 $message = $response->getErrorOutput() ?: $response->getOutput();
