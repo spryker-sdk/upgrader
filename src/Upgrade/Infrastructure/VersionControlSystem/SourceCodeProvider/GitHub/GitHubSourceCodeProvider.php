@@ -172,6 +172,10 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
 
         $traceArray = explode('#1', $messageArray[1]);
 
+        if (!isset($traceArray[0])) {
+            return $message;
+        }
+
         return $messageArray[0]
             . $traceArray[0]
             . ('[...trace truncated...]');
