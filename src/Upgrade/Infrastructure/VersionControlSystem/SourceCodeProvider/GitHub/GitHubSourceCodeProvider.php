@@ -149,7 +149,31 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
             '> [!IMPORTANT] %s> <b>%s.</b> %s',
             PHP_EOL,
             $blocker->getTitle(),
-            $blocker->getMessage(),
+            $this->buildMessageWithTruncatedTrace($blocker->getMessage()),
         ) . PHP_EOL;
+    }
+
+    /**
+     * @param string $message
+     *
+     * @return string
+     */
+    public function buildMessageWithTruncatedTrace(string $message): string
+    {
+        if (!$this->configurationProvider->isTruncateErrorTracesInPrsEnabled()) {
+            return $message;
+        }
+
+        $messageArray = explode('[stacktrace]', $message);
+
+        if (!isset($messageArray[0]) || !isset($messageArray[1])) {
+            return $message;
+        }
+
+        $traceArray = explode('#1', $messageArray[1]);
+
+        return $messageArray[0]
+            . $traceArray[0]
+            . ('[...trace truncated...]');
     }
 }
