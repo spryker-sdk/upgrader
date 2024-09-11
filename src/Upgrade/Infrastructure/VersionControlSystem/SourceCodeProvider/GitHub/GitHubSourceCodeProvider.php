@@ -193,6 +193,6 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
 
         return $messageArray[0]
             . $traceArray[0]
-            . (self::STRING_TRACE_TRUNCATED);
+            . self::STRING_TRACE_TRUNCATED;
     }
 }
