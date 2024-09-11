@@ -203,11 +203,11 @@ class GitHubSourceCodeProviderTest extends TestCase
         return [
             [
                 '<b>Test error message.</b>[stacktrace] #0 /first/row/of/trace/#1 /second/row/of/trace/ #3 /third/row/of/trace/',
-                '<b>Test error message.</b>[stacktrace] #0 /first/row/of/trace/',
+                '<b>Test error message.</b> #0 /first/row/of/trace/[...trace truncated...]',
             ],
             [
                 '<u>Another test error message.</u>[stacktrace] #0 /first/row/of/trace/#1 /second/row/of/trace/ #3 /third/row/of/trace/',
-                '<u>Another test error message.</u>[stacktrace] #0 /first/row/of/trace/',
+                '<u>Another test error message.</u> #0 /first/row/of/trace/[...trace truncated...]',
             ],
         ];
     }
