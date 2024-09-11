@@ -31,6 +31,21 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
     protected const NUMBER_KEY = 'number';
 
     /**
+     * @var string
+     */
+    protected const STRING_STACK_TRACE = '[stacktrace]';
+
+    /**
+     * @var string
+     */
+    protected const STRING_NUMBER_ONE = '#1';
+
+    /**
+     * @var string
+     */
+    protected const STRING_TRACE_TRUNCATED = '[...trace truncated...]';
+
+    /**
      * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
      */
     protected ConfigurationProvider $configurationProvider;
@@ -164,13 +179,13 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
             return $message;
         }
 
-        $messageArray = explode('[stacktrace]', $message);
+        $messageArray = explode(self::STRING_STACK_TRACE, $message);
 
         if (!isset($messageArray[0]) || !isset($messageArray[1])) {
             return $message;
         }
 
-        $traceArray = explode('#1', $messageArray[1]);
+        $traceArray = explode(self::STRING_NUMBER_ONE, $messageArray[1]);
 
         if (!isset($traceArray[0])) {
             return $message;
@@ -178,6 +193,6 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
 
         return $messageArray[0]
             . $traceArray[0]
-            . ('[...trace truncated...]');
+            . (self::STRING_TRACE_TRUNCATED);
     }
 }
