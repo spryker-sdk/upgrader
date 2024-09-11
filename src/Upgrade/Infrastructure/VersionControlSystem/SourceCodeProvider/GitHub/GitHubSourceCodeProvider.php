@@ -175,13 +175,13 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
      */
     public function buildMessageWithTruncatedTrace(string $message): string
     {
-        if (!$this->configurationProvider->isTruncateErrorTracesInPrsEnabled()) {
-            return $message;
-        }
-
         $messageArray = explode(self::STRING_STACK_TRACE, $message);
 
-        if (!isset($messageArray[0]) || !isset($messageArray[1])) {
+        if (
+            !$this->configurationProvider->isTruncateErrorTracesInPrsEnabled()
+            || !isset($messageArray[0])
+            || !isset($messageArray[1])
+        ) {
             return $message;
         }
 
