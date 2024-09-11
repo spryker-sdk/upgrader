@@ -158,6 +158,33 @@ class GitHubSourceCodeProviderTest extends TestCase
     }
 
     /**
+     * @dataProvider testBuildBlockerTextBlockTruncatesErrorTraceDataProvider
+     *
+     * @param string $message
+     * @param string $expectedOutput
+     *
+     * @return void
+     */
+    public function testBuildBlockerTextBlockTruncatesErrorTrace(string $message, string $expectedOutput): void
+    {
+        $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
+        $configurationProviderMock
+            ->method('isTruncateErrorTracesInPrsEnabled')
+            ->willReturn(true);
+        $gitHubClientFactoryMock = $this->createMock(GitHubClientFactory::class);
+
+        $gitHubSourceCodeProvider = new GitHubSourceCodeProvider(
+            $configurationProviderMock,
+            $gitHubClientFactoryMock,
+            new OutputMessageBuilder(),
+        );
+
+        $result = $gitHubSourceCodeProvider->buildMessageWithTruncatedTrace($message);
+
+        $this->assertSame($expectedOutput, $result);
+    }
+
+    /**
      * @return array<array>
      */
     public function buildBlockerTextBlockDataProvider(): array
@@ -165,6 +192,23 @@ class GitHubSourceCodeProviderTest extends TestCase
         return [
             ['Title 1', 'Message 1', "> [!IMPORTANT] \n> <b>Title 1.</b> Message 1\n"],
             ['Another Title', 'Another Message', "> [!IMPORTANT] \n> <b>Another Title.</b> Another Message\n"],
+        ];
+    }
+
+    /**
+     * @return array<array>
+     */
+    public function testBuildBlockerTextBlockTruncatesErrorTraceDataProvider(): array
+    {
+        return [
+            [
+                '<b>Test error message.</b>[stacktrace] #0 /first/row/of/trace/#1 /second/row/of/trace/ #3 /third/row/of/trace/',
+                '<b>Test error message.</b>[stacktrace] #0 /first/row/of/trace/',
+            ],
+            [
+                '<u>Another test error message.</u>[stacktrace] #0 /first/row/of/trace/#1 /second/row/of/trace/ #3 /third/row/of/trace/',
+                '<u>Another test error message.</u>[stacktrace] #0 /first/row/of/trace/',
+            ],
         ];
     }
 }
