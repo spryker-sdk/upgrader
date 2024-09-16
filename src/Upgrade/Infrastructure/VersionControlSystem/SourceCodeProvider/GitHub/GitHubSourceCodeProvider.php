@@ -173,7 +173,7 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
      *
      * @return string
      */
-    public function buildMessageWithTruncatedTrace(string $message): string
+    protected function buildMessageWithTruncatedTrace(string $message): string
     {
         $messageArray = explode(self::STRING_STACK_TRACE, $message);
 
