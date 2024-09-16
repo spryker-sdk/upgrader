@@ -160,12 +160,13 @@ class GitHubSourceCodeProviderTest extends TestCase
     /**
      * @dataProvider testBuildBlockerTextBlockTruncatesErrorTraceDataProvider
      *
+     * @param string $title
      * @param string $message
      * @param string $expectedOutput
      *
      * @return void
      */
-    public function testBuildBlockerTextBlockTruncatesErrorTrace(string $message, string $expectedOutput): void
+    public function testBuildBlockerTextBlockTruncatesErrorTrace(string $title, string $message, string $expectedOutput): void
     {
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
         $configurationProviderMock
@@ -179,7 +180,7 @@ class GitHubSourceCodeProviderTest extends TestCase
             new OutputMessageBuilder(),
         );
 
-        $result = $gitHubSourceCodeProvider->buildMessageWithTruncatedTrace($message);
+        $result = $gitHubSourceCodeProvider->buildBlockerTextBlock(new ValidatorViolationDto($title, $message));
 
         $this->assertSame($expectedOutput, $result);
     }
@@ -202,12 +203,14 @@ class GitHubSourceCodeProviderTest extends TestCase
     {
         return [
             [
+                'Title 1',
                 '<b>Test error message.</b>[stacktrace] #0 /first/row/of/trace/#1 /second/row/of/trace/ #3 /third/row/of/trace/',
-                '<b>Test error message.</b> #0 /first/row/of/trace/[...trace truncated...]',
+                "> [!IMPORTANT] \n> <b>Title 1.</b> <b>Test error message.</b> #0 /first/row/of/trace/[...trace truncated...]\n",
             ],
             [
+                'Title 2',
                 '<u>Another test error message.</u>[stacktrace] #0 /first/row/of/trace/#1 /second/row/of/trace/ #3 /third/row/of/trace/',
-                '<u>Another test error message.</u> #0 /first/row/of/trace/[...trace truncated...]',
+                "> [!IMPORTANT] \n> <b>Title 2.</b> <u>Another test error message.</u> #0 /first/row/of/trace/[...trace truncated...]\n",
             ],
         ];
     }
