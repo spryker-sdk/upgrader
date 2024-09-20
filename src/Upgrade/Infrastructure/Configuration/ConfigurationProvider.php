@@ -440,7 +440,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     {
         return EnvFetcher::getBool('SPRYKER_DYNAMIC_STORE_MODE', false);
     }
-  
+    
     /**
      * {@inheritDoc}
      *
