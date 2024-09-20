@@ -169,4 +169,10 @@ interface ConfigurationProviderInterface
      * @return bool
      */
     public function isSprykerDynamicStoreModeEnabled(): bool;
+
+     *  - Defines whether error traces in error messages should be truncated before adding them to a PR.
+     *
+     * @return bool
+     */
+    public function isTruncateErrorTracesInPrsEnabled(): bool;
 }
