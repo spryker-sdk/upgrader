@@ -13,7 +13,6 @@ jobs:
       fail-fast: false
       matrix:
         php-version: [
-            '8.1',
             '8.2',
             '8.3'
         ]
@@ -61,14 +60,10 @@ jobs:
 
       - name: Run tests
         run: |
-          if [[ ${{ matrix.php-version }} == '8.1' ]]; then
-           XDEBUG_MODE=coverage vendor/bin/phpunit tests/ --coverage-clover coverage.xml
-          else
            composer tests
-          fi
 
       - name: Code Coverage Report
-        if: success() && matrix.php-version == '8.1'
+        if: success() && matrix.php-version == '8.2'
         uses: codecov/codecov-action@v1
 
   automerge:
