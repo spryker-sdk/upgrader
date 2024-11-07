@@ -52,7 +52,7 @@ class FileErrorsFetcherTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function toolInvalidReturnDataProvider(): array
+    public static function toolInvalidReturnDataProvider(): array
     {
         return [
             [['file' => ['src/someClass.php' => ['messages' => [['line' => 1, 'message' => 'test message']]]]]],
@@ -109,7 +109,7 @@ class FileErrorsFetcherTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function projectFileErrorsDataProvider(): array
+    public static function projectFileErrorsDataProvider(): array
     {
         return [
             [

@@ -54,7 +54,7 @@ class DummyPackageFilterItemTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function dummyPackagesDataProvider(): array
+    public static function dummyPackagesDataProvider(): array
     {
         return [
             ['spryker/dummy-merchant-portal-gui', true],

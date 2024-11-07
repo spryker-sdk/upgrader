@@ -49,7 +49,7 @@ class AzureSourceCodeProviderTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function validateCredentialsDataProvider(): array
+    public static function validateCredentialsDataProvider(): array
     {
         return [
             // Invalid credentials
@@ -142,7 +142,7 @@ class AzureSourceCodeProviderTest extends TestCase
     /**
      * @return array<array>
      */
-    public function buildBlockerTextBlockDataProvider(): array
+    public static function buildBlockerTextBlockDataProvider(): array
     {
         return [
             ['Title 1', 'Message 1', "> <b>Title 1.</b> Message 1\n <br>\n"],

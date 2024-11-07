@@ -166,20 +166,30 @@ class ComposerCommandExecutorTest extends TestCase
      */
     public function testUpdateWithStrategy(array $isSuccessful, array $arguments): void
     {
+        //Arrange
         $processMock = $this->createMock(Process::class);
         $processMock->method('getCommandLine')->willReturn('');
         $processMock->expects($this->exactly(count($isSuccessful)))->method('isSuccessful')->willReturnOnConsecutiveCalls(...$isSuccessful);
         $processRunnerServiceMock = $this->createMock(ProcessRunnerService::class);
+        $invocations = [];
         $processRunnerServiceMock
             ->expects($this->exactly(count($arguments)))
             ->method('run')
-            ->withConsecutive(...$arguments)
-            ->willReturn($processMock);
+            ->willReturnCallback(function (...$args) use (&$invocations, $processMock) {
+                $invocations[] = array_slice($args, 0, 2);
+
+                return $processMock;
+            });
+
         $this->mockConfigurationProvider->method('getComposerNoInstall')
             ->willReturn(true);
 
+        //Act
         $cmdExecutor = new ComposerCommandExecutor($processRunnerServiceMock, $this->mockConfigurationProvider, $this->composerLockReader, true);
         $response = $cmdExecutor->update();
+
+        //Assert
+        $this->assertEquals($arguments, $invocations);
     }
 
     /**
@@ -300,7 +310,7 @@ class ComposerCommandExecutorTest extends TestCase
     /**
      * @return \Generator
      */
-    public function getStrategyCallDataProvider(): Generator
+    public static function getStrategyCallDataProvider(): Generator
     {
         $dataProvider = [
             [

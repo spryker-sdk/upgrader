@@ -45,7 +45,7 @@ class IntegratorExecutionValidatorTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function configurationDataProvider(): array
+    public static function configurationDataProvider(): array
     {
         return [
             [false, 50, false],

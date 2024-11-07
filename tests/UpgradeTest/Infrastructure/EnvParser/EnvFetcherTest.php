@@ -69,7 +69,7 @@ class EnvFetcherTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function getBoolValueDataProvider(): array
+    public static function getBoolValueDataProvider(): array
     {
         return [
             ['1', true],
@@ -85,7 +85,7 @@ class EnvFetcherTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function getBoolValueDataExceptionProvider(): array
+    public static function getBoolValueDataExceptionProvider(): array
     {
         return [
             ['fake', null, null, true],
