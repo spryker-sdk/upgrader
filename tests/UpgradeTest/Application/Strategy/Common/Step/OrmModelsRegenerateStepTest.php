@@ -18,6 +18,7 @@ use Upgrade\Application\Dto\ComposerLockDiffDto;
 use Upgrade\Application\Dto\StepsResponseDto;
 use Upgrade\Application\Strategy\Common\Step\OrmModelsRegenerateStep;
 use Upgrade\Domain\Entity\Package;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class OrmModelsRegenerateStepTest extends TestCase
 {
@@ -35,7 +36,11 @@ class OrmModelsRegenerateStepTest extends TestCase
         $processRunnerMock->expects($this->atLeastOnce())->method('run');
 
         // Arrange
-        $step = new OrmModelsRegenerateStep($processRunnerMock, new Filesystem());
+        $step = new OrmModelsRegenerateStep(
+            $processRunnerMock,
+            new Filesystem(),
+            new ConfigurationProvider(),
+        );
 
         // Act
         $step->run($stepsExecutionDto);
@@ -54,7 +59,11 @@ class OrmModelsRegenerateStepTest extends TestCase
         $processRunnerMock->expects($this->never())->method('run');
 
         // Arrange
-        $step = new OrmModelsRegenerateStep($processRunnerMock, new Filesystem());
+        $step = new OrmModelsRegenerateStep(
+            $processRunnerMock,
+            new Filesystem(),
+            new ConfigurationProvider(),
+        );
 
         // Act
         $step->run($stepsExecutionDto);
@@ -69,7 +78,11 @@ class OrmModelsRegenerateStepTest extends TestCase
         $stepsExecutionDto = new StepsResponseDto(true);
         $stepsExecutionDto->setComposerLockDiff($this->createComposerLockDiffDto());
         $processRunnerMock = $this->createProcessRunnerServiceMock();
-        $step = new OrmModelsRegenerateStep($processRunnerMock, new Filesystem());
+        $step = new OrmModelsRegenerateStep(
+            $processRunnerMock,
+            new Filesystem(),
+            new ConfigurationProvider(),
+        );
 
         // Act
         $response = $step->run($stepsExecutionDto);

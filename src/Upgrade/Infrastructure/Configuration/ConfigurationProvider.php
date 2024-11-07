@@ -430,4 +430,24 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     {
         return EnvFetcher::getBool('PHPSTAN_OPTIMIZATION_RUN', false);
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function isSprykerDynamicStoreModeEnabled(): bool
+    {
+        return EnvFetcher::getBool('SPRYKER_DYNAMIC_STORE_MODE', false);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function isTruncateErrorTracesInPrsEnabled(): bool
+    {
+        return EnvFetcher::getBool('TRUNCATE_ERROR_TRACES_IN_PRS', true);
+    }
 }

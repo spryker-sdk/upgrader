@@ -156,9 +156,25 @@ interface ConfigurationProviderInterface
 
     /**
      * Specification:
-     *  - Defines whether to run PHPStan per directory or analyze all files at once.
+     * - Defines whether to run PHPStan per directory or analyze all files at once.
      *
      * @return bool
      */
     public function isPhpStanOptimizationRun(): bool;
+
+    /**
+     * Specification:
+     * - Defines whether Dynamic Multistore feature is enabled in Spryker.
+     *
+     * @return bool
+     */
+    public function isSprykerDynamicStoreModeEnabled(): bool;
+
+    /**
+     * Specification:
+     * - Defines whether error traces in error messages should be truncated before adding them to a PR.
+     *
+     * @return bool
+     */
+    public function isTruncateErrorTracesInPrsEnabled(): bool;
 }
