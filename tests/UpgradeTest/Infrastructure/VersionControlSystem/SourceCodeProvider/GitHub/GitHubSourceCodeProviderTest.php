@@ -28,7 +28,7 @@ class GitHubSourceCodeProviderTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function createPullRequestDataProvider(): array
+    public static function createPullRequestDataProvider(): array
     {
         return [
             // Invalid credentials
@@ -118,7 +118,7 @@ class GitHubSourceCodeProviderTest extends TestCase
         // Create a mock for the GitHub client and its methods used in the createPullRequest method
         $gitHubClientMock = $this->getMockBuilder(GitHubClient::class)
             ->disableOriginalConstructor()
-            ->setMethods(['pr'])
+            ->addMethods(['pr'])
             ->getMock();
 
         if (!$pr) {
@@ -158,7 +158,7 @@ class GitHubSourceCodeProviderTest extends TestCase
     }
 
     /**
-     * @dataProvider testBuildBlockerTextBlockTruncatesErrorTraceDataProvider
+     * @dataProvider buildBlockerTextBlockTruncatesErrorTraceDataProvider
      *
      * @param string $title
      * @param string $message
@@ -188,7 +188,7 @@ class GitHubSourceCodeProviderTest extends TestCase
     /**
      * @return array<array>
      */
-    public function buildBlockerTextBlockDataProvider(): array
+    public static function buildBlockerTextBlockDataProvider(): array
     {
         return [
             ['Title 1', 'Message 1', "> [!IMPORTANT] \n> <b>Title 1.</b> Message 1\n"],
@@ -199,7 +199,7 @@ class GitHubSourceCodeProviderTest extends TestCase
     /**
      * @return array<array>
      */
-    public function testBuildBlockerTextBlockTruncatesErrorTraceDataProvider(): array
+    public static function buildBlockerTextBlockTruncatesErrorTraceDataProvider(): array
     {
         return [
             [

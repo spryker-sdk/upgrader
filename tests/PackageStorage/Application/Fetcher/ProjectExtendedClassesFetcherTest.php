@@ -53,7 +53,7 @@ class ProjectExtendedClassesFetcherTest extends TestCase
     /**
      * @return array<string, array<mixed>>
      */
-    public function getExtendedClassesDataProvider(): array
+    public static function getExtendedClassesDataProvider(): array
     {
         return [
             'extendedClass' => [

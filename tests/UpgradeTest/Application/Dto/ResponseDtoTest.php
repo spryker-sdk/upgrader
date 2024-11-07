@@ -34,7 +34,7 @@ class ResponseDtoTest extends TestCase
     /**
      * @return \Generator
      */
-    public function gettersDataProvider(): Generator
+    public static function gettersDataProvider(): Generator
     {
         $dataProvider = [
             [true, null],

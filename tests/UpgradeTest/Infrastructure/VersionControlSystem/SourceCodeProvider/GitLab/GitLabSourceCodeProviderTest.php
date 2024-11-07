@@ -64,7 +64,7 @@ class GitLabSourceCodeProviderTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function validateCredentialsDataProvider(): array
+    public static function validateCredentialsDataProvider(): array
     {
         return [
             ['access_token', 'project_id', 'organization_name', 'repository_name', true],
@@ -91,7 +91,7 @@ class GitLabSourceCodeProviderTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function createPullRequestDataProvider(): array
+    public static function createPullRequestDataProvider(): array
     {
         return [
             // Invalid credentials
@@ -186,7 +186,7 @@ class GitLabSourceCodeProviderTest extends TestCase
     /**
      * @return array<array>
      */
-    public function buildBlockerTextBlockDataProvider(): array
+    public static function buildBlockerTextBlockDataProvider(): array
     {
         return [
             ['Title 1', 'Message 1', "> <b>Title 1.</b> Message 1\n <br>\n"],
