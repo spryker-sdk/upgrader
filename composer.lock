@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46b0593dfb4632650e7769529dc0b728",
+    "content-hash": "9c9b3f25ec3c3bed24a857fade920dd6",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3245,16 +3245,16 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "dev-feature/frw-8773/updated-dependencies",
+            "version": "0.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "4354224e2a8a80b143f21c29f319fdf872ae041e"
+                "reference": "f5bcc145499506030d23f4cf4f1c7876e1f00a46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/4354224e2a8a80b143f21c29f319fdf872ae041e",
-                "reference": "4354224e2a8a80b143f21c29f319fdf872ae041e",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/f5bcc145499506030d23f4cf4f1c7876e1f00a46",
+                "reference": "f5bcc145499506030d23f4cf4f1c7876e1f00a46",
                 "shasum": ""
             },
             "require": {
@@ -3267,7 +3267,7 @@
                 "ext-simplexml": "*",
                 "guzzlehttp/guzzle": "^7.4",
                 "nikic/php-parser": "^5.1.0",
-                "php": ">=8.1",
+                "php": ">=8.2",
                 "sebastian/diff": "^6.0.0",
                 "spryker-sdk/utils": "^0.2.2",
                 "symfony/console": "^6.0",
@@ -3303,9 +3303,9 @@
             "description": "Integrator module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
-                "source": "https://github.com/spryker-sdk/integrator/tree/feature/frw-8773/updated-dependencies"
+                "source": "https://github.com/spryker-sdk/integrator/tree/0.1.6"
             },
-            "time": "2024-11-07T11:01:56+00:00"
+            "time": "2024-11-07T12:04:05+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
@@ -8628,7 +8628,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "spryker-sdk/integrator": 20,
         "spryker/code-sniffer": 20
     },
     "prefer-stable": true,

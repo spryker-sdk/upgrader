@@ -18,7 +18,7 @@
         "nikic/php-parser": "5.1.*",
         "phpstan/phpstan": "^1.10",
         "spryker-sdk/azure-php-client": "^0.2.1",
-        "spryker-sdk/integrator": "dev-feature/frw-8773/updated-dependencies",
+        "spryker-sdk/integrator": "^0.1.6",
         "spryker-sdk/sdk-contracts": "^0.5.0",
         "spryker-sdk/utils": "^0.2.2",
         "symfony/config": "^6.0",
