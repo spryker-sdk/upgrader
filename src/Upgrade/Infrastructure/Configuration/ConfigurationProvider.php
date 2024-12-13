@@ -312,6 +312,17 @@ class ConfigurationProvider implements ConfigurationProviderInterface
 
     /**
      * Specification:
+     * - Defines Buddy run branch.
+     *
+     * @return string
+     */
+    public function getBuddyRunBranch(): string
+    {
+        return (string)getenv('BUDDY_RUN_BRANCH');
+    }
+
+    /**
+     * Specification:
      * - Defines ci workspace name.
      *
      * @return string
