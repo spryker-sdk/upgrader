@@ -340,7 +340,7 @@ class Git
     protected function getBaseBranch(): string
     {
         if ($this->baseBranch === '') {
-            $this->baseBranch = $this->configurationProvider->getBuddyRunBranch() ?? $this->getCurrentBranch();
+            $this->baseBranch = $this->configurationProvider->getBuddyRunBranch() ?: $this->getCurrentBranch();
         }
 
         return $this->baseBranch;
