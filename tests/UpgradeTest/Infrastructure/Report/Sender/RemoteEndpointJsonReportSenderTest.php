@@ -69,6 +69,10 @@ class RemoteEndpointJsonReportSenderTest extends TestCase
             ->method('getReportSendAuthToken')
             ->willReturn('your_auth_token');
 
+        $configurationProvider->expects($this->once())
+            ->method('isReportingEnabled')
+            ->willReturn(true);
+
         // Configure the http client mock
         $httpClient->expects($this->once())
             ->method('request')
