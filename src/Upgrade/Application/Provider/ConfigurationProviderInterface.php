@@ -139,6 +139,13 @@ interface ConfigurationProviderInterface
     public function getReportSendAuthToken(): string;
 
     /**
+     * {@inheritDoc}
+     *
+     * @return string
+     */
+    public function getBuddyRunBranch(): string;
+
+    /**
      * Specification:
      *  - Defines manifest rating threshold.
      *
