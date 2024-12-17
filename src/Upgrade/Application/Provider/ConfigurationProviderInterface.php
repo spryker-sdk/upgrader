@@ -139,7 +139,8 @@ interface ConfigurationProviderInterface
     public function getReportSendAuthToken(): string;
 
     /**
-     * {@inheritDoc}
+     * Specification:
+     * - Defines Buddy run branch.
      *
      * @return string
      */

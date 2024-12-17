@@ -311,8 +311,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
-     * Specification:
-     * - Defines Buddy run branch.
+     * {@inheritDoc}
      *
      * @return string
      */
