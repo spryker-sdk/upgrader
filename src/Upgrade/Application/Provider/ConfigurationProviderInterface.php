@@ -140,6 +140,14 @@ interface ConfigurationProviderInterface
 
     /**
      * Specification:
+     * - Defines Buddy run branch.
+     *
+     * @return string
+     */
+    public function getBuddyRunBranch(): string;
+
+    /**
+     * Specification:
      *  - Defines manifest rating threshold.
      *
      * @return int
