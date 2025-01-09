@@ -13,10 +13,14 @@ use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\Baseline
 use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto;
 use Exception;
 use InvalidArgumentException;
+use Nette\Neon\Neon;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
+use Symfony\Component\Process\Process;
+use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class FileErrorsFetcher implements FileErrorsFetcherInterface
 {
@@ -24,6 +28,11 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
      * @var string
      */
     protected string $executableConfig;
+
+    /**
+     * @var string
+     */
+    protected string $executableProjectConfig;
 
     /**
      * @var string
@@ -46,31 +55,42 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     protected LoggerInterface $logger;
 
     /**
+     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
+     */
+    protected ConfigurationProvider $configurationProvider;
+
+    /**
      * @var string
      */
     protected string $phpstanNeonFileName;
 
     /**
      * @param string $executableConfig
+     * @param string $executableProjectConfig
      * @param string $executable
      * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
      * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\BaselineStorageInterface $baselineStorage
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      * @param string $phpstanNeonFileName
      */
     public function __construct(
         string $executableConfig,
+        string $executableProjectConfig,
         string $executable,
         ProcessRunnerServiceInterface $processRunnerService,
         BaselineStorageInterface $baselineStorage,
         LoggerInterface $logger,
+        ConfigurationProvider $configurationProvider,
         string $phpstanNeonFileName = 'phpstan.neon'
     ) {
         $this->executableConfig = $executableConfig;
+        $this->executableProjectConfig = $executableProjectConfig;
         $this->executable = $executable;
         $this->processRunnerService = $processRunnerService;
         $this->baselineStorage = $baselineStorage;
         $this->logger = $logger;
+        $this->configurationProvider = $configurationProvider;
         $this->phpstanNeonFileName = $phpstanNeonFileName;
     }
 
@@ -82,6 +102,10 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     public function fetchProjectFileErrorsAndSaveInBaseLine(array $dirs = []): array
     {
         $fileErrors = [];
+
+        if ($dirs === [] && $this->configurationProvider->isPhpStanOptimizationRun() === true) {
+            $dirs = $this->getDirectories($dirs);
+        }
 
         try {
             $errors = $this->fetchErrorsArray($dirs);
@@ -138,7 +162,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
         $this->assertArrayKeyExists($message, 'line');
         $this->assertArrayKeyExists($message, 'message');
 
-        $fileError = new FileErrorDto($file, $message['line'], $message['message']);
+        $fileError = new FileErrorDto($file, (int)$message['line'], (string)$message['message']);
 
         if ($this->baselineStorage->hasFileError($fileError)) {
             return null;
@@ -146,44 +170,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
 
         $this->baselineStorage->addFileError($fileError);
 
-        return new FileErrorDto($file, $message['line'], $message['message']);
-    }
-
-    /**
-     * @param array<string> $dirs
-     *
-     * @throws \RuntimeException
-     *
-     * @return array<mixed>
-     */
-    protected function fetchErrorsArray(array $dirs): array
-    {
-        $process = $this->processRunnerService->run([
-            $this->executable,
-            'analyse',
-            '-c',
-            $this->executableConfig,
-            '--error-format',
-            'prettyJson',
-            ...$dirs,
-        ]);
-
-        try {
-            $result = json_decode($process->getOutput(), true, 512, \JSON_THROW_ON_ERROR);
-        } catch (Exception $e) {
-            throw new RuntimeException(
-                sprintf(
-                    'Command: %s. Error: %s. Output: %s. Err: %s, Code: %s',
-                    $process->getCommandLine(),
-                    $e->getMessage(),
-                    $process->getOutput(),
-                    $process->getErrorOutput(),
-                    $process->getExitCode(),
-                ),
-            );
-        }
-
-        return $result;
+        return new FileErrorDto($file, (int)$message['line'], (string)$message['message']);
     }
 
     /**
@@ -212,12 +199,156 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
      */
     protected function assertArrayKeyExists(array $data, string $key, bool $isArray = false): void
     {
-        if (!isset($data[$key]) || ($isArray && !is_array($data[$key]))) {
+        if (!array_key_exists($key, $data) || ($isArray && !is_array($data[$key]))) {
             throw new InvalidArgumentException(sprintf(
                 'Unable to find %s key or it\'s not an array in %s. Tooling export format is changes.',
                 $key,
                 substr(json_encode($data, \JSON_THROW_ON_ERROR), 0, 100),
             ));
         }
+    }
+
+    /**
+     * @param array<string> $dirs
+     *
+     * @return array<mixed>
+     */
+    protected function fetchErrorsArray(array $dirs): array
+    {
+        if ($dirs !== [] && $this->configurationProvider->isPhpStanOptimizationRun() === true) {
+            return $this->fetchErrorsArrayPerDirectory($dirs);
+        }
+
+        $executableConfig = file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) && $this->configurationProvider->isPhpStanOptimizationRun() === true ? $this->executableProjectConfig : $this->executableConfig;
+
+        $process = $this->processRunnerService->run([
+            $this->executable,
+            'analyse',
+            '-c',
+            $executableConfig,
+            '--error-format',
+            'prettyJson',
+            ...$dirs,
+        ]);
+
+        return $this->runProcess($process);
+    }
+
+    /**
+     * @param array<string> $dirs
+     *
+     * @return array<string, mixed>
+     */
+    protected function fetchErrorsArrayPerDirectory(array $dirs): array
+    {
+        $result = [];
+        $executableConfig = file_exists(getcwd() . DIRECTORY_SEPARATOR . $this->phpstanNeonFileName) && $this->configurationProvider->isPhpStanOptimizationRun() === true ? $this->executableProjectConfig : $this->executableConfig;
+
+        foreach ($dirs as $dir) {
+            $process = $this->processRunnerService->run([
+                $this->executable,
+                'analyse',
+                '-c',
+                $executableConfig,
+                '--error-format',
+                'prettyJson',
+                $dir,
+            ]);
+
+            $result = array_merge_recursive($result, $this->runProcess($process));
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param \Symfony\Component\Process\Process $process
+     *
+     * @throws \RuntimeException
+     *
+     * @return array<string, mixed>
+     */
+    protected function runProcess(Process $process): array
+    {
+        try {
+            $result = json_decode($process->getOutput(), true, 512, \JSON_THROW_ON_ERROR);
+        } catch (Exception $e) {
+            throw new RuntimeException(
+                sprintf(
+                    'Command: %s. Error: %s. Output: %s. Err: %s, Code: %s',
+                    $process->getCommandLine(),
+                    $e->getMessage(),
+                    $process->getOutput(),
+                    $process->getErrorOutput(),
+                    $process->getExitCode(),
+                ),
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $neonFilePath
+     *
+     * @return array<string, mixed>
+     */
+    protected function parseNeonFile(string $neonFilePath): array
+    {
+        if (file_exists($neonFilePath) === false) {
+            return [];
+        }
+
+        $neonContent = file_get_contents($neonFilePath);
+
+        if ($neonContent === false) {
+            return [];
+        }
+
+        return Neon::decode($neonContent);
+    }
+
+    /**
+     * @param array<string> $dirs
+     *
+     * @return array<string>
+     */
+    protected function getDirectories(array $dirs = []): array
+    {
+        $config = $this->parseNeonFile($this->executableConfig);
+
+        if ($config === []) {
+            return $dirs;
+        }
+
+        foreach ($config['parameters']['paths'] as $basePath) {
+            $basePath = str_replace('%currentWorkingDirectory%', getcwd() ?: '', $basePath);
+            $dirs = array_merge($dirs, $this->findDirectories($basePath, $config['parameters']['excludePaths']['analyse']));
+        }
+
+        return $dirs;
+    }
+
+    /**
+     * @param string $baseDir
+     * @param array<string> $excludePaths
+     *
+     * @return array<string>
+     */
+    protected function findDirectories(string $baseDir, array $excludePaths): array
+    {
+        $finder = new Finder();
+        $finder->directories()->in($baseDir)->depth('== 1');
+
+        foreach ($excludePaths as $excludePath) {
+            $finder->notPath($excludePath);
+        }
+
+        $dirs = [];
+        foreach ($finder as $dir) {
+            $dirs[] = $dir->getRealPath();
+        }
+
+        return $dirs;
     }
 }

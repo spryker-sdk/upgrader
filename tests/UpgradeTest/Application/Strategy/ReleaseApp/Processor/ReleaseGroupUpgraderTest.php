@@ -35,7 +35,14 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
         }
 
         $moduleFetcherMock = $this->createMock(ModuleFetcher::class);
-        $moduleFetcherMock->expects($this->exactly(2))->method('require')->withConsecutive([$moduleWithFeatureCollection], [$moduleCollection])->willReturn(new PackageManagerResponseDto(false));
+        $invocations = [];
+        $moduleFetcherMock->expects($this->exactly(2))
+            ->method('require')
+            ->willReturnCallback(function ($modules) use (&$invocations) {
+                $invocations[] = $modules;
+
+                return new PackageManagerResponseDto(false);
+            });
         $loggerMock = $this->createMock(LoggerInterface::class);
         $releaseGroupUpgrader = new ReleaseGroupUpgrader($moduleFetcherMock, $loggerMock, []);
         $releaseGroupMock = $this->createMock(ReleaseGroupDto::class);
@@ -47,6 +54,7 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
         // Assert
         $this->assertNotNull($releaseGroupUpgrader);
         $this->assertFalse($packageManagerResponseDto->isSuccessful());
+        $this->assertEquals([$moduleWithFeatureCollection, $moduleCollection], $invocations);
     }
 
     /**
@@ -88,13 +96,16 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
             new PackageManagerResponseDto(true),
         )->with($moduleDtoCollection);
 
+        $logMessages = [];
         $loggerMock = $this->createMock(LoggerInterface::class);
-        $loggerMock->method('info')->withConsecutive(
-            ['Release Group `0` is failed. Trying to fix it', [null]],
-            ['Fixer `FixerOne` is not applicable'],
-            ['`FixerTwo` fixer is applying'],
-            ['Run release group upgrade after fixer.'],
-        );
+        $loggerMock->expects($this->exactly(4))
+            ->method('info')
+            ->willReturnCallback(function (...$args) use (&$logMessages) {
+                $logMessages[] = $args;
+
+                return $logMessages;
+            });
+
         $fixer1 = $this->getMockBuilder(UpgradeFixerInterface::class);
         $fixer1->setMockClassName('FixerOne');
         $fixer1 = $fixer1->getMock();
@@ -121,6 +132,21 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
         // Assert
         $this->assertNotNull($releaseGroupUpgrader);
         $this->assertTrue($packageManagerResponseDto->isSuccessful());
+
+        $expectedLogMessages = [
+            ['Release Group `0` is failed. Trying to fix it', [null]],
+            ['Fixer `FixerOne` is not applicable'],
+            ['`FixerTwo` fixer is applying'],
+            ['Run release group upgrade after fixer.'],
+        ];
+
+        $this->assertCount(4, $logMessages);
+        foreach ($expectedLogMessages as $index => $expected) {
+            $this->assertSame($expected[0], $logMessages[$index][0]);
+            if (isset($expected[1])) {
+                $this->assertSame($expected[1], $logMessages[$index][1] ?? null);
+            }
+        }
     }
 
     /**
@@ -143,21 +169,24 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
         )->with($moduleDtoCollection);
 
         $loggerMock = $this->createMock(LoggerInterface::class);
-        $loggerMock->method('warning')->with('Fixer `FixerTwo` is failed', [null]);
-        $loggerMock->method('info')->withConsecutive(
-            ['Release Group `0` is failed. Trying to fix it', [null]],
-            ['Fixer `FixerOne` is not applicable'],
-            ['`FixerTwo` fixer is applying'],
-            ['Run release group upgrade after fixer.'],
-        );
-        $fixer1 = $this->getMockBuilder(UpgradeFixerInterface::class);
-        $fixer1->setMockClassName('FixerOne');
-        $fixer1 = $fixer1->getMock();
+        $loggerMock->method('warning')->with('Fixer `Fixer2` is failed', [null]);
+
+        $infoMessages = [];
+        $loggerMock->expects($this->exactly(3))->method('info')
+            ->willReturnCallback(function ($message, $context = []) use (&$infoMessages) {
+                $infoMessages[] = [$message, $context];
+
+                return $infoMessages;
+            });
+
+        $fixer1 = $this->getMockBuilder(UpgradeFixerInterface::class)
+            ->setMockClassName('Fixer1')
+            ->getMock();
         $fixer1->expects($this->once())->method('isApplicable')->willReturn(false);
         $fixer1->expects($this->never())->method('run');
-        $fixer2 = $this->getMockBuilder(UpgradeFixerInterface::class);
-        $fixer2->setMockClassName('FixerTwo');
-        $fixer2 = $fixer2->getMock();
+        $fixer2 = $this->getMockBuilder(UpgradeFixerInterface::class)
+            ->setMockClassName('Fixer2')
+            ->getMock();
         $fixer2->expects($this->once())->method('isApplicable')->willReturn(true);
         $fixer2->expects($this->once())->method('run')->willReturn(new PackageManagerResponseDto(false));
         $releaseGroupUpgrader = new ReleaseGroupUpgrader(
@@ -175,5 +204,8 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
         // Assert
         $this->assertNotNull($releaseGroupUpgrader);
         $this->assertFalse($packageManagerResponseDto->isSuccessful());
+        $this->assertSame('Release Group `0` is failed. Trying to fix it', $infoMessages[0][0]);
+        $this->assertMatchesRegularExpression('/Fixer `.*` is not applicable/', $infoMessages[1][0]);
+        $this->assertMatchesRegularExpression('/`.*` fixer is applying/', $infoMessages[2][0]);
     }
 }

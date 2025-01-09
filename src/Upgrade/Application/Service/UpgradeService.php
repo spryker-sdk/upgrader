@@ -77,6 +77,7 @@ class UpgradeService implements UpgradeServiceInterface
         $startTime = time();
 
         $this->logger->info('Starting upgrade process');
+        $this->logger->info('BUDDY_RUN_BRANCH: ' . $this->configurationProvider->getBuddyRunBranch());
         $this->dispatchUpgraderStartedEvent();
 
         $stepsResponse = new StepsResponseDto();

@@ -64,6 +64,10 @@ services:
 
     orm_models_regenerate.step:
         class: Upgrade\Application\Strategy\Common\Step\OrmModelsRegenerateStep
+        arguments:
+            - '@process.runner'
+            - '@file.system'
+            - '@configuration.provider'
 
     integrator.step:
         class: Upgrade\Application\Strategy\Common\Step\IntegratorStep
@@ -230,6 +234,12 @@ services:
 
     configuration.provider:
         class: Upgrade\Infrastructure\Configuration\ConfigurationProvider
+
+    process.runner:
+        class: SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService
+
+    file.system:
+        class: SprykerSdk\Utils\Infrastructure\Service\Filesystem
 
     Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider:
         class: Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider

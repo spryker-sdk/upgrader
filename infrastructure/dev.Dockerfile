@@ -14,7 +14,7 @@ COPY --chown=spryker:spryker composer.json composer.lock ${srcRoot}/
 
 RUN --mount=type=cache,id=composer,sharing=locked,target=/home/spryker/.composer/cache,uid=1000 \
   --mount=type=ssh,uid=1000 --mount=type=secret,id=secrets-env,uid=1000 \
-    composer install --no-scripts --no-interaction --dev -vvv
+    composer clear-cache && composer install --no-cache --no-scripts --no-interaction --dev -vvv
 
 FROM application-production-dependencies AS application-production-codebase
 

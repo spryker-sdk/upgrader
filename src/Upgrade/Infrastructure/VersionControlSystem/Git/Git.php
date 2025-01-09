@@ -340,12 +340,21 @@ class Git
     protected function getBaseBranch(): string
     {
         if ($this->baseBranch === '') {
-            $command = ['git', 'rev-parse', '--abbrev-ref', 'HEAD'];
-            $process = $this->processRunner->run($command);
-            $this->baseBranch = trim($process->getOutput());
+            $this->baseBranch = $this->configurationProvider->getBuddyRunBranch() ?: $this->getCurrentBranch();
         }
 
         return $this->baseBranch;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCurrentBranch(): string
+    {
+        $command = ['git', 'rev-parse', '--abbrev-ref', 'HEAD'];
+        $process = $this->processRunner->run($command);
+
+        return trim($process->getOutput());
     }
 
     /**

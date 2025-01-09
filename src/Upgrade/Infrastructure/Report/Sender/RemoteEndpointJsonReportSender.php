@@ -77,6 +77,10 @@ class RemoteEndpointJsonReportSender implements ReportSenderInterface
      */
     public function send(ReportDto $reportDto): void
     {
+        if (!$this->configurationProvider->isReportingEnabled()) {
+            return;
+        }
+
         $this->httpClient->request(
             'POST',
             $this->endpointUrl,

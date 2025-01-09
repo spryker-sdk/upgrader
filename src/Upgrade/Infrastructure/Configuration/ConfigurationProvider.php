@@ -311,6 +311,16 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @return string
+     */
+    public function getBuddyRunBranch(): string
+    {
+        return (string)getenv('BUDDY_RUN_BRANCH');
+    }
+
+    /**
      * Specification:
      * - Defines ci workspace name.
      *
@@ -419,5 +429,35 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     public function getPullRequestReviewers(): array
     {
         return getenv('PULL_REQUEST_REVIEWERS') ? explode(',', getenv('PULL_REQUEST_REVIEWERS')) : [];
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function isPhpStanOptimizationRun(): bool
+    {
+        return EnvFetcher::getBool('PHPSTAN_OPTIMIZATION_RUN', false);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function isSprykerDynamicStoreModeEnabled(): bool
+    {
+        return EnvFetcher::getBool('SPRYKER_DYNAMIC_STORE_MODE', false);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return bool
+     */
+    public function isTruncateErrorTracesInPrsEnabled(): bool
+    {
+        return EnvFetcher::getBool('TRUNCATE_ERROR_TRACES_IN_PRS', true);
     }
 }

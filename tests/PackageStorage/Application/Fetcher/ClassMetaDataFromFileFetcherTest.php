@@ -37,7 +37,7 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
     /**
      * @return array<string, array<mixed>>
      */
-    public function getFQCNProvider(): array
+    public static function getFQCNProvider(): array
     {
         return [
             'simpleClass' => [

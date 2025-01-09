@@ -629,7 +629,7 @@ class PullRequestDataGenerator
     {
         return '### Having trouble with Upgrader and going to contact Spryker?'
             . PHP_EOL
-            . '- Check [Upgrader docs](https://docs.spryker.com/docs/scu/dev/spryker-code-upgrader.html)'
+            . '- Check [Upgrader docs](https://docs.spryker.com/docs/ca/devscu/spryker-code-upgrader.html)'
             . PHP_EOL
             . '- Please copy this report ID or content of this PR and send it to us. '
             . sprintf('Report ID: %s', $stepsResponseDto->getReportId() ?? 'n/a');

@@ -140,6 +140,14 @@ interface ConfigurationProviderInterface
 
     /**
      * Specification:
+     * - Defines Buddy run branch.
+     *
+     * @return string
+     */
+    public function getBuddyRunBranch(): string;
+
+    /**
+     * Specification:
      *  - Defines manifest rating threshold.
      *
      * @return int
@@ -153,4 +161,28 @@ interface ConfigurationProviderInterface
      * @return array<string>
      */
     public function getPullRequestReviewers(): array;
+
+    /**
+     * Specification:
+     * - Defines whether to run PHPStan per directory or analyze all files at once.
+     *
+     * @return bool
+     */
+    public function isPhpStanOptimizationRun(): bool;
+
+    /**
+     * Specification:
+     * - Defines whether Dynamic Multistore feature is enabled in Spryker.
+     *
+     * @return bool
+     */
+    public function isSprykerDynamicStoreModeEnabled(): bool;
+
+    /**
+     * Specification:
+     * - Defines whether error traces in error messages should be truncated before adding them to a PR.
+     *
+     * @return bool
+     */
+    public function isTruncateErrorTracesInPrsEnabled(): bool;
 }

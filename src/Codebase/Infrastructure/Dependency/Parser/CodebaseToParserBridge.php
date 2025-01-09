@@ -23,7 +23,7 @@ class CodebaseToParserBridge implements CodebaseToParserInterface
      */
     public function __construct(ParserFactory $parserFactory)
     {
-        $this->parser = $parserFactory->create(ParserFactory::ONLY_PHP7);
+        $this->parser = $parserFactory->createForHostVersion();
     }
 
     /**

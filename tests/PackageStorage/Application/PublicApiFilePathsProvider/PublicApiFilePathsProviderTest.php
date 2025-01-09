@@ -71,7 +71,7 @@ class PublicApiFilePathsProviderTest extends TestCase
     /**
      * @return array<array<string>>
      */
-    public function publicApiFilesDataProvider(): array
+    public static function publicApiFilesDataProvider(): array
     {
         return [
             ['/data/project/b2b-demo-shop/src/Pyz/Zed/PriceProduct/PriceProductConfig.php'],
@@ -114,7 +114,7 @@ class PublicApiFilePathsProviderTest extends TestCase
     /**
      * @return array<array<string>>
      */
-    public function nonPublicApiFilesDataProvider(): array
+    public static function nonPublicApiFilesDataProvider(): array
     {
         return [
             ['/data/project/b2b-demo-shop/src/Pyz/Zed/PriceProduct/Business/Model/PriceGrouper.php'],
