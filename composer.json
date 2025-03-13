@@ -84,7 +84,7 @@
             "@cs-fix",
             "@cs-check",
             "@stan"
-        ],
+        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true
