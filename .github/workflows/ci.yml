@@ -60,7 +60,7 @@ jobs:
 
       - name: Run tests
         run: |
-           composer tests
+           XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --only-summary-for-coverage-text tests
 
       - name: Code Coverage Report
         if: success() && matrix.php-version == '8.2'

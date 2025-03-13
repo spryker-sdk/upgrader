@@ -85,7 +85,6 @@
             "@cs-check",
             "@stan"
         ],
-        "tests": "phpunit tests/"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
