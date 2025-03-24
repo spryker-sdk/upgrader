@@ -62,9 +62,11 @@ jobs:
         run: |
            XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --only-summary-for-coverage-text tests
 
-      - name: Code Coverage Report
-        if: success() && matrix.php-version == '8.2'
-        uses: codecov/codecov-action@v1
+#       Disabled as requested by Anton Shopin within
+#       https://spryker.atlassian.net/browse/FRW-10059
+#      - name: Code Coverage Report
+#        if: success() && matrix.php-version == '8.2'
+#        uses: codecov/codecov-action@v1
 
   automerge:
     runs-on: ubuntu-latest
