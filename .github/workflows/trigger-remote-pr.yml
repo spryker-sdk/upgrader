@@ -20,9 +20,9 @@ jobs:
         steps:
             # https://github.com/marketplace/actions/setup-php-action
             - name: "Install PHP"
-              uses: shivammathur/setup-php@2.27.0
+              uses: shivammathur/setup-php@2.33.0
               with:
-                  php-version: 8.1
+                  php-version: 8.2
                   tools: composer:v2
 
             - run: |
@@ -31,7 +31,7 @@ jobs:
 
             # https://github.com/marketplace/actions/get-current-pull-request
             - name: "Collect PR data"
-              uses: 8BitJonny/gh-get-current-pr@2.2.0
+              uses: 8BitJonny/gh-get-current-pr@3.0.0
               id: PR
               with:
                   github-token: ${{ secrets.PAT }}
