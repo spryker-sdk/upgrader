@@ -36,7 +36,7 @@ jobs:
           echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Composer cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -60,11 +60,13 @@ jobs:
 
       - name: Run tests
         run: |
-           composer tests
+           XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --only-summary-for-coverage-text tests
 
-      - name: Code Coverage Report
-        if: success() && matrix.php-version == '8.2'
-        uses: codecov/codecov-action@v1
+#       Disabled as requested by Anton Shopin within
+#       https://spryker.atlassian.net/browse/FRW-10059
+#      - name: Code Coverage Report
+#        if: success() && matrix.php-version == '8.2'
+#        uses: codecov/codecov-action@v1
 
   automerge:
     runs-on: ubuntu-latest

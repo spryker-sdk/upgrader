@@ -10,6 +10,8 @@ RUN apk update \
     git \
     rsync
 
+RUN docker-php-ext-enable xdebug
+
 COPY --chown=spryker:spryker composer.json composer.lock ${srcRoot}/
 
 RUN --mount=type=cache,id=composer,sharing=locked,target=/home/spryker/.composer/cache,uid=1000 \
