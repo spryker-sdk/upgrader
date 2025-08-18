@@ -16,7 +16,7 @@
         "m4tthumphrey/php-gitlab-api": "^11.12",
         "nette/neon": "^3.4",
         "nikic/php-parser": "5.1.*",
-        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan": "^1.12",
         "spryker-sdk/azure-php-client": "^0.2.1",
         "spryker-sdk/integrator": "^0.1.6",
         "spryker-sdk/sdk-contracts": "^0.5.0",
