@@ -257,7 +257,7 @@ class PullRequestDataGenerator
         if (
             count(array_filter(
                 $stepsResponseDto->getAppliedReleaseGroups(),
-                fn (ReleaseGroupDto $appliedReleaseGroup): ?string => $appliedReleaseGroup->getIntegrationGuide()
+                static fn (ReleaseGroupDto $appliedReleaseGroup): bool => (string)$appliedReleaseGroup->getIntegrationGuide() !== ''
             )) === 0
         ) {
             return '';
