@@ -164,6 +164,7 @@ class ComposerCommandExecutorTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getStrategyCallDataProvider')]
     public function testUpdateWithStrategy(array $isSuccessful, array $arguments): void
     {
         //Arrange

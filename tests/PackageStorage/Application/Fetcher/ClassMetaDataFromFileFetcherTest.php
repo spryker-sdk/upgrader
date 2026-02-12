@@ -22,6 +22,7 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getFQCNProvider')]
     public function testFetchFQCNShouldReturnClassName(string $fileData, ?string $expectedClassName): void
     {
         // Arrange

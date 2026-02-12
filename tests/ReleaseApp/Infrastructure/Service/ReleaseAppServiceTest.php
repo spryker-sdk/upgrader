@@ -146,7 +146,7 @@ class ReleaseAppServiceTest extends KernelTestCase
         $executorMock = $this->createMock(HttpRequestExecutor::class);
         $executorMock->expects($this->any())
             ->method('execute')
-            ->will($this->returnCallback($callback));
+            ->willReturnCallback($callback);
 
         return $executorMock;
     }

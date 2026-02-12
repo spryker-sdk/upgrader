@@ -30,6 +30,7 @@ class FileErrorsFetcherTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toolInvalidReturnDataProvider')]
     public function testFetchProjectFileErrorsAndSaveInBaseLineShouldValidate(array $toolOutput): void
     {
         // Arrange
@@ -90,6 +91,7 @@ class FileErrorsFetcherTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('projectFileErrorsDataProvider')]
     public function testFetchProjectFileErrorsAndSaveInBaseLineShouldFetchFileErrors(array $toolOutput, array $expectedResult): void
     {
         // Arrange
