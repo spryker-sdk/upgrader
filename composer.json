@@ -15,7 +15,7 @@
         "knplabs/github-api": "^3.13",
         "m4tthumphrey/php-gitlab-api": "^11.12",
         "nette/neon": "^3.4",
-        "nikic/php-parser": "5.3.*",
+        "nikic/php-parser": "^5.6.0",
         "phpstan/phpstan": "^1.12",
         "spryker-sdk/azure-php-client": "^0.2.1",
         "spryker-sdk/integrator": "^0.2.0",
@@ -39,7 +39,7 @@
     "require-dev": {
         "ext-xdebug": "*",
         "mikey179/vfsstream": "^1.6.11",
-        "phpspec/prophecy-phpunit": "^2.2",
+        "phpspec/prophecy-phpunit": "^2.4",
         "phpunit/phpunit": "^12.1.0",
         "spryker/code-sniffer": "dev-master"
     },
