@@ -90,8 +90,8 @@ class EnvFetcherTest extends TestCase
     public static function getBoolValueDataExceptionProvider(): array
     {
         return [
-            ['fake', null, null, true],
-            [null, null, null, true],
+            ['fake', null, null],
+            [null, null, null],
         ];
     }
 }

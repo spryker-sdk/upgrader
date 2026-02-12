@@ -490,8 +490,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
     {
         $composerAdapterMock = $this->getMockBuilder(ReleaseGroupProcessorResolver::class)
             ->disableOriginalConstructor()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->getMock();
         $composerAdapterMock->method('getProcessor')->willReturn($processor);
 
@@ -508,8 +506,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $releaseAppResponse = new ReleaseAppResponse($releaseGroupDtoCollection);
         $composerAdapterMock = $this->getMockBuilder(ReleaseAppClientAdapter::class)
             ->disableOriginalConstructor()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->getMock();
         $composerAdapterMock->method('getNewReleaseGroups')->willReturn($releaseAppResponse);
         $composerAdapterMock->method('getReleaseGroup')->willReturn($releaseAppResponse);
@@ -535,8 +531,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
 
         $composerAdapterMock = $this->getMockBuilder(ComposerAdapter::class)
             ->disableOriginalConstructor()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->getMock();
         $composerAdapterMock->method('require')->willReturn($responseDto);
         $composerAdapterMock->method('requireDev')->willReturn($responseDto);

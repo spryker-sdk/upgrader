@@ -87,7 +87,7 @@ class ProjectSchemaColumnsMapFetcherTest extends TestCase
     protected function createXmlSchemaFileParserMock(array $returnValues = []): XmlSchemaFileParserInterface
     {
         $xmlSchemaFileParser = $this->createMock(XmlSchemaFileParserInterface::class);
-        $xmlSchemaFileParser->method('parseXmlToColumnsMap')->will($this->onConsecutiveCalls(...$returnValues));
+        $xmlSchemaFileParser->method('parseXmlToColumnsMap')->willReturnOnConsecutiveCalls(...$returnValues);
 
         return $xmlSchemaFileParser;
     }

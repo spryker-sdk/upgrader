@@ -52,6 +52,7 @@ class GitHubSourceCodeProviderTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('createPullRequestDataProvider')]
     public function testCreatePullRequest(
         string $accessToken,
         string $orgName,
@@ -118,16 +119,22 @@ class GitHubSourceCodeProviderTest extends TestCase
         // Create a mock for the GitHub client and its methods used in the createPullRequest method
         $gitHubClientMock = $this->getMockBuilder(GitHubClient::class)
             ->disableOriginalConstructor()
-            ->addMethods(['pr'])
+            ->onlyMethods(['__call'])
             ->getMock();
 
         if (!$pr) {
-            $gitHubClientMock->method('pr')->willThrowException(new RuntimeException('some error'));
+            $gitHubClientMock
+                ->method('__call')
+                ->with('pr')
+                ->willThrowException(new RuntimeException('some error'));
 
             return $gitHubClientMock;
         }
 
-        $gitHubClientMock->method('pr')->willReturn($pr);
+        $gitHubClientMock
+            ->method('__call')
+            ->with('pr')
+            ->willReturn($pr);
 
         return $gitHubClientMock;
     }
@@ -141,6 +148,7 @@ class GitHubSourceCodeProviderTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('buildBlockerTextBlockDataProvider')]
     public function testBuildBlockerTextBlock(string $title, string $message, string $expectedOutput): void
     {
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
@@ -166,6 +174,7 @@ class GitHubSourceCodeProviderTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('buildBlockerTextBlockTruncatesErrorTraceDataProvider')]
     public function testBuildBlockerTextBlockTruncatesErrorTrace(string $title, string $message, string $expectedOutput): void
     {
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
