@@ -33,6 +33,7 @@ class GitLabSourceCodeProviderTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validateCredentialsDataProvider')]
     public function testValidateCredentialsShouldValidateCorrectly(
         string $hasAccessToken,
         string $hasProjectId,
@@ -114,6 +115,7 @@ class GitLabSourceCodeProviderTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('createPullRequestDataProvider')]
     public function testCreatePullRequest(string $accessToken, string $projectId, string $orgName, string $repoName, string $expectedError): void
     {
         // Set up mocks and dependencies
@@ -167,6 +169,7 @@ class GitLabSourceCodeProviderTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('buildBlockerTextBlockDataProvider')]
     public function testBuildBlockerTextBlock(string $title, string $message, string $expectedOutput): void
     {
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);

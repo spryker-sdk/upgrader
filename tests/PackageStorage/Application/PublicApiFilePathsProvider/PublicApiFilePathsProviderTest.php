@@ -20,6 +20,7 @@ class PublicApiFilePathsProviderTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('publicApiFilesDataProvider')]
     public function testGetPublicApiFilePathsRegexCollectionShouldMatchApiPattern(string $filePath): void
     {
         // Arrange
@@ -39,6 +40,7 @@ class PublicApiFilePathsProviderTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('nonPublicApiFilesDataProvider')]
     public function testGetPublicApiFilePathsRegexCollectionShouldNotMatchPattern(string $filePath): void
     {
         // Arrange

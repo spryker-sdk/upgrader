@@ -27,6 +27,7 @@ class ProjectExtendedClassesFetcherTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getExtendedClassesDataProvider')]
     public function testFetchExtendedClassesShouldFetchExtendedClasses(string $classContent, ?string $expectedClass): void
     {
         // Arrange
