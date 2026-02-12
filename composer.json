@@ -40,7 +40,7 @@
         "ext-xdebug": "*",
         "mikey179/vfsstream": "^1.6.11",
         "phpspec/prophecy-phpunit": "^2.2",
-        "phpunit/phpunit": "^11.4.0",
+        "phpunit/phpunit": "^12.1.0",
         "spryker/code-sniffer": "dev-master"
     },
     "autoload": {
