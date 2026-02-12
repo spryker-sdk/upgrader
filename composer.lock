@@ -3241,16 +3241,16 @@
         },
         {
             "name": "spryker-sdk/integrator",
-            "version": "0.2.1",
+            "version": "0.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/integrator.git",
-                "reference": "610f18bf1cf78ff17a6998b6b4d952bf4a0d50a0"
+                "reference": "871e8f27a40afa37e1894981e857dc42b3eabb97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/610f18bf1cf78ff17a6998b6b4d952bf4a0d50a0",
-                "reference": "610f18bf1cf78ff17a6998b6b4d952bf4a0d50a0",
+                "url": "https://api.github.com/repos/spryker-sdk/integrator/zipball/871e8f27a40afa37e1894981e857dc42b3eabb97",
+                "reference": "871e8f27a40afa37e1894981e857dc42b3eabb97",
                 "shasum": ""
             },
             "require": {
@@ -3273,7 +3273,7 @@
             "require-dev": {
                 "ext-zip": "*",
                 "phpstan/phpstan": "^1.0.0",
-                "phpunit/phpunit": "^11.4.0",
+                "phpunit/phpunit": "^10.5.0 || ^11.4.0",
                 "spryker-sdk/manifest-test-data-provider": "dev-master",
                 "spryker/code-sniffer": "^0.17.19",
                 "symfony/filesystem": "^6.0"
@@ -3299,9 +3299,9 @@
             "description": "Integrator module",
             "support": {
                 "issues": "https://github.com/spryker-sdk/integrator/issues",
-                "source": "https://github.com/spryker-sdk/integrator/tree/0.2.1"
+                "source": "https://github.com/spryker-sdk/integrator/tree/0.2.3"
             },
-            "time": "2025-10-02T13:49:56+00:00"
+            "time": "2025-12-04T08:38:50+00:00"
         },
         {
             "name": "spryker-sdk/sdk-contracts",
@@ -8637,5 +8637,5 @@
     "platform-dev": {
         "ext-xdebug": "*"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
