@@ -25,7 +25,7 @@ class HttpResponseBuilder implements HttpResponseBuilderInterface
         HttpRequestInterface $request,
         ResponseInterface $guzzleResponse
     ): DomainResponse {
-        /** @var \ReleaseApp\Domain\Client\Response\ResponseInterface $responseClass */
+        /** @var class-string<\ReleaseApp\Domain\Client\Response\ResponseInterface> $responseClass */
         $responseClass = $request->getRequest()->getResponseClass();
         $response = new $responseClass($guzzleResponse->getStatusCode(), $this->getBody($guzzleResponse));
 
