@@ -48,7 +48,7 @@ class DatabaseSchemaParser extends XmlFileParser
     {
         $sources = [];
 
-        /** @var \SplFileInfo $file */
+        /** @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder as $file) {
             if ($file->getExtension() !== static::XML_EXTENSION) {
                 continue;

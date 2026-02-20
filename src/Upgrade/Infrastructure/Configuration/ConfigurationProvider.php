@@ -428,7 +428,9 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function getPullRequestReviewers(): array
     {
-        return getenv('PULL_REQUEST_REVIEWERS') ? explode(',', getenv('PULL_REQUEST_REVIEWERS')) : [];
+        $reviewers = getenv('PULL_REQUEST_REVIEWERS');
+
+        return $reviewers ? explode(',', $reviewers) : [];
     }
 
     /**
