@@ -77,7 +77,7 @@ class NewVendorColumnsFetcherTest extends TestCase
     protected function createXmlSchemaFileParserMock(array $consecutiveReturns): XmlSchemaFileParserInterface
     {
         $xmlSchemaFileParser = $this->createMock(XmlSchemaFileParserInterface::class);
-        $xmlSchemaFileParser->method('parseXmlToColumnsMap')->will($this->onConsecutiveCalls(...$consecutiveReturns));
+        $xmlSchemaFileParser->method('parseXmlToColumnsMap')->willReturnOnConsecutiveCalls(...$consecutiveReturns);
 
         return $xmlSchemaFileParser;
     }

@@ -76,6 +76,7 @@ class AzureSourceCodeProviderTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validateCredentialsDataProvider')]
     public function testValidateCredentials(
         string $accessToken,
         string $orgName,
@@ -125,6 +126,7 @@ class AzureSourceCodeProviderTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('buildBlockerTextBlockDataProvider')]
     public function testBuildBlockerTextBlock(string $title, string $message, string $expectedOutput): void
     {
         $azureSourceCodeProvider = new AzureSourceCodeProvider(

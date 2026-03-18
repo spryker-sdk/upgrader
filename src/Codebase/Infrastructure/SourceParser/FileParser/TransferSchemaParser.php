@@ -47,7 +47,7 @@ class TransferSchemaParser extends XmlFileParser
     public function parse(Finder $finder, CodebaseSourceDto $codebaseSourceDto): CodebaseSourceDto
     {
         $sources = [];
-        /** @var \SplFileInfo $file */
+        /** @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder as $file) {
             if ($file->getExtension() !== static::XML_EXTENSION) {
                 continue;

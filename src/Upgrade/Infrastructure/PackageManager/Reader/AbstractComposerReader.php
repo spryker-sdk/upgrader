@@ -61,6 +61,6 @@ abstract class AbstractComposerReader implements ComposerReaderInterface
             $this->composerData = json_decode((string)file_get_contents($path), true);
         }
 
-        return $this->composerData;
+        return $this->composerData ?? [];
     }
 }

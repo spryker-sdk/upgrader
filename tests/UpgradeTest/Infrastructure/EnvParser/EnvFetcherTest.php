@@ -24,6 +24,7 @@ class EnvFetcherTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getBoolValueDataProvider')]
     public function testGetBoolShouldReturnProperValue(
         ?string $varValue,
         ?bool $expectedVarValue,
@@ -50,6 +51,7 @@ class EnvFetcherTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getBoolValueDataExceptionProvider')]
     public function testGetBoolShouldReturnProperValueShouldThrowException(
         ?string $varValue,
         ?bool $expectedVarValue,
@@ -88,8 +90,8 @@ class EnvFetcherTest extends TestCase
     public static function getBoolValueDataExceptionProvider(): array
     {
         return [
-            ['fake', null, null, true],
-            [null, null, null, true],
+            ['fake', null, null],
+            [null, null, null],
         ];
     }
 }

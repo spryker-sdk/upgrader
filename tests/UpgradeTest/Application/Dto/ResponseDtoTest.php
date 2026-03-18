@@ -23,6 +23,7 @@ class ResponseDtoTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('gettersDataProvider')]
     public function testGetters(bool $isSuccessful, ?string $outputMessage): void
     {
         $dto = new ResponseDto($isSuccessful, $outputMessage);

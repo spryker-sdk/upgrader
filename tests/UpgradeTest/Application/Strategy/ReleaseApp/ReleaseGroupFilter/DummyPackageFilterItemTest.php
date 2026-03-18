@@ -26,6 +26,7 @@ class DummyPackageFilterItemTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dummyPackagesDataProvider')]
     public function testFilterShouldFilterDummyPackages(string $packageName, bool $isDummy): void
     {
         // Arrange
