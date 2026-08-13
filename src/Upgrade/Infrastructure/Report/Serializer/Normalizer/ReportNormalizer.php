@@ -22,12 +22,23 @@ class ReportNormalizer implements NormalizerInterface
     /**
      * @param mixed $data
      * @param string|null $format
+     * @param array<string, mixed> $context
      *
      * @return bool
      */
-    public function supportsNormalization($data, ?string $format = null): bool
+    public function supportsNormalization($data, ?string $format = null, array $context = []): bool
     {
         return $data instanceof ReportDto;
+    }
+
+    /**
+     * @param string|null $format
+     *
+     * @return array<class-string|'*'|'object'|string, bool|null>
+     */
+    public function getSupportedTypes(?string $format): array
+    {
+        return [ReportDto::class => true];
     }
 
     /**
