@@ -62,10 +62,10 @@ class ComposerJsonConstraintFixStepTest extends TestCase
 
         $stepResponseDto = new StepsResponseDto();
 
-    // Act
+        // Act
         $returnStepsResponse = $composerJsonConstraintFixStep->run($stepResponseDto);
 
-    // Assert
+        // Assert
         $this->assertSame($stepResponseDto, $returnStepsResponse);
     }
 
@@ -86,7 +86,7 @@ class ComposerJsonConstraintFixStepTest extends TestCase
             +        "spryker/acl": "1.1.*",
             +        "symfony/kernel": "6.1.*",
             +        "symfony/uuid": "5.1.0",
-                OUT,
+            OUT,
         );
 
         $filesystem = $this->createMock(Filesystem::class);
@@ -113,7 +113,7 @@ class ComposerJsonConstraintFixStepTest extends TestCase
                     "symfony/kernel": "6.1.*",
                     "symfony/uuid": "5.1.0"
                 }
-                FILE,
+            FILE,
         );
         $filesystem->expects($this->once())->method('dumpFile')->with($this->stringEndsWith('composer.json'), $this->equalTo(
             <<<FILE
@@ -138,7 +138,7 @@ class ComposerJsonConstraintFixStepTest extends TestCase
                     "symfony/kernel": "6.1.*",
                     "symfony/uuid": "5.1.0"
                 }
-                FILE,
+            FILE,
         ));
 
         $composerJsonConstraintFixStep = new ComposerJsonConstraintFixStep(

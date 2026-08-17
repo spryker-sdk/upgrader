@@ -38,10 +38,10 @@ class AzurePullRequestDescriptionNormalizerTest extends TestCase
     // Assert
         $this->assertSame(
             <<<DSCR
-        Auto created via Upgrader tool.
+            Auto created via Upgrader tool.
 
-        #### Overview
-        Report ID: 096f66c9-7588-449d-aebb-95621f283619
+            #### Overview
+            Report ID: 096f66c9-7588-449d-aebb-95621f283619
 
 
             DSCR,
@@ -61,10 +61,10 @@ class AzurePullRequestDescriptionNormalizerTest extends TestCase
         // Assert
         $this->assertSame(
             <<<DSCR
-        Auto created via Upgrader tool.
+            Auto created via Upgrader tool.
 
-        #### Overview
-        Report ID: 4ab87392-bc3c-11ed-afa1-0242ac120002
+            #### Overview
+            Report ID: 4ab87392-bc3c-11ed-afa1-0242ac120002
 
 
             DSCR,

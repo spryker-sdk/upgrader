@@ -56,14 +56,14 @@ class XmlSchemaFileParserTest extends TestCase
                     </table>
 
                 </database>
-                    SCHEMA,
+                SCHEMA,
             ),
         );
 
-    // Act
+        // Act
         $result = $xmlSchemaFileParser->parseXmlToColumnsMap('schema.xml');
 
-    // Assert
+        // Assert
         $this->assertSame(['spy_api_key' => ['id_api_key', 'name']], $result);
     }
 
@@ -83,7 +83,7 @@ class XmlSchemaFileParserTest extends TestCase
                     </table>
 
                 </database>
-                    SCHEMA,
+                SCHEMA,
             ),
         );
 

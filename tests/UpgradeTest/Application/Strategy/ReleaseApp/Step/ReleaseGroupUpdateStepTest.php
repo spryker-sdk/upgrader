@@ -101,10 +101,10 @@ class ReleaseGroupUpdateStepTest extends TestCase
 
         $stepsResponseDto = new StepsResponseDto();
 
-    // Act
+        // Act
         $stepsResponseDto = $step->run($stepsResponseDto);
 
-    // Assert
+        // Assert
         $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             implode(PHP_EOL, [
@@ -139,7 +139,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
               Problem 3
                 - Root composer.json requires spryker/locale-gui 1.0.0 -> satisfiable by spryker/locale-gui[1.0.0].
                 - spryker/locale-gui 1.0.0 requires spryker/locale ^4.0.0 -> found spryker/locale[dev-master, 4.0.0, ..., 4.2.0] but these were not loaded, likely because it conflicts with another require.
-                OUT,
+            OUT,
         );
 
         $step = new ReleaseGroupUpdateStep(
@@ -172,7 +172,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
               Problem 3
                 - Root composer.json requires spryker/locale-gui 1.0.0 -> satisfiable by spryker/locale-gui[1.0.0].
                 - spryker/locale-gui 1.0.0 requires spryker/locale ^4.0.0 -> found spryker/locale[dev-master, 4.0.0, ..., 4.2.0] but these were not loaded, likely because it conflicts with another require.
-                OUT,
+            OUT,
             $stepsResponseDto->getOutputMessage(),
         );
     }

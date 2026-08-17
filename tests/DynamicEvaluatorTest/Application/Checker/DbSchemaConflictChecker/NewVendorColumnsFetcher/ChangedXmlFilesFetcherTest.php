@@ -38,15 +38,15 @@ class ChangedXmlFilesFetcherTest extends TestCase
             <<<OUT
             src/Spryker/Zed/ApiKey/Persistence/Propel/Schema
             src/Spryker/Zed/Acl/Persistence/Propel/Schema
-                OUT,
+            OUT,
         );
 
         $changedXmlFilesFetcher = new ChangedXmlFilesFetcher($processRunnerMock);
 
-    // Act
+        // Act
         $result = $changedXmlFilesFetcher->fetchChangedXmlSchemaFiles('/vendor', '/rev-vendor');
 
-    // Assert
+        // Assert
         $this->assertSame(['src/Spryker/Zed/ApiKey/Persistence/Propel/Schema', 'src/Spryker/Zed/Acl/Persistence/Propel/Schema'], $result);
     }
 
@@ -57,8 +57,8 @@ class ChangedXmlFilesFetcherTest extends TestCase
 
         $processRunnerService = $this->createMock(ProcessRunnerServiceInterface::class);
         $processRunnerService->expects($this->once())
-        ->method('mustRunFromCommandLine')
-        ->with($expectedCommand)->willReturn($process);
+            ->method('mustRunFromCommandLine')
+            ->with($expectedCommand)->willReturn($process);
 
         return $processRunnerService;
     }
