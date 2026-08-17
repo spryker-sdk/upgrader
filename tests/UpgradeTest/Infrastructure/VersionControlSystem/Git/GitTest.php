@@ -151,7 +151,6 @@ class GitTest extends KernelTestCase
         // Arrange
         $reflection = new ReflectionClass($git);
         $reflectionProperty = $reflection->getProperty('sourceCodeProvider');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($git, $gitHubProviderMock);
 
         // Act
@@ -201,7 +200,6 @@ class GitTest extends KernelTestCase
         // Arrange
         $reflection = new ReflectionClass($git);
         $reflectionProperty = $reflection->getProperty('sourceCodeProvider');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($git, $gitHubProviderMock);
 
         // Act
@@ -223,11 +221,9 @@ class GitTest extends KernelTestCase
 
         $gitReflection = new ReflectionClass($git);
         $gitProperty = $gitReflection->getProperty('processRunner');
-        $gitProperty->setAccessible(true);
         $gitProperty->setValue($git, $processRunner);
 
         $gitProperty = $gitReflection->getProperty('configurationProvider');
-        $gitProperty->setAccessible(true);
         $gitProperty->setValue($git, $this->mockConfigurationProvider());
 
         return $git;
