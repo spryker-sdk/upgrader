@@ -14,13 +14,8 @@ interface CheckerViolationMessageBuilderInterface
     /**
      * @param array<\Upgrade\Application\Dto\ViolationDtoInterface> $violations
      * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
-     *
-     * @return string
      */
     public function buildViolationsMessage(array $violations, array $packageDtos): string;
 
-    /**
-     * @return string
-     */
     public function getSupportedType(): string;
 }

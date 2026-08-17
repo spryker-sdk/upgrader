@@ -18,17 +18,12 @@ class CodebaseToParserBridge implements CodebaseToParserInterface
      */
     protected $parser;
 
-    /**
-     * @param \PhpParser\ParserFactory $parserFactory
-     */
     public function __construct(ParserFactory $parserFactory)
     {
         $this->parser = $parserFactory->createForHostVersion();
     }
 
     /**
-     * @param string $dataToParse
-     *
      * @return array<\PhpParser\Node\Stmt>|null
      */
     public function parse(string $dataToParse): ?array

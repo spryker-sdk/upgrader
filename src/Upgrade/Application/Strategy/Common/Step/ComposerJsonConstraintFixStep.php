@@ -45,39 +45,16 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
      */
     protected const SPRYKER_PACKAGE_PREFIX = 'spryker';
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected ProcessRunnerServiceInterface $processRunnerService;
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\Filesystem
-     */
     protected Filesystem $filesystem;
 
-    /**
-     * @var \Upgrader\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManagerAdapter;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
     protected LoggerInterface $logger;
 
-    /**
-     * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
-     * @param \SprykerSdk\Utils\Infrastructure\Service\Filesystem $filesystem
-     * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManagerAdapter
-     * @param \Psr\Log\LoggerInterface $logger
-     */
     public function __construct(
         VersionControlSystemAdapterInterface $versionControlSystem,
         ProcessRunnerServiceInterface $processRunnerService,
@@ -95,11 +72,6 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
         $this->logger = $logger;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $packages = $this->getPackagesNamesFromDiff();
@@ -153,10 +125,7 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
     }
 
     /**
-     * @param string $composerJsonContent
      * @param array<string> $packages
-     *
-     * @return string
      */
     protected function addCaretToVersionConstraints(string $composerJsonContent, array $packages): string
     {
@@ -186,9 +155,6 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
         return $updatedComposerJson;
     }
 
-    /**
-     * @return void
-     */
     protected function updateLockHash(): void
     {
         $response = $this->packageManagerAdapter->updateLockHash();
@@ -204,47 +170,26 @@ class ComposerJsonConstraintFixStep extends AbstractStep implements StepInterfac
         }
     }
 
-    /**
-     * @return string
-     */
     protected function readComposerFile(): string
     {
         return $this->filesystem->readFile($this->getComposerFilePath());
     }
 
-    /**
-     * @param string $packageName
-     *
-     * @return bool
-     */
     protected function isSprykerPackage(string $packageName): bool
     {
         return strpos($packageName, static::SPRYKER_PACKAGE_PREFIX) === 0;
     }
 
-    /**
-     * @param string $packageVersion
-     *
-     * @return bool
-     */
     protected function isDigitPackageVersion(string $packageVersion): bool
     {
         return (bool)preg_match('/^\d+(\.\d+)*$/', $packageVersion);
     }
 
-    /**
-     * @param string $content
-     *
-     * @return void
-     */
     protected function writeComposerFile(string $content): void
     {
         $this->filesystem->dumpFile($this->getComposerFilePath(), $content);
     }
 
-    /**
-     * @return string
-     */
     protected function getComposerFilePath(): string
     {
         return $this->configurationProvider->getRootPath() . static::COMPOSER_JSON_FILE;

@@ -14,10 +14,5 @@ use Upgrade\Application\Dto\ReleaseGroupFilterResponseDto;
 
 interface ReleaseGroupFilterInterface
 {
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
-     *
-     * @return \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto
-     */
     public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupFilterResponseDto;
 }

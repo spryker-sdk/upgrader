@@ -21,18 +21,23 @@ class ReportNormalizer implements NormalizerInterface
 {
     /**
      * @param mixed $data
-     * @param string|null $format
-     *
-     * @return bool
+     * @param array<string, mixed> $context
      */
-    public function supportsNormalization($data, ?string $format = null): bool
+    public function supportsNormalization($data, ?string $format = null, array $context = []): bool
     {
         return $data instanceof ReportDto;
     }
 
     /**
+     * @return array<class-string|'*'|'object'|string, bool|null>
+     */
+    public function getSupportedTypes(?string $format): array
+    {
+        return [ReportDto::class => true];
+    }
+
+    /**
      * @param mixed $object
-     * @param string|null $format
      * @param array<string, mixed> $context
      *
      * @throws \InvalidArgumentException
@@ -58,8 +63,6 @@ class ReportNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Report\Dto\ReportPayloadDto $reportPayloadDto
-     *
      * @return array<string, mixed>
      */
     protected function formatPayload(ReportPayloadDto $reportPayloadDto): array
@@ -73,8 +76,6 @@ class ReportNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param \Upgrade\Infrastructure\Report\Dto\ReportMetadataDto $metadataDto
-     *
      * @return array<string, mixed>
      */
     protected function formatMetaData(ReportMetadataDto $metadataDto): array
@@ -92,8 +93,6 @@ class ReportNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param \Upgrade\Domain\Entity\Package $package
-     *
      * @return array<string, mixed>
      */
     protected function formatPackage(Package $package): array
@@ -107,8 +106,6 @@ class ReportNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param \Upgrade\Application\Dto\ModelStatisticDto $modelStatisticDto
-     *
      * @return array<string, mixed>
      */
     protected function formatModuleStatistic(ModelStatisticDto $modelStatisticDto): array

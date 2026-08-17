@@ -21,11 +21,6 @@ class ProjectExtendedClassesFetcherTest extends TestCase
 {
     /**
      * @dataProvider getExtendedClassesDataProvider
-     *
-     * @param string $classContent
-     * @param string|null $expectedClass
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getExtendedClassesDataProvider')]
     public function testFetchExtendedClassesShouldFetchExtendedClasses(string $classContent, ?string $expectedClass): void
@@ -100,12 +95,6 @@ class ProjectExtendedClassesFetcherTest extends TestCase
         ];
     }
 
-    /**
-     * @param string $classContent
-     * @param string $filePath
-     *
-     * @return \Symfony\Component\Finder\Finder
-     */
     public function createFinderMock(string $classContent, string $filePath): Finder
     {
         $fileInfo = $this->createMock(SplFileInfo::class);

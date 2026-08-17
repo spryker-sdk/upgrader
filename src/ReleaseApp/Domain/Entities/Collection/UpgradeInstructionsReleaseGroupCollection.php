@@ -27,11 +27,6 @@ class UpgradeInstructionsReleaseGroupCollection
         $this->elements = $elements;
     }
 
-    /**
-     * @param \ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup $element
-     *
-     * @return void
-     */
     public function add(UpgradeInstructionsReleaseGroup $element): void
     {
         $this->elements[] = $element;
@@ -45,17 +40,11 @@ class UpgradeInstructionsReleaseGroupCollection
         return $this->elements;
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return count($this->elements);
     }
 
-    /**
-     * @return bool
-     */
     public function isEmpty(): bool
     {
         return !$this->elements;
@@ -63,17 +52,12 @@ class UpgradeInstructionsReleaseGroupCollection
 
     /**
      * @param \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection|self $collectionToMerge
-     *
-     * @return void
      */
     public function addCollection(self $collectionToMerge): void
     {
         $this->elements = array_merge($this->elements, $collectionToMerge->toArray());
     }
 
-    /**
-     * @return self
-     */
     public function sortByReleasedDate(): self
     {
         $sortData = [];
@@ -88,35 +72,26 @@ class UpgradeInstructionsReleaseGroupCollection
         return new self(array_values($sortData));
     }
 
-    /**
-     * @return self
-     */
     public function getSecurityFixes(): self
     {
         return new self(
             array_filter(
                 $this->elements,
-                fn (UpgradeInstructionsReleaseGroup $releaseGroup): bool => $releaseGroup->isSecurity()
+                fn (UpgradeInstructionsReleaseGroup $releaseGroup): bool => $releaseGroup->isSecurity(),
             ),
         );
     }
 
-    /**
-     * @return self
-     */
     public function getNonSecurityFixes(): self
     {
         return new self(
             array_filter(
                 $this->elements,
-                fn (UpgradeInstructionsReleaseGroup $releaseGroup): bool => !$releaseGroup->isSecurity()
+                fn (UpgradeInstructionsReleaseGroup $releaseGroup): bool => !$releaseGroup->isSecurity(),
             ),
         );
     }
 
-    /**
-     * @return self
-     */
     public function getOnlyWithReleasedDate(): self
     {
         $result = new self();

@@ -13,10 +13,5 @@ use Upgrade\Application\Dto\StepsResponseDto;
 
 interface ReportSendProcessorInterface
 {
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function process(StepsResponseDto $stepsResponseDto): StepsResponseDto;
 }

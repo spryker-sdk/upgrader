@@ -13,9 +13,6 @@ use PHPUnit\Framework\TestCase;
 
 class VendorChangedClassesFetcherTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFetchVendorChangedClassesShouldSkipWhenClassNotFound(): void
     {
         // Arrange
@@ -33,9 +30,6 @@ class VendorChangedClassesFetcherTest extends TestCase
         $this->assertEmpty($changedClasses);
     }
 
-    /**
-     * @return void
-     */
     public function testFetchVendorChangedClassesShouldReturnClassesWhenClassFound(): void
     {
         // Arrange
@@ -46,16 +40,13 @@ class VendorChangedClassesFetcherTest extends TestCase
             $classNameFromFileFetcher,
         );
 
-        // Act
+    // Act
         $changedClasses = $vendorChangedClassesFetcher->fetchVendorChangedClassesWithPackage();
 
-        // Assert
+    // Assert
         $this->assertSame(['Spryker\Zed\Acl\Business\Model\Group' => 'spryker/acl'], $changedClasses);
     }
 
-    /**
-     * @return void
-     */
     public function testFetchVendorChangedClassesShouldReturnClassesWhenPackageNotFound(): void
     {
         // Arrange
@@ -75,8 +66,6 @@ class VendorChangedClassesFetcherTest extends TestCase
 
     /**
      * @param array<string> $changedFiles
-     *
-     * @return \PackageStorage\Application\Fetcher\VendorChangedFilesFetcherInterface
      */
     public function createVendorChangedFilesFetcherMock(array $changedFiles): VendorChangedFilesFetcherInterface
     {
@@ -86,12 +75,6 @@ class VendorChangedClassesFetcherTest extends TestCase
         return $vendorChangedFilesFetcher;
     }
 
-    /**
-     * @param string|null $FQCN
-     * @param string|null $packageName
-     *
-     * @return \PackageStorage\Application\Fetcher\ClassMetaDataFromFileFetcherInterface
-     */
     public function createClassMetaDataFromFileFetcherMock(
         ?string $FQCN,
         ?string $packageName

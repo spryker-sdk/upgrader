@@ -15,9 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class BaselineStorageTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testAddFileErrorShouldSkipWhenFileErrorAdded(): void
     {
         // Arrange
@@ -32,25 +29,19 @@ class BaselineStorageTest extends TestCase
         $this->assertSame(['somefile.php' => ['message']], $storage->getFileErrors());
     }
 
-    /**
-     * @return void
-     */
     public function testHasFileErrorShouldCheckItemAlreadyAdded(): void
     {
         // Arrange
         $storage = new BaselineStorage();
 
-        // Act
+    // Act
         $storage->addFileError(new FileErrorDto('somefile.php', 0, 'message'));
         $hasFileError = $storage->hasFileError(new FileErrorDto('somefile.php', 0, 'message'));
 
-        // Assert
+    // Assert
         $this->assertTrue($hasFileError);
     }
 
-    /**
-     * @return void
-     */
     public function testClearShouldClearStorage(): void
     {
         // Arrange

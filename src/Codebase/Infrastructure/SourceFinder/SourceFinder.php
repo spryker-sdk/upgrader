@@ -29,10 +29,6 @@ class SourceFinder
      */
     protected $classNodeFinder;
 
-    /**
-     * @param \Codebase\Infrastructure\Dependency\Finder\CodebaseToFinderInterface $finder
-     * @param \Codebase\Infrastructure\SourceFinder\ClassNodeFinder $classNodeFinder
-     */
     public function __construct(
         CodebaseToFinderInterface $finder,
         ClassNodeFinder $classNodeFinder
@@ -45,8 +41,6 @@ class SourceFinder
      * @param array<string> $extensions
      * @param array<string> $paths
      * @param array<string> $exclude
-     *
-     * @return \Symfony\Component\Finder\Finder
      */
     public function findSourceByExtension(array $extensions = [], array $paths = [], array $exclude = []): Finder
     {

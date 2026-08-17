@@ -26,32 +26,14 @@ class ModuleNameConflictCheckerEventSubscriber implements EventSubscriberInterfa
      */
     protected const BEFORE_INTEGRATOR_PRIORITY = 200;
 
-    /**
-     * @var \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Fetcher\ComposerModulesNamesFetcherInterface
-     */
     protected ComposerModulesNamesFetcherInterface $composerModulesNamesFetcher;
 
-    /**
-     * @var \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Fetcher\ProjectModulesNamesFetcherInterface
-     */
     protected ProjectModulesNamesFetcherInterface $projectModulesNamesFetcher;
 
-    /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @var \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\PreviousProjectModulesStateStorage\PreviousProjectModulesStateStorageInterface
-     */
     protected PreviousProjectModulesStateStorageInterface $previousProjectModulesStateStorage;
 
-    /**
-     * @param \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Fetcher\ComposerModulesNamesFetcherInterface $composerModulesNamesFetcher
-     * @param \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Fetcher\ProjectModulesNamesFetcherInterface $projectModulesNamesFetcher
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     * @param \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\PreviousProjectModulesStateStorage\PreviousProjectModulesStateStorageInterface $previousProjectModulesStateStorage
-     */
     public function __construct(
         ComposerModulesNamesFetcherInterface $composerModulesNamesFetcher,
         ProjectModulesNamesFetcherInterface $projectModulesNamesFetcher,
@@ -75,11 +57,6 @@ class ModuleNameConflictCheckerEventSubscriber implements EventSubscriberInterfa
         ];
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $event
-     *
-     * @return void
-     */
     public function onPreRequire(ReleaseGroupProcessorEvent $event): void
     {
         if (!$this->configurationProvider->isEvaluatorEnabled()) {
@@ -94,11 +71,6 @@ class ModuleNameConflictCheckerEventSubscriber implements EventSubscriberInterfa
         );
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorPostRequireEvent $event
-     *
-     * @return void
-     */
     public function onPostRequire(ReleaseGroupProcessorPostRequireEvent $event): void
     {
         if (!$this->configurationProvider->isEvaluatorEnabled()) {

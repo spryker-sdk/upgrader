@@ -14,9 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class UpgraderExtensionTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testCreateExtension(): void
     {
         // Arrange

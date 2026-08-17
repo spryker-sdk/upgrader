@@ -30,20 +30,11 @@ class DatabaseSchemaParser extends XmlFileParser
      */
     protected const SCHEMA_NAMESPACE = 'spryker:schema-01';
 
-    /**
-     * @return string
-     */
     public function getExtension(): string
     {
         return static::PARSER_EXTENSION;
     }
 
-    /**
-     * @param \Symfony\Component\Finder\Finder $finder
-     * @param \Codebase\Application\Dto\CodebaseSourceDto $codebaseSourceDto
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
     public function parse(Finder $finder, CodebaseSourceDto $codebaseSourceDto): CodebaseSourceDto
     {
         $sources = [];
@@ -83,8 +74,6 @@ class DatabaseSchemaParser extends XmlFileParser
     }
 
     /**
-     * @param \SimpleXMLElement $simpleXmlElement
-     *
      * @return array<\SimpleXMLElement>
      */
     protected function getSimpleXmlTableElements(SimpleXMLElement $simpleXmlElement): array

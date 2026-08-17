@@ -21,80 +21,30 @@ class UpgraderFinishedEvent implements MetricEventInterface
      */
     public const EVENT_NAME = 'UpgraderFinishedEvent';
 
-    /**
-     * @var int
-     */
     protected int $timestamp;
 
-    /**
-     * @var int
-     */
     protected int $duration;
 
-    /**
-     * @var string
-     */
     protected string $organizationName;
 
-    /**
-     * @var string
-     */
     protected string $repositoryName;
 
-    /**
-     * @var string
-     */
     protected string $reason;
 
-    /**
-     * @var bool
-     */
     protected bool $isBuildSuccessful;
 
-    /**
-     * @var bool
-     */
     protected bool $isClientIssue;
 
-    /**
-     * @var string
-     */
     protected string $ciExecutionId;
 
-    /**
-     * @var string
-     */
     protected string $workspaceName;
 
-    /**
-     * @var int
-     */
     protected int $availableRgsAmount;
 
-    /**
-     * @var int
-     */
     protected int $appliedPackagesAmount;
 
-    /**
-     * @var int
-     */
     protected int $appliedRGsAmount;
 
-    /**
-     * @param int $timestamp
-     * @param int $duration
-     * @param string $organizationName
-     * @param string $repositoryName
-     * @param string $reason
-     * @param bool $isBuildSuccessful
-     * @param bool $isClientIssue
-     * @param string $ciExecutionId
-     * @param string $workspaceName
-     * @param int $availableRgsAmount
-     * @param int $appliedPackagesAmount
-     * @param int $appliedRGsAmount
-     */
     public function __construct(
         int $timestamp,
         int $duration,
@@ -123,9 +73,6 @@ class UpgraderFinishedEvent implements MetricEventInterface
         $this->appliedRGsAmount = $appliedRGsAmount;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return static::EVENT_NAME;

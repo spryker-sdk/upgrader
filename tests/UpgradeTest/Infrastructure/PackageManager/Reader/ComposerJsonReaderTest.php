@@ -17,15 +17,10 @@ use Upgrade\Infrastructure\PackageManager\Reader\ComposerJsonReader;
 
 class ComposerJsonReaderTest extends TestCase
 {
-    /**
-     * @var string
-     */
     protected string $testDataDirectory;
 
     /**
      * @throws \Exception
-     *
-     * @return void
      */
     protected function setUp(): void
     {
@@ -38,9 +33,6 @@ class ComposerJsonReaderTest extends TestCase
         $this->testDataDirectory = $testDataDirectory;
     }
 
-    /**
-     * @return void
-     */
     public function testRead(): void
     {
         $fileStructure = [
@@ -55,9 +47,6 @@ class ComposerJsonReaderTest extends TestCase
         $this->assertIsArray($jsonReader->read());
     }
 
-    /**
-     * @return void
-     */
     public function testException(): void
     {
         $fileSystem = vfsStream::setup('root', 444, []);

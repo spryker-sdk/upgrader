@@ -14,11 +14,6 @@ use Upgrade\Application\Strategy\StepInterface;
 
 class CheckCredentialsStep extends AbstractStep implements StepInterface
 {
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->vsc->validateSourceCodeProviderCredentials($stepsExecutionDto);

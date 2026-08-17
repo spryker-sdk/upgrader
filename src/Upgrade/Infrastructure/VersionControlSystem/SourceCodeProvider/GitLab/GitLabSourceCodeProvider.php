@@ -21,26 +21,12 @@ use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodePro
 
 class GitLabSourceCodeProvider implements SourceCodeProviderInterface
 {
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabClientFactory
-     */
     protected GitLabClientFactory $gitLabClientFactory;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder
-     */
     protected OutputMessageBuilder $outputMessageBuilder;
 
-    /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabClientFactory $gitLabClientFactory
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder $outputMessageBuilder
-     */
     public function __construct(
         ConfigurationProvider $configurationProvider,
         GitLabClientFactory $gitLabClientFactory,
@@ -51,19 +37,11 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
         $this->outputMessageBuilder = $outputMessageBuilder;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return ConfigurationProvider::GITLAB_SOURCE_CODE_PROVIDER;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function validateCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         if (
@@ -81,12 +59,6 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
         return $stepsExecutionDto;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function createPullRequest(StepsResponseDto $stepsExecutionDto, PullRequestDto $pullRequestDto): StepsResponseDto
     {
         try {
@@ -107,23 +79,13 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
         }
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\ValidatorViolationDto $blocker
-     *
-     * @return string
-     */
     public function buildBlockerTextBlock(ValidatorViolationDto $blocker): string
     {
         return sprintf('> <b>%s.</b> %s <br>', $blocker->getTitle(), $blocker->getMessage() . PHP_EOL) . PHP_EOL;
     }
 
     /**
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
      * @throws \RuntimeException
-     *
-     * @return int
      */
     protected function create(PullRequestDto $pullRequestDto, StepsResponseDto $stepsExecutionDto): int
     {
@@ -148,11 +110,6 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
         return $prCreatingResult['iid'];
     }
 
-    /**
-     * @param int $pullRequestId
-     *
-     * @return void
-     */
     protected function mergePullRequest(int $pullRequestId): void
     {
         sleep($this->configurationProvider->getGitLabDelayBetweenPrCreatingAndMerging());
@@ -166,9 +123,6 @@ class GitLabSourceCodeProvider implements SourceCodeProviderInterface
         );
     }
 
-    /**
-     * @return string
-     */
     protected function getProjectId(): string
     {
         $gitLabProjectId = $this->configurationProvider->getProjectId();

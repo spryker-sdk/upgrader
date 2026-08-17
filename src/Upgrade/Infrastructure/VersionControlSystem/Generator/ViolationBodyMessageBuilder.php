@@ -11,14 +11,8 @@ namespace Upgrade\Infrastructure\VersionControlSystem\Generator;
 
 class ViolationBodyMessageBuilder
 {
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\CheckerViolationMessageBuilderRegistry
-     */
     protected CheckerViolationMessageBuilderRegistry $checkerViolationMessageBuilderRegistry;
 
-    /**
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\CheckerViolationMessageBuilderRegistry $checkerViolationMessageBuilderRegistry
-     */
     public function __construct(
         CheckerViolationMessageBuilderRegistry $checkerViolationMessageBuilderRegistry
     ) {
@@ -28,8 +22,6 @@ class ViolationBodyMessageBuilder
     /**
      * @param array<\Upgrade\Application\Dto\ViolationDtoInterface> $violations
      * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
-     *
-     * @return string
      */
     public function buildViolationsMessage(array $violations, array $packageDtos): string
     {

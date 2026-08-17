@@ -16,9 +16,6 @@ class Response implements ResponseInterface
      */
     protected const RESULT_KEY = 'result';
 
-    /**
-     * @var int
-     */
     protected int $code;
 
     /**
@@ -26,19 +23,12 @@ class Response implements ResponseInterface
      */
     protected array $body;
 
-    /**
-     * @param int $code
-     * @param string $body
-     */
     public function __construct(int $code, string $body)
     {
         $this->code = $code;
         $this->body = json_decode($body, true);
     }
 
-    /**
-     * @return int
-     */
     public function getCode(): int
     {
         return $this->code;

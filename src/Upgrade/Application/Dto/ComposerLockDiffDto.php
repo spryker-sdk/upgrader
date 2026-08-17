@@ -47,9 +47,6 @@ class ComposerLockDiffDto
         return $this->requiredDevPackages;
     }
 
-    /**
-     * @return bool
-     */
     public function isEmpty(): bool
     {
         return (count($this->requiredPackages) + count($this->requiredDevPackages)) === 0;

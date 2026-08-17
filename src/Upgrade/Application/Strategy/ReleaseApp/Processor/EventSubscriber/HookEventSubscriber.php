@@ -21,20 +21,10 @@ class HookEventSubscriber implements EventSubscriberInterface
      */
     protected const HIGH_PRIORITY = 100;
 
-    /**
-     * @var \Upgrade\Application\Executor\StepExecutorInterface
-     */
     protected StepExecutorInterface $preRequireHookExecutor;
 
-    /**
-     * @var \Upgrade\Application\Executor\StepExecutorInterface
-     */
     protected StepExecutorInterface $postRequireHookExecutor;
 
-    /**
-     * @param \Upgrade\Application\Executor\StepExecutorInterface $preRequireHookExecutor
-     * @param \Upgrade\Application\Executor\StepExecutorInterface $postRequireHookExecutor
-     */
     public function __construct(
         StepExecutorInterface $preRequireHookExecutor,
         StepExecutorInterface $postRequireHookExecutor
@@ -54,22 +44,12 @@ class HookEventSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $processorEvent
-     *
-     * @return void
-     */
     public function onPreRequire(ReleaseGroupProcessorEvent $processorEvent): void
     {
         $stepsResponseDto = $this->preRequireHookExecutor->execute($processorEvent->getStepsExecutionDto());
         $processorEvent->setStepsExecutionDto($stepsResponseDto);
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $processorEvent
-     *
-     * @return void
-     */
     public function onPostRequire(ReleaseGroupProcessorEvent $processorEvent): void
     {
         $stepsResponseDto = $this->postRequireHookExecutor->execute($processorEvent->getStepsExecutionDto());

@@ -21,14 +21,8 @@ class ComposerLockComparatorCommandExecutorTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutor
-     */
     protected ComposerLockComparatorCommandExecutor $cmdExecutor;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         $processRunner = $this->prophesize(ProcessRunnerService::class);
@@ -60,9 +54,6 @@ class ComposerLockComparatorCommandExecutorTest extends TestCase
         $this->cmdExecutor = new ComposerLockComparatorCommandExecutor($processRunner->reveal());
     }
 
-    /**
-     * @return void
-     */
     public function testGetComposerLockDiff(): void
     {
         $response = $this->cmdExecutor->getComposerLockDiff();

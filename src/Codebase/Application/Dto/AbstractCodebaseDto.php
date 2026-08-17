@@ -34,19 +34,11 @@ class AbstractCodebaseDto implements CodebaseInterface
         $this->coreNamespaces = $coreNamespaces;
     }
 
-    /**
-     * @return string|null
-     */
     public function getClassName(): ?string
     {
         return $this->className;
     }
 
-    /**
-     * @param string|null $className
-     *
-     * @return \Codebase\Application\Dto\CodebaseInterface
-     */
     public function setClassName(?string $className = null): CodebaseInterface
     {
         $this->className = $className;
@@ -54,17 +46,11 @@ class AbstractCodebaseDto implements CodebaseInterface
         return $this;
     }
 
-    /**
-     * @return \Codebase\Application\Dto\CodebaseInterface|null
-     */
     public function getParent(): ?CodebaseInterface
     {
         return $this->parent;
     }
 
-    /**
-     * @return \Codebase\Application\Dto\CodebaseInterface|null
-     */
     public function getCoreParent(): ?CodebaseInterface
     {
         $parent = $this->parent;
@@ -78,11 +64,6 @@ class AbstractCodebaseDto implements CodebaseInterface
         return ($parent && $parent->hasClassNameCoreNamespace()) ? $parent : null;
     }
 
-    /**
-     * @param \Codebase\Application\Dto\CodebaseInterface|null $parent
-     *
-     * @return \Codebase\Application\Dto\CodebaseInterface
-     */
     public function setParent(?CodebaseInterface $parent): CodebaseInterface
     {
         $this->parent = $parent;
@@ -90,9 +71,6 @@ class AbstractCodebaseDto implements CodebaseInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasClassNameCoreNamespace(): bool
     {
         foreach ($this->coreNamespaces as $coreNamespace) {

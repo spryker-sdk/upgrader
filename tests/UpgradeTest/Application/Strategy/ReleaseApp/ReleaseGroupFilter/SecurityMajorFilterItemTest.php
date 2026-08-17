@@ -19,9 +19,6 @@ use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\SecurityMajorFilt
 
 class SecurityMajorFilterItemTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testShouldFilterMajorPackagesFromSecurityRgs(): void
     {
         // Arrange
@@ -50,9 +47,6 @@ class SecurityMajorFilterItemTest extends TestCase
         $this->assertSame('2.17.2', $modules[1]->getVersion());
     }
 
-    /**
-     * @return void
-     */
     public function testShouldNotFilterMajorPackagesFromNotSecurityRgs(): void
     {
         // Arrange
@@ -60,43 +54,38 @@ class SecurityMajorFilterItemTest extends TestCase
         $releaseGroupDto->setIsSecurity(false);
 
         $packageManagerAdapterMock = $this->createPackageManagerAdapterMock([
-            ['spryker/package-one', '4.16.0'],
-            ['spryker/package-two', '4.0.0'],
+        ['spryker/package-one', '4.16.0'],
+        ['spryker/package-two', '4.0.0'],
         ]);
 
         $filter = new SecurityMajorFilterItem($packageManagerAdapterMock);
 
-        // Act
+    // Act
         $response = $filter->filter($releaseGroupDto);
 
-        // Assert
+    // Assert
         $this->assertSame(3, $response->getReleaseGroupDto()->getModuleCollection()->count());
     }
 
     /**
      * @param array<array<string>> $packageVersionMap
-     *
-     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
     protected function createPackageManagerAdapterMock(array $packageVersionMap): PackageManagerAdapterInterface
     {
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter
-            ->method('getPackageVersion')
-            ->willReturnMap($packageVersionMap);
+        ->method('getPackageVersion')
+        ->willReturnMap($packageVersionMap);
 
         return $packageManagerAdapter;
     }
 
-    /**
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto
-     */
     protected function createReleaseGroupDto(): ReleaseGroupDto
     {
         $moduleDto = [
-            new ModuleDto('spryker/package-one', '5.17.0', 'minor'),
-            new ModuleDto('spryker/package-two', '4.17.0', 'minor'),
-            new ModuleDto('spryker/package-three', '2.17.2', 'minor'),
+        new ModuleDto('spryker/package-one', '5.17.0', 'minor'),
+        new ModuleDto('spryker/package-two', '4.17.0', 'minor'),
+        new ModuleDto('spryker/package-three', '2.17.2', 'minor'),
         ];
 
         return new ReleaseGroupDto(

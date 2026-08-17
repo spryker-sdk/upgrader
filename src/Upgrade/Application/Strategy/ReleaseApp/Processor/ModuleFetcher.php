@@ -34,26 +34,12 @@ class ModuleFetcher
      */
     protected const REQUIRED_DEV_TYPE = 'required-dev';
 
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManager;
 
-    /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface
-     */
     protected PackageCollectionMapperInterface $packageCollectionMapper;
 
-    /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface
-     */
     protected PackageManagerPackagesFetcherInterface $packageManagerPackagesFetcher;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Mapper\PackageCollectionMapperInterface $packageCollectionMapper
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface $packageManagerPackagesFetcher
-     */
     public function __construct(
         PackageManagerAdapterInterface $packageManager,
         PackageCollectionMapperInterface $packageCollectionMapper,
@@ -64,11 +50,6 @@ class ModuleFetcher
         $this->packageManagerPackagesFetcher = $packageManagerPackagesFetcher;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function require(ModuleDtoCollection $moduleCollection): PackageManagerResponseDto
     {
         $packageCollection = $this->packageCollectionMapper->mapModuleCollectionToPackageCollection($moduleCollection);
@@ -82,11 +63,6 @@ class ModuleFetcher
         );
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\PackageManagerPackagesDto $packageManagerPackagesDto
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     protected function requirePackageCollection(PackageManagerPackagesDto $packageManagerPackagesDto): PackageManagerResponseDto
     {
         $requiredPackages = $packageManagerPackagesDto->getPackagesForRequire();
@@ -113,11 +89,6 @@ class ModuleFetcher
         );
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $updatedSubPackages
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     protected function updateSubPackage(PackageCollection $updatedSubPackages): PackageManagerResponseDto
     {
         if ($updatedSubPackages->isEmpty()) {
@@ -133,12 +104,6 @@ class ModuleFetcher
         return new PackageManagerResponseDto(true, sprintf('Updated packages count: %s', $updatedSubPackages->count()), $requireResponse->getExecutedCommands());
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $requiredPackages
-     * @param string $requiredPackageType
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     protected function requirePackages(
         PackageCollection $requiredPackages,
         string $requiredPackageType

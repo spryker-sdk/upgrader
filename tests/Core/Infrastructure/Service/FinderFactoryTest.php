@@ -15,9 +15,6 @@ use Symfony\Component\Finder\Finder;
 
 class FinderFactoryTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testCreateFinderShouldCreateFinder(): void
     {
         // Arrange

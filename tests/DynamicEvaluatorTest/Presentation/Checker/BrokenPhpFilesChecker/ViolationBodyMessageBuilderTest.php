@@ -17,9 +17,6 @@ use Upgrader\Configuration\ConfigurationProvider;
 
 class ViolationBodyMessageBuilderTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testBuildViolationsMessage(): void
     {
         $violations = [

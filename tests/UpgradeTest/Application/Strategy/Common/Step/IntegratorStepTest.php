@@ -25,9 +25,6 @@ use Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter;
 
 class IntegratorStepTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testIntegratorEnabled(): void
     {
         // Arrange
@@ -46,31 +43,25 @@ class IntegratorStepTest extends TestCase
         $integratorStep->run(new StepsResponseDto(true));
     }
 
-    /**
-     * @return void
-     */
     public function testIntegratorDisabled(): void
     {
         // Arrange
         $gitAdapter = $this->createMock(GitAdapter::class);
 
         $integratorExecutor = $this->createMock(IntegratorExecutor::class);
-        // Assert
+    // Assert
         $integratorExecutor->expects($this->never())->method('runIntegrator');
 
-        // Arrange
+    // Arrange
         $configurationProvider = $this->createMock(IntegratorExecutionValidatorInterface::class);
         $configurationProvider->method('isIntegratorShouldBeInvoked')->willReturn(false);
 
         $integratorStep = new IntegratorStep($gitAdapter, $integratorExecutor, $configurationProvider, $this->createConfigurationProviderMock());
 
-        // Act
+    // Act
         $integratorStep->run(new StepsResponseDto(true));
     }
 
-    /**
-     * @return void
-     */
     public function testRunShouldPassModulesInExecutor(): void
     {
         // Arrange
@@ -93,9 +84,6 @@ class IntegratorStepTest extends TestCase
         $integratorStep->run($stepsResponseDto);
     }
 
-    /**
-     * @return void
-     */
     public function testRunShouldNotPassModulesInExecutorWhenNotSpecifiedReleaseGroup(): void
     {
         // Arrange
@@ -118,11 +106,6 @@ class IntegratorStepTest extends TestCase
         $integratorStep->run($stepsResponseDto);
     }
 
-    /**
-     * @param int|null $releaseGroupId
-     *
-     * @return \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected function createConfigurationProviderMock(?int $releaseGroupId = null): ConfigurationProvider
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
@@ -131,18 +114,13 @@ class IntegratorStepTest extends TestCase
         return $configurationProvider;
     }
 
-    /**
-     * @param array $expectedModules
-     *
-     * @return \Upgrade\Application\Adapter\IntegratorExecutorInterface
-     */
     protected function createIntegratorExecutorMock(array $expectedModules): IntegratorExecutorInterface
     {
         $integratorExecutor = $this->createMock(IntegratorExecutorInterface::class);
         $integratorExecutor
-            ->expects($this->once())
-            ->method('runIntegrator')
-            ->with($this->isInstanceOf(StepsResponseDto::class), $this->equalTo($expectedModules));
+        ->expects($this->once())
+        ->method('runIntegrator')
+        ->with($this->isInstanceOf(StepsResponseDto::class), $this->equalTo($expectedModules));
 
         return $integratorExecutor;
     }

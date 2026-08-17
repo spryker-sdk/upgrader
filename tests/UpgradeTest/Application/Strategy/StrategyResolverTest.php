@@ -18,9 +18,6 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class StrategyResolverTest extends KernelTestCase
 {
-    /**
-     * @return void
-     */
     public function testGetStrategyReturnComposerStrategy(): void
     {
         // Arrange
@@ -34,29 +31,28 @@ class StrategyResolverTest extends KernelTestCase
         $this->assertInstanceOf(ComposerStrategy::class, $strategy);
     }
 
-    /**
-     * @return void
-     */
     public function testGetStrategyReturnReleaseAppStrategy(): void
     {
         // Arrange
-        /** @var \Upgrade\Application\Strategy\StrategyResolver $strategyResolver */
+    /**
+         * @var \Upgrade\Application\Strategy\StrategyResolver $strategyResolver
+                 */
         $strategyResolver = static::bootKernel()->getContainer()->get(StrategyResolver::class);
 
-        // Act
+    // Act
         $strategy = $strategyResolver->getStrategy(ConfigurationProvider::RELEASE_APP_STRATEGY);
 
-        // Assert
+    // Assert
         $this->assertInstanceOf(ReleaseAppStrategy::class, $strategy);
     }
 
-    /**
-     * @return void
-     */
     public function testGetStrategyThrowNotDefinedException(): void
     {
         // Arrange
-        /** @var \Upgrade\Application\Strategy\StrategyResolver $strategyResolver */
+        /**
+                 *
+ @var \Upgrade\Application\Strategy\StrategyResolver $strategyResolver
+                 */
         $strategyResolver = static::bootKernel()->getContainer()->get(StrategyResolver::class);
 
         // Assert

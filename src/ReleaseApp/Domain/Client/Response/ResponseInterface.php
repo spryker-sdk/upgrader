@@ -11,9 +11,6 @@ namespace ReleaseApp\Domain\Client\Response;
 
 interface ResponseInterface
 {
-    /**
-     * @return int
-     */
     public function getCode(): int;
 
     /**

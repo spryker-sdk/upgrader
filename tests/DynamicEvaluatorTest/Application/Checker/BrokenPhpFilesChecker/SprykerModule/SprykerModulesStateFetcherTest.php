@@ -15,9 +15,6 @@ use Upgrade\Infrastructure\PackageManager\Reader\ComposerReaderInterface;
 
 class SprykerModulesStateFetcherTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFetchCurrentSprykerModulesStateShouldReturnValidPackages(): void
     {
         // Arrange
@@ -54,8 +51,6 @@ class SprykerModulesStateFetcherTest extends TestCase
 
     /**
      * @param array<string> $composerLockData
-     *
-     * @return \Upgrade\Infrastructure\PackageManager\Reader\ComposerReaderInterface
      */
     protected function createComposerReaderMock(array $composerLockData): ComposerReaderInterface
     {

@@ -14,9 +14,6 @@ use Upgrade\Infrastructure\Exception\SourceCodeProviderIsNotDefinedException;
 
 class SourceCodeProvider
 {
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
     /**
@@ -25,7 +22,6 @@ class SourceCodeProvider
     protected array $sourceCodeProviders = [];
 
     /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      * @param array<\Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface> $providers
      */
     public function __construct(ConfigurationProvider $configurationProvider, array $providers = [])
@@ -38,8 +34,6 @@ class SourceCodeProvider
      * @thorws \Upgrade\Infrastructure\Exception\SourceCodeProviderIsNotDefinedException
      *
      * @throws \Upgrade\Infrastructure\Exception\SourceCodeProviderIsNotDefinedException
-     *
-     * @return \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface
      */
     public function getSourceCodeProvider(): SourceCodeProviderInterface
     {

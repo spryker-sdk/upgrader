@@ -12,8 +12,6 @@ namespace DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\XmlSchema
 interface XmlSchemaFileParserInterface
 {
     /**
-     * @param string $schemaFile
-     *
      * @return array<string, array<string>>
      */
     public function parseXmlToColumnsMap(string $schemaFile): array;

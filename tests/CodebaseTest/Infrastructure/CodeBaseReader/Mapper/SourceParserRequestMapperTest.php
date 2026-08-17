@@ -17,9 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class SourceParserRequestMapperTest extends KernelTestCase
 {
-    /**
-     * @return void
-     */
     public function testSuccessProjectPathMapByModules(): void
     {
         //Arrange
@@ -52,9 +49,6 @@ class SourceParserRequestMapperTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testSuccessProjectPathMapByPrefixes(): void
     {
         //Arrange
@@ -71,14 +65,14 @@ class SourceParserRequestMapperTest extends KernelTestCase
         $configurationResponseDto = new ConfigurationResponseDto();
         $configurationResponseDto->setProjectPrefixes(['Project']);
 
-        //Act
+    //Act
         $sourceParserRequest = $mapper->mapToSourceParserRequest($codeBaseRequestDto, $configurationResponseDto, []);
 
-        //Assert
+    //Assert
         $this->assertEquals(
             [
-                'project' => [getcwd() . '/tests/data/Evaluate/Project/'],
-                'core' => ['vendor/spryker'],
+            'project' => [getcwd() . '/tests/data/Evaluate/Project/'],
+            'core' => ['vendor/spryker'],
             ],
             $sourceParserRequest->getPaths(),
         );
@@ -90,8 +84,8 @@ class SourceParserRequestMapperTest extends KernelTestCase
     protected function getModuleList(): array
     {
         return [
-            (new ModuleDto('Pyz', 'ModuleA')),
-            (new ModuleDto('Pyz', 'ModuleB')),
+        (new ModuleDto('Pyz', 'ModuleA')),
+        (new ModuleDto('Pyz', 'ModuleB')),
         ];
     }
 }

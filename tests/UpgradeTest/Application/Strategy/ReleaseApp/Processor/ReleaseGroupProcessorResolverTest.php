@@ -17,9 +17,6 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class ReleaseGroupProcessorResolverTest extends KernelTestCase
 {
-    /**
-     * @return void
-     */
     public function testGetProcessorSuccessful(): void
     {
         // Arrange
@@ -47,35 +44,32 @@ class ReleaseGroupProcessorResolverTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testGetProcessorUnsuccessful(): void
     {
         // Arrange
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
         $configurationProviderMock
-            ->method('getReleaseGroupProcessor')
-            ->willReturn('not_exist');
+        ->method('getReleaseGroupProcessor')
+        ->willReturn('not_exist');
         $processor1Mock = $this->createMock(ReleaseGroupProcessorInterface::class);
         $processor1Mock
-            ->method('getProcessorName')
-            ->willReturn('test1');
+        ->method('getProcessorName')
+        ->willReturn('test1');
         $processor2Mock = $this->createMock(ReleaseGroupProcessorInterface::class);
         $processor2Mock
-            ->method('getProcessorName')
-            ->willReturn('test2');
+        ->method('getProcessorName')
+        ->willReturn('test2');
 
         $releaseGroupProcessorResolver = new ReleaseGroupProcessorResolver(
             $configurationProviderMock,
             [$processor1Mock, $processor2Mock],
         );
 
-        // Assert
+    // Assert
         $this->expectException(ReleaseGroupRequireProcessorIsNotDefinedException::class);
         $this->expectExceptionMessage('`not_exist` processor is not available. Available processors: test1,test2.');
 
-        // Act
+    // Act
         $releaseGroupProcessorResolver->getProcessor();
     }
 }

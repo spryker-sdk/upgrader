@@ -21,26 +21,12 @@ class ProjectModulesNamesFetcher implements ProjectModulesNamesFetcherInterface
      */
     public const MODULE_LAYERS = ['Client', 'Glue', 'Service', 'Shared', 'Yves', 'Zed'];
 
-    /**
-     * @var \DynamicEvaluator\Application\ProjectConfigReader\ProjectConfigReaderInterface
-     */
     protected ProjectConfigReaderInterface $projectConfigReader;
 
-    /**
-     * @var \Core\Infrastructure\Service\FinderFactory
-     */
     protected FinderFactory $finderFactory;
 
-    /**
-     * @var \Upgrader\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @param \DynamicEvaluator\Application\ProjectConfigReader\ProjectConfigReaderInterface $projectConfigReader
-     * @param \Core\Infrastructure\Service\FinderFactory $finderFactory
-     * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     */
     public function __construct(
         ProjectConfigReaderInterface $projectConfigReader,
         FinderFactory $finderFactory,
@@ -73,10 +59,6 @@ class ProjectModulesNamesFetcher implements ProjectModulesNamesFetcherInterface
     }
 
     /**
-     * @param string $projectNamespace
-     * @param \Symfony\Component\Finder\Finder $finder
-     * @param string $srcPath
-     *
      * @return array<string>
      */
     protected function getModulesFromProjectNamespace(string $projectNamespace, Finder $finder, string $srcPath): array

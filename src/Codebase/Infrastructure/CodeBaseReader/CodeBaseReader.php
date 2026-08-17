@@ -18,32 +18,14 @@ use Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReade
 
 class CodeBaseReader implements CodeBaseReaderInterface
 {
-    /**
-     * @var \Codebase\Infrastructure\SourceParser\SourceParserInterface
-     */
     protected SourceParserInterface $sourceParser;
 
-    /**
-     * @var \Codebase\Infrastructure\CodeBaseReader\Mapper\ModuleOptionMapperInterface
-     */
     protected ModuleOptionMapperInterface $moduleOptionMapper;
 
-    /**
-     * @var \Codebase\Infrastructure\CodeBaseReader\Mapper\SourceParserRequestMapperInterface
-     */
     protected SourceParserRequestMapperInterface $sourceParserRequestMapper;
 
-    /**
-     * @var \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface
-     */
     protected ToolingConfigurationReaderInterface $toolingConfigurationReader;
 
-    /**
-     * @param \Codebase\Infrastructure\SourceParser\SourceParserInterface $sourceParser
-     * @param \Codebase\Infrastructure\CodeBaseReader\Mapper\ModuleOptionMapperInterface $moduleOptionMapper
-     * @param \Codebase\Infrastructure\CodeBaseReader\Mapper\SourceParserRequestMapperInterface $sourceParserRequestMapper
-     * @param \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface $toolingConfigurationReader
-     */
     public function __construct(
         SourceParserInterface $sourceParser,
         ModuleOptionMapperInterface $moduleOptionMapper,
@@ -56,11 +38,6 @@ class CodeBaseReader implements CodeBaseReaderInterface
         $this->toolingConfigurationReader = $toolingConfigurationReader;
     }
 
-    /**
-     * @param \Codebase\Application\Dto\CodeBaseRequestDto $codebaseRequestDto
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
     public function readCodeBase(CodeBaseRequestDto $codebaseRequestDto): CodebaseSourceDto
     {
         $configurationFilePath = $codebaseRequestDto->getToolingConfigurationFilePath();

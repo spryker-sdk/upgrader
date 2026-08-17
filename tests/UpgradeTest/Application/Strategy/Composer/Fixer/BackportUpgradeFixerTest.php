@@ -21,9 +21,6 @@ use Upgrade\Domain\Entity\Package;
 
 class BackportUpgradeFixerTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testIsReRunStep(): void
     {
         // Arrange
@@ -38,9 +35,6 @@ class BackportUpgradeFixerTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @return void
-     */
     public function testIsApplicable(): void
     {
         // Arrange
@@ -51,16 +45,13 @@ class BackportUpgradeFixerTest extends TestCase
         $releaseGroupDtoMock = $this->createMock(ReleaseGroupDto::class);
         $releaseGroupDtoMock->method('getBackportModuleCollection')->willReturn(new ModuleDtoCollection([new ModuleDto('test', 'test', 'test')]));
 
-        // Act
+    // Act
         $result = $fixer->isApplicable($releaseGroupDtoMock, $packageManagerResponseDto);
 
-        // Assert
+    // Assert
         $this->assertTrue($result);
     }
 
-    /**
-     * @return void
-     */
     public function testIsNotApplicable(): void
     {
         // Arrange
@@ -75,28 +66,25 @@ class BackportUpgradeFixerTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @return void
-     */
     public function testRunFix(): void
     {
         // Arrange
         $packageManagerAdapterMock = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapterMock->method('require')->with(new PackageCollection([
-            new Package('spryker/cart', '2.1.9'),
-            new Package('spryker-shup/cart-page', '0.1.9'),
-            new Package('spryker/merchant', '0.2.1'),
+        new Package('spryker/cart', '2.1.9'),
+        new Package('spryker-shup/cart-page', '0.1.9'),
+        new Package('spryker/merchant', '0.2.1'),
         ]))->willReturn(new PackageManagerResponseDto(true));
         $releaseGroupDtoMock = $this->createMock(ReleaseGroupDto::class);
         $releaseGroupDtoMock->method('getModuleCollection')->willReturn(new ModuleDtoCollection([
-            new ModuleDto('spryker/cart', '2.1.9', 'minor'),
-            new ModuleDto('spryker-shup/cart-page', '1.1.9', 'minor'),
-            new ModuleDto('spryker/merchant', '3.2.1', 'minor'),
+        new ModuleDto('spryker/cart', '2.1.9', 'minor'),
+        new ModuleDto('spryker-shup/cart-page', '1.1.9', 'minor'),
+        new ModuleDto('spryker/merchant', '3.2.1', 'minor'),
         ]));
         $releaseGroupDtoMock->method('getBackportModuleCollection')->willReturn(new ModuleDtoCollection([
-            new ModuleDto('spryker/cart-new', '2.1.9', 'minor'),
-            new ModuleDto('spryker-shup/cart-page', '0.1.9', 'minor'),
-            new ModuleDto('spryker/merchant', '0.2.1', 'minor'),
+        new ModuleDto('spryker/cart-new', '2.1.9', 'minor'),
+        new ModuleDto('spryker-shup/cart-page', '0.1.9', 'minor'),
+        new ModuleDto('spryker/merchant', '0.2.1', 'minor'),
         ]));
         $fixer = new BackportUpgradeFixer($packageManagerAdapterMock);
         $packageManagerResponseDto = new PackageManagerResponseDto(false, 'test');

@@ -20,11 +20,6 @@ class DummyPackageFilterItem implements ReleaseGroupFilterItemInterface
      */
     protected const DUMMY_MODULES_REGEXP = '/^spryker.*\/(dummy-.*|.*-example)$/';
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
-     *
-     * @return \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto
-     */
     public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupFilterResponseDto
     {
         $filteredModuleCollection = new ModuleDtoCollection();

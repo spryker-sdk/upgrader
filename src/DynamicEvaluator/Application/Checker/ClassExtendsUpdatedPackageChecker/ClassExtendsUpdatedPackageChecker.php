@@ -21,26 +21,12 @@ class ClassExtendsUpdatedPackageChecker
      */
     protected const ERROR_MESSAGE = 'These classes of yours extend modified Spryker Core classes and need to be checked';
 
-    /**
-     * @var \PackageStorage\Application\Fetcher\VendorChangedClassesFetcherInterface
-     */
     protected VendorChangedClassesFetcherInterface $vendorChangedClassesFetcher;
 
-    /**
-     * @var \PackageStorage\Application\Fetcher\ProjectExtendedClassesFetcherInterface
-     */
     protected ProjectExtendedClassesFetcherInterface $projectExtendedClassesFetcher;
 
-    /**
-     * @var \Upgrader\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @param \PackageStorage\Application\Fetcher\VendorChangedClassesFetcherInterface $vendorChangedClassesFetcher
-     * @param \PackageStorage\Application\Fetcher\ProjectExtendedClassesFetcherInterface $projectExtendedClassesFetcher
-     * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     */
     public function __construct(
         VendorChangedClassesFetcherInterface $vendorChangedClassesFetcher,
         ProjectExtendedClassesFetcherInterface $projectExtendedClassesFetcher,

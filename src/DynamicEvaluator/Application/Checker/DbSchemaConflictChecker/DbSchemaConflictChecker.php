@@ -15,20 +15,10 @@ use DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\ProjectSchemaCo
 
 class DbSchemaConflictChecker
 {
-    /**
-     * @var \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\ProjectSchemaColumnsMapFetcher\ProjectSchemaColumnsMapFetcherInterface
-     */
     protected ProjectSchemaColumnsMapFetcherInterface $projectSchemaColumnsMapFetcher;
 
-    /**
-     * @var \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\NewVendorColumnsFetcher\NewVendorColumnsFetcherInterface
-     */
     protected NewVendorColumnsFetcherInterface $newVendorColumnsFetcher;
 
-    /**
-     * @param \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\ProjectSchemaColumnsMapFetcher\ProjectSchemaColumnsMapFetcherInterface $projectSchemaColumnsMapFetcher
-     * @param \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\NewVendorColumnsFetcher\NewVendorColumnsFetcherInterface $newVendorColumnsFetcher
-     */
     public function __construct(
         ProjectSchemaColumnsMapFetcherInterface $projectSchemaColumnsMapFetcher,
         NewVendorColumnsFetcherInterface $newVendorColumnsFetcher
@@ -57,7 +47,6 @@ class DbSchemaConflictChecker
     /**
      * @param array<string, array<string>> $projectColumnsMap
      * @param array<string, array<string>> $newVendorColumnsMap
-     * @param string $projectFile
      *
      * @return array<\DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\Dto\ViolationDto>
      */

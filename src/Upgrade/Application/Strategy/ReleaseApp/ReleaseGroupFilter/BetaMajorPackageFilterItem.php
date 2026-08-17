@@ -18,24 +18,13 @@ use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppPackageHelper;
 
 class BetaMajorPackageFilterItem implements ReleaseGroupFilterItemInterface
 {
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManagerAdapter;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManagerAdapter
-     */
     public function __construct(PackageManagerAdapterInterface $packageManagerAdapter)
     {
         $this->packageManagerAdapter = $packageManagerAdapter;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
-     *
-     * @return \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto
-     */
     public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupFilterResponseDto
     {
         $filteredModuleCollection = new ModuleDtoCollection();
@@ -53,11 +42,6 @@ class BetaMajorPackageFilterItem implements ReleaseGroupFilterItemInterface
         return new ReleaseGroupFilterResponseDto($releaseGroupDto);
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ModuleDto $module
-     *
-     * @return bool
-     */
     public function isNotInstalledBetaModule(ModuleDto $module): bool
     {
         return $module->isBeta()

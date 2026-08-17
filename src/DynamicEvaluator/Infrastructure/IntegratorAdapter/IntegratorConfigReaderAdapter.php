@@ -14,21 +14,14 @@ use SprykerSdk\Integrator\ConfigReader\ConfigReaderInterface as IntegratorConfig
 
 class IntegratorConfigReaderAdapter implements ConfigReaderInterface
 {
-    /**
-     * @var \SprykerSdk\Integrator\ConfigReader\ConfigReaderInterface
-     */
     protected IntegratorConfigReaderInterface $configReader;
 
-    /**
-     * @param \SprykerSdk\Integrator\ConfigReader\ConfigReaderInterface $configReader
-     */
     public function __construct(IntegratorConfigReaderInterface $configReader)
     {
         $this->configReader = $configReader;
     }
 
     /**
-     * @param string $configPath
      * @param array<string> $configKeys
      *
      * @return array<string, mixed>

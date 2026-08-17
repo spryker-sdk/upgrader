@@ -16,25 +16,13 @@ class AzurePullRequestDescriptionNormalizer
      */
     protected const MAX_PR_DESCRIPTION_LENGTH = 4000;
 
-    /**
-     * @var int
-     */
     protected int $maxDescriptionLength;
 
-    /**
-     * @param int $maxDescriptionLength
-     */
     public function __construct(int $maxDescriptionLength = self::MAX_PR_DESCRIPTION_LENGTH)
     {
         $this->maxDescriptionLength = $maxDescriptionLength;
     }
 
-    /**
-     * @param string $prDescription
-     * @param string|null $reportId
-     *
-     * @return string
-     */
     public function normalize(string $prDescription, ?string $reportId): string
     {
         if (mb_strlen($prDescription) <= $this->maxDescriptionLength) {
@@ -46,12 +34,6 @@ class AzurePullRequestDescriptionNormalizer
         return $description ?? $this->getDefaultDescription($reportId);
     }
 
-    /**
-     * @param string $description
-     * @param string $text
-     *
-     * @return string|null
-     */
     protected function cutDescriptionToText(string $description, string $text): ?string
     {
         $cutLine = mb_strpos($description, $text);
@@ -69,11 +51,6 @@ class AzurePullRequestDescriptionNormalizer
         return null;
     }
 
-    /**
-     * @param string|null $reportId
-     *
-     * @return string
-     */
     protected function getDefaultDescription(?string $reportId): string
     {
         return 'Auto created via Upgrader tool.'

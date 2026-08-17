@@ -17,21 +17,10 @@ use Upgrade\Application\Strategy\RollbackStepInterface;
 
 class IntegratorLockStep extends AbstractStep implements RollbackStepInterface
 {
-    /**
-     * @var \Upgrade\Application\Adapter\IntegratorExecutorInterface
-     */
     protected IntegratorExecutorInterface $integratorClient;
 
-    /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
-     * @param \Upgrade\Application\Adapter\IntegratorExecutorInterface $integratorClient
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     */
     public function __construct(
         VersionControlSystemAdapterInterface $versionControlSystem,
         IntegratorExecutorInterface $integratorClient,
@@ -43,11 +32,6 @@ class IntegratorLockStep extends AbstractStep implements RollbackStepInterface
         $this->configurationProvider = $configurationProvider;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         if (!$this->configurationProvider->isIntegratorEnabled()) {
@@ -57,11 +41,6 @@ class IntegratorLockStep extends AbstractStep implements RollbackStepInterface
         return $this->integratorClient->runIntegratorLockUpdater($stepsExecutionDto);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function rollBack(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->vsc->restore($stepsExecutionDto);

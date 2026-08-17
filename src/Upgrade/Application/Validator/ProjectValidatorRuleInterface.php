@@ -13,13 +13,8 @@ interface ProjectValidatorRuleInterface
 {
     /**
      * @throws \Upgrade\Application\Exception\UpgraderException
-     *
-     * @return void
      */
     public function validate(): void;
 
-    /**
-     * @return string
-     */
     public function getViolationTitle(): string;
 }

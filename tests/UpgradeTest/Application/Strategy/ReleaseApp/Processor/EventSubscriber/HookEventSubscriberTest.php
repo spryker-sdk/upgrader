@@ -17,9 +17,6 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\EventSubscriber\HookEventS
 
 class HookEventSubscriberTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testOnPreRequireShouldCallPreRequireHooks(): void
     {
         // Arrange
@@ -42,9 +39,6 @@ class HookEventSubscriberTest extends TestCase
         $this->assertSame($stepsResponseDto, $event->getStepsExecutionDto());
     }
 
-    /**
-     * @return void
-     */
     public function testOnPostRequireShouldCallPreRequireHooks(): void
     {
         // Arrange
@@ -60,10 +54,10 @@ class HookEventSubscriberTest extends TestCase
 
         $event = new ReleaseGroupProcessorEvent(new StepsResponseDto());
 
-        // Act
+    // Act
         $hookEventSubscriber->onPostRequire($event);
 
-        // Assert
+    // Assert
         $this->assertSame($stepsResponseDto, $event->getStepsExecutionDto());
     }
 }

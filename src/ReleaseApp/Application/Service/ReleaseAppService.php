@@ -20,20 +20,10 @@ use ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup;
 
 class ReleaseAppService implements ReleaseAppServiceInterface
 {
-    /**
-     * @var \ReleaseApp\Domain\Client\ReleaseAppClientInterface
-     */
     protected ReleaseAppClientInterface $releaseAppClient;
 
-    /**
-     * @var \ReleaseApp\Application\Configuration\ConfigurationProviderInterface
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @param \ReleaseApp\Domain\Client\ReleaseAppClientInterface $releaseAppClient
-     * @param \ReleaseApp\Application\Configuration\ConfigurationProviderInterface $configurationProvider
-     */
     public function __construct(
         ReleaseAppClientInterface $releaseAppClient,
         ConfigurationProviderInterface $configurationProvider
@@ -42,11 +32,6 @@ class ReleaseAppService implements ReleaseAppServiceInterface
         $this->configurationProvider = $configurationProvider;
     }
 
-    /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest $upgradeInstructionsRequest
-     *
-     * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection
-     */
     public function getNewReleaseGroupsSortedByReleaseDate(
         UpgradeInstructionsRequest $upgradeInstructionsRequest
     ): UpgradeInstructionsReleaseGroupCollection {
@@ -60,11 +45,6 @@ class ReleaseAppService implements ReleaseAppServiceInterface
         return $upgradeInstructionsReleaseGroupCollection;
     }
 
-    /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest $upgradeReleaseGroupInstructionsRequest
-     *
-     * @return \ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup
-     */
     public function getReleaseGroup(UpgradeReleaseGroupInstructionsRequest $upgradeReleaseGroupInstructionsRequest): UpgradeInstructionsReleaseGroup
     {
         $response = $this->releaseAppClient->getUpgradeReleaseGroupInstruction($upgradeReleaseGroupInstructionsRequest);
@@ -72,14 +52,6 @@ class ReleaseAppService implements ReleaseAppServiceInterface
         return $response->getReleaseGroup();
     }
 
-    /**
-     * @param string|null $sort
-     * @param string|null $direction
-     * @param \DateTimeInterface|null $releasedFrom
-     * @param bool $projectOnly
-     *
-     * @return string
-     */
     public function getReleaseHistoryLink(
         ?string $sort = null,
         ?string $direction = null,

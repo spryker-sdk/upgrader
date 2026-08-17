@@ -22,9 +22,6 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 
 class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testOnPreProcessorShouldInvokeFileFetcherMethods(): void
     {
         // Arrange
@@ -42,9 +39,6 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
         $brokenPhpFilesCheckerEventSubscriber->onPreProcessor($event);
     }
 
-    /**
-     * @return void
-     */
     public function testOnPreProcessorShouldShouldSkipExecutionWhenEvaluatorDisabled(): void
     {
         // Arrange
@@ -58,13 +52,10 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
             $brokenPhpFilesCheckerMock,
         );
 
-        // Act
+    // Act
         $brokenPhpFilesCheckerEventSubscriber->onPreProcessor($event);
     }
 
-    /**
-     * @return void
-     */
     public function testOnPreRequireShouldInvokeFetchAndPersistInstalledSprykerModules(): void
     {
         // Arrange
@@ -82,9 +73,6 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
         $brokenPhpFilesCheckerEventSubscriber->onPreRequire($event);
     }
 
-    /**
-     * @return void
-     */
     public function testOnPreRequireShouldNotInvokeCheckerWhenItDisabled(): void
     {
         // Arrange
@@ -102,9 +90,6 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
         $brokenPhpFilesCheckerEventSubscriber->onPreRequire($event);
     }
 
-    /**
-     * @return void
-     */
     public function testOnPostRequireShouldAddViolation(): void
     {
         // Arrange
@@ -112,9 +97,9 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
 
         $brokenPhpFilesCheckerMock = $this->createMock(BrokenPhpFilesChecker::class);
         $brokenPhpFilesCheckerMock
-            ->expects($this->once())
-            ->method('checkUpdatedSprykerModules')
-            ->willReturn($violations);
+        ->expects($this->once())
+        ->method('checkUpdatedSprykerModules')
+        ->willReturn($violations);
 
         $event = new ReleaseGroupProcessorPostRequireEvent(new StepsResponseDto(), new PackageManagerResponseDto(true));
 
@@ -130,9 +115,6 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
         $this->assertSame($violations, $event->getStepsExecutionDto()->getViolations()[0]);
     }
 
-    /**
-     * @return void
-     */
     public function testOnPostRequireShouldNotInvokeCheckerWhenItDisabled(): void
     {
         // Arrange
@@ -150,9 +132,6 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
         $brokenPhpFilesCheckerEventSubscriber->onPostRequire($event);
     }
 
-    /**
-     * @return void
-     */
     public function testOnPostProcessorShouldAddViolations(): void
     {
         // Arrange
@@ -161,9 +140,9 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
 
         $brokenPhpFilesCheckerMock = $this->createMock(BrokenPhpFilesChecker::class);
         $brokenPhpFilesCheckerMock
-            ->expects($this->once())
-            ->method('checkAll')
-            ->willReturn($violations);
+        ->expects($this->once())
+        ->method('checkAll')
+        ->willReturn($violations);
 
         $brokenPhpFilesCheckerEventSubscriber = new BrokenPhpFilesCheckerEventSubscriber(
             $this->createConfigurationProviderMock(),
@@ -174,9 +153,6 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
         $brokenPhpFilesCheckerEventSubscriber->onPostProcessor($event);
     }
 
-    /**
-     * @return void
-     */
     public function testOnPostProcessorShouldNotInvokeCheckerWhenItDisabled(): void
     {
         // Arrange
@@ -194,11 +170,6 @@ class BrokenPhpFilesCheckerEventSubscriberTest extends TestCase
         $brokenPhpFilesCheckerEventSubscriber->onPostProcessor($event);
     }
 
-    /**
-     * @param bool $isEvaluatorEnabled
-     *
-     * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     public function createConfigurationProviderMock(bool $isEvaluatorEnabled = true): ConfigurationProviderInterface
     {
         $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);

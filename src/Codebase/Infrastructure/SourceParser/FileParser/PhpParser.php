@@ -41,10 +41,6 @@ class PhpParser implements PhpFileParserInterface
      */
     protected $sourceFinder;
 
-    /**
-     * @param \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface $parser
-     * @param \Codebase\Infrastructure\SourceFinder\SourceFinder $sourceFinder
-     */
     public function __construct(
         CodebaseToParserInterface $parser,
         SourceFinder $sourceFinder
@@ -53,20 +49,11 @@ class PhpParser implements PhpFileParserInterface
         $this->sourceFinder = $sourceFinder;
     }
 
-    /**
-     * @return string
-     */
     public function getExtension(): string
     {
         return static::PARSER_EXTENSION;
     }
 
-    /**
-     * @param \Symfony\Component\Finder\Finder $finder
-     * @param \Codebase\Application\Dto\CodebaseSourceDto $codebaseSourceDto
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
     public function parse(Finder $finder, CodebaseSourceDto $codebaseSourceDto): CodebaseSourceDto
     {
         $this->requireAutoload();
@@ -105,9 +92,6 @@ class PhpParser implements PhpFileParserInterface
         return $codebaseSourceDto->setPhpCodebaseSources($sources, $codebaseSourceDto->getType());
     }
 
-    /**
-     * @return void
-     */
     protected function requireAutoload(): void
     {
         $autoloadPaths = [
@@ -121,9 +105,6 @@ class PhpParser implements PhpFileParserInterface
         }
     }
 
-    /**
-     * @return void
-     */
     protected function defineEnvironmentVariables(): void
     {
         if (!defined('APPLICATION_SOURCE_DIR')) {
@@ -140,12 +121,8 @@ class PhpParser implements PhpFileParserInterface
      *
      * @phpstan-return \Codebase\Application\Dto\ClassCodebaseDto<T>|null
      *
-     * @param string $namespace
      * @param array<string> $projectPrefixes
      * @param array<string> $coreNamespaces
-     * @param \Codebase\Application\Dto\ClassCodebaseDto|null $transfer
-     *
-     * @return \Codebase\Application\Dto\ClassCodebaseDto|null
      */
     public function parseClass(
         string $namespace,
@@ -200,7 +177,6 @@ class PhpParser implements PhpFileParserInterface
     }
 
     /**
-     * @param string $projectClassName
      * @param array<\ReflectionMethod> $methods
      * @param array<string> $coreNamespaces
      *
@@ -225,8 +201,6 @@ class PhpParser implements PhpFileParserInterface
      * @param \ReflectionClass<T> $projectClass
      * @param array<string> $projectPrefix
      * @param array<string> $coreNamespaces
-     *
-     * @return bool
      */
     protected function isExtendCore(ReflectionClass $projectClass, array $projectPrefix, array $coreNamespaces): bool
     {

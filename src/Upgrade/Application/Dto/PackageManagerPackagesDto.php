@@ -13,26 +13,12 @@ use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 class PackageManagerPackagesDto
 {
-    /**
-     * @var \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
     protected PackageCollection $packagesForRequire;
 
-    /**
-     * @var \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
     protected PackageCollection $packagesForRequireDev;
 
-    /**
-     * @var \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
     protected PackageCollection $packagesForUpdate;
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packagesForRequire
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packagesForRequireDev
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packagesForUpdate
-     */
     public function __construct(
         PackageCollection $packagesForRequire,
         PackageCollection $packagesForRequireDev,
@@ -43,25 +29,16 @@ class PackageManagerPackagesDto
         $this->packagesForUpdate = $packagesForUpdate;
     }
 
-    /**
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
     public function getPackagesForRequire(): PackageCollection
     {
         return $this->packagesForRequire;
     }
 
-    /**
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
     public function getPackagesForRequireDev(): PackageCollection
     {
         return $this->packagesForRequireDev;
     }
 
-    /**
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
     public function getPackagesForUpdate(): PackageCollection
     {
         return $this->packagesForUpdate;

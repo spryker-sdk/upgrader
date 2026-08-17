@@ -13,14 +13,8 @@ use Upgrade\Application\Dto\ViolationDtoInterface;
 
 class ViolationDto implements ViolationDtoInterface
 {
-    /**
-     * @var string
-     */
     protected string $projectFile;
 
-    /**
-     * @var string
-     */
     protected string $table;
 
     /**
@@ -28,14 +22,9 @@ class ViolationDto implements ViolationDtoInterface
      */
     protected array $columns;
 
-    /**
-     * @var string
-     */
     protected string $hash;
 
     /**
-     * @param string $projectFile
-     * @param string $table
      * @param array<string> $columns
      */
     public function __construct(string $projectFile, string $table, array $columns)
@@ -46,17 +35,11 @@ class ViolationDto implements ViolationDtoInterface
         $this->hash = sha1($projectFile . $table . implode('', $columns));
     }
 
-    /**
-     * @return string
-     */
     public function getProjectFile(): string
     {
         return $this->projectFile;
     }
 
-    /**
-     * @return string
-     */
     public function getTable(): string
     {
         return $this->table;
@@ -70,19 +53,11 @@ class ViolationDto implements ViolationDtoInterface
         return $this->columns;
     }
 
-    /**
-     * @return string
-     */
     public function getHash(): string
     {
         return $this->hash;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\ViolationDtoInterface $violationDto
-     *
-     * @return bool
-     */
     public function equals(ViolationDtoInterface $violationDto): bool
     {
         return $violationDto instanceof self && $violationDto->getHash() === $this->getHash();

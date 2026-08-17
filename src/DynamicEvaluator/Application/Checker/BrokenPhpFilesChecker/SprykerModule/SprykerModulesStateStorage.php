@@ -34,8 +34,6 @@ class SprykerModulesStateStorage
 
     /**
      * @param array<string, string> $modulesState <module-name>: <version>
-     *
-     * @return void
      */
     public function setModulesState(array $modulesState): void
     {

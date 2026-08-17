@@ -13,9 +13,6 @@ use Upgrade\Infrastructure\Exception\FileNotFoundException;
 
 abstract class AbstractComposerReader implements ComposerReaderInterface
 {
-    /**
-     * @var int
-     */
     protected int $modifyTime = 0;
 
     /**
@@ -23,9 +20,6 @@ abstract class AbstractComposerReader implements ComposerReaderInterface
      */
     protected ?array $composerData = null;
 
-    /**
-     * @var string
-     */
     protected string $directory = '';
 
     /**
@@ -33,19 +27,12 @@ abstract class AbstractComposerReader implements ComposerReaderInterface
      */
     abstract public function read(): array;
 
-    /**
-     * @param string $directory
-     *
-     * @return void
-     */
     public function setDirectory(string $directory): void
     {
         $this->directory = $directory;
     }
 
     /**
-     * @param string $path
-     *
      * @throws \Upgrade\Infrastructure\Exception\FileNotFoundException
      *
      * @return array<mixed>

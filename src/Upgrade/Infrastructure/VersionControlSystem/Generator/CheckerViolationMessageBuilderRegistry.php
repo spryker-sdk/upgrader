@@ -27,11 +27,7 @@ class CheckerViolationMessageBuilderRegistry
     }
 
     /**
-     * @param string $type
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return \Upgrade\Infrastructure\VersionControlSystem\Generator\CheckerViolationMessageBuilderInterface
      */
     public function getBuilderByType(string $type): CheckerViolationMessageBuilderInterface
     {

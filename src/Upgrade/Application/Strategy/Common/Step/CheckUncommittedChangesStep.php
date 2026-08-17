@@ -15,11 +15,6 @@ use Upgrade\Domain\ValueObject\Error;
 
 class CheckUncommittedChangesStep extends AbstractStep implements StepInterface
 {
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $stepsExecutionDto = $this->vsc->hasAnyUncommittedChanges($stepsExecutionDto);

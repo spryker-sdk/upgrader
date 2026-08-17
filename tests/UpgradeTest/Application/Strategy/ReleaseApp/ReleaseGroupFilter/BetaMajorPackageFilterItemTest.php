@@ -20,9 +20,6 @@ use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\BetaMajorPackageF
 
 class BetaMajorPackageFilterItemTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFilterShouldFilterBetaMajors(): void
     {
         // Arrange
@@ -71,8 +68,6 @@ class BetaMajorPackageFilterItemTest extends TestCase
 
     /**
      * @param array<array<string>> $returnMap
-     *
-     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
     protected function createPackageManagerAdapterMock(array $returnMap): PackageManagerAdapterInterface
     {

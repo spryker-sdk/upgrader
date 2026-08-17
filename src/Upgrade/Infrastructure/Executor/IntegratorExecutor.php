@@ -45,24 +45,15 @@ class IntegratorExecutor implements IntegratorExecutorInterface
      */
     protected const FROMAT_JSON_OPTION = '--format=json';
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected ProcessRunnerServiceInterface $processRunner;
 
-    /**
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
-     */
     public function __construct(ProcessRunnerServiceInterface $processRunner)
     {
         $this->processRunner = $processRunner;
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto> $modules
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
     public function runIntegrator(StepsResponseDto $stepsExecutionDto, array $modules = []): StepsResponseDto
     {
@@ -77,11 +68,6 @@ class IntegratorExecutor implements IntegratorExecutorInterface
         return $this->runIntegratorProcess($command, $stepsExecutionDto);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function runIntegratorLockUpdater(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = implode(' ', [
@@ -96,8 +82,6 @@ class IntegratorExecutor implements IntegratorExecutorInterface
 
     /**
      * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto> $modules
-     *
-     * @return string
      */
     protected function getModulesArgument(array $modules): string
     {
@@ -119,12 +103,6 @@ class IntegratorExecutor implements IntegratorExecutorInterface
         return $modulesString;
     }
 
-    /**
-     * @param string $command
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     protected function runIntegratorProcess(string $command, StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $process = $this->processRunner->run(explode(' ', $command));

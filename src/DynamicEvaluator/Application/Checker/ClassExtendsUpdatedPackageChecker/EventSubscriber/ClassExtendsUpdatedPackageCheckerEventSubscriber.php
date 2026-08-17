@@ -16,20 +16,10 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 
 class ClassExtendsUpdatedPackageCheckerEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker
-     */
     protected ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker;
 
-    /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     */
     public function __construct(
         ClassExtendsUpdatedPackageChecker $classExtendsUpdatedPackageChecker,
         ConfigurationProviderInterface $configurationProvider
@@ -48,11 +38,6 @@ class ClassExtendsUpdatedPackageCheckerEventSubscriber implements EventSubscribe
         ];
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorPostRequireEvent $event
-     *
-     * @return void
-     */
     public function onPostRequire(ReleaseGroupProcessorPostRequireEvent $event): void
     {
         if (!$this->configurationProvider->isEvaluatorEnabled()) {

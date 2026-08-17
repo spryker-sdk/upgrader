@@ -18,20 +18,10 @@ use ReleaseApp\Infrastructure\Shared\Mapper\ReleaseGroupDtoCollectionMapper;
 
 class ReleaseAppService implements ReleaseAppServiceInterface
 {
-    /**
-     * @var \ReleaseApp\Application\Service\ReleaseAppService
-     */
     protected ApplicationReleaseAppService $releaseApp;
 
-    /**
-     * @var \ReleaseApp\Infrastructure\Shared\Mapper\ReleaseGroupDtoCollectionMapper
-     */
     protected ReleaseGroupDtoCollectionMapper $releaseGroupDtoCollectionMapper;
 
-    /**
-     * @param \ReleaseApp\Application\Service\ReleaseAppService $releaseApp
-     * @param \ReleaseApp\Infrastructure\Shared\Mapper\ReleaseGroupDtoCollectionMapper $releaseGroupDtoCollectionMapper
-     */
     public function __construct(
         ApplicationReleaseAppService $releaseApp,
         ReleaseGroupDtoCollectionMapper $releaseGroupDtoCollectionMapper
@@ -40,11 +30,6 @@ class ReleaseAppService implements ReleaseAppServiceInterface
         $this->releaseGroupDtoCollectionMapper = $releaseGroupDtoCollectionMapper;
     }
 
-    /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest $upgradeInstructionsRequest
-     *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
-     */
     public function getNewReleaseGroups(UpgradeInstructionsRequest $upgradeInstructionsRequest): ReleaseAppResponse
     {
         $releaseGroupCollection = $this->releaseGroupDtoCollectionMapper->mapReleaseGroupTransferCollection(
@@ -54,11 +39,6 @@ class ReleaseAppService implements ReleaseAppServiceInterface
         return new ReleaseAppResponse($releaseGroupCollection);
     }
 
-    /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest $upgradeReleaseGroupInstructionsRequest
-     *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
-     */
     public function getReleaseGroup(UpgradeReleaseGroupInstructionsRequest $upgradeReleaseGroupInstructionsRequest): ReleaseAppResponse
     {
         $releaseGroupCollection = $this->releaseGroupDtoCollectionMapper->mapReleaseGroupDtoIntoCollection(
@@ -68,14 +48,6 @@ class ReleaseAppService implements ReleaseAppServiceInterface
         return new ReleaseAppResponse($releaseGroupCollection);
     }
 
-    /**
-     * @param string|null $sort
-     * @param string|null $direction
-     * @param \DateTimeInterface|null $releasedFrom
-     * @param bool $projectOnly
-     *
-     * @return string
-     */
     public function getReleaseHistoryLink(
         ?string $sort = null,
         ?string $direction = null,

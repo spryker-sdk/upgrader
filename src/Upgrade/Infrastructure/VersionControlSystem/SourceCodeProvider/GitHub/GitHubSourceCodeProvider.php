@@ -45,26 +45,12 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
      */
     protected const STRING_TRACE_TRUNCATED = '[...trace truncated...]';
 
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubClientFactory
-     */
     protected GitHubClientFactory $gitHubClientFactory;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder
-     */
     protected OutputMessageBuilder $outputMessageBuilder;
 
-    /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHubClientFactory $gitHubClientFactory
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder $outputMessageBuilder
-     */
     public function __construct(
         ConfigurationProvider $configurationProvider,
         GitHubClientFactory $gitHubClientFactory,
@@ -75,19 +61,11 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
         $this->outputMessageBuilder = $outputMessageBuilder;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return ConfigurationProvider::GITHUB_SOURCE_CODE_PROVIDER;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function validateCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         if (
@@ -105,12 +83,6 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
         return $stepsExecutionDto;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function createPullRequest(StepsResponseDto $stepsExecutionDto, PullRequestDto $pullRequestDto): StepsResponseDto
     {
         try {
@@ -153,11 +125,6 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
         }
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\ValidatorViolationDto $blocker
-     *
-     * @return string
-     */
     public function buildBlockerTextBlock(ValidatorViolationDto $blocker): string
     {
         return sprintf(
@@ -168,11 +135,6 @@ class GitHubSourceCodeProvider implements SourceCodeProviderInterface
         ) . PHP_EOL;
     }
 
-    /**
-     * @param string $message
-     *
-     * @return string
-     */
     protected function buildMessageWithTruncatedTrace(string $message): string
     {
         $messageArray = explode(self::STRING_STACK_TRACE, $message);

@@ -18,9 +18,6 @@ use Upgrader\Console\UpgraderConsole;
 
 class UpgradeCommandTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testExecuteSuccessfulUpgrade(): void
     {
         // Create a mock of the UpgradeServiceInterface
@@ -45,36 +42,30 @@ class UpgradeCommandTest extends TestCase
         $this->assertSame(UpgraderConsole::SUCCESS, $result);
     }
 
-    /**
-     * @return void
-     */
     public function testExecuteFailedUpgrade(): void
     {
         // Create a mock of the UpgradeServiceInterface
         $upgradeService = $this->createMock(UpgradeServiceInterface::class);
 
-        // Configure the mock to return a failed result
+    // Configure the mock to return a failed result
         $upgradeService->expects($this->once())
-            ->method('upgrade')
-            ->willReturn($this->createFailedExecutionDto());
+        ->method('upgrade')
+        ->willReturn($this->createFailedExecutionDto());
 
-        // Create a mock for InputInterface and OutputInterface
+    // Create a mock for InputInterface and OutputInterface
         $input = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
 
-        // Create an instance of the UpgraderConsole and inject the mock UpgradeServiceInterface
+    // Create an instance of the UpgraderConsole and inject the mock UpgradeServiceInterface
         $upgraderConsole = new UpgraderConsole($upgradeService);
 
-        // Call the execute method
+    // Call the execute method
         $result = $upgraderConsole->execute($input, $output);
 
-        // Assert that the result is a failure
+    // Assert that the result is a failure
         $this->assertSame(UpgraderConsole::FAILURE, $result);
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     private function createSuccessfulExecutionDto(): StepsResponseDto
     {
         $dto = new StepsResponseDto();
@@ -83,9 +74,6 @@ class UpgradeCommandTest extends TestCase
         return $dto;
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     private function createFailedExecutionDto(): StepsResponseDto
     {
         $dto = new StepsResponseDto();

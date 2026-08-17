@@ -17,20 +17,10 @@ use Upgrade\Application\Strategy\Common\Module\BetaMajorModule\BetaMajorModulesF
 
 class MajorVersionValidator implements ReleaseGroupValidatorInterface
 {
-    /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @var \Upgrade\Application\Strategy\Common\Module\BetaMajorModule\BetaMajorModulesFetcherInterface
-     */
     protected BetaMajorModulesFetcherInterface $betaMajorModulesFetcher;
 
-    /**
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     * @param \Upgrade\Application\Strategy\Common\Module\BetaMajorModule\BetaMajorModulesFetcherInterface $betaMajorModulesFetcher
-     */
     public function __construct(ConfigurationProviderInterface $configurationProvider, BetaMajorModulesFetcherInterface $betaMajorModulesFetcher)
     {
         $this->configurationProvider = $configurationProvider;
@@ -38,11 +28,7 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
     }
 
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     *
      * @throws \Upgrade\Application\Exception\ReleaseGroupValidatorException
-     *
-     * @return void
      */
     public function validate(ReleaseGroupDto $releaseGroup): void
     {
@@ -71,9 +57,6 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
         ));
     }
 
-    /**
-     * @return string
-     */
     public static function getValidatorTitle(): string
     {
         return 'Major Module Version or this version requires manual actions';

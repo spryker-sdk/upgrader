@@ -22,9 +22,6 @@ class FeatureDevMasterPackageUpgradeFixerTest extends TestCase
      */
     protected const ERROR_MESSAGE = 'spryker-feature/spryker-core 202204.0 requires spryker/glue-http ^0.2.0 -> found spryker/glue-http[0.2.0] but it conflicts with your root composer.json require (0.3.0)';
 
-    /**
-     * @return void
-     */
     public function testIsReRunStep(): void
     {
         // Arrange
@@ -39,9 +36,6 @@ class FeatureDevMasterPackageUpgradeFixerTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @return void
-     */
     public function testIsApplicableWhenIsFeatureToDevMasterDisabled(): void
     {
         // Arrange
@@ -57,9 +51,6 @@ class FeatureDevMasterPackageUpgradeFixerTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @return void
-     */
     public function testIsApplicable(): void
     {
         // Arrange
@@ -76,9 +67,6 @@ class FeatureDevMasterPackageUpgradeFixerTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @return void
-     */
     public function testRunSkip(): void
     {
         // Arrange
@@ -99,9 +87,6 @@ class FeatureDevMasterPackageUpgradeFixerTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testIsNotApplicable(): void
     {
         // Arrange
@@ -117,9 +102,6 @@ class FeatureDevMasterPackageUpgradeFixerTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @return void
-     */
     public function testRunFix(): void
     {
         // Arrange
@@ -139,9 +121,6 @@ class FeatureDevMasterPackageUpgradeFixerTest extends TestCase
         $this->assertTrue($packageManagerResponseDto->isSuccessful());
     }
 
-    /**
-     * @return void
-     */
     public function testRunWithFailed(): void
     {
         // Arrange
@@ -165,9 +144,6 @@ class FeatureDevMasterPackageUpgradeFixerTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRunCanNotUpdateFeatureDevMaster(): void
     {
         // Arrange
@@ -187,9 +163,6 @@ class FeatureDevMasterPackageUpgradeFixerTest extends TestCase
         $this->assertEquals($responseDto, $packageManagerResponse);
     }
 
-    /**
-     * @return void
-     */
     public function testRunFixWithNoPackage(): void
     {
         // Arrange

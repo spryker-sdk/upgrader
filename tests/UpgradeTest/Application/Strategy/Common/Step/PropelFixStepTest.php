@@ -16,9 +16,6 @@ use Upgrade\Application\Strategy\Common\Step\PropelFixStep;
 
 class PropelFixStepTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testProcessShouldAddPropelPackageWhenItHasSpecificVersion(): void
     {
         // Arrange
@@ -38,9 +35,6 @@ class PropelFixStepTest extends TestCase
         $propelFixStep->run(new StepsResponseDto());
     }
 
-    /**
-     * @return void
-     */
     protected function testProcessShouldSkipAddingPropelPackageWhenReleaseGroupIntegratorEnabled(): void
     {
         // Arrange
@@ -50,20 +44,17 @@ class PropelFixStepTest extends TestCase
             ['require' => [PropelFixStep::PACKAGE_NAME => '1.0.0']],
         );
 
-        // Assert
+    // Assert
         $packageManagerAdapterMock->expects($this->once())->method('getPackageVersion');
         $packageManagerAdapterMock->expects($this->never())->method('require');
 
-        // Arrange
+    // Arrange
         $propelFixStep = new PropelFixStep($packageManagerAdapterMock, true);
 
-        // Act
+    // Act
         $propelFixStep->run(new StepsResponseDto());
     }
 
-    /**
-     * @return void
-     */
     protected function testProcessShouldSkipAddingPropelPackageWhenPackageInComposerRequire(): void
     {
         // Arrange
@@ -84,23 +75,19 @@ class PropelFixStepTest extends TestCase
     }
 
     /**
-     * @param string $package
-     * @param string $version
      * @param array<string, mixed> $composerJson
-     *
-     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
     protected function createPackageManagerAdapterMock(string $package, string $version, array $composerJson): PackageManagerAdapterInterface
     {
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter
-            ->expects($this->once())
-            ->method('getPackageVersion')
-            ->with($package)->willReturn($version);
+        ->expects($this->once())
+        ->method('getPackageVersion')
+        ->with($package)->willReturn($version);
 
         $packageManagerAdapter
-            ->method('getComposerJsonFile')
-            ->willReturn($composerJson);
+        ->method('getComposerJsonFile')
+        ->willReturn($composerJson);
 
         return $packageManagerAdapter;
     }

@@ -29,19 +29,10 @@ class UpgradeInstructionMeta
      */
     protected const CONFLICT_KEY = 'conflict';
 
-    /**
-     * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection
-     */
     protected UpgradeInstructionModuleCollection $includeModuleCollection;
 
-    /**
-     * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection
-     */
     protected UpgradeInstructionModuleCollection $excludeModuleCollection;
 
-    /**
-     * @var \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection
-     */
     protected UpgradeInstructionModuleCollection $conflictModuleCollection;
 
     /**
@@ -66,33 +57,22 @@ class UpgradeInstructionMeta
         );
     }
 
-    /**
-     * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection
-     */
     public function getInclude(): UpgradeInstructionModuleCollection
     {
         return $this->includeModuleCollection;
     }
 
-    /**
-     * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection
-     */
     public function getExclude(): UpgradeInstructionModuleCollection
     {
         return $this->excludeModuleCollection;
     }
 
-    /**
-     * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection
-     */
     public function getConflict(): UpgradeInstructionModuleCollection
     {
         return $this->conflictModuleCollection;
     }
 
     /**
-     * @param string $key
-     *
      * @return array<\ReleaseApp\Domain\Entities\UpgradeInstructionModule>
      */
     protected function getModuleListByKey(string $key): array

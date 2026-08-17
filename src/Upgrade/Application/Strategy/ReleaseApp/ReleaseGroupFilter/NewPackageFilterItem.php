@@ -19,26 +19,12 @@ use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppPackageHelper;
 
 class NewPackageFilterItem implements ReleaseGroupFilterItemInterface
 {
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManagerAdapter;
 
-    /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @var bool
-     */
     protected bool $isFeatureToDevMasterEnabled;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManagerAdapter
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     * @param bool $isFeatureToDevMasterEnabled
-     */
     public function __construct(
         PackageManagerAdapterInterface $packageManagerAdapter,
         ConfigurationProviderInterface $configurationProvider,
@@ -49,11 +35,6 @@ class NewPackageFilterItem implements ReleaseGroupFilterItemInterface
         $this->isFeatureToDevMasterEnabled = $isFeatureToDevMasterEnabled;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
-     *
-     * @return \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto
-     */
     public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupFilterResponseDto
     {
         if (!$this->configurationProvider->isPackageUpgradeOnly()) {
@@ -87,10 +68,6 @@ class NewPackageFilterItem implements ReleaseGroupFilterItemInterface
 
     /**
      * Checks if some feature packages from module exists in demoshop.
-     *
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ModuleDto $module
-     *
-     * @return bool
      */
     protected function existFeaturePackages(ModuleDto $module): bool
     {

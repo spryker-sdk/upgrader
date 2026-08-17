@@ -13,20 +13,9 @@ use DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Dto\ProjectMo
 
 interface PreviousProjectModulesStateStorageInterface
 {
-    /**
-     * @param \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Dto\ProjectModulesStateDto $projectModulesStateDto
-     *
-     * @return void
-     */
     public function setPreviousProjectModulesState(ProjectModulesStateDto $projectModulesStateDto): void;
 
-    /**
-     * @return \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Dto\ProjectModulesStateDto
-     */
     public function getRequiredPreviousProjectModulesState(): ProjectModulesStateDto;
 
-    /**
-     * @return \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Dto\ProjectModulesStateDto|null
-     */
     public function getPreviousProjectModulesState(): ?ProjectModulesStateDto;
 }

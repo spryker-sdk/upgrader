@@ -18,9 +18,6 @@ class PhpParserTest extends BaseParser
      */
     protected const PHP_EXTENSION = 'php';
 
-    /**
-     * @return void
-     */
     public function testParse(): void
     {
         //Arrange

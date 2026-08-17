@@ -13,8 +13,5 @@ use Upgrade\Application\Dto\StepsResponseDto;
 
 interface UpgradeServiceInterface
 {
-    /**
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function upgrade(): StepsResponseDto;
 }

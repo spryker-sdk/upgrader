@@ -11,8 +11,5 @@ namespace Upgrade\Application\Strategy\Common;
 
 interface IntegratorExecutionValidatorInterface
 {
-    /**
-     * @return bool
-     */
     public function isIntegratorShouldBeInvoked(): bool;
 }

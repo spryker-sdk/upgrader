@@ -15,14 +15,8 @@ use Upgrade\Application\Dto\PackageManagerResponseDto;
 
 class ReleaseGroupUpgrader
 {
-    /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher
-     */
     protected ModuleFetcher $moduleFetcher;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
     protected LoggerInterface $logger;
 
     /**
@@ -31,8 +25,6 @@ class ReleaseGroupUpgrader
     protected array $fixers = [];
 
     /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ModuleFetcher $moduleFetcher
-     * @param \Psr\Log\LoggerInterface $logger
      * @param array<\Upgrade\Application\Strategy\UpgradeFixerInterface> $fixers
      */
     public function __construct(ModuleFetcher $moduleFetcher, LoggerInterface $logger, array $fixers = [])
@@ -42,11 +34,6 @@ class ReleaseGroupUpgrader
         $this->fixers = $fixers;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function upgrade(ReleaseGroupDto $releaseGroup): PackageManagerResponseDto
     {
         $alternativeRequireModuleCollections = $this->getAlternativeRequireModuleCollections($releaseGroup);
@@ -67,8 +54,6 @@ class ReleaseGroupUpgrader
     }
 
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     *
      * @return array<\ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection>
      */
     protected function getAlternativeRequireModuleCollections(ReleaseGroupDto $releaseGroup): array
@@ -85,12 +70,6 @@ class ReleaseGroupUpgrader
         return $moduleAlternativeCollection;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $response
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     protected function runWithFixer(ReleaseGroupDto $releaseGroup, PackageManagerResponseDto $response): PackageManagerResponseDto
     {
         $this->logger->info(

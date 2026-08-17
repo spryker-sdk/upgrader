@@ -27,8 +27,6 @@ class FileErrorsFetcherTest extends TestCase
      * @dataProvider toolInvalidReturnDataProvider
      *
      * @param array<mixed> $toolOutput
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('toolInvalidReturnDataProvider')]
     public function testFetchProjectFileErrorsAndSaveInBaseLineShouldValidate(array $toolOutput): void
@@ -63,9 +61,6 @@ class FileErrorsFetcherTest extends TestCase
         ];
     }
 
-    /**
-     * @return void
-     */
     public function testFetchProjectFileErrorsAndSaveInBaseLineShouldReturnEmptyWhenThisErrorInBaseLineStorage(): void
     {
         // Arrange
@@ -88,8 +83,6 @@ class FileErrorsFetcherTest extends TestCase
      *
      * @param array<mixed> $toolOutput
      * @param array<mixed> $expectedResult
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('projectFileErrorsDataProvider')]
     public function testFetchProjectFileErrorsAndSaveInBaseLineShouldFetchFileErrors(array $toolOutput, array $expectedResult): void
@@ -129,9 +122,6 @@ class FileErrorsFetcherTest extends TestCase
         ];
     }
 
-    /**
-     * @return void
-     */
     public function testResetShouldInvokeBaselineStorageResetting(): void
     {
         // Arrange
@@ -146,8 +136,6 @@ class FileErrorsFetcherTest extends TestCase
 
     /**
      * @param array<mixed> $returnValue
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     public function createProcessRunnerServiceMock(array $returnValue): ProcessRunnerServiceInterface
     {
@@ -161,19 +149,11 @@ class FileErrorsFetcherTest extends TestCase
         return $processRunnerService;
     }
 
-    /**
-     * @return \Psr\Log\LoggerInterface
-     */
     public function createLoggerMock(): LoggerInterface
     {
         return $this->createMock(LoggerInterface::class);
     }
 
-    /**
-     * @param bool $configurableValue
-     *
-     * @return \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected function createConfigurationProviderMock(bool $configurableValue = false): ConfigurationProvider
     {
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
@@ -182,9 +162,6 @@ class FileErrorsFetcherTest extends TestCase
         return $configurationProviderMock;
     }
 
-    /**
-     * @return void
-     */
     public function testRunWithoutProjectConfig(): void
     {
         // Arrange
@@ -207,9 +184,6 @@ class FileErrorsFetcherTest extends TestCase
         $this->assertEmpty($fileErrors);
     }
 
-    /**
-     * @return void
-     */
     public function testRunProcessWithTimeout(): void
     {
         // Arrange
@@ -239,9 +213,6 @@ class FileErrorsFetcherTest extends TestCase
         ), $fileErrors[0]->getMessage());
     }
 
-    /**
-     * @return void
-     */
     public function testRunProcessWithException(): void
     {
         // Arrange
@@ -268,9 +239,6 @@ class FileErrorsFetcherTest extends TestCase
         ), $fileErrors[0]->getMessage());
     }
 
-    /**
-     * @return void
-     */
     public function testFetchProjectFileErrorsExecutesPerDir(): void
     {
         // Arrange

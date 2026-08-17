@@ -17,9 +17,6 @@ use Upgrader\Configuration\ConfigurationProvider;
 
 class ClassExtendsUpdatedPackageCheckerTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testCheckShouldReturnNoViolationsWhenNotFoundInProject(): void
     {
         // Arrange
@@ -40,9 +37,6 @@ class ClassExtendsUpdatedPackageCheckerTest extends TestCase
         $this->assertEmpty($violations);
     }
 
-    /**
-     * @return void
-     */
     public function testCheckShouldReturnNViolationsWhenFoundExtendedClassInProject(): void
     {
         // Arrange
@@ -56,10 +50,10 @@ class ClassExtendsUpdatedPackageCheckerTest extends TestCase
             $configurationProvider,
         );
 
-        // Act
+    // Act
         $violations = $checker->check();
 
-        // Assert
+    // Assert
         $this->assertCount(1, $violations);
         $this->assertSame('src/Pyz/Zed/Acl/Model.php', $violations[0]->getTarget());
         $this->assertSame('spryker/acl', $violations[0]->getPackage());
@@ -67,8 +61,6 @@ class ClassExtendsUpdatedPackageCheckerTest extends TestCase
 
     /**
      * @param array<string, string> $vendorChangedClasses
-     *
-     * @return \PackageStorage\Application\Fetcher\VendorChangedClassesFetcherInterface
      */
     public function createVendorChangedClassesFetcher(array $vendorChangedClasses): VendorChangedClassesFetcherInterface
     {
@@ -80,8 +72,6 @@ class ClassExtendsUpdatedPackageCheckerTest extends TestCase
 
     /**
      * @param array<string, string> $extendedClasses
-     *
-     * @return \PackageStorage\Application\Fetcher\ProjectExtendedClassesFetcherInterface
      */
     protected function createProjectExtendedClassesFetcher(array $extendedClasses): ProjectExtendedClassesFetcherInterface
     {
@@ -91,11 +81,6 @@ class ClassExtendsUpdatedPackageCheckerTest extends TestCase
         return $projectExtendedClassesFetcher;
     }
 
-    /**
-     * @param string $rootPath
-     *
-     * @return \Upgrader\Configuration\ConfigurationProvider
-     */
     public function createConfigurationProviderMock(string $rootPath): ConfigurationProvider
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);

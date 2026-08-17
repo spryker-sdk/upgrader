@@ -18,29 +18,16 @@ use Upgrade\Application\Adapter\ReleaseAppClientAdapterInterface;
 
 class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
 {
-    /**
-     * @var \ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface
-     */
     protected ReleaseAppServiceInterface $releaseApp;
 
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManager;
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Service\ReleaseAppServiceInterface $releaseApp
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
-     */
     public function __construct(ReleaseAppServiceInterface $releaseApp, PackageManagerAdapterInterface $packageManager)
     {
         $this->releaseApp = $releaseApp;
         $this->packageManager = $packageManager;
     }
 
-    /**
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
-     */
     public function getNewReleaseGroups(): ReleaseAppResponse
     {
         $upgradeInstructionsRequest = $this->createDataProviderRequest();
@@ -48,19 +35,11 @@ class ReleaseAppClientAdapter implements ReleaseAppClientAdapterInterface
         return $this->releaseApp->getNewReleaseGroups($upgradeInstructionsRequest);
     }
 
-    /**
-     * @param int $releaseGroupId
-     *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseAppResponse
-     */
     public function getReleaseGroup(int $releaseGroupId): ReleaseAppResponse
     {
         return $this->releaseApp->getReleaseGroup(new UpgradeReleaseGroupInstructionsRequest($releaseGroupId));
     }
 
-    /**
-     * @return \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest
-     */
     protected function createDataProviderRequest(): UpgradeInstructionsRequest
     {
         $packages = $this->extractLockedPackages($this->packageManager->getComposerLockFile());

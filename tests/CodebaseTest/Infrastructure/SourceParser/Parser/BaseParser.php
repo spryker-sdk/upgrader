@@ -40,8 +40,6 @@ class BaseParser extends KernelTestCase
      * @param array<string> $paths
      * @param array<string> $extensions
      * @param array<string> $exclude
-     *
-     * @return \Symfony\Component\Finder\Finder
      */
     protected function getFinder(array $paths = [], array $extensions = [], array $exclude = []): Finder
     {
@@ -50,13 +48,6 @@ class BaseParser extends KernelTestCase
         return $finder->in($paths)->name($extensions)->exclude($exclude);
     }
 
-    /**
-     * @param string $parserClass
-     * @param \Codebase\Application\Dto\CodebaseSourceDto $codebaseSourceDto
-     * @param string $extension
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
     protected function runParser(string $parserClass, CodebaseSourceDto $codebaseSourceDto, string $extension): CodebaseSourceDto
     {
         foreach ($this->getPaths() as $type => $path) {
@@ -68,9 +59,6 @@ class BaseParser extends KernelTestCase
         return $codebaseSourceDto;
     }
 
-    /**
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
     protected function createCodebaseSourceDto(): CodebaseSourceDto
     {
         return new CodebaseSourceDto(static::PROJECT_PREFIX, static::CORE_NAMESPACES);

@@ -14,9 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 class SprykerModulesStateStorageTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testGetAndSetModulesStateShouldReturnValidState(): void
     {
         // Arrange

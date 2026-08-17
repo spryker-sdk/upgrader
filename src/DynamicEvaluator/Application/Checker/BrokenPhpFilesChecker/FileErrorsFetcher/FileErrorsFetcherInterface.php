@@ -18,8 +18,5 @@ interface FileErrorsFetcherInterface
      */
     public function fetchProjectFileErrorsAndSaveInBaseLine(array $dirs = []): array;
 
-    /**
-     * @return void
-     */
     public function reset(): void;
 }

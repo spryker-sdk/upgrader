@@ -18,9 +18,6 @@ class DatabaseSchemaParserTest extends BaseParser
      */
     protected const DATABASE_SCHEMA_EXTENSION = 'schema.xml';
 
-    /**
-     * @return void
-     */
     public function testParse(): void
     {
         //Arrange

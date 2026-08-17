@@ -13,9 +13,6 @@ use Symfony\Component\Finder\Finder;
 
 class FinderFactory
 {
-    /**
-     * @return \Symfony\Component\Finder\Finder
-     */
     public function createFinder(): Finder
     {
         return new Finder();

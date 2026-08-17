@@ -17,9 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 class NewVendorColumnsFetcherTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFetchUpdatedVendorColumnsMapShouldCalculateColumnsMap(): void
     {
         // Arrange
@@ -43,23 +40,17 @@ class NewVendorColumnsFetcherTest extends TestCase
         $this->assertSame(['table_one' => ['col_three'], 'table_new' => ['col_one'], 'table_two' => ['col_one']], $result);
     }
 
-    /**
-     * @return \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\NewVendorColumnsFetcher\ChangedXmlFilesFetcher
-     */
     protected function createChangedXmlFilesFetcherMock(): ChangedXmlFilesFetcher
     {
         $changedXmlFilesFetcher = $this->createMock(ChangedXmlFilesFetcher::class);
         $changedXmlFilesFetcher->method('fetchChangedXmlSchemaFiles')->willReturn([
-            'src/Spryker/Zed/ApiKey/Persistence/Propel/Schema/spy_api_key.schema.xml',
-            'src/Spryker/Zed/Acl/Persistence/Propel/Schema/spy_acl_key.schema.xml',
+        'src/Spryker/Zed/ApiKey/Persistence/Propel/Schema/spy_api_key.schema.xml',
+        'src/Spryker/Zed/Acl/Persistence/Propel/Schema/spy_acl_key.schema.xml',
         ]);
 
         return $changedXmlFilesFetcher;
     }
 
-    /**
-     * @return \PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface
-     */
     protected function createPackagesDirProviderMock(): PackagesDirProviderInterface
     {
         $packagesDirProvider = $this->createMock(PackagesDirProviderInterface::class);
@@ -71,8 +62,6 @@ class NewVendorColumnsFetcherTest extends TestCase
 
     /**
      * @param array<mixed> $consecutiveReturns
-     *
-     * @return \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\XmlSchemaFileParser\XmlSchemaFileParserInterface
      */
     protected function createXmlSchemaFileParserMock(array $consecutiveReturns): XmlSchemaFileParserInterface
     {

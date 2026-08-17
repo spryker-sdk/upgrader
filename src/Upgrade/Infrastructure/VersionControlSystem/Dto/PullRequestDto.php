@@ -11,38 +11,16 @@ namespace Upgrade\Infrastructure\VersionControlSystem\Dto;
 
 class PullRequestDto
 {
-    /**
-     * @var string
-     */
     protected string $sourceBranch;
 
-    /**
-     * @var string
-     */
     protected string $targetBranch;
 
-    /**
-     * @var string
-     */
     protected string $title;
 
-    /**
-     * @var ?string
-     */
     protected ?string $body;
 
-    /**
-     * @var bool
-     */
     protected bool $autoMerge;
 
-    /**
-     * @param string $sourceBranch
-     * @param string $targetBranch
-     * @param string $title
-     * @param string|null $body
-     * @param bool $autoMerge
-     */
     public function __construct(
         string $sourceBranch,
         string $targetBranch,
@@ -57,41 +35,26 @@ class PullRequestDto
         $this->autoMerge = $autoMerge;
     }
 
-    /**
-     * @return string
-     */
     public function getSourceBranch(): string
     {
         return $this->sourceBranch;
     }
 
-    /**
-     * @return string
-     */
     public function getTargetBranch(): string
     {
         return $this->targetBranch;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @return string|null
-     */
     public function getBody(): ?string
     {
         return $this->body;
     }
 
-    /**
-     * @return bool
-     */
     public function isAutoMerge(): bool
     {
         return $this->autoMerge;

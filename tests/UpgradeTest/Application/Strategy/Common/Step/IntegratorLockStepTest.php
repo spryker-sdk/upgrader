@@ -18,9 +18,6 @@ use Upgrade\Infrastructure\VersionControlSystem\Git\Adapter\GitAdapter;
 
 class IntegratorLockStepTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testIntegrator(): void
     {
         // Arrange
@@ -38,9 +35,6 @@ class IntegratorLockStepTest extends TestCase
         $integratorStep->run(new StepsResponseDto(true));
     }
 
-    /**
-     * @return void
-     */
     public function testRollBack(): void
     {
         // Arrange
@@ -48,11 +42,11 @@ class IntegratorLockStepTest extends TestCase
         $integratorExecutor = $this->createMock(IntegratorExecutor::class);
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
 
-        // Assert
+    // Assert
         $gitAdapter->expects($this->once())->method('restore');
         $integratorStep = new IntegratorLockStep($gitAdapter, $integratorExecutor, $configurationProvider);
 
-        // Act
+    // Act
         $integratorStep->rollBack(new StepsResponseDto(true));
     }
 }

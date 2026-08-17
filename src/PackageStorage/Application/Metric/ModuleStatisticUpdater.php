@@ -15,20 +15,10 @@ use Upgrade\Application\Dto\StepsResponseDto;
 
 class ModuleStatisticUpdater implements ModuleStatisticUpdaterInterface
 {
-    /**
-     * @var \PackageStorage\Application\Fetcher\ProjectExtendedClassesFetcherInterface
-     */
     protected ProjectExtendedClassesFetcherInterface $projectExtendedClassesFetcher;
 
-    /**
-     * @var \PackageStorage\Application\Fetcher\VendorChangedClassesFetcherInterface
-     */
     protected VendorChangedClassesFetcherInterface $vendorChangedClassesFetcher;
 
-    /**
-     * @param \PackageStorage\Application\Fetcher\ProjectExtendedClassesFetcherInterface $projectExtendedClassesFetcher
-     * @param \PackageStorage\Application\Fetcher\VendorChangedClassesFetcherInterface $vendorChangedClassesFetcher
-     */
     public function __construct(
         ProjectExtendedClassesFetcherInterface $projectExtendedClassesFetcher,
         VendorChangedClassesFetcherInterface $vendorChangedClassesFetcher
@@ -37,11 +27,6 @@ class ModuleStatisticUpdater implements ModuleStatisticUpdaterInterface
         $this->vendorChangedClassesFetcher = $vendorChangedClassesFetcher;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function updateStatisticPreRequire(StepsResponseDto $stepsResponseDto): StepsResponseDto
     {
         $totalOverwritedModels = count($this->projectExtendedClassesFetcher->fetchExtendedClasses());
@@ -50,11 +35,6 @@ class ModuleStatisticUpdater implements ModuleStatisticUpdaterInterface
         return $stepsResponseDto;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function updateStatisticPostRequire(StepsResponseDto $stepsResponseDto): StepsResponseDto
     {
         $totalChangedCoreModules = $this->vendorChangedClassesFetcher->fetchVendorChangedClassesWithPackage();

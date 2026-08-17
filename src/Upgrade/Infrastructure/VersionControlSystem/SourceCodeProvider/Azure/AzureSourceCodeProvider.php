@@ -23,32 +23,14 @@ use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodePro
 
 class AzureSourceCodeProvider implements SourceCodeProviderInterface
 {
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureClientFactory
-     */
     protected AzureClientFactory $azureClientFactory;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzurePullRequestDescriptionNormalizer
-     */
     protected AzurePullRequestDescriptionNormalizer $descriptionNormalizer;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder
-     */
     protected OutputMessageBuilder $outputMessageBuilder;
 
-    /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureClientFactory $azureClientFactory
-     * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzurePullRequestDescriptionNormalizer $descriptionNormalizer
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\OutputMessageBuilder $outputMessageBuilder
-     */
     public function __construct(
         ConfigurationProvider $configurationProvider,
         AzureClientFactory $azureClientFactory,
@@ -61,19 +43,11 @@ class AzureSourceCodeProvider implements SourceCodeProviderInterface
         $this->outputMessageBuilder = $outputMessageBuilder;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return ConfigurationProvider::AZURE_SOURCE_CODE_PROVIDER;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function validateCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $violations = [];
@@ -101,12 +75,6 @@ class AzureSourceCodeProvider implements SourceCodeProviderInterface
         return $stepsExecutionDto;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function createPullRequest(
         StepsResponseDto $stepsExecutionDto,
         PullRequestDto $pullRequestDto
@@ -143,11 +111,6 @@ class AzureSourceCodeProvider implements SourceCodeProviderInterface
         return $stepsExecutionDto;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\ValidatorViolationDto $blocker
-     *
-     * @return string
-     */
     public function buildBlockerTextBlock(ValidatorViolationDto $blocker): string
     {
         return sprintf('> <b>%s.</b> %s <br>', $blocker->getTitle(), $blocker->getMessage() . PHP_EOL) . PHP_EOL;
@@ -155,8 +118,6 @@ class AzureSourceCodeProvider implements SourceCodeProviderInterface
 
     /**
      * @throws \InvalidArgumentException
-     *
-     * @return string
      */
     protected function getRepositoryId(): string
     {

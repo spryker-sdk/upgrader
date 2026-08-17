@@ -14,8 +14,6 @@ use ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection;
 interface BetaMajorModulesFetcherInterface
 {
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleDtoCollection
-     *
      * @return array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto>
      */
     public function getBetaMajorsNotInstalledInDev(ModuleDtoCollection $moduleDtoCollection): array;

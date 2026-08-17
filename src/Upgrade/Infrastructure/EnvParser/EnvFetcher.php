@@ -24,12 +24,7 @@ class EnvFetcher
     protected const TRUE_VALUES = ['1', 'true'];
 
     /**
-     * @param string $varName
-     * @param bool|null $defaultValue
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return bool
      */
     public static function getBool(string $varName, ?bool $defaultValue = null): bool
     {

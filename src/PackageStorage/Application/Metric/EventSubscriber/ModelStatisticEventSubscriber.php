@@ -16,14 +16,8 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 
 class ModelStatisticEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var \PackageStorage\Application\Metric\ModuleStatisticUpdaterInterface
-     */
     protected ModuleStatisticUpdaterInterface $moduleStatisticFetcher;
 
-    /**
-     * @param \PackageStorage\Application\Metric\ModuleStatisticUpdaterInterface $moduleStatisticFetcher
-     */
     public function __construct(ModuleStatisticUpdaterInterface $moduleStatisticFetcher)
     {
         $this->moduleStatisticFetcher = $moduleStatisticFetcher;
@@ -40,21 +34,11 @@ class ModelStatisticEventSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $event
-     *
-     * @return void
-     */
     public function onPreRequire(ReleaseGroupProcessorEvent $event): void
     {
         $this->moduleStatisticFetcher->updateStatisticPreRequire($event->getStepsExecutionDto());
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $event
-     *
-     * @return void
-     */
     public function onPostRequire(ReleaseGroupProcessorEvent $event): void
     {
         $this->moduleStatisticFetcher->updateStatisticPostRequire($event->getStepsExecutionDto());

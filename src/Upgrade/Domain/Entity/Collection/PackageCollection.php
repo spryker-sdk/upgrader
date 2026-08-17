@@ -26,11 +26,6 @@ class PackageCollection
         $this->elements = $elements;
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Package $element
-     *
-     * @return void
-     */
     public function add(Package $element): void
     {
         $this->elements[] = $element;
@@ -44,17 +39,11 @@ class PackageCollection
         return $this->elements;
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return count($this->elements);
     }
 
-    /**
-     * @return bool
-     */
     public function isEmpty(): bool
     {
         return !$this->elements;
@@ -62,8 +51,6 @@ class PackageCollection
 
     /**
      * @param \Upgrade\Domain\Entity\Collection\PackageCollection|self $collectionToMerge
-     *
-     * @return void
      */
     public function addCollection(self $collectionToMerge): void
     {

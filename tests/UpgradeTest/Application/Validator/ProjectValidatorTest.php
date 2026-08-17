@@ -16,9 +16,6 @@ use Upgrade\Application\Validator\ProjectValidatorRuleInterface;
 
 class ProjectValidatorTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testValidateProjectShouldInvokeValidatorRules(): void
     {
         // Arrange
@@ -37,12 +34,6 @@ class ProjectValidatorTest extends TestCase
         $this->assertSame($errorTitle, $violations[0]->getTitle());
     }
 
-    /**
-     * @param string $message
-     * @param string $title
-     *
-     * @return \Upgrade\Application\Validator\ProjectValidatorRuleInterface
-     */
     protected function createProjectValidatorRuleMock(string $message, string $title): ProjectValidatorRuleInterface
     {
         $projectValidatorRule = $this->createMock(ProjectValidatorRuleInterface::class);

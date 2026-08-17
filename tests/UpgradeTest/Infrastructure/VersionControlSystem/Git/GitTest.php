@@ -30,9 +30,6 @@ use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHub
 
 class GitTest extends KernelTestCase
 {
-    /**
-     * @return void
-     */
     public function testIsRemoteTargetBranchNotExistSuccessCase(): void
     {
         // Arrange
@@ -47,25 +44,19 @@ class GitTest extends KernelTestCase
         $this->assertSame('upgradebot/upgrade-bot', $stepsExecutionDto->getTargetBranch());
     }
 
-    /**
-     * @return void
-     */
     public function testIsRemoteTargetBranchNotExistUnSuccessCase(): void
     {
         // Arrange
         $processRunnerMock = $this->mockProcessRunnerWithOutput('d50f9e5f2062ff54c4c192fecd853c5983b3a600');
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
-        // Act
+    // Act
         $stepsExecutionDto = $git->isRemoteTargetBranchNotExist((new StepsResponseDto(true)));
 
-        // Assert
+    // Assert
         $this->assertFalse($stepsExecutionDto->getIsSuccessful());
     }
 
-    /**
-     * @return void
-     */
     public function testIsLocalTargetBranchNotExistSuccessCase(): void
     {
         // Arrange
@@ -79,9 +70,6 @@ class GitTest extends KernelTestCase
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
     }
 
-    /**
-     * @return void
-     */
     public function testIsLocalTargetBranchNotExistUnSuccessCase(): void
     {
         // Arrange
@@ -95,9 +83,6 @@ class GitTest extends KernelTestCase
         $this->assertFalse($stepsExecutionDto->getIsSuccessful());
     }
 
-    /**
-     * @return void
-     */
     public function testHasAnyUncommittedChangesSuccessCase(): void
     {
         // Arrange
@@ -111,9 +96,6 @@ class GitTest extends KernelTestCase
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
     }
 
-    /**
-     * @return void
-     */
     public function testHasAnyUncommittedChangesUnSuccessCase(): void
     {
         // Arrange
@@ -127,9 +109,6 @@ class GitTest extends KernelTestCase
         $this->assertFalse($stepsExecutionDto->getIsSuccessful());
     }
 
-    /**
-     * @return void
-     */
     public function testCreatePullRequestUnSuccessCaseNoRequiredProperty(): void
     {
         $stepsExecutionDto = new StepsResponseDto(true);
@@ -140,13 +119,13 @@ class GitTest extends KernelTestCase
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
         $gitHubProviderMock = $this->getMockBuilder(GitHubSourceCodeProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        ->disableOriginalConstructor()
+        ->getMock();
 
         // Assert
         $gitHubProviderMock->expects($this->exactly(1))
-            ->method('createPullRequest')
-            ->willReturn($stepsExecutionDto);
+        ->method('createPullRequest')
+        ->willReturn($stepsExecutionDto);
 
         // Arrange
         $reflection = new ReflectionClass($git);
@@ -160,9 +139,6 @@ class GitTest extends KernelTestCase
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
     }
 
-    /**
-     * @return void
-     */
     public function testCreatePullRequestSuccessCase(): void
     {
         // Arrange
@@ -171,8 +147,8 @@ class GitTest extends KernelTestCase
         $stepsExecutionDto->setComposerLockDiff($this->getComposerLockDiffDto());
         $stepsExecutionDto->addBlocker(new ValidatorViolationDto(MajorVersionValidator::getValidatorTitle(), 'Available major info'));
         $integratorResponseDto = new IntegratorResponseDto([
-            'message-list' => ['Test message'],
-            'warning-list' => ['Manifest for Spryker.AuthenticationOauth:1.0.0 was skipped. Please, update it to use full functionality.'],
+        'message-list' => ['Test message'],
+        'warning-list' => ['Manifest for Spryker.AuthenticationOauth:1.0.0 was skipped. Please, update it to use full functionality.'],
         ]);
         $stepsExecutionDto->addIntegratorResponseDto($integratorResponseDto);
 
@@ -180,22 +156,22 @@ class GitTest extends KernelTestCase
         $git = $this->getGitWithProcessRunner($processRunnerMock);
 
         $gitHubProviderMock = $this->getMockBuilder(GitHubSourceCodeProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        ->disableOriginalConstructor()
+        ->getMock();
 
         $stepsExecutionDto->addFilterResponse(
             new ReleaseGroupFilterResponseDto(
                 $this->getReleaseGroupDto(),
                 new ModuleDtoCollection([
-                    new ModuleDto('spryker/shipment-types-backend-api', '0.1.0', 'minor'),
+                new ModuleDto('spryker/shipment-types-backend-api', '0.1.0', 'minor'),
                 ]),
             ),
         );
 
         // Assert
         $gitHubProviderMock->expects($this->exactly(1))
-            ->method('createPullRequest')
-            ->willReturn($stepsExecutionDto);
+        ->method('createPullRequest')
+        ->willReturn($stepsExecutionDto);
 
         // Arrange
         $reflection = new ReflectionClass($git);
@@ -209,14 +185,12 @@ class GitTest extends KernelTestCase
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
     }
 
-    /**
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService $processRunner
-     *
-     * @return \Upgrade\Infrastructure\VersionControlSystem\Git\Git
-     */
     protected function getGitWithProcessRunner(ProcessRunnerService $processRunner): Git
     {
-        /** @var \Upgrade\Infrastructure\VersionControlSystem\Git\Git $git */
+        /**
+                 *
+ @var \Upgrade\Infrastructure\VersionControlSystem\Git\Git $git
+                 */
         $git = static::bootKernel()->getContainer()->get(Git::class);
 
         $gitReflection = new ReflectionClass($git);
@@ -229,12 +203,6 @@ class GitTest extends KernelTestCase
         return $git;
     }
 
-    /**
-     * @param string $outputMessage
-     * @param bool $isSuccessful
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService
-     */
     protected function mockProcessRunnerWithOutput(string $outputMessage, bool $isSuccessful = true): ProcessRunnerService
     {
         $processMock = $this->createMock(Process::class);
@@ -247,9 +215,6 @@ class GitTest extends KernelTestCase
         return $processRunnerMock;
     }
 
-    /**
-     * @return \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected function mockConfigurationProvider(): ConfigurationProvider
     {
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
@@ -261,9 +226,6 @@ class GitTest extends KernelTestCase
         return $configurationProviderMock;
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\ComposerLockDiffDto
-     */
     protected function getComposerLockDiffDto(): ComposerLockDiffDto
     {
         $message = '{"changes":{"spryker\/product-label":["3.2.0","3.3.0","https:\/\/github.com\/spryker\/product-label\/compare\/3.2.0...3.3.0"]},"changes-dev":{"spryker-shop\/web-profiler-widget":["1.4.1","1.4.2","https:\/\/github.com\/spryker-shop\/web-profiler-widget\/compare\/1.4.1...1.4.2"]}}';
@@ -278,9 +240,6 @@ class GitTest extends KernelTestCase
         return $composerLockComparatorCommandExecutor->getComposerLockDiff();
     }
 
-    /**
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto
-     */
     protected function getReleaseGroupDto(): ReleaseGroupDto
     {
         $releaseGroupDto = new ReleaseGroupDto(

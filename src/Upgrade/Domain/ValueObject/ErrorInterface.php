@@ -11,13 +11,7 @@ namespace Upgrade\Domain\ValueObject;
 
 interface ErrorInterface
 {
-    /**
-     * @return string
-     */
     public function getErrorMessage(): string;
 
-    /**
-     * @return string
-     */
     public function getErrorType(): string;
 }

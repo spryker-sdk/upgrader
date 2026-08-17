@@ -16,9 +16,6 @@ use PHPUnit\Framework\TestCase;
 
 class DbSchemaConflictCheckerTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testCheckShouldReturnViolationsWithColumnsAlreadyInProject(): void
     {
         // Arrange
@@ -57,8 +54,6 @@ class DbSchemaConflictCheckerTest extends TestCase
 
     /**
      * @param array<mixed> $projectColumnsMap
-     *
-     * @return \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\ProjectSchemaColumnsMapFetcher\ProjectSchemaColumnsMapFetcherInterface
      */
     protected function createProjectSchemaColumnsMapFetcherMock(array $projectColumnsMap = []): ProjectSchemaColumnsMapFetcherInterface
     {
@@ -70,8 +65,6 @@ class DbSchemaConflictCheckerTest extends TestCase
 
     /**
      * @param array<mixed> $newVendorColumns
-     *
-     * @return \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\NewVendorColumnsFetcher\NewVendorColumnsFetcherInterface
      */
     protected function createNewVendorColumnsFetcherMock(array $newVendorColumns): NewVendorColumnsFetcherInterface
     {

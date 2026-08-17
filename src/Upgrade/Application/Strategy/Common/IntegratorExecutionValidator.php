@@ -18,22 +18,13 @@ class IntegratorExecutionValidator implements IntegratorExecutionValidatorInterf
      */
     protected const MAX_MANIFESTS_RATING_THRESHOLD = 100;
 
-    /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     */
     public function __construct(ConfigurationProviderInterface $configurationProvider)
     {
         $this->configurationProvider = $configurationProvider;
     }
 
-    /**
-     * @return bool
-     */
     public function isIntegratorShouldBeInvoked(): bool
     {
         return $this->configurationProvider->isIntegratorEnabled()

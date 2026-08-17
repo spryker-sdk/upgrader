@@ -17,9 +17,6 @@ use Upgrader\Configuration\ConfigurationProvider;
 
 class PhpcsInstallationValidatorRuleTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testValidateShouldThrowExceptionWhenPhpcsNotFound(): void
     {
         // Arrange & Assert
@@ -34,9 +31,6 @@ class PhpcsInstallationValidatorRuleTest extends TestCase
         $validator->validate();
     }
 
-    /**
-     * @return void
-     */
     public function testValidateShouldNotThrowExceptionWhenFound(): void
     {
         // Arrange & Assert
@@ -45,13 +39,10 @@ class PhpcsInstallationValidatorRuleTest extends TestCase
             $this->createFilesystemMock(),
         );
 
-        // Act
+    // Act
         $validator->validate();
     }
 
-    /**
-     * @return void
-     */
     public function testGetViolationTitleShouldReturnTitle(): void
     {
         // Arrange
@@ -67,9 +58,6 @@ class PhpcsInstallationValidatorRuleTest extends TestCase
         $this->assertSame(PhpcsInstallationValidatorRule::VIOLATION_TITLE, $title);
     }
 
-    /**
-     * @return \Upgrader\Configuration\ConfigurationProvider
-     */
     protected function createConfigurationProviderMock(): ConfigurationProvider
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
@@ -78,18 +66,13 @@ class PhpcsInstallationValidatorRuleTest extends TestCase
         return $configurationProvider;
     }
 
-    /**
-     * @param bool $isPhpcsFound
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\Filesystem
-     */
     protected function createFilesystemMock(bool $isPhpcsFound = true): Filesystem
     {
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->expects($this->once())
-            ->method('exists')
-            ->with(PhpcsInstallationValidatorRule::PHP_CS_FIXER_PATH)
-            ->willReturn($isPhpcsFound);
+        ->method('exists')
+        ->with(PhpcsInstallationValidatorRule::PHP_CS_FIXER_PATH)
+        ->willReturn($isPhpcsFound);
 
         return $filesystem;
     }

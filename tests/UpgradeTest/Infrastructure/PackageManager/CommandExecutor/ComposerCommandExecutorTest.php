@@ -33,9 +33,6 @@ class ComposerCommandExecutorTest extends TestCase
      */
     protected $processRunner;
 
-    /**
-     * @var \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutor
-     */
     protected ComposerCommandExecutor $cmdExecutor;
 
     /**
@@ -43,14 +40,8 @@ class ComposerCommandExecutorTest extends TestCase
      */
     protected ConfigurationProvider $mockConfigurationProvider;
 
-    /**
-     * @var \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader
-     */
     protected ComposerLockReader $composerLockReader;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         $this->processRunner = $this->prophesize(ProcessRunnerService::class);
@@ -60,9 +51,6 @@ class ComposerCommandExecutorTest extends TestCase
         $this->cmdExecutor = new ComposerCommandExecutor($this->processRunner->reveal(), $this->mockConfigurationProvider, $this->composerLockReader);
     }
 
-    /**
-     * @return void
-     */
     public function testRequireWithDependencies(): void
     {
         $this->runWithoutStrategy();
@@ -78,9 +66,6 @@ class ComposerCommandExecutorTest extends TestCase
         $this->assertSame('composer require spryker-sdk/sdk-contracts:0.2.1 spryker-sdk/sdk:dev-master as 1.0.0 --no-scripts --no-plugins -W', $response->getOutputMessage());
     }
 
-    /**
-     * @return void
-     */
     public function testRequire(): void
     {
         $this->runWithoutStrategy();
@@ -95,9 +80,6 @@ class ComposerCommandExecutorTest extends TestCase
         $this->assertSame('composer require spryker-sdk/sdk-contracts:0.2.1 --no-scripts --no-plugins -W --no-install', $response->getOutputMessage());
     }
 
-    /**
-     * @return void
-     */
     public function testRemove(): void
     {
         $this->runWithoutStrategy();
@@ -109,9 +91,6 @@ class ComposerCommandExecutorTest extends TestCase
         $this->assertSame('composer remove spryker-sdk/sdk-contracts --no-scripts --no-plugins', $response->getOutputMessage());
     }
 
-    /**
-     * @return void
-     */
     public function testRequireDev(): void
     {
         $this->runWithoutStrategy();
@@ -125,9 +104,6 @@ class ComposerCommandExecutorTest extends TestCase
         $this->assertSame('composer require phpspec/prophecy-phpunit:2.0.1 --no-scripts --no-plugins --dev -W --no-install', $response->getOutputMessage());
     }
 
-    /**
-     * @return void
-     */
     public function testUpdateSubPackage(): void
     {
         $this->runWithoutStrategy();
@@ -141,9 +117,6 @@ class ComposerCommandExecutorTest extends TestCase
         $this->assertSame('composer update phpspec/prophecy-phpunit:2.0.1 --no-scripts --no-plugins --no-interaction -W --no-install', $response->getOutputMessage());
     }
 
-    /**
-     * @return void
-     */
     public function testUpdate(): void
     {
         $this->runWithoutStrategy();
@@ -159,10 +132,8 @@ class ComposerCommandExecutorTest extends TestCase
      *
      * @dataProvider getStrategyCallDataProvider
      *
-     * @param array $isSuccessful
-     * @param array $arguments
-     *
-     * @return void
+     * @param array<bool> $isSuccessful
+     * @param array<array<mixed>> $arguments
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getStrategyCallDataProvider')]
     public function testUpdateWithStrategy(array $isSuccessful, array $arguments): void
@@ -193,9 +164,6 @@ class ComposerCommandExecutorTest extends TestCase
         $this->assertEquals($arguments, $invocations);
     }
 
-    /**
-     * @return void
-     */
     public function testUpdateLockHashShouldThrowExceptionWhenEmptyLockFileSet(): void
     {
         // Arrange & Assert
@@ -212,9 +180,6 @@ class ComposerCommandExecutorTest extends TestCase
         $commandExecutor->updateLockHash();
     }
 
-    /**
-     * @return void
-     */
     public function testUpdateLockHashShouldThrowExceptionWhenInvalidLockFileSet(): void
     {
         // Arrange & Assert
@@ -237,9 +202,6 @@ class ComposerCommandExecutorTest extends TestCase
         $commandExecutor->updateLockHash();
     }
 
-    /**
-     * @return void
-     */
     public function testUpdateLockHashShouldUpdatePackage(): void
     {
         // Arrange & Assert
@@ -276,9 +238,6 @@ class ComposerCommandExecutorTest extends TestCase
         $commandExecutor->updateLockHash();
     }
 
-    /**
-     * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected function mockConfigurationProvider(): ConfigurationProviderInterface
     {
         return $this->createMock(ConfigurationProvider::class);
@@ -286,8 +245,6 @@ class ComposerCommandExecutorTest extends TestCase
 
     /**
      * @param array<mixed> $composerLockData
-     *
-     * @return \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader
      */
     protected function createComposerLockReaderMock(array $composerLockData = []): ComposerLockReader
     {
@@ -297,9 +254,6 @@ class ComposerCommandExecutorTest extends TestCase
         return $composerLockReader;
     }
 
-    /**
-     * @return void
-     */
     protected function runWithoutStrategy(): void
     {
         $this->processRunner->run(Argument::type('array'), Argument::type('array'))->shouldBeCalledOnce()
@@ -308,9 +262,6 @@ class ComposerCommandExecutorTest extends TestCase
             });
     }
 
-    /**
-     * @return \Generator
-     */
     public static function getStrategyCallDataProvider(): Generator
     {
         $dataProvider = [

@@ -27,11 +27,6 @@ class TestKernel extends BaseKernel
         }
     }
 
-    /**
-     * @param \Symfony\Component\Config\Loader\LoaderInterface $loader
-     *
-     * @return void
-     */
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(APPLICATION_ROOT_DIR . '/config/services.yaml');

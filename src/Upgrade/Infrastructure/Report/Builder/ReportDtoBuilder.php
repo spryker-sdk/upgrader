@@ -34,24 +34,13 @@ class ReportDtoBuilder implements ReportDtoBuilderInterface
      */
     public const REPORT_VERSION = 1;
 
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     */
     public function __construct(ConfigurationProvider $configurationProvider)
     {
         $this->configurationProvider = $configurationProvider;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Infrastructure\Report\Dto\ReportDto
-     */
     public function buildFromStepResponseDto(StepsResponseDto $stepsResponseDto): ReportDto
     {
         return new ReportDto(
@@ -64,11 +53,6 @@ class ReportDtoBuilder implements ReportDtoBuilderInterface
         );
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Infrastructure\Report\Dto\ReportMetadataDto
-     */
     protected function createReportMetadata(StepsResponseDto $stepsResponseDto): ReportMetadataDto
     {
         return new ReportMetadataDto(
@@ -83,11 +67,6 @@ class ReportDtoBuilder implements ReportDtoBuilderInterface
         );
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Infrastructure\Report\Dto\ReportPayloadDto
-     */
     protected function createReportPayload(StepsResponseDto $stepsResponseDto): ReportPayloadDto
     {
         $composerLockDiff = $stepsResponseDto->getComposerLockDiff();

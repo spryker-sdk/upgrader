@@ -16,11 +16,7 @@ use Codebase\Application\Dto\SourceParserRequestDto;
 class SourceParserRequestMapper implements SourceParserRequestMapperInterface
 {
     /**
-     * @param \Codebase\Application\Dto\CodeBaseRequestDto $codebaseRequestDto
-     * @param \Codebase\Application\Dto\ConfigurationResponseDto $configurationResponseDto
      * @param array<\Codebase\Application\Dto\ModuleDto> $modules
-     *
-     * @return \Codebase\Application\Dto\SourceParserRequestDto
      */
     public function mapToSourceParserRequest(
         CodeBaseRequestDto $codebaseRequestDto,
@@ -43,7 +39,6 @@ class SourceParserRequestMapper implements SourceParserRequestMapperInterface
     }
 
     /**
-     * @param string $srcPath
      * @param array<string> $projectPrefixes
      * @param array<\Codebase\Application\Dto\ModuleDto> $modules
      *
@@ -59,7 +54,6 @@ class SourceParserRequestMapper implements SourceParserRequestMapperInterface
     }
 
     /**
-     * @param string $srcPath
      * @param array<string> $projectPrefixes
      *
      * @return array<string>
@@ -79,7 +73,6 @@ class SourceParserRequestMapper implements SourceParserRequestMapperInterface
     }
 
     /**
-     * @param string $srcPath
      * @param array<\Codebase\Application\Dto\ModuleDto> $modules
      *
      * @return array<string>

@@ -15,9 +15,6 @@ use Upgrade\Application\Factory\ComposerViolationDtoFactory;
 
 class ComposerViolationDtoFactoryTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testCreateFromPackageManagerResponseShouldCreateViolationResponse(): void
     {
         // Arrange

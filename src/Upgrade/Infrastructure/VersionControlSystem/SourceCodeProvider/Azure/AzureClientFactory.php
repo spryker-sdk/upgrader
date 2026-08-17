@@ -17,34 +17,18 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class AzureClientFactory
 {
-    /**
-     * @var \SprykerAzure\Client\ClientInterface|null
-     */
     protected ?AzureClientInterface $client = null;
 
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \Psr\Http\Client\ClientInterface
-     */
     protected ClientInterface $httpClient;
 
-    /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Psr\Http\Client\ClientInterface $httpClient
-     */
     public function __construct(ConfigurationProvider $configurationProvider, ClientInterface $httpClient)
     {
         $this->configurationProvider = $configurationProvider;
         $this->httpClient = $httpClient;
     }
 
-    /**
-     * @return \SprykerAzure\Client\ClientInterface
-     */
     public function getClient(): AzureClientInterface
     {
         if ($this->client === null) {
@@ -54,9 +38,6 @@ class AzureClientFactory
         return $this->client;
     }
 
-    /**
-     * @return \SprykerAzure\Client\ClientInterface
-     */
     protected function createClient(): AzureClientInterface
     {
         $clientBuilder = new ClientBuilder();

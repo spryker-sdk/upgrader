@@ -17,12 +17,6 @@ class IntegratorExecutionValidatorTest extends TestCase
 {
     /**
      * @dataProvider configurationDataProvider
-     *
-     * @param bool $isIntegratorEnabled
-     * @param int $getManifestsRatingThreshold
-     * @param bool $expectedResult
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('configurationDataProvider')]
     public function testIsIntegratorShouldBeInvokedShouldReturnValidState(

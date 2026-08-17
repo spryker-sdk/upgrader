@@ -13,14 +13,8 @@ use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
 
 class ClassMetaDataFromFileFetcher implements ClassMetaDataFromFileFetcherInterface
 {
- /**
-  * @var \SprykerSdk\Utils\Infrastructure\Service\Filesystem
-  */
     protected Filesystem $filesystem;
 
-    /**
-     * @param \SprykerSdk\Utils\Infrastructure\Service\Filesystem $filesystem
-     */
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
@@ -28,8 +22,6 @@ class ClassMetaDataFromFileFetcher implements ClassMetaDataFromFileFetcherInterf
 
     /**
      * Current spryker packages has full class name in class path
-     *
-     * @param string $filePath
      *
      * @return string|null null in case non-class file
      */
@@ -54,11 +46,6 @@ class ClassMetaDataFromFileFetcher implements ClassMetaDataFromFileFetcherInterf
         return $matches['namespace'] . '\\' . $className;
     }
 
-    /**
-     * @param string $filePath
-     *
-     * @return string|null
-     */
     public function fetchPackageName(string $filePath): ?string
     {
         preg_match('/(?<basePath>.*\/)src\/.*\.php/', $filePath, $matches);

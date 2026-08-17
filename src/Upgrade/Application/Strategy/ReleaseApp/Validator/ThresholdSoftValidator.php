@@ -28,11 +28,6 @@ class ThresholdSoftValidator implements ThresholdSoftValidatorInterface
         $this->validatorList = $validatorList;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $groupDtoCollection
-     *
-     * @return \Upgrade\Application\Dto\ResponseDto
-     */
     public function validate(ReleaseGroupDtoCollection $groupDtoCollection): ResponseDto
     {
         try {

@@ -18,27 +18,12 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class IntegratorStep extends AbstractStep implements RollbackStepInterface
 {
-    /**
-     * @var \Upgrade\Application\Adapter\IntegratorExecutorInterface
-     */
     protected IntegratorExecutorInterface $integratorClient;
 
-    /**
-     * @var \Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface
-     */
     protected IntegratorExecutionValidatorInterface $integratorExecutorValidator;
 
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
-     * @param \Upgrade\Application\Adapter\IntegratorExecutorInterface $integratorClient
-     * @param \Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface $integratorExecutorValidator
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     */
     public function __construct(
         VersionControlSystemAdapterInterface $versionControlSystem,
         IntegratorExecutorInterface $integratorClient,
@@ -52,11 +37,6 @@ class IntegratorStep extends AbstractStep implements RollbackStepInterface
         $this->configurationProvider = $configurationProvider;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         if (!$this->integratorExecutorValidator->isIntegratorShouldBeInvoked()) {
@@ -73,11 +53,6 @@ class IntegratorStep extends AbstractStep implements RollbackStepInterface
         );
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function rollBack(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->vsc->restore($stepsExecutionDto);

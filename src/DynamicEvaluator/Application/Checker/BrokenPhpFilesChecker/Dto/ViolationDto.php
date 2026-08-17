@@ -23,9 +23,6 @@ class ViolationDto implements ViolationDtoInterface
      */
     protected array $fileErrors;
 
-    /**
-     * @var string
-     */
     protected string $hash;
 
     /**
@@ -58,19 +55,11 @@ class ViolationDto implements ViolationDtoInterface
         return $this->fileErrors;
     }
 
-    /**
-     * @return string
-     */
     public function getHash(): string
     {
         return $this->hash;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\ViolationDtoInterface $violationDto
-     *
-     * @return bool
-     */
     public function equals(ViolationDtoInterface $violationDto): bool
     {
         return $violationDto instanceof ViolationDto && $this->getHash() === $violationDto->getHash();

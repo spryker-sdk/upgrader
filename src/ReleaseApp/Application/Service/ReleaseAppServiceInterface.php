@@ -17,28 +17,10 @@ use ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup;
 
 interface ReleaseAppServiceInterface
 {
-    /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest $upgradeInstructionsRequest
-     *
-     * @return \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionsReleaseGroupCollection
-     */
     public function getNewReleaseGroupsSortedByReleaseDate(UpgradeInstructionsRequest $upgradeInstructionsRequest): UpgradeInstructionsReleaseGroupCollection;
 
-    /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest $upgradeReleaseGroupInstructionsRequest
-     *
-     * @return \ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup
-     */
     public function getReleaseGroup(UpgradeReleaseGroupInstructionsRequest $upgradeReleaseGroupInstructionsRequest): UpgradeInstructionsReleaseGroup;
 
-    /**
-     * @param string|null $sort
-     * @param string|null $direction
-     * @param \DateTimeInterface|null $releasedFrom
-     * @param bool $projectOnly
-     *
-     * @return string
-     */
     public function getReleaseHistoryLink(
         ?string $sort = null,
         ?string $direction = null,

@@ -18,15 +18,8 @@ use Upgrade\Domain\ValueObject\Error;
 
 class ComposerUpdateStep extends AbstractStep implements RollbackStepInterface
 {
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManager;
 
-    /**
-     * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
-     */
     public function __construct(
         VersionControlSystemAdapterInterface $versionControlSystem,
         PackageManagerAdapterInterface $packageManager
@@ -36,11 +29,6 @@ class ComposerUpdateStep extends AbstractStep implements RollbackStepInterface
         $this->packageManager = $packageManager;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $updateResponse = $this->packageManager->update();
@@ -54,11 +42,6 @@ class ComposerUpdateStep extends AbstractStep implements RollbackStepInterface
         return $stepsExecutionDto;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function rollBack(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->vsc->restore($stepsExecutionDto);

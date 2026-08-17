@@ -16,11 +16,6 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
 {
     /**
      * @dataProvider getFQCNProvider
-     *
-     * @param string $fileData
-     * @param string|null $expectedClassName
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getFQCNProvider')]
     public function testFetchFQCNShouldReturnClassName(string $fileData, ?string $expectedClassName): void
@@ -102,9 +97,6 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
         ];
     }
 
-    /**
-     * @return void
-     */
     public function testFetchPackageNameShouldReturnPackageName(): void
     {
         // Arrange
@@ -136,9 +128,6 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
         $this->assertSame('spryker/acl', $packageName);
     }
 
-    /**
-     * @return void
-     */
     public function testFetchPackageNameShouldReturnNullWithInvalidPath(): void
     {
         // Arrange
@@ -170,9 +159,6 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
         $this->assertNull($packageName);
     }
 
-    /**
-     * @return void
-     */
     public function testFetchPackageNameShouldReturnNullWhenComposerFileDoesNotMatchPattern(): void
     {
         // Arrange
@@ -191,9 +177,6 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
         $this->assertNull($packageName);
     }
 
-    /**
-     * @return void
-     */
     public function testFetchPackageNameShouldReturnNullWhenComposerFileDoesNotExist(): void
     {
         // Arrange
@@ -212,11 +195,6 @@ class ClassMetaDataFromFileFetcherTest extends TestCase
         $this->assertNull($packageName);
     }
 
-    /**
-     * @param string $fileContent
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\Filesystem
-     */
     public function createFilesystemFacadeMock(string $fileContent): Filesystem
     {
         $filesystem = $this->createMock(Filesystem::class);

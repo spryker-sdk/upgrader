@@ -18,38 +18,23 @@ class HttpUpgradeInstructionsRequest implements HttpRequestInterface
      */
     public const REQUEST_ENDPOINT = '/upgrader-instruction-list.json';
 
-    /**
-     * @var \ReleaseApp\Domain\Client\Request\RequestInterface
-     */
     protected RequestInterface $request;
 
-    /**
-     * @param \ReleaseApp\Domain\Client\Request\RequestInterface $domainRequest
-     */
     public function __construct(RequestInterface $domainRequest)
     {
         $this->request = $domainRequest;
     }
 
-    /**
-     * @return \ReleaseApp\Domain\Client\Request\RequestInterface
-     */
     public function getRequest(): RequestInterface
     {
         return $this->request;
     }
 
-    /**
-     * @return string
-     */
     public function getEndpoint(): string
     {
         return sprintf('%s?%s', static::REQUEST_ENDPOINT, $this->request->getParameters());
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return static::REQUEST_METHOD_POST;

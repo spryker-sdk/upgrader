@@ -11,37 +11,21 @@ namespace Upgrade\Application\Dto;
 
 class ResponseDto
 {
-    /**
-     * @var bool
-     */
     protected bool $isSuccessful;
 
-    /**
-     * @var string|null
-     */
     protected ?string $outputMessage;
 
-    /**
-     * @param bool $isSuccessful
-     * @param string|null $outputMessage
-     */
     public function __construct(bool $isSuccessful, ?string $outputMessage = null)
     {
         $this->isSuccessful = $isSuccessful;
         $this->outputMessage = $outputMessage;
     }
 
-    /**
-     * @return bool
-     */
     public function isSuccessful(): bool
     {
         return $this->isSuccessful;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOutputMessage(): ?string
     {
         return $this->outputMessage;

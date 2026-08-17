@@ -14,10 +14,5 @@ use Upgrade\Application\Dto\ResponseDto;
 
 interface ThresholdSoftValidatorInterface
 {
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $moduleDtoCollection
-     *
-     * @return \Upgrade\Application\Dto\ResponseDto
-     */
     public function validate(ReleaseGroupDtoCollection $moduleDtoCollection): ResponseDto;
 }

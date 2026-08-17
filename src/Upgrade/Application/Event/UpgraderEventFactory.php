@@ -16,27 +16,15 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class UpgraderEventFactory
 {
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var string|null
-     */
     protected ?string $executionId = null;
 
-    /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     */
     public function __construct(ConfigurationProvider $configurationProvider)
     {
         $this->configurationProvider = $configurationProvider;
     }
 
-    /**
-     * @return \Upgrade\Application\Event\UpgraderStartedEvent
-     */
     public function createUpgraderStartedEvent(): UpgraderStartedEvent
     {
         return new UpgraderStartedEvent(
@@ -48,12 +36,6 @@ class UpgraderEventFactory
         );
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     * @param int $duration
-     *
-     * @return \Upgrade\Application\Event\UpgraderFinishedEvent
-     */
     public function createUpgraderFinishedEvent(StepsResponseDto $stepsResponseDto, int $duration): UpgraderFinishedEvent
     {
         $finishReason = $stepsResponseDto->getError() !== null
@@ -79,9 +61,6 @@ class UpgraderEventFactory
         );
     }
 
-    /**
-     * @return string
-     */
     protected function getCiExecutionId(): string
     {
         $ciExecutionId = $this->configurationProvider->getCiExecutionId();

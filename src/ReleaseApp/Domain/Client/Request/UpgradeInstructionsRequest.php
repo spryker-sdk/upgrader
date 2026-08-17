@@ -31,25 +31,16 @@ class UpgradeInstructionsRequest implements RequestInterface
         $this->packages = $packages;
     }
 
-    /**
-     * @return string
-     */
     public function getBody(): string
     {
         return (string)json_encode($this->getBodyArray());
     }
 
-    /**
-     * @return string
-     */
     public function getResponseClass(): string
     {
         return UpgradeInstructions::class;
     }
 
-    /**
-     * @return string|null
-     */
     public function getParameters(): ?string
     {
         return null;

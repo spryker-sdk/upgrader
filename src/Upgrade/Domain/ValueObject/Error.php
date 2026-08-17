@@ -24,57 +24,31 @@ class Error implements ErrorInterface
      */
     public const INTERNAL_ERROR = 'internalError';
 
-    /**
-     * @var string
-     */
     protected string $errorMessage;
 
-    /**
-     * @var string
-     */
     protected string $errorType;
 
-    /**
-     * @param string $errorMessage
-     * @param string $errorType
-     */
     public function __construct(string $errorMessage, string $errorType)
     {
         $this->errorMessage = $errorMessage;
         $this->errorType = $errorType;
     }
 
-    /**
-     * @param string $errorMessage
-     *
-     * @return self
-     */
     public static function createClientCodeError(string $errorMessage): self
     {
         return new self($errorMessage, static::CLIENT_CODE_ERROR);
     }
 
-    /**
-     * @param string $errorMessage
-     *
-     * @return self
-     */
     public static function createInternalError(string $errorMessage): self
     {
         return new self($errorMessage, static::INTERNAL_ERROR);
     }
 
-    /**
-     * @return string
-     */
     public function getErrorMessage(): string
     {
         return $this->errorMessage;
     }
 
-    /**
-     * @return string
-     */
     public function getErrorType(): string
     {
         return $this->errorType;

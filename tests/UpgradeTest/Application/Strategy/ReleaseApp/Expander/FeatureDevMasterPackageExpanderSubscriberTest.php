@@ -22,9 +22,6 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 
 class FeatureDevMasterPackageExpanderSubscriberTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testOnPreRequireShouldNotInvokeCheckerWhenFeatureDevMasterDisabled(): void
     {
         // Arrange & Assert
@@ -42,9 +39,6 @@ class FeatureDevMasterPackageExpanderSubscriberTest extends TestCase
         $featureDevMasterPackageExpanderEventSubscriber->onPreRequire($event);
     }
 
-    /**
-     * @return void
-     */
     public function testOnPreRequireShouldNotInvokeCheckerWhenReleaseGroupIdEmpty(): void
     {
         // Arrange & Assert
@@ -58,13 +52,10 @@ class FeatureDevMasterPackageExpanderSubscriberTest extends TestCase
             true,
         );
 
-        // Act
+    // Act
         $featureDevMasterPackageExpanderEventSubscriber->onPreRequire($event);
     }
 
-    /**
-     * @return void
-     */
     public function testOnPreRequireShouldNotInvokeCheckerWhenCurrentReleaseGroupEmpty(): void
     {
         // Arrange & Assert
@@ -84,9 +75,6 @@ class FeatureDevMasterPackageExpanderSubscriberTest extends TestCase
         $featureDevMasterPackageExpanderEventSubscriber->onPreRequire($event);
     }
 
-    /**
-     * @return void
-     */
     public function testSetFeaturePackages(): void
     {
         // Arrange
@@ -94,9 +82,9 @@ class FeatureDevMasterPackageExpanderSubscriberTest extends TestCase
             1000,
             'test',
             new ModuleDtoCollection([
-                new ModuleDto('spryker/package-one', '^4.17.1', 'minor', ['spryker-feature/feature-package-one' => 'dev-master as 20440.0']),
-                new ModuleDto('spryker/package-two', '^4.17.1', 'minor', ['spryker-feature/feature-package-two' => 'dev-master as 20440.0']),
-                new ModuleDto('spryker/package-three', '^4.17.1', 'minor', ['spryker-feature/feature-package-three' => 'dev-master as 20441.0']),
+            new ModuleDto('spryker/package-one', '^4.17.1', 'minor', ['spryker-feature/feature-package-one' => 'dev-master as 20440.0']),
+            new ModuleDto('spryker/package-two', '^4.17.1', 'minor', ['spryker-feature/feature-package-two' => 'dev-master as 20440.0']),
+            new ModuleDto('spryker/package-three', '^4.17.1', 'minor', ['spryker-feature/feature-package-three' => 'dev-master as 20441.0']),
             ]),
             new ModuleDtoCollection(),
             new ModuleDtoCollection(),
@@ -111,19 +99,19 @@ class FeatureDevMasterPackageExpanderSubscriberTest extends TestCase
         $event = new ReleaseGroupProcessorEvent($stepsResponseDtoMock);
         $packageManagerAdapterMock = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapterMock->method('getComposerJsonFile')->willReturn([
-            'require' => [
-                'spryker/package-one' => '^4.17.0',
-                'spryker/package-two' => '^4.17.0',
-                'spryker/package-three' => '^4.17.0',
-                'spryker-feature/feature-package-two' => '^4.18.0',
-                'spryker-feature/feature-package-one' => '^4.19.0',
-                'spryker-feature/feature-package-three' => 'dev-master as 20440.0',
-            ],
-            'require-dev' => [
-                'spryker/package-1' => '^3.17.0',
-                'spryker/package-2' => '^3.17.0',
-                'spryker/package-3' => '^3.17.0',
-            ],
+        'require' => [
+            'spryker/package-one' => '^4.17.0',
+            'spryker/package-two' => '^4.17.0',
+            'spryker/package-three' => '^4.17.0',
+            'spryker-feature/feature-package-two' => '^4.18.0',
+            'spryker-feature/feature-package-one' => '^4.19.0',
+            'spryker-feature/feature-package-three' => 'dev-master as 20440.0',
+        ],
+        'require-dev' => [
+            'spryker/package-1' => '^3.17.0',
+            'spryker/package-2' => '^3.17.0',
+            'spryker/package-3' => '^3.17.0',
+        ],
         ]);
 
         $featureDevMasterPackageExpanderEventSubscriber = new FeatureDevMasterPackageExpanderEventSubscriber(
@@ -141,11 +129,6 @@ class FeatureDevMasterPackageExpanderSubscriberTest extends TestCase
         $this->assertSame('spryker-feature/feature-package-two', $currentReleaseGroup->getFeaturePackages()->toArray()[1]->getName());
     }
 
-    /**
-     * @param bool $releaseGroupIdExist
-     *
-     * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     public function createConfigurationProviderMock(bool $releaseGroupIdExist = false): ConfigurationProviderInterface
     {
         $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);

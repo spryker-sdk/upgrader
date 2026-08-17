@@ -16,9 +16,6 @@ use Upgrader\Configuration\ConfigurationProvider;
 
 class ProjectExtendedClassesFetcher implements ProjectExtendedClassesFetcherInterface
 {
-    /**
-     * @var \Upgrader\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
     /**
@@ -26,21 +23,10 @@ class ProjectExtendedClassesFetcher implements ProjectExtendedClassesFetcherInte
      */
     protected ?array $foundClasses = null;
 
-    /**
-     * @var \Core\Infrastructure\Service\FinderFactory
-     */
     protected FinderFactory $finderFactory;
 
-    /**
-     * @var \PackageStorage\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface
-     */
     protected PublicApiFilePathsProviderInterface $publicApiFilePathsProvider;
 
-    /**
-     * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Core\Infrastructure\Service\FinderFactory $finderFactory
-     * @param \PackageStorage\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface $publicApiFilePathsProvider
-     */
     public function __construct(
         ConfigurationProvider $configurationProvider,
         FinderFactory $finderFactory,
@@ -94,9 +80,6 @@ class ProjectExtendedClassesFetcher implements ProjectExtendedClassesFetcherInte
         return $classNames;
     }
 
-    /**
-     * @return \Symfony\Component\Finder\Finder
-     */
     protected function getFinderIterator(): Finder
     {
         $finder = $this->finderFactory->createFinder();

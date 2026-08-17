@@ -18,9 +18,6 @@ class TransferSchemaParserTest extends BaseParser
      */
     protected const TRANSFER_SCHEMA_EXTENSION = 'transfer.xml';
 
-    /**
-     * @return void
-     */
     public function testParse(): void
     {
         //Arrange

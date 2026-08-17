@@ -21,29 +21,14 @@ use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodePro
 
 class Git
 {
-    /**
-     * @var string
-     */
     protected string $baseBranch = '';
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected ProcessRunnerServiceInterface $processRunner;
 
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface
-     */
     protected SourceCodeProviderInterface $sourceCodeProvider;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator
-     */
     protected PullRequestDataGenerator $pullRequestDataGenerator;
 
     /**
@@ -51,12 +36,6 @@ class Git
      */
     protected array $targetFiles = ['*'];
 
-    /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
-     * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $sourceCodeProvider
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\PullRequestDataGenerator $pullRequestDataGenerator
-     */
     public function __construct(
         ConfigurationProvider $configurationProvider,
         ProcessRunnerServiceInterface $processRunner,
@@ -69,11 +48,6 @@ class Git
         $this->pullRequestDataGenerator = $pullRequestDataGenerator;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function isRemoteTargetBranchNotExist(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $targetBranch = $this->getHeadBranch();
@@ -90,11 +64,6 @@ class Git
         return $this->prepareStepsExecutionDto($stepsExecutionDto, $process);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function isLocalTargetBranchNotExist(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'rev-parse', '--verify', $this->getHeadBranch()];
@@ -111,11 +80,6 @@ class Git
         return $stepsExecutionDto;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function hasAnyUncommittedChanges(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'status', '--porcelain'];
@@ -129,11 +93,6 @@ class Git
         return $this->prepareStepsExecutionDto($stepsExecutionDto, $process);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function createBranch(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'checkout', '-b', $this->getHeadBranch()];
@@ -141,11 +100,6 @@ class Git
         return $this->process($stepsExecutionDto, $command);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function add(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = array_merge(['git', 'add'], $this->targetFiles);
@@ -153,11 +107,6 @@ class Git
         return $this->process($stepsExecutionDto, $command);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function commit(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $commitMessage = $this->configurationProvider->getCommitMessage();
@@ -176,11 +125,6 @@ class Git
         return $this->process($stepsExecutionDto, $command);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function push(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'push', '--set-upstream', 'origin', $this->getHeadBranch()];
@@ -189,21 +133,11 @@ class Git
         return $this->prepareStepsExecutionDto($stepsExecutionDto, $process);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function validateSourceCodeProviderCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->sourceCodeProvider->validateCredentials($stepsExecutionDto);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function createPullRequest(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $composerDiffDto = $stepsExecutionDto->getComposerLockDiff();
@@ -235,12 +169,6 @@ class Git
         return $this->sourceCodeProvider->createPullRequest($stepsExecutionDto, $pullRequestDto);
     }
 
-    /**
-     * @param int|null $releaseGroupId
-     * @param string|null $jiraIssue
-     *
-     * @return string
-     */
     protected function getPullRequestTitle(?int $releaseGroupId = null, ?string $jiraIssue = null): string
     {
         $title = 'Auto-updating Spryker modules on ' . date('Y-m-d H:i');
@@ -256,11 +184,6 @@ class Git
         return $title;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function checkout(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'checkout', $this->getBaseBranch()];
@@ -268,11 +191,6 @@ class Git
         return $this->process($stepsExecutionDto, $command);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function deleteLocalBranch(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'branch', '-D', $this->getHeadBranch()];
@@ -280,11 +198,6 @@ class Git
         return $this->process($stepsExecutionDto, $command);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function deleteRemoteBranch(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $command = ['git', 'push', '--delete', 'origin', $this->getHeadBranch()];
@@ -292,11 +205,6 @@ class Git
         return $this->process($stepsExecutionDto, $command);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function restore(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $restore = array_merge(['git', 'restore'], $this->targetFiles);
@@ -309,12 +217,6 @@ class Git
         return $this->process($stepsExecutionDto, $removeUntracked);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     * @param string $message
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     protected function createEmptyCommit(StepsResponseDto $stepsExecutionDto, string $message): StepsResponseDto
     {
         $command = ['git', 'commit', '--allow-empty', '-m', $message];
@@ -322,9 +224,6 @@ class Git
         return $this->process($stepsExecutionDto, $command);
     }
 
-    /**
-     * @return string
-     */
     protected function getHeadBranch(): string
     {
         $releaseGroupId = $this->configurationProvider->getReleaseGroupId();
@@ -334,9 +233,6 @@ class Git
             : sprintf($this->configurationProvider->getBranchPattern(), $this->getBaseBranch());
     }
 
-    /**
-     * @return string
-     */
     protected function getBaseBranch(): string
     {
         if ($this->baseBranch === '') {
@@ -346,9 +242,6 @@ class Git
         return $this->baseBranch;
     }
 
-    /**
-     * @return string
-     */
     protected function getCurrentBranch(): string
     {
         $command = ['git', 'rev-parse', '--abbrev-ref', 'HEAD'];
@@ -358,10 +251,7 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      * @param array<string> $command
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
     public function process(StepsResponseDto $stepsExecutionDto, array $command): StepsResponseDto
     {
@@ -371,10 +261,7 @@ class Git
     }
 
     /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
      * @param \Symfony\Component\Process\Process<string, string> $process
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
      */
     protected function prepareStepsExecutionDto(StepsResponseDto $stepsExecutionDto, Process $process): StepsResponseDto
     {
@@ -392,9 +279,6 @@ class Git
         return $stepsExecutionDto;
     }
 
-    /**
-     * @return bool
-     */
     protected function hasCurrentBranchCommits(): bool
     {
         $command = ['git', 'log', '--oneline', $this->getBaseBranch() . '..'];

@@ -14,9 +14,6 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class ComposerStrategy extends AbstractStrategy
 {
-    /**
-     * @return string
-     */
     public function getStrategyName(): string
     {
         return ConfigurationProvider::COMPOSER_STRATEGY;

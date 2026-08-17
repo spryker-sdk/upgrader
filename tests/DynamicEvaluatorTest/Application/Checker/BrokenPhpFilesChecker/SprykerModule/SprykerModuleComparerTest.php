@@ -14,9 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 class SprykerModuleComparerTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testCompareForUpdatedModulesShouldReturnValidModules(): void
     {
         // Arrange

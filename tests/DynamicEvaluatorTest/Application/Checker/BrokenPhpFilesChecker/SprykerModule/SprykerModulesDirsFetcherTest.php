@@ -20,9 +20,6 @@ use Upgrader\Configuration\ConfigurationProvider;
 
 class SprykerModulesDirsFetcherTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFetchModulesDirsShouldReturnValidDirectories(): void
     {
         // Arrange
@@ -38,9 +35,6 @@ class SprykerModulesDirsFetcherTest extends TestCase
         $this->assertSame(['/data/src/Pyz/Zed/ModuleOne', '/data/src/Pyz/Yves/ModuleOne'], $dirs);
     }
 
-    /**
-     * @return \DynamicEvaluator\Application\ProjectConfigReader\ProjectConfigReaderInterface
-     */
     protected function createProjectConfigReaderMock(): ProjectConfigReaderInterface
     {
         $projectConfigReader = $this->createMock(ProjectConfigReaderInterface::class);
@@ -49,9 +43,6 @@ class SprykerModulesDirsFetcherTest extends TestCase
         return $projectConfigReader;
     }
 
-    /**
-     * @return \Upgrader\Configuration\ConfigurationProvider
-     */
     protected function createConfigurationProviderMock(): ConfigurationProvider
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
@@ -62,9 +53,6 @@ class SprykerModulesDirsFetcherTest extends TestCase
 
     /**
      * @param array<string> $paths
-     * @param string $expectedRegExp
-     *
-     * @return \Core\Infrastructure\Service\FinderFactory
      */
     protected function createFinderFactoryMock(array $paths, string $expectedRegExp): FinderFactory
     {

@@ -15,9 +15,6 @@ use SprykerSdk\Integrator\ConfigReader\ConfigReaderInterface as IntegratorConfig
 
 class IntegratorConfigReaderAdapterTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testReadShouldReturnIntegratorReaderResult(): void
     {
         // Arrange
@@ -37,11 +34,8 @@ class IntegratorConfigReaderAdapterTest extends TestCase
     }
 
     /**
-     * @param array $expectedReaderResult
-     * @param string $expectedConfigPath
+     * @param array<string, string> $expectedReaderResult
      * @param array<mixed> $expectedConfigKeys
-     *
-     * @return \SprykerSdk\Integrator\ConfigReader\ConfigReaderInterface
      */
     protected function createIntegratorConfigReaderMock(
         array $expectedReaderResult,

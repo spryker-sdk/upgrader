@@ -24,14 +24,6 @@ class GitLabSourceCodeProviderTest extends TestCase
 {
     /**
      * @dataProvider validateCredentialsDataProvider
-     *
-     * @param string $hasAccessToken
-     * @param string $hasProjectId
-     * @param string $hasOrganizationName
-     * @param string $hasRepositoryName
-     * @param bool $expectedResult
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('validateCredentialsDataProvider')]
     public function testValidateCredentialsShouldValidateCorrectly(
@@ -78,9 +70,6 @@ class GitLabSourceCodeProviderTest extends TestCase
         ];
     }
 
-    /**
-     * @return \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitLab\GitLabClientFactory
-     */
     protected function createGitLabClientFactoryMock(): GitLabClientFactory
     {
         $gitLabClientFactory = $this->createMock(GitLabClientFactory::class);
@@ -106,14 +95,6 @@ class GitLabSourceCodeProviderTest extends TestCase
 
     /**
      * @dataProvider createPullRequestDataProvider
-     *
-     * @param string $accessToken
-     * @param string $projectId
-     * @param string $orgName
-     * @param string $repoName
-     * @param string $expectedError
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('createPullRequestDataProvider')]
     public function testCreatePullRequest(string $accessToken, string $projectId, string $orgName, string $repoName, string $expectedError): void
@@ -162,12 +143,6 @@ class GitLabSourceCodeProviderTest extends TestCase
 
     /**
      * @dataProvider buildBlockerTextBlockDataProvider
-     *
-     * @param string $title
-     * @param string $message
-     * @param string $expectedOutput
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('buildBlockerTextBlockDataProvider')]
     public function testBuildBlockerTextBlock(string $title, string $message, string $expectedOutput): void

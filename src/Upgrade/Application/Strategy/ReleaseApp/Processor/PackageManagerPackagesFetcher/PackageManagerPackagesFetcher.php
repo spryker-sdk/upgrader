@@ -17,31 +17,16 @@ use Upgrade\Domain\Entity\Package;
 
 class PackageManagerPackagesFetcher implements PackageManagerPackagesFetcherInterface
 {
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManager;
 
-    /**
-     * @var bool
-     */
     protected bool $isReleaseGroupIntegratorEnabled;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
-     * @param bool $isReleaseGroupIntegratorEnabled
-     */
     public function __construct(PackageManagerAdapterInterface $packageManager, bool $isReleaseGroupIntegratorEnabled = false)
     {
         $this->packageManager = $packageManager;
         $this->isReleaseGroupIntegratorEnabled = $isReleaseGroupIntegratorEnabled;
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerPackagesDto
-     */
     public function fetchPackages(PackageCollection $packageCollection): PackageManagerPackagesDto
     {
         $packagesForRequire = $this->getRequiredPackages($packageCollection);
@@ -56,11 +41,6 @@ class PackageManagerPackagesFetcher implements PackageManagerPackagesFetcherInte
         return new PackageManagerPackagesDto($packagesForRequire, $packagesForRequireDev, $packagesForUpdate);
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
     public function getRequiredPackages(PackageCollection $packageCollection): PackageCollection
     {
         $resultCollection = new PackageCollection();
@@ -74,11 +54,6 @@ class PackageManagerPackagesFetcher implements PackageManagerPackagesFetcherInte
         return $resultCollection;
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Package $package
-     *
-     * @return bool
-     */
     protected function isPackagedShouldBeRequired(Package $package): bool
     {
         $packageConstraint = $this->packageManager->getPackageConstraint($package->getName());
@@ -89,11 +64,6 @@ class PackageManagerPackagesFetcher implements PackageManagerPackagesFetcherInte
             );
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
     public function getRequiredDevPackages(PackageCollection $packageCollection): PackageCollection
     {
         $resultCollection = new PackageCollection();
@@ -107,11 +77,6 @@ class PackageManagerPackagesFetcher implements PackageManagerPackagesFetcherInte
         return $resultCollection;
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Package $package
-     *
-     * @return bool
-     */
     protected function isPackageShouldBeRequiredForDev(Package $package): bool
     {
         $packageConstraint = $this->packageManager->getPackageConstraint($package->getName());
@@ -121,10 +86,7 @@ class PackageManagerPackagesFetcher implements PackageManagerPackagesFetcherInte
     }
 
     /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
      * @param array<\Upgrade\Domain\Entity\Package> $requiredPackages
-     *
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
      */
     protected function getPackagesForUpdate(PackageCollection $packageCollection, array $requiredPackages): PackageCollection
     {
@@ -140,16 +102,13 @@ class PackageManagerPackagesFetcher implements PackageManagerPackagesFetcherInte
     }
 
     /**
-     * @param \Upgrade\Domain\Entity\Package $package
      * @param array<\Upgrade\Domain\Entity\Package> $requiredPackages
-     *
-     * @return bool
      */
     protected function isPackageShouldBeUpdated(Package $package, array $requiredPackages): bool
     {
         return count(array_filter(
             $requiredPackages,
-            static fn (Package $requiredPackage): bool => $requiredPackage->getName() === $package->getName()
+            static fn (Package $requiredPackage): bool => $requiredPackage->getName() === $package->getName(),
         )) === 0;
     }
 }

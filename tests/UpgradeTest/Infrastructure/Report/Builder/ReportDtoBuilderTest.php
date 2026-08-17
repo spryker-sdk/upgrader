@@ -57,9 +57,6 @@ class ReportDtoBuilderTest extends TestCase
      */
     protected const REPORT_ID = '902072d8-a2cc-11ed-a8fc-0242ac120002';
 
-    /**
-     * @return void
-     */
     public function testBuildFromStepResponseDtoShouldReturnReportDto(): void
     {
         // Arrange
@@ -104,9 +101,6 @@ class ReportDtoBuilderTest extends TestCase
         $this->assertSame(static::REPOSITORY_NAME, $metadata->getRepositoryName());
     }
 
-    /**
-     * @return void
-     */
     public function testBuildFromStepResponseDtoShouldReturnEmptyPayloadWhenComposerLockDiffNotSet(): void
     {
         // Arrange
@@ -121,9 +115,6 @@ class ReportDtoBuilderTest extends TestCase
         $this->assertCount(0, $reportDto->getPayload()->getDevRequiredPackages());
     }
 
-    /**
-     * @return \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected function createConfigurationProviderMock(): ConfigurationProvider
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
@@ -137,11 +128,6 @@ class ReportDtoBuilderTest extends TestCase
         return $configurationProvider;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\ComposerLockDiffDto|null $composerLockDiffDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     protected function createStepsResponseDto(?ComposerLockDiffDto $composerLockDiffDto = null): StepsResponseDto
     {
         $stepsResponseDto = new StepsResponseDto();
@@ -165,9 +151,6 @@ class ReportDtoBuilderTest extends TestCase
         return $stepsResponseDto;
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\ComposerLockDiffDto
-     */
     protected function createComposerLockDiffDto(): ComposerLockDiffDto
     {
         return new ComposerLockDiffDto(

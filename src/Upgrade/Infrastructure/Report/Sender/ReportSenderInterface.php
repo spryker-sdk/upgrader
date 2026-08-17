@@ -13,10 +13,5 @@ use Upgrade\Infrastructure\Report\Dto\ReportDto;
 
 interface ReportSenderInterface
 {
-    /**
-     * @param \Upgrade\Infrastructure\Report\Dto\ReportDto $reportDto
-     *
-     * @return void
-     */
     public function send(ReportDto $reportDto): void;
 }

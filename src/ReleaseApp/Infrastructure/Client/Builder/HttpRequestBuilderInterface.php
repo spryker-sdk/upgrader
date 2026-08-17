@@ -14,10 +14,5 @@ use ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface;
 
 interface HttpRequestBuilderInterface
 {
-    /**
-     * @param \ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface $request
-     *
-     * @return \GuzzleHttp\Psr7\Request
-     */
     public function createRequest(HttpRequestInterface $request): Request;
 }

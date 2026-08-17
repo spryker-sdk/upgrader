@@ -12,8 +12,6 @@ namespace Codebase\Infrastructure\Dependency\Parser;
 interface CodebaseToParserInterface
 {
     /**
-     * @param string $dataToParse
-     *
      * @return array<\PhpParser\Node\Stmt>|null
      */
     public function parse(string $dataToParse): ?array;

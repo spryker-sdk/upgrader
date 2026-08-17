@@ -25,9 +25,6 @@ use Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader;
 
 class ComposerLockComparatorStepTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testRunSuccessCase(): void
     {
         // Arrange
@@ -58,9 +55,6 @@ class ComposerLockComparatorStepTest extends TestCase
         $this->assertIsArray($composerLockDiffDto->getRequiredDevPackages());
     }
 
-    /**
-     * @return void
-     */
     public function testRunUpToDate(): void
     {
         // Arrange
@@ -76,17 +70,14 @@ class ComposerLockComparatorStepTest extends TestCase
 
         $comparatorStep = new ComposerLockComparatorStep($composerAdapter);
 
-        // Act
+    // Act
         $stepsExecutionDto = $comparatorStep->run((new StepsResponseDto(true)));
 
-        // Assert
+    // Assert
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }
 
-    /**
-     * @return void
-     */
     public function testRunProcessFailed(): void
     {
         // Arrange
@@ -108,11 +99,6 @@ class ComposerLockComparatorStepTest extends TestCase
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }
 
-    /**
-     * @param string $outputMessage
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService
-     */
     protected function mockProcessRunnerWithOutput(string $outputMessage): ProcessRunnerService
     {
         $processMock = $this->createMock(Process::class);
@@ -124,23 +110,15 @@ class ComposerLockComparatorStepTest extends TestCase
         return $processRunnerMock;
     }
 
-    /**
-     * @param bool $withDependencies
-     *
-     * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected function mockConfigurationProvider(bool $withDependencies = false): ConfigurationProviderInterface
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
         $configurationProvider->method('getComposerNoInstall')
-            ->willReturn($withDependencies);
+        ->willReturn($withDependencies);
 
         return $configurationProvider;
     }
 
-    /**
-     * @return \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader
-     */
     protected function createComposerLockReaderMock(): ComposerLockReader
     {
         return $this->createMock(ComposerLockReader::class);

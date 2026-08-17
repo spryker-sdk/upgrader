@@ -17,9 +17,6 @@ use Upgrade\Application\Validator\ProjectValidatorInterface;
 
 class ProjectValidationStepTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testRunShouldInvokeProjectValidator(): void
     {
         // Arrange
@@ -38,8 +35,6 @@ class ProjectValidationStepTest extends TestCase
 
     /**
      * @param array<\Upgrade\Application\Dto\ValidatorViolationDto> $violations
-     *
-     * @return \Upgrade\Application\Validator\ProjectValidatorInterface
      */
     protected function createProjectValidatorMock(array $violations): ProjectValidatorInterface
     {

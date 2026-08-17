@@ -21,38 +21,16 @@ class UpgraderStartedEvent implements MetricEventInterface
      */
     public const EVENT_NAME = 'UpgraderStartedEvent';
 
-    /**
-     * @var int
-     */
     protected int $timestamp;
 
-    /**
-     * @var string
-     */
     protected string $organizationName;
 
-    /**
-     * @var string
-     */
     protected string $repositoryName;
 
-    /**
-     * @var string
-     */
     protected string $ciExecutionId;
 
-    /**
-     * @var string
-     */
     protected string $workspaceName;
 
-    /**
-     * @param int $timestamp
-     * @param string $organizationName
-     * @param string $repositoryName
-     * @param string $ciExecutionId
-     * @param string $workspaceName
-     */
     public function __construct(int $timestamp, string $organizationName, string $repositoryName, string $ciExecutionId, string $workspaceName)
     {
         $this->timestamp = $timestamp;
@@ -62,9 +40,6 @@ class UpgraderStartedEvent implements MetricEventInterface
         $this->workspaceName = $workspaceName;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return static::EVENT_NAME;

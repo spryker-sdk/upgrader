@@ -11,20 +11,10 @@ namespace PackageStorage\Application\Fetcher;
 
 class VendorChangedClassesFetcher implements VendorChangedClassesFetcherInterface
 {
-    /**
-     * @var \PackageStorage\Application\Fetcher\VendorChangedFilesFetcherInterface
-     */
     protected VendorChangedFilesFetcherInterface $packagesDiffFetcher;
 
-    /**
-     * @var \PackageStorage\Application\Fetcher\ClassMetaDataFromFileFetcherInterface
-     */
     protected ClassMetaDataFromFileFetcherInterface $classNameFromFileFetcher;
 
-    /**
-     * @param \PackageStorage\Application\Fetcher\VendorChangedFilesFetcherInterface $packagesDiffFetcher
-     * @param \PackageStorage\Application\Fetcher\ClassMetaDataFromFileFetcherInterface $classNameFromFileFetcher
-     */
     public function __construct(
         VendorChangedFilesFetcherInterface $packagesDiffFetcher,
         ClassMetaDataFromFileFetcherInterface $classNameFromFileFetcher

@@ -14,17 +14,8 @@ use Upgrade\Application\Dto\StepsResponseDto;
 
 interface ReleaseGroupProcessorInterface
 {
-    /**
-     * @return string
-     */
     public function getProcessorName(): string;
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $requireRequestCollection
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function process(
         ReleaseGroupDtoCollection $requireRequestCollection,
         StepsResponseDto $stepsExecutionDto

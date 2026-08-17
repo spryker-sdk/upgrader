@@ -28,8 +28,6 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
     /**
      * @param array<\DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Dto\ViolationDto> $violations
      * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
-     *
-     * @return string
      */
     public function buildViolationsMessage(array $violations, array $packageDtos): string
     {
@@ -58,9 +56,6 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
         return "<details><summary><h4>$header</h4></summary>$text</details>";
     }
 
-    /**
-     * @return string
-     */
     public function getSupportedType(): string
     {
         return ViolationDto::class;

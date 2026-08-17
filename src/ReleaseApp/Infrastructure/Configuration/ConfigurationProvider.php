@@ -28,25 +28,16 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     protected const DEFAULT_HTTP_RETRIEVE_RETRY_DELAY = 10;
 
-    /**
-     * @return string
-     */
     public function getReleaseAppUrl(): string
     {
         return (string)getenv('RELEASE_APP_URL') ?: static::DEFAULT_RELEASE_APP_URL;
     }
 
-    /**
-     * @return int
-     */
     public function getHttpRetrieveAttemptsCount(): int
     {
         return (int)getenv('UPGRADER_HTTP_RETRIEVE_ATTEMPTS_COUNT') ?: static::DEFAULT_HTTP_RETRIEVE_ATTEMPTS_COUNT;
     }
 
-    /**
-     * @return int
-     */
     public function getHttpRetrieveRetryDelay(): int
     {
         return (int)getenv('UPGRADER_HTTP_RETRIEVE_RETRY_DELAY') ?: static::DEFAULT_HTTP_RETRIEVE_RETRY_DELAY;

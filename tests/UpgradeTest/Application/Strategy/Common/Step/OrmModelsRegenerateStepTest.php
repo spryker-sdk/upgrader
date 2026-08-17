@@ -22,9 +22,6 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class OrmModelsRegenerateStepTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testRunSuccess(): void
     {
         // Arrange
@@ -46,32 +43,26 @@ class OrmModelsRegenerateStepTest extends TestCase
         $step->run($stepsExecutionDto);
     }
 
-    /**
-     * @return void
-     */
     public function testRunWhenComposerLockDiffNotExists(): void
     {
         // Arrange
         $stepsExecutionDto = new StepsResponseDto(true);
         $processRunnerMock = $this->createMock(ProcessRunnerService::class);
 
-        // Assert
+    // Assert
         $processRunnerMock->expects($this->never())->method('run');
 
-        // Arrange
+    // Arrange
         $step = new OrmModelsRegenerateStep(
             $processRunnerMock,
             new Filesystem(),
             new ConfigurationProvider(),
         );
 
-        // Act
+    // Act
         $step->run($stepsExecutionDto);
     }
 
-    /**
-     * @return void
-     */
     public function testRunWhenCommandFailed(): void
     {
         // Arrange
@@ -91,19 +82,13 @@ class OrmModelsRegenerateStepTest extends TestCase
         $this->assertNotEmpty($response->getBlockers());
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\ComposerLockDiffDto
-     */
     protected function createComposerLockDiffDto(): ComposerLockDiffDto
     {
         return new ComposerLockDiffDto([
-            new Package('propel/propel', '1.0.1', '1.0.0', 'https://github.com/...'),
+        new Package('propel/propel', '1.0.1', '1.0.0', 'https://github.com/...'),
         ]);
     }
 
-    /**
-     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected function createProcessRunnerServiceMock(): ProcessRunnerServiceInterface
     {
         $process = $this->createMock(Process::class);

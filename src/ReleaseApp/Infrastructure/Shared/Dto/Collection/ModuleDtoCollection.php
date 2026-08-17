@@ -26,11 +26,6 @@ class ModuleDtoCollection
         $this->elements = $elements;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ModuleDto $element
-     *
-     * @return void
-     */
     public function add(ModuleDto $element): void
     {
         $this->elements[] = $element;
@@ -44,17 +39,11 @@ class ModuleDtoCollection
         return $this->elements;
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return count($this->elements);
     }
 
-    /**
-     * @return bool
-     */
     public function isEmpty(): bool
     {
         return !$this->elements;
@@ -62,8 +51,6 @@ class ModuleDtoCollection
 
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection|self $collectionToMerge
-     *
-     * @return void
      */
     public function addCollection(self $collectionToMerge): void
     {

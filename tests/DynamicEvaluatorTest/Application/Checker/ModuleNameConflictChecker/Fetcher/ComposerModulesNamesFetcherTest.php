@@ -15,9 +15,6 @@ use Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader;
 
 class ComposerModulesNamesFetcherTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFetchComposerModulesShouldReturnSprykerModuleNames(): void
     {
         // Arrange
@@ -60,8 +57,6 @@ class ComposerModulesNamesFetcherTest extends TestCase
 
     /**
      * @param array<string, mixed> $composerLockData
-     *
-     * @return \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader
      */
     protected function createComposerLockReaderMock(array $composerLockData): ComposerLockReader
     {

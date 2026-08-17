@@ -11,17 +11,7 @@ namespace PackageStorage\Application\Fetcher;
 
 interface ClassMetaDataFromFileFetcherInterface
 {
-    /**
-     * @param string $filePath
-     *
-     * @return string|null
-     */
     public function fetchFQCN(string $filePath): ?string;
 
-    /**
-     * @param string $filePath
-     *
-     * @return string|null
-     */
     public function fetchPackageName(string $filePath): ?string;
 }

@@ -18,9 +18,6 @@ use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppStrategy;
 
 class ReleaseAppStrategyTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testUpgradeShouldNotSendEmptyPrWhenItIsSuccessful(): void
     {
         // Arrange & Assert
@@ -35,9 +32,6 @@ class ReleaseAppStrategyTest extends TestCase
         $strategy->upgrade();
     }
 
-    /**
-     * @return void
-     */
     public function testUpgradeShouldNotSendEmptyPrWhenNoErrors(): void
     {
         // Arrange & Assert
@@ -48,13 +42,10 @@ class ReleaseAppStrategyTest extends TestCase
             $this->createLoggerMock(),
         );
 
-        // Act
+    // Act
         $strategy->upgrade();
     }
 
-    /**
-     * @return void
-     */
     public function testUpgradeShouldNotSendEmptyPrWhenPrIsSent(): void
     {
         // Arrange & Assert
@@ -71,9 +62,6 @@ class ReleaseAppStrategyTest extends TestCase
         $strategy->upgrade();
     }
 
-    /**
-     * @return void
-     */
     public function testUpgradeShouldSendEmptyPr(): void
     {
         // Arrange & Assert
@@ -90,11 +78,6 @@ class ReleaseAppStrategyTest extends TestCase
         $strategy->upgrade();
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $returnStepsResponse
-     *
-     * @return \Upgrade\Application\Executor\StepExecutorInterface
-     */
     protected function createStepExecutorMock(StepsResponseDto $returnStepsResponse): StepExecutorInterface
     {
         $stepExecutor = $this->createMock(StepExecutorInterface::class);
@@ -103,11 +86,6 @@ class ReleaseAppStrategyTest extends TestCase
         return $stepExecutor;
     }
 
-    /**
-     * @param bool $shouldBeInvoked
-     *
-     * @return \Upgrade\Application\Executor\StepExecutorInterface
-     */
     protected function createErrorPrStepExecutorMock(bool $shouldBeInvoked = true): StepExecutorInterface
     {
         $stepExecutor = $this->createMock(StepExecutorInterface::class);
@@ -116,9 +94,6 @@ class ReleaseAppStrategyTest extends TestCase
         return $stepExecutor;
     }
 
-    /**
-     * @return \Psr\Log\LoggerInterface
-     */
     protected function createLoggerMock(): LoggerInterface
     {
         return $this->createMock(LoggerInterface::class);

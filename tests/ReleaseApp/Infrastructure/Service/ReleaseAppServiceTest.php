@@ -29,9 +29,6 @@ class ReleaseAppServiceTest extends KernelTestCase
      */
     protected const API_RESPONSE_DIR = 'tests/data/ReleaseApp/Api/Response';
 
-    /**
-     * @return void
-     */
     public function testGetNewReleaseGroupsSuccess(): void
     {
         // Arrange
@@ -67,9 +64,6 @@ class ReleaseAppServiceTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testGetReleaseGroupSuccess(): void
     {
         // Arrange
@@ -111,9 +105,6 @@ class ReleaseAppServiceTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testGetReleaseHistoryLink(): void
     {
         // Arrange
@@ -134,9 +125,6 @@ class ReleaseAppServiceTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return \ReleaseApp\Infrastructure\Client\HttpRequestExecutor
-     */
     protected function createRequestExecutorMock(): HttpRequestExecutor
     {
         $callback = function (Request $request) {
@@ -151,11 +139,6 @@ class ReleaseAppServiceTest extends KernelTestCase
         return $executorMock;
     }
 
-    /**
-     * @param string $endpoint
-     *
-     * @return \GuzzleHttp\Psr7\Response
-     */
     protected function createHttpResponse(string $endpoint): Response
     {
         $contents = file_get_contents(self::API_RESPONSE_DIR . $endpoint);

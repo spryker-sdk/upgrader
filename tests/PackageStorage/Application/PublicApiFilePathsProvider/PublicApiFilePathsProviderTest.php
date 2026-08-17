@@ -15,10 +15,6 @@ class PublicApiFilePathsProviderTest extends TestCase
 {
     /**
      * @dataProvider publicApiFilesDataProvider
-     *
-     * @param string $filePath
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('publicApiFilesDataProvider')]
     public function testGetPublicApiFilePathsRegexCollectionShouldMatchApiPattern(string $filePath): void
@@ -35,10 +31,6 @@ class PublicApiFilePathsProviderTest extends TestCase
 
     /**
      * @dataProvider nonPublicApiFilesDataProvider
-     *
-     * @param string $filePath
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('nonPublicApiFilesDataProvider')]
     public function testGetPublicApiFilePathsRegexCollectionShouldNotMatchPattern(string $filePath): void
@@ -53,12 +45,6 @@ class PublicApiFilePathsProviderTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @param string $filePath
-     * @param array $regexCollection
-     *
-     * @return bool
-     */
     protected function checkByRegexCollection(string $filePath, array $regexCollection): bool
     {
         foreach ($regexCollection as $regex) {

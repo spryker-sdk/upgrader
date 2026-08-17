@@ -16,9 +16,6 @@ use Upgrade\Application\Strategy\StepInterface;
 
 class StepExecutor implements StepExecutorInterface
 {
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
     protected LoggerInterface $logger;
 
     /**
@@ -27,7 +24,6 @@ class StepExecutor implements StepExecutorInterface
     protected array $steps = [];
 
     /**
-     * @param \Psr\Log\LoggerInterface $logger
      * @param array<\Upgrade\Application\Strategy\StepInterface> $steps
      */
     public function __construct(LoggerInterface $logger, array $steps = [])
@@ -36,11 +32,6 @@ class StepExecutor implements StepExecutorInterface
         $this->steps = $steps;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function execute(StepsResponseDto $stepsResponseDto): StepsResponseDto
     {
         $executedSteps = [];
@@ -74,11 +65,6 @@ class StepExecutor implements StepExecutorInterface
         return $stepsResponseDto;
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\StepInterface $step
-     *
-     * @return string
-     */
     protected function getStepName(StepInterface $step): string
     {
         $classParts = explode('\\', get_class($step));
