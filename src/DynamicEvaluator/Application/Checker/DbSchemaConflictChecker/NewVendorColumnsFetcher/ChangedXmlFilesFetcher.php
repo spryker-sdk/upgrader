@@ -13,23 +13,14 @@ use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 
 class ChangedXmlFilesFetcher
 {
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected ProcessRunnerServiceInterface $processRunner;
 
-    /**
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
-     */
     public function __construct(ProcessRunnerServiceInterface $processRunner)
     {
         $this->processRunner = $processRunner;
     }
 
     /**
-     * @param string $fromDir
-     * @param string $toDir
-     *
      * @return array<string>
      */
     public function fetchChangedXmlSchemaFiles(string $fromDir, string $toDir): array
@@ -45,12 +36,6 @@ class ChangedXmlFilesFetcher
         return explode(PHP_EOL, $output);
     }
 
-    /**
-     * @param string $fromDir
-     * @param string $toDir
-     *
-     * @return string
-     */
     protected function getCommand(string $fromDir, string $toDir): string
     {
         return strtr(

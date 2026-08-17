@@ -21,9 +21,6 @@ use PHPUnit\Framework\TestCase;
 
 class BrokenPhpFilesCheckerTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testCheckAllShouldReturnEmptyArrayWhenErrorsNotFound(): void
     {
         // Arrange
@@ -43,9 +40,6 @@ class BrokenPhpFilesCheckerTest extends TestCase
         $this->assertEmpty($violations);
     }
 
-    /**
-     * @return void
-     */
     public function testCheckAllShouldReturnViolations(): void
     {
         // Arrange
@@ -60,25 +54,22 @@ class BrokenPhpFilesCheckerTest extends TestCase
             $this->createSprykerModulesDirsFetcherMock(),
         );
 
-        // Act
+    // Act
         $violations = $checker->checkAll();
 
-        // Assert
+    // Assert
         $this->assertCount(1, $violations);
         $this->assertSame($fileErrors, $violations[0]->getFileErrors());
     }
 
-    /**
-     * @return void
-     */
     public function testCheckUpdatedSprykerModulesShouldReturnNoViolationWhenNoNewPackagesFound(): void
     {
         $previousState = [
-            'spryker/module-one' => '1.1.0',
+        'spryker/module-one' => '1.1.0',
         ];
 
         $newState = [
-            'spryker/module-one' => '1.1.0',
+        'spryker/module-one' => '1.1.0',
         ];
 
         // Arrange
@@ -99,17 +90,14 @@ class BrokenPhpFilesCheckerTest extends TestCase
         $this->assertEmpty($violations);
     }
 
-    /**
-     * @return void
-     */
     public function testCheckUpdatedSprykerModulesShouldReturnNoViolationWhenNoStanErrors(): void
     {
         $previousState = [
-            'spryker/module-one' => '1.1.0',
+        'spryker/module-one' => '1.1.0',
         ];
 
         $newState = [
-            'spryker/module-one' => '1.1.1',
+        'spryker/module-one' => '1.1.1',
         ];
 
         // Arrange
@@ -130,17 +118,14 @@ class BrokenPhpFilesCheckerTest extends TestCase
         $this->assertEmpty($violations);
     }
 
-    /**
-     * @return void
-     */
     public function testCheckUpdatedSprykerModulesShouldReturnViolations(): void
     {
         $previousState = [
-            'spryker/module-one' => '1.1.0',
+        'spryker/module-one' => '1.1.0',
         ];
 
         $newState = [
-            'spryker/module-one' => '1.1.1',
+        'spryker/module-one' => '1.1.1',
         ];
 
         // Arrange
@@ -163,9 +148,6 @@ class BrokenPhpFilesCheckerTest extends TestCase
         $this->assertSame($fileErrors, $violations[0]->getFileErrors());
     }
 
-    /**
-     * @return void
-     */
     public function testFetchAndPersistInstalledSprykerModules(): void
     {
         // Arrange
@@ -186,9 +168,6 @@ class BrokenPhpFilesCheckerTest extends TestCase
         $this->assertSame(['spryker/module-one' => '1.1.1'], $storage->getModulesState());
     }
 
-    /**
-     * @return void
-     */
     public function testFetchAndPersistInitialErrorsShouldInvokeFetchersMethods(): void
     {
         // Arrange
@@ -210,8 +189,6 @@ class BrokenPhpFilesCheckerTest extends TestCase
 
     /**
      * @param array<\DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto> $fileErrors
-     *
-     * @return \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher\FileErrorsFetcherInterface
      */
     public function createFileErrorsFetcherMock(array $fileErrors = []): FileErrorsFetcherInterface
     {
@@ -223,8 +200,6 @@ class BrokenPhpFilesCheckerTest extends TestCase
 
     /**
      * @param array<mixed> $moduleForUpdate
-     *
-     * @return \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModuleComparerInterface
      */
     protected function createSprykerModuleComparerMock(array $moduleForUpdate = []): SprykerModuleComparerInterface
     {
@@ -236,8 +211,6 @@ class BrokenPhpFilesCheckerTest extends TestCase
 
     /**
      * @param array<mixed> $currentModulesState
-     *
-     * @return \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModulesStateFetcherInterface
      */
     protected function createSprykerModulesStateFetcherMock(array $currentModulesState = []): SprykerModulesStateFetcherInterface
     {
@@ -250,15 +223,13 @@ class BrokenPhpFilesCheckerTest extends TestCase
     /**
      * @param array<mixed> $fetchedModulesDirs
      * @param array<string> $expectedPackages
-     *
-     * @return \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModulesDirsFetcherInterface
      */
     protected function createSprykerModulesDirsFetcherMock(array $fetchedModulesDirs = [], array $expectedPackages = []): SprykerModulesDirsFetcherInterface
     {
         $sprykerModulesDirsFetcher = $this->createMock(SprykerModulesDirsFetcherInterface::class);
         $sprykerModulesDirsFetcher
-            ->expects(count($expectedPackages) > 0 ? $this->once() : $this->never())
-            ->method('fetchModulesDirs')->with($expectedPackages)->willReturn($fetchedModulesDirs);
+        ->expects(count($expectedPackages) > 0 ? $this->once() : $this->never())
+        ->method('fetchModulesDirs')->with($expectedPackages)->willReturn($fetchedModulesDirs);
 
         return $sprykerModulesDirsFetcher;
     }

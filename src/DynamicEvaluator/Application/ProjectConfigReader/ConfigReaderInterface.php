@@ -12,7 +12,6 @@ namespace DynamicEvaluator\Application\ProjectConfigReader;
 interface ConfigReaderInterface
 {
     /**
-     * @param string $configPath
      * @param array<string> $configKeys
      *
      * @return array<string, mixed>

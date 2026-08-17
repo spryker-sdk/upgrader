@@ -14,16 +14,7 @@ use Symfony\Component\Finder\Finder;
 
 interface FileParserInterface
 {
-    /**
-     * @return string
-     */
     public function getExtension(): string;
 
-    /**
-     * @param \Symfony\Component\Finder\Finder $finder
-     * @param \Codebase\Application\Dto\CodebaseSourceDto $codebaseSourceDto
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
     public function parse(Finder $finder, CodebaseSourceDto $codebaseSourceDto): CodebaseSourceDto;
 }

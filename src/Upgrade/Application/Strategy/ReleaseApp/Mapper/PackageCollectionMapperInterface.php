@@ -14,10 +14,5 @@ use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 interface PackageCollectionMapperInterface
 {
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
-     *
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
     public function mapModuleCollectionToPackageCollection(ModuleDtoCollection $moduleCollection): PackageCollection;
 }

@@ -20,26 +20,12 @@ class ProjectSchemaColumnsMapFetcher implements ProjectSchemaColumnsMapFetcherIn
      */
     protected const EXCLUDED_DIRS = ['Generated', 'Orm'];
 
-    /**
-     * @var \Core\Infrastructure\Service\FinderFactory
-     */
     protected FinderFactory $finderFactory;
 
-    /**
-     * @var \Upgrader\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\XmlSchemaFileParser\XmlSchemaFileParserInterface
-     */
     protected XmlSchemaFileParserInterface $xmlSchemaFileParser;
 
-    /**
-     * @param \Core\Infrastructure\Service\FinderFactory $finderFactory
-     * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     * @param \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\XmlSchemaFileParser\XmlSchemaFileParserInterface $xmlSchemaFileParser
-     */
     public function __construct(
         FinderFactory $finderFactory,
         ConfigurationProvider $configurationProvider,
@@ -77,11 +63,6 @@ class ProjectSchemaColumnsMapFetcher implements ProjectSchemaColumnsMapFetcherIn
         return $projectXmlSchemaData;
     }
 
-    /**
-     * @param string $absolutePath
-     *
-     * @return string
-     */
     protected function getProjectRelativePath(string $absolutePath): string
     {
         return (string)preg_replace('/.*(\/src\/.*)/', '$1', $absolutePath);

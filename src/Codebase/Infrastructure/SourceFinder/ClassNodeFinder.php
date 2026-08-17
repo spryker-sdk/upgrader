@@ -18,8 +18,6 @@ class ClassNodeFinder
 {
     /**
      * @param array<\PhpParser\Node> $nodes
-     *
-     * @return \PhpParser\Node|null
      */
     public function findClassNode(array $nodes): ?Node
     {

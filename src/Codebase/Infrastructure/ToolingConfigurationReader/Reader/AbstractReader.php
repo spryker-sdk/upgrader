@@ -13,8 +13,6 @@ abstract class AbstractReader implements ReaderInterface
 {
     /**
      * @param array<string> $array
-     *
-     * @return bool
      */
     protected function isSequentialArrayOfString(array $array): bool
     {

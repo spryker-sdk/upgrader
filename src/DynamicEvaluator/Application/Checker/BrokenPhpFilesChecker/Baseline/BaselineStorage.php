@@ -18,11 +18,6 @@ class BaselineStorage implements BaselineStorageInterface
      */
     protected array $fileErrors;
 
-    /**
-     * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto $fileErrorDto
-     *
-     * @return void
-     */
     public function addFileError(FileErrorDto $fileErrorDto): void
     {
         if ($this->hasFileError($fileErrorDto)) {
@@ -36,11 +31,6 @@ class BaselineStorage implements BaselineStorageInterface
         $this->fileErrors[$fileErrorDto->getFilename()][] = $fileErrorDto->getMessage();
     }
 
-    /**
-     * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto $fileErrorDto
-     *
-     * @return bool
-     */
     public function hasFileError(FileErrorDto $fileErrorDto): bool
     {
         return isset($this->fileErrors[$fileErrorDto->getFilename()])
@@ -55,9 +45,6 @@ class BaselineStorage implements BaselineStorageInterface
         return $this->fileErrors;
     }
 
-    /**
-     * @return void
-     */
     public function clear(): void
     {
         $this->fileErrors = [];

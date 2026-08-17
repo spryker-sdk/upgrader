@@ -13,44 +13,18 @@ use DateTimeImmutable;
 
 class ReportDto
 {
-    /**
-     * @var string
-     */
     protected string $name;
 
-    /**
-     * @var int
-     */
     protected int $version;
 
-    /**
-     * @var string
-     */
     protected string $scope;
 
-    /**
-     * @var \DateTimeImmutable
-     */
     protected DateTimeImmutable $createdAt;
 
-    /**
-     * @var \Upgrade\Infrastructure\Report\Dto\ReportPayloadDto
-     */
     protected ReportPayloadDto $payload;
 
-    /**
-     * @var \Upgrade\Infrastructure\Report\Dto\ReportMetadataDto
-     */
     protected ReportMetadataDto $metadata;
 
-    /**
-     * @param string $name
-     * @param int $version
-     * @param string $scope
-     * @param \DateTimeImmutable $createdAt
-     * @param \Upgrade\Infrastructure\Report\Dto\ReportPayloadDto $payload
-     * @param \Upgrade\Infrastructure\Report\Dto\ReportMetadataDto $metadata
-     */
     public function __construct(
         string $name,
         int $version,
@@ -67,49 +41,31 @@ class ReportDto
         $this->metadata = $metadata;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return int
-     */
     public function getVersion(): int
     {
         return $this->version;
     }
 
-    /**
-     * @return string
-     */
     public function getScope(): string
     {
         return $this->scope;
     }
 
-    /**
-     * @return \DateTimeImmutable
-     */
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    /**
-     * @return \Upgrade\Infrastructure\Report\Dto\ReportPayloadDto
-     */
     public function getPayload(): ReportPayloadDto
     {
         return $this->payload;
     }
 
-    /**
-     * @return \Upgrade\Infrastructure\Report\Dto\ReportMetadataDto
-     */
     public function getMetadata(): ReportMetadataDto
     {
         return $this->metadata;

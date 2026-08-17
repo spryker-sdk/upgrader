@@ -16,9 +16,6 @@ use Upgrade\Application\Exception\UpgraderException;
 
 class ModuleOptionMapperMapperTest extends KernelTestCase
 {
-    /**
-     * @return void
-     */
     public function testSuccessSampleModuleList(): void
     {
         //Arrange
@@ -31,18 +28,15 @@ class ModuleOptionMapperMapperTest extends KernelTestCase
         $this->assertEquals($moduleList, $this->getModuleList());
     }
 
-    /**
-     * @return void
-     */
     public function testFailedIncorrectInput(): void
     {
         //Arrange
         $mapper = new ModuleOptionMapper();
 
-        //Assert
+    //Assert
         $this->expectException(UpgraderException::class);
 
-        //Act
+    //Act
         $moduleList = $mapper->mapToModuleList('Pyz_ModuleA|Pyz_ModuleB');
     }
 
@@ -52,8 +46,8 @@ class ModuleOptionMapperMapperTest extends KernelTestCase
     protected function getModuleList(): array
     {
         return [
-            (new ModuleDto('Pyz', 'ModuleA')),
-            (new ModuleDto('Pyz', 'ModuleB')),
+        (new ModuleDto('Pyz', 'ModuleA')),
+        (new ModuleDto('Pyz', 'ModuleB')),
         ];
     }
 }

@@ -17,20 +17,10 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 
 abstract class BaseReleaseGroupProcessor implements ReleaseGroupProcessorInterface
 {
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
     protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
     protected LoggerInterface $logger;
 
-    /**
-     * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     * @param \Psr\Log\LoggerInterface $logger
-     */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         LoggerInterface $logger
@@ -39,12 +29,6 @@ abstract class BaseReleaseGroupProcessor implements ReleaseGroupProcessorInterfa
         $this->logger = $logger;
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $event
-     * @param string $eventName
-     *
-     * @return bool
-     */
     protected function dispatchEvent(ReleaseGroupProcessorEvent $event, string $eventName): bool
     {
         $this->eventDispatcher->dispatch($event, $eventName);
@@ -52,12 +36,6 @@ abstract class BaseReleaseGroupProcessor implements ReleaseGroupProcessorInterfa
         return $event->getStepsExecutionDto()->isSuccessful() || $event->getStepsExecutionDto()->getIsStopPropagation();
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $packageManagerResponseDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     protected function addReleaseGroupStat(
         StepsResponseDto $stepsExecutionDto,
         PackageManagerResponseDto $packageManagerResponseDto
@@ -69,13 +47,6 @@ abstract class BaseReleaseGroupProcessor implements ReleaseGroupProcessorInterfa
         return $stepsExecutionDto;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     * @param int $appliedRGsNum
-     * @param int $appliedSecurityRGsNum
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     protected function addAppliedRGsInfo(
         StepsResponseDto $stepsExecutionDto,
         int $appliedRGsNum,

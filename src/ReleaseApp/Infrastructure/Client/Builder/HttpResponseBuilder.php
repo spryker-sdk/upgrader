@@ -15,12 +15,6 @@ use ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface;
 
 class HttpResponseBuilder implements HttpResponseBuilderInterface
 {
-    /**
-     * @param \ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface $guzzleResponse
-     *
-     * @return \ReleaseApp\Domain\Client\Response\ResponseInterface
-     */
     public function createHttpResponse(
         HttpRequestInterface $request,
         ResponseInterface $guzzleResponse
@@ -32,11 +26,6 @@ class HttpResponseBuilder implements HttpResponseBuilderInterface
         return $response;
     }
 
-    /**
-     * @param \Psr\Http\Message\ResponseInterface $guzzleResponse
-     *
-     * @return string
-     */
     protected function getBody(ResponseInterface $guzzleResponse): string
     {
         $responseStream = $guzzleResponse->getBody();

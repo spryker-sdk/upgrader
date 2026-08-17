@@ -15,9 +15,6 @@ use Upgrader\Configuration\ConfigurationProvider;
 
 class PackagesDirProviderTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testGetSprykerPackageDirsShouldReturnFilteredDirs(): void
     {
         // Arrange
@@ -32,9 +29,6 @@ class PackagesDirProviderTest extends TestCase
         $this->assertSame(['spryker-sdk', 'spryker-shop', 'spryker'], $dirs);
     }
 
-    /**
-     * @return void
-     */
     public function testGetFromDirShouldReturnFromDirPath(): void
     {
         // Arrange
@@ -42,16 +36,13 @@ class PackagesDirProviderTest extends TestCase
         $configurationProviderMock = $this->createConfigurationProviderMock('/data/');
         $packagesDirProvider = new PackagesDirProvider($configurationProviderMock, $filesystemMock);
 
-        // Act
+    // Act
         $dir = $packagesDirProvider->getFromDir();
 
-        // Assert
+    // Assert
         $this->assertSame($dir, '/data/' . PackagesDirProvider::FROM_DIR);
     }
 
-    /**
-     * @return void
-     */
     public function testGetToDirShouldReturnToDirPath(): void
     {
         // Arrange
@@ -68,8 +59,6 @@ class PackagesDirProviderTest extends TestCase
 
     /**
      * @param array<string> $dirFiles
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\Filesystem
      */
     public function createFilesystemMock(array $dirFiles): Filesystem
     {
@@ -79,11 +68,6 @@ class PackagesDirProviderTest extends TestCase
         return $filesystem;
     }
 
-    /**
-     * @param string $rootPath
-     *
-     * @return \Upgrader\Configuration\ConfigurationProvider
-     */
     public function createConfigurationProviderMock(string $rootPath): ConfigurationProvider
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);

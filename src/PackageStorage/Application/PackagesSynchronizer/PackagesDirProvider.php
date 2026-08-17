@@ -29,20 +29,10 @@ class PackagesDirProvider implements PackagesDirProviderInterface
      */
     protected const SPRYKER_PACKAGE_PREFIX = 'spryker';
 
-    /**
-     * @var \Upgrader\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\Filesystem
-     */
     protected Filesystem $filesystem;
 
-    /**
-     * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     * @param \SprykerSdk\Utils\Infrastructure\Service\Filesystem $filesystem
-     */
     public function __construct(ConfigurationProvider $configurationProvider, Filesystem $filesystem)
     {
         $this->configurationProvider = $configurationProvider;
@@ -60,21 +50,15 @@ class PackagesDirProvider implements PackagesDirProviderInterface
 
         return array_values(array_filter(
             $packagesDirs,
-            static fn (string $dir): bool => strpos($dir, static::SPRYKER_PACKAGE_PREFIX) === 0
+            static fn (string $dir): bool => strpos($dir, static::SPRYKER_PACKAGE_PREFIX) === 0,
         ));
     }
 
-    /**
-     * @return string
-     */
     public function getFromDir(): string
     {
         return $this->configurationProvider->getRootPath() . static::FROM_DIR;
     }
 
-    /**
-     * @return string
-     */
     public function getToDir(): string
     {
         return $this->configurationProvider->getRootPath() . static::TO_DIR;

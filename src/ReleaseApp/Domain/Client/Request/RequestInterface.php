@@ -11,18 +11,9 @@ namespace ReleaseApp\Domain\Client\Request;
 
 interface RequestInterface
 {
-    /**
-     * @return string|null
-     */
     public function getBody(): ?string;
 
-    /**
-     * @return string
-     */
     public function getResponseClass(): string;
 
-    /**
-     * @return string|null
-     */
     public function getParameters(): ?string;
 }

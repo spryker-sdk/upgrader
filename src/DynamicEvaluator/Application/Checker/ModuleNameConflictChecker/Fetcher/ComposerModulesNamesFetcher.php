@@ -19,14 +19,8 @@ class ComposerModulesNamesFetcher implements ComposerModulesNamesFetcherInterfac
      */
     protected const SPRYKER_REPOSITORY_PREFIX = 'spryker';
 
-    /**
-     * @var \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader
-     */
     protected ComposerLockReader $composerLockReader;
 
-    /**
-     * @param \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader $composerLockReader
-     */
     public function __construct(ComposerLockReader $composerLockReader)
     {
         $this->composerLockReader = $composerLockReader;
@@ -51,11 +45,6 @@ class ComposerModulesNamesFetcher implements ComposerModulesNamesFetcherInterfac
         return array_unique(array_merge(...$sprykerModules));
     }
 
-    /**
-     * @param string $package
-     *
-     * @return string
-     */
     protected function getModuleFromPackage(string $package): string
     {
         [, $moduleName] = explode('/', $package);

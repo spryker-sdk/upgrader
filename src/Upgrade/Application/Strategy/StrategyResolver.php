@@ -27,11 +27,7 @@ class StrategyResolver
     }
 
     /**
-     * @param string $strategyName
-     *
      * @throws \Upgrade\Application\Exception\UpgradeStrategyIsNotDefinedException
-     *
-     * @return \Upgrade\Application\Strategy\StrategyInterface
      */
     public function getStrategy(string $strategyName): StrategyInterface
     {

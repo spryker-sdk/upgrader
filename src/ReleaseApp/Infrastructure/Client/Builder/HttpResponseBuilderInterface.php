@@ -15,11 +15,5 @@ use ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface;
 
 interface HttpResponseBuilderInterface
 {
-    /**
-     * @param \ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface $guzzleResponse
-     *
-     * @return \ReleaseApp\Domain\Client\Response\ResponseInterface
-     */
     public function createHttpResponse(HttpRequestInterface $request, ResponseInterface $guzzleResponse): DomainResponse;
 }

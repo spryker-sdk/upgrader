@@ -13,10 +13,5 @@ use Upgrade\Application\Dto\StepsResponseDto;
 
 interface StepExecutorInterface
 {
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function execute(StepsResponseDto $stepsResponseDto): StepsResponseDto;
 }

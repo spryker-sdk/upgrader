@@ -25,26 +25,12 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
      */
     protected const COMMAND = 'rsync -au --delete %s %s';
 
-    /**
-     * @var \PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface
-     */
     protected PackagesDirProviderInterface $packagesDirProvider;
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\Filesystem
-     */
     protected Filesystem $filesystem;
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected ProcessRunnerServiceInterface $processRunnerService;
 
-    /**
-     * @param \PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface $packagesDirProvider
-     * @param \SprykerSdk\Utils\Infrastructure\Service\Filesystem $filesystem
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
-     */
     public function __construct(
         PackagesDirProviderInterface $packagesDirProvider,
         Filesystem $filesystem,
@@ -57,8 +43,6 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
 
     /**
      * @throws \Symfony\Component\Process\Exception\ProcessFailedException
-     *
-     * @return void
      */
     public function sync(): void
     {
@@ -84,9 +68,6 @@ class PackagesSynchronizer implements PackagesSynchronizerInterface
         }
     }
 
-    /**
-     * @return void
-     */
     public function clear(): void
     {
         if ($this->filesystem->exists($this->packagesDirProvider->getToDir())) {

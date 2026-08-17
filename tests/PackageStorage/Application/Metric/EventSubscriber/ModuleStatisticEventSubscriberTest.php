@@ -21,9 +21,6 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 
 class ModuleStatisticEventSubscriberTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testOnPostRequireShouldAddViolationsIntoResponseDto(): void
     {
         // Arrange

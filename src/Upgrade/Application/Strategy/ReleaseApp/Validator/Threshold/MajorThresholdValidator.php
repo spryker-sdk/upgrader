@@ -15,25 +15,15 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class MajorThresholdValidator implements ThresholdValidatorInterface
 {
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     */
     public function __construct(ConfigurationProvider $configurationProvider)
     {
         $this->configurationProvider = $configurationProvider;
     }
 
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $releaseReleaseGroupDtoCollection
-     *
      * @throws \Upgrade\Application\Exception\ReleaseGroupThresholdException
-     *
-     * @return void
      */
     public function validate(ReleaseGroupDtoCollection $releaseReleaseGroupDtoCollection): void
     {

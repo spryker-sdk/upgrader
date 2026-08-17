@@ -19,9 +19,6 @@ use UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps\FooStep;
 
 class ComposerStrategyTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testUpgradeWithoutSteps(): void
     {
         // Arrange
@@ -41,9 +38,6 @@ class ComposerStrategyTest extends TestCase
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }
 
-    /**
-     * @return void
-     */
     public function testUpgradeSuccessFlow(): void
     {
         // Arrange
@@ -65,18 +59,15 @@ class ComposerStrategyTest extends TestCase
             $this->createMock(LoggerInterface::class),
         );
 
-        // Act
+    // Act
         $stepsExecutionDto = $strategy->upgrade();
 
-        // Assert
+    // Assert
         $this->assertTrue($stepsExecutionDto->getIsSuccessful());
         $this->assertNull($stepsExecutionDto->getComposerLockDiff());
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }
 
-    /**
-     * @return void
-     */
     public function testUpgradeSuccessFlowWithStoppedPropagation(): void
     {
         // Arrange
@@ -112,9 +103,6 @@ class ComposerStrategyTest extends TestCase
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }
 
-    /**
-     * @return void
-     */
     public function testUpgradeUnSuccessFlow(): void
     {
         // Arrange
@@ -122,8 +110,8 @@ class ComposerStrategyTest extends TestCase
             new StepExecutor(
                 $this->createMock(LoggerInterface::class),
                 [
-                    new FooStep(),
-                    $this->mockUnSuccessFooStep(),
+                new FooStep(),
+                $this->mockUnSuccessFooStep(),
                 ],
             ),
             new StepExecutor($this->createMock(LoggerInterface::class)),
@@ -139,9 +127,6 @@ class ComposerStrategyTest extends TestCase
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }
 
-    /**
-     * @return void
-     */
     public function testUpgradeUnSuccessFlowAndRollBack(): void
     {
         // Arrange
@@ -152,9 +137,9 @@ class ComposerStrategyTest extends TestCase
             new StepExecutor(
                 $this->createMock(LoggerInterface::class),
                 [
-                    new FooStep(),
-                    $fooRollbackStep,
-                    $this->mockUnSuccessFooStep(),
+                new FooStep(),
+                $fooRollbackStep,
+                $this->mockUnSuccessFooStep(),
                 ],
             ),
             new StepExecutor($this->createMock(LoggerInterface::class)),
@@ -170,9 +155,6 @@ class ComposerStrategyTest extends TestCase
         $this->assertNull($stepsExecutionDto->getPullRequestId());
     }
 
-    /**
-     * @return \UpgradeData\Infrastructure\Processor\Strategy\Composer\Steps\FooStep
-     */
     protected function mockUnSuccessFooStep(): FooStep
     {
         $stepsExecutionDto = new StepsResponseDto(false);

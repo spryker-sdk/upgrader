@@ -15,17 +15,7 @@ use Codebase\Application\Dto\ConfigurationResponseDto;
 
 interface CodebaseServiceInterface
 {
-    /**
-     * @param \Codebase\Application\Dto\CodeBaseRequestDto $codebaseRequestDto
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
     public function readCodeBase(CodeBaseRequestDto $codebaseRequestDto): CodebaseSourceDto;
 
-    /**
-     * @param string $configurationFilePath
-     *
-     * @return \Codebase\Application\Dto\ConfigurationResponseDto
-     */
     public function readToolingConfiguration(string $configurationFilePath): ConfigurationResponseDto;
 }

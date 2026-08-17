@@ -16,9 +16,6 @@ use Symfony\Component\Process\Process;
 
 class ChangedXmlFilesFetcherTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFetchChangedXmlSchemaFilesShouldReturnEmptyArrayWhenCommandOutputIsEmpty(): void
     {
         // Arrange
@@ -33,9 +30,6 @@ class ChangedXmlFilesFetcherTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    /**
-     * @return void
-     */
     public function testFetchChangedXmlSchemaFilesShouldReturnChangesLines(): void
     {
         // Arrange
@@ -44,24 +38,18 @@ class ChangedXmlFilesFetcherTest extends TestCase
             <<<OUT
             src/Spryker/Zed/ApiKey/Persistence/Propel/Schema
             src/Spryker/Zed/Acl/Persistence/Propel/Schema
-            OUT,
+                OUT,
         );
 
         $changedXmlFilesFetcher = new ChangedXmlFilesFetcher($processRunnerMock);
 
-        // Act
+    // Act
         $result = $changedXmlFilesFetcher->fetchChangedXmlSchemaFiles('/vendor', '/rev-vendor');
 
-        // Assert
+    // Assert
         $this->assertSame(['src/Spryker/Zed/ApiKey/Persistence/Propel/Schema', 'src/Spryker/Zed/Acl/Persistence/Propel/Schema'], $result);
     }
 
-    /**
-     * @param string $expectedCommand
-     * @param string $output
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected function createProcessRunnerServiceMock(string $expectedCommand, string $output = ''): ProcessRunnerServiceInterface
     {
         $process = $this->createMock(Process::class);
@@ -69,15 +57,12 @@ class ChangedXmlFilesFetcherTest extends TestCase
 
         $processRunnerService = $this->createMock(ProcessRunnerServiceInterface::class);
         $processRunnerService->expects($this->once())
-            ->method('mustRunFromCommandLine')
-            ->with($expectedCommand)->willReturn($process);
+        ->method('mustRunFromCommandLine')
+        ->with($expectedCommand)->willReturn($process);
 
         return $processRunnerService;
     }
 
-    /**
-     * @return string
-     */
     protected function getExpectedCommandString(): string
     {
         return <<<'CMD'

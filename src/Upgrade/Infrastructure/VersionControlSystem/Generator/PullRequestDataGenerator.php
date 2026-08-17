@@ -35,38 +35,16 @@ class PullRequestDataGenerator
      */
     protected const RELEASE_GROUP_TITLE_LENGTH = 50;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder
-     */
     protected ViolationBodyMessageBuilder $violationBodyMessageBuilder;
 
-    /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @var \Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface
-     */
     protected IntegratorExecutionValidatorInterface $integratorExecutionValidator;
 
-    /**
-     * @var \ReleaseApp\Application\Service\ReleaseAppServiceInterface $releaseApp
-     */
     protected ReleaseAppServiceInterface $releaseApp;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProviderInterface
-     */
     protected SourceCodeProviderInterface $sourceCodeProvider;
 
-    /**
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Generator\ViolationBodyMessageBuilder $violationBodyMessageBuilder
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     * @param \Upgrade\Application\Strategy\Common\IntegratorExecutionValidatorInterface $integratorExecutionValidator
-     * @param \ReleaseApp\Application\Service\ReleaseAppServiceInterface $releaseApp
-     * @param \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $sourceCodeProvider
-     */
     public function __construct(
         ViolationBodyMessageBuilder $violationBodyMessageBuilder,
         ConfigurationProviderInterface $configurationProvider,
@@ -81,12 +59,6 @@ class PullRequestDataGenerator
         $this->sourceCodeProvider = $sourceCodeProvider->getSourceCodeProvider();
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     * @param int|null $releaseGroupId
-     *
-     * @return string
-     */
     public function buildBody(
         StepsResponseDto $stepsResponseDto,
         ?int $releaseGroupId = null
@@ -112,13 +84,6 @@ class PullRequestDataGenerator
             . $this->buildFooterText($stepsResponseDto);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     * @param int|null $releaseGroupId
-     * @param bool $hasWarnings
-     *
-     * @return string
-     */
     protected function buildHeaderText(StepsResponseDto $stepsResponseDto, ?int $releaseGroupId, bool $hasWarnings): string
     {
         if ($hasWarnings && count($stepsResponseDto->getAppliedReleaseGroups()) === 0) {
@@ -159,11 +124,6 @@ class PullRequestDataGenerator
         return $text;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return string
-     */
     protected function buildReleaseGroupsTable(StepsResponseDto $stepsResponseDto): string
     {
         if (count($stepsResponseDto->getAppliedReleaseGroups()) === 0) {
@@ -219,11 +179,6 @@ class PullRequestDataGenerator
         return $text;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
-     *
-     * @return string
-     */
     protected function getReleaseGroupName(ReleaseGroupDto $releaseGroupDto): string
     {
         $name = trim((string)preg_replace(
@@ -237,27 +192,17 @@ class PullRequestDataGenerator
             : $name;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return string
-     */
     protected function createErrorTitle(StepsResponseDto $stepsResponseDto): string
     {
         return count($stepsResponseDto->getAppliedReleaseGroups()) > 0 ? 'Warnings' : 'Errors :warning:';
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return string
-     */
     protected function buildReleaseGroupIntegrationGuideTable(StepsResponseDto $stepsResponseDto): string
     {
         if (
             count(array_filter(
                 $stepsResponseDto->getAppliedReleaseGroups(),
-                static fn (ReleaseGroupDto $appliedReleaseGroup): bool => (string)$appliedReleaseGroup->getIntegrationGuide() !== ''
+                static fn (ReleaseGroupDto $appliedReleaseGroup): bool => (string)$appliedReleaseGroup->getIntegrationGuide() !== '',
             )) === 0
         ) {
             return '';
@@ -280,12 +225,6 @@ class PullRequestDataGenerator
         return $text;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $appliedReleaseGroup
-     * @param int $manifestRatingThreshold
-     *
-     * @return string
-     */
     protected function buildRatingCell(ReleaseGroupDto $appliedReleaseGroup, int $manifestRatingThreshold): string
     {
         return $appliedReleaseGroup->getRating() > 0 && $appliedReleaseGroup->getRating() < $manifestRatingThreshold
@@ -293,12 +232,6 @@ class PullRequestDataGenerator
             : sprintf('%s%%', $appliedReleaseGroup->getRating());
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $appliedReleaseGroup
-     *
-     * @return string
-     */
     protected function getReleaseGroupsTableWarningColumnText(
         StepsResponseDto $stepsResponseDto,
         ReleaseGroupDto $appliedReleaseGroup
@@ -306,12 +239,6 @@ class PullRequestDataGenerator
         return $this->responseHasWarnings($stepsResponseDto, $appliedReleaseGroup) ? 'Yes :warning:' : 'No';
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
-     *
-     * @return bool
-     */
     protected function responseHasWarnings(StepsResponseDto $stepsResponseDto, ReleaseGroupDto $releaseGroupDto): bool
     {
         $releaseGroupId = $releaseGroupDto->getId();
@@ -326,8 +253,6 @@ class PullRequestDataGenerator
 
     /**
      * @param array<\Upgrade\Application\Dto\ReleaseGroupFilterResponseDto> $filterResponseList
-     *
-     * @return bool
      */
     protected function shouldDisplayModuleOfferColumn(array $filterResponseList): bool
     {
@@ -336,9 +261,6 @@ class PullRequestDataGenerator
 
     /**
      * @param array<\Upgrade\Application\Dto\ReleaseGroupFilterResponseDto> $filterResponseList
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $appliedReleaseGroup
-     *
-     * @return string
      */
     protected function buildModuleOfferCell(array $filterResponseList, ReleaseGroupDto $appliedReleaseGroup): string
     {
@@ -355,11 +277,6 @@ class PullRequestDataGenerator
         return implode('<br>', array_unique($moduleList));
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return string
-     */
     protected function buildBlockers(StepsResponseDto $stepsResponseDto): string
     {
         $message = '';
@@ -372,11 +289,6 @@ class PullRequestDataGenerator
         return $message;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return string
-     */
     protected function buildProjectViolationWarnings(StepsResponseDto $stepsResponseDto): string
     {
         $warnings = [];
@@ -394,7 +306,6 @@ class PullRequestDataGenerator
 
     /**
      * @param array<string, array<string>> $warnings
-     * @param \Upgrade\Application\Dto\ValidatorViolationDto $validatorViolationDto
      *
      * @return array<string, array<string>>
      */
@@ -415,8 +326,6 @@ class PullRequestDataGenerator
 
     /**
      * @param array<string, array<string>> $warnings
-     *
-     * @return string
      */
     protected function buildWarningsTextBlocks(array $warnings): string
     {
@@ -433,11 +342,6 @@ class PullRequestDataGenerator
         return $text;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return string
-     */
     protected function buildViolationsWarnings(StepsResponseDto $stepsResponseDto): string
     {
         $composerDiffDto = $stepsResponseDto->getComposerLockDiff();
@@ -475,11 +379,6 @@ class PullRequestDataGenerator
         ) . PHP_EOL;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return string
-     */
     protected function buildIntegratorWarnings(StepsResponseDto $stepsResponseDto): string
     {
         $text = '';
@@ -509,8 +408,6 @@ class PullRequestDataGenerator
 
     /**
      * @param array<string> $skippedManifests
-     *
-     * @return string
      */
     protected function buildSkippedManifestTable(array $skippedManifests): string
     {
@@ -554,12 +451,6 @@ class PullRequestDataGenerator
         return $text;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     * @param int|null $releaseGroupId
-     *
-     * @return string
-     */
     protected function buildListOfPackages(StepsResponseDto $stepsResponseDto, ?int $releaseGroupId): string
     {
         $text = '';
@@ -595,8 +486,6 @@ class PullRequestDataGenerator
 
     /**
      * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
-     *
-     * @return string
      */
     protected function buildPackageDiffTable(array $packageDtos): string
     {
@@ -620,11 +509,6 @@ class PullRequestDataGenerator
         return $text;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return string
-     */
     protected function buildFooterText(StepsResponseDto $stepsResponseDto): string
     {
         return '### Having trouble with Upgrader and going to contact Spryker?'

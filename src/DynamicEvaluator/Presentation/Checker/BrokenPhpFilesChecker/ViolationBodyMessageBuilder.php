@@ -28,14 +28,8 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
      */
     protected const ERROR_MESSAGE = 'PHP classes that became not compatible with Spryker Release';
 
-    /**
-     * @var \Upgrader\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     */
     public function __construct(ConfigurationProvider $configurationProvider)
     {
         $this->configurationProvider = $configurationProvider;
@@ -44,8 +38,6 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
     /**
      * @param array<\DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\ViolationDto> $violations
      * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
-     *
-     * @return string
      */
     public function buildViolationsMessage(array $violations, array $packageDtos): string
     {
@@ -80,11 +72,6 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
         return "<details><summary><h4>$header</h4></summary>$text</details>";
     }
 
-    /**
-     * @param string $fileName
-     *
-     * @return string
-     */
     protected function trimRootDir(string $fileName): string
     {
         $rootDir = $this->configurationProvider->getRootPath();
@@ -96,9 +83,6 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
         return mb_substr($fileName, mb_strlen($rootDir));
     }
 
-    /**
-     * @return string
-     */
     public function getSupportedType(): string
     {
         return ViolationDto::class;

@@ -21,8 +21,6 @@ class UpgradeInstruction extends Response
 
     /**
      * @throws \Upgrade\Application\Exception\UpgraderException
-     *
-     * @return \ReleaseApp\Domain\Entities\UpgradeInstructionsReleaseGroup
      */
     public function getReleaseGroup(): UpgradeInstructionsReleaseGroup
     {

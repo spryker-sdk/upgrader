@@ -20,9 +20,6 @@ use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilte
 
 class ReleaseGroupFilterTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFilter(): void
     {
         // Arrange
@@ -42,9 +39,6 @@ class ReleaseGroupFilterTest extends TestCase
         $this->assertSame(2, $filterResponse->getProposedModuleCollection()->count());
     }
 
-    /**
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto
-     */
     protected function createReleaseGroupDto(): ReleaseGroupDto
     {
         return new ReleaseGroupDto(
@@ -60,9 +54,6 @@ class ReleaseGroupFilterTest extends TestCase
         );
     }
 
-    /**
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ModuleDto
-     */
     protected function createModuleDto(): ModuleDto
     {
         return new ModuleDto('spryker/shipment-types-backend-api', '0.1.0', 'minor');

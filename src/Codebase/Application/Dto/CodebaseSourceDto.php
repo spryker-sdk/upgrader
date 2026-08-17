@@ -51,9 +51,6 @@ class CodebaseSourceDto
      */
     protected array $xmlTransferSchemaCoreCodebaseSources = [];
 
-    /**
-     * @var string
-     */
     protected string $type = '';
 
     /**
@@ -73,7 +70,6 @@ class CodebaseSourceDto
 
     /**
      * @param array<\Codebase\Application\Dto\CodebaseInterface> $codebaseSources
-     * @param string|null $type
      *
      * @return $this
      */
@@ -90,7 +86,6 @@ class CodebaseSourceDto
 
     /**
      * @param array<\Codebase\Application\Dto\CodebaseInterface> $codebaseSources
-     * @param string|null $type
      *
      * @return $this
      */
@@ -109,7 +104,6 @@ class CodebaseSourceDto
 
     /**
      * @param array<\Codebase\Application\Dto\CodebaseInterface> $codebaseSources
-     * @param string|null $type
      *
      * @return $this
      */
@@ -183,8 +177,6 @@ class CodebaseSourceDto
     }
 
     /**
-     * @param string $type
-     *
      * @return $this
      */
     public function setType(string $type)
@@ -194,9 +186,6 @@ class CodebaseSourceDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
@@ -212,8 +201,6 @@ class CodebaseSourceDto
 
     /**
      * @param array<string> $coreModuleNames
-     *
-     * @return void
      */
     public function setCoreModuleNames(array $coreModuleNames): void
     {
@@ -230,8 +217,6 @@ class CodebaseSourceDto
 
     /**
      * @param array<string> $projectModuleNames
-     *
-     * @return void
      */
     public function setProjectModuleNames(array $projectModuleNames): void
     {

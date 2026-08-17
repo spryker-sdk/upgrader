@@ -127,9 +127,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
         return EnvFetcher::getBool('INTEGRATOR_ENABLED', static::INTEGRATOR_ENABLED);
     }
 
-    /**
-     * @return bool
-     */
     public function isEvaluatorEnabled(): bool
     {
         return EnvFetcher::getBool('EVALUATOR_ENABLED', false);
@@ -148,8 +145,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines id of your project.
-     *
-     * @return string
      */
     public function getProjectId(): string
     {
@@ -159,8 +154,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines name of your project.
-     *
-     * @return string
      */
     public function getProjectName(): string
     {
@@ -170,8 +163,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines delay in seconds between request for PR creation and enable auto merging.
-     *
-     * @return int
      */
     public function getGitLabDelayBetweenPrCreatingAndMerging(): int
     {
@@ -181,8 +172,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Returns the link to the source code provider.
-     *
-     * @return string
      */
     public function getSourceCodeProviderUrl(): string
     {
@@ -192,8 +181,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines pattern for branch that will be created during upgrade process.
-     *
-     * @return string
      */
     public function getBranchPattern(): string
     {
@@ -203,8 +190,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines single release group pattern for branch that will be created during upgrade process.
-     *
-     * @return string
      */
     public function getReleaseGroupBranchPattern(): string
     {
@@ -214,8 +199,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines commit message that will be used during upgrade process.
-     *
-     * @return string
      */
     public function getCommitMessage(): string
     {
@@ -225,8 +208,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines if pull request auto-merge is enabled. Default value is false.
-     *
-     * @return bool
      */
     public function isPullRequestAutoMergeEnabled(): bool
     {
@@ -236,8 +217,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Returns the link to the source code provider.
-     *
-     * @return string
      */
     public function getSourceCodeProvider(): string
     {
@@ -247,8 +226,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines access token for code source provider system.
-     *
-     * @return string
      */
     public function getAccessToken(): string
     {
@@ -258,8 +235,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines organisation name for source provider.
-     *
-     * @return string
      */
     public function getOrganizationName(): string
     {
@@ -269,8 +244,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines repository id for your project.
-     *
-     * @return string
      */
     public function getRepositoryId(): string
     {
@@ -280,8 +253,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines repository name for your project.
-     *
-     * @return string
      */
     public function getRepositoryName(): string
     {
@@ -291,8 +262,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      *  - Defines the specific release group id.
-     *
-     * @return int|null
      */
     public function getReleaseGroupId(): ?int
     {
@@ -302,8 +271,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines ci execution id.
-     *
-     * @return string
      */
     public function getCiExecutionId(): string
     {
@@ -323,8 +290,6 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     /**
      * Specification:
      * - Defines ci workspace name.
-     *
-     * @return string
      */
     public function getCiWorkspaceName(): string
     {

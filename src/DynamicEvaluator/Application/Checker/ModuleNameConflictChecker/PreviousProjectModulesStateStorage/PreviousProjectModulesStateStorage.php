@@ -14,16 +14,8 @@ use InvalidArgumentException;
 
 class PreviousProjectModulesStateStorage implements PreviousProjectModulesStateStorageInterface
 {
-    /**
-     * @var \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Dto\ProjectModulesStateDto|null
-     */
     protected ?ProjectModulesStateDto $previousProjectModulesStateDto = null;
 
-    /**
-     * @param \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Dto\ProjectModulesStateDto $projectModulesStateDto
-     *
-     * @return void
-     */
     public function setPreviousProjectModulesState(ProjectModulesStateDto $projectModulesStateDto): void
     {
         $this->previousProjectModulesStateDto = $projectModulesStateDto;
@@ -31,8 +23,6 @@ class PreviousProjectModulesStateStorage implements PreviousProjectModulesStateS
 
     /**
      * @throws \InvalidArgumentException
-     *
-     * @return \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Dto\ProjectModulesStateDto
      */
     public function getRequiredPreviousProjectModulesState(): ProjectModulesStateDto
     {
@@ -43,9 +33,6 @@ class PreviousProjectModulesStateStorage implements PreviousProjectModulesStateS
         return $this->previousProjectModulesStateDto;
     }
 
-    /**
-     * @return \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Dto\ProjectModulesStateDto|null
-     */
     public function getPreviousProjectModulesState(): ?ProjectModulesStateDto
     {
         return $this->previousProjectModulesStateDto;

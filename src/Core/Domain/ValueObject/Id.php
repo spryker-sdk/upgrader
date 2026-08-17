@@ -11,17 +11,11 @@ namespace Core\Domain\ValueObject;
 
 class Id
 {
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->uuid();
     }
 
-    /**
-     * @return string
-     */
     protected function uuid(): string
     {
         $data = random_bytes(16);

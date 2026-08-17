@@ -11,10 +11,5 @@ namespace Upgrade\Application\Dto;
 
 interface ViolationDtoInterface
 {
-    /**
-     * @param \Upgrade\Application\Dto\ViolationDtoInterface $violationDto
-     *
-     * @return bool
-     */
     public function equals(ViolationDtoInterface $violationDto): bool;
 }

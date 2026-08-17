@@ -21,41 +21,21 @@ use Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReade
  */
 class CodebaseService implements CodebaseServiceInterface
 {
-    /**
-     * @var \Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface
-     */
     protected CodeBaseReaderInterface $codeBaseReader;
 
-    /**
-     * @var \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface
-     */
     protected ToolingConfigurationReaderInterface $toolingConfigurationReader;
 
-    /**
-     * @param \Codebase\Infrastructure\CodeBaseReader\CodeBaseReaderInterface $codeBaseReader
-     * @param \Codebase\Infrastructure\ToolingConfigurationReader\ToolingConfigurationReaderInterface $toolingConfigurationReader
-     */
     public function __construct(CodeBaseReaderInterface $codeBaseReader, ToolingConfigurationReaderInterface $toolingConfigurationReader)
     {
         $this->codeBaseReader = $codeBaseReader;
         $this->toolingConfigurationReader = $toolingConfigurationReader;
     }
 
-    /**
-     * @param \Codebase\Application\Dto\CodeBaseRequestDto $codebaseRequestDto
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
     public function readCodeBase(CodeBaseRequestDto $codebaseRequestDto): CodebaseSourceDto
     {
         return $this->codeBaseReader->readCodeBase($codebaseRequestDto);
     }
 
-    /**
-     * @param string $configurationFilePath
-     *
-     * @return \Codebase\Application\Dto\ConfigurationResponseDto
-     */
     public function readToolingConfiguration(string $configurationFilePath): ConfigurationResponseDto
     {
         return $this->toolingConfigurationReader->readToolingConfiguration($configurationFilePath);

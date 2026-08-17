@@ -18,9 +18,6 @@ use Symfony\Component\Process\Process;
 
 class VendorChangedFilesFetcherTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFetchChangedFilesShouldReturnVendorFiles(): void
     {
         // Arrange
@@ -46,9 +43,6 @@ class VendorChangedFilesFetcherTest extends TestCase
         ], $files);
     }
 
-    /**
-     * @return void
-     */
     public function testFetchChangedFilesShouldEmptyArrayWhenCommandOutputEmpty(): void
     {
         // Arrange
@@ -59,17 +53,15 @@ class VendorChangedFilesFetcherTest extends TestCase
 
         $vendorChangedFilesFetcher = new VendorChangedFilesFetcher($packagesDirProviderMock, $processRunnerMock, $publicApiFilePathsProviderMock);
 
-        // Act
+    // Act
         $files = $vendorChangedFilesFetcher->fetchChangedFiles();
 
-        // Assert
+    // Assert
         $this->assertEmpty($files);
     }
 
     /**
      * @param array<string> $dirs
-     *
-     * @return \PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface
      */
     public function createPackagesDirProviderMock(array $dirs): PackagesDirProviderInterface
     {
@@ -81,11 +73,6 @@ class VendorChangedFilesFetcherTest extends TestCase
         return $packagesDirProvider;
     }
 
-    /**
-     * @param string $output
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     public function createProcessRunnerServiceMock(string $output): ProcessRunnerServiceInterface
     {
         $process = $this->createMock(Process::class);
@@ -97,9 +84,6 @@ class VendorChangedFilesFetcherTest extends TestCase
         return $processRunnerService;
     }
 
-    /**
-     * @return \PackageStorage\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface
-     */
     public function createPublicApiFilePathsProviderMock(): PublicApiFilePathsProviderInterface
     {
         $publicApiFilePathsProvider = $this->createMock(PublicApiFilePathsProviderInterface::class);

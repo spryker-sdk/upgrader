@@ -15,33 +15,14 @@ use Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto;
 
 interface SourceCodeProviderInterface
 {
-    /**
-     * @return string
-     */
     public function getName(): string;
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     * @param \Upgrade\Infrastructure\VersionControlSystem\Dto\PullRequestDto $pullRequestDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function createPullRequest(
         StepsResponseDto $stepsExecutionDto,
         PullRequestDto $pullRequestDto
     ): StepsResponseDto;
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function validateCredentials(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
 
-    /**
-     * @param \Upgrade\Application\Dto\ValidatorViolationDto $blocker
-     *
-     * @return string
-     */
     public function buildBlockerTextBlock(ValidatorViolationDto $blocker): string;
 }

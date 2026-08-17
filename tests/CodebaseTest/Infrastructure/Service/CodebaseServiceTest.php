@@ -16,9 +16,6 @@ use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 class CodebaseServiceTest extends KernelTestCase
 {
-    /**
-     * @return void
-     */
     public function testParseSourceWithValidPath(): void
     {
         //Arrange
@@ -39,15 +36,12 @@ class CodebaseServiceTest extends KernelTestCase
         $this->assertInstanceOf('\Codebase\Application\Dto\CodebaseInterface', $projectKey);
     }
 
-    /**
-     * @return void
-     */
     public function testParseSourceWithInvalidPath(): void
     {
         //Assert
         $this->expectException(DirectoryNotFoundException::class);
 
-        //Arrange
+    //Arrange
         $codebaseRequestDto = new SourceParserRequestDto(
             [APPLICATION_ROOT_DIR . '/invalidPath/'],
             [APPLICATION_ROOT_DIR . '/invalidPath/'],
@@ -55,7 +49,7 @@ class CodebaseServiceTest extends KernelTestCase
             [],
         );
 
-        //Act
+    //Act
         static::bootKernel()->getContainer()->get(SourceParser::class)->parseSource($codebaseRequestDto);
     }
 }

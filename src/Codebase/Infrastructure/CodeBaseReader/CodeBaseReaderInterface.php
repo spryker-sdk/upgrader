@@ -14,10 +14,5 @@ use Codebase\Application\Dto\CodebaseSourceDto;
 
 interface CodeBaseReaderInterface
 {
-    /**
-     * @param \Codebase\Application\Dto\CodeBaseRequestDto $codebaseRequestDto
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
     public function readCodeBase(CodeBaseRequestDto $codebaseRequestDto): CodebaseSourceDto;
 }

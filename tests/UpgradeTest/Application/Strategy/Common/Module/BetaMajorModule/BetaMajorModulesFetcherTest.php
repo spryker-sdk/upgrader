@@ -18,9 +18,6 @@ use Upgrade\Application\Strategy\Common\Module\BetaMajorModule\BetaMajorModulesF
 
 class BetaMajorModulesFetcherTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testGetBetaMajorsNotInstalledInDevShouldFilterLockDevPackages(): void
     {
         //Arrange
@@ -35,9 +32,6 @@ class BetaMajorModulesFetcherTest extends TestCase
         $this->assertEmpty($fetchedModuleDtoCollection);
     }
 
-    /**
-     * @return void
-     */
     public function testGetBetaMajorsNotInstalledInDevShouldBetaMajors(): void
     {
         //Arrange
@@ -45,18 +39,13 @@ class BetaMajorModulesFetcherTest extends TestCase
         $betaMajorModulesFetcher = new BetaMajorModulesFetcher($packageManagerAdapterMock);
         $moduleDtoCollection = new ModuleDtoCollection([new ModuleDto('spryker/picking-lists-backend-api', '0.1.1', ReleaseAppConstant::MODULE_TYPE_MINOR)]);
 
-        //Act
+    //Act
         $fetchedModuleDtoCollection = $betaMajorModulesFetcher->getBetaMajorsNotInstalledInDev($moduleDtoCollection);
 
-        //Assert
+    //Assert
         $this->assertCount(1, $fetchedModuleDtoCollection);
     }
 
-    /**
-     * @param bool $isLockDevPackageVersion
-     *
-     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected function createPackageManagerAdapterMock(bool $isLockDevPackageVersion): PackageManagerAdapterInterface
     {
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);

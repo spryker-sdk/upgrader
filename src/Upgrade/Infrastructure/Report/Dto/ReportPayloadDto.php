@@ -28,16 +28,12 @@ class ReportPayloadDto
      */
     protected array $integratorWarnings;
 
-    /**
-     * @var \Upgrade\Application\Dto\ModelStatisticDto|null
-     */
     protected ?ModelStatisticDto $modelStatisticDto;
 
     /**
      * @param array<\Upgrade\Domain\Entity\Package> $requiredPackages
      * @param array<\Upgrade\Domain\Entity\Package> $devRequiredPackages
      * @param array<string> $integratorWarnings
-     * @param \Upgrade\Application\Dto\ModelStatisticDto|null $modelStatisticDto
      */
     public function __construct(
         array $requiredPackages = [],
@@ -75,9 +71,6 @@ class ReportPayloadDto
         return $this->integratorWarnings;
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\ModelStatisticDto|null
-     */
     public function getModelStatisticDto(): ?ModelStatisticDto
     {
         return $this->modelStatisticDto;

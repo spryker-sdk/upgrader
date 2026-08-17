@@ -14,12 +14,8 @@ use Codebase\Application\Dto\ClassCodebaseDto;
 interface PhpFileParserInterface extends FileParserInterface
 {
     /**
-     * @param string $namespace
      * @param array<string> $projectPrefixes
      * @param array<string> $coreNamespaces
-     * @param \Codebase\Application\Dto\ClassCodebaseDto|null $transfer
-     *
-     * @return \Codebase\Application\Dto\ClassCodebaseDto|null
      */
     public function parseClass(
         string $namespace,

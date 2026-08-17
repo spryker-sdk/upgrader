@@ -26,11 +26,6 @@ class UpgradeInstructionModuleCollection
         $this->elements = $elements;
     }
 
-    /**
-     * @param \ReleaseApp\Domain\Entities\UpgradeInstructionModule $element
-     *
-     * @return void
-     */
     public function add(UpgradeInstructionModule $element): void
     {
         $this->elements[] = $element;
@@ -44,17 +39,11 @@ class UpgradeInstructionModuleCollection
         return $this->elements;
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return count($this->elements);
     }
 
-    /**
-     * @return bool
-     */
     public function isEmpty(): bool
     {
         return !$this->elements;
@@ -62,19 +51,12 @@ class UpgradeInstructionModuleCollection
 
     /**
      * @param \ReleaseApp\Domain\Entities\Collection\UpgradeInstructionModuleCollection|self $collectionToMerge
-     *
-     * @return void
      */
     public function addCollection(self $collectionToMerge): void
     {
         $this->elements = array_merge($this->elements, $collectionToMerge->toArray());
     }
 
-    /**
-     * @param string $name
-     *
-     * @return \ReleaseApp\Domain\Entities\UpgradeInstructionModule|null
-     */
     public function getByName(string $name): ?UpgradeInstructionModule
     {
         foreach ($this->elements as $module) {
@@ -86,11 +68,6 @@ class UpgradeInstructionModuleCollection
         return null;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return void
-     */
     public function deleteByName(string $name): void
     {
         foreach ($this->elements as $key => $module) {

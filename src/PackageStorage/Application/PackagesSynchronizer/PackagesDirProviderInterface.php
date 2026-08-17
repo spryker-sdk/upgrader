@@ -16,13 +16,7 @@ interface PackagesDirProviderInterface
      */
     public function getSprykerPackageDirs(): array;
 
-    /**
-     * @return string
-     */
     public function getFromDir(): string;
 
-    /**
-     * @return string
-     */
     public function getToDir(): string;
 }

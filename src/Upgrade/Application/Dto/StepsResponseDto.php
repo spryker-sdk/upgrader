@@ -22,9 +22,6 @@ class StepsResponseDto extends ResponseDto
      */
     public const UNDEFINED_RELEASE_GROUP_ID = 0;
 
-    /**
-     * @var bool
-     */
     protected bool $isSuccessful;
 
     /**
@@ -37,9 +34,6 @@ class StepsResponseDto extends ResponseDto
      */
     protected array $appliedReleaseGroups = [];
 
-    /**
-     * @var \Upgrade\Application\Dto\ComposerLockDiffDto|null
-     */
     protected ?ComposerLockDiffDto $composerLockDiffDto = null;
 
     /**
@@ -47,9 +41,6 @@ class StepsResponseDto extends ResponseDto
      */
     protected array $integratorResponseCollection = [];
 
-    /**
-     * @var \Upgrade\Domain\ValueObject\ErrorInterface|null
-     */
     protected ?ErrorInterface $error = null;
 
     /**
@@ -62,19 +53,10 @@ class StepsResponseDto extends ResponseDto
      */
     protected array $projectViolations = [];
 
-    /**
-     * @var int|null
-     */
     protected ?int $pullRequestId = null;
 
-    /**
-     * @var string|null
-     */
     protected ?string $reportId = null;
 
-    /**
-     * @var bool
-     */
     protected bool $isStopPropagation = false;
 
     /**
@@ -87,35 +69,16 @@ class StepsResponseDto extends ResponseDto
      */
     protected array $filterResponseList = [];
 
-    /**
-     * @var \Upgrade\Application\Dto\ReleaseGroupStatDto
-     */
     protected ReleaseGroupStatDto $releaseGroupStatDto;
 
-    /**
-     * @var \Upgrade\Application\Dto\ModelStatisticDto
-     */
     protected ModelStatisticDto $modelStatisticDto;
 
-    /**
-     * @var \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto|null
-     */
     protected ?ReleaseGroupDto $currentReleaseGroup = null;
 
-    /**
-     * @var bool
-     */
     protected bool $isPullRequestSent = false;
 
-    /**
-     * @var string
-     */
     protected string $targetBranch = '';
 
-    /**
-     * @param bool $isSuccessful
-     * @param string|null $outputMessage
-     */
     public function __construct(bool $isSuccessful = true, ?string $outputMessage = null)
     {
         parent::__construct($isSuccessful);
@@ -127,17 +90,12 @@ class StepsResponseDto extends ResponseDto
         $this->modelStatisticDto = new ModelStatisticDto();
     }
 
-    /**
-     * @return bool
-     */
     public function getIsSuccessful(): bool
     {
         return $this->isSuccessful;
     }
 
     /**
-     * @param bool $isSuccessful
-     *
      * @return $this
      */
     public function setIsSuccessful(bool $isSuccessful)
@@ -147,17 +105,12 @@ class StepsResponseDto extends ResponseDto
         return $this;
     }
 
-    /**
-     * @return \Upgrade\Domain\ValueObject\ErrorInterface|null
-     */
     public function getError(): ?ErrorInterface
     {
         return $this->error;
     }
 
     /**
-     * @param \Upgrade\Domain\ValueObject\ErrorInterface|null $error
-     *
      * @return $this
      */
     public function setError(?ErrorInterface $error)
@@ -171,9 +124,6 @@ class StepsResponseDto extends ResponseDto
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOutputMessage(): ?string
     {
         if (!$this->outputMessageList) {
@@ -204,8 +154,6 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @param string|null $outputMessage
-     *
      * @return $this
      */
     public function addOutputMessage(?string $outputMessage)
@@ -218,8 +166,6 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @param \Upgrade\Application\Dto\ComposerLockDiffDto|null $composerLockDiffDto
-     *
      * @return $this
      */
     public function setComposerLockDiff(?ComposerLockDiffDto $composerLockDiffDto)
@@ -229,9 +175,6 @@ class StepsResponseDto extends ResponseDto
         return $this;
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\ComposerLockDiffDto|null
-     */
     public function getComposerLockDiff(): ?ComposerLockDiffDto
     {
         return $this->composerLockDiffDto;
@@ -245,37 +188,22 @@ class StepsResponseDto extends ResponseDto
         return $this->integratorResponseCollection;
     }
 
-    /**
-     * @param int $releaseGroupId
-     *
-     * @return \Upgrade\Application\Dto\IntegratorResponseDto|null
-     */
     public function getIntegratorResponseDtoByReleaseGroupId(int $releaseGroupId): ?IntegratorResponseDto
     {
         return $this->integratorResponseCollection[$releaseGroupId] ?? null;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\IntegratorResponseDto $integratorResponseDto
-     *
-     * @return void
-     */
     public function addIntegratorResponseDto(IntegratorResponseDto $integratorResponseDto): void
     {
         $this->integratorResponseCollection[$this->getCurrentReleaseGroupId()] = $integratorResponseDto;
     }
 
-    /**
-     * @return int|null
-     */
     public function getPullRequestId(): ?int
     {
         return $this->pullRequestId;
     }
 
     /**
-     * @param int|null $pullRequestId
-     *
      * @return $this
      */
     public function setPullRequestId(?int $pullRequestId)
@@ -285,11 +213,6 @@ class StepsResponseDto extends ResponseDto
         return $this;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\ValidatorViolationDto $blockerInfo
-     *
-     * @return void
-     */
     public function addBlocker(ValidatorViolationDto $blockerInfo): void
     {
         $currentReleaseGroupId = $this->getCurrentReleaseGroupId();
@@ -301,11 +224,6 @@ class StepsResponseDto extends ResponseDto
         $this->blockers[$currentReleaseGroupId][] = $blockerInfo;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return void
-     */
     public function removeBlockersByTitle(string $title): void
     {
         $currentReleaseGroupId = $this->getCurrentReleaseGroupId();
@@ -316,7 +234,7 @@ class StepsResponseDto extends ResponseDto
 
         $this->blockers[$currentReleaseGroupId] = array_filter(
             $this->blockers[$currentReleaseGroupId],
-            static fn (ValidatorViolationDto $violation): bool => $violation->getTitle() !== $title
+            static fn (ValidatorViolationDto $violation): bool => $violation->getTitle() !== $title,
         );
     }
 
@@ -328,17 +246,12 @@ class StepsResponseDto extends ResponseDto
         return $this->blockers;
     }
 
-    /**
-     * @return bool
-     */
     public function hasBlockers(): bool
     {
         return count($this->blockers) > 0;
     }
 
     /**
-     * @param int $releaseGroupId
-     *
      * @return array<\Upgrade\Application\Dto\ValidatorViolationDto>
      */
     public function getBlockersByReleaseGroupId(int $releaseGroupId): array
@@ -354,27 +267,17 @@ class StepsResponseDto extends ResponseDto
         return $this->projectViolations;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\ValidatorViolationDto $violationDto
-     *
-     * @return void
-     */
     public function addProjectViolation(ValidatorViolationDto $violationDto): void
     {
         $this->projectViolations[] = $violationDto;
     }
 
-    /**
-     * @return string|null
-     */
     public function getReportId(): ?string
     {
         return $this->reportId;
     }
 
     /**
-     * @param string|null $reportId
-     *
      * @return $this
      */
     public function setReportId(?string $reportId)
@@ -384,17 +287,12 @@ class StepsResponseDto extends ResponseDto
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function getIsStopPropagation(): bool
     {
         return $this->isStopPropagation;
     }
 
     /**
-     * @param bool $isStopPropagation
-     *
      * @return $this
      */
     public function setIsStopPropagation(bool $isStopPropagation)
@@ -404,9 +302,6 @@ class StepsResponseDto extends ResponseDto
         return $this;
     }
 
-    /**
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto|null
-     */
     public function getLastAppliedReleaseGroup(): ?ReleaseGroupDto
     {
         return end($this->appliedReleaseGroups) ?: null;
@@ -427,41 +322,25 @@ class StepsResponseDto extends ResponseDto
     {
         return array_filter(
             $this->appliedReleaseGroups,
-            static fn (ReleaseGroupDto $releaseGroup): bool => $releaseGroup->isSecurity()
+            static fn (ReleaseGroupDto $releaseGroup): bool => $releaseGroup->isSecurity(),
         );
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $appliedReleaseGroup
-     *
-     * @return void
-     */
     public function addAppliedReleaseGroup(ReleaseGroupDto $appliedReleaseGroup): void
     {
         $this->appliedReleaseGroups[$appliedReleaseGroup->getId()] = $appliedReleaseGroup;
     }
 
-    /**
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto|null
-     */
     public function getCurrentReleaseGroup(): ?ReleaseGroupDto
     {
         return $this->currentReleaseGroup;
     }
 
-    /**
-     * @return int
-     */
     public function getCurrentReleaseGroupId(): int
     {
         return $this->currentReleaseGroup ? $this->currentReleaseGroup->getId() : static::UNDEFINED_RELEASE_GROUP_ID;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $currentReleaseGroup
-     *
-     * @return void
-     */
     public function setCurrentReleaseGroup(ReleaseGroupDto $currentReleaseGroup): void
     {
         $this->currentReleaseGroup = $currentReleaseGroup;
@@ -476,8 +355,6 @@ class StepsResponseDto extends ResponseDto
     }
 
     /**
-     * @param int $releaseGroupId
-     *
      * @return array<\Upgrade\Application\Dto\ViolationDtoInterface>
      */
     public function getViolationsByReleaseGroupId(int $releaseGroupId): array
@@ -485,11 +362,6 @@ class StepsResponseDto extends ResponseDto
         return $this->violations[$releaseGroupId] ?? [];
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\ViolationDtoInterface $violation
-     *
-     * @return void
-     */
     public function addViolation(ViolationDtoInterface $violation): void
     {
         $currentReleaseGroupId = $this->getCurrentReleaseGroupId();
@@ -501,19 +373,11 @@ class StepsResponseDto extends ResponseDto
         $this->violations[$currentReleaseGroupId][] = $violation;
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\ReleaseGroupStatDto
-     */
     public function getReleaseGroupStatDto(): ReleaseGroupStatDto
     {
         return $this->releaseGroupStatDto;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\ReleaseGroupStatDto $releaseGroupStatDto
-     *
-     * @return void
-     */
     public function setReleaseGroupStatDto(ReleaseGroupStatDto $releaseGroupStatDto): void
     {
         $this->releaseGroupStatDto = $releaseGroupStatDto;
@@ -527,55 +391,31 @@ class StepsResponseDto extends ResponseDto
         return $this->filterResponseList;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto $responseDto
-     *
-     * @return void
-     */
     public function addFilterResponse(ReleaseGroupFilterResponseDto $responseDto): void
     {
         $this->filterResponseList[] = $responseDto;
     }
 
-    /**
-     * @return bool
-     */
     public function isPullRequestSent(): bool
     {
         return $this->isPullRequestSent;
     }
 
-    /**
-     * @param bool $isPullRequestSent
-     *
-     * @return void
-     */
     public function setIsPullRequestSent(bool $isPullRequestSent): void
     {
         $this->isPullRequestSent = $isPullRequestSent;
     }
 
-    /**
-     * @return string
-     */
     public function getTargetBranch(): string
     {
         return $this->targetBranch;
     }
 
-    /**
-     * @param string $targetBranch
-     *
-     * @return void
-     */
     public function setTargetBranch(string $targetBranch): void
     {
         $this->targetBranch = $targetBranch;
     }
 
-    /**
-     * @return bool
-     */
     public function hasErrors(): bool
     {
         return count($this->getBlockers()) > 0
@@ -589,19 +429,11 @@ class StepsResponseDto extends ResponseDto
             || count($this->getProjectViolations()) > 0;
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\ModelStatisticDto
-     */
     public function getModelStatisticDto(): ModelStatisticDto
     {
         return $this->modelStatisticDto;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\ModelStatisticDto $modelStatisticDto
-     *
-     * @return void
-     */
     public function setModelStatisticDto(ModelStatisticDto $modelStatisticDto): void
     {
         $this->modelStatisticDto = $modelStatisticDto;

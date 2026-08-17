@@ -20,24 +20,13 @@ class HttpRequestBuilder implements HttpRequestBuilderInterface
      */
     protected const HTTP_HEADER_LIST = ['Content-Type' => 'application/json'];
 
-    /**
-     * @var \ReleaseApp\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $releaseAppConfig;
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     */
     public function __construct(ConfigurationProvider $configurationProvider)
     {
         $this->releaseAppConfig = $configurationProvider;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface $request
-     *
-     * @return \GuzzleHttp\Psr7\Request
-     */
     public function createRequest(HttpRequestInterface $request): Request
     {
         return new Request(
@@ -48,9 +37,6 @@ class HttpRequestBuilder implements HttpRequestBuilderInterface
         );
     }
 
-    /**
-     * @return string
-     */
     protected function getBaseUrl(): string
     {
         return $this->releaseAppConfig->getReleaseAppUrl();

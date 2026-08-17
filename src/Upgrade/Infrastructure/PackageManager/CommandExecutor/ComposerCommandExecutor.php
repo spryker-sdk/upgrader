@@ -79,32 +79,14 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
      */
     protected const NO_INSTALL_FLAG = '--no-install';
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected ProcessRunnerServiceInterface $processRunner;
 
-    /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @var bool
-     */
     protected bool $isUpdateMinimumDependeciesEnabled;
 
-    /**
-     * @var \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader
-     */
     protected ComposerLockReader $composerLockReader;
 
-    /**
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     * @param \Upgrade\Infrastructure\PackageManager\Reader\ComposerLockReader $composerLockReader
-     * @param bool $isUpdateMinimumDependeciesEnabled
-     */
     public function __construct(
         ProcessRunnerServiceInterface $processRunner,
         ConfigurationProviderInterface $configurationProvider,
@@ -133,11 +115,6 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
             ];
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function updateSubPackage(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->runWithDependencyFlags([
@@ -150,11 +127,6 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
         ]);
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function require(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->runWithDependencyFlags([
@@ -166,11 +138,6 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
         ]);
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function remove(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         $command = [
@@ -184,11 +151,6 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
         return $this->createResponse($this->processRunner->run($command, static::ENV));
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function requireDev(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->runWithDependencyFlags([
@@ -201,9 +163,6 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
         ]);
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function update(): PackageManagerResponseDto
     {
         return $this->runWithDependencyFlags([
@@ -215,9 +174,6 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
         ]);
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function updateLockHash(): PackageManagerResponseDto
     {
         $package = $this->getFirstAvailablePackage();
@@ -261,8 +217,6 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
 
     /**
      * @param array<string> $command
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
     protected function runWithDependencyFlags(array $command): PackageManagerResponseDto
     {
@@ -283,8 +237,6 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
     }
 
     /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
      * @return array<string>
      */
     protected function getPackageString(PackageCollection $packageCollection): array
@@ -309,8 +261,6 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
 
     /**
      * @param \Symfony\Component\Process\Process<string, string> $process
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
      */
     protected function createResponse(Process $process): PackageManagerResponseDto
     {
@@ -323,8 +273,6 @@ class ComposerCommandExecutor implements ComposerCommandExecutorInterface
 
     /**
      * @param array<string> $command
-     *
-     * @return \Symfony\Component\Process\Process
      */
     protected function runCommand(array $command): Process
     {

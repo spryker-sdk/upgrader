@@ -11,8 +11,5 @@ namespace ReleaseApp\Application\Configuration;
 
 interface ConfigurationProviderInterface
 {
-    /**
-     * @return string
-     */
     public function getReleaseAppUrl(): string;
 }

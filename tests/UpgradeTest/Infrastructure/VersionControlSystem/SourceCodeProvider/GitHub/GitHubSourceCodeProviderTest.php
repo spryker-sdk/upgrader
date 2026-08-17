@@ -43,14 +43,7 @@ class GitHubSourceCodeProviderTest extends TestCase
     /**
      * @dataProvider createPullRequestDataProvider
      *
-     * @param string $accessToken
-     * @param string $orgName
-     * @param string $repoName
-     * @param array $reviewers
-     * @param string $expectedError
-     * @param bool $produceException
-     *
-     * @return void
+     * @param array<string> $reviewers
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('createPullRequestDataProvider')]
     public function testCreatePullRequest(
@@ -109,11 +102,6 @@ class GitHubSourceCodeProviderTest extends TestCase
         }
     }
 
-    /**
-     * @param \Github\Api\PullRequest|null $pr
-     *
-     * @return \GitHub\Client
-     */
     protected function createGitHubClientMock(?PullRequest $pr): GitHubClient
     {
         // Create a mock for the GitHub client and its methods used in the createPullRequest method
@@ -141,12 +129,6 @@ class GitHubSourceCodeProviderTest extends TestCase
 
     /**
      * @dataProvider buildBlockerTextBlockDataProvider
-     *
-     * @param string $title
-     * @param string $message
-     * @param string $expectedOutput
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('buildBlockerTextBlockDataProvider')]
     public function testBuildBlockerTextBlock(string $title, string $message, string $expectedOutput): void
@@ -167,12 +149,6 @@ class GitHubSourceCodeProviderTest extends TestCase
 
     /**
      * @dataProvider buildBlockerTextBlockTruncatesErrorTraceDataProvider
-     *
-     * @param string $title
-     * @param string $message
-     * @param string $expectedOutput
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('buildBlockerTextBlockTruncatesErrorTraceDataProvider')]
     public function testBuildBlockerTextBlockTruncatesErrorTrace(string $title, string $message, string $expectedOutput): void

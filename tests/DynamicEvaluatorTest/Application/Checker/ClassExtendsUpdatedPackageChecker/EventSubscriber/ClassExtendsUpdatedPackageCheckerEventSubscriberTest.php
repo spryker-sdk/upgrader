@@ -20,9 +20,6 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 
 class ClassExtendsUpdatedPackageCheckerEventSubscriberTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testOnPostRequireShouldAddViolationsIntoResponseDto(): void
     {
         // Arrange
@@ -42,9 +39,6 @@ class ClassExtendsUpdatedPackageCheckerEventSubscriberTest extends TestCase
         $this->assertSame('violation one', $violations[0]->getMessage());
     }
 
-    /**
-     * @return void
-     */
     public function testOnPostRequireShouldBeSkippedWhenEvaluatorDisabled(): void
     {
         // Arrange
@@ -55,19 +49,14 @@ class ClassExtendsUpdatedPackageCheckerEventSubscriberTest extends TestCase
 
         $event = new ReleaseGroupProcessorPostRequireEvent(new StepsResponseDto(), new PackageManagerResponseDto(true));
 
-        // Act
+    // Act
         $checkerExecutorEventSubscriber->onPostRequire($event);
 
-        // Assert
+    // Assert
         $violations = $event->getStepsExecutionDto()->getViolations();
         $this->assertEmpty($violations);
     }
 
-    /**
-     * @param bool $isEvaluatorEnabled
-     *
-     * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     public function createConfigurationProviderMock(bool $isEvaluatorEnabled = true): ConfigurationProviderInterface
     {
         $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
@@ -76,11 +65,6 @@ class ClassExtendsUpdatedPackageCheckerEventSubscriberTest extends TestCase
         return $configurationProvider;
     }
 
-    /**
-     * @param \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Dto\ViolationDto $violationDto
-     *
-     * @return \DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\ClassExtendsUpdatedPackageChecker
-     */
     public function createCheckerMock(ViolationDto $violationDto): ClassExtendsUpdatedPackageChecker
     {
         $checker = $this->createMock(ClassExtendsUpdatedPackageChecker::class);

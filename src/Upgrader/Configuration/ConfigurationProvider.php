@@ -24,9 +24,6 @@ class ConfigurationProvider
         return static::CORE_NAMESPACES;
     }
 
-    /**
-     * @return string
-     */
     public function getToolingConfigurationFilePath(): string
     {
         return (string)getenv('PROJECT_CONFIGURATION_FILE_PATH') ?: 'tooling.yml';
@@ -55,25 +52,16 @@ class ConfigurationProvider
         });
     }
 
-    /**
-     * @return string
-     */
     public function getSrcPath(): string
     {
         return $this->getRootPath() . 'src' . DIRECTORY_SEPARATOR;
     }
 
-    /**
-     * @return string
-     */
     public function getVendorPath(): string
     {
         return $this->getRootPath() . 'vendor' . DIRECTORY_SEPARATOR;
     }
 
-    /**
-     * @return string
-     */
     public function getRootPath(): string
     {
         return getcwd() . DIRECTORY_SEPARATOR;

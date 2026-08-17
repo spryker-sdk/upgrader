@@ -22,8 +22,6 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
     /**
      * @param array<\DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Dto\ViolationDto> $violations
      * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
-     *
-     * @return string
      */
     public function buildViolationsMessage(array $violations, array $packageDtos): string
     {
@@ -50,8 +48,6 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
     /**
      * @param array<\DynamicEvaluator\Application\Checker\ClassExtendsUpdatedPackageChecker\Dto\ViolationDto> $groupedViolationsByMessage
      * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
-     *
-     * @return string
      */
     protected function getMessageViolationsTableLines(array $groupedViolationsByMessage, array $packageDtos): string
     {
@@ -117,9 +113,6 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
 
     /**
      * @param array<\Upgrade\Domain\Entity\Package> $packageDtos
-     * @param string $package
-     *
-     * @return string
      */
     protected function getPackageReleaseLink(array $packageDtos, string $package): string
     {
@@ -132,9 +125,6 @@ class ViolationBodyMessageBuilder implements CheckerViolationMessageBuilderInter
         return '-';
     }
 
-    /**
-     * @return string
-     */
     public function getSupportedType(): string
     {
         return ViolationDto::class;

@@ -13,10 +13,5 @@ use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 
 interface ThresholdValidatorInterface
 {
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $releaseReleaseGroup
-     *
-     * @return void
-     */
     public function validate(ReleaseGroupDtoCollection $releaseReleaseGroup): void;
 }

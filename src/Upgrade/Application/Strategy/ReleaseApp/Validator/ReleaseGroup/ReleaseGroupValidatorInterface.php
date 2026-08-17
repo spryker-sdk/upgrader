@@ -14,16 +14,9 @@ use ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto;
 interface ReleaseGroupValidatorInterface
 {
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     *
      * @throws \Upgrade\Application\Exception\UpgraderException
-     *
-     * @return void
      */
     public function validate(ReleaseGroupDto $releaseGroup): void;
 
-    /**
-     * @return string
-     */
     public static function getValidatorTitle(): string;
 }

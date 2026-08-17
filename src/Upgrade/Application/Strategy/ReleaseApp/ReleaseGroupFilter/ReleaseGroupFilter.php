@@ -28,11 +28,6 @@ class ReleaseGroupFilter implements ReleaseGroupFilterInterface
         $this->releaseGroupFilterItems = $releaseGroupFilterItems;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
-     *
-     * @return \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto
-     */
     public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupFilterResponseDto
     {
         $proposedModuleCollection = new ModuleDtoCollection();

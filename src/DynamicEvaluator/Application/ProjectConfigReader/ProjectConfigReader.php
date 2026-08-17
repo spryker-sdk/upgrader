@@ -23,20 +23,10 @@ class ProjectConfigReader implements ProjectConfigReaderInterface
      */
     protected const PROJECT_NAMESPACES_CONFIG_KEY = 'KernelConstants::PROJECT_NAMESPACES';
 
-    /**
-     * @var \Upgrader\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \DynamicEvaluator\Application\ProjectConfigReader\ConfigReaderInterface
-     */
     protected ConfigReaderInterface $configReader;
 
-    /**
-     * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     * @param \DynamicEvaluator\Application\ProjectConfigReader\ConfigReaderInterface $configReader
-     */
     public function __construct(ConfigurationProvider $configurationProvider, ConfigReaderInterface $configReader)
     {
         $this->configurationProvider = $configurationProvider;

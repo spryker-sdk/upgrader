@@ -19,9 +19,6 @@ use Upgrade\Infrastructure\HttpClient\RepeatableHttpClient;
 
 class RepeatableHttpClientTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testSendRequestShouldThrowExceptionWhenServerUnreachable(): void
     {
         // Arrange & Assert
@@ -34,9 +31,6 @@ class RepeatableHttpClientTest extends TestCase
         $repeatableHttpClientMock->sendRequest($request);
     }
 
-    /**
-     * @return void
-     */
     public function testSendRequestShouldThrowExceptionWhen500ResponseReturned(): void
     {
         // Arrange & Assert
@@ -46,13 +40,10 @@ class RepeatableHttpClientTest extends TestCase
         $this->expectException(RemoteServerUnreachableException::class);
         $request = $this->createRequestMock();
 
-        // Act
+    // Act
         $repeatableHttpClientMock->sendRequest($request);
     }
 
-    /**
-     * @return void
-     */
     public function testSendRequestShouldReturnResponseWhenSuccessRequestProcessed(): void
     {
         // Arrange
@@ -68,41 +59,28 @@ class RepeatableHttpClientTest extends TestCase
         $this->assertSame($response, $receivedResponse);
     }
 
-    /**
-     * @return \Psr\Http\Client\ClientInterface
-     */
     protected function createUnreachableServerClientMock(): ClientInterface
     {
         $client = $this->createMock(ClientInterface::class);
         $client
-            ->method('sendRequest')
-            ->willThrowException(
-                $this->createMock(NetworkExceptionInterface::class),
-            );
+        ->method('sendRequest')
+        ->willThrowException(
+            $this->createMock(NetworkExceptionInterface::class),
+        );
 
         return $client;
     }
 
-    /**
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return \Psr\Http\Client\ClientInterface
-     */
     protected function createServerClientMock(ResponseInterface $response): ClientInterface
     {
         $client = $this->createMock(ClientInterface::class);
         $client
-            ->method('sendRequest')
-            ->willReturn($response);
+        ->method('sendRequest')
+        ->willReturn($response);
 
         return $client;
     }
 
-    /**
-     * @param int $statusCode
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
     protected function createResponseMock(int $statusCode): ResponseInterface
     {
         $response = $this->createMock(ResponseInterface::class);
@@ -111,9 +89,6 @@ class RepeatableHttpClientTest extends TestCase
         return $response;
     }
 
-    /**
-     * @return \Psr\Http\Message\RequestInterface
-     */
     protected function createRequestMock(): RequestInterface
     {
         return $this->createMock(RequestInterface::class);

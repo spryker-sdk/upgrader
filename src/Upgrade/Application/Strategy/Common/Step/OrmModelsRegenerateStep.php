@@ -18,9 +18,6 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class OrmModelsRegenerateStep implements StepInterface
 {
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
     /**
@@ -50,21 +47,10 @@ class OrmModelsRegenerateStep implements StepInterface
         'src/Orm/Propel/generated-conf/*',
     ];
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected ProcessRunnerServiceInterface $processRunner;
 
-    /**
-     * @var \Symfony\Component\Filesystem\Filesystem
-     */
     protected Filesystem $filesystem;
 
-    /**
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
-     * @param \Symfony\Component\Filesystem\Filesystem $filesystem
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     */
     public function __construct(
         ProcessRunnerServiceInterface $processRunner,
         Filesystem $filesystem,
@@ -75,11 +61,6 @@ class OrmModelsRegenerateStep implements StepInterface
         $this->configurationProvider = $configurationProvider;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         if (!$this->isApplicable($stepsExecutionDto)) {
@@ -89,21 +70,11 @@ class OrmModelsRegenerateStep implements StepInterface
         return $this->handle($stepsExecutionDto);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return bool
-     */
     protected function isApplicable(StepsResponseDto $stepsExecutionDto): bool
     {
         return (bool)$stepsExecutionDto->getComposerLockDiff();
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     protected function handle(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         foreach (static::GENERATED_MODEL_PATH_LIST as $path) {

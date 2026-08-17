@@ -19,19 +19,10 @@ use Upgrade\Application\Exception\UpgraderException;
 
 class HttpRequestExecutor implements HttpRequestExecutorInterface
 {
-    /**
-     * @var \GuzzleHttp\Client
-     */
     protected Client $guzzleClient;
 
-    /**
-     * @var \ReleaseApp\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $config;
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Configuration\ConfigurationProvider $config
-     */
     public function __construct(ConfigurationProvider $config)
     {
         $this->guzzleClient = new GuzzleHttp();
@@ -39,11 +30,7 @@ class HttpRequestExecutor implements HttpRequestExecutorInterface
     }
 
     /**
-     * @param \Psr\Http\Message\RequestInterface $request
-     *
      * @throws \GuzzleHttp\Exception\GuzzleException
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     public function execute(RequestInterface $request): ResponseInterface
     {

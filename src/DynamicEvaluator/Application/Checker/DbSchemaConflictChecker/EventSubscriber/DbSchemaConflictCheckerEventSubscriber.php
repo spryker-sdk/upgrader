@@ -16,20 +16,10 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 
 class DbSchemaConflictCheckerEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\DbSchemaConflictChecker
-     */
     protected DbSchemaConflictChecker $dbSchemaConflictChecker;
 
-    /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @param \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\DbSchemaConflictChecker $dbSchemaConflictChecker
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     */
     public function __construct(
         DbSchemaConflictChecker $dbSchemaConflictChecker,
         ConfigurationProviderInterface $configurationProvider
@@ -48,11 +38,6 @@ class DbSchemaConflictCheckerEventSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorPostRequireEvent $event
-     *
-     * @return void
-     */
     public function onPostRequire(ReleaseGroupProcessorPostRequireEvent $event): void
     {
         if (!$this->configurationProvider->isEvaluatorEnabled()) {

@@ -17,9 +17,6 @@ use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\GitHub\GitHub
 
 class GitHubClientFactoryTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testGetClient(): void
     {
         $accessToken = 'your_access_token';
@@ -44,28 +41,25 @@ class GitHubClientFactoryTest extends TestCase
         $this->assertSame($client, $sameClient);
     }
 
-    /**
-     * @return void
-     */
     public function testCreateClient(): void
     {
         $accessToken = 'your_access_token';
 
         // Create mock for ConfigurationProvider
         $configurationProviderMock = $this->getMockBuilder(ConfigurationProvider::class)
-            ->getMock();
+        ->getMock();
         $configurationProviderMock->method('getAccessToken')->willReturn($accessToken);
 
-        // Create mock for ClientInterface
+    // Create mock for ClientInterface
         $httpClientMock = $this->getMockBuilder(ClientInterface::class)
-            ->getMock();
+        ->getMock();
 
         $gitHubClientFactory = new GitHubClientFactory($configurationProviderMock, $httpClientMock);
 
-        // Call createClient
+    // Call createClient
         $client = $gitHubClientFactory->getClient();
 
-        // Assertions
+    // Assertions
         $this->assertInstanceOf(GitHubClient::class, $client);
     }
 }

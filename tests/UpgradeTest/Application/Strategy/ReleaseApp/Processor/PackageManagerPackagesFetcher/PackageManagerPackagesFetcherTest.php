@@ -19,8 +19,6 @@ class PackageManagerPackagesFetcherTest extends TestCase
 {
     /**
      * Dev package should be updated
-     *
-     * @return void
      */
     public function testFetchPackagesShouldReturnUpdatedPackagesWhenDevPackageThatMatchConstraint(): void
     {
@@ -46,8 +44,6 @@ class PackageManagerPackagesFetcherTest extends TestCase
 
     /**
      * Dev package should be require
-     *
-     * @return void
      */
     public function testFetchPackagesShouldReturnRequiredPackagedWhenDevPackageThatDoesntMatchConstraint(): void
     {
@@ -73,8 +69,6 @@ class PackageManagerPackagesFetcherTest extends TestCase
 
     /**
      * Package is not installed (package version === null)
-     *
-     * @return void
      */
     public function testFetchPackagesShouldReturnRequiredWhenPackageIsNotDevAndNotInstalled(): void
     {
@@ -100,8 +94,6 @@ class PackageManagerPackagesFetcherTest extends TestCase
 
     /**
      * Package is installed and match constraint
-     *
-     * @return void
      */
     public function testFetchPackagesShouldReturnRequiredWhenPackageIsNotDevAndInstalledAndMatchConstraint(): void
     {
@@ -127,8 +119,6 @@ class PackageManagerPackagesFetcherTest extends TestCase
 
     /**
      * Package is installed and doesn't match constraint
-     *
-     * @return void
      */
     public function testFetchPackagesShouldReturnRequiredWhenPackageIsNotDevAndInstalledAndDoesntMatchConstraint(): void
     {
@@ -154,8 +144,6 @@ class PackageManagerPackagesFetcherTest extends TestCase
 
     /**
      * Package is installed and match constraint
-     *
-     * @return void
      */
     public function testFetchPackagesShouldReturnRequiredPackages(): void
     {
@@ -201,8 +189,6 @@ class PackageManagerPackagesFetcherTest extends TestCase
      * @param array<string> $devPackages
      * @param array<string, string|null> $packageVersions
      * @param array<string, string|null> $packageConstraints
-     *
-     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
     protected function createPackageManagerAdapterMock(
         array $devPackages = [],

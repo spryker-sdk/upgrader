@@ -20,9 +20,6 @@ use Upgrader\Configuration\ConfigurationProvider;
 
 class ProjectModulesNamesFetcherTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFetchProjectModulesShouldReturnProjectModules(): void
     {
         // Arrange
@@ -48,8 +45,6 @@ class ProjectModulesNamesFetcherTest extends TestCase
 
     /**
      * @param array<string> $projectNameSpaces
-     *
-     * @return \DynamicEvaluator\Application\ProjectConfigReader\ProjectConfigReaderInterface
      */
     protected function createProjectConfigReaderMock(array $projectNameSpaces): ProjectConfigReaderInterface
     {
@@ -62,8 +57,6 @@ class ProjectModulesNamesFetcherTest extends TestCase
     /**
      * @param array<string> $expectedLookupPaths
      * @param array<string> $modules
-     *
-     * @return \Core\Infrastructure\Service\FinderFactory
      */
     protected function createFinderFactoryMock(array $expectedLookupPaths, array $modules): FinderFactory
     {
@@ -81,11 +74,6 @@ class ProjectModulesNamesFetcherTest extends TestCase
         return $finderFactory;
     }
 
-    /**
-     * @param string $rootPath
-     *
-     * @return \Upgrader\Configuration\ConfigurationProvider
-     */
     protected function createConfigurationProviderMock(string $rootPath): ConfigurationProvider
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);

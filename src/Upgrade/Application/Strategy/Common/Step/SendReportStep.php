@@ -16,15 +16,8 @@ use Upgrade\Application\Strategy\StepInterface;
 
 class SendReportStep extends AbstractStep implements StepInterface
 {
-    /**
-     * @var \Upgrade\Application\Report\ReportSendProcessorInterface
-     */
     protected ReportSendProcessorInterface $reportSendProcessor;
 
-    /**
-     * @param \Upgrade\Application\Report\ReportSendProcessorInterface $reportSendProcessor
-     * @param \Upgrade\Application\Adapter\VersionControlSystemAdapterInterface $versionControlSystem
-     */
     public function __construct(ReportSendProcessorInterface $reportSendProcessor, VersionControlSystemAdapterInterface $versionControlSystem)
     {
         parent::__construct($versionControlSystem);
@@ -32,11 +25,6 @@ class SendReportStep extends AbstractStep implements StepInterface
         $this->reportSendProcessor = $reportSendProcessor;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->reportSendProcessor->process($stepsExecutionDto);

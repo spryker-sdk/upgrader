@@ -43,14 +43,8 @@ class SprykerModulesStateFetcher implements SprykerModulesStateFetcherInterface
      */
     protected const EXCLUDED_VENDOR = 'spryker-feature';
 
-    /**
-     * @var \Upgrade\Infrastructure\PackageManager\Reader\ComposerReaderInterface
-     */
     protected ComposerReaderInterface $composerLockReader;
 
-    /**
-     * @param \Upgrade\Infrastructure\PackageManager\Reader\ComposerReaderInterface $composerLockReader
-     */
     public function __construct(ComposerReaderInterface $composerLockReader)
     {
         $this->composerLockReader = $composerLockReader;
@@ -73,7 +67,7 @@ class SprykerModulesStateFetcher implements SprykerModulesStateFetcherInterface
             $sprykerModules[] = $this->composerPackagesToFlatArray(array_filter(
                 $composerLockData[$type],
                 static fn (array $package): bool => strpos($package[static::NAME_KEY], static::SPRYKER_PREFIX) === 0
-                        && strpos($package[static::NAME_KEY], static::EXCLUDED_VENDOR) === false
+                        && strpos($package[static::NAME_KEY], static::EXCLUDED_VENDOR) === false,
             ));
         }
 

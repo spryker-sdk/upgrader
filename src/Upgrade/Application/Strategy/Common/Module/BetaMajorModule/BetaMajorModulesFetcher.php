@@ -15,22 +15,14 @@ use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppPackageHelper;
 
 class BetaMajorModulesFetcher implements BetaMajorModulesFetcherInterface
 {
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManagerAdapter;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManagerAdapter
-     */
     public function __construct(PackageManagerAdapterInterface $packageManagerAdapter)
     {
         $this->packageManagerAdapter = $packageManagerAdapter;
     }
 
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleDtoCollection
-     *
      * @return array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto>
      */
     public function getBetaMajorsNotInstalledInDev(ModuleDtoCollection $moduleDtoCollection): array

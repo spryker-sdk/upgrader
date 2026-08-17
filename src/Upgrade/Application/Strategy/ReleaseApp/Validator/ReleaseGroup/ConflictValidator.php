@@ -15,11 +15,7 @@ use Upgrade\Application\Exception\ReleaseGroupValidatorException;
 class ConflictValidator implements ReleaseGroupValidatorInterface
 {
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     *
      * @throws \Upgrade\Application\Exception\ReleaseGroupValidatorException
-     *
-     * @return void
      */
     public function validate(ReleaseGroupDto $releaseGroup): void
     {
@@ -36,9 +32,6 @@ class ConflictValidator implements ReleaseGroupValidatorInterface
         throw new ReleaseGroupValidatorException($message);
     }
 
-    /**
-     * @return string
-     */
     public static function getValidatorTitle(): string
     {
         return 'Conflicting Modules';

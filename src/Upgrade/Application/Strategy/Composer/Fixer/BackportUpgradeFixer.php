@@ -22,41 +22,21 @@ class BackportUpgradeFixer extends AbstractFeaturePackageUpgradeFixer
      */
     protected const RE_RUN_STEP = false;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
-     */
     public function __construct(PackageManagerAdapterInterface $packageManager)
     {
         parent::__construct($packageManager);
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $packageManagerResponseDto
-     *
-     * @return bool
-     */
     public function isApplicable(ReleaseGroupDto $releaseGroup, PackageManagerResponseDto $packageManagerResponseDto): bool
     {
         return !$packageManagerResponseDto->isSuccessful() && $releaseGroup->getBackportModuleCollection()->count();
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $packageManagerResponseDto
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto|null
-     */
     public function run(ReleaseGroupDto $releaseGroup, PackageManagerResponseDto $packageManagerResponseDto): ?PackageManagerResponseDto
     {
         return $this->packageManager->require($this->getPackageCollectionWithBackports($releaseGroup));
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
-     *
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
     protected function getPackageCollectionWithBackports(ReleaseGroupDto $releaseGroupDto): PackageCollection
     {
         $moduleCollection = $releaseGroupDto->getModuleCollection();

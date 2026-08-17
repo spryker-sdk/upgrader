@@ -16,44 +16,18 @@ use Upgrade\Infrastructure\Report\Dto\ReportDto;
 
 class RemoteEndpointJsonReportSender implements ReportSenderInterface
 {
-    /**
-     * @var \GuzzleHttp\ClientInterface
-     */
     protected ClientInterface $httpClient;
 
-    /**
-     * @var \Symfony\Component\Serializer\SerializerInterface
-     */
     protected SerializerInterface $serializer;
 
-    /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @var string
-     */
     protected string $endpointUrl;
 
-    /**
-     * @var int
-     */
     protected int $timeout;
 
-    /**
-     * @var int
-     */
     protected int $connectionTimeout;
 
-    /**
-     * @param \GuzzleHttp\ClientInterface $httpClient
-     * @param \Symfony\Component\Serializer\SerializerInterface $serializer
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     * @param string $endpointUrl
-     * @param int $timeout
-     * @param int $connectionTimeout
-     */
     public function __construct(
         ClientInterface $httpClient,
         SerializerInterface $serializer,
@@ -70,11 +44,6 @@ class RemoteEndpointJsonReportSender implements ReportSenderInterface
         $this->configurationProvider = $configurationProvider;
     }
 
-    /**
-     * @param \Upgrade\Infrastructure\Report\Dto\ReportDto $reportDto
-     *
-     * @return void
-     */
     public function send(ReportDto $reportDto): void
     {
         if (!$this->configurationProvider->isReportingEnabled()) {

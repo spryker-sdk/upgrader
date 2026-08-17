@@ -35,8 +35,6 @@ class ModuleOptionMapper implements ModuleOptionMapperInterface
     public const NAMESPACE_NAME_SEPARATOR = '.';
 
     /**
-     * @param string|null $moduleOption
-     *
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
      * @return array<\Codebase\Application\Dto\ModuleDto>

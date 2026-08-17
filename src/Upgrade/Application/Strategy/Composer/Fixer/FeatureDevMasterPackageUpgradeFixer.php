@@ -22,15 +22,8 @@ class FeatureDevMasterPackageUpgradeFixer extends AbstractFeaturePackageUpgradeF
      */
     public const MASK_ALIAS_DEV_MASTER = 'dev-master as ^%s';
 
-    /**
-     * @var bool
-     */
     protected bool $isFeatureToDevMasterEnabled;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
-     * @param bool $isFeatureToDevMasterEnabled
-     */
     public function __construct(PackageManagerAdapterInterface $packageManager, bool $isFeatureToDevMasterEnabled = false)
     {
         $this->isFeatureToDevMasterEnabled = $isFeatureToDevMasterEnabled;
@@ -38,23 +31,11 @@ class FeatureDevMasterPackageUpgradeFixer extends AbstractFeaturePackageUpgradeF
         parent::__construct($packageManager);
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $packageManagerResponseDto
-     *
-     * @return bool
-     */
     public function isApplicable(ReleaseGroupDto $releaseGroup, PackageManagerResponseDto $packageManagerResponseDto): bool
     {
         return $this->isFeatureToDevMasterEnabled && parent::isApplicable($releaseGroup, $packageManagerResponseDto);
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $packageManagerResponseDto
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto|null
-     */
     public function run(ReleaseGroupDto $releaseGroup, PackageManagerResponseDto $packageManagerResponseDto): ?PackageManagerResponseDto
     {
         preg_match_all(static::FEATURE_PACKAGE_PATTERN, (string)$packageManagerResponseDto->getOutputMessage(), $matches);

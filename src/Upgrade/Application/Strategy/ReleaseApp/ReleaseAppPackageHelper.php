@@ -12,8 +12,6 @@ namespace Upgrade\Application\Strategy\ReleaseApp;
 class ReleaseAppPackageHelper
 {
     /**
-     * @param string $releaseAppPackageName
-     *
      * @return string
      *
      * spryker-shop/shop.shop-ui -> spryker-shop/shop-ui

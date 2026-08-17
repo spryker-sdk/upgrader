@@ -30,22 +30,14 @@ class XmlSchemaFileParser implements XmlSchemaFileParserInterface
      */
     protected const NAME_ATTRIBUTE = 'name';
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\Filesystem
-     */
     protected Filesystem $filesystem;
 
-    /**
-     * @param \SprykerSdk\Utils\Infrastructure\Service\Filesystem $filesystem
-     */
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
     }
 
     /**
-     * @param string $schemaFile
-     *
      * @throws \InvalidArgumentException
      *
      * @return array<string, array<string>>
@@ -71,9 +63,6 @@ class XmlSchemaFileParser implements XmlSchemaFileParserInterface
     }
 
     /**
-     * @param \SimpleXMLElement $rootNode
-     * @param string $schemaFile
-     *
      * @return array<string, array<string>>
      */
     protected function parseSchemaXmlToColumnsMap(SimpleXMLElement $rootNode, string $schemaFile): array
@@ -105,12 +94,7 @@ class XmlSchemaFileParser implements XmlSchemaFileParserInterface
     }
 
     /**
-     * @param \SimpleXMLElement $element
-     * @param string $filePath
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return string
      */
     protected function getNameAttribute(SimpleXMLElement $element, string $filePath): string
     {

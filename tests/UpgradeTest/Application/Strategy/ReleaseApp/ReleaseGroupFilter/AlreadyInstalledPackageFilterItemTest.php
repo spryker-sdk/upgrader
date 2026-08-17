@@ -19,9 +19,6 @@ use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\AlreadyInstalledP
 
 class AlreadyInstalledPackageFilterItemTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFilterShouldFilterAlreadyInstalledPackages(): void
     {
         // Arrange
@@ -56,23 +53,19 @@ class AlreadyInstalledPackageFilterItemTest extends TestCase
 
     /**
      * @param array<array<string>> $packageVersionMap
-     *
-     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
     protected function createPackageManagerAdapterMock(array $packageVersionMap): PackageManagerAdapterInterface
     {
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter
-            ->method('getPackageVersion')
-            ->willReturnMap($packageVersionMap);
+        ->method('getPackageVersion')
+        ->willReturnMap($packageVersionMap);
 
         return $packageManagerAdapter;
     }
 
     /**
      * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto> $moduleDto
-     *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto
      */
     protected function createReleaseGroupDto(array $moduleDto): ReleaseGroupDto
     {

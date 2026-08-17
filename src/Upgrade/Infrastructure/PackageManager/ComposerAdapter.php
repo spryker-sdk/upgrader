@@ -39,38 +39,16 @@ class ComposerAdapter implements PackageManagerAdapterInterface
      */
     protected const VERSION_KEY = 'version';
 
-    /**
-     * @var \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutorInterface
-     */
     protected ComposerCommandExecutorInterface $composerCommandExecutor;
 
-    /**
-     * @var \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutorInterface
-     */
     protected ComposerLockComparatorCommandExecutorInterface $composerLockComparator;
 
-    /**
-     * @var \Upgrade\Infrastructure\PackageManager\Reader\ComposerReaderInterface
-     */
     protected ComposerReaderInterface $composerJsonReader;
 
-    /**
-     * @var \Upgrade\Infrastructure\PackageManager\Reader\ComposerReaderInterface
-     */
     protected ComposerReaderInterface $composerLockReader;
 
-    /**
-     * @var bool
-     */
     protected bool $isReleaseGroupIntegratorEnabled;
 
-    /**
-     * @param \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerCommandExecutorInterface $composerCommandExecutor
-     * @param \Upgrade\Infrastructure\PackageManager\CommandExecutor\ComposerLockComparatorCommandExecutorInterface $composerLockComparator
-     * @param \Upgrade\Infrastructure\PackageManager\Reader\ComposerReaderInterface $composerJsonReader
-     * @param \Upgrade\Infrastructure\PackageManager\Reader\ComposerReaderInterface $composerLockReader
-     * @param bool $isReleaseGroupIntegratorEnabled
-     */
     public function __construct(
         ComposerCommandExecutorInterface $composerCommandExecutor,
         ComposerLockComparatorCommandExecutorInterface $composerLockComparator,
@@ -85,9 +63,6 @@ class ComposerAdapter implements PackageManagerAdapterInterface
         $this->isReleaseGroupIntegratorEnabled = $isReleaseGroupIntegratorEnabled;
     }
 
-    /**
-     * @return string
-     */
     public function getProjectName(): string
     {
         $composerJsonContent = $this->composerJsonReader->read();
@@ -111,67 +86,36 @@ class ComposerAdapter implements PackageManagerAdapterInterface
         return $this->composerLockReader->read();
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function updateSubPackage(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->composerCommandExecutor->updateSubPackage($packageCollection);
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function require(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->composerCommandExecutor->require($packageCollection);
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function remove(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->composerCommandExecutor->remove($packageCollection);
     }
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function requireDev(PackageCollection $packageCollection): PackageManagerResponseDto
     {
         return $this->composerCommandExecutor->requireDev($packageCollection);
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function update(): PackageManagerResponseDto
     {
         return $this->composerCommandExecutor->update();
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function updateLockHash(): PackageManagerResponseDto
     {
         return $this->composerCommandExecutor->updateLockHash();
     }
 
-    /**
-     * @param string $packageName
-     *
-     * @return string|null
-     */
     public function getPackageVersion(string $packageName): ?string
     {
         $composerLock = $this->composerLockReader->read();
@@ -191,11 +135,6 @@ class ComposerAdapter implements PackageManagerAdapterInterface
         return null;
     }
 
-    /**
-     * @param string $packageName
-     *
-     * @return string|null
-     */
     public function getPackageConstraint(string $packageName): ?string
     {
         $composerJson = $this->composerJsonReader->read();
@@ -205,26 +144,16 @@ class ComposerAdapter implements PackageManagerAdapterInterface
             ?? null;
     }
 
-    /**
-     * @param string $packageName
-     *
-     * @return bool
-     */
     public function isLockDevPackage(string $packageName): bool
     {
         $composerLock = $this->composerLockReader->read();
 
         return count(array_filter(
             $composerLock[self::PACKAGES_DEV_KEY],
-            static fn (array $package): bool => $package[self::NAME_KEY] === $packageName
+            static fn (array $package): bool => $package[self::NAME_KEY] === $packageName,
         )) > 0;
     }
 
-    /**
-     * @param string $packageName
-     *
-     * @return bool
-     */
     public function isDevPackage(string $packageName): bool
     {
         $composerJson = $this->composerJsonReader->read();
@@ -236,11 +165,6 @@ class ComposerAdapter implements PackageManagerAdapterInterface
         return false;
     }
 
-    /**
-     * @param string $packageName
-     *
-     * @return bool
-     */
     public function isSubPackage(string $packageName): bool
     {
         if (!$this->isReleaseGroupIntegratorEnabled) {
@@ -256,9 +180,6 @@ class ComposerAdapter implements PackageManagerAdapterInterface
         return false;
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\ComposerLockDiffDto
-     */
     public function getComposerLockDiff(): ComposerLockDiffDto
     {
         return $this->composerLockComparator->getComposerLockDiff();

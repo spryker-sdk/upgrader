@@ -18,9 +18,6 @@ use Upgrade\Infrastructure\Adapter\ReleaseAppClientAdapter;
 
 class ReleaseAppClientAdapterTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testGetNewReleaseGroups(): void
     {
         // Arrange
@@ -50,32 +47,29 @@ class ReleaseAppClientAdapterTest extends TestCase
         $this->assertSame($releaseAppResponseMock, $releaseAppResponse);
     }
 
-    /**
-     * @return void
-     */
     public function testGetNewReleaseGroupsWithWrongStructure(): void
     {
         // Arrange
         $releaseAppServiceMock = $this->createMock(ReleaseAppServiceInterface::class);
         $packageManagerAdapterMock = $this->createMock(PackageManagerAdapterInterface::class);
         $releaseAppResponseMock = $this->createMock(ReleaseAppResponse::class);
-        // Asserts
+    // Asserts
         $releaseAppServiceMock->method('getNewReleaseGroups')
-            ->with(new UpgradeInstructionsRequest([]))
-            ->willReturn($releaseAppResponseMock);
+        ->with(new UpgradeInstructionsRequest([]))
+        ->willReturn($releaseAppResponseMock);
         $packageManagerAdapterMock->method('getComposerLockFile')
-            ->willReturn([
-                'package-list' => [
-                    ['name' => 'spryker-shop/test', 'version' => '^1.0.0'],
-                    ['name' => 'spryker/test', 'version' => '^1.0.0'],
-                    ['name' => 'spryker-feature/test', 'version' => '^1.0.0'],
-                ],
-            ]);
+        ->willReturn([
+            'package-list' => [
+                ['name' => 'spryker-shop/test', 'version' => '^1.0.0'],
+                ['name' => 'spryker/test', 'version' => '^1.0.0'],
+                ['name' => 'spryker-feature/test', 'version' => '^1.0.0'],
+            ],
+        ]);
 
-        //Act
+    //Act
         $releaseAppResponse = (new ReleaseAppClientAdapter($releaseAppServiceMock, $packageManagerAdapterMock))->getNewReleaseGroups();
 
-        // Asserts
+    // Asserts
         $this->assertSame($releaseAppResponseMock, $releaseAppResponse);
     }
 }

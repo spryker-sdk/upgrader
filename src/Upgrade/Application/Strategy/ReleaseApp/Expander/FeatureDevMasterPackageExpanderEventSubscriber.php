@@ -23,26 +23,12 @@ class FeatureDevMasterPackageExpanderEventSubscriber implements EventSubscriberI
      */
     protected const DEV_MASTER_PREFIX = 'dev-master';
 
-    /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManager;
 
-    /**
-     * @var bool
-     */
     protected bool $isFeatureToDevMasterEnabled;
 
-    /**
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
-     * @param bool $isFeatureToDevMasterEnabled
-     */
     public function __construct(
         ConfigurationProviderInterface $configurationProvider,
         PackageManagerAdapterInterface $packageManager,
@@ -63,11 +49,6 @@ class FeatureDevMasterPackageExpanderEventSubscriber implements EventSubscriberI
         ];
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $event
-     *
-     * @return void
-     */
     public function onPreRequire(ReleaseGroupProcessorEvent $event): void
     {
         if (!$this->configurationProvider->getReleaseGroupId() || !$this->isFeatureToDevMasterEnabled) {
@@ -87,8 +68,6 @@ class FeatureDevMasterPackageExpanderEventSubscriber implements EventSubscriberI
     }
 
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $currentReleaseGroup
-     *
      * @return array<string, string>
      */
     protected function getFeaturePackagesForUpdate(ReleaseGroupDto $currentReleaseGroup): array
@@ -108,8 +87,6 @@ class FeatureDevMasterPackageExpanderEventSubscriber implements EventSubscriberI
     }
 
     /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $currentReleaseGroup
-     *
      * @return array<string, string>
      */
     protected function getFeaturePackages(ReleaseGroupDto $currentReleaseGroup): array

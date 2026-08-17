@@ -27,31 +27,16 @@ class PropelFixStep implements StepInterface
      */
     public const LOCK_PACKAGE_VERSION = '2.0.0-beta2';
 
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManager;
 
-    /**
-     * @var bool
-     */
     protected bool $isReleaseGroupIntegratorEnabled;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
-     * @param bool $isReleaseGroupIntegratorEnabled
-     */
     public function __construct(PackageManagerAdapterInterface $packageManager, bool $isReleaseGroupIntegratorEnabled = false)
     {
         $this->packageManager = $packageManager;
         $this->isReleaseGroupIntegratorEnabled = $isReleaseGroupIntegratorEnabled;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         if ($this->isReleaseGroupIntegratorEnabled) {
@@ -81,9 +66,6 @@ class PropelFixStep implements StepInterface
         return $stepsExecutionDto;
     }
 
-    /**
-     * @return bool
-     */
     protected function alreadyHasRequiredPropelPackage(): bool
     {
         $composerJson = $this->packageManager->getComposerJsonFile();

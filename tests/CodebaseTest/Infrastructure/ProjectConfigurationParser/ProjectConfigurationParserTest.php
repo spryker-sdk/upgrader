@@ -17,9 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ProjectConfigurationParserTest extends KernelTestCase
 {
- /**
-  * @return void
-  */
     public function testEmptyFile(): void
     {
         //Arrange
@@ -33,24 +30,18 @@ class ProjectConfigurationParserTest extends KernelTestCase
         $this->assertSame([], $configurationResponseDto->getIgnoredRules());
     }
 
-    /**
-     * @return void
-     */
     public function testPrefixesSuccessParse(): void
     {
         //Arrange
         $parser = new ToolingConfigurationReader([new ProjectPrefixesReader()]);
 
-        //Act
+    //Act
         $configurationResponseDto = $parser->readToolingConfiguration('tests/data/Evaluate/Project/tooling-prefixes.yml');
 
-        //Assert
+    //Assert
         $this->assertSame(['Pyz', 'Zyp'], $configurationResponseDto->getProjectPrefixes());
     }
 
-    /**
-     * @return void
-     */
     public function testPrefixesParseDefaultValueForNotExistFile(): void
     {
         //Arrange
@@ -63,9 +54,6 @@ class ProjectConfigurationParserTest extends KernelTestCase
         $this->assertSame(['Pyz'], $configurationResponseDto->getProjectPrefixes());
     }
 
-    /**
-     * @return void
-     */
     public function testPrefixesParseDefaultValueForNotExistKey(): void
     {
         //Arrange
@@ -78,9 +66,6 @@ class ProjectConfigurationParserTest extends KernelTestCase
         $this->assertSame(['Pyz'], $configurationResponseDto->getProjectPrefixes());
     }
 
-    /**
-     * @return void
-     */
     public function testPrefixesInvalidTypeOneParse(): void
     {
         //Arrange
@@ -94,9 +79,6 @@ class ProjectConfigurationParserTest extends KernelTestCase
         $configurationResponseDto = $parser->readToolingConfiguration('tests/data/Evaluate/Project/tooling-prefixes-invalid-value-1.yml');
     }
 
-    /**
-     * @return void
-     */
     public function testPrefixesInvalidTypeTwoParse(): void
     {
         //Arrange
@@ -110,9 +92,6 @@ class ProjectConfigurationParserTest extends KernelTestCase
         $configurationResponseDto = $parser->readToolingConfiguration('tests/data/Evaluate/Project/tooling-prefixes-invalid-value-2.yml');
     }
 
-    /**
-     * @return void
-     */
     public function testPrefixesInvalidTypeThreeParse(): void
     {
         //Arrange
@@ -126,9 +105,6 @@ class ProjectConfigurationParserTest extends KernelTestCase
         $configurationResponseDto = $parser->readToolingConfiguration('tests/data/Evaluate/Project/tooling-prefixes-invalid-value-3.yml');
     }
 
-    /**
-     * @return void
-     */
     public function testRulesIgnoreSuccessParse(): void
     {
         //Arrange
@@ -141,9 +117,6 @@ class ProjectConfigurationParserTest extends KernelTestCase
         $this->assertSame(['Rule1', 'Rule2'], $configurationResponseDto->getIgnoredRules());
     }
 
-    /**
-     * @return void
-     */
     public function testRulesIgnoreParseDefaultValueForNotExistFile(): void
     {
         //Arrange
@@ -156,9 +129,6 @@ class ProjectConfigurationParserTest extends KernelTestCase
         $this->assertSame([], $configurationResponseDto->getIgnoredRules());
     }
 
-    /**
-     * @return void
-     */
     public function testIgnoredRulesReaderInvalidTypeOneParse(): void
     {
         //Arrange
@@ -173,9 +143,6 @@ class ProjectConfigurationParserTest extends KernelTestCase
         $configurationResponseDto = $parser->readToolingConfiguration($configurationFilePath);
     }
 
-    /**
-     * @return void
-     */
     public function testRulesIgnoreInvalidTypeTwoParse(): void
     {
         //Arrange
@@ -190,9 +157,6 @@ class ProjectConfigurationParserTest extends KernelTestCase
         $configurationResponseDto = $parser->readToolingConfiguration($configurationFilePath);
     }
 
-    /**
-     * @return void
-     */
     public function testRulesIgnoreInvalidTypeThreeParse(): void
     {
         //Arrange

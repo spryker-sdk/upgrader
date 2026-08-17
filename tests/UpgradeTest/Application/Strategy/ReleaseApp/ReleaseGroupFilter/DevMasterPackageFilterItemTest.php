@@ -19,9 +19,6 @@ use Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\DevMasterPackageF
 
 class DevMasterPackageFilterItemTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFilterShouldReturnFilteredWhenDevMasterInComposerRequireSection(): void
     {
         // Arrange
@@ -40,35 +37,30 @@ class DevMasterPackageFilterItemTest extends TestCase
         $this->assertSame('spryker/package-two', $response->getReleaseGroupDto()->getModuleCollection()->toArray()[0]->getName());
     }
 
-    /**
-     * @return void
-     */
     public function testFilterShouldReturnFilteredWhenDevMasterInComposerRequireAndRequireDevSection(): void
     {
         // Arrange
         $releaseGroupDto = $this->createReleaseGroupDto([
-            new ModuleDto('spryker/package-one', '4.17.0', 'minor'),
-            new ModuleDto('spryker/package-two', '3.17.0', 'minor'),
-            new ModuleDto('spryker/package-three', '2.17.0', 'minor'),
+        new ModuleDto('spryker/package-one', '4.17.0', 'minor'),
+        new ModuleDto('spryker/package-two', '3.17.0', 'minor'),
+        new ModuleDto('spryker/package-three', '2.17.0', 'minor'),
         ]);
         $packageManagerAdapterMock = $this->createPackageManagerAdapterMock([
-            'require' => ['spryker/package-one' => 'dev-master as 4.17.0'],
-            'require-dev' => ['spryker/package-two' => 'dev-master as 3.17.0'],
+        'require' => ['spryker/package-one' => 'dev-master as 4.17.0'],
+        'require-dev' => ['spryker/package-two' => 'dev-master as 3.17.0'],
         ]);
         $devMasterPackageFilterItem = new DevMasterPackageFilterItem($packageManagerAdapterMock);
 
-        // Act
+    // Act
         $response = $devMasterPackageFilterItem->filter($releaseGroupDto);
 
-        // Assert
+    // Assert
         $this->assertSame(1, $response->getReleaseGroupDto()->getModuleCollection()->count());
         $this->assertSame('spryker/package-three', $response->getReleaseGroupDto()->getModuleCollection()->toArray()[0]->getName());
     }
 
     /**
      * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto> $moduleDto
-     *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto
      */
     protected function createReleaseGroupDto(array $moduleDto): ReleaseGroupDto
     {
@@ -87,8 +79,6 @@ class DevMasterPackageFilterItemTest extends TestCase
 
     /**
      * @param array<string, mixed> $composerJson
-     *
-     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
     protected function createPackageManagerAdapterMock(array $composerJson = []): PackageManagerAdapterInterface
     {

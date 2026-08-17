@@ -16,9 +16,6 @@ use Upgrader\Configuration\ConfigurationProvider;
 
 class ProjectConfigReaderTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testGetProjectNamespacesShouldReturnProjectNameSpaces(): void
     {
         // Arrange & Assert
@@ -30,11 +27,6 @@ class ProjectConfigReaderTest extends TestCase
         $projectConfigReader->getProjectNamespaces();
     }
 
-    /**
-     * @param string $rootPath
-     *
-     * @return \Upgrader\Configuration\ConfigurationProvider
-     */
     protected function createConfigurationProviderMock(string $rootPath): ConfigurationProvider
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
@@ -44,10 +36,7 @@ class ProjectConfigReaderTest extends TestCase
     }
 
     /**
-     * @param string $expectedConfigPath
      * @param array<string> $expectedConfigKeys
-     *
-     * @return \DynamicEvaluator\Application\ProjectConfigReader\ConfigReaderInterface
      */
     protected function createConfigReaderMock(string $expectedConfigPath, array $expectedConfigKeys): ConfigReaderInterface
     {

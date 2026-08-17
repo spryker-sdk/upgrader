@@ -15,9 +15,6 @@ interface ReaderInterface
 {
     /**
      * @param array<mixed> $configuration
-     * @param \Codebase\Application\Dto\ConfigurationResponseDto $configurationResponseDto
-     *
-     * @return void
      */
     public function read(array $configuration, ConfigurationResponseDto $configurationResponseDto): void;
 }

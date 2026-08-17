@@ -15,9 +15,6 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 
 class PackagesSynchronizerEventSubscriberTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testOnPreProcessorShouldCallSynchronizer(): void
     {
         // Arrange
@@ -32,9 +29,6 @@ class PackagesSynchronizerEventSubscriberTest extends TestCase
         $checkerExecutorEventSubscriber->onPreProcessor($event);
     }
 
-    /**
-     * @return void
-     */
     public function testOnPreRequireShouldCallSynchronizer(): void
     {
         // Arrange
@@ -45,13 +39,10 @@ class PackagesSynchronizerEventSubscriberTest extends TestCase
 
         $event = new ReleaseGroupProcessorEvent(new StepsResponseDto());
 
-        // Act
+    // Act
         $checkerExecutorEventSubscriber->onPreRequire($event);
     }
 
-    /**
-     * @return void
-     */
     public function testOnPostProcessorShouldCallSynchronizer(): void
     {
         // Arrange

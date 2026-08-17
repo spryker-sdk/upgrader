@@ -26,11 +26,6 @@ class ReleaseGroupDtoCollection
         $this->elements = $elements;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $element
-     *
-     * @return void
-     */
     public function add(ReleaseGroupDto $element): void
     {
         $this->elements[] = $element;
@@ -44,17 +39,11 @@ class ReleaseGroupDtoCollection
         return $this->elements;
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return count($this->elements);
     }
 
-    /**
-     * @return bool
-     */
     public function isEmpty(): bool
     {
         return !$this->elements;
@@ -62,17 +51,12 @@ class ReleaseGroupDtoCollection
 
     /**
      * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection|self $collectionToMerge
-     *
-     * @return void
      */
     public function addCollection(self $collectionToMerge): void
     {
         $this->elements = array_merge($this->elements, $collectionToMerge->toArray());
     }
 
-    /**
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection
-     */
     public function getCommonModuleCollection(): ModuleDtoCollection
     {
         $resultCollection = new ModuleDtoCollection();
@@ -83,15 +67,12 @@ class ReleaseGroupDtoCollection
         return $resultCollection;
     }
 
-    /**
-     * @return self
-     */
     public function getSecurityFixes(): self
     {
         return new self(
             array_filter(
                 $this->elements,
-                fn (ReleaseGroupDto $releaseGroup): bool => $releaseGroup->isSecurity()
+                fn (ReleaseGroupDto $releaseGroup): bool => $releaseGroup->isSecurity(),
             ),
         );
     }

@@ -14,21 +14,11 @@ use Upgrade\Application\Strategy\RollbackStepInterface;
 
 class CreateBranchStep extends AbstractStep implements RollbackStepInterface
 {
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $this->vsc->createBranch($stepsExecutionDto);
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function rollBack(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $stepsExecutionDto = $this->vsc->checkout($stepsExecutionDto);

@@ -16,9 +16,6 @@ use PHPUnit\Framework\TestCase;
 
 class PreviousProjectModulesStateStorageTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testSetPreviousProjectModulesStateShouldSetState(): void
     {
         // Arrange
@@ -32,22 +29,16 @@ class PreviousProjectModulesStateStorageTest extends TestCase
         $this->assertSame($state, $storage->getPreviousProjectModulesState());
     }
 
-    /**
-     * @return void
-     */
     public function testGetRequiredProjectModulesStateShouldThrowExceptionWhenValueNotSet(): void
     {
         // Arrange & Assert
         $this->expectException(InvalidArgumentException::class);
         $storage = new PreviousProjectModulesStateStorage();
 
-        // Act
+    // Act
         $storage->getRequiredPreviousProjectModulesState();
     }
 
-    /**
-     * @return void
-     */
     public function testGetRequiredPreviousProjectModulesStateShouldReturnState(): void
     {
         // Arrange
@@ -62,9 +53,6 @@ class PreviousProjectModulesStateStorageTest extends TestCase
         $this->assertSame($state, $returnedState);
     }
 
-    /**
-     * @return void
-     */
     public function testGetPreviousProjectModulesStateShouldReturnState(): void
     {
         // Arrange

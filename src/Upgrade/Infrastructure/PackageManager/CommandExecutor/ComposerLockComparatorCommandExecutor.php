@@ -35,22 +35,13 @@ class ComposerLockComparatorCommandExecutor implements ComposerLockComparatorCom
      */
     protected const JSON_OUTPUT_FLAG = '--json';
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected ProcessRunnerServiceInterface $processRunner;
 
-    /**
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
-     */
     public function __construct(ProcessRunnerServiceInterface $processRunner)
     {
         $this->processRunner = $processRunner;
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\ComposerLockDiffDto
-     */
     public function getComposerLockDiff(): ComposerLockDiffDto
     {
         $command = sprintf('%s %s', APPLICATION_ROOT_DIR . static::RUNNER, static::JSON_OUTPUT_FLAG);
@@ -65,7 +56,6 @@ class ComposerLockComparatorCommandExecutor implements ComposerLockComparatorCom
 
     /**
      * @param array<mixed> $composerLockDiff
-     * @param string $key
      *
      * @return array<\Upgrade\Domain\Entity\Package>
      */

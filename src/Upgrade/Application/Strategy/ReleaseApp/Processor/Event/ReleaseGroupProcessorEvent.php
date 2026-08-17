@@ -28,32 +28,18 @@ class ReleaseGroupProcessorEvent
      */
     public const PRE_REQUIRE = 'PRE_REQUIRE';
 
-    /**
-     * @var \Upgrade\Application\Dto\StepsResponseDto
-     */
     protected StepsResponseDto $stepsExecutionDto;
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     */
     public function __construct(StepsResponseDto $stepsExecutionDto)
     {
         $this->stepsExecutionDto = $stepsExecutionDto;
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function getStepsExecutionDto(): StepsResponseDto
     {
         return $this->stepsExecutionDto;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return void
-     */
     public function setStepsExecutionDto(StepsResponseDto $stepsExecutionDto): void
     {
         $this->stepsExecutionDto = $stepsExecutionDto;

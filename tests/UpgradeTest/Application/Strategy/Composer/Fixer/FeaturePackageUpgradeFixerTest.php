@@ -22,9 +22,6 @@ class FeaturePackageUpgradeFixerTest extends TestCase
      */
     protected const ERROR_MESSAGE = 'spryker-feature/spryker-core 202204.0 requires spryker/glue-http ^0.2.0 -> found spryker/glue-http[0.2.0] but it conflicts with your root composer.json require (0.3.0)';
 
-    /**
-     * @return void
-     */
     public function testIsReRunStep(): void
     {
         // Arrange
@@ -39,9 +36,6 @@ class FeaturePackageUpgradeFixerTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @return void
-     */
     public function testIsApplicableWhenReleaseGroupIntegratorEnabled(): void
     {
         // Arrange
@@ -58,9 +52,6 @@ class FeaturePackageUpgradeFixerTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @return void
-     */
     public function testIsApplicable(): void
     {
         // Arrange
@@ -76,9 +67,6 @@ class FeaturePackageUpgradeFixerTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @return void
-     */
     public function testIsNotApplicable(): void
     {
         // Arrange
@@ -94,9 +82,6 @@ class FeaturePackageUpgradeFixerTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @return void
-     */
     public function testRunFixWithNoPackage(): void
     {
         // Arrange
@@ -111,9 +96,6 @@ class FeaturePackageUpgradeFixerTest extends TestCase
         $this->assertNull($packageManagerResponseDto);
     }
 
-    /**
-     * @return void
-     */
     public function testRunFix(): void
     {
         // Arrange
@@ -140,9 +122,6 @@ class FeaturePackageUpgradeFixerTest extends TestCase
         $this->assertTrue($packageManagerResponseDto->isSuccessful());
     }
 
-    /**
-     * @return void
-     */
     public function testRunCanNotRequirePackages(): void
     {
         // Arrange
@@ -161,9 +140,6 @@ class FeaturePackageUpgradeFixerTest extends TestCase
         $this->assertSame($packageManagerResponseDto, $packageManagerResponse);
     }
 
-    /**
-     * @return void
-     */
     public function testRunCanNotRemoveFeature(): void
     {
         // Arrange

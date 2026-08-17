@@ -20,11 +20,6 @@ class DummyPackageFilterItemTest extends TestCase
 {
     /**
      * @dataProvider dummyPackagesDataProvider
-     *
-     * @param string $packageName
-     * @param bool $isDummy
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('dummyPackagesDataProvider')]
     public function testFilterShouldFilterDummyPackages(string $packageName, bool $isDummy): void
@@ -74,8 +69,6 @@ class DummyPackageFilterItemTest extends TestCase
 
     /**
      * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto> $moduleDto
-     *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto
      */
     protected function createReleaseGroupDto(array $moduleDto): ReleaseGroupDto
     {

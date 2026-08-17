@@ -24,9 +24,6 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 
 class ModuleNameConflictCheckerEventSubscriberTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testOnPreRequireShouldBeSkippedWhenEvaluatorDisabled(): void
     {
         // Arrange
@@ -46,9 +43,6 @@ class ModuleNameConflictCheckerEventSubscriberTest extends TestCase
         $this->assertNull($previousModuleStateStorage->getPreviousProjectModulesState());
     }
 
-    /**
-     * @return void
-     */
     public function testOnPreRequireShouldSetReturnInitialState(): void
     {
         // Arrange
@@ -61,19 +55,16 @@ class ModuleNameConflictCheckerEventSubscriberTest extends TestCase
             $previousModuleStateStorage,
         );
 
-        // Act
+    // Act
         $eventSubscriber->onPreRequire(new ReleaseGroupProcessorEvent(new StepsResponseDto()));
 
-        // Assert
+    // Assert
         $previousModuleState = $previousModuleStateStorage->getRequiredPreviousProjectModulesState();
 
         $this->assertSame(['one'], $previousModuleState->getComposerInstalledModules());
         $this->assertSame(['two'], $previousModuleState->getProjectModules());
     }
 
-    /**
-     * @return void
-     */
     public function testOnPostRequireShouldBeSkippedWhenEvaluatorDisabled(): void
     {
         // Arrange
@@ -94,9 +85,6 @@ class ModuleNameConflictCheckerEventSubscriberTest extends TestCase
         $this->assertEmpty($stepsResponse->getViolations());
     }
 
-    /**
-     * @return void
-     */
     public function testOnPostRequireShouldReturnNoViolationsWhenNoInterceptionsFound(): void
     {
         // Arrange
@@ -121,9 +109,6 @@ class ModuleNameConflictCheckerEventSubscriberTest extends TestCase
         $this->assertEmpty($stepsResponse->getViolations());
     }
 
-    /**
-     * @return void
-     */
     public function testOnPostRequireShouldReturnViolationsWhenInterceptionsFound(): void
     {
         // Arrange
@@ -149,15 +134,15 @@ class ModuleNameConflictCheckerEventSubscriberTest extends TestCase
 
         $this->assertCount(1, $violations);
 
-        /** @var \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Dto\ViolationDto $violation */
+        /**
+                 *
+ @var \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Dto\ViolationDto $violation
+                 */
         $violation = $violations[0][0];
         $this->assertInstanceOf(ViolationDto::class, $violation);
         $this->assertEquals(['moduleTwo'], $violation->getExistingModules());
     }
 
-    /**
-     * @return void
-     */
     public function testGetSubscribedEventsShouldReturnArrayOfEvents(): void
     {
         // Act
@@ -169,8 +154,6 @@ class ModuleNameConflictCheckerEventSubscriberTest extends TestCase
 
     /**
      * @param array<string> $moduleNames
-     *
-     * @return \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Fetcher\ComposerModulesNamesFetcherInterface
      */
     protected function createComposerModulesNamesFetcherMock(array $moduleNames): ComposerModulesNamesFetcherInterface
     {
@@ -182,8 +165,6 @@ class ModuleNameConflictCheckerEventSubscriberTest extends TestCase
 
     /**
      * @param array<string> $moduleNames
-     *
-     * @return \DynamicEvaluator\Application\Checker\ModuleNameConflictChecker\Fetcher\ProjectModulesNamesFetcherInterface
      */
     protected function createProjectModulesNamesFetcherMock(array $moduleNames): ProjectModulesNamesFetcherInterface
     {
@@ -193,11 +174,6 @@ class ModuleNameConflictCheckerEventSubscriberTest extends TestCase
         return $projectModulesNamesFetcher;
     }
 
-    /**
-     * @param bool $isEvaluatorEnabled
-     *
-     * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected function createConfigurationProviderMock(bool $isEvaluatorEnabled = true): ConfigurationProviderInterface
     {
         $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);

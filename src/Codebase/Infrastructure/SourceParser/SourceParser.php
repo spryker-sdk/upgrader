@@ -37,7 +37,6 @@ class SourceParser implements SourceParserInterface
     protected array $structureParsers;
 
     /**
-     * @param \Codebase\Infrastructure\SourceFinder\SourceFinder $sourceFinder
      * @param array<\Codebase\Infrastructure\SourceParser\FileParser\FileParserInterface> $sourceParsers
      * @param array<\Codebase\Infrastructure\SourceParser\StructureParser\StructureParserInterface> $structureParsers
      */
@@ -51,11 +50,6 @@ class SourceParser implements SourceParserInterface
         $this->structureParsers = $structureParsers;
     }
 
-    /**
-     * @param \Codebase\Application\Dto\SourceParserRequestDto $codebaseRequestDto
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
     public function parseSource(SourceParserRequestDto $codebaseRequestDto): CodebaseSourceDto
     {
         $codebaseSourceDto = new CodebaseSourceDto(

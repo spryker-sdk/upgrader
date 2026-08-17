@@ -18,9 +18,6 @@ use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodePro
 
 class SourceCodeProviderTest extends KernelTestCase
 {
-    /**
-     * @return void
-     */
     public function testGetSourceCodeProviderReturnDefaultProvider(): void
     {
         // Arrange
@@ -34,9 +31,6 @@ class SourceCodeProviderTest extends KernelTestCase
         $this->assertInstanceOf(GitHubSourceCodeProvider::class, $sourceCodeProvider);
     }
 
-    /**
-     * @return void
-     */
     public function testGetSourceCodeProviderReturnGitLabProvider(): void
     {
         // Arrange
@@ -46,19 +40,18 @@ class SourceCodeProviderTest extends KernelTestCase
         $configurationProvider->method('getSourceCodeProvider')->willReturn(ConfigurationProvider::GITLAB_SOURCE_CODE_PROVIDER);
         $container->set('configuration.provider', $configurationProvider);
 
-        /** @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $strategyResolver */
+    /**
+         * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $strategyResolver
+                 */
         $strategyResolver = $container->get(SourceCodeProvider::class);
 
-        // Act
+    // Act
         $sourceCodeProvider = $strategyResolver->getSourceCodeProvider();
 
-        // Assert
+    // Assert
         $this->assertInstanceOf(GitLabSourceCodeProvider::class, $sourceCodeProvider);
     }
 
-    /**
-     * @return void
-     */
     public function testGetSourceCodeProviderThrowNotDefinedException(): void
     {
         // Arrange
@@ -68,7 +61,10 @@ class SourceCodeProviderTest extends KernelTestCase
         $configurationProvider->method('getSourceCodeProvider')->willReturn('NOT_DEFINED_PROVIDER');
         $container->set('configuration.provider', $configurationProvider);
 
-        /** @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $strategyResolver */
+        /**
+                 *
+ @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\SourceCodeProvider $strategyResolver
+                 */
         $strategyResolver = $container->get(SourceCodeProvider::class);
 
         // Assert

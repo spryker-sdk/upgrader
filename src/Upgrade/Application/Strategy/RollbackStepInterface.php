@@ -13,10 +13,5 @@ use Upgrade\Application\Dto\StepsResponseDto;
 
 interface RollbackStepInterface extends StepInterface
 {
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function rollBack(StepsResponseDto $stepsExecutionDto): StepsResponseDto;
 }

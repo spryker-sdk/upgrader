@@ -11,14 +11,8 @@ namespace Codebase\Application\Dto;
 
 class CodeBaseRequestDto
 {
- /**
-  * @var string
-  */
     protected string $toolingConfigurationPath;
 
-    /**
-     * @var string
-     */
     protected string $srcPath;
 
     /**
@@ -36,18 +30,12 @@ class CodeBaseRequestDto
      */
     protected array $excludeList;
 
-    /**
-     * @var string|null
-     */
     protected ?string $moduleOption;
 
     /**
-     * @param string $toolingConfigurationPath
-     * @param string $srcPath
      * @param array<string> $corePaths
      * @param array<string> $coreNamespaces
      * @param array<string> $excludeList
-     * @param string|null $moduleOption
      */
     public function __construct(
         string $toolingConfigurationPath,
@@ -65,17 +53,11 @@ class CodeBaseRequestDto
         $this->moduleOption = $moduleOption;
     }
 
-    /**
-     * @return string
-     */
     public function getToolingConfigurationFilePath(): string
     {
         return $this->toolingConfigurationPath;
     }
 
-    /**
-     * @return string
-     */
     public function getSrcPath(): string
     {
         return $this->srcPath;
@@ -105,9 +87,6 @@ class CodeBaseRequestDto
         return $this->excludeList;
     }
 
-    /**
-     * @return string|null
-     */
     public function getModuleOption(): ?string
     {
         return $this->moduleOption;

@@ -24,56 +24,22 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class FileErrorsFetcher implements FileErrorsFetcherInterface
 {
-    /**
-     * @var string
-     */
     protected string $executableConfig;
 
-    /**
-     * @var string
-     */
     protected string $executableProjectConfig;
 
-    /**
-     * @var string
-     */
     protected string $executable;
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected ProcessRunnerServiceInterface $processRunnerService;
 
-    /**
-     * @var \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\BaselineStorageInterface
-     */
     protected BaselineStorageInterface $baselineStorage;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
     protected LoggerInterface $logger;
 
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var string
-     */
     protected string $phpstanNeonFileName;
 
-    /**
-     * @param string $executableConfig
-     * @param string $executableProjectConfig
-     * @param string $executable
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunnerService
-     * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Baseline\BaselineStorageInterface $baselineStorage
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param string $phpstanNeonFileName
-     */
     public function __construct(
         string $executableConfig,
         string $executableProjectConfig,
@@ -152,10 +118,7 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     }
 
     /**
-     * @param string $file
      * @param array<mixed> $message
-     *
-     * @return \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\Dto\FileErrorDto|null
      */
     protected function fetchNewFileError(string $file, array $message): ?FileErrorDto
     {
@@ -173,9 +136,6 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
         return new FileErrorDto($file, (int)$message['line'], (string)$message['message']);
     }
 
-    /**
-     * @return void
-     */
     public function reset(): void
     {
         $this->processRunnerService->mustRun([
@@ -190,12 +150,8 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
 
     /**
      * @param array<mixed> $data
-     * @param string $key
-     * @param bool $isArray
      *
      * @throws \InvalidArgumentException
-     *
-     * @return void
      */
     protected function assertArrayKeyExists(array $data, string $key, bool $isArray = false): void
     {
@@ -262,8 +218,6 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     }
 
     /**
-     * @param \Symfony\Component\Process\Process $process
-     *
      * @throws \RuntimeException
      *
      * @return array<string, mixed>
@@ -289,8 +243,6 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     }
 
     /**
-     * @param string $neonFilePath
-     *
      * @return array<string, mixed>
      */
     protected function parseNeonFile(string $neonFilePath): array
@@ -330,7 +282,6 @@ class FileErrorsFetcher implements FileErrorsFetcherInterface
     }
 
     /**
-     * @param string $baseDir
      * @param array<string> $excludePaths
      *
      * @return array<string>

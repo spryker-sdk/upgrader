@@ -16,9 +16,6 @@ use SprykerSdk\Utils\Infrastructure\Service\Filesystem;
 
 class XmlSchemaFileParserTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testParseXmlToColumnsMapShouldReturnEmptyArrayWhenFileDoesNotExist(): void
     {
         // Arrange & Assert
@@ -33,9 +30,6 @@ class XmlSchemaFileParserTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    /**
-     * @return void
-     */
     public function testParseXmlToColumnsMapShouldParseXmlColumns(): void
     {
         // Arrange
@@ -62,20 +56,17 @@ class XmlSchemaFileParserTest extends TestCase
                     </table>
 
                 </database>
-                SCHEMA,
+                    SCHEMA,
             ),
         );
 
-        // Act
+    // Act
         $result = $xmlSchemaFileParser->parseXmlToColumnsMap('schema.xml');
 
-        // Assert
+    // Assert
         $this->assertSame(['spy_api_key' => ['id_api_key', 'name']], $result);
     }
 
-    /**
-     * @return void
-     */
     public function testParseXmlToColumnsMapShouldShouldThrowExceptionWhenNameIsNotDefined(): void
     {
         // Arrange & Assert
@@ -92,7 +83,7 @@ class XmlSchemaFileParserTest extends TestCase
                     </table>
 
                 </database>
-                SCHEMA,
+                    SCHEMA,
             ),
         );
 
@@ -100,12 +91,6 @@ class XmlSchemaFileParserTest extends TestCase
         $xmlSchemaFileParser->parseXmlToColumnsMap('schema.xml');
     }
 
-    /**
-     * @param string $fileContent
-     * @param bool $fileExists
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\Filesystem
-     */
     protected function createFilesystemMock(string $fileContent, bool $fileExists = true): Filesystem
     {
         $filesystem = $this->createMock(Filesystem::class);

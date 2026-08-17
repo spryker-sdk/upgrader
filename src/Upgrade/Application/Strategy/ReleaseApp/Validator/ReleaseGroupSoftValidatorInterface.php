@@ -14,10 +14,5 @@ use Upgrade\Application\Dto\ValidatorViolationDto;
 
 interface ReleaseGroupSoftValidatorInterface
 {
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     *
-     * @return \Upgrade\Application\Dto\ValidatorViolationDto|null
-     */
     public function isValidReleaseGroup(ReleaseGroupDto $releaseGroup): ?ValidatorViolationDto;
 }

@@ -14,22 +14,13 @@ use Upgrade\Application\Service\UpgradeService as ApplicationService;
 
 class UpgradeService implements UpgradeServiceInterface
 {
-    /**
-     * @var \Upgrade\Application\Service\UpgradeService
-     */
     protected ApplicationService $application;
 
-    /**
-     * @param \Upgrade\Application\Service\UpgradeService $application
-     */
     public function __construct(ApplicationService $application)
     {
         $this->application = $application;
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function upgrade(): StepsResponseDto
     {
         return $this->application->upgrade();

@@ -12,8 +12,6 @@ namespace Codebase\Infrastructure\CodeBaseReader\Mapper;
 interface ModuleOptionMapperInterface
 {
     /**
-     * @param string|null $moduleOption
-     *
      * @throws \Upgrade\Application\Exception\UpgraderException
      *
      * @return array<\Codebase\Application\Dto\ModuleDto>

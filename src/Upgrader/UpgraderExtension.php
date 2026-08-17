@@ -18,9 +18,6 @@ class UpgraderExtension extends Extension
 {
     /**
      * @param array<mixed> $configs
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @return void
      */
     public function load(array $configs, ContainerBuilder $container): void
     {

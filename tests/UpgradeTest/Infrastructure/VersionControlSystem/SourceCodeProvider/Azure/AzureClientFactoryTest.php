@@ -17,9 +17,6 @@ use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureCl
 
 class AzureClientFactoryTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testGetClient(): void
     {
         $accessToken = 'your_access_token';
@@ -46,9 +43,6 @@ class AzureClientFactoryTest extends TestCase
         $this->assertSame($client, $sameClient);
     }
 
-    /**
-     * @return void
-     */
     public function testCreateClient(): void
     {
         $accessToken = 'your_access_token';
@@ -56,20 +50,20 @@ class AzureClientFactoryTest extends TestCase
 
         // Create mock for ConfigurationProvider
         $configurationProviderMock = $this->getMockBuilder(ConfigurationProvider::class)
-            ->getMock();
+        ->getMock();
         $configurationProviderMock->method('getAccessToken')->willReturn($accessToken);
         $configurationProviderMock->method('getSourceCodeProviderUrl')->willReturn($sourceCodeProviderUrl);
 
-        // Create mock for ClientInterface
+    // Create mock for ClientInterface
         $httpClientMock = $this->getMockBuilder(ClientInterface::class)
-            ->getMock();
+        ->getMock();
 
         $gitLabClientFactory = new AzureClientFactory($configurationProviderMock, $httpClientMock);
 
-        // Call createClient
+    // Call createClient
         $client = $gitLabClientFactory->getClient();
 
-        // Assertions
+    // Assertions
         $this->assertInstanceOf(AzureClient::class, $client);
     }
 }

@@ -24,40 +24,16 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
 {
-    /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface
-     */
     protected ReleaseGroupSoftValidatorInterface $releaseGroupValidator;
 
-    /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface
-     */
     protected ThresholdSoftValidatorInterface $thresholdValidator;
 
-    /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupUpgrader
-     */
     protected ReleaseGroupUpgrader $releaseGroupUpgrader;
 
-    /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface
-     */
     protected ReleaseGroupFilterInterface $releaseGroupPackageFilter;
 
-    /**
-     * @var \Upgrade\Application\Factory\ComposerViolationDtoFactory
-     */
     protected ComposerViolationDtoFactory $composerViolationDtoFactory;
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Validator\ThresholdSoftValidatorInterface $thresholdSoftValidator
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupUpgrader $releaseGroupUpgrader
-     * @param \Upgrade\Application\Strategy\ReleaseApp\ReleaseGroupFilter\ReleaseGroupFilterInterface $releaseGroupFilter
-     * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Upgrade\Application\Factory\ComposerViolationDtoFactory $composerViolationDtoFactory
-     */
     public function __construct(
         ReleaseGroupSoftValidatorInterface $releaseGroupValidateManager,
         ThresholdSoftValidatorInterface $thresholdSoftValidator,
@@ -76,20 +52,11 @@ class SequentialReleaseGroupProcessor extends BaseReleaseGroupProcessor
         $this->composerViolationDtoFactory = $composerViolationDtoFactory;
     }
 
-    /**
-     * @return string
-     */
     public function getProcessorName(): string
     {
         return ConfigurationProvider::SEQUENTIAL_RELEASE_GROUP_PROCESSOR;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $requireRequestCollection
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function process(ReleaseGroupDtoCollection $requireRequestCollection, StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         if ($requireRequestCollection->isEmpty()) {

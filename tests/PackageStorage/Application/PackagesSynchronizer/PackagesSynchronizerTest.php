@@ -17,9 +17,6 @@ use Symfony\Component\Process\Process;
 
 class PackagesSynchronizerTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testSyncShouldCreateDestinationDirIfNotExists(): void
     {
         // Arrange
@@ -53,15 +50,12 @@ class PackagesSynchronizerTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testSyncShouldClearDataAndPassExceptionWhenExceptionThrown(): void
     {
         //Assert
         $this->expectException(ProcessFailedException::class);
 
-        // Arrange
+    // Arrange
         $fromDir = DIRECTORY_SEPARATOR . PackagesDirProvider::FROM_DIR;
         $toDir = DIRECTORY_SEPARATOR . PackagesDirProvider::TO_DIR;
         $packagesDirProvider = $this->createPackagesDirProviderMock(['spryker'], $fromDir, $toDir);
@@ -70,8 +64,8 @@ class PackagesSynchronizerTest extends TestCase
 
         $processRunnerMock = $this->createProcessRunnerServiceMock($process);
         $processRunnerMock->expects($this->once())
-            ->method('mustRunFromCommandLine')
-            ->willThrowException(new ProcessFailedException($process));
+        ->method('mustRunFromCommandLine')
+        ->willThrowException(new ProcessFailedException($process));
 
         $filesystem = $this->createMock(Filesystem::class);
 
@@ -79,44 +73,38 @@ class PackagesSynchronizerTest extends TestCase
         $invocations = [];
 
         $filesystem->method('exists')
-            ->willReturnCallback(function ($path) use (&$returnValues, &$invocations) {
-                $invocations[] = $path;
+        ->willReturnCallback(function ($path) use (&$returnValues, &$invocations) {
+            $invocations[] = $path;
 
-                return array_shift($returnValues);
-            });
+            return array_shift($returnValues);
+        });
 
         $filesystem->expects($this->once())
-            ->method('remove')
-            ->with($toDir);
+        ->method('remove')
+        ->with($toDir);
 
         $packagesSynchronizer = new PackagesSynchronizer($packagesDirProvider, $filesystem, $processRunnerMock);
 
-        // Act
+    // Act
         $packagesSynchronizer->sync();
     }
 
-    /**
-     * @return void
-     */
     public function testPackagesSynchronizerDestruct(): void
     {
         // Arrange
         $packagesSynchronizer = $this->getMockBuilder(PackagesSynchronizer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(array_diff(
-                get_class_methods(PackagesSynchronizer::class),
-                ['__destruct'],
-            ))
-            ->getMock();
+        ->disableOriginalConstructor()
+        ->onlyMethods(array_diff(
+            get_class_methods(PackagesSynchronizer::class),
+            ['__destruct'],
+        ))
+        ->getMock();
         $packagesSynchronizer->expects($this->once())->method('clear');
 
         // Act
         $packagesSynchronizer->__destruct();
     }
 
-    /**
-     * @return void
-     */
     public function testClearShouldInvokeRemove(): void
     {
         // Arrange
@@ -129,8 +117,8 @@ class PackagesSynchronizerTest extends TestCase
 
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->expects($this->exactly(2))->method('exists')
-            ->with($toDir)
-            ->willReturnOnConsecutiveCalls(true, false);
+        ->with($toDir)
+        ->willReturnOnConsecutiveCalls(true, false);
         $filesystem->expects($this->once())->method('remove')->with($toDir);
 
         $packagesSynchronizer = new PackagesSynchronizer($packagesDirProvider, $filesystem, $processRunnerMock);
@@ -139,9 +127,6 @@ class PackagesSynchronizerTest extends TestCase
         $packagesSynchronizer->clear();
     }
 
-    /**
-     * @return void
-     */
     public function testClearShouldInvokeRemoveWhenFailed(): void
     {
         // Arrange
@@ -154,8 +139,8 @@ class PackagesSynchronizerTest extends TestCase
 
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->expects($this->once())->method('exists')
-            ->with($toDir)
-            ->willReturn(true);
+        ->with($toDir)
+        ->willReturn(true);
         $filesystem->expects($this->once())->method('remove')->with($toDir);
 
         $packagesSynchronizer = new PackagesSynchronizer($packagesDirProvider, $filesystem, $processRunnerMock);
@@ -163,10 +148,6 @@ class PackagesSynchronizerTest extends TestCase
 
     /**
      * @param array<string> $dirs
-     * @param string $fromDir
-     * @param string $toDir
-     *
-     * @return \PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface
      */
     public function createPackagesDirProviderMock(array $dirs, string $fromDir, string $toDir): PackagesDirProviderInterface
     {
@@ -179,8 +160,6 @@ class PackagesSynchronizerTest extends TestCase
     }
 
     /**
-     * @param \Symfony\Component\Process\Process $process
-     *
      * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     public function createProcessRunnerServiceMock(Process $process): ProcessRunnerServiceInterface

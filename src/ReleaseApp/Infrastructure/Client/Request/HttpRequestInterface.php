@@ -23,18 +23,9 @@ interface HttpRequestInterface
      */
     public const REQUEST_METHOD_GET = 'GET';
 
-    /**
-     * @return \ReleaseApp\Domain\Client\Request\RequestInterface
-     */
     public function getRequest(): RequestInterface;
 
-    /**
-     * @return string
-     */
     public function getEndpoint(): string;
 
-    /**
-     * @return string
-     */
     public function getMethod(): string;
 }

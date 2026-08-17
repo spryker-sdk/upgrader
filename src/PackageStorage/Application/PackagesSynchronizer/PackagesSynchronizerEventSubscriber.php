@@ -14,19 +14,10 @@ use Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcesso
 
 class PackagesSynchronizerEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var int
-     */
     protected const HIGH_PRIORITY_EVENT = 250;
 
-    /**
-     * @var \PackageStorage\Application\PackagesSynchronizer\PackagesSynchronizerInterface
-     */
     protected PackagesSynchronizerInterface $packagesSynchronizer;
 
-    /**
-     * @param \PackageStorage\Application\PackagesSynchronizer\PackagesSynchronizerInterface $packagesSynchronizer
-     */
     public function __construct(PackagesSynchronizerInterface $packagesSynchronizer)
     {
         $this->packagesSynchronizer = $packagesSynchronizer;
@@ -44,31 +35,16 @@ class PackagesSynchronizerEventSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $event
-     *
-     * @return void
-     */
     public function onPreProcessor(ReleaseGroupProcessorEvent $event): void
     {
         $this->packagesSynchronizer->clear();
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $event
-     *
-     * @return void
-     */
     public function onPreRequire(ReleaseGroupProcessorEvent $event): void
     {
         $this->packagesSynchronizer->sync();
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\Event\ReleaseGroupProcessorEvent $event
-     *
-     * @return void
-     */
     public function onPostProcessor(ReleaseGroupProcessorEvent $event): void
     {
         $this->packagesSynchronizer->clear();

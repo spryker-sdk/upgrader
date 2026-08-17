@@ -21,24 +21,12 @@ use Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureSo
 
 class AzureSourceCodeProviderTest extends TestCase
 {
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     private ConfigurationProvider $configurationProviderMock;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzureClientFactory
-     */
     private AzureClientFactory $azureClientFactoryMock;
 
-    /**
-     * @var \Upgrade\Infrastructure\VersionControlSystem\SourceCodeProvider\Azure\AzurePullRequestDescriptionNormalizer
-     */
     private AzurePullRequestDescriptionNormalizer $descriptionNormalizerMock;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         $this->configurationProviderMock = $this->createMock(ConfigurationProvider::class);
@@ -65,16 +53,6 @@ class AzureSourceCodeProviderTest extends TestCase
 
     /**
      * @dataProvider validateCredentialsDataProvider
-     *
-     * @param string $accessToken
-     * @param string $orgName
-     * @param string $projectName
-     * @param string $projectId
-     * @param string $repoName
-     * @param string $repoId
-     * @param string $expectedError
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('validateCredentialsDataProvider')]
     public function testValidateCredentials(
@@ -119,12 +97,6 @@ class AzureSourceCodeProviderTest extends TestCase
 
     /**
      * @dataProvider buildBlockerTextBlockDataProvider
-     *
-     * @param string $title
-     * @param string $message
-     * @param string $expectedOutput
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('buildBlockerTextBlockDataProvider')]
     public function testBuildBlockerTextBlock(string $title, string $message, string $expectedOutput): void

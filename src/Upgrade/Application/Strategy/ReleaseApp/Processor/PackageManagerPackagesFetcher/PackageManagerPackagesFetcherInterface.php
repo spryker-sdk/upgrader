@@ -14,10 +14,5 @@ use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 interface PackageManagerPackagesFetcherInterface
 {
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerPackagesDto
-     */
     public function fetchPackages(PackageCollection $packageCollection): PackageManagerPackagesDto;
 }

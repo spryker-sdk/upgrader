@@ -11,13 +11,7 @@ namespace PackageStorage\Application\PackagesSynchronizer;
 
 interface PackagesSynchronizerInterface
 {
-    /**
-     * @return void
-     */
     public function sync(): void;
 
-    /**
-     * @return void
-     */
     public function clear(): void;
 }

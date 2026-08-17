@@ -17,30 +17,18 @@ use Upgrader\Lifecycle\Lifecycle;
 
 class UpgradeTask implements TaskInterface
 {
-    /**
-     * @var \Upgrade\Application\Service\UpgradeServiceInterface
-     */
     protected UpgradeServiceInterface $upgraderService;
 
-    /**
-     * @param \Upgrade\Application\Service\UpgradeServiceInterface $upgraderService
-     */
     public function __construct(UpgradeServiceInterface $upgraderService)
     {
         $this->upgraderService = $upgraderService;
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return 'upgradability:php:upgrade';
     }
 
-    /**
-     * @return string
-     */
     public function getShortDescription(): string
     {
         return 'Upgrades your system to the latest Spryker version (minor + patches)';
@@ -64,49 +52,31 @@ class UpgradeTask implements TaskInterface
         return [];
     }
 
-    /**
-     * @return string|null
-     */
     public function getHelp(): ?string
     {
         return 'Helps you don\'t think about updates.';
     }
 
-    /**
-     * @return string
-     */
     public function getVersion(): string
     {
         return '0.1.0';
     }
 
-    /**
-     * @return bool
-     */
     public function isDeprecated(): bool
     {
         return false;
     }
 
-    /**
-     * @return bool
-     */
     public function isOptional(): bool
     {
         return false;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSuccessor(): ?string
     {
         return null;
     }
 
-    /**
-     * @return \SprykerSdk\SdkContracts\Entity\Lifecycle\LifecycleInterface
-     */
     public function getLifecycle(): LifecycleInterface
     {
         return new Lifecycle();

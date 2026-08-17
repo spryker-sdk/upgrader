@@ -33,14 +33,10 @@ class UpgradeInstructionModule
      */
     protected array $body;
 
-    /**
-     * @var string
-     */
     protected string $name;
 
     /**
      * @param array<mixed> $body
-     * @param string $name
      */
     public function __construct(array $body, string $name)
     {
@@ -48,9 +44,6 @@ class UpgradeInstructionModule
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -58,8 +51,6 @@ class UpgradeInstructionModule
 
     /**
      * @throws \Upgrade\Application\Exception\UpgraderException
-     *
-     * @return string
      */
     public function getVersion(): string
     {
@@ -70,11 +61,6 @@ class UpgradeInstructionModule
         return $this->body[static::VERSION_KEY];
     }
 
-    /**
-     * @param string $version
-     *
-     * @return void
-     */
     public function setVersion(string $version): void
     {
         $this->body[static::VERSION_KEY] = $version;
@@ -82,8 +68,6 @@ class UpgradeInstructionModule
 
     /**
      * @throws \Upgrade\Application\Exception\UpgraderException
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -94,11 +78,6 @@ class UpgradeInstructionModule
         return $this->body[static::TYPE_KEY];
     }
 
-    /**
-     * @param string $type
-     *
-     * @return void
-     */
     public function setType(string $type): void
     {
         $this->body[static::TYPE_KEY] = $type;
@@ -112,11 +91,6 @@ class UpgradeInstructionModule
         return $this->body[static::FEATURE_PACKAGES_KEY] ?? [];
     }
 
-    /**
-     * @param string $type
-     *
-     * @return void
-     */
     public function setFeaturePackages(string $type): void
     {
         $this->body[static::FEATURE_PACKAGES_KEY] = $type;

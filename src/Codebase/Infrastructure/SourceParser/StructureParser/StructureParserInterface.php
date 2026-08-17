@@ -14,11 +14,5 @@ use Codebase\Application\Dto\SourceParserRequestDto;
 
 interface StructureParserInterface
 {
-    /**
-     * @param \Codebase\Application\Dto\SourceParserRequestDto $codebaseRequestDto
-     * @param \Codebase\Application\Dto\CodebaseSourceDto $codebaseSourceDto
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
     public function parse(SourceParserRequestDto $codebaseRequestDto, CodebaseSourceDto $codebaseSourceDto): CodebaseSourceDto;
 }

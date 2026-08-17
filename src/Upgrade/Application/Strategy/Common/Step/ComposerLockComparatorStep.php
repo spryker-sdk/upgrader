@@ -16,24 +16,13 @@ use Upgrade\Application\Strategy\StepInterface;
 
 class ComposerLockComparatorStep implements StepInterface
 {
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManager;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
-     */
     public function __construct(PackageManagerAdapterInterface $packageManager)
     {
         $this->packageManager = $packageManager;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $composerLockDiffDto = $this->packageManager->getComposerLockDiff();

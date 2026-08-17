@@ -17,11 +17,6 @@ class ResponseDtoTest extends TestCase
 {
     /**
      * @dataProvider gettersDataProvider
-     *
-     * @param bool $isSuccessful
-     * @param string|null $outputMessage
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('gettersDataProvider')]
     public function testGetters(bool $isSuccessful, ?string $outputMessage): void
@@ -32,9 +27,6 @@ class ResponseDtoTest extends TestCase
         $this->assertSame($outputMessage, $dto->getOutputMessage());
     }
 
-    /**
-     * @return \Generator
-     */
     public static function gettersDataProvider(): Generator
     {
         $dataProvider = [

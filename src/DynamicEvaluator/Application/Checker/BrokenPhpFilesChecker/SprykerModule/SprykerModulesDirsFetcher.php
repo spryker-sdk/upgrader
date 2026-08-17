@@ -16,26 +16,12 @@ use Upgrader\Configuration\ConfigurationProvider;
 
 class SprykerModulesDirsFetcher implements SprykerModulesDirsFetcherInterface
 {
-    /**
-     * @var \DynamicEvaluator\Application\ProjectConfigReader\ProjectConfigReaderInterface
-     */
     protected ProjectConfigReaderInterface $projectConfigReader;
 
-    /**
-     * @var \Upgrader\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \Core\Infrastructure\Service\FinderFactory
-     */
     protected FinderFactory $finderFactory;
 
-    /**
-     * @param \DynamicEvaluator\Application\ProjectConfigReader\ProjectConfigReaderInterface $projectConfigReader
-     * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Core\Infrastructure\Service\FinderFactory $finderFactory
-     */
     public function __construct(
         ProjectConfigReaderInterface $projectConfigReader,
         ConfigurationProvider $configurationProvider,
@@ -64,7 +50,6 @@ class SprykerModulesDirsFetcher implements SprykerModulesDirsFetcherInterface
 
     /**
      * @param array<string> $sprykerPackages
-     * @param string $projectNamespace
      *
      * @return array<string>
      */
@@ -80,9 +65,6 @@ class SprykerModulesDirsFetcher implements SprykerModulesDirsFetcherInterface
     }
 
     /**
-     * @param string $sprykerPackage
-     * @param string $projectNamespace
-     *
      * @return array<string>
      */
     protected function findAllPackageDirs(string $sprykerPackage, string $projectNamespace): array
@@ -107,11 +89,6 @@ class SprykerModulesDirsFetcher implements SprykerModulesDirsFetcherInterface
         return $modulesDirs;
     }
 
-    /**
-     * @param string $package
-     *
-     * @return string
-     */
     protected function sprykerPackageToModuleDir(string $package): string
     {
         [, $packageName] = explode('/', $package);

@@ -13,13 +13,7 @@ use Upgrade\Application\Dto\StepsResponseDto;
 
 interface StrategyInterface
 {
-    /**
-     * @return string
-     */
     public function getStrategyName(): string;
 
-    /**
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function upgrade(): StepsResponseDto;
 }

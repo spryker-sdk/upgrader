@@ -32,11 +32,6 @@ class ToolingConfigurationReader implements ToolingConfigurationReaderInterface
         $this->propertyReaders = $propertyReaders;
     }
 
-    /**
-     * @param string $configurationFilePath
-     *
-     * @return \Codebase\Application\Dto\ConfigurationResponseDto
-     */
     public function readToolingConfiguration(string $configurationFilePath): ConfigurationResponseDto
     {
         $configurationResponseDto = new ConfigurationResponseDto();

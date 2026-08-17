@@ -18,38 +18,16 @@ use DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\Spr
 
 class BrokenPhpFilesChecker
 {
-    /**
-     * @var \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher\FileErrorsFetcherInterface
-     */
     protected FileErrorsFetcherInterface $fileErrorsFetcher;
 
-    /**
-     * @var \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModuleComparerInterface
-     */
     protected SprykerModuleComparerInterface $sprykerModuleComparer;
 
-    /**
-     * @var \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModulesStateStorage
-     */
     protected SprykerModulesStateStorage $sprykerModulesStateStorage;
 
-    /**
-     * @var \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModulesStateFetcherInterface
-     */
     protected SprykerModulesStateFetcherInterface $sprykerModulesStateFetcher;
 
-    /**
-     * @var \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModulesDirsFetcherInterface
-     */
     protected SprykerModulesDirsFetcherInterface $sprykerModulesDirsFetcher;
 
-    /**
-     * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\FileErrorsFetcher\FileErrorsFetcherInterface $fileErrorsFetcher
-     * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModuleComparerInterface $sprykerModuleComparer
-     * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModulesStateStorage $sprykerModulesStateStorage
-     * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModulesStateFetcherInterface $sprykerModulesStateFetcher
-     * @param \DynamicEvaluator\Application\Checker\BrokenPhpFilesChecker\SprykerModule\SprykerModulesDirsFetcherInterface $sprykerModulesDirsFetcher
-     */
     public function __construct(
         FileErrorsFetcherInterface $fileErrorsFetcher,
         SprykerModuleComparerInterface $sprykerModuleComparer,
@@ -109,9 +87,6 @@ class BrokenPhpFilesChecker
         return [new ViolationDto([], $fileErrors)];
     }
 
-    /**
-     * @return void
-     */
     public function fetchAndPersistInstalledSprykerModules(): void
     {
         $modulesState = $this->sprykerModulesStateFetcher->fetchCurrentSprykerModulesState();
@@ -119,9 +94,6 @@ class BrokenPhpFilesChecker
         $this->sprykerModulesStateStorage->setModulesState($modulesState);
     }
 
-    /**
-     * @return void
-     */
     public function fetchAndPersistInitialErrors(): void
     {
         $this->fileErrorsFetcher->reset();

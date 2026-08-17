@@ -20,9 +20,6 @@ use Upgrader\Configuration\ConfigurationProvider;
 
 class ProjectSchemaColumnsMapFetcherTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFetcherColumnsMapShouldReturnProjectColumnsMap(): void
     {
         // Arrange
@@ -44,8 +41,6 @@ class ProjectSchemaColumnsMapFetcherTest extends TestCase
 
     /**
      * @param array<string> $files
-     *
-     * @return \Core\Infrastructure\Service\FinderFactory
      */
     protected function createFinderFactoryMock(array $files = []): FinderFactory
     {
@@ -68,9 +63,6 @@ class ProjectSchemaColumnsMapFetcherTest extends TestCase
         return $finderFactory;
     }
 
-    /**
-     * @return \Upgrader\Configuration\ConfigurationProvider
-     */
     protected function createConfigurationProviderMock(): ConfigurationProvider
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
@@ -81,8 +73,6 @@ class ProjectSchemaColumnsMapFetcherTest extends TestCase
 
     /**
      * @param array<mixed> $returnValues
-     *
-     * @return \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\XmlSchemaFileParser\XmlSchemaFileParserInterface
      */
     protected function createXmlSchemaFileParserMock(array $returnValues = []): XmlSchemaFileParserInterface
     {

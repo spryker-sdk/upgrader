@@ -16,7 +16,16 @@
     <file>src/</file>
     <file>tests/</file>
 
-    <rule ref="vendor/spryker/code-sniffer/SprykerStrict/ruleset.xml"/>
+    <rule ref="vendor/spryker/code-sniffer/SprykerStrict/ruleset.xml">
+        <!-- excluded on purpose: SprykerStrict pulls in the full Spryker/ruleset.xml,
+             which requires docblocks (DocBlock/DocBlockConst/InlineDocBlock/DocBlockReturnVoid),
+             directly contradicting SprykerStrict.TypeHints.*.UselessAnnotation, which forbids
+             them. Without this exclude, phpcbf oscillates forever on typed methods/properties. -->
+        <exclude name="Spryker.Commenting.DocBlock"/>
+        <exclude name="Spryker.Commenting.DocBlockConst"/>
+        <exclude name="Spryker.Commenting.InlineDocBlock"/>
+        <exclude name="Spryker.Commenting.DocBlockReturnVoid"/>
+    </rule>
 
     <rule ref="Spryker.PHP.DeclareStrictTypesAfterFileDoc">
         <properties>

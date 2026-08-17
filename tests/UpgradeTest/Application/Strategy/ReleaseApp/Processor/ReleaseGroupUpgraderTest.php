@@ -21,9 +21,6 @@ use Upgrade\Application\Strategy\UpgradeFixerInterface;
 
 class ReleaseGroupUpgraderTest extends KernelTestCase
 {
-    /**
-     * @return void
-     */
     public function testRequireWithAlternativePackages(): void
     {
         // Arrange
@@ -57,9 +54,6 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
         $this->assertEquals([$moduleWithFeatureCollection, $moduleCollection], $invocations);
     }
 
-    /**
-     * @return void
-     */
     public function testRequireWithoutRunFixer(): void
     {
         // Arrange
@@ -69,24 +63,21 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
         $loggerMock->expects($this->never())->method('info');
         $releaseGroupUpgrader = new ReleaseGroupUpgrader($moduleFetcherMock, $loggerMock, []);
 
-        // Act
+    // Act
         $packageManagerResponseDto = $releaseGroupUpgrader->upgrade($this->createMock(ReleaseGroupDto::class));
 
-        // Assert
+    // Assert
         $this->assertNotNull($releaseGroupUpgrader);
         $this->assertTrue($packageManagerResponseDto->isSuccessful());
     }
 
-    /**
-     * @return void
-     */
     public function testRequireWithRunFixer(): void
     {
         // Arrange
         $moduleDtoCollection = new ModuleDtoCollection([
-            new ModuleDto('spryker/cart', '2.1.9', 'minor'),
-            new ModuleDto('spryker-shup/cart-page', '1.1.9', 'minor'),
-            new ModuleDto('spryker/merchant', '3.2.1', 'minor'),
+        new ModuleDto('spryker/cart', '2.1.9', 'minor'),
+        new ModuleDto('spryker-shup/cart-page', '1.1.9', 'minor'),
+        new ModuleDto('spryker/merchant', '3.2.1', 'minor'),
         ]);
         $releaseGroupDtoMock = $this->createMock(ReleaseGroupDto::class);
         $releaseGroupDtoMock->method('getModuleCollection')->willReturn($moduleDtoCollection);
@@ -99,12 +90,12 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
         $logMessages = [];
         $loggerMock = $this->createMock(LoggerInterface::class);
         $loggerMock->expects($this->exactly(4))
-            ->method('info')
-            ->willReturnCallback(function (...$args) use (&$logMessages) {
-                $logMessages[] = $args;
+        ->method('info')
+        ->willReturnCallback(function (...$args) use (&$logMessages) {
+            $logMessages[] = $args;
 
-                return $logMessages;
-            });
+            return $logMessages;
+        });
 
         $fixer1 = $this->getMockBuilder(UpgradeFixerInterface::class);
         $fixer1->setMockClassName('FixerOne');
@@ -121,8 +112,8 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
             $moduleFetcherMock,
             $loggerMock,
             [
-                $fixer1,
-                $fixer2,
+            $fixer1,
+            $fixer2,
             ],
         );
 
@@ -134,10 +125,10 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
         $this->assertTrue($packageManagerResponseDto->isSuccessful());
 
         $expectedLogMessages = [
-            ['Release Group `0` is failed. Trying to fix it', [null]],
-            ['Fixer `FixerOne` is not applicable'],
-            ['`FixerTwo` fixer is applying'],
-            ['Run release group upgrade after fixer.'],
+        ['Release Group `0` is failed. Trying to fix it', [null]],
+        ['Fixer `FixerOne` is not applicable'],
+        ['`FixerTwo` fixer is applying'],
+        ['Run release group upgrade after fixer.'],
         ];
 
         $this->assertCount(4, $logMessages);
@@ -149,16 +140,13 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
         }
     }
 
-    /**
-     * @return void
-     */
     public function testRequireWithRunFixerThatFailed(): void
     {
         // Arrange
         $moduleDtoCollection = new ModuleDtoCollection([
-            new ModuleDto('spryker/cart', '2.1.9', 'minor'),
-            new ModuleDto('spryker-shup/cart-page', '1.1.9', 'minor'),
-            new ModuleDto('spryker/merchant', '3.2.1', 'minor'),
+        new ModuleDto('spryker/cart', '2.1.9', 'minor'),
+        new ModuleDto('spryker-shup/cart-page', '1.1.9', 'minor'),
+        new ModuleDto('spryker/merchant', '3.2.1', 'minor'),
         ]);
         $releaseGroupDtoMock = $this->createMock(ReleaseGroupDto::class);
         $releaseGroupDtoMock->method('getModuleCollection')->willReturn($moduleDtoCollection);
@@ -173,28 +161,28 @@ class ReleaseGroupUpgraderTest extends KernelTestCase
 
         $infoMessages = [];
         $loggerMock->expects($this->exactly(3))->method('info')
-            ->willReturnCallback(function ($message, $context = []) use (&$infoMessages) {
-                $infoMessages[] = [$message, $context];
+        ->willReturnCallback(function ($message, $context = []) use (&$infoMessages) {
+            $infoMessages[] = [$message, $context];
 
-                return $infoMessages;
-            });
+            return $infoMessages;
+        });
 
         $fixer1 = $this->getMockBuilder(UpgradeFixerInterface::class)
-            ->setMockClassName('Fixer1')
-            ->getMock();
+        ->setMockClassName('Fixer1')
+        ->getMock();
         $fixer1->expects($this->once())->method('isApplicable')->willReturn(false);
         $fixer1->expects($this->never())->method('run');
         $fixer2 = $this->getMockBuilder(UpgradeFixerInterface::class)
-            ->setMockClassName('Fixer2')
-            ->getMock();
+        ->setMockClassName('Fixer2')
+        ->getMock();
         $fixer2->expects($this->once())->method('isApplicable')->willReturn(true);
         $fixer2->expects($this->once())->method('run')->willReturn(new PackageManagerResponseDto(false));
         $releaseGroupUpgrader = new ReleaseGroupUpgrader(
             $moduleFetcherMock,
             $loggerMock,
             [
-                $fixer1,
-                $fixer2,
+            $fixer1,
+            $fixer2,
             ],
         );
 

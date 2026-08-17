@@ -14,26 +14,12 @@ use PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface
 
 class NewVendorColumnsFetcher implements NewVendorColumnsFetcherInterface
 {
-    /**
-     * @var \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\NewVendorColumnsFetcher\ChangedXmlFilesFetcher
-     */
     protected ChangedXmlFilesFetcher $changedXmlFilesFetcher;
 
-    /**
-     * @var \PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface
-     */
     protected PackagesDirProviderInterface $packagesDirProvider;
 
-    /**
-     * @var \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\XmlSchemaFileParser\XmlSchemaFileParserInterface
-     */
     protected XmlSchemaFileParserInterface $xmlSchemaFileParser;
 
-    /**
-     * @param \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\NewVendorColumnsFetcher\ChangedXmlFilesFetcher $changedXmlFilesFetcher
-     * @param \PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface $packagesDirProvider
-     * @param \DynamicEvaluator\Application\Checker\DbSchemaConflictChecker\XmlSchemaFileParser\XmlSchemaFileParserInterface $xmlSchemaFileParser
-     */
     public function __construct(
         ChangedXmlFilesFetcher $changedXmlFilesFetcher,
         PackagesDirProviderInterface $packagesDirProvider,

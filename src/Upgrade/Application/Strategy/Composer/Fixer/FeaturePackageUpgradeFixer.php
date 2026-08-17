@@ -17,15 +17,8 @@ use Upgrade\Domain\Entity\Package;
 
 class FeaturePackageUpgradeFixer extends AbstractFeaturePackageUpgradeFixer
 {
-    /**
-     * @var bool
-     */
     protected bool $isReleaseGroupIntegratorEnabled;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
-     * @param bool $isReleaseGroupIntegratorEnabled
-     */
     public function __construct(PackageManagerAdapterInterface $packageManager, bool $isReleaseGroupIntegratorEnabled = false)
     {
         $this->isReleaseGroupIntegratorEnabled = $isReleaseGroupIntegratorEnabled;
@@ -33,12 +26,6 @@ class FeaturePackageUpgradeFixer extends AbstractFeaturePackageUpgradeFixer
         parent::__construct($packageManager);
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $packageManagerResponseDto
-     *
-     * @return bool
-     */
     public function isApplicable(ReleaseGroupDto $releaseGroup, PackageManagerResponseDto $packageManagerResponseDto): bool
     {
         if ($this->isReleaseGroupIntegratorEnabled) {
@@ -48,12 +35,6 @@ class FeaturePackageUpgradeFixer extends AbstractFeaturePackageUpgradeFixer
         return parent::isApplicable($releaseGroup, $packageManagerResponseDto);
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $packageManagerResponseDto
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto|null
-     */
     public function run(ReleaseGroupDto $releaseGroup, PackageManagerResponseDto $packageManagerResponseDto): ?PackageManagerResponseDto
     {
         preg_match_all(static::FEATURE_PACKAGE_PATTERN, (string)$packageManagerResponseDto->getOutputMessage(), $matches);

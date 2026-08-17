@@ -24,12 +24,6 @@ class ModuleParser implements StructureParserInterface
      */
     protected const PROJECT_PATH_FORMAT = '%s/*/*';
 
-    /**
-     * @param \Codebase\Application\Dto\SourceParserRequestDto $codebaseRequestDto
-     * @param \Codebase\Application\Dto\CodebaseSourceDto $codebaseSourceDto
-     *
-     * @return \Codebase\Application\Dto\CodebaseSourceDto
-     */
     public function parse(SourceParserRequestDto $codebaseRequestDto, CodebaseSourceDto $codebaseSourceDto): CodebaseSourceDto
     {
         $coreModules = [];
@@ -53,22 +47,11 @@ class ModuleParser implements StructureParserInterface
         return $codebaseSourceDto;
     }
 
-    /**
-     * @param string $input
-     * @param string $separator
-     *
-     * @return string
-     */
     protected function snakeCaseToCamelCase(string $input, string $separator = '-'): string
     {
         return str_replace($separator, '', ucwords($input, $separator));
     }
 
-    /**
-     * @param string $input
-     *
-     * @return string
-     */
     protected function removeRegionCode(string $input): string
     {
         $lastTwoCharacters = substr($input, -2);

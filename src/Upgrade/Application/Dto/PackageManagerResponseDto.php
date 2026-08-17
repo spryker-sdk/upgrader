@@ -16,16 +16,10 @@ class PackageManagerResponseDto extends ResponseDto
      */
     protected array $executedCommands;
 
-    /**
-     * @var int
-     */
     protected int $appliedPackagesAmount;
 
     /**
-     * @param bool $isSuccessful
-     * @param string|null $outputMessage
      * @param array<string> $executedCommands
-     * @param int $appliedPackagesAmount
      */
     public function __construct(
         bool $isSuccessful,
@@ -46,9 +40,6 @@ class PackageManagerResponseDto extends ResponseDto
         return $this->executedCommands;
     }
 
-    /**
-     * @return int
-     */
     public function getAppliedPackagesAmount(): int
     {
         return $this->appliedPackagesAmount;

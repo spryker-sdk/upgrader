@@ -23,26 +23,12 @@ use ReleaseApp\Infrastructure\Client\Request\HttpUpgradeReleaseGroupInstructions
 
 class HttpReleaseAppClient implements ReleaseAppClientInterface
 {
-    /**
-     * @var \ReleaseApp\Infrastructure\Client\Builder\HttpRequestBuilderInterface
-     */
     protected HttpRequestBuilderInterface $requestBuilder;
 
-    /**
-     * @var \ReleaseApp\Infrastructure\Client\Builder\HttpResponseBuilderInterface
-     */
     protected HttpResponseBuilderInterface $responseBuilder;
 
-    /**
-     * @var \ReleaseApp\Infrastructure\Client\HttpRequestExecutorInterface
-     */
     protected HttpRequestExecutorInterface $requestExecutor;
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Client\Builder\HttpRequestBuilderInterface $requestBuilder
-     * @param \ReleaseApp\Infrastructure\Client\Builder\HttpResponseBuilderInterface $responseBuilder
-     * @param \ReleaseApp\Infrastructure\Client\HttpRequestExecutorInterface $requestExecutor
-     */
     public function __construct(
         HttpRequestBuilderInterface $requestBuilder,
         HttpResponseBuilderInterface $responseBuilder,
@@ -53,11 +39,6 @@ class HttpReleaseAppClient implements ReleaseAppClientInterface
         $this->requestExecutor = $requestExecutor;
     }
 
-    /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeInstructionsRequest $instructionsRequest
-     *
-     * @return \ReleaseApp\Domain\Entities\UpgradeInstructions
-     */
     public function getUpgradeInstructions(UpgradeInstructionsRequest $instructionsRequest): UpgradeInstructions
     {
         /** @var \ReleaseApp\Domain\Entities\UpgradeInstructions $response */
@@ -66,11 +47,6 @@ class HttpReleaseAppClient implements ReleaseAppClientInterface
         return $response;
     }
 
-    /**
-     * @param \ReleaseApp\Domain\Client\Request\UpgradeReleaseGroupInstructionsRequest $releaseGroupRequest
-     *
-     * @return \ReleaseApp\Domain\Entities\UpgradeInstruction
-     */
     public function getUpgradeReleaseGroupInstruction(UpgradeReleaseGroupInstructionsRequest $releaseGroupRequest): UpgradeInstruction
     {
         /** @var \ReleaseApp\Domain\Entities\UpgradeInstruction $response */
@@ -79,11 +55,6 @@ class HttpReleaseAppClient implements ReleaseAppClientInterface
         return $response;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Client\Request\HttpRequestInterface $request
-     *
-     * @return \ReleaseApp\Domain\Client\Response\ResponseInterface
-     */
     protected function getResponse(HttpRequestInterface $request): ResponseInterface
     {
         $guzzleRequest = $this->requestBuilder->createRequest($request);

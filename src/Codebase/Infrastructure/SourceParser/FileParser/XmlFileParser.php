@@ -36,10 +36,6 @@ abstract class XmlFileParser implements FileParserInterface
      */
     protected $sourceFinder;
 
-    /**
-     * @param \Codebase\Infrastructure\Dependency\Parser\CodebaseToParserInterface $parser
-     * @param \Codebase\Infrastructure\SourceFinder\SourceFinder $sourceFinder
-     */
     public function __construct(
         CodebaseToParserInterface $parser,
         SourceFinder $sourceFinder
@@ -50,8 +46,6 @@ abstract class XmlFileParser implements FileParserInterface
 
     /**
      * @param array<\SimpleXMLElement> $xmlElements
-     * @param string $childElement
-     * @param string $fileRealPath
      *
      * @return array<\Codebase\Application\Dto\CodebaseInterface>
      */
@@ -75,12 +69,6 @@ abstract class XmlFileParser implements FileParserInterface
         return $sources;
     }
 
-    /**
-     * @param \SimpleXMLElement $simpleXmlElement
-     * @param string $namespace
-     *
-     * @return bool
-     */
     protected function hasNamespaceInXml(SimpleXMLElement $simpleXmlElement, string $namespace): bool
     {
         return in_array($namespace, $simpleXmlElement->getNamespaces());

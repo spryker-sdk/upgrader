@@ -17,30 +17,18 @@ use Upgrade\Domain\Entity\Message;
 
 class UpgradeCommand implements ExecutableCommandInterface
 {
-    /**
-     * @var \Upgrade\Application\Service\UpgradeServiceInterface
-     */
     protected UpgradeServiceInterface $upgradeService;
 
-    /**
-     * @param \Upgrade\Application\Service\UpgradeServiceInterface $upgradeService
-     */
     public function __construct(UpgradeServiceInterface $upgradeService)
     {
         $this->upgradeService = $upgradeService;
     }
 
-    /**
-     * @return string
-     */
     public function getCommand(): string
     {
         return '';
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return 'php';
@@ -54,27 +42,16 @@ class UpgradeCommand implements ExecutableCommandInterface
         return [];
     }
 
-    /**
-     * @return bool
-     */
     public function hasStopOnError(): bool
     {
         return true;
     }
 
-    /**
-     * @return \SprykerSdk\SdkContracts\Entity\ConverterInterface|null
-     */
     public function getConverter(): ?ConverterInterface
     {
         return null;
     }
 
-    /**
-     * @param \SprykerSdk\SdkContracts\Entity\ContextInterface $context
-     *
-     * @return \SprykerSdk\SdkContracts\Entity\ContextInterface
-     */
     public function execute(ContextInterface $context): ContextInterface
     {
         $stepsExecutionDto = $this->upgradeService->upgrade();
@@ -91,9 +68,6 @@ class UpgradeCommand implements ExecutableCommandInterface
         return $context;
     }
 
-    /**
-     * @return string
-     */
     public function getStage(): string
     {
         return ContextInterface::DEFAULT_STAGE;

@@ -27,9 +27,6 @@ use Upgrade\Infrastructure\Report\Sender\ReportSenderInterface;
  */
 class OperationsReportSendProcessorTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testProcessShouldSkipWhenReportingDisabled(): void
     {
         // Arrange
@@ -46,9 +43,6 @@ class OperationsReportSendProcessorTest extends TestCase
         $operationsReportSendProcessor->process($stepsResponseDto);
     }
 
-    /**
-     * @return void
-     */
     public function testProcessShouldSendReport(): void
     {
         // Arrange
@@ -61,13 +55,10 @@ class OperationsReportSendProcessorTest extends TestCase
 
         $stepsResponseDto = new StepsResponseDto();
 
-        // Act
+    // Act
         $operationsReportSendProcessor->process($stepsResponseDto);
     }
 
-    /**
-     * @return void
-     */
     public function testProcessShouldLogErrorWhenExceptionThrown(): void
     {
         // Arrange
@@ -84,11 +75,6 @@ class OperationsReportSendProcessorTest extends TestCase
         $operationsReportSendProcessor->process($stepsResponseDto);
     }
 
-    /**
-     * @param bool $isReportingEnabled
-     *
-     * @return \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected function createConfigurationProviderMock(bool $isReportingEnabled = true): ConfigurationProviderInterface
     {
         $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
@@ -97,9 +83,6 @@ class OperationsReportSendProcessorTest extends TestCase
         return $configurationProvider;
     }
 
-    /**
-     * @return \Upgrade\Infrastructure\Report\Builder\ReportDtoBuilderInterface
-     */
     protected function createReportDtoBuilderMock(): ReportDtoBuilderInterface
     {
         $reportDtoBuilder = $this->createMock(ReportDtoBuilderInterface::class);
@@ -109,12 +92,6 @@ class OperationsReportSendProcessorTest extends TestCase
         return $reportDtoBuilder;
     }
 
-    /**
-     * @param bool $shouldBeSent
-     * @param bool $throwException
-     *
-     * @return \Upgrade\Infrastructure\Report\Sender\ReportSenderInterface
-     */
     protected function createReportSenderMock(bool $shouldBeSent, bool $throwException = false): ReportSenderInterface
     {
         $reportSender = $this->createMock(ReportSenderInterface::class);
@@ -128,11 +105,6 @@ class OperationsReportSendProcessorTest extends TestCase
         return $reportSender;
     }
 
-    /**
-     * @param bool $shouldTriggerLogging
-     *
-     * @return \Psr\Log\LoggerInterface
-     */
     protected function createLoggerMock(bool $shouldTriggerLogging): LoggerInterface
     {
         $logger = $this->createMock(LoggerInterface::class);

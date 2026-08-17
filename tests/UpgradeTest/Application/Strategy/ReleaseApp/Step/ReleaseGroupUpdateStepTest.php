@@ -51,9 +51,6 @@ use Upgrade\Infrastructure\PackageManager\ComposerAdapter;
 
 class ReleaseGroupUpdateStepTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testSequentialReleaseGroupProcessorFailedByConflicts(): void
     {
         // Arrange
@@ -88,9 +85,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRunWithSequentialReleaseGroupProcessor(): void
     {
         // Arrange
@@ -107,29 +101,26 @@ class ReleaseGroupUpdateStepTest extends TestCase
 
         $stepsResponseDto = new StepsResponseDto();
 
-        // Act
+    // Act
         $stepsResponseDto = $step->run($stepsResponseDto);
 
-        // Assert
+    // Assert
         $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             implode(PHP_EOL, [
-                'Amount of available release groups for the project: 2',
-                'Applied required packages count: 1',
-                'There are no packages for the update.',
-                'No new required-dev packages',
-                'Applied required packages count: 1',
-                'There are no packages for the update.',
-                'No new required-dev packages',
-                'Amount of applied release groups: 2',
+            'Amount of available release groups for the project: 2',
+            'Applied required packages count: 1',
+            'There are no packages for the update.',
+            'No new required-dev packages',
+            'Applied required packages count: 1',
+            'There are no packages for the update.',
+            'No new required-dev packages',
+            'Amount of applied release groups: 2',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRunWithSequentialReleaseGroupProcessorPackageManagerError(): void
     {
         // Arrange
@@ -148,7 +139,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
               Problem 3
                 - Root composer.json requires spryker/locale-gui 1.0.0 -> satisfiable by spryker/locale-gui[1.0.0].
                 - spryker/locale-gui 1.0.0 requires spryker/locale ^4.0.0 -> found spryker/locale[dev-master, 4.0.0, ..., 4.2.0] but these were not loaded, likely because it conflicts with another require.
-            OUT,
+                OUT,
         );
 
         $step = new ReleaseGroupUpdateStep(
@@ -181,14 +172,11 @@ class ReleaseGroupUpdateStepTest extends TestCase
               Problem 3
                 - Root composer.json requires spryker/locale-gui 1.0.0 -> satisfiable by spryker/locale-gui[1.0.0].
                 - spryker/locale-gui 1.0.0 requires spryker/locale ^4.0.0 -> found spryker/locale[dev-master, 4.0.0, ..., 4.2.0] but these were not loaded, likely because it conflicts with another require.
-            OUT,
+                OUT,
             $stepsResponseDto->getOutputMessage(),
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRunWithSequentialReleaseGroupProcessorApplySoftThreshold(): void
     {
         // Arrange
@@ -201,10 +189,10 @@ class ReleaseGroupUpdateStepTest extends TestCase
                 $this->createSequentialReleaseGroupProcessor(
                     [],
                     [
-                        new MajorThresholdValidator($configurationProvider),
-                        new MinorThresholdValidator($configurationProvider),
-                        new PatchThresholdValidator($configurationProvider),
-                        new ReleaseGroupThresholdValidator($configurationProvider),
+                    new MajorThresholdValidator($configurationProvider),
+                    new MinorThresholdValidator($configurationProvider),
+                    new PatchThresholdValidator($configurationProvider),
+                    new ReleaseGroupThresholdValidator($configurationProvider),
                     ],
                 ),
             ),
@@ -221,20 +209,17 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             implode(PHP_EOL, [
-                'Amount of available release groups for the project: 2',
-                'Applied required packages count: 1',
-                'There are no packages for the update.',
-                'No new required-dev packages',
-                'Soft threshold hit by 1 minor releases',
-                'Amount of applied release groups: 1',
+            'Amount of available release groups for the project: 2',
+            'Applied required packages count: 1',
+            'There are no packages for the update.',
+            'No new required-dev packages',
+            'Soft threshold hit by 1 minor releases',
+            'Amount of applied release groups: 1',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
     }
 
-    /**
-     * @return void
-     */
     public function testProcessWithSequentialReleaseGroupProcessorAndEmptyReleaseGroupDtoCollection(): void
     {
         // Arrange
@@ -256,21 +241,18 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             implode(PHP_EOL, [
-                'Amount of available release groups for the project: 0',
-                'The branch is up to date. No further action is required.',
+            'Amount of available release groups for the project: 0',
+            'The branch is up to date. No further action is required.',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
     }
 
-    /**
-     * @return void
-     */
     public function testDevMasterFilterShouldFilterReleaseAppPackages(): void
     {
         // Arrange
         $releaseGroupFilters = [
-            new DevMasterPackageFilterItem($this->createPackageManagerAdapterMock(['require' => ['spryker/product-category' => 'dev-master']])),
+        new DevMasterPackageFilterItem($this->createPackageManagerAdapterMock(['require' => ['spryker/product-category' => 'dev-master']])),
         ];
 
         $step = new ReleaseGroupUpdateStep(
@@ -293,19 +275,16 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             implode(PHP_EOL, [
-                'Amount of available release groups for the project: 2',
-                'Applied required packages count: 1',
-                'There are no packages for the update.',
-                'No new required-dev packages',
-                'Amount of applied release groups: 1',
+            'Amount of available release groups for the project: 2',
+            'Applied required packages count: 1',
+            'There are no packages for the update.',
+            'No new required-dev packages',
+            'Amount of applied release groups: 1',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRunReturnsResponseDtoWithStatData(): void
     {
         // Assert
@@ -334,9 +313,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRunWithWithBetaMajorReleasesThatNotInstalledInProjectShouldBeSkipped(): void
     {
         // Arrange
@@ -346,7 +322,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $step = new ReleaseGroupUpdateStep(
             $this->creteReleaseAppClientAdapterMock(
                 $this->buildReleaseGroupDtoCollectionByModules([
-                    new ModuleDto('spryker/picking-lists-backend-api', '0.1.1', ReleaseAppConstant::MODULE_TYPE_MINOR),
+                new ModuleDto('spryker/picking-lists-backend-api', '0.1.1', ReleaseAppConstant::MODULE_TYPE_MINOR),
                 ]),
             ),
             $this->creteReleaseGroupProcessorResolverMock(
@@ -369,15 +345,12 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             implode(PHP_EOL, [
-                'Amount of available release groups for the project: 1',
+            'Amount of available release groups for the project: 1',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRunWithWithBetaMajorReleasesThatInstalledInProjectShouldTriggerValidationError(): void
     {
         // Arrange
@@ -411,17 +384,14 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             implode(PHP_EOL, [
-                'Amount of available release groups for the project: 1',
-                'There is a major release available for module spryker/picking-lists-backend-api. Please follow the link'
-                . " below to find all documentation needed to help you upgrade to the latest release \nhttps://api.release.spryker.com/release-groups/view/1",
+            'Amount of available release groups for the project: 1',
+            'There is a major release available for module spryker/picking-lists-backend-api. Please follow the link'
+            . " below to find all documentation needed to help you upgrade to the latest release \nhttps://api.release.spryker.com/release-groups/view/1",
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRunWithWithManualChangesThatInstalledInProjectShouldTriggerValidationError(): void
     {
         // Arrange
@@ -458,20 +428,14 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertTrue($stepsResponseDto->isSuccessful());
         $this->assertSame(
             implode(PHP_EOL, [
-                'Amount of available release groups for the project: 2',
-                'This release needs manual changes, please follow migration guide. Please follow the link below to find all documentation needed to help you upgrade to the latest release ',
-                'https://api.release.spryker.com/release-groups/view/1',
+            'Amount of available release groups for the project: 2',
+            'This release needs manual changes, please follow migration guide. Please follow the link below to find all documentation needed to help you upgrade to the latest release ',
+            'https://api.release.spryker.com/release-groups/view/1',
             ]),
             $stepsResponseDto->getOutputMessage(),
         );
     }
 
-    /**
-     * @param bool $isLockDevPackage
-     * @param string|null $lockPackageVersion
-     *
-     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected function createPackageManagerAdapterMockForBetaMajorTests(bool $isLockDevPackage, ?string $lockPackageVersion): PackageManagerAdapterInterface
     {
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
@@ -481,46 +445,28 @@ class ReleaseGroupUpdateStepTest extends TestCase
         return $packageManagerAdapter;
     }
 
-    /**
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface $processor
-     *
-     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver
-     */
     protected function creteReleaseGroupProcessorResolverMock(ReleaseGroupProcessorInterface $processor): ReleaseGroupProcessorResolver
     {
         $composerAdapterMock = $this->getMockBuilder(ReleaseGroupProcessorResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        ->disableOriginalConstructor()
+        ->getMock();
         $composerAdapterMock->method('getProcessor')->willReturn($processor);
 
         return $composerAdapterMock;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $releaseGroupDtoCollection
-     *
-     * @return \Upgrade\Infrastructure\Adapter\ReleaseAppClientAdapter
-     */
     protected function creteReleaseAppClientAdapterMock(ReleaseGroupDtoCollection $releaseGroupDtoCollection): ReleaseAppClientAdapter
     {
         $releaseAppResponse = new ReleaseAppResponse($releaseGroupDtoCollection);
         $composerAdapterMock = $this->getMockBuilder(ReleaseAppClientAdapter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        ->disableOriginalConstructor()
+        ->getMock();
         $composerAdapterMock->method('getNewReleaseGroups')->willReturn($releaseAppResponse);
         $composerAdapterMock->method('getReleaseGroup')->willReturn($releaseAppResponse);
 
         return $composerAdapterMock;
     }
 
-    /**
-     * @param array $releaseGroupFilters
-     * @param array $thresholdSoftValidators
-     * @param array $releaseGroupValidators
-     * @param \Upgrade\Application\Dto\PackageManagerResponseDto|null $packageManagerResponseDto
-     *
-     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\SequentialReleaseGroupProcessor
-     */
     protected function createSequentialReleaseGroupProcessor(
         array $releaseGroupFilters = [],
         array $thresholdSoftValidators = [],
@@ -530,8 +476,8 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $responseDto = $packageManagerResponseDto ?? new PackageManagerResponseDto(true);
 
         $composerAdapterMock = $this->getMockBuilder(ComposerAdapter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        ->disableOriginalConstructor()
+        ->getMock();
         $composerAdapterMock->method('require')->willReturn($responseDto);
         $composerAdapterMock->method('requireDev')->willReturn($responseDto);
         $moduleFetcher = new ModuleFetcher(
@@ -554,70 +500,61 @@ class ReleaseGroupUpdateStepTest extends TestCase
         );
     }
 
-    /**
-     * @param bool $conflictDetected
-     *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection
-     */
     protected function buildReleaseGroupDtoCollection(bool $conflictDetected = false): ReleaseGroupDtoCollection
     {
         return new ReleaseGroupDtoCollection([
-            new ReleaseGroupDto(
-                1,
-                'RG1',
-                new ModuleDtoCollection([
-                    new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
-                ]),
-                new ModuleDtoCollection(),
-                new ModuleDtoCollection(),
-                new DateTime(),
-                false,
-                'https://api.release.spryker.com/release-groups/view/1',
-                100,
-            ),
-            new ReleaseGroupDto(
-                1,
-                'RG2',
-                new ModuleDtoCollection([
-                    new ModuleDto('spryker/oauth-backend-api', '1.1.1', 'path'),
-                ]),
-                new ModuleDtoCollection(),
-                new ModuleDtoCollection(),
-                new DateTime(),
-                true,
-                'https://api.release.spryker.com/release-groups/view/2',
-                100,
-                $conflictDetected,
-            ),
+        new ReleaseGroupDto(
+            1,
+            'RG1',
+            new ModuleDtoCollection([
+                new ModuleDto('spryker/product-category', '4.17.0', 'minor'),
+            ]),
+            new ModuleDtoCollection(),
+            new ModuleDtoCollection(),
+            new DateTime(),
+            false,
+            'https://api.release.spryker.com/release-groups/view/1',
+            100,
+        ),
+        new ReleaseGroupDto(
+            1,
+            'RG2',
+            new ModuleDtoCollection([
+                new ModuleDto('spryker/oauth-backend-api', '1.1.1', 'path'),
+            ]),
+            new ModuleDtoCollection(),
+            new ModuleDtoCollection(),
+            new DateTime(),
+            true,
+            'https://api.release.spryker.com/release-groups/view/2',
+            100,
+            $conflictDetected,
+        ),
         ]);
     }
 
     /**
      * @param array<\ReleaseApp\Infrastructure\Shared\Dto\ModuleDto> $moduleDtoCollection
-     *
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection
      */
     protected function buildReleaseGroupDtoCollectionByModules(array $moduleDtoCollection): ReleaseGroupDtoCollection
     {
         return new ReleaseGroupDtoCollection([
-            new ReleaseGroupDto(
-                1,
-                'RG1',
-                new ModuleDtoCollection($moduleDtoCollection),
-                new ModuleDtoCollection(),
-                new ModuleDtoCollection(),
-                new DateTime(),
-                false,
-                'https://api.release.spryker.com/release-groups/view/1',
-                100,
-            ),
+        new ReleaseGroupDto(
+            1,
+            'RG1',
+            new ModuleDtoCollection($moduleDtoCollection),
+            new ModuleDtoCollection(),
+            new ModuleDtoCollection(),
+            new DateTime(),
+            false,
+            'https://api.release.spryker.com/release-groups/view/1',
+            100,
+        ),
         ]);
     }
 
     /**
      * @param array<string, mixed> $composerJson
-     *
-     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
     protected function createPackageManagerAdapterMock(array $composerJson = []): PackageManagerAdapterInterface
     {
@@ -628,28 +565,21 @@ class ReleaseGroupUpdateStepTest extends TestCase
     }
 
     /**
-     * @param string $package
-     * @param string $version
      * @param array<string, mixed> $composerJson
-     *
-     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
      */
     protected function createPackageManagerPackageVersionAdapterMock(string $package, string $version, array $composerJson = []): PackageManagerAdapterInterface
     {
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManagerAdapter
-            ->method('getPackageVersion')
-            ->with($package)->willReturn($version);
+        ->method('getPackageVersion')
+        ->with($package)->willReturn($version);
         $packageManagerAdapter
-            ->method('getComposerJsonFile')
-            ->willReturn($composerJson);
+        ->method('getComposerJsonFile')
+        ->willReturn($composerJson);
 
         return $packageManagerAdapter;
     }
 
-    /**
-     * @return \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected function createConfigurationProviderMock(): ConfigurationProvider
     {
         $configurationProvider = $this->createMock(ConfigurationProvider::class);
@@ -662,18 +592,10 @@ class ReleaseGroupUpdateStepTest extends TestCase
         return $configurationProvider;
     }
 
-    /**
-     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface
-     */
     protected function createPackageManagerPackagesFetcherMock(): PackageManagerPackagesFetcherInterface
     {
         return new class () implements PackageManagerPackagesFetcherInterface
         {
-            /**
-             * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-             *
-             * @return \Upgrade\Application\Dto\PackageManagerPackagesDto
-             */
             public function fetchPackages(PackageCollection $packageCollection): PackageManagerPackagesDto
             {
                 return new PackageManagerPackagesDto($packageCollection, new PackageCollection([]), new PackageCollection([]));
@@ -681,9 +603,6 @@ class ReleaseGroupUpdateStepTest extends TestCase
         };
     }
 
-    /**
-     * @return \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
     protected function createEventDispatcherMock(): EventDispatcherInterface
     {
         return $this->createMock(EventDispatcherInterface::class);

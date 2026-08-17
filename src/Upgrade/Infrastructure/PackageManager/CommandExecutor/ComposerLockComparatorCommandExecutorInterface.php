@@ -13,8 +13,5 @@ use Upgrade\Application\Dto\ComposerLockDiffDto;
 
 interface ComposerLockComparatorCommandExecutorInterface
 {
-    /**
-     * @return \Upgrade\Application\Dto\ComposerLockDiffDto
-     */
     public function getComposerLockDiff(): ComposerLockDiffDto;
 }

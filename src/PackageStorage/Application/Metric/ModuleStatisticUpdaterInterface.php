@@ -13,17 +13,7 @@ use Upgrade\Application\Dto\StepsResponseDto;
 
 interface ModuleStatisticUpdaterInterface
 {
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function updateStatisticPreRequire(StepsResponseDto $stepsResponseDto): StepsResponseDto;
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function updateStatisticPostRequire(StepsResponseDto $stepsResponseDto): StepsResponseDto;
 }

@@ -28,11 +28,6 @@ class ReleaseGroupSoftValidator implements ReleaseGroupSoftValidatorInterface
         $this->validatorList = $validatorList;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroup
-     *
-     * @return \Upgrade\Application\Dto\ValidatorViolationDto|null
-     */
     public function isValidReleaseGroup(ReleaseGroupDto $releaseGroup): ?ValidatorViolationDto
     {
         try {

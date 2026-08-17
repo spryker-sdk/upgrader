@@ -23,9 +23,6 @@ use Upgrader\Configuration\ConfigurationProvider;
 
 class ComposerJsonConstraintFixStepTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testRunShouldSkipStepWhenGrepNothingFound(): void
     {
         // Arrange
@@ -49,9 +46,6 @@ class ComposerJsonConstraintFixStepTest extends TestCase
         $this->assertSame($stepResponseDto, $returnStepsResponse);
     }
 
-    /**
-     * @return void
-     */
     public function testRunShouldSkipStepWhenNoPackagesFound(): void
     {
         // Arrange
@@ -68,16 +62,13 @@ class ComposerJsonConstraintFixStepTest extends TestCase
 
         $stepResponseDto = new StepsResponseDto();
 
-        // Act
+    // Act
         $returnStepsResponse = $composerJsonConstraintFixStep->run($stepResponseDto);
 
-        // Assert
+    // Assert
         $this->assertSame($stepResponseDto, $returnStepsResponse);
     }
 
-    /**
-     * @return void
-     */
     public function testRunShouldWriteUpdatedJson(): void
     {
         // Arrange
@@ -95,7 +86,7 @@ class ComposerJsonConstraintFixStepTest extends TestCase
             +        "spryker/acl": "1.1.*",
             +        "symfony/kernel": "6.1.*",
             +        "symfony/uuid": "5.1.0",
-            OUT,
+                OUT,
         );
 
         $filesystem = $this->createMock(Filesystem::class);
@@ -122,7 +113,7 @@ class ComposerJsonConstraintFixStepTest extends TestCase
                     "symfony/kernel": "6.1.*",
                     "symfony/uuid": "5.1.0"
                 }
-            FILE,
+                FILE,
         );
         $filesystem->expects($this->once())->method('dumpFile')->with($this->stringEndsWith('composer.json'), $this->equalTo(
             <<<FILE
@@ -147,7 +138,7 @@ class ComposerJsonConstraintFixStepTest extends TestCase
                     "symfony/kernel": "6.1.*",
                     "symfony/uuid": "5.1.0"
                 }
-            FILE,
+                FILE,
         ));
 
         $composerJsonConstraintFixStep = new ComposerJsonConstraintFixStep(
@@ -168,11 +159,6 @@ class ComposerJsonConstraintFixStepTest extends TestCase
         $this->assertSame($stepResponseDto, $returnStepsResponse);
     }
 
-    /**
-     * @param bool $expectWriting
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\Filesystem
-     */
     protected function createFilesystemMock(bool $expectWriting = true): Filesystem
     {
         $filesystem = $this->createMock(Filesystem::class);
@@ -182,11 +168,6 @@ class ComposerJsonConstraintFixStepTest extends TestCase
         return $filesystem;
     }
 
-    /**
-     * @param \Symfony\Component\Process\Process $process
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected function createProcessRunnerServiceMock(Process $process): ProcessRunnerServiceInterface
     {
         $processRunnerService = $this->createMock(ProcessRunnerServiceInterface::class);
@@ -195,12 +176,6 @@ class ComposerJsonConstraintFixStepTest extends TestCase
         return $processRunnerService;
     }
 
-    /**
-     * @param string $output
-     * @param int $exitCode
-     *
-     * @return \Symfony\Component\Process\Process
-     */
     protected function createProcessMock(string $output = '', int $exitCode = 0): Process
     {
         $process = $this->createMock(Process::class);
@@ -210,11 +185,6 @@ class ComposerJsonConstraintFixStepTest extends TestCase
         return $process;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $managerResponseDto
-     *
-     * @return \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected function createPackageManagerAdapterMock(PackageManagerResponseDto $managerResponseDto): PackageManagerAdapterInterface
     {
         $packageManagerAdapter = $this->createMock(PackageManagerAdapterInterface::class);
@@ -223,11 +193,6 @@ class ComposerJsonConstraintFixStepTest extends TestCase
         return $packageManagerAdapter;
     }
 
-    /**
-     * @param bool $expectsErrorLog
-     *
-     * @return \Psr\Log\LoggerInterface
-     */
     protected function createLoggerMock(bool $expectsErrorLog = false): LoggerInterface
     {
         $logger = $this->createMock(LoggerInterface::class);

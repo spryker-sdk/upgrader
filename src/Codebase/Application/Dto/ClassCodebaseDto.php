@@ -16,9 +16,6 @@ use ReflectionClass;
  */
 class ClassCodebaseDto extends AbstractCodebaseDto
 {
-    /**
-     * @var bool
-     */
     protected bool $extendsCore = false;
 
     /**
@@ -146,8 +143,6 @@ class ClassCodebaseDto extends AbstractCodebaseDto
 
     /**
      * @param array<\ReflectionMethod> $projectMethods
-     *
-     * @return void
      */
     public function setProjectMethods(array $projectMethods): void
     {
@@ -164,8 +159,6 @@ class ClassCodebaseDto extends AbstractCodebaseDto
 
     /**
      * @param array<\ReflectionMethod> $coreMethods
-     *
-     * @return void
      */
     public function setCoreMethods(array $coreMethods): void
     {
@@ -182,27 +175,17 @@ class ClassCodebaseDto extends AbstractCodebaseDto
 
     /**
      * @param array<\ReflectionMethod> $coreInterfacesMethods
-     *
-     * @return void
      */
     public function setCoreInterfacesMethods(array $coreInterfacesMethods): void
     {
         $this->coreInterfacesMethods = $coreInterfacesMethods;
     }
 
-    /**
-     * @return bool
-     */
     public function isExtendCore(): bool
     {
         return $this->extendsCore;
     }
 
-    /**
-     * @param bool $extendsCore
-     *
-     * @return void
-     */
     public function setExtendCore(bool $extendsCore): void
     {
         $this->extendsCore = $extendsCore;

@@ -15,11 +15,6 @@ use Upgrade\Application\Strategy\StepInterface;
 
 class GenerateReportIdStep extends AbstractStep implements StepInterface
 {
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         return $stepsExecutionDto->setReportId(Uuid::v4()->toRfc4122());

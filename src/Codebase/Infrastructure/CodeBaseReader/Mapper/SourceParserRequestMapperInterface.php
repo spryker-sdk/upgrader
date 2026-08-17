@@ -16,11 +16,7 @@ use Codebase\Application\Dto\SourceParserRequestDto;
 interface SourceParserRequestMapperInterface
 {
     /**
-     * @param \Codebase\Application\Dto\CodeBaseRequestDto $codebaseRequestDto
-     * @param \Codebase\Application\Dto\ConfigurationResponseDto $configurationResponseDto
      * @param array<\Codebase\Application\Dto\ModuleDto> $modules
-     *
-     * @return \Codebase\Application\Dto\SourceParserRequestDto
      */
     public function mapToSourceParserRequest(
         CodeBaseRequestDto $codebaseRequestDto,

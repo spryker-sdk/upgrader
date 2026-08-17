@@ -15,26 +15,12 @@ use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 
 class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
 {
-    /**
-     * @var \PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface
-     */
     protected PackagesDirProviderInterface $packagesDirProvider;
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
-     */
     protected ProcessRunnerServiceInterface $processRunner;
 
-    /**
-     * @var \PackageStorage\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface
-     */
     protected PublicApiFilePathsProviderInterface $publicApiFilePathsProvider;
 
-    /**
-     * @param \PackageStorage\Application\PackagesSynchronizer\PackagesDirProviderInterface $packagesDirProvider
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
-     * @param \PackageStorage\Application\PublicApiFilePathsProvider\PublicApiFilePathsProviderInterface $publicApiFilePathsProvider
-     */
     public function __construct(
         PackagesDirProviderInterface $packagesDirProvider,
         ProcessRunnerServiceInterface $processRunner,
@@ -60,8 +46,6 @@ class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
     }
 
     /**
-     * @param string $dir
-     *
      * @return array<string>
      */
     protected function executeCommandForDir(string $dir): array
@@ -83,12 +67,6 @@ class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
         );
     }
 
-    /**
-     * @param string $fromDir
-     * @param string $toDir
-     *
-     * @return string
-     */
     protected function getCommand(string $fromDir, string $toDir): string
     {
         return strtr(
@@ -113,9 +91,6 @@ class VendorChangedFilesFetcher implements VendorChangedFilesFetcherInterface
         );
     }
 
-    /**
-     * @return string
-     */
     protected function getExcludedPublicApiFiles(): string
     {
         return implode(

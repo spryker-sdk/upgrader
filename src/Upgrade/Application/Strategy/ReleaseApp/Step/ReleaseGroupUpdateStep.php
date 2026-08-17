@@ -18,32 +18,14 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class ReleaseGroupUpdateStep implements StepInterface
 {
-    /**
-     * @var \Upgrade\Application\Adapter\ReleaseAppClientAdapterInterface
-     */
     protected ReleaseAppClientAdapterInterface $packageManagementSystemBridge;
 
-    /**
-     * @var \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver
-     */
     protected ReleaseGroupProcessorResolver $groupRequireProcessorResolver;
 
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     private ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
     protected LoggerInterface $logger;
 
-    /**
-     * @param \Upgrade\Application\Adapter\ReleaseAppClientAdapterInterface $packageManagementSystemBridge
-     * @param \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorResolver $groupRequireProcessorResolver
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Psr\Log\LoggerInterface $logger
-     */
     public function __construct(
         ReleaseAppClientAdapterInterface $packageManagementSystemBridge,
         ReleaseGroupProcessorResolver $groupRequireProcessorResolver,
@@ -56,11 +38,6 @@ class ReleaseGroupUpdateStep implements StepInterface
         $this->logger = $logger;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function run(StepsResponseDto $stepsExecutionDto): StepsResponseDto
     {
         $releaseGroupId = $this->configurationProvider->getReleaseGroupId();

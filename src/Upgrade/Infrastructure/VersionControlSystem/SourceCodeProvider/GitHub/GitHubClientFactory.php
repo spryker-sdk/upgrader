@@ -17,34 +17,18 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class GitHubClientFactory
 {
-    /**
-     * @var \Github\Client|null
-     */
     protected ?Client $client = null;
 
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \Psr\Http\Client\ClientInterface
-     */
     protected ClientInterface $httpClient;
 
-    /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
-     * @param \Psr\Http\Client\ClientInterface $httpClient
-     */
     public function __construct(ConfigurationProvider $configurationProvider, ClientInterface $httpClient)
     {
         $this->configurationProvider = $configurationProvider;
         $this->httpClient = $httpClient;
     }
 
-    /**
-     * @return \Github\Client
-     */
     public function getClient(): Client
     {
         if ($this->client === null) {
@@ -54,9 +38,6 @@ class GitHubClientFactory
         return $this->client;
     }
 
-    /**
-     * @return \Github\Client
-     */
     protected function createClient(): Client
     {
         $builder = new Builder($this->httpClient);

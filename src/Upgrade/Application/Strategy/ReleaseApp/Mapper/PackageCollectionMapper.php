@@ -17,24 +17,13 @@ use Upgrade\Domain\Entity\Package;
 
 class PackageCollectionMapper implements PackageCollectionMapperInterface
 {
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManager;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
-     */
     public function __construct(PackageManagerAdapterInterface $packageManager)
     {
         $this->packageManager = $packageManager;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ModuleDtoCollection $moduleCollection
-     *
-     * @return \Upgrade\Domain\Entity\Collection\PackageCollection
-     */
     public function mapModuleCollectionToPackageCollection(ModuleDtoCollection $moduleCollection): PackageCollection
     {
         $packageCollection = new PackageCollection();

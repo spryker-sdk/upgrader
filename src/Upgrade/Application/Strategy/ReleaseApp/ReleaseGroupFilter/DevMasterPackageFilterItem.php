@@ -22,9 +22,6 @@ class DevMasterPackageFilterItem implements ReleaseGroupFilterItemInterface
      */
     protected const DEV_MASTER_PREFIX = 'dev-master';
 
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManager;
 
     /**
@@ -32,19 +29,11 @@ class DevMasterPackageFilterItem implements ReleaseGroupFilterItemInterface
      */
     protected ?array $devMasterModules = null;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManager
-     */
     public function __construct(PackageManagerAdapterInterface $packageManager)
     {
         $this->packageManager = $packageManager;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
-     *
-     * @return \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto
-     */
     public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupFilterResponseDto
     {
         $devMasterModules = $this->getProjectDevMasterPackages();

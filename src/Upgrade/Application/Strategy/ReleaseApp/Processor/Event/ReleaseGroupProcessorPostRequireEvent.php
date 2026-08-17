@@ -19,24 +19,14 @@ class ReleaseGroupProcessorPostRequireEvent extends ReleaseGroupProcessorEvent
      */
     public const POST_REQUIRE = 'POST_REQUIRE';
 
-    /**
-     * @var \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     protected PackageManagerResponseDto $packageManagerResponseDto;
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsExecutionDto
-     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $packageManagerResponseDto
-     */
     public function __construct(StepsResponseDto $stepsExecutionDto, PackageManagerResponseDto $packageManagerResponseDto)
     {
         parent::__construct($stepsExecutionDto);
         $this->packageManagerResponseDto = $packageManagerResponseDto;
     }
 
-    /**
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function getPackageManagerResponseDto(): PackageManagerResponseDto
     {
         return $this->packageManagerResponseDto;

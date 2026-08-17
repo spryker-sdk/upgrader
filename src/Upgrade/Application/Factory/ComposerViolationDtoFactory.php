@@ -19,11 +19,6 @@ class ComposerViolationDtoFactory
      */
     public const VIOLATION_TITLE = 'Composer issues';
 
-    /**
-     * @param \Upgrade\Application\Dto\PackageManagerResponseDto $packageManagerResponseDto
-     *
-     * @return \Upgrade\Application\Dto\ValidatorViolationDto
-     */
     public function createFromPackageManagerResponse(PackageManagerResponseDto $packageManagerResponseDto): ValidatorViolationDto
     {
         $errorMessage = $packageManagerResponseDto->getOutputMessage() ?? 'Module fetcher error';

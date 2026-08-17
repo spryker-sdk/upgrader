@@ -13,10 +13,5 @@ use Codebase\Application\Dto\ConfigurationResponseDto;
 
 interface ToolingConfigurationReaderInterface
 {
-    /**
-     * @param string $configurationFilePath
-     *
-     * @return \Codebase\Application\Dto\ConfigurationResponseDto
-     */
     public function readToolingConfiguration(string $configurationFilePath): ConfigurationResponseDto;
 }

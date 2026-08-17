@@ -11,11 +11,6 @@ namespace Upgrade\Infrastructure\VersionControlSystem\Generator;
 
 class OutputMessageBuilder
 {
-    /**
-     * @param string $prLink
-     *
-     * @return string
-     */
     public function buildOutputMessage(string $prLink): string
     {
         $outputMessage = sprintf('Link to pull request %s', $prLink);

@@ -19,9 +19,6 @@ use Upgrade\Infrastructure\Executor\IntegratorExecutor;
 
 class IntegratorExecutorTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testRunIntegratorShouldRunCommandWithoutModules(): void
     {
         // Arrange
@@ -35,9 +32,6 @@ class IntegratorExecutorTest extends TestCase
         $integratorExecutor->runIntegrator($stepsExecutionDto);
     }
 
-    /**
-     * @return void
-     */
     public function testRunIntegratorShouldRunCommandWithModules(): void
     {
         // Arrange
@@ -47,20 +41,18 @@ class IntegratorExecutorTest extends TestCase
         $integratorExecutor = new IntegratorExecutor($processRunnerMock);
         $stepsExecutionDto = new StepsResponseDto();
 
-        //Act
+    //Act
         $integratorExecutor->runIntegrator(
             $stepsExecutionDto,
             [
-                new ModuleDto('spryker/acl', '1.0.1', ReleaseAppConstant::MODULE_TYPE_PATCH),
-                new ModuleDto('spryker-shop/company-page', '2.0.0', ReleaseAppConstant::MODULE_TYPE_MAJOR),
+            new ModuleDto('spryker/acl', '1.0.1', ReleaseAppConstant::MODULE_TYPE_PATCH),
+            new ModuleDto('spryker-shop/company-page', '2.0.0', ReleaseAppConstant::MODULE_TYPE_MAJOR),
             ],
         );
     }
 
     /**
      * @param array<string> $expectedCommand
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
     protected function createProcessRunnerServiceMock(array $expectedCommand): ProcessRunnerServiceInterface
     {
@@ -71,10 +63,10 @@ class IntegratorExecutorTest extends TestCase
         $process->method('getOutput')->willReturn('[]');
 
         $processRunnerService
-            ->expects($this->once())
-            ->method('run')
-            ->with($this->equalTo($expectedCommand))
-            ->willReturn($process);
+        ->expects($this->once())
+        ->method('run')
+        ->with($this->equalTo($expectedCommand))
+        ->willReturn($process);
 
         return $processRunnerService;
     }

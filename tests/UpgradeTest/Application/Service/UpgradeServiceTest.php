@@ -21,9 +21,6 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class UpgradeServiceTest extends KernelTestCase
 {
-    /**
-     * @return void
-     */
     public function testUpgradeWithoutAccessToken(): void
     {
         $configurationProviderMock = $this->createMock(ConfigurationProvider::class);
@@ -49,9 +46,6 @@ class UpgradeServiceTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testUpgradeShouldCollectExceptionWhenItThrows(): void
     {
         $this->expectException(Exception::class);
@@ -73,9 +67,6 @@ class UpgradeServiceTest extends KernelTestCase
         $service->upgrade();
     }
 
-    /**
-     * @return \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
     public function createEventDispatcherMock(): EventDispatcherInterface
     {
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);

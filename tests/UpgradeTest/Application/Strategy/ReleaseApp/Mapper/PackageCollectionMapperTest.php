@@ -20,9 +20,6 @@ use Upgrade\Infrastructure\PackageManager\ComposerAdapter;
 
 class PackageCollectionMapperTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testMapModuleCollectionToPackageCollection(): void
     {
         $mapper = new PackageCollectionMapper($this->createMock(ComposerAdapter::class));

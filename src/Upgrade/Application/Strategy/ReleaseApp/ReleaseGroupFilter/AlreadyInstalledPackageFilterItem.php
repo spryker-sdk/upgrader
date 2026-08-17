@@ -17,24 +17,13 @@ use Upgrade\Application\Strategy\ReleaseApp\ReleaseAppPackageHelper;
 
 class AlreadyInstalledPackageFilterItem implements ReleaseGroupFilterItemInterface
 {
-    /**
-     * @var \Upgrade\Application\Adapter\PackageManagerAdapterInterface
-     */
     protected PackageManagerAdapterInterface $packageManagerAdapter;
 
-    /**
-     * @param \Upgrade\Application\Adapter\PackageManagerAdapterInterface $packageManagerAdapter
-     */
     public function __construct(PackageManagerAdapterInterface $packageManagerAdapter)
     {
         $this->packageManagerAdapter = $packageManagerAdapter;
     }
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\ReleaseGroupDto $releaseGroupDto
-     *
-     * @return \Upgrade\Application\Dto\ReleaseGroupFilterResponseDto
-     */
     public function filter(ReleaseGroupDto $releaseGroupDto): ReleaseGroupFilterResponseDto
     {
         $filteredModuleCollection = new ModuleDtoCollection();

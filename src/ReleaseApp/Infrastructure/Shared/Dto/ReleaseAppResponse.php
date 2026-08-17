@@ -13,22 +13,13 @@ use ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection;
 
 class ReleaseAppResponse
 {
-    /**
-     * @var \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection
-     */
     protected ReleaseGroupDtoCollection $releaseGroupCollection;
 
-    /**
-     * @param \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection $releaseGroupCollection
-     */
     public function __construct(ReleaseGroupDtoCollection $releaseGroupCollection)
     {
         $this->releaseGroupCollection = $releaseGroupCollection;
     }
 
-    /**
-     * @return \ReleaseApp\Infrastructure\Shared\Dto\Collection\ReleaseGroupDtoCollection
-     */
     public function getReleaseGroupCollection(): ReleaseGroupDtoCollection
     {
         return $this->releaseGroupCollection;

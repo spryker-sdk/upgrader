@@ -17,9 +17,6 @@ use Upgrade\Infrastructure\PackageManager\Reader\ComposerReaderInterface;
 
 class ComposerAdapterTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testIsDevPackageShouldReturnValidValue(): void
     {
         // Arrange
@@ -49,8 +46,6 @@ class ComposerAdapterTest extends TestCase
 
     /**
      * @param array<mixed> $returnValues
-     *
-     * @return \Upgrade\Infrastructure\PackageManager\Reader\ComposerReaderInterface
      */
     protected function createComposerReaderMock(array $returnValues): ComposerReaderInterface
     {
@@ -60,15 +55,12 @@ class ComposerAdapterTest extends TestCase
         return $composerReader;
     }
 
-    /**
-     * @return void
-     */
     public function testGetPackageConstraintShouldReturnNullIfConstraintNotFound(): void
     {
         // Arrange
         $composerJson = [
-            'require' => ['spryker/acl' => '^1.2.0'],
-            'require-dev' => ['spryker/dev' => '^2.2.0'],
+        'require' => ['spryker/acl' => '^1.2.0'],
+        'require-dev' => ['spryker/dev' => '^2.2.0'],
         ];
 
         $composerAdapter = new ComposerAdapter(
@@ -85,15 +77,12 @@ class ComposerAdapterTest extends TestCase
         $this->assertNull($result);
     }
 
-    /**
-     * @return void
-     */
     public function testGetPackageConstraintShouldReturnRequireConstraint(): void
     {
         // Arrange
         $composerJson = [
-            'require' => ['spryker/acl' => '^1.2.0'],
-            'require-dev' => ['spryker/dev' => '^2.2.0'],
+        'require' => ['spryker/acl' => '^1.2.0'],
+        'require-dev' => ['spryker/dev' => '^2.2.0'],
         ];
 
         $composerAdapter = new ComposerAdapter(
@@ -106,19 +95,16 @@ class ComposerAdapterTest extends TestCase
         // Act
         $result = $composerAdapter->getPackageConstraint('spryker/acl');
 
-        // Assert
+    // Assert
         $this->assertSame('^1.2.0', $result);
     }
 
-    /**
-     * @return void
-     */
     public function testGetPackageConstraintShouldReturnRequireDevConstraint(): void
     {
         // Arrange
         $composerJson = [
-            'require' => ['spryker/acl' => '^1.2.0'],
-            'require-dev' => ['spryker/dev' => '^2.2.0'],
+        'require' => ['spryker/acl' => '^1.2.0'],
+        'require-dev' => ['spryker/dev' => '^2.2.0'],
         ];
 
         $composerAdapter = new ComposerAdapter(
@@ -135,9 +121,6 @@ class ComposerAdapterTest extends TestCase
         $this->assertSame('^2.2.0', $result);
     }
 
-    /**
-     * @return void
-     */
     public function testUpdateLockHashShouldInvokeComposerCommandExecutor(): void
     {
         // Arrange & Assert

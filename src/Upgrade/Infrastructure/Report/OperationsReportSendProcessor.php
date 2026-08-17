@@ -19,32 +19,14 @@ use Upgrade\Infrastructure\Report\Sender\ReportSenderInterface;
 
 class OperationsReportSendProcessor implements ReportSendProcessorInterface
 {
-    /**
-     * @var \Upgrade\Application\Provider\ConfigurationProviderInterface
-     */
     protected ConfigurationProviderInterface $configurationProvider;
 
-    /**
-     * @var \Upgrade\Infrastructure\Report\Builder\ReportDtoBuilderInterface
-     */
     protected ReportDtoBuilderInterface $reportDtoBuilder;
 
-    /**
-     * @var \Upgrade\Infrastructure\Report\Sender\ReportSenderInterface
-     */
     protected ReportSenderInterface $reportSender;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
     protected LoggerInterface $logger;
 
-    /**
-     * @param \Upgrade\Application\Provider\ConfigurationProviderInterface $configurationProvider
-     * @param \Upgrade\Infrastructure\Report\Builder\ReportDtoBuilderInterface $reportDtoBuilder
-     * @param \Upgrade\Infrastructure\Report\Sender\ReportSenderInterface $reportSender
-     * @param \Psr\Log\LoggerInterface $logger
-     */
     public function __construct(
         ConfigurationProviderInterface $configurationProvider,
         ReportDtoBuilderInterface $reportDtoBuilder,
@@ -57,11 +39,6 @@ class OperationsReportSendProcessor implements ReportSendProcessorInterface
         $this->logger = $logger;
     }
 
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Application\Dto\StepsResponseDto
-     */
     public function process(StepsResponseDto $stepsResponseDto): StepsResponseDto
     {
         if (!$this->configurationProvider->isReportingEnabled()) {

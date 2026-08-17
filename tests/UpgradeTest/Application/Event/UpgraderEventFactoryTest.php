@@ -17,9 +17,6 @@ use Upgrade\Infrastructure\Configuration\ConfigurationProvider;
 
 class UpgraderEventFactoryTest extends KernelTestCase
 {
-    /**
-     * @return void
-     */
     public function testCreateUpgraderStartedEventShouldReturnStartedEvent(): void
     {
         // Arrange
@@ -40,9 +37,6 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $this->assertSame($workspaceName, $event->getPayLoad()['workspaceName']);
     }
 
-    /**
-     * @return void
-     */
     public function testCreateUpgraderStartedEventShouldReturnStartedEventWithUuid(): void
     {
         // Arrange
@@ -53,16 +47,13 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $configurationProviderMock = $this->createConfigurationProviderMock($organizationName, $repositoryName, $ciExecutionId, $workspaceName);
         $upgraderEventFactory = new UpgraderEventFactory($configurationProviderMock);
 
-        // Act
+    // Act
         $event = $upgraderEventFactory->createUpgraderStartedEvent();
 
-        // Assert
+    // Assert
         $this->assertMatchesRegularExpression('/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/', $event->getPayLoad()['ciExecutionId']);
     }
 
-    /**
-     * @return void
-     */
     public function testCreateUpgraderFinishedEventShouldReturnFinishedClientEvent(): void
     {
         // Arrange
@@ -91,9 +82,6 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $this->assertSame('client_error', $payload['reason']);
     }
 
-    /**
-     * @return void
-     */
     public function testCreateUpgraderFinishedEventShouldNonClientNonReasonEventWhenNoErrorRaised(): void
     {
         // Arrange
@@ -121,9 +109,6 @@ class UpgraderEventFactoryTest extends KernelTestCase
         $this->assertSame('', $payload['reason']);
     }
 
-    /**
-     * @return void
-     */
     public function testCreateUpgraderFinishedEventContainsRgStatDataIfSet(): void
     {
         // Arrange
@@ -160,9 +145,6 @@ class UpgraderEventFactoryTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testCreateUpgraderFinishedEventContainsDefaultDataIfNotSet(): void
     {
         // Arrange
@@ -192,14 +174,6 @@ class UpgraderEventFactoryTest extends KernelTestCase
         );
     }
 
-    /**
-     * @param string $organizationName
-     * @param string $repositoryName
-     * @param string $ciExecutionId
-     * @param string $workspaceName
-     *
-     * @return \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected function createConfigurationProviderMock(
         string $organizationName = 'org',
         string $repositoryName = 'repo',

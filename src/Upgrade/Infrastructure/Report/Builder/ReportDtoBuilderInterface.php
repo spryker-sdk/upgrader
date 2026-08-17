@@ -14,10 +14,5 @@ use Upgrade\Infrastructure\Report\Dto\ReportDto;
 
 interface ReportDtoBuilderInterface
 {
-    /**
-     * @param \Upgrade\Application\Dto\StepsResponseDto $stepsResponseDto
-     *
-     * @return \Upgrade\Infrastructure\Report\Dto\ReportDto
-     */
     public function buildFromStepResponseDto(StepsResponseDto $stepsResponseDto): ReportDto;
 }

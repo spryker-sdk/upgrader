@@ -19,13 +19,9 @@ class ReleaseGroupProcessorResolver
      */
     protected array $processorList = [];
 
-    /**
-     * @var \Upgrade\Infrastructure\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
     /**
-     * @param \Upgrade\Infrastructure\Configuration\ConfigurationProvider $configurationProvider
      * @param array<\Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface> $processorList
      */
     public function __construct(ConfigurationProvider $configurationProvider, array $processorList)
@@ -36,8 +32,6 @@ class ReleaseGroupProcessorResolver
 
     /**
      * @throws \Upgrade\Application\Exception\ReleaseGroupRequireProcessorIsNotDefinedException
-     *
-     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\ReleaseGroupProcessorInterface
      */
     public function getProcessor(): ReleaseGroupProcessorInterface
     {

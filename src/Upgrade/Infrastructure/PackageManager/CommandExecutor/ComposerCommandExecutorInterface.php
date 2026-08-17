@@ -14,41 +14,15 @@ use Upgrade\Domain\Entity\Collection\PackageCollection;
 
 interface ComposerCommandExecutorInterface
 {
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function updateSubPackage(PackageCollection $packageCollection): PackageManagerResponseDto;
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function require(PackageCollection $packageCollection): PackageManagerResponseDto;
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function remove(PackageCollection $packageCollection): PackageManagerResponseDto;
 
-    /**
-     * @param \Upgrade\Domain\Entity\Collection\PackageCollection $packageCollection
-     *
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function requireDev(PackageCollection $packageCollection): PackageManagerResponseDto;
 
-    /**
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function update(): PackageManagerResponseDto;
 
-    /**
-     * @return \Upgrade\Application\Dto\PackageManagerResponseDto
-     */
     public function updateLockHash(): PackageManagerResponseDto;
 }

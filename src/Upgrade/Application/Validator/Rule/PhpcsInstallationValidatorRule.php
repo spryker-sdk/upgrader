@@ -26,20 +26,10 @@ class PhpcsInstallationValidatorRule implements ProjectValidatorRuleInterface
      */
     public const PHP_CS_FIXER_PATH = 'vendor/bin/phpcbf';
 
-    /**
-     * @var \Upgrader\Configuration\ConfigurationProvider
-     */
     protected ConfigurationProvider $configurationProvider;
 
-    /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\Filesystem
-     */
     protected Filesystem $filesystem;
 
-    /**
-     * @param \Upgrader\Configuration\ConfigurationProvider $configurationProvider
-     * @param \SprykerSdk\Utils\Infrastructure\Service\Filesystem $filesystem
-     */
     public function __construct(ConfigurationProvider $configurationProvider, Filesystem $filesystem)
     {
         $this->configurationProvider = $configurationProvider;
@@ -48,8 +38,6 @@ class PhpcsInstallationValidatorRule implements ProjectValidatorRuleInterface
 
     /**
      * @throws \Upgrade\Application\Exception\UpgraderException
-     *
-     * @return void
      */
     public function validate(): void
     {
@@ -62,9 +50,6 @@ class PhpcsInstallationValidatorRule implements ProjectValidatorRuleInterface
         }
     }
 
-    /**
-     * @return string
-     */
     public function getViolationTitle(): string
     {
         return static::VIOLATION_TITLE;

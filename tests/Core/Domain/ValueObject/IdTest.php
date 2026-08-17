@@ -14,9 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 class IdTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testUuidIsValid(): void
     {
         $id = new Id();

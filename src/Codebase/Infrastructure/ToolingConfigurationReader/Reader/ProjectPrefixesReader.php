@@ -22,11 +22,8 @@ class ProjectPrefixesReader extends AbstractReader
 
     /**
      * @param array<mixed> $configuration
-     * @param \Codebase\Application\Dto\ConfigurationResponseDto $configurationResponseDto
      *
      * @throws \Codebase\Infrastructure\Exception\ProjectConfigurationFileInvalidSyntaxException
-     *
-     * @return void
      */
     public function read(array $configuration, ConfigurationResponseDto $configurationResponseDto): void
     {

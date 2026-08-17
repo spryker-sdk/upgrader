@@ -22,9 +22,6 @@ use Upgrade\Domain\Entity\Package;
 
 class ModuleFetcherTest extends KernelTestCase
 {
-    /**
-     * @return void
-     */
     public function testRequireReturnsProperResponseDtoIfNothingToInstall(): void
     {
         // Arrange
@@ -67,9 +64,6 @@ class ModuleFetcherTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRequireReturnsFailedResponseDtoIfRequirePackagesFailed(): void
     {
         // Arrange
@@ -77,13 +71,13 @@ class ModuleFetcherTest extends KernelTestCase
         $packageCollection->add(new Package());
         $packageCollectionMapper = $this->createMock(PackageCollectionMapperInterface::class);
         $packageCollectionMapper->expects($this->once())
-            ->method('mapModuleCollectionToPackageCollection')
-            ->willReturn($packageCollection);
+        ->method('mapModuleCollectionToPackageCollection')
+        ->willReturn($packageCollection);
 
         $packageManager = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManager->expects($this->once())
-            ->method('require')
-            ->willReturn(new PackageManagerResponseDto(false, ''));
+        ->method('require')
+        ->willReturn(new PackageManagerResponseDto(false, ''));
 
         $moduleFetcher = new ModuleFetcher(
             $packageManager,
@@ -91,19 +85,16 @@ class ModuleFetcherTest extends KernelTestCase
             $this->createPackageManagerPackagesFetcherMock(),
         );
 
-        // Act
+    // Act
         $packageResponseDto = $moduleFetcher->require(new ModuleDtoCollection());
 
-        // Assert
+    // Assert
         $this->assertFalse(
             $packageResponseDto->isSuccessful(),
             'Returned PackageManagerResponseDto must be failed because require packages operation failed.',
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRequireReturnsFailedResponseDtoIfItFailedToUpdateSubPackages(): void
     {
         // Arrange
@@ -111,16 +102,16 @@ class ModuleFetcherTest extends KernelTestCase
         $packageCollection->add(new Package());
         $packageCollectionMapper = $this->createMock(PackageCollectionMapperInterface::class);
         $packageCollectionMapper->expects($this->once())
-            ->method('mapModuleCollectionToPackageCollection')
-            ->willReturn($packageCollection);
+        ->method('mapModuleCollectionToPackageCollection')
+        ->willReturn($packageCollection);
 
         $packageManager = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManager->expects($this->once())
-            ->method('require')
-            ->willReturn(new PackageManagerResponseDto(true, ''));
+        ->method('require')
+        ->willReturn(new PackageManagerResponseDto(true, ''));
         $packageManager->expects($this->once())
-            ->method('updateSubPackage')
-            ->willReturn(new PackageManagerResponseDto(false, ''));
+        ->method('updateSubPackage')
+        ->willReturn(new PackageManagerResponseDto(false, ''));
 
         $moduleFetcher = new ModuleFetcher(
             $packageManager,
@@ -138,9 +129,6 @@ class ModuleFetcherTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testRequireReturnsFailedResponseDtoIfRequireDevPackagesFailed(): void
     {
         // Arrange
@@ -148,19 +136,19 @@ class ModuleFetcherTest extends KernelTestCase
         $packageCollection->add(new Package());
         $packageCollectionMapper = $this->createMock(PackageCollectionMapperInterface::class);
         $packageCollectionMapper->expects($this->once())
-            ->method('mapModuleCollectionToPackageCollection')
-            ->willReturn($packageCollection);
+        ->method('mapModuleCollectionToPackageCollection')
+        ->willReturn($packageCollection);
 
         $packageManager = $this->createMock(PackageManagerAdapterInterface::class);
         $packageManager->expects($this->once())
-            ->method('require')
-            ->willReturn(new PackageManagerResponseDto(true, ''));
+        ->method('require')
+        ->willReturn(new PackageManagerResponseDto(true, ''));
         $packageManager->expects($this->once())
-            ->method('updateSubPackage')
-            ->willReturn(new PackageManagerResponseDto(true, ''));
+        ->method('updateSubPackage')
+        ->willReturn(new PackageManagerResponseDto(true, ''));
         $packageManager->expects($this->once())
-            ->method('requireDev')
-            ->willReturn(new PackageManagerResponseDto(false, ''));
+        ->method('requireDev')
+        ->willReturn(new PackageManagerResponseDto(false, ''));
 
         $moduleFetcher = new ModuleFetcher(
             $packageManager,
@@ -178,9 +166,6 @@ class ModuleFetcherTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return \Upgrade\Application\Strategy\ReleaseApp\Processor\PackageManagerPackagesFetcher\PackageManagerPackagesFetcherInterface
-     */
     protected function createPackageManagerPackagesFetcherMock(): PackageManagerPackagesFetcherInterface
     {
         $packageManagerPackagesFetcher = $this->createMock(PackageManagerPackagesFetcherInterface::class);
