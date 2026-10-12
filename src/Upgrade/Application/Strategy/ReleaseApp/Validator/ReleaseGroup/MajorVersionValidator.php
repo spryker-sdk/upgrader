@@ -38,7 +38,7 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
 
         if ($releaseGroup->getManualActionNeeded()) {
             throw new ReleaseGroupValidatorException(sprintf(
-                'This release needs manual changes, please follow migration guide. Please follow the link below to find all documentation needed to help you upgrade to the latest release %s',
+                'Error: This release needs manual changes, please follow migration guide. Please follow the link below to find all documentation needed to help you upgrade to the latest release %s',
                 PHP_EOL . $releaseGroup->getLink(),
             ));
         }
@@ -51,7 +51,7 @@ class MajorVersionValidator implements ReleaseGroupValidatorInterface
         }
 
         throw new ReleaseGroupValidatorException(sprintf(
-            'There is a major release available for module %s. Please follow the link below to find all documentation needed to help you upgrade to the latest release %s',
+            'Error: There is a major release available for module %s. Please follow the link below to find all documentation needed to help you upgrade to the latest release %s',
             implode(', ', array_map(static fn (ModuleDto $module): string => $module->getName(), array_merge($moduleWithMajorUpdates, $moduleWithBetaMajorUpdates))),
             PHP_EOL . $releaseGroup->getLink(),
         ));
