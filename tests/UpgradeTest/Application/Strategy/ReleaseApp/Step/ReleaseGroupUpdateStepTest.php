@@ -385,7 +385,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertSame(
             implode(PHP_EOL, [
             'Amount of available release groups for the project: 1',
-            'There is a major release available for module spryker/picking-lists-backend-api. Please follow the link'
+            'Error: There is a major release available for module spryker/picking-lists-backend-api. Please follow the link'
             . " below to find all documentation needed to help you upgrade to the latest release \nhttps://api.release.spryker.com/release-groups/view/1",
             ]),
             $stepsResponseDto->getOutputMessage(),
@@ -429,7 +429,7 @@ class ReleaseGroupUpdateStepTest extends TestCase
         $this->assertSame(
             implode(PHP_EOL, [
             'Amount of available release groups for the project: 2',
-            'This release needs manual changes, please follow migration guide. Please follow the link below to find all documentation needed to help you upgrade to the latest release ',
+            'Error: This release needs manual changes, please follow migration guide. Please follow the link below to find all documentation needed to help you upgrade to the latest release ',
             'https://api.release.spryker.com/release-groups/view/1',
             ]),
             $stepsResponseDto->getOutputMessage(),
